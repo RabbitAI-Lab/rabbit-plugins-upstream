@@ -1,46 +1,56 @@
-## Description: <br>
-Bannerbear (bannerbear.com) helps agents operate Bannerbear through an OOMOL-connected account for reading templates and images, verifying auth, and creating images from templates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables an agent to operate Bannerbear through an OOMOL-connected account for template inspection, synchronous image creation, project authentication checks, and image or template retrieval.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to work with Bannerbear projects through the OOMOL connector, including template discovery, image lookup, auth checks, and synchronous image creation. It is intended for users who have the oo CLI installed, are signed in to OOMOL, and have connected Bannerbear. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Image creation can change Bannerbear state and may consume connected account resources. <br>
-Mitigation: Confirm the exact create_image_sync payload and expected effect with the user before running the write action. <br>
-Risk: The skill may ask to install or invoke the oo CLI when it is unavailable. <br>
-Mitigation: Review the oo CLI install command before execution and install only when the user intends to operate Bannerbear through OOMOL. <br>
-Risk: Authentication, connection, scope, credential, or billing failures can block connector actions. <br>
-Mitigation: Use first-time setup, connection repair, or billing steps only after a matching command failure instead of proactively opening auth or connection flows. <br>
+## Use Case:
 
+Developers and external users use this skill to run Bannerbear actions from an agent through an already connected OOMOL account, including listing templates, creating images from templates, retrieving images or templates, and checking API key access.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-bannerbear) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Bannerbear Homepage](https://www.bannerbear.com/) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before building payloads; write actions require user confirmation of the exact payload and effect.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: Setup instructions include unverified remote installer one-liners from the internet.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before use; prefer an official package manager, versioned download, and checksum or signature verification before installation.
+
+Risk: Bannerbear write actions can create generated media and change service state.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [Bannerbear skill page](https://clawhub.ai/oomol/skills/oo-bannerbear)
+- [Bannerbear homepage](https://www.bannerbear.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON and include returned data plus an execution id when actions run.]
+
+## Skill Version(s):
+
+1.0.2 (source: evidence.json release.version and artifact frontmatter metadata.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

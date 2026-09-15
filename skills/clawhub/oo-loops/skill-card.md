@@ -1,47 +1,56 @@
-## Description: <br>
-Loops is a connector skill for reading, creating, updating, and deleting Loops data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Loops lets agents operate Loops through an OOMOL-connected account using the oo CLI for contact, mailing-list, contact-property, and event workflows.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Loops connector schemas and run Loops contact, mailing-list, and event actions through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: State-changing Loops actions can create or update contacts, create custom contact properties, or send events that trigger workflows. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running actions tagged [write]. <br>
-Risk: The delete_contact action can remove Loops contacts. <br>
-Mitigation: Require explicit user approval for the target email or userId before running actions tagged [destructive]. <br>
-Risk: The skill operates an OOMOL-connected Loops account and requires sensitive account access. <br>
-Mitigation: Install and use it only when the user intends the agent to operate that Loops account; review write, delete, and event payloads carefully before approval. <br>
-Risk: Connector input and output schemas can change independently of the skill text. <br>
-Mitigation: Run oo connector schema for the selected Loops action before building each payload. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Loops contacts, contact properties, mailing lists, and event sends through an authenticated OOMOL connector. It is useful when an agent should inspect the live action schema and run Loops actions without directly handling raw API tokens.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-loops) <br>
-- [Loops homepage](https://loops.so) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash, PowerShell, text, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; connector runs return JSON when --json is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: evidence release metadata and SKILL.md metadata) <br>
+Risk: Setup instructions include unverified internet installers that can execute changing remote code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer using the skill only after the oo CLI is already installed through a trusted, verified method; do not let an agent run curl | bash or irm | iex setup commands automatically.
+
+Risk: Contact creation, update, event sending, and deletion can change Loops account state.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions, and require explicit approval before destructive deletion.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-loops)
+- [Loops homepage](https://loops.so)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON response guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the live oo connector schema before constructing action payloads; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

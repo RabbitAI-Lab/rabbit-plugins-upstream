@@ -1,46 +1,56 @@
-## Description: <br>
-Placekey helps agents resolve postal addresses, geocodes, and Placekey identifiers through OOMOL-connected Placekey actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Placekey helps agents search and read Placekey data through the OOMOL oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to look up Placekey identifiers, resolve addresses into geocoded responses, and run bulk Placekey lookups through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Address and location data is sent through OOMOL as the intermediary for Placekey requests. <br>
-Mitigation: Install and use the skill only when that data path is acceptable for the user's task and organization. <br>
-Risk: The skill requires connected Placekey credentials through OOMOL. <br>
-Mitigation: Use an OOMOL-connected account with appropriate Placekey access and avoid exposing raw API credentials in prompts or shell commands. <br>
-Risk: First-time setup may involve running an external oo CLI installer. <br>
-Mitigation: Review the oo CLI installer before running optional setup commands, and run setup only when the connector command fails for an installation or authentication reason. <br>
+## Use Case:
 
+Developers and external agents use this skill to resolve addresses into geocodes or Placekey identifiers, including single-location and bulk lookups, through an OOMOL-connected Placekey account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-placekey) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Placekey Homepage](https://www.placekey.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON response handling] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing payloads; bulk lookup supports up to 100 locations per request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: The first-time setup path can execute remote installer scripts on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OOMOL's official install guide or a package manager path with version and integrity checks; avoid piping remote installer scripts directly into bash or PowerShell in sensitive environments.
+
+Risk: Placekey access depends on OOMOL as the intermediary for authentication and connector execution.
+
+Mitigation: Install and use the skill only when the user accepts OOMOL's role as the intermediary for Placekey.
+
+## Reference(s):
+
+- [ClawHub Placekey skill page](https://clawhub.ai/oomol/skills/oo-placekey)
+- [Placekey homepage](https://www.placekey.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and meta.executionId when actions run with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

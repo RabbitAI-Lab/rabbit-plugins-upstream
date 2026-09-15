@@ -1,43 +1,56 @@
-## Description: <br>
-HotspotSystem helps an agent inspect a connected HotspotSystem operator account and retrieve location, customer, and subscriber records through the OOMOL `oo` CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HotspotSystem (hotspotsystem.com). Use this skill for ANY HotspotSystem request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External operators and support agents use this skill to verify a connected HotspotSystem account and look up locations, customers, and subscribers for operational support workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires connected HotspotSystem credentials and can surface account, location, customer, or subscriber records to the agent. <br>
-Mitigation: Install only for intended HotspotSystem workflows and review the exact command target before approving account-access actions. <br>
-Risk: Setup and billing recovery commands can affect local CLI authentication state or route users into external account-management flows. <br>
-Mitigation: Run setup or recovery steps only after the matching authentication, connection, or billing error occurs. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect HotspotSystem action schemas and run read actions for owners, customers, subscribers, locations, and location options through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-hotspotsystem) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
-- [HotspotSystem homepage](https://www.hotspotsystem.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands can return JSON responses from the `oo` CLI when run with `--json`.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup instructions include remote script execution for installing the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing and prefer a verified, signed, or package-manager installation of the oo CLI.
+
+Risk: The connector can retrieve broad customer and subscriber records through a third-party connector.
+
+Mitigation: Connect a least-privilege HotspotSystem account and review returned customer or subscriber data before sharing it.
+
+## Reference(s):
+
+- [HotspotSystem Skill Page](https://clawhub.ai/oomol/skills/oo-hotspotsystem)
+- [HotspotSystem Homepage](https://www.hotspotsystem.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector action responses are JSON objects containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

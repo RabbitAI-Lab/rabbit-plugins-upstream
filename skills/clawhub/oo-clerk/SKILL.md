@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Clerk"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.4"
   services: ["clerk"]
   icon: "https://static.oomol.com/logo/third-party/clerk.svg"
 ---

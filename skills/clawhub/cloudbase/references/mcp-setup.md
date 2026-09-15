@@ -38,7 +38,7 @@ npx plugins add TencentCloudBase/cloudbase-plugin -y --scope user --target curso
 npx plugins targets
 ```
 
-**Not supported by `npx plugins` yet** (use each product's native path): CodeBuddy, WorkBuddy, ZCode, WindSurf, and other IDEs without Open Plugin Spec. For those, use Approach A (native MCP) or Approach B (mcporter) below, plus Skills if needed.
+**Not supported by `npx plugins` yet** (use each product's native path): CodeBuddy, WorkBuddy, Kimi Code, Kimi Work, ZCode, WindSurf, and other IDEs without Open Plugin Spec. For those, use Approach A (native MCP) or Approach B (mcporter) below, plus Skills if needed.
 
 **Do not double-install:** if Claude Code / Codex already has the plugin via marketplace (`claude plugin install` / `codex plugin add`), do **not** also run `npx plugins add` for the same tool.
 
@@ -145,11 +145,11 @@ Query available plans, create environments, change plans, and renew:
 
 - **Create a new environment**:
   ```
-  npx mcporter call cloudbase.manageEnv action=create alias=my-env packageId=baas_personal resources='["flexdb","storage","function","postgresql"]' duration=1 confirm=yes --output json
+  npx mcporter call cloudbase.manageEnv action=create alias=my-env packageId=baas_personal resources='["storage","function","postgresql"]' duration=1 confirm=yes --output json
   ```
 
-  Resources parameter values: `flexdb` (document database), `storage` (cloud storage), `function` (cloud functions), `postgresql` (PostgreSQL database).
-  Do **not** pass `region`: CreateEnv does not accept Region; environment region is determined by account/package.
+  Resources parameter values: `storage` (cloud storage), `function` (cloud functions), `postgresql` (PostgreSQL database). `flexdb` (document database) is **not** offered — new environments are created without a NoSQL tenant, and passing it is rejected by the schema. To find out whether an environment actually has NoSQL, read `queryEnv(action="info")` → `EnvInfo.RuntimeBackends` instead of assuming.
+  Optional `region` (e.g. `region=ap-shanghai`) selects where the environment is created: it is sent as the **`X-TC-Region` request context** (same as CLI `tcb env create --region ap-shanghai`), never as a CreateEnv body field. Omit it to use the current session region (`cloudBaseOptions.region` → `TCB_REGION` → project config / rc binding → site default: `ap-shanghai` domestic, `ap-singapore` intl). If you pass `region`, repeat the same value on the confirming call (`confirm=yes`), otherwise the environment may be created in the session region instead.
 
 - **Change plan** (e.g. upgrade to standard):
   `npx mcporter call cloudbase.manageEnv action=modifyPlan envId=<envId> packageId=baas_pf_standard confirm=yes --output json`
@@ -181,9 +181,18 @@ Query available plans, create environments, change plans, and renew:
 
 ---
 
+## No npm / npx
+
+If `npm` / `npx` are missing, do **not** keep retrying `npx plugins` / `npx mcporter`:
+
+1. Ask the user to install **Node.js LTS** (https://nodejs.org, or `brew install node` / `winget install OpenJS.NodeJS.LTS` / nvm / fnm), then re-check `node -v` and `npm -v`.
+2. Meanwhile, prefer **IDE native plugin / marketplace / MCP UI** paths above (no hand-run `npx`), or Approach A hand-written MCP config once Node exists.
+3. For login/deploy in this session without MCP tools, follow `tooling-fallback.md` (CLI via `cloudbase-cli` domain skills). Full decision tree includes the npm-missing branch.
+
 ## Important Rules
 
-- **When managing or deploying CloudBase, you MUST use MCP and MUST understand tool details first.** Before calling any CloudBase tool, run `npx mcporter describe cloudbase --all-parameters` (or `ToolSearch` in IDE) to inspect available tools and their parameters.
-- You **do not need to hard-code Secret ID / Secret Key / Env ID** in the config. CloudBase MCP supports device-code based login via the `auth` tool, so credentials can be obtained interactively instead of being stored in config.
-- When the environment identifier in the conversation is an alias, nickname, or other short form, **do not pass it directly** to `auth.set_env`, SDK init, console URLs, or generated config files. First resolve it to the canonical full `EnvId` with `envQuery(action=list, alias=..., aliasExact=true)`. If multiple environments match or no exact alias exists, stop and clarify with the user.
-- Verify MCP availability first with `npx mcporter list | grep cloudbase` or the IDE's MCP panel before calling any CloudBase tool.
+- **When MCP tools are available in this session**, prefer them for manage/deploy, and understand tool details first. Before calling any CloudBase MCP tool, run `npx mcporter describe cloudbase --all-parameters` (or `ToolSearch` in IDE) to inspect available tools and their parameters.
+- **When MCP is not configured or tools are not yet loaded** (common on first session, or right after install before restart): complete the MCP setup steps above for the **next** session, then use `tcb` CLI for login/manage now. Follow `tooling-fallback.md` and the `cloudbase-cli` skill (domain references — **not** `tcb deploy`). Do not block the user waiting for a restart.
+- You **do not need to hard-code Secret ID / Secret Key / Env ID** in the config. Prefer device-code login via MCP `auth` or `tcb login` instead of storing long-lived secrets in MCP JSON.
+- When the environment identifier in the conversation is an alias, nickname, or other short form, **do not pass it directly** to `auth.set_env`, SDK init, console URLs, or generated config files. First resolve it to the canonical full `EnvId` with `envQuery(action=list, alias=..., aliasExact=true)` when MCP is available; with CLI, confirm the full envId with the user (or `tcb env list` as a fallback) before `tcb env use`. If multiple environments match or no exact alias exists, stop and clarify with the user.
+- Verify MCP availability with `npx mcporter list | grep cloudbase` or the IDE's MCP panel (skip the `npx` check when npm/npx is absent — use the IDE panel / native plugin instead). Missing MCP is a signal to **set up MCP + fall back to CLI**, not to stop the task.

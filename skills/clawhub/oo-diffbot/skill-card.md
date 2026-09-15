@@ -1,45 +1,55 @@
-## Description: <br>
-Diffbot (diffbot.com). Use this skill for Diffbot requests involving searching and reading data through the OOMOL-backed Diffbot connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Diffbot through an OOMOL-connected account to extract public article URLs and return normalized article data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect the live Diffbot connector schema and run Diffbot article extraction through the oo CLI. It supports extracting normalized article data from a public URL without directly handling raw Diffbot API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive Diffbot credentials to be brokered by OOMOL. <br>
-Mitigation: Install only when the user accepts OOMOL as the credential broker and understands that connector actions run through the oo CLI. <br>
-Risk: The documented remote installer commands execute installer scripts for the oo CLI. <br>
-Mitigation: Review the oo CLI installer before running the install commands. <br>
-Risk: Future Diffbot connector actions could write, delete, or change account data if such actions are added. <br>
-Mitigation: Keep explicit user confirmation for any connector action marked write or destructive, including the exact payload and intended effect. <br>
+## Use Case:
 
+External developers and agents use this skill to run Diffbot actions through the oo CLI with an OOMOL-connected Diffbot account, especially extracting structured article data from public URLs.
 
-## Reference(s): <br>
-- [Diffbot homepage](https://www.diffbot.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-diffbot) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId fields when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The setup path includes remote installer scripts that could be executed without review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install oo from trusted, versioned release artifacts or official package instructions, and review installer contents before execution.
+
+Risk: Diffbot access is mediated through OOMOL, which handles connector credentials server-side.
+
+Mitigation: Use Diffbot credentials and scopes appropriate for the intended data access, and install the skill only when OOMOL is an acceptable intermediary.
+
+## Reference(s):
+
+- [Diffbot Homepage](https://www.diffbot.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-diffbot)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON CLI payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector action results are returned as JSON containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

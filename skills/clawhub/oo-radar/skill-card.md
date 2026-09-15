@@ -1,43 +1,56 @@
-## Description: <br>
-Radar (radar.com) connector skill for reading, creating, and updating Radar data through the OOMOL oo CLI instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Radar supports address, place, and geocoding workflows through an OOMOL-connected Radar account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to operate Radar through an OOMOL-connected account for address autocomplete, geocoding, IP geocoding, reverse geocoding, and nearby place search. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The first-time setup path installs the remote oo CLI, which executes an installer from cli.oomol.com. <br>
-Mitigation: Review the remote installer before first-time setup, as recommended by ClawScan guidance. <br>
-Risk: Actions marked write can change Radar state when run with an exact payload. <br>
-Mitigation: Confirm the action payload and expected effect with the user before executing any write action. <br>
-Risk: Connector schemas may change over time, causing stale payloads to be incorrect. <br>
-Mitigation: Inspect the live Radar connector schema before constructing each action payload. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect Radar connector schemas, build matching JSON payloads, and run Radar actions such as autocomplete, forward geocoding, reverse geocoding, IP geocoding, and place search.
 
-## Reference(s): <br>
-- [Radar homepage](https://radar.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before actions; Radar command responses include data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: Setup instructions include one-line remote installer commands that could run arbitrary code if the installer delivery path is compromised.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a package manager, pinned release, checksum or signature verification, and review of the installer before execution.
+
+Risk: Some Radar connector actions can change state.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions, and require explicit approval for destructive actions.
+
+## Reference(s):
+
+- [Radar homepage](https://radar.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Radar ClawHub release](https://clawhub.ai/oomol/skills/oo-radar)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live Radar connector schema inspection before running actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

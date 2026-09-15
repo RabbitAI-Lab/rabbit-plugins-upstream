@@ -1,45 +1,55 @@
-## Description: <br>
-Mailgun (mailgun.com). Use this skill for Mailgun requests that read, create, update, or delete data through the OOMOL Mailgun connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mailgun lets agents inspect and manage Mailgun domains, templates, events, suppressions, tracking settings, and email sending through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and support teams use this skill to manage Mailgun domains, templates, suppressions, tracking settings, and message sending through an OOMOL-connected account. It supports both read-only inspection and user-confirmed write or destructive Mailgun operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Mailgun account and may use sensitive credentials through the OOMOL connector. <br>
-Mitigation: Use the OOMOL-connected account flow and avoid exposing raw Mailgun API tokens in prompts, files, or command arguments. <br>
-Risk: Write actions can change Mailgun state, including sending email, changing tracking settings, creating templates, or adding suppression records. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running any action marked write. <br>
-Risk: The delete_suppression action removes suppression or allowlist records. <br>
-Mitigation: Get explicit approval for the target record before running destructive actions. <br>
+## Use Case:
 
+Developers, operators, and support teams use this skill to perform Mailgun account operations without handling raw API tokens, including domain checks, event review, suppression management, template maintenance, and controlled email sending.
 
-## Reference(s): <br>
-- [Mailgun homepage](https://www.mailgun.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-mailgun) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May execute Mailgun connector actions that return JSON data and an execution identifier.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions include commands that execute internet-downloaded installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the OOMOL CLI installation path before running it; prefer an official package manager, pinned release, or installer with verified checksum or signature.
+
+Risk: Mailgun write and destructive actions can send email, change tracking settings, or alter suppression and allowlist records.
+
+Mitigation: Confirm the exact action, target, and payload before sends, writes, tracking changes, or deletion of suppressions.
+
+## Reference(s):
+
+- [Mailgun homepage](https://www.mailgun.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include JSON returned by the oo CLI, including connector response data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

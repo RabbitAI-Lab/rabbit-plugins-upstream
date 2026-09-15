@@ -1,46 +1,61 @@
-## Description: <br>
-Skyfire lets an agent operate Skyfire through an OOMOL-connected account for marketplace reads and buyer token creation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Skyfire (skyfire.xyz). Use this skill for ANY Skyfire request — reading, creating, and updating data. Whenever a task involves Skyfire, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External developers and agents use this skill to inspect Skyfire marketplace services and create buyer tokens through the OOMOL Skyfire connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create Skyfire buyer tokens that may involve funds or identity attributes. <br>
-Mitigation: Confirm the exact write payload and expected effect with the user before running token creation. <br>
-Risk: Connector requests may fail or behave unexpectedly if the live Skyfire action schema changes. <br>
-Mitigation: Inspect the live connector schema before building each action payload. <br>
-Risk: The skill requires an authenticated OOMOL-connected Skyfire account. <br>
-Mitigation: Use first-time setup or connection recovery only after an action fails with an authentication or connection error. <br>
+## Use Case:
 
+Developers and external users use this skill to operate Skyfire through an OOMOL-connected account, including marketplace service lookup and buyer-token creation. The skill guides the agent to inspect live action schemas before sending JSON payloads through the oo CLI.
 
-## Reference(s): <br>
-- [Skyfire Skill Page](https://clawhub.ai/oomol/oo-skyfire) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Skyfire Homepage](https://skyfire.xyz) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce connector command payloads for marketplace reads or buyer token creation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and frontmatter) <br>
+Risk: First-time setup may ask users to run remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI from a verified, version-pinned source, or inspect and verify the installer before running it.
+
+Risk: The create_token action can create funded or identity-carrying buyer tokens.
+
+Mitigation: Confirm the exact create_token payload and intended effect with the user before execution.
+
+Risk: Connector inputs can drift from examples or assumptions.
+
+Mitigation: Fetch the live action schema with `oo connector schema` before constructing or running any payload.
+
+## Reference(s):
+
+- [ClawHub Skyfire Skill](https://clawhub.ai/oomol/skills/oo-skyfire)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Skyfire Homepage](https://skyfire.xyz)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live Skyfire connector schemas before action execution; oo CLI responses are JSON objects containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: artifact frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

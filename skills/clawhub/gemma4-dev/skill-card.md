@@ -1,47 +1,59 @@
-## Description: <br>
-A development and orchestration skill for working with the Gemma 4 model family, supporting thinking modes and multi-step agentic workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when designing, configuring, or implementing applications targeting the Google Gemma 4 model family, including model architecture selection, Thinking Mode formatting, function calling schemas, multimodal audio and vision pipelines, and deployment reference patterns.
 
-## Publisher: <br>
-[johngreenfield](https://clawhub.ai/user/johngreenfield) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[johngreenfield](https://clawhub.ai/user/johngreenfield)
 
-## Use Case: <br>
-Developers and agent builders use this skill to configure Gemma-focused coding, architecture, debugging, and multi-step reasoning workflows. The artifact also includes sample local, browser, and Vertex AI app code for Gemma model use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sample apps may download Gemma model artifacts or consume local compute. <br>
-Mitigation: Review the sample scripts and runtime environment before execution, and run them only where model downloads and compute use are acceptable. <br>
-Risk: The Gradio sample may open a local app server. <br>
-Mitigation: Run the Gradio app only in an intended local or controlled environment and review its launch behavior before exposing it. <br>
-Risk: The Vertex AI sample uses Google Cloud project, location, and endpoint configuration and may consume cloud quota. <br>
-Mitigation: Confirm the target Google Cloud project, endpoint, permissions, and cost controls before running the Vertex AI example. <br>
+## Use Case:
 
+Developers and engineers use this skill to select Gemma 4 variants, format thinking, tool-calling, and multimodal turns, and adapt local, browser, or Vertex AI deployment examples. It is intended for developer-controlled Gemma application design and integration work.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/johngreenfield/gemma4-dev) <br>
-- [README.md](artifact/README.md) <br>
-- [SKILL.md](artifact/SKILL.md) <br>
-- [Gradio sample app](artifact/assets/gradio-app.py) <br>
-- [Transformers.js sample app](artifact/assets/transformers-js-app.js) <br>
-- [Vertex AI sample app](artifact/assets/vertex-ai-app.py) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline commands, configuration values, and sample Python or JavaScript code references] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May involve local model downloads, a local Gradio app, WebGPU execution, or Google Cloud Vertex AI endpoint configuration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: Reasoning-inspector examples can expose sensitive thought-like text.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only in developer-controlled environments, do not expose raw <thought> traces to end users or logs, and route streamed output through fail-closed parsing and review.
+
+Risk: Remote model, tokenizer, or processor downloads can introduce supply-chain risk when revisions are not pinned.
+
+Mitigation: Pin every remote artifact to a verified immutable revision, keep trust_remote_code=False where supported, and prefer verified local directories for restricted deployments.
+
+Risk: Vertex AI deployment examples transmit prompt payloads to Google Cloud endpoints.
+
+Mitigation: Verify endpoint region, retention policy, and least-privilege IAM access before processing confidential, proprietary, or regulated data.
+
+## Reference(s):
+
+- [Gemma 4 Hardware Sizing & VRAM Matrix](artifact/references/hardware-sizing.md)
+- [Gemma 4 Native Multimodal Integration (Audio & Vision)](artifact/references/multimodal.md)
+- [ClawHub skill page](https://clawhub.ai/johngreenfield/skills/gemma4-dev)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with code examples and command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes optional local, browser, and Vertex AI reference patterns; examples may require environment variables and network access.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and OpenClaw metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

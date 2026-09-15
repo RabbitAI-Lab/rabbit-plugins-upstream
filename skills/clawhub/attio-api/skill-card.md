@@ -1,53 +1,77 @@
-## Description: <br>
-Attio API integration with managed OAuth for creating, reading, updating, deleting, and querying CRM data including people, companies, tasks, notes, comments, lists, meetings, and call recordings. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Attio API integration with managed OAuth for managing CRM records, objects, tasks, notes, comments, lists, meetings, and related workspace data.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and CRM operators use this skill to work with Attio CRM records and workspace data through Maton's managed OAuth API proxy. It supports read and write workflows for objects, records, tasks, notes, comments, lists, meetings, and related CRM resources. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and change CRM records, notes, meetings, and call recordings in the connected Attio workspace. <br>
-Mitigation: Install it only for intended Attio workspaces and approve create, update, or delete actions only after checking the exact target and effect. <br>
-Risk: MATON_API_KEY grants access to the Maton-managed Attio connection. <br>
-Mitigation: Keep MATON_API_KEY private, provide it only through the agent environment, and rotate it if exposure is suspected. <br>
-Risk: Multiple Maton connections can point requests at the wrong Attio account. <br>
-Mitigation: Use the Maton-Connection header when multiple accounts exist and verify the selected connection before sensitive operations. <br>
-Risk: CRM notes, meetings, and call recordings may contain sensitive business or personal data. <br>
-Mitigation: Limit prompts and outputs to the minimum necessary data and review retrieved content before sharing it outside the intended workflow. <br>
+## Use Case:
 
+Developers and agents use this skill to access Attio CRM data through Maton-managed authentication, with read/list operations as the default and explicit approval required for writes, new connections, hosted functions, and triggers.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/attio-api) <br>
-- [Attio API Overview](https://docs.attio.com/rest-api/overview) <br>
-- [Attio API Reference](https://docs.attio.com/rest-api/endpoint-reference) <br>
-- [Records API](https://docs.attio.com/rest-api/endpoint-reference/records) <br>
-- [Objects API](https://docs.attio.com/rest-api/endpoint-reference/objects) <br>
-- [Tasks API](https://docs.attio.com/rest-api/endpoint-reference/tasks) <br>
-- [Rate Limiting](https://docs.attio.com/rest-api/guides/rate-limiting) <br>
-- [Pagination](https://docs.attio.com/rest-api/guides/pagination) <br>
-- [Maton](https://maton.ai) <br>
-- [Related API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration, API calls] <br>
-**Output Format:** [Markdown with inline Python, JavaScript, HTTP, JSON, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a valid Attio OAuth connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: Attio and Maton credentials can expose CRM data if OAuth connections or API keys are mishandled.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth, use the operating system credential store, avoid long-lived API keys unless the CLI cannot be installed, and verify the active profile before calls.
+
+Risk: Write operations or new connections can change CRM data or broaden account access.
+
+Mitigation: Default to read and list calls, verify identifiers and account context first, and require explicit user approval before creating connections or making POST, PUT, PATCH, or DELETE requests.
+
+Risk: Hosted functions and triggers can continue running after setup and can act on future events.
+
+Mitigation: Use user-authored or user-reviewed handlers, require separate approval for creation, deployment, invocation, and trigger setup, prefer DENY_ALL network policy, and delete automations when the task is complete.
+
+## Reference(s):
+
+- [ClawHub Attio Skill](https://clawhub.ai/byungkyu/skills/attio-api)
+- [Maton Homepage](https://maton.ai)
+- [Attio API Overview](https://docs.attio.com/rest-api/overview)
+- [Attio API Reference](https://docs.attio.com/rest-api/endpoint-reference)
+- [Records API](https://docs.attio.com/rest-api/endpoint-reference/records)
+- [Objects API](https://docs.attio.com/rest-api/endpoint-reference/objects)
+- [Tasks API](https://docs.attio.com/rest-api/endpoint-reference/tasks)
+- [Rate Limiting](https://docs.attio.com/rest-api/guides/rate-limiting)
+- [Pagination](https://docs.attio.com/rest-api/guides/pagination)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces authenticated Attio API workflows and Maton automation guidance; it does not itself return Attio data.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

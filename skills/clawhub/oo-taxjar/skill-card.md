@@ -1,44 +1,58 @@
-## Description: <br>
-Helps an agent inspect TaxJar connector schemas and run TaxJar read, write, and delete actions through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to operate TaxJar through the OOMOL oo CLI for tax calculations, rate lookups, VAT validation, and customer, order, and refund transaction workflows.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to calculate sales tax, retrieve rates, validate VAT IDs, and manage TaxJar customers, orders, and refunds from an agent workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access a user's TaxJar account through OOMOL and requires sensitive account credentials to be connected. <br>
-Mitigation: Install it only when TaxJar account access is intended, and keep account connection and credential handling within the OOMOL setup flow. <br>
-Risk: Customer, order, refund, update, and delete actions can affect business tax records. <br>
-Mitigation: Review the exact payload, target record, and expected effect with the user before approving write or destructive actions. <br>
-Risk: TaxJar action inputs can change or differ by account configuration. <br>
-Mitigation: Fetch the live connector schema before building each action payload. <br>
+## Use Case:
 
+Developers and business operations users use this skill to let an agent inspect TaxJar connector schemas and run TaxJar read, write, and destructive actions through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-taxjar) <br>
-- [TaxJar homepage](https://www.taxjar.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with bash command examples and JSON payload or response guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an installed and authenticated oo CLI plus a connected TaxJar account; write and delete actions should be reviewed before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill frontmatter) <br>
+Risk: First-time setup directs users to run a remote OOMOL CLI installer.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer before execution and prefer a verified release or checksum when available.
+
+Risk: The skill can create, update, or delete business tax data through TaxJar connector actions.
+
+Mitigation: Use an appropriate TaxJar account and require explicit confirmation of payloads and targets before write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-taxjar)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [TaxJar Homepage](https://www.taxjar.com/)
+- [TaxJar Icon](https://static.oomol.com/logo/third-party/Taxjar.svg)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill guides agents to inspect live connector schemas before constructing payloads and to confirm state-changing or destructive actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

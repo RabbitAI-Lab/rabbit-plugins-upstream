@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Campaign Cleaner"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["campaign_cleaner"]
   icon: "https://static.oomol.com/logo/third-party/campaign_cleaner.png"
 ---

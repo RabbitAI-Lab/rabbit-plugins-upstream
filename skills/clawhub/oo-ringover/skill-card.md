@@ -1,42 +1,60 @@
-## Description: <br>
-Ringover helps agents use the oo CLI to search and read Ringover calls, users, groups, IVRs, numbers, tags, and team data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Ringover through the OOMOL oo CLI connector to search and read calls, users, groups, IVRs, numbers, tags, and team details.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to retrieve Ringover call, user, group, IVR, number, tag, and team information from an OOMOL-connected account. Review before installation because the security evidence flags write-capable instructions despite the read/search framing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Security evidence says the read/search framing conflicts with write-capable instructions and broad Ringover routing language. <br>
-Mitigation: Review the exact supported operations before installation and require explicit confirmation before any account, contact, call, message, or other state-changing action. <br>
-Risk: Ringover actions can expose account data allowed by the connected API key. <br>
-Mitigation: Use a least-privilege Ringover token where possible and inspect the live action schema before executing commands. <br>
+## Use Case:
 
+External users and support or operations teams use this skill to retrieve Ringover telephony records and directory data from a connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-ringover) <br>
-- [Ringover homepage](https://www.ringover.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server-resolved release metadata and skill metadata) <br>
+Risk: The setup instructions include remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installation, prefer official signed or package-manager installation methods, verify downloads where possible, and do not let an agent run a remote installer automatically.
+
+Risk: The skill accesses Ringover data through a connected account and may expose data according to granted scopes.
+
+Mitigation: Ensure the Ringover connection has only the intended scopes and review returned data before sharing it outside the authorized workflow.
+
+Risk: Future connector actions could change Ringover state if write or destructive actions are added.
+
+Mitigation: Require user confirmation for any state-changing connector action, including the exact target, payload, and expected effect.
+
+## Reference(s):
+
+- [ClawHub Ringover Skill](https://clawhub.ai/oomol/skills/oo-ringover)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Ringover Homepage](https://www.ringover.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector action responses are JSON objects returned by the oo CLI.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

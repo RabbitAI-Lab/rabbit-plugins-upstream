@@ -1,45 +1,55 @@
-## Description: <br>
-Enables agents to operate La Growth Machine through OOMOL's la_growth_machine connector for reading, creating, and updating audiences and leads. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate La Growth Machine through an OOMOL-connected account to read, create, and update audiences, leads, and members using the oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, employees, and developers with an OOMOL-connected La Growth Machine account use this skill to inspect schemas, run account and lead queries, and perform confirmed audience or lead changes through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change La Growth Machine CRM lead and audience data. <br>
-Mitigation: Review the exact create or update payload with the user and get confirmation before running write actions. <br>
-Risk: First-time CLI installation introduces an additional trust decision when oo is not already installed. <br>
-Mitigation: Treat installation separately from connector use and proceed only when the user intentionally uses OOMOL for the connected La Growth Machine account. <br>
-Risk: Authentication, missing scopes, expired credentials, billing stops, or disconnected app state can block connector execution. <br>
-Mitigation: Use the documented first-time setup and troubleshooting steps only after a command fails with the matching error. <br>
+## Use Case:
 
+External users and operators use this skill to manage La Growth Machine data from an agent session, including audience creation and listing, lead create/update/search, and member listing. Confirm exact payloads before write actions that change account state.
 
-## Reference(s): <br>
-- [La Growth Machine homepage](https://lagrowthmachine.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-la-growth-machine) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload patterns] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands use the oo CLI and may return JSON responses containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: Fallback setup includes pipe-to-shell installer commands that execute remote scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer verified official packages or reviewed installers before installing the oo CLI.
+
+Risk: Write actions can create or update La Growth Machine audiences and leads.
+
+Mitigation: Confirm the exact payload and intended account changes with the user before running write actions.
+
+## Reference(s):
+
+- [La Growth Machine homepage](https://lagrowthmachine.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-la-growth-machine)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId when actions run.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

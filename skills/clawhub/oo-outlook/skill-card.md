@@ -1,44 +1,60 @@
-## Description: <br>
-Outlook (microsoft.com) supports Outlook requests for reading, creating, and updating data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Outlook (microsoft.com). Use this skill for Outlook requests involving reading, creating, sending, replying to, updating messages and drafts, and managing mailbox settings through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to read Outlook account, mailbox, folder, and message data, and to create, update, send, or reply to Outlook emails through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change Outlook mailbox state by creating, updating, sending, or replying to email. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running actions tagged as write. <br>
-Risk: Connector access depends on user authentication, Outlook connection status, scopes, and account billing. <br>
-Mitigation: Use the documented first-time setup and troubleshooting steps only when an action fails for the matching auth, connection, scope, or billing reason. <br>
-Risk: The scanner reported clean evidence, but installation and account access are still not risk-free. <br>
-Mitigation: Review the displayed skill instructions at install time and only approve account access, network calls, or write actions that match expected behavior. <br>
+## Use Case:
 
+External users, employees, and developers use this skill to operate Outlook mailboxes through the OOMOL oo CLI for profile lookup, folder and message reads, email and draft creation, replies, sending, and mailbox settings updates.
 
-## Reference(s): <br>
-- [ClawHub Outlook skill page](https://clawhub.ai/oomol/oo-outlook) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Microsoft Outlook](https://www.microsoft.com/microsoft-365/outlook/email-and-calendar-software-microsoft-outlook) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution and returns connector responses as JSON when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Setup instructions include pipe-to-shell remote installer commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a reviewed, version-pinned installer, or inspect and verify the downloaded script before execution.
+
+Risk: The skill can access sensitive Outlook mailbox data through a third-party connector.
+
+Mitigation: Install only when the user trusts OOMOL with Outlook connector access, and limit use to the connected account and intended mailbox task.
+
+Risk: Write actions can send email, update drafts, reply to messages, or change mailbox settings.
+
+Mitigation: Confirm every send, reply, draft update, or mailbox settings change, including the exact payload and expected effect, before running the action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-outlook)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Outlook homepage](https://www.microsoft.com/microsoft-365/outlook/email-and-calendar-software-microsoft-outlook)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the oo CLI and should fetch the live connector schema before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: evidence.release.version and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

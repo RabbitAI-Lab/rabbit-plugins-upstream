@@ -1,45 +1,56 @@
-## Description: <br>
-Otter.ai (otter.ai). Use this skill for ANY Otter.ai request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides read-only Otter.ai access through the OOMOL otter_ai connector and oo CLI for listing conversations, channels, members, workspace details, and temporary audio URLs.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to let an agent search, list, and read Otter.ai workspace, channel, conversation, and conversation-audio information through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad Otter.ai prompts may cause the agent to access private meeting or transcript information sooner than the user intended. <br>
-Mitigation: Review prompts involving private meetings, transcript links, or workspace data before allowing the agent to retrieve or summarize Otter.ai content. <br>
-Risk: Conversation audio actions can return temporary download URLs for meeting audio. <br>
-Mitigation: Request audio URLs only when the task requires audio access, and avoid exposing or persisting the URL beyond the current user-approved workflow. <br>
-Risk: Authentication, connection, and billing setup commands can change account state or require user action. <br>
-Mitigation: Use setup steps only after a matching CLI, authentication, connection, or billing failure, and keep normal operation limited to the already connected OOMOL account. <br>
+## Use Case:
 
+External users and agents with an OOMOL-connected Otter.ai account use this skill to inspect Otter.ai conversations, temporary audio links, workspace details, channels, and channel members through the oo CLI.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-otter-ai) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Otter.ai Homepage](https://otter.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill instructs the agent to inspect live connector schemas before running Otter.ai read actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Setup guidance includes remote installer scripts that could execute unverified code in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installing, prefer OOMOL signed or package-manager installation instructions, and avoid piping remote scripts directly into a shell.
+
+Risk: Connected Otter.ai transcripts, temporary audio links, workspace data, channel data, and member data may be routed through OOMOL's connector.
+
+Mitigation: Connect only accounts whose Otter.ai data is acceptable to route through the OOMOL connector, and avoid connecting sensitive workspaces unless approved.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-otter-ai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Otter.ai homepage](https://otter.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with bash and PowerShell command examples; connector responses are JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses read-oriented oo connector actions; temporary audio URL output may expire.]
+
+## Skill Version(s):
+
+1.0.2 (source: artifact frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

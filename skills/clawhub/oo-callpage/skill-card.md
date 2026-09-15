@@ -1,45 +1,59 @@
-## Description: <br>
-CallPage (callpage.io) helps agents read, create, and update CallPage data through an OOMOL-connected account instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use CallPage through an OOMOL-connected account to read calls, users, and widgets and to create callback requests without handling raw API tokens.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate CallPage through OOMOL-connected credentials, including listing and retrieving calls, users, and widgets, and creating callback requests after confirming the payload. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The optional oo CLI installer uses shell-eval commands. <br>
-Mitigation: Review the installer source or use official verified installation guidance before running the installer. <br>
-Risk: The create_widget_call action can create a CallPage callback request. <br>
-Mitigation: Confirm the exact callback payload and intended effect with the user before execution. <br>
-Risk: The skill requires connecting CallPage through OOMOL-managed credentials. <br>
-Mitigation: Install only when the user is comfortable connecting CallPage through OOMOL and using OOMOL-injected credentials. <br>
+## Use Case:
 
+External users and developers use this skill to operate CallPage through the OOMOL connector: listing and retrieving calls, users, and widgets, and creating widget callback requests after confirming write payloads.
 
-## Reference(s): <br>
-- [CallPage skill page](https://clawhub.ai/oomol/oo-callpage) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [CallPage homepage](https://www.callpage.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the live connector schema before execution and returns connector responses as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill metadata) <br>
+Risk: The fallback setup includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only through a trusted, verifiable method; do not allow an agent to run remote installer commands automatically.
+
+Risk: The skill can create CallPage callback requests that change CallPage state.
+
+Mitigation: Confirm the exact payload and expected effect with the user before any write action.
+
+Risk: Authentication and CallPage connection steps affect the user's OOMOL account.
+
+Mitigation: Run login or connection steps only after an action fails for auth or connection reasons and with explicit user approval.
+
+## Reference(s):
+
+- [ClawHub CallPage skill page](https://clawhub.ai/oomol/skills/oo-callpage)
+- [CallPage homepage](https://www.callpage.io)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live connector schema inspection before action execution; write actions require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

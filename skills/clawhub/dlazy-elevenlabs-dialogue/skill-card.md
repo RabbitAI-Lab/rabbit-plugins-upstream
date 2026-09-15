@@ -1,43 +1,61 @@
-## Description: <br>
-Dlazy Elevenlabs Dialogue helps an agent invoke the pinned dLazy CLI to generate ElevenLabs eleven_v3 multi-voice dialogue audio from per-line voice assignments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents use dLazy's ElevenLabs Dialogue wrapper to generate multi-voice dialogue audio from per-line voice and text inputs.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to create character dialogue, podcast segments, and short skits by sending dialogue lines, voice IDs, and generation options through the dLazy CLI to a hosted audio-generation service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Dialogue text and local files explicitly passed to supported media fields may be sent to dLazy or ElevenLabs infrastructure. <br>
-Mitigation: Review user inputs before invocation and avoid sending confidential or restricted content unless the deployment has approved the external service use. <br>
-Risk: The dLazy CLI can store an API key in the local user configuration. <br>
-Mitigation: Use per-invocation credentials or npx when persistence is not desired, restrict local credential access, and rotate or revoke the key from the dLazy dashboard when needed. <br>
+## Use Case:
 
+External users, creators, and developers use this skill to route dialogue lines through a dLazy CLI command for ElevenLabs multi-voice audio generation, including character dialogue, podcasts, and short skits.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-dialogue) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown instructions with bash examples and JSON result envelopes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return hosted generated-output URLs or an async generateId; requires dLazy API credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Installing or running the dLazy CLI through npm or npx executes third-party code locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the dLazy CLI package before installation and prefer npx or an isolated environment when a persistent global binary is not needed.
+
+Risk: The skill requires a dLazy API key and stores or accepts credentials through local configuration or environment variables.
+
+Mitigation: Keep the API key revocable, rotate it when needed, and avoid sharing local configuration files or command histories that may expose credentials.
+
+Risk: The evidence notes documentation copy-paste errors around output type and command examples.
+
+Mitigation: Check `dlazy elevenlabs-dialogue -h` before use and verify generated command flags against the CLI help output.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-dialogue)
+- [Publisher profile](https://clawhub.ai/user/dlazyai)
+- [dLazy CLI homepage](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The invoked third-party CLI/API returns hosted audio result URLs or async task identifiers; local file saving is optional through the CLI.]
+
+## Skill Version(s):
+
+1.3.16 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Sage Sales Management"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["sage_sales_management"]
   icon: "https://static.oomol.com/logo/third-party/sage_sales_management.svg"
 ---

@@ -1,43 +1,56 @@
-## Description: <br>
-Telnyx lets an agent inspect Telnyx connector schemas and run Telnyx messaging actions through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables an agent to operate Telnyx through an OOMOL-connected account for messaging profile lookup, message retrieval, and confirmed SMS or MMS sending.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to list and retrieve Telnyx messaging profiles and messages, and to send SMS or MMS messages from an OOMOL-connected Telnyx account after confirming write payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sending Telnyx messages can affect recipients or incur account costs. <br>
-Mitigation: Confirm the exact recipient, message content, media URLs, and payload with the user before running send_message. <br>
-Risk: Connector commands require an authenticated OOMOL account with an active Telnyx connection. <br>
-Mitigation: Run setup or reconnection steps only after a command fails with an authentication, missing scope, expired credential, app readiness, or billing error. <br>
+## Use Case:
 
+Developers, support teams, and operations users can use this skill to inspect Telnyx messaging profiles, retrieve message details, and send SMS or MMS messages through a connected Telnyx account. Write actions require confirmation of the exact payload and effect before execution.
 
-## Reference(s): <br>
-- [ClawHub Telnyx Skill](https://clawhub.ai/oomol/skills/oo-telnyx) <br>
-- [Telnyx Homepage](https://telnyx.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands may return JSON from the oo CLI; write actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: evidence.release.version and SKILL.md metadata) <br>
+Risk: Setup instructions include remote installer scripts that could execute arbitrary code if followed without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified, pinned, or signed release process and review the setup path before installing.
+
+Risk: The send_message action can send SMS or MMS through the connected Telnyx account.
+
+Mitigation: Confirm the exact send_message payload and user-visible effect before executing the write action.
+
+## Reference(s):
+
+- [ClawHub Telnyx Skill](https://clawhub.ai/oomol/skills/oo-telnyx)
+- [Telnyx Homepage](https://telnyx.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector action results are returned as JSON by the oo CLI when commands are executed.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

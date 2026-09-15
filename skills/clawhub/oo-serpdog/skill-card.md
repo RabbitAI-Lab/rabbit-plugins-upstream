@@ -1,43 +1,55 @@
-## Description: <br>
-Serpdog enables an agent to search and read Google Search, News, Videos, Autocomplete, and account quota data through an OOMOL-connected Serpdog account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Serpdog helps agents run Serpdog search and account or quota read actions through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to run Serpdog-backed search and account lookup actions through the oo CLI without handling raw Serpdog API tokens directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Serpdog API key connected through OOMOL. <br>
-Mitigation: Confirm the user trusts OOMOL and intends to connect Serpdog before using the connector. <br>
-Risk: First-time setup may require running a remote oo CLI installer if the CLI is missing. <br>
-Mitigation: Review the installer source before running it, or use an already installed and trusted oo CLI. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect Serpdog action schemas, run Google Search, News, Videos, and Autocomplete queries, and retrieve Serpdog account and quota information through a connected OOMOL account.
 
-## Reference(s): <br>
-- [Serpdog homepage](https://serpdog.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-serpdog) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include oo CLI commands, JSON payloads, and JSON connector responses returned by Serpdog actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter metadata) <br>
+Risk: Fallback setup guidance includes remote installer commands that execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official package manager, or download, inspect, and verify the installer before execution.
+
+Risk: Serpdog searches and account or quota reads run through the user's connected OOMOL account.
+
+Mitigation: Use the skill only when the OOMOL publisher and connected account are trusted for the intended query data.
+
+## Reference(s):
+
+- [Serpdog homepage](https://serpdog.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-serpdog)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return JSON data and execution metadata from Serpdog connector actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

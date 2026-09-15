@@ -1,42 +1,61 @@
-## Description: <br>
-Prometheus Fire helps a user distill their own thinking into six cognitive personas for self-reflection, decision support, and problem solving. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Prometheus Fire helps users distill their own thinking into six cognitive personas for self-reflection, decision support, and problem solving.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users invoke this skill as a guided conversational self-reflection system to build and use six personal thinking personas. It is intended for decision exploration, problem framing, monthly reflection, and cognitive perspective-taking rather than professional advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may ask personal self-reflection questions and keep sensitive thought material in the chat context. <br>
-Mitigation: Use explicit /prometheus invocations and avoid highly sensitive medical, legal, financial, credential, or confidential workplace information unless comfortable retaining it in the conversation. <br>
-Risk: Persona responses can influence decisions without being professional advice. <br>
-Mitigation: Treat outputs as prompts for reflection and make final decisions independently or with qualified professional review when stakes are high. <br>
+## Use Case:
 
+Individuals and knowledge workers use this conversational skill to collect their own thought material, form six cognitive personas, and explore decisions through structured reflection, challenge, and action planning.
 
-## Reference(s): <br>
-- [Prometheus Fire on ClawHub](https://clawhub.ai/gechengling/prometheus-fire) <br>
-- [King Persona Example](references/king-persona.md) <br>
-- [Dialogue Examples](references/dialogue-examples.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Conversational Markdown with prompts, reflective questions, persona responses, and summarized guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Purely conversational output; evidence.security reports no code, tool access, network access, or file operations. Users should avoid entering highly sensitive medical, legal, financial, credential, or confidential workplace information unless comfortable keeping it in chat context.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.1.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Users may enter sensitive personal thought material, identifiers, credentials, customer lists, or non-public business figures.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enter only what is needed, use role labels instead of real names, omit credentials and sensitive business data, and prefer de-identified summaries for highly sensitive situations.
+
+Risk: Conversation content is still handled by the AI platform and model running the skill.
+
+Mitigation: Treat typed content as platform-processed data and review that platform's retention policy before sharing sensitive material.
+
+Risk: Users may treat persona responses as final decisions rather than reflective support.
+
+Mitigation: Use the six personas to surface tradeoffs and blind spots, then verify facts and make the final decision independently.
+
+Risk: Installing from an unpinned source can reduce supply-chain confidence.
+
+Mitigation: Prefer a pinned or trusted ClawHub installer source when installing the skill.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/prometheus-fire)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown conversational responses with structured persona notes and command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No declared tool, file, or network access; output quality depends on the user's provided thought material.]
+
+## Skill Version(s):
+
+3.1.2 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

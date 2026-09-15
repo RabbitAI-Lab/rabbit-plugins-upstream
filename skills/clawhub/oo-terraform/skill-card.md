@@ -1,45 +1,61 @@
-## Description: <br>
-Operates HCP Terraform through an OOMOL-connected account using the oo CLI to inspect account, organization, workspace, and run data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Terraform (hashicorp.com). Use this skill for Terraform search and read requests through the OOMOL-connected Terraform connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and infrastructure engineers use this skill to inspect Terraform account details, organizations, workspaces, runs, and run history through an OOMOL-connected Terraform account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent can query Terraform account, organization, workspace, and run information through OOMOL. <br>
-Mitigation: Install only where that read access is acceptable, and review requested Terraform actions before execution. <br>
-Risk: Future connector actions may become write-capable or destructive even though the current artifact evidence is read-oriented. <br>
-Mitigation: Require explicit user confirmation for any action marked write or destructive and verify the live connector schema before building the payload. <br>
-Risk: The skill may be invoked broadly for general Terraform requests. <br>
-Mitigation: Use it for OOMOL connector-backed Terraform data access, and avoid unnecessary connector calls for general Terraform advice. <br>
+## Use Case:
 
+Developers and infrastructure engineers use this skill to inspect Terraform account, organization, workspace, and run information through the OOMOL-connected oo CLI. It helps agents fetch live action schemas, build JSON payloads, and recover from authentication, connection, setup, or billing errors.
 
-## Reference(s): <br>
-- [Terraform homepage](https://www.hashicorp.com/products/terraform) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-terraform) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and connector result summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo CLI connector schemas before constructing Terraform connector payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: Setup instructions include direct execution of remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing and prefer a verified, documented oo CLI installation method instead of allowing an agent to run remote installer commands automatically.
+
+Risk: The activation scope is broader than necessary for Terraform requests.
+
+Mitigation: Use the skill only for Terraform account, organization, workspace, and run lookup tasks, and avoid routing unrelated infrastructure work through it.
+
+Risk: Terraform account, organization, workspace, and run metadata can be exposed through the OOMOL connector.
+
+Mitigation: Use accounts and connected Terraform organizations whose metadata is appropriate to expose through the OOMOL connector.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-terraform)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Terraform Homepage](https://www.hashicorp.com/products/terraform)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline bash, PowerShell, text, and JSON command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include Terraform account, organization, workspace, and run metadata returned through the OOMOL connector.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

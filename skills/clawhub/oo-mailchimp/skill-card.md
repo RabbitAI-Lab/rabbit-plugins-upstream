@@ -1,45 +1,60 @@
-## Description: <br>
-Mailchimp (mailchimp.com). Use this skill for ANY Mailchimp request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mailchimp helps agents operate Mailchimp through OOMOL-connected credentials for reading, creating, updating, and deleting audience and member data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Mailchimp schemas and run Mailchimp audience, member, tag, and merge-field actions through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access subscriber, member, and audience data from the connected Mailchimp account. <br>
-Mitigation: Install it only for agents that should access that Mailchimp account, and review read results as potentially sensitive data. <br>
-Risk: Write and destructive actions can update, archive, tag, upsert, or permanently delete Mailchimp members. <br>
-Mitigation: Require the agent to show the exact target, payload, and expected effect, and require explicit approval before those actions run. <br>
-Risk: Incorrect payloads can affect the wrong Mailchimp object or fail against the current connector contract. <br>
-Mitigation: Inspect the live action schema with `oo connector schema` before constructing each payload. <br>
+## Use Case:
 
+Developers and external agents use this skill to inspect Mailchimp connector schemas and run Mailchimp audience, list, member, tag, and merge-field actions through the oo CLI. It supports both read workflows and state-changing member management workflows when the user confirms the target and payload.
 
-## Reference(s): <br>
-- [ClawHub Mailchimp skill page](https://clawhub.ai/oomol/oo-mailchimp) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Mailchimp homepage](https://mailchimp.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill frontmatter) <br>
+Risk: Setup can execute a remote installer script for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installation, verify the oo CLI through a safer installation path when possible and avoid running remote installer scripts directly unless the source and contents have been reviewed.
+
+Risk: Mailchimp subscriber and audience data is routed through OOMOL-connected credentials.
+
+Mitigation: Confirm that routing Mailchimp data through OOMOL is acceptable for the workspace and use only the intended connected account.
+
+Risk: Write and destructive actions can update, archive, or permanently delete Mailchimp member data.
+
+Mitigation: Require explicit approval for updates, archives, and permanent deletes, and verify exact targets and payloads before running state-changing actions.
+
+## Reference(s):
+
+- [ClawHub Mailchimp Skill](https://clawhub.ai/oomol/skills/oo-mailchimp)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Mailchimp](https://mailchimp.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads; command responses are JSON when run with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

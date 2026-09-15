@@ -1,41 +1,60 @@
-## Description: <br>
-Operate Twilio through an OOMOL-connected account for account lookup, message reads, usage reporting, and outbound SMS or MMS sending. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Twilio through an OOMOL-connected oo CLI connector for reading account data and creating outbound calls or messages.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent operate their connected Twilio account through OOMOL, including reading account and message data, listing usage, and preparing confirmed outbound messages. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send outbound SMS or MMS messages through the connected Twilio account, which can contact unintended recipients or incur cost. <br>
-Mitigation: Before running send_message or any other write action, verify the recipient, message body, account or project, full payload, and potential cost with the user. <br>
-Risk: Broad Twilio invocation wording could be mistaken for permission to make changes. <br>
-Mitigation: Treat broad Twilio requests as routing context only, and require explicit user confirmation before write or destructive actions. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Twilio connector schemas, fetch Twilio account, call, message, and usage data, and send messages or create outbound calls through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Twilio homepage](https://www.twilio.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live schema inspection before connector actions; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server evidence) <br>
+Risk: Twilio activity is routed through OOMOL as a third-party service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installing and use it only when routing Twilio work through OOMOL is acceptable.
+
+Risk: First-time setup references remote installer commands for the oo CLI.
+
+Mitigation: Prefer a verified or package-manager install path, and inspect installer commands before running them.
+
+Risk: Write actions can send messages, create calls, affect accounts, and incur costs.
+
+Mitigation: Approve write actions only after checking phone numbers, message content, call parameters, account impact, and possible cost.
+
+## Reference(s):
+
+- [Twilio homepage](https://www.twilio.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-twilio)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs depend on live Twilio connector schemas and oo CLI JSON responses.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

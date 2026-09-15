@@ -1,43 +1,55 @@
-## Description: <br>
-Censys (censys.com). Use this skill for Censys requests involving searching and reading certificate, host, and web property data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Censys (censys.com). Use this skill for Censys requests that search or read Censys Global Data assets through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, security analysts, and external agents use this skill to query Censys Global Data through an authenticated OOMOL-connected Censys account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an authenticated OOMOL-connected Censys account and can run CLI commands against that account. <br>
-Mitigation: Confirm the target Censys asset and command before execution, and use the connected account flow so raw credentials are not handled in the skill. <br>
-Risk: Setup and recovery commands can affect authenticated service state or billing recovery. <br>
-Mitigation: Run first-time setup, reconnection, or billing recovery steps only after a command fails with the matching authentication, connection, or credit error. <br>
+## Use Case:
 
+Developers and security analysts use this skill to retrieve Censys certificate, host, and web property records through the oo CLI after inspecting the live action schema for the requested action.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-censys) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Censys homepage](https://censys.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include Censys asset data returned as JSON through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup instructions include remote installer commands that could be unsafe if an agent runs them automatically.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run curl|bash or irm|iex installer commands. Install the oo CLI yourself from a trusted source and verify the installer or package where possible.
+
+Risk: The connected Censys account determines what data the skill can access.
+
+Mitigation: Connect only the Censys account intended for this skill and review account scope before use.
+
+## Reference(s):
+
+- [Censys homepage](https://censys.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Censys skill page](https://clawhub.ai/oomol/skills/oo-censys)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON responses from the connector]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

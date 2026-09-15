@@ -1,45 +1,60 @@
-## Description: <br>
-This skill lets agents operate NetSuite through an OOMOL-connected account by reading records, running SuiteQL queries, and creating or updating records through the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+NetSuite (netsuite.com). Use this skill for NetSuite requests that read, create, or update data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and business operators use this skill to inspect, create, and update NetSuite records through an OOMOL-connected account. It supports record lookup, record listing, SuiteQL queries, and state-changing record operations with confirmation for writes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create or update NetSuite records. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running create or update actions. <br>
-Risk: Read actions, including record listing and SuiteQL queries, can expose sensitive business data. <br>
-Mitigation: Run read actions only for the user's stated purpose and avoid broad queries when narrower record access is sufficient. <br>
-Risk: The skill depends on an OOMOL-connected NetSuite account and the oo CLI. <br>
-Mitigation: Install and connect the CLI only when the user intends to let the agent access that NetSuite account. <br>
+## Use Case:
 
+Employees, external operators, and developers use this skill to inspect NetSuite schemas and run connector actions for records and SuiteQL through the oo CLI. It supports read workflows and user-confirmed create or update workflows.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-netsuite) <br>
-- [NetSuite Homepage](https://www.netsuite.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL NetSuite Connection](https://console.oomol.com/app-connections?provider=netsuite) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill retrieves live connector schemas before constructing action payloads and returns connector results as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Setup instructions include direct execution of remote installer scripts, which creates local execution risk.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation source before installing and prefer a verified, version-pinned installer or package-manager flow.
+
+Risk: Create and update actions can change NetSuite records.
+
+Mitigation: Use the skill only with a NetSuite account authorized for the target records, and require confirmation of the exact payload and expected effect before write actions.
+
+Risk: Incorrect payloads or stale assumptions about action fields could produce failed or unintended NetSuite operations.
+
+Mitigation: Inspect the live connector schema for the chosen action before building each payload.
+
+## Reference(s):
+
+- [ClawHub NetSuite skill page](https://clawhub.ai/oomol/skills/oo-netsuite)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+- [NetSuite homepage](https://www.netsuite.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use oo connector schema and oo connector run; write actions require user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

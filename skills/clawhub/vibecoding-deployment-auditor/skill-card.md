@@ -1,43 +1,63 @@
-## Description: <br>
-Publishes locally built static HTML/CSS/JavaScript, Vite, React, or Vue websites as public HTTPS links through a fixed ZIP upload and deployment workflow, and rejects projects that require backend, database, SSR, server runtime, or remote dependency installation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI网站一键发布 helps agents audit, package, upload, deploy, and verify pure static websites through a fixed private ZIP-based HTTPS release flow.
 
-## Publisher: <br>
-[kyriswu](https://clawhub.ai/user/kyriswu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kyriswu](https://clawhub.ai/user/kyriswu)
 
-## Use Case: <br>
-Developers, makers, and non-specialist users use this skill to audit, package, upload, deploy, and verify pure static websites such as H5 games, portfolios, company sites, landing pages, and browser-only frontend tools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT No Attribution
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow uploads a vetted static ZIP to a fixed deployment service for public hosting. <br>
-Mitigation: Use it only when the user has requested publishing, and confirm the build output contains no secrets or private data before upload. <br>
-Risk: Remote retention and undeploy behavior are not described in the evidence. <br>
-Mitigation: Treat published output as public and avoid deploying content that requires guaranteed deletion or private retention controls. <br>
+## Use Case:
 
+Developers, site creators, and external agents use this skill to publish already-audited VibeCoding or front-end projects as public HTTPS static sites. It is intended for projects that can be built locally into an index.html-based static directory and do not require a server runtime, database, SSR, or private secrets in the published artifact.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kyriswu/skills/vibecoding-deployment-auditor) <br>
-- [Publisher profile](https://clawhub.ai/user/kyriswu) <br>
-- [Static deployment request schema](artifact/templates/static-deployment-request.v1.json) <br>
-- [Deployment dossier template](artifact/templates/deployment-dossier.v1.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Shell commands, Configuration, Files, JSON, Markdown, Guidance] <br>
-**Output Format:** [Markdown status updates, JSON deployment records, shell commands, and generated static ZIP manifest and dossier files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce blocked or not_deployed status when static eligibility, upload, deployment, or public URL verification fails.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.3.18 (source: server release metadata and frontmatter) <br>
+Risk: The final reviewed static website ZIP is sent to f.devtool.uk and that service acts as the deployment provider.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for artifacts intended for public release, and review the third-party service before submitting the ZIP.
+
+Risk: Published artifacts may accidentally include secrets, backend code, private data, or files that are not safe for public static hosting.
+
+Mitigation: Audit the final static output before upload and block deployment when credentials, server runtime requirements, source repositories, node_modules, .env files, or private data are present.
+
+Risk: Installation commands that resolve latest packages can change over time.
+
+Mitigation: Prefer pinned or otherwise verified installation commands according to the consuming organization's release process.
+
+## Reference(s):
+
+- [README](README.md)
+- [Automatic preflight semantics](references/automatic-preflight.md)
+- [Private static-release rejection patterns](references/private-static-release-rejections.md)
+- [Public static deployment endpoint operating contract](references/public-deployment-no-quota.md)
+- [Static application boundary](references/static-app-boundary.md)
+- [Windows ZIP entries and CDN-aware verification](references/windows-zip-and-cdn-verification.md)
+- [ClawHub skill page](https://clawhub.ai/kyriswu/skills/vibecoding-deployment-auditor)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON manifest, dossier, or submission files when packaging or deployment is performed.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return structured blocked or not_deployed status details when static qualification, upload, deployment, or public verification fails.]
+
+## Skill Version(s):
+
+2.3.21 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

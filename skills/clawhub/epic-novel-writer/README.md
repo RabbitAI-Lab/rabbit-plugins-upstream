@@ -49,6 +49,9 @@ All editing happens in `在编辑稿/` (Work-in-Progress), archive versions (v1/
 | File | Purpose |
 |------|---------|
 | `SKILL.md` | Core rules, workflow, naming conventions, archive process guide |
+| `references/project-structure.md` | Project directory structure + core rules |
+| `references/lifecycle.md` | 13-phase full workflow details (per-phase output files) |
+| `references/name-rules.md` | Naming rules (global continuous numbering + file naming table) |
 | `references/archive-template.md` | 8-step archive flow (directory structure + command examples + checklists) |
 | `references/world-setting-template.md` | World-building template (geography/history/power system/rhythm planning) |
 | `references/character-card-template.md` | Character card template (personality/background/ability growth/appearance tracking) |
@@ -153,6 +156,15 @@ clawhub install epic-novel-writer
 ```bash
 clawhub update epic-novel-writer
 ```
+
+## 🗂️ Version History
+
+| Version | Date | Changes |
+|---------|------|---------|
+| 1.2.0 | 2026-09-13 | SKILL.md frontmatter 补全（name/version/license/中英 description/compatibility/allowed-tools）；新增 `references/lifecycle.md`（13 阶段详情）与 `references/name-rules.md`（命名规则表）；修正子文件表死链；新增 `LICENSE`（BSD 3-Clause）与 `VERSION` 文件 |
+| 1.1.2 | 2026-04-27 | Removed unsupported license field from SKILL.md frontmatter (ClawHub CLI v0.8.0 defaults to MIT-0) |
+| 1.1.1 | 2026-04-27 | Fixed license field from BSD-3-Clause to MIT |
+| 1.1.0 | 2026-04-27 | Initial release: 13-phase novel workflow, global chapter numbering, read-only archives, character JSON, HTML guides |
 
 ## 📄 License
 

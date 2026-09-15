@@ -1,43 +1,55 @@
-## Description: <br>
-Provides agent guidance for searching and reading Modjo AI data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Modjo AI connector for searching and reading Modjo account, call, contact, deal, team, user, tag, and topic data through OOMOL.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill when an agent needs to retrieve Modjo AI account, call, contact, deal, team, user, tag, topic, note, summary, transcript, or next-step data from a connected Modjo AI account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can retrieve sensitive Modjo AI data, including call transcripts, contacts, users, and deal information. <br>
-Mitigation: Review the Modjo AI permissions on the connected OOMOL account and use the skill only for prompts that actually require Modjo AI data. <br>
-Risk: Retrieved CRM and conversation records may contain sensitive business or personal information. <br>
-Mitigation: Limit requests to the minimum needed records and avoid exposing retrieved data outside the intended task context. <br>
+## Use Case:
 
+External users and developers use this skill to inspect Modjo AI data through an OOMOL-connected account, including calls, transcripts, notes, contacts, deals, teams, users, tags, topics, summaries, and next steps.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-modjo-ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Modjo AI Homepage](https://www.modjo.ai) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Modjo AI retrieval actions return JSON responses with data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: Setup instructions include unverified remote scripts executed directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing, prefer safer official installation methods, inspect downloaded installers, verify signatures or checksums when available, and avoid running one-line installers from an elevated shell.
+
+Risk: Connector use can expose sensitive Modjo AI business, CRM, and call information to the agent session.
+
+Mitigation: Run only the read actions needed for the user's task, inspect live action schemas before sending payloads, and avoid requesting broader records than necessary.
+
+## Reference(s):
+
+- [Modjo AI homepage](https://www.modjo.ai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector actions return JSON data with execution metadata when run with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,55 @@
-## Description: <br>
-monday (monday.com) lets an agent read, create, update, and delete monday data through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents handle monday.com requests, including reading, creating, updating, and deleting data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate monday.com workspaces through an OOMOL-connected account, including board, item, document, dashboard, team, audit log, and activity log workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change or delete monday.com data. <br>
-Mitigation: Confirm the exact payload, target, and effect before approving write or destructive actions. <br>
-Risk: The skill can access sensitive monday.com workspace or account data, including audit logs on enterprise accounts. <br>
-Mitigation: Install and use it only for monday accounts and workspaces where the agent is authorized to operate. <br>
+## Use Case:
 
+Employees, operators, and developers use this skill to read and manage monday.com boards, items, workspaces, dashboards, docs, forms, users, teams, and related account data through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-monday) <br>
-- [monday homepage](https://monday.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires fetching the connector action schema before constructing payloads; write and destructive actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release and skill metadata) <br>
+Risk: The first-time setup path tells users to execute remote installer scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before use and prefer a verified package or downloaded file with checksum or signature validation.
+
+Risk: The skill can perform high-impact monday.com write and delete actions.
+
+Mitigation: Approve write or destructive actions only after checking the exact target, payload, and expected effect.
+
+## Reference(s):
+
+- [monday homepage](https://monday.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-monday)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill can guide calls that return JSON data from monday connector actions.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

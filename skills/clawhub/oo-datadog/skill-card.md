@@ -1,42 +1,52 @@
-## Description: <br>
-Datadog helps an agent search and read Datadog monitoring data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Datadog lets agents search, retrieve, and query Datadog metrics and monitors through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to retrieve Datadog metric metadata, monitor details, metric names, monitor search results, timeseries points, and API key validation results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill broadly applies to Datadog-related work, which could lead an agent to use it for tasks beyond simple read workflows. <br>
-Mitigation: Confirm that Datadog access is intended before installation or use, and keep actions scoped to the user's requested Datadog task. <br>
-Risk: Future or expanded Datadog actions could create, edit, or delete resources such as monitors, dashboards, incidents, or configuration. <br>
-Mitigation: Require explicit user confirmation of the exact target, payload, and expected effect before any state-changing Datadog action. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Datadog connector schemas, retrieve Datadog metrics and monitor data, query timeseries points, and validate the configured Datadog API key through the oo CLI.
 
-## Reference(s): <br>
-- [ClawHub Datadog skill](https://clawhub.ai/oomol/skills/oo-datadog) <br>
-- [Datadog homepage](https://www.datadoghq.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, json, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill frontmatter) <br>
+Risk: First-time setup can involve executing remote installer scripts from cli.oomol.com.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer or verified installation documentation and confirm setup before allowing the agent to run installation commands.
+
+## Reference(s):
+
+- [ClawHub Datadog skill](https://clawhub.ai/oomol/skills/oo-datadog)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI installation guide](https://cli.oomol.com/install-guide.md)
+- [Datadog homepage](https://www.datadoghq.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Directs the agent to inspect live Datadog connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

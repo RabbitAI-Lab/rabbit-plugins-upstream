@@ -1,40 +1,60 @@
-## Description: <br>
-Businessmap (businessmap.io). Use this skill for Businessmap requests that read, create, update, or delete workspace, board, and card data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Businessmap helps an agent read, create, update, and delete Businessmap boards and cards through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Businessmap schemas, list and retrieve workspaces, boards, and cards, and perform confirmed board or card changes through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-businessmap) <br>
-- [Businessmap Homepage](https://businessmap.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+External users and developers use this skill to operate Businessmap workspaces, boards, and cards from an agent session while relying on OOMOL-mediated Businessmap access.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill runs Businessmap connector actions through the oo CLI; write actions require payload review, and destructive card deletion requires explicit target confirmation.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Setup instructions can run unverified remote installer code on the user's machine.
+
+Mitigation: Review the setup path first and run installer commands only after verifying the installer source and integrity through a safer channel.
+
+Risk: Write and destructive Businessmap actions can change or permanently delete user data.
+
+Mitigation: Confirm the exact Businessmap object, payload, and intended effect with the user before running write or delete actions.
+
+Risk: Businessmap access is mediated by OOMOL rather than handled directly by the agent.
+
+Mitigation: Use the skill only when the user is comfortable with OOMOL mediating Businessmap access.
+
+## Reference(s):
+
+- [Businessmap homepage](https://businessmap.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Skill page](https://clawhub.ai/oomol/skills/oo-businessmap)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return JSON-formatted connector responses from Businessmap actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

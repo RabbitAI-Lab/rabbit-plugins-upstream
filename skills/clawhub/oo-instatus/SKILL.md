@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Instatus"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["instatus"]
   icon: "https://static.oomol.com/logo/third-party/instatus.svg"
 ---

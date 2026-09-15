@@ -1,46 +1,56 @@
-## Description: <br>
-Google Sheets skill for reading, creating, updating, and deleting spreadsheet data through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to operate Google Sheets through the OOMOL oo CLI for reading, creating, updating, searching, formatting, and managing spreadsheet data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Google Sheets through an OOMOL-connected account, including reading ranges, creating spreadsheets, updating values, and managing sheet structure. It is suited for agent workflows that need Google Sheets actions through the oo CLI connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change spreadsheet state through write actions. <br>
-Mitigation: Confirm the exact spreadsheet target, action, and payload with the user before running any action tagged [write]. <br>
-Risk: The skill can remove or overwrite spreadsheet data through destructive actions. <br>
-Mitigation: Get explicit user approval for the target and effect before running any action tagged [destructive], especially clear, delete row or column, and delete sheet operations. <br>
-Risk: The skill depends on an OOMOL-connected Google Sheets account. <br>
-Mitigation: Install only when the operator is comfortable granting OOMOL access to Google Sheets and use the first-time setup flow only after an auth or connection error. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect Google Sheets action schemas and run read, write, formatting, search, filtering, chart, validation, metadata, and sheet-management operations through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-googlesheets) <br>
-- [Google Sheets homepage](https://workspace.google.com/products/sheets/) <br>
-- [oo CLI repository](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [OOMOL Google Sheets connection page](https://console.oomol.com/app-connections?provider=googlesheets) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects with data and meta.executionId fields when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup instructs users to run remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the OOMOL CLI installation path and prefer official, versioned instructions with checksum or signature verification before running an installer.
+
+Risk: Write and destructive Google Sheets actions can alter, overwrite, or remove spreadsheet data.
+
+Mitigation: Confirm exact payloads and intended effects before write actions, and require explicit approval for destructive actions.
+
+## Reference(s):
+
+- [ClawHub Google Sheets Skill](https://clawhub.ai/oomol/skills/oo-googlesheets)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Google Sheets](https://workspace.google.com/products/sheets/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands, JSON payloads, and structured command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live schema inspection before constructing connector payloads; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

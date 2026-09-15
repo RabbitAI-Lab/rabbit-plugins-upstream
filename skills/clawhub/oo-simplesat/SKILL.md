@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Simplesat"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["simplesat"]
   icon: "https://static.oomol.com/logo/third-party/simplesat.svg"
 ---

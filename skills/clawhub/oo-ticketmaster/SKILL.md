@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Ticketmaster"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["ticketmaster"]
   icon: "https://static.oomol.com/logo/third-party/Ticketmaster.png"
 ---

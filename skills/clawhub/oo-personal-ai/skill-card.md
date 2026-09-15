@@ -1,42 +1,56 @@
-## Description: <br>
-Personal AI (personal.ai) lets agents read, create, and update data through an OOMOL-connected Personal AI account instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Personal AI (personal.ai) lets an agent read, create, and update Personal AI data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to let an agent operate Personal AI personas, send messages or instructions, and upload memories, text documents, or public URLs through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and write Personal AI data through a connected account, including content that may persist in memories or document libraries. <br>
-Mitigation: Install it only for intended Personal AI account use, and review proposed write payloads before approving state-changing actions. <br>
-Risk: Incorrect payloads could send unintended persona messages, instructions, memories, documents, or URL uploads. <br>
-Mitigation: Inspect the live connector schema before constructing payloads and confirm the exact effect with the user for write actions. <br>
+## Use Case:
 
+External users and developers use this skill to operate Personal AI personas through an OOMOL-connected account, including sending messages or instructions and uploading memories, text documents, or public URL content.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-personal-ai) <br>
-- [Personal AI homepage](https://personal.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector actions may return JSON responses containing data and meta.executionId; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: release evidence and skill metadata) <br>
+Risk: Setup instructions execute remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer workflow before installing and prefer a versioned, signed, or checksum-verified source.
+
+Risk: Write actions can change Personal AI account state by sending messages, instructions, memories, documents, or URLs.
+
+Mitigation: Confirm the exact payload and intended effect with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-personal-ai)
+- [Personal AI Homepage](https://personal.ai)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON payload instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

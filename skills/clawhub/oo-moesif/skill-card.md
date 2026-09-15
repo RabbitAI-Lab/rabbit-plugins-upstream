@@ -1,46 +1,55 @@
-## Description: <br>
-Moesif (moesif.com) lets an agent search and read Moesif workspace, app, template, and workspace-list data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Moesif provides schema-first guidance for running Moesif read actions through an OOMOL-connected account with the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and support teams use this skill to inspect Moesif workspace, app, template, and workspace-list data through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Moesif data through the user's OOMOL-connected account when connector access is available. <br>
-Mitigation: Install and invoke it only when Moesif account data access is intended, and review OOMOL CLI sign-in and connection behavior before use. <br>
-Risk: Connector commands may fail or use the wrong payload if the live Moesif action contract changes. <br>
-Mitigation: Inspect the live action schema with `oo connector schema` before constructing each connector payload. <br>
-Risk: Although the listed Moesif actions are read-only, future write or destructive connector actions would carry state-change risk. <br>
-Mitigation: Require explicit user confirmation for any action tagged `[write]` or `[destructive]` before running it. <br>
+## Use Case:
 
+Developers and support engineers use this skill to inspect Moesif workspace and app information, including apps, workspaces, workspace templates, and individual workspaces.
 
-## Reference(s): <br>
-- [Moesif homepage](https://www.moesif.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-moesif) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runs read-only Moesif connector actions through the oo CLI after inspecting the live action schema.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Setup instructions include curl and PowerShell pipe commands that execute a remote installer without built-in verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official signed package or separately downloaded installer with checksum or signature verification before installing the oo CLI.
+
+Risk: Normal operation accesses Moesif data through OOMOL using the user's connected account.
+
+Mitigation: Confirm the connected OOMOL account and Moesif workspace are appropriate before running connector actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-moesif)
+- [Moesif Homepage](https://www.moesif.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector action responses are JSON when the documented --json flag is used.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

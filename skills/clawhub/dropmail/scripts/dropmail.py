@@ -30,20 +30,88 @@ import urllib.parse
 DB_DIR = Path.home() / ".dropmail"
 DB_PATH = DB_DIR / "dropmail.db"
 
-# macOS Python (python.org installer) doesn't bundle system CA certs.
-# Use certifi if available, otherwise fall back to unverified context.
-try:
-    import certifi
-    _SSL_CTX = ssl.create_default_context(cafile=certifi.where())
-except ImportError:
-    _SSL_CTX = ssl._create_unverified_context()
+def _make_ssl_context():
+    """Build a TLS context that ALWAYS verifies certificates.
+
+    Uses the system trust store by default. Some Python builds (notably the
+    python.org macOS installer) ship no system CAs; in that case we augment the
+    context with certifi's bundle if it is installed. We never fall back to an
+    unverified context — doing so would silently expose session cookies and
+    inbox contents to a man-in-the-middle.
+    """
+    ctx = ssl.create_default_context()
+    if not ctx.get_ca_certs():
+        try:
+            import certifi
+            ctx.load_verify_locations(cafile=certifi.where())
+        except ImportError:
+            print(
+                "[warn] No system CA certificates found and 'certifi' is not "
+                "installed. TLS verification may fail; install certifi with "
+                "'pip install certifi'.",
+                file=sys.stderr,
+            )
+    return ctx
+
+
+_SSL_CTX = _make_ssl_context()
 API_BASE = "https://api.guerrillamail.com/ajax.php"
 SESSION_FILE = DB_DIR / "sessions.json"
 
+# Basic email shape check for CLI args (defense-in-depth, better errors).
+_EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+
+# Terminal control characters (excludes tab \x09 and newline \x0a).
+_CTRL_RE = re.compile(r"[\x00-\x08\x0b-\x1f\x7f]")
+
+
+def _valid_email(email: str) -> bool:
+    return bool(email) and len(email) <= 254 and bool(_EMAIL_RE.match(email))
+
+
+def _clean(text) -> str:
+    """Strip terminal control/escape characters from server-supplied content.
+
+    Inbox contents come from anyone who emails a disposable address, i.e. they
+    are fully attacker-controlled. Printing them raw would let a crafted message
+    inject ANSI escape sequences into the user's terminal (screen spoofing,
+    clipboard/title manipulation on some emulators). We drop control chars,
+    keeping only tab and newline.
+    """
+    if text is None:
+        return ""
+    return _CTRL_RE.sub("", str(text))
+
+# ── Filesystem helpers ────────────────────────────────────────────────────────
+def _ensure_private_dir():
+    """Create ~/.dropmail owned by the user only (0700). Session cookies and
+    cached inbox contents live here; other local users must not read them."""
+    DB_DIR.mkdir(parents=True, exist_ok=True)
+    try:
+        os.chmod(DB_DIR, 0o700)
+    except OSError:
+        pass
+
+
+def _write_private(path: Path, text: str):
+    """Write text to a file that only the owner can read/write (0600)."""
+    fd = os.open(str(path), os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    with os.fdopen(fd, "w") as f:
+        f.write(text)
+    try:
+        os.chmod(path, 0o600)  # tighten if the file pre-existed with looser perms
+    except OSError:
+        pass
+
+
 # ── DB Setup ──────────────────────────────────────────────────────────────────
 def init_db():
-    DB_DIR.mkdir(parents=True, exist_ok=True)
+    _ensure_private_dir()
     con = sqlite3.connect(DB_PATH)
+    try:
+        os.chmod(DB_PATH, 0o600)  # the DB caches received message bodies
+    except OSError:
+        pass
     cur = con.cursor()
     cur.executescript("""
         CREATE TABLE IF NOT EXISTS emails (
@@ -77,7 +145,8 @@ def load_sessions():
 
 
 def save_sessions(sessions):
-    SESSION_FILE.write_text(json.dumps(sessions, indent=2))
+    _ensure_private_dir()
+    _write_private(SESSION_FILE, json.dumps(sessions, indent=2))
 
 
 def api_call(params: dict, email: str = None) -> dict:
@@ -95,8 +164,10 @@ def api_call(params: dict, email: str = None) -> dict:
     # Inject saved PHPSESSID
     if "phpsessid" in session_data:
         req.add_header("Cookie", f"PHPSESSID={session_data['phpsessid']}")
-        req.add_header("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0")
 
+    # GuerrillaMail rejects non-browser User-Agents with 403, so we send a
+    # browser UA. This is a compatibility requirement of their public API, not
+    # an attempt to evade anything — no credentials or PII are sent.
     req.add_header("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0")
     try:
         with urllib.request.urlopen(req, timeout=10, context=_SSL_CTX) as resp:
@@ -194,8 +265,8 @@ def cmd_inbox(args, con, email):
     for msg_id, mail_from, subject, excerpt, received_at, read in rows:
         date_str = datetime.fromtimestamp(received_at).strftime("%m-%d %H:%M") if received_at else "?"
         read_mark = "✓" if read else "●"
-        from_trunc = (mail_from or "")[:29]
-        subj_trunc = (subject or "(no subject)")[:34]
+        from_trunc = _clean(mail_from or "")[:29]
+        subj_trunc = _clean(subject or "(no subject)")[:34]
         print(f"  {msg_id:<12} {from_trunc:<30} {subj_trunc:<35} {date_str:<16} {read_mark}")
     print(f"\n  Use: dropmail {email} read <id>  to read a message")
 
@@ -251,7 +322,6 @@ def cmd_read(args, con, email, msg_id):
         data = api_call({"f": "fetch_email", "email_id": msg_id}, email=email)
         body = data.get("mail_body", "(empty)")
         # Strip basic HTML tags
-        import re
         body = re.sub(r"<[^>]+>", "", body)
         body = body.replace("&nbsp;", " ").replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&")
         cur.execute("UPDATE messages SET body=?, read=1 WHERE id=?", (body, msg_id))
@@ -262,11 +332,11 @@ def cmd_read(args, con, email, msg_id):
 
     date_str = datetime.fromtimestamp(received_at).strftime("%Y-%m-%d %H:%M") if received_at else "?"
     print(f"\n{'─'*60}")
-    print(f"From:    {mail_from}")
-    print(f"Subject: {subject}")
+    print(f"From:    {_clean(mail_from)}")
+    print(f"Subject: {_clean(subject)}")
     print(f"Date:    {date_str}")
     print(f"{'─'*60}\n")
-    print(body.strip())
+    print(_clean(body).strip())
     print(f"\n{'─'*60}")
 
 
@@ -366,6 +436,14 @@ def main():
 
     parser = build_parser()
     args = parser.parse_args()
+
+    # Validate untrusted CLI input before it reaches the DB/API layer.
+    if getattr(args, "email", None) is not None and not _valid_email(args.email):
+        print(f"[error] Not a valid email address: {args.email}", file=sys.stderr)
+        sys.exit(2)
+    if getattr(args, "id", None) is not None and not args.id.isdigit():
+        print(f"[error] Message ID must be numeric: {args.id}", file=sys.stderr)
+        sys.exit(2)
 
     con = init_db()
 

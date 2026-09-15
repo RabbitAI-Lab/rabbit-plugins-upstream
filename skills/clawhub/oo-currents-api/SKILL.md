@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Currents API"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["currents_api"]
   icon: "https://static.oomol.com/logo/third-party/Currents%20API.svg"
 ---

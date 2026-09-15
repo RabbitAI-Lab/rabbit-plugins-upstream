@@ -1,45 +1,51 @@
-## Description: <br>
-Lumos helps agents read and search Lumos access requests and AppStore app records through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lumos (lumos.com). Use this skill for ANY Lumos request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to retrieve Lumos access-request and AppStore-app data from a connected Lumos account without handling raw credentials directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: An agent may construct an invalid or stale Lumos connector payload. <br>
-Mitigation: Fetch the live connector schema with `oo connector schema` before constructing each action payload. <br>
-Risk: A state-changing Lumos action could affect the wrong target if write or destructive actions are later added. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running any action tagged `[write]` or `[destructive]`. <br>
-Risk: Authentication or connection setup may be attempted unnecessarily. <br>
-Mitigation: Run first-time setup commands only after the matching command-not-found, authentication, connection, scope, or billing error appears. <br>
+## Use Case:
 
+Developers and agents use this skill to search and read Lumos data through an OOMOL-connected account. It supports retrieving and listing Lumos access requests and AppStore apps while inspecting live action schemas before sending JSON payloads.
 
-## Reference(s): <br>
-- [ClawHub Lumos skill](https://clawhub.ai/oomol/skills/oo-lumos) <br>
-- [Lumos homepage](https://www.lumos.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live Lumos connector schemas before execution; read actions are safe to run directly, while write or destructive actions require confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release and skill metadata) <br>
+Risk: Setup instructions include unverified remote installer commands that should not be run automatically by an agent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup instructions before installation and prefer a verified, version-pinned package or documented manual install process.
+
+## Reference(s):
+
+- [Lumos homepage](https://www.lumos.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include live schema inspection commands and connector action commands; connector responses are JSON when run with --json.]
+
+## Skill Version(s):
+
+1.0.2 (source: SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "EasyPost"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["easypost"]
   icon: "https://static.oomol.com/logo/third-party/easypost.svg"
 ---

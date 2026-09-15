@@ -1,45 +1,56 @@
-## Description: <br>
-Use this skill for Readwise requests that read, create, or update data through the OOMOL Readwise connector instead of calling the Readwise API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Readwise access skill for reading, creating, and updating highlights, books, sources, and Reader documents through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Readwise through an OOMOL-connected account, including exporting highlights, listing books or Reader documents, saving URLs, creating highlights, and updating Reader document metadata. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: OOMOL acts as the intermediary for account-scoped Readwise actions. <br>
-Mitigation: Install and use this skill only when the user is comfortable authorizing OOMOL for the connected Readwise account. <br>
-Risk: Write actions can create highlights, save Reader documents, or update Reader document metadata, tags, or location. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running any create, save, or update action. <br>
-Risk: First-time setup commands can install the oo CLI or initiate account connection flows. <br>
-Mitigation: Run installation, login, or connection steps only after an auth or connection failure and only when the user intentionally wants the integration configured. <br>
+## Use Case:
 
+External users and developers use this skill to work with Readwise data from an agent, including exporting highlights, listing books or documents, saving URLs, and creating or updating highlights and documents after confirming write payloads.
 
-## Reference(s): <br>
-- [ClawHub Readwise skill page](https://clawhub.ai/oomol/skills/oo-readwise) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Readwise homepage](https://readwise.io) <br>
-- [OOMOL Readwise connection](https://console.oomol.com/app-connections?provider=readwise) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md metadata.version and server evidence) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and use a verified oo CLI installation path before installing; avoid running pipe-to-shell commands blindly.
+
+Risk: Write actions can modify Readwise highlights or Reader documents.
+
+Mitigation: Inspect the live action schema and confirm the exact JSON payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [Readwise homepage](https://readwise.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub Readwise skill page](https://clawhub.ai/oomol/skills/oo-readwise)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline bash and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live Readwise connector schemas before running actions; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

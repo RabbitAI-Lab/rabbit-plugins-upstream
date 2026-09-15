@@ -1,44 +1,64 @@
-## Description: <br>
-A professional product image generation skill for Amazon product detail pages, covering main images, secondary images, and A+ modules. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A professional product image generation skill for Amazon product detail pages, covering main images, secondary images, and A+ Brand Content modules.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External sellers, marketplace operators, and ecommerce designers use this skill to plan and generate Amazon product image suites. It guides the agent through main-image baselining, secondary image selection, A+ module planning, and one-at-a-time image generation via the dLazy CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Use of the third-party dLazy CLI may send prompts and supplied local media to dLazy services. <br>
-Mitigation: Install only if the user accepts dLazy hosted processing, and avoid sending sensitive product data or media unless approved for that service. <br>
-Risk: The CLI may store or use a dLazy API key on the local system. <br>
-Mitigation: Prefer npx or the DLAZY_API_KEY environment variable for temporary use, and rotate or revoke keys from the dLazy dashboard when no longer needed. <br>
-Risk: Some runtime instructions and disclosures are Chinese-only metadata. <br>
-Mitigation: Review the Chinese instructions before use, especially command execution and API-key handling guidance. <br>
+## Use Case:
 
+External sellers, marketplace teams, and ecommerce creative operators use this skill to plan and generate Amazon-compliant product image sets, including main images, secondary infographics, lifestyle/detail shots, and A+ content modules.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-image-amazon-product-image-suite) <br>
-- [dLazy CLI repository](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and generated image URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires dLazy CLI authentication and user confirmation before each generation command.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: The skill asks users to run a third-party npm CLI with user-account permissions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer npx or a local install, review @dlazy/cli@1.2.3 and its source before use, and avoid global installation unless operationally required.
+
+Risk: The CLI stores persistent dLazy credentials in a local configuration file or reads them from DLAZY_API_KEY.
+
+Mitigation: Use least-privilege API keys where possible, protect the local config file, and rotate or revoke keys if the CLI or environment is no longer trusted.
+
+Risk: Prompts and user-provided media paths may be sent to dLazy API and uploaded to files.dlazy.com for generation.
+
+Mitigation: Provide only product media and prompts intended for upload to the dLazy service, and avoid confidential or regulated content unless approved for that service.
+
+Risk: Server evidence reports unavailable provenance and disclosure inconsistencies.
+
+Mitigation: Treat repository and package links as metadata references, verify the publisher and package independently before deployment, and do not infer GitHub import provenance.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-image-amazon-product-image-suite)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands, checklists, prompt drafts, and generated asset URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May invoke the dLazy CLI, upload user-provided media paths, and return generated result URLs hosted by files.dlazy.com.]
+
+## Skill Version(s):
+
+1.3.17 (source: server release metadata; artifact frontmatter says 1.3.6)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

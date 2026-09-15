@@ -1,44 +1,56 @@
-## Description: <br>
-ShipEngine lets an agent use an OOMOL-connected ShipEngine account to calculate or estimate shipping rates, list carriers, retrieve rates, parse addresses, and validate mailing addresses. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents operate ShipEngine through an OOMOL-connected account by inspecting live action schemas and running ShipEngine connector actions for rates, carriers, and address parsing or validation.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent perform ShipEngine rate, carrier, address parsing, and address validation workflows through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a credentialed OOMOL-connected ShipEngine account for external API activity. <br>
-Mitigation: Install only when that account access is acceptable, and review requests that include customer addresses or shipment details before execution. <br>
-Risk: Rate, carrier, parsing, and validation requests may affect ShipEngine or OOMOL usage and billing. <br>
-Mitigation: Treat connector calls as billable external API activity and pause retries when billing or credit errors are returned. <br>
+## Use Case:
 
+Developers and agent users use this skill to calculate or estimate shipping rates, retrieve rate details, list connected carriers, parse addresses, and validate mailing addresses through a connected ShipEngine account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-shipengine) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [ShipEngine Homepage](https://www.shipengine.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ShipEngine Icon](https://static.oomol.com/logo/third-party/shipengine.png) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON request or response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution and returns connector results as JSON when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: ShipEngine requests may include sensitive addresses and shipment details routed through OOMOL.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when that routing is acceptable, and confirm payload contents before rate calculation, address parsing, or address validation.
+
+Risk: The setup guidance includes remote installer commands for the oo CLI.
+
+Mitigation: Prefer a signed, pinned, and verifiable installation method instead of running the remote installer commands as written.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-shipengine)
+- [ShipEngine Homepage](https://www.shipengine.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May execute oo CLI commands against the user's connected ShipEngine account after live schema inspection.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,59 @@
-## Description: <br>
-API Ninjas (api-ninjas.com). Use this skill for ANY API Ninjas request — searching and reading data. Whenever a task involves API Ninjas, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+API Ninjas connector for searching and reading air quality, weather, geocoding, reverse geocoding, timezone, and forecast data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to query API Ninjas location and environment data through an OOMOL-connected account, including geocoding, reverse geocoding, timezone, weather, forecast, and air quality lookups. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires authenticated OOMOL and API Ninjas access and can fail when credentials, scopes, or billing are not ready. <br>
-Mitigation: Use an already connected account when available, follow setup only after auth or connection failures, and resolve expired credentials or billing errors before retrying. <br>
-Risk: Incorrect request payloads can produce failed or misleading API lookups. <br>
-Mitigation: Inspect each action's live schema with the oo CLI before constructing request data. <br>
+## Use Case:
 
+External users and developers use this skill to query API Ninjas data through the OOMOL `oo` CLI after their account and API Ninjas connection are configured.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-api-ninjas) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [API Ninjas Homepage](https://api-ninjas.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution and returns connector responses as JSON when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions include unverified remote installer commands that can execute changing code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing; prefer an official package-manager or checksum/signature-verified oo CLI installation and avoid pipe-to-shell commands.
+
+Risk: The skill sends API request payloads through OOMOL to API Ninjas.
+
+Mitigation: Treat request payloads as data shared with those services and avoid sending sensitive information unless that data flow is acceptable.
+
+Risk: Authentication and connection setup can affect the user's OOMOL account and API Ninjas access.
+
+Mitigation: Authenticate and connect API Ninjas manually, and do not run setup or installer commands with administrator privileges unless clearly required.
+
+## Reference(s):
+
+- [API Ninjas homepage](https://api-ninjas.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before API requests and returns API results as JSON from the `oo` CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

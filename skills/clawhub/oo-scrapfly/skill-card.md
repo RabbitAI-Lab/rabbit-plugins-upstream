@@ -1,44 +1,52 @@
-## Description: <br>
-Scrapfly support for searching and reading data through the OOMOL-connected Scrapfly connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scrapfly (scrapfly.io) skill that lets an agent scrape public URLs and retrieve monitoring metrics through the OOMOL oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Agents and developers use this skill to operate Scrapfly through an OOMOL-connected account, including scraping a single public URL and retrieving monitoring metrics for the connected API key. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Scrapfly account and sensitive credentials managed through OOMOL. <br>
-Mitigation: Use it only with an intended OOMOL Scrapfly connection and keep credential handling within the connected account flow. <br>
-Risk: First-time setup may involve approving an external oo CLI installer and account connection. <br>
-Mitigation: Review the installer and account connection steps before approving them, and run setup only after a command fails for the matching reason. <br>
-Risk: Scraping actions can target public URLs that the user may not be authorized to access through Scrapfly. <br>
-Mitigation: Run scraping actions only for URLs the user is authorized to access and process. <br>
+## Use Case:
 
+Developers and external agents use this skill to inspect Scrapfly action schemas, run scraping or monitoring actions through an OOMOL-connected account, and recover from setup, authentication, connection, credential, and billing errors.
 
-## Reference(s): <br>
-- [ClawHub Scrapfly skill](https://clawhub.ai/oomol/oo-scrapfly) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Scrapfly homepage](https://scrapfly.io/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action payload construction.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill metadata) <br>
+Risk: First-time setup directs users to run remote installer scripts, which can execute unverified code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installing; prefer a pinned, verified, or platform-package-manager installation method and avoid running remote installer scripts directly with elevated privileges.
+
+## Reference(s):
+
+- [ClawHub Scrapfly skill page](https://clawhub.ai/oomol/skills/oo-scrapfly)
+- [Scrapfly homepage](https://scrapfly.io/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with bash, PowerShell, text, and JSON command examples; connector action results are returned as JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before action payload construction.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

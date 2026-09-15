@@ -1,47 +1,73 @@
-## Description: <br>
-SignNow API integration with managed OAuth for uploading documents, sending signature invites, creating templates, and managing e-signature workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SignNow API integration with managed OAuth for sending, signing, and managing e-signature documents.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operations teams use this skill to automate SignNow document, template, signing invite, folder, and webhook workflows through Maton-managed OAuth. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Maton API access and the SignNow OAuth connection can expose document and signing workflows. <br>
-Mitigation: Install only if you trust Maton to proxy SignNow requests, protect MATON_API_KEY, and use the intended SignNow connection. <br>
-Risk: Write operations can upload, send, update, delete, or create webhooks for SignNow resources. <br>
-Mitigation: Review document IDs, recipients, callback URLs, target resources, and intended effects before approving any write operation. <br>
-Risk: Multiple connected SignNow accounts can route a request to the wrong account. <br>
-Mitigation: Include the Maton-Connection header when more than one SignNow connection exists. <br>
+## Use Case:
 
+Developers and agents use this skill to work with SignNow through Maton's managed OAuth connection, including listing documents, uploading PDFs, sending signature invites, creating templates, and configuring approved automation.
 
-## Reference(s): <br>
-- [ClawHub SignNow Skill](https://clawhub.ai/byungkyu/signnow) <br>
-- [SignNow API Reference](https://docs.signnow.com/docs/signnow/reference) <br>
-- [SignNow Developer Portal](https://www.signnow.com/developers) <br>
-- [SignNow Postman Collection](https://github.com/signnow/postman-collection) <br>
-- [SignNow SDKs](https://github.com/signnow) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with HTTP endpoints and Python, JavaScript, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an active SignNow OAuth connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: ClawHub release metadata) <br>
+Risk: The skill can act on SignNow business documents through a Maton-authenticated connection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use OAuth with the narrowest available SignNow scopes, confirm connection creation, and verify the target account or connection before writes.
+
+Risk: Write operations and automations can send invites, modify documents, or create persistent downstream workflows.
+
+Mitigation: Default to read/list calls, require explicit approval for every POST, PUT, PATCH, DELETE, function deployment, trigger, or destination, and describe the target resource and intended effect before execution.
+
+Risk: API keys, event payloads, and document responses may expose sensitive data if printed, logged, or forwarded broadly.
+
+Mitigation: Prefer CLI-managed OAuth, never print or persist credentials, forward only minimum required fields, avoid full-payload forwarding, and use platform destinations unless the user approves a specific third-party host.
+
+## Reference(s):
+
+- [SignNow API Reference](https://docs.signnow.com/docs/signnow/reference)
+- [SignNow Developer Portal](https://www.signnow.com/developers)
+- [SignNow Postman Collection](https://github.com/signnow/postman-collection)
+- [SignNow SDKs](https://github.com/signnow)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Time Trigger Reference](references/time/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with bash, JSON, and Python code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include API paths, CLI commands, request payloads, hosted function snippets, and trigger configuration examples.]
+
+## Skill Version(s):
+
+1.2.3 (source: ClawHub release metadata; artifact frontmatter metadata.version is 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

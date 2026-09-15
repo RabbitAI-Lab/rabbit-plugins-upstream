@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/teneo-agent-deployment",
   "slug": "teneo-agent-deployment",
   "ownerHandle": null,
-  "version": null,
-  "updatedAt": 1779219139743,
-  "contentHash": "09c8af7e65f2b5b83126fb6b2a3c0ff85561707d5cb67c784923e7784ca610a9",
-  "fetchedAt": "2026-07-26T18:43:35.773Z"
+  "version": "1.0.15",
+  "updatedAt": 1789433405956,
+  "contentHash": "2857480d41cb5c3140a268cc119fb50a2ac07df864f61fb9f916d1ec728cf3fd",
+  "fetchedAt": "2026-09-15T12:59:45.858Z"
 }

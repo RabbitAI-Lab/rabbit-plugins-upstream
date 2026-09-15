@@ -1,45 +1,61 @@
-## Description: <br>
-Use this skill to operate V2EX through the OOMOL v2ex connector and oo CLI for reading, creating, updating, and deleting V2EX data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+V2EX (v2ex.com). Use this skill for ANY V2EX request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent operate V2EX through their OOMOL-connected account, including reading public and authenticated content and performing explicitly confirmed account actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill gives an agent broad authenticated control over a V2EX account. <br>
-Mitigation: Install only when the user trusts OOMOL and wants account operation through the oo CLI; require explicit confirmation before every non-read action. <br>
-Risk: State-changing actions can affect topics, tokens, sticky status, or notifications. <br>
-Mitigation: Confirm the exact target, payload, and effect before running boost_topic, create_token, set_topic_sticky, delete_notification, or any other non-read action. <br>
-Risk: Remote installer commands are present for first-time oo CLI setup. <br>
-Mitigation: Prefer reviewed official installation instructions and do not let an agent run a remote installer directly without user approval. <br>
+## Use Case:
 
+External users and developers use this skill to operate V2EX through an OOMOL-connected account, including reading topics, replies, nodes, notifications, member profiles, and token metadata. It can also run state-changing V2EX actions such as token creation, topic boosting, sticky changes, and notification deletion when confirmed.
 
-## Reference(s): <br>
-- [ClawHub V2EX skill](https://clawhub.ai/oomol/oo-v2ex) <br>
-- [V2EX homepage](https://www.v2ex.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command payloads; connector responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an installed oo CLI, OOMOL sign-in, connected V2EX credentials, and explicit confirmation before non-read actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: evidence.release.version and artifact metadata.version) <br>
+Risk: Setup guidance includes one-line remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the oo CLI source and installation guide before running installer commands, and avoid executing remote scripts blindly.
+
+Risk: The skill can perform state-changing V2EX actions, including token creation, topic boosting, sticky changes, and notification deletion.
+
+Mitigation: Require explicit user confirmation of the exact action, target, payload, and expected effect before running any write or destructive action.
+
+Risk: One state-changing action is not tagged for confirmation in the skill evidence.
+
+Mitigation: Treat topic boosting as a write action and require confirmation even if the action list does not mark it with a write tag.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-v2ex)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [V2EX](https://www.v2ex.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live V2EX connector action schemas before constructing payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

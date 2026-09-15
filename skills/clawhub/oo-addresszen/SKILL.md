@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "AddressZen"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["addresszen"]
   icon: "https://static.oomol.com/logo/third-party/addresszen.svg"
 ---

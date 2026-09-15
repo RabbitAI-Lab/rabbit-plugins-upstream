@@ -1,43 +1,56 @@
-## Description: <br>
-Feathery lets an agent operate an OOMOL-connected Feathery account to read account, form, user, session, submission, and hidden-field data and to perform approved writes or deletes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Feathery helps agents read, create, update, and delete Feathery account data through an OOMOL-connected CLI workflow.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Agents supporting teams that use Feathery can inspect form and account data and, with confirmation, manage users, hidden fields, and submissions through an OOMOL-connected Feathery account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, or delete Feathery users, hidden fields, and submissions. <br>
-Mitigation: Confirm the exact payload and intended effect before write actions, and require explicit approval before destructive actions. <br>
-Risk: The skill depends on the oo CLI and an OOMOL-connected Feathery account, including a remote installer for first-time setup. <br>
-Mitigation: Install and authenticate oo only when needed, and run the installer only when the user trusts OOMOL and needs the connector. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Feathery forms, schemas, submissions, users, sessions, account details, and hidden fields from an agent. It is intended for Feathery tasks where the agent should inspect each action schema before running read, write, or destructive operations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-feathery) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Feathery homepage](https://www.feathery.io/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return Feathery account, form, user, session, hidden field, or submission data from connected OOMOL actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: The first-time setup includes remote installer commands that pipe downloaded scripts directly to a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified OOMOL CLI installation method with pinned versions or checksum/signature validation before installing.
+
+Risk: The skill can perform write and destructive actions against Feathery account data.
+
+Mitigation: Inspect the live action schema, review the exact payload and target, and require explicit user approval before write or delete actions.
+
+## Reference(s):
+
+- [ClawHub Feathery skill](https://clawhub.ai/oomol/skills/oo-feathery)
+- [Feathery homepage](https://www.feathery.io/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose or run Feathery connector commands after schema inspection; write and destructive operations require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

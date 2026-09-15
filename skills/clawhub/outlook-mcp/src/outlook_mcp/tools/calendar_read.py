@@ -3,15 +3,71 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta
+from datetime import timezone as dt_timezone
 from typing import Any
-from zoneinfo import ZoneInfo
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from outlook_mcp.pagination import apply_pagination, build_request_config, wrap_nextlink
+from outlook_mcp.tools._recurrence import serialize_recurrence
 from outlook_mcp.validation import sanitize_output, validate_datetime, validate_graph_id
+
+_UTC_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 
 
 def _clamp(value: int, low: int, high: int) -> int:
     return max(low, min(high, value))
+
+
+def _has_time_zone_database() -> bool:
+    """Whether *any* IANA database is reachable, asked by resolving a key that
+    every database has.
+
+    Importability of ``tzdata`` is a proxy for this, not the thing itself: a
+    POSIX host with ``/usr/share/zoneinfo`` and no ``tzdata`` installed has a
+    database, and would have been told its install was broken.
+    """
+    try:
+        ZoneInfo("UTC")
+    except (ZoneInfoNotFoundError, ValueError):
+        return False
+    return True
+
+
+def _resolve_timezone(name: str) -> ZoneInfo:
+    """Return the ``ZoneInfo`` for ``name``, or say why it would not load.
+
+    ``name`` is server configuration rather than a tool argument, but an
+    unhandled ``ZoneInfoNotFoundError`` reaches the model as a message-free
+    ``Error executing tool outlook_list_events`` — ``_wrap_tool_errors`` keeps
+    the text of an *unexpected* exception on the server, which is right for a
+    crash and wrong for a misconfiguration. Raising ``ValueError`` routes it
+    through ``ToolInputError`` instead, so the message survives the trip. This
+    is what ``validate_datetime`` already does with the same config value.
+
+    The two ways the lookup fails need different fixes, so they get different
+    messages: a name no database contains is a typo in ``config.json``, while
+    no database at all is a broken install — ``tzdata`` is a dependency exactly
+    so that Windows and slim Linux images have one.
+
+    ``ValueError`` is caught alongside ``ZoneInfoNotFoundError`` because zoneinfo
+    raises it, not the subclass, for a path-shaped key: ``/etc/localtime`` is a
+    plausible thing to put in a config file and would otherwise escape both the
+    truncation and the hint. ``validate_datetime`` already catches both.
+    """
+    try:
+        return ZoneInfo(name)
+    except (ZoneInfoNotFoundError, ValueError) as exc:
+        if not _has_time_zone_database():
+            raise ValueError(
+                f"Invalid timezone: {name[:50]} — this host has no IANA time zone "
+                "database, so no zone name would resolve. Reinstall "
+                "outlook-graph-mcp to pick up its `tzdata` dependency."
+            ) from exc
+        raise ValueError(
+            f"Invalid timezone: {name[:50]} — not a zone name the IANA database "
+            "contains. Set `timezone` in ~/.outlook-mcp/config.json to a name "
+            "like America/Los_Angeles or UTC."
+        ) from exc
 
 
 def _compute_calendar_range(
@@ -25,20 +81,22 @@ def _compute_calendar_range(
     Uses explicit after/before if provided, otherwise computes
     relative to "now" in the configured timezone.
     """
-    tz = ZoneInfo(timezone)
+    tz = _resolve_timezone(timezone)
 
-    if after:
-        start_utc = validate_datetime(after)
-    else:
-        now_local = datetime.now(tz)
-        start_utc = now_local.astimezone(ZoneInfo("UTC")).strftime("%Y-%m-%dT%H:%M:%SZ")
+    def _now_plus(days_ahead: int) -> str:
+        # The guard is load-bearing, not a micro-optimisation. PEP 495 makes
+        # arithmetic on an aware datetime ignore ``fold`` and return fold=0, so
+        # ``+ timedelta(days=0)`` is NOT the identity: during the repeated hour
+        # after a DST fall-back it silently picks the first pass, moving the
+        # window an hour early. ``start`` must keep the fold ``datetime.now``
+        # gave it. (``end`` resets fold too, as it did before this refactor.)
+        moment = datetime.now(tz)
+        if days_ahead:
+            moment += timedelta(days=days_ahead)
+        return moment.astimezone(dt_timezone.utc).strftime(_UTC_FORMAT)
 
-    if before:
-        end_utc = validate_datetime(before)
-    else:
-        now_local = datetime.now(tz)
-        end_local = now_local + timedelta(days=days)
-        end_utc = end_local.astimezone(ZoneInfo("UTC")).strftime("%Y-%m-%dT%H:%M:%SZ")
+    start_utc = validate_datetime(after, timezone) if after else _now_plus(0)
+    end_utc = validate_datetime(before, timezone) if before else _now_plus(days)
 
     return start_utc, end_utc
 
@@ -65,6 +123,13 @@ def _format_event_summary(event: Any) -> dict:
     if event.end:
         end_str = f"{event.end.date_time} ({event.end.time_zone})"
 
+    # `type` distinguishes a seriesMaster from a singleInstance / occurrence /
+    # exception. Without it a listing cannot tell a recurring event from a
+    # one-off without fetching each one.
+    event_type = ""
+    if event.type is not None:
+        event_type = event.type.value if hasattr(event.type, "value") else str(event.type)
+
     return {
         "id": event.id,
         "subject": sanitize_output(event.subject or "(no subject)"),
@@ -77,6 +142,7 @@ def _format_event_summary(event: Any) -> dict:
         "organizer": sanitize_output(organizer_name),
         "response_status": response,
         "is_online": bool(event.is_online_meeting),
+        "type": event_type,
     }
 
 
@@ -113,17 +179,13 @@ def _format_event_detail(event: Any) -> dict:
     if event.online_meeting and event.online_meeting.join_url:
         online_meeting_url = event.online_meeting.join_url
 
-    recurrence = None
-    if event.recurrence:
-        recurrence = str(event.recurrence)
-
     return {
         **summary,
         "organizer": organizer,
         "body": body,
         "attendees": attendees,
         "online_meeting_url": online_meeting_url,
-        "recurrence": recurrence,
+        "recurrence": serialize_recurrence(event.recurrence),
         "categories": list(event.categories or []),
     }
 
@@ -133,7 +195,9 @@ def _format_event_concise(event: Any) -> dict:
 
     Keeps: id, subject, start, end, location, is_all_day, is_organizer,
     is_online_meeting, attendees_count. Drops: body, organizer (object),
-    response_status, categories, full attendees list.
+    response_status, categories, full attendees list, and `type` — concise
+    mode is for day-at-a-glance scans where the series/one-off distinction
+    isn't worth the tokens; use the normal listing when it is.
     """
     start_str = ""
     if event.start:

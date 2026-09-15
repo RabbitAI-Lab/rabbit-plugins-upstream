@@ -1,43 +1,56 @@
-## Description: <br>
-Together AI helps agents work with Together AI through an OOMOL-connected account for chat completions, embeddings, and model discovery. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Together AI lets agents use an OOMOL-connected Together AI account to create chat completions, generate embeddings, and list available models through the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate Together AI from an agent session through an OOMOL-connected account. It supports non-streaming chat completions, embedding generation, and model discovery. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and requested inputs may be sent to Together AI and may incur Together AI or OOMOL costs. <br>
-Mitigation: Review the intended payload and cost impact before approving write-tagged actions. <br>
-Risk: Chat completion and embedding actions are write-tagged and can create provider-side activity. <br>
-Mitigation: Confirm the exact action, schema-derived payload, and expected effect before execution. <br>
+## Use Case:
 
+Developers and operators use this skill to route Together AI tasks through an OOMOL-connected account, including non-streaming chat completions, text embeddings, and model listing.
 
-## Reference(s): <br>
-- [Together AI homepage](https://www.together.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-together-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions may return JSON data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: Setup guidance includes remote installer commands that could execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a trusted, verified method and inspect downloaded scripts before running them; do not allow an agent to run installer commands automatically.
+
+Risk: Write actions can create Together AI chat completions or embeddings through the connected account.
+
+Mitigation: Fetch the live action schema and confirm the exact payload and intended effect with the user before running write actions.
+
+## Reference(s):
+
+- [Together AI homepage](https://www.together.ai)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Together AI skill on ClawHub](https://clawhub.ai/oomol/skills/oo-together-ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON payload patterns]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution; JSON command responses include connector data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

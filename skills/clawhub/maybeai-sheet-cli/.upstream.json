@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/maybeai-sheet-cli",
   "slug": "maybeai-sheet-cli",
   "ownerHandle": null,
-  "version": "0.16.2",
-  "updatedAt": 1784890170955,
-  "contentHash": "066586ed8c6db354eca0ab630cdb6a6d9bbabd6fb5c770f4ec9d44c27a03a83d",
-  "fetchedAt": "2026-07-26T18:05:16.875Z"
+  "version": "v0.21.8",
+  "updatedAt": 1789359622703,
+  "contentHash": "45537858d276e3c230313d3bf388d8ca679bf48f8db647da35d2db8d26a01abf",
+  "fetchedAt": "2026-09-15T13:04:47.744Z"
 }

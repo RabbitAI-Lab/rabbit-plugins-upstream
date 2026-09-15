@@ -1,41 +1,58 @@
-## Description: <br>
-AI-powered bond analysis for the China market, including valuation, yield analysis, duration and convexity calculation, credit spread analysis, and bond portfolio management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered bond analysis expert for China market that covers bond valuation, yield analysis, duration and convexity calculation, credit spread analysis, convertible bond analysis, and bond portfolio management.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Fixed income analysts, bond traders, and portfolio managers use this skill to structure China bond valuation, yield, duration, convexity, credit spread, interest-rate risk, and portfolio analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Bond analysis outputs may be incorrect or outdated if market, issuer, rating, or regulatory inputs are stale. <br>
-Mitigation: Verify current market, issuer, rating, and regulatory information from trusted sources before relying on outputs. <br>
-Risk: The skill provides educational finance analysis and may be mistaken for investment advice. <br>
-Mitigation: Treat outputs as analytical support only and apply professional review before making investment decisions. <br>
-Risk: Broad trigger keywords could invoke the skill for prompts that are only loosely related to bond analysis. <br>
-Mitigation: Use narrower triggers when deployments should limit activation to explicit bond-analysis requests. <br>
+## Use Case:
 
+Fixed income analysts, bond traders, portfolio managers, and external users use this skill to structure China bond valuation, credit spread review, duration and convexity risk analysis, convertible bond checks, and portfolio risk-control workflows. It should be treated as an analytical aid, not investment advice.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown with tables, formulas, and Python code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Provides educational finance analysis frameworks and templates; users should verify market, issuer, rating, and regulatory inputs before relying on outputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The skill includes time-sensitive China bond-market commentary and does not provide live market or regulatory data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify current market data, official regulatory updates, issuer disclosures, and bond-specific inputs against authoritative sources before relying on outputs.
+
+Risk: Bond valuation, credit spread, duration, convexity, and convertible bond calculations can produce misleading conclusions when inputs or conventions are wrong.
+
+Mitigation: Check pricing basis, clean versus dirty price, coupon frequency, accrued interest, rating assumptions, and data timestamps before using any analysis.
+
+Risk: The skill can support investment analysis but is not investment advice.
+
+Mitigation: Use outputs as review material only and keep human approval, suitability review, and compliance controls in the decision process.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/security-bond-analysis)
+- [ClawHub publisher profile](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Code, Guidance]
+
+**Output Format:** [Markdown with tables, worked examples, formulas, and inline code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include bond valuation summaries, risk-control checklists, scenario tables, calculation templates, and verification guidance.]
+
+## Skill Version(s):
+
+3.0.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

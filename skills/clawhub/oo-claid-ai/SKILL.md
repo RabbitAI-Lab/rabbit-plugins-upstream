@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Claid AI"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["claid_ai"]
   icon: "https://static.oomol.com/logo/third-party/claid_ai.svg"
 ---

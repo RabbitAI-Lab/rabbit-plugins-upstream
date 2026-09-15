@@ -1,43 +1,57 @@
-## Description: <br>
-Operate Memberstack through an OOMOL-connected account for reading, creating, updating, deleting, and verifying member data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Memberstack (memberstack.com) supports reading, creating, updating, and deleting Memberstack data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Memberstack member records through the OOMOL memberstack connector, including member lookup, listing, creation, update, plan changes, deletion, and JWT verification. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Create, update, plan-change, and delete actions can change or permanently remove Memberstack member data. <br>
-Mitigation: Review the exact action payload and intended effect with the user before approving state-changing or destructive operations. <br>
-Risk: The skill operates through the user's OOMOL-connected Memberstack account. <br>
-Mitigation: Install and use it only when the user wants Codex to manage Memberstack through that connected account. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Memberstack connector schemas and run JSON-based actions against an OOMOL-connected Memberstack account. It supports member lookup, listing, creation, updates, plan changes, token verification, and deletion workflows with confirmation requirements for write and destructive actions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-memberstack) <br>
-- [Memberstack homepage](https://www.memberstack.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL Memberstack connection](https://console.oomol.com/app-connections?provider=memberstack) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; connector responses are JSON with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The setup instructions include remote installer commands that execute immediately on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a signed or package-manager install, a pinned release, or a manually downloaded installer with checksum or signature verification before running the oo CLI.
+
+Risk: Write and destructive connector actions can modify or delete Memberstack members, plans, profile data, and related subscription cleanup settings.
+
+Mitigation: Inspect the live action schema, confirm the exact payload and target with the user, and require explicit approval before member updates, free-plan removals, or deletions.
+
+## Reference(s):
+
+- [ClawHub Memberstack Skill Page](https://clawhub.ai/oomol/skills/oo-memberstack)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Memberstack Homepage](https://www.memberstack.com/)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands call the oo CLI connector and may return JSON responses with data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,56 @@
-## Description: <br>
-Use Hoop through OOMOL's oo CLI connector to search and read profile, connection, and session data from a connected Hoop account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Hoop (hoop.dev). Use this skill for ANY Hoop request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External developers and operators use this skill to inspect Hoop account profile, connection, and session information through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Hoop profile, connection, and session data through the connected OOMOL account. <br>
-Mitigation: Install and use it only for intended Hoop access, and review the connected account scopes before first use. <br>
-Risk: First-time setup may require installing the oo CLI before connector actions can run. <br>
-Mitigation: Review the CLI installer and install guide before completing setup. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect Hoop action schemas and run read-oriented Hoop connector actions through an OOMOL-connected oo CLI session.
 
-## Reference(s): <br>
-- [Hoop homepage](https://hoop.dev) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and frontmatter) <br>
+Risk: Setup instructions include running an internet installer for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only through a trusted, reviewable path, verify integrity if available, and personally approve installer execution.
+
+Risk: Hoop queries are routed through an OOMOL-connected CLI session.
+
+Mitigation: Use the skill only when comfortable routing Hoop queries through OOMOL, and personally approve sign-in, Hoop connection, and billing-related steps.
+
+## Reference(s):
+
+- [ClawHub Hoop skill page](https://clawhub.ai/oomol/skills/oo-hoop)
+- [Hoop homepage](https://hoop.dev)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Hoop connector responses are returned as JSON when the documented oo CLI command is run with --json.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

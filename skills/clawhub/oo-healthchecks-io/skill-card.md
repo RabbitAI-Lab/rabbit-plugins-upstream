@@ -1,43 +1,55 @@
-## Description: <br>
-Healthchecks.io lets agents operate Healthchecks.io checks through OOMOL's oo CLI, including reading, creating, updating, pausing, resuming, and deleting checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Healthchecks.io (healthchecks.io). Use this skill for ANY Healthchecks.io request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Healthchecks.io monitoring checks from an OOMOL-connected account. It supports project visibility, check lifecycle operations, notification channel review, status flips, and recent ping inspection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to a connected Healthchecks.io API key through OOMOL. <br>
-Mitigation: Install only after confirming trust in OOMOL and comfort with the Healthchecks.io account connection. <br>
-Risk: Create, update, pause, resume, and delete actions can affect monitoring state or remove checks. <br>
-Mitigation: Confirm the exact target and payload with the user before approving write or destructive actions. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Healthchecks.io checks, notification metadata, pings, and status history through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-healthchecks-io) <br>
-- [Healthchecks.io Homepage](https://healthchecks.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API Calls, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON with data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill metadata) <br>
+Risk: Setup instructions include remote installer scripts that could run arbitrary code if the installer source or transport is compromised.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing and prefer a verified, versioned oo CLI package or independently check installer contents and integrity before execution.
+
+Risk: The skill can create, update, pause, resume, and delete Healthchecks.io checks.
+
+Mitigation: Confirm write and delete payloads, targets, and intended effects before allowing the skill to act.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-healthchecks-io)
+- [Healthchecks.io homepage](https://healthchecks.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May invoke Healthchecks.io actions through the oo CLI after inspecting the live action schema.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

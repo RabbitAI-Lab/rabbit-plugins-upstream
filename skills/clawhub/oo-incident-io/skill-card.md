@@ -1,44 +1,55 @@
-## Description: <br>
-Provides incident.io incident, action, status, and severity lookup through OOMOL's incident_io connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+incident.io helps agents search and read incident.io data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Incident responders and operations teams use this skill to let an agent read incident.io incidents, actions, statuses, and severities from a connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: incident.io data may contain sensitive operational or business information. <br>
-Mitigation: Install only when the connected incident.io account is correct and treat returned incident data as sensitive. <br>
-Risk: Requests are routed through OOMOL's oo connector. <br>
-Mitigation: Use the skill only if that routing model is acceptable for the organization. <br>
-Risk: Future versions may add write or destructive actions that change incident.io state. <br>
-Mitigation: Review the version's listed actions and do not approve write or destructive payloads unless intentionally requested. <br>
+## Use Case:
 
+Employees, operators, and developers use this skill to inspect incident.io incidents, actions, statuses, and severities from a connected incident.io account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-incident-io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [incident.io](https://incident.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-oriented connector actions; command responses include data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and frontmatter) <br>
+Risk: The first-time setup guidance includes one-line remote installer commands, which evidence.security flags as a supply-chain risk.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified or pinned oo CLI installation path, inspect installers before execution, and avoid running remote installer commands directly in a shell.
+
+Risk: The skill mediates incident.io access through OOMOL-connected credentials.
+
+Mitigation: Install only if OOMOL-mediated access is acceptable, connect a least-privilege incident.io credential, and keep usage to the listed read-only actions unless a future version clearly discloses and gates writes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-incident-io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [incident.io](https://incident.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON command payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill calls listed read-only incident.io connector actions and returns connector data with execution metadata when commands are run.]
+
+## Skill Version(s):
+
+1.0.2 (source: evidence.release.version and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

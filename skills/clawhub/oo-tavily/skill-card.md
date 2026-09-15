@@ -1,45 +1,56 @@
-## Description: <br>
-Operates Tavily through the OOMOL oo CLI connector for search, crawl, extract, map, usage, and research workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tavily helps agents operate Tavily through the OOMOL oo CLI, including web search, crawling, URL mapping, content extraction, usage checks, and asynchronous research tasks.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to run Tavily search, crawling, extraction, URL mapping, usage lookup, and research workflows through an OOMOL-connected Tavily account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Tavily account through OOMOL. <br>
-Mitigation: Install only when the user is comfortable connecting Tavily through OOMOL; the skill directs agents not to handle raw Tavily tokens. <br>
-Risk: Write actions can create Tavily research jobs and may affect account usage or billing. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running write actions such as create_research. <br>
-Risk: Search, crawl, extract, and research actions can return untrusted web content. <br>
-Mitigation: Treat returned web content as external source material and review results before relying on them for downstream decisions. <br>
+## Use Case:
 
+Developers and agents use this skill to run Tavily search, crawl, map, extract, usage, and research actions through an OOMOL-connected Tavily account.
 
-## Reference(s): <br>
-- [Tavily homepage](https://tavily.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub listing](https://clawhub.ai/oomol/oo-tavily) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance with inline bash commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before payload construction.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and server evidence) <br>
+Risk: First-time setup includes remote installer commands for the OOMOL CLI, which may be unsafe if an agent runs them automatically or from an unverified source.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installation path first and prefer a verified package, pinned release, checksum, or manually inspected installer before installation.
+
+Risk: The skill can start asynchronous Tavily Research tasks, which may change service state or consume account resources.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub Tavily Skill Page](https://clawhub.ai/oomol/skills/oo-tavily)
+- [Tavily Homepage](https://tavily.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects that include data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

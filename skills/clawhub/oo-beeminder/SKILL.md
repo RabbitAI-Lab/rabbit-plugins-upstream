@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Beeminder"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["beeminder"]
   icon: "https://static.oomol.com/logo/third-party/beeminder.png"
 ---

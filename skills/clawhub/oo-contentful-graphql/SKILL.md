@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Contentful GraphQL"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["contentful_graphql"]
   icon: "https://static.oomol.com/logo/third-party/contentful_graphql.svg"
 ---

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Foxit Cloud API"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["fuxin"]
   icon: "https://static.oomol.com/logo/third-party/fuxin.svg"
 ---

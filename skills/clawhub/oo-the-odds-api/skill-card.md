@@ -1,44 +1,55 @@
-## Description: <br>
-The Odds API (the-odds-api.com) skill helps agents search and read sports odds, scores, events, participants, and market data through the OOMOL `oo` CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+The Odds API skill helps agents search and read live odds, events, scores, participants, markets, and supported sports through an OOMOL-connected The Odds API account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to connect an agent to an OOMOL-connected The Odds API account for sports odds, scores, events, participants, and market lookup tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a connected OOMOL account for The Odds API access. <br>
-Mitigation: Install only if you trust OOMOL and want the agent to use that connected account. <br>
-Risk: Live odds queries may consume The Odds API account quota or credits. <br>
-Mitigation: Monitor API usage and stop retrying when billing or insufficient-credit errors occur. <br>
-Risk: First-time setup may require installing the oo CLI from an external install command. <br>
-Mitigation: Review the oo CLI installation command before running it. <br>
+## Use Case:
 
+Developers and external users use this skill to let an agent query The Odds API through OOMOL's connector for sports, events, odds, scores, participants, and market metadata.
 
-## Reference(s): <br>
-- [The Odds API homepage](https://the-odds-api.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-the-odds-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and a meta.executionId when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: artifact frontmatter and release evidence) <br>
+Risk: First-time setup recommends executing a remote installer script directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installation, prefer a safer vendor-supported install path, review the installer, and verify any available checksum or signature.
+
+Risk: The skill depends on OOMOL's oo CLI and a connected The Odds API account.
+
+Mitigation: Install only if comfortable with OOMOL's CLI and account connection model, and avoid exposing raw The Odds API credentials outside the connector.
+
+## Reference(s):
+
+- [The Odds API homepage](https://the-odds-api.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-the-odds-api)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with oo CLI commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution and returns read-only The Odds API data through OOMOL.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

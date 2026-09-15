@@ -1,47 +1,56 @@
-## Description: <br>
-Operates Jotform through an OOMOL-connected account using the oo CLI for reading account details, forms, questions, submissions, and creating submissions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Jotform helps agents read, create, and update Jotform data through OOMOL's oo CLI and a connected Jotform account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, employees, and developers use this skill to operate Jotform data from an agent through the OOMOL connector. It supports reading account, form, question, and submission data, and creating submissions after user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Jotform account and can read account, form, question, and submission data. <br>
-Mitigation: Install it only for users or agents that should access that Jotform account, and keep the OOMOL connection scoped to the intended provider and account. <br>
-Risk: The create_submission action changes Jotform state. <br>
-Mitigation: Confirm the target form ID and exact submission payload with the user before running the write action. <br>
-Risk: Server security evidence marks the bundle suspicious and recommends review before installation. <br>
-Mitigation: Install only if the publisher is trusted and the Jotform workflow is needed; review the exact oo connector command and payload before allowing writes. <br>
-Risk: The setup guidance includes remote CLI installation commands. <br>
-Mitigation: Use an organization-approved installation path for the oo CLI and inspect remote install commands when policy requires it. <br>
+## Use Case:
 
+External users and developers use this skill to operate Jotform from an agent through an OOMOL-connected account, including listing forms, retrieving forms and submissions, inspecting questions, and creating submissions after confirmation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-jotform) <br>
-- [Jotform homepage](https://www.jotform.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL Jotform connection](https://console.oomol.com/app-connections?provider=jotform) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands require an installed oo CLI, an authenticated OOMOL account, and a connected Jotform provider.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: Setup instructions include unverified remote installer commands that could execute arbitrary code if the external installer is compromised.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing; prefer a verified, version-pinned, checksum- or signature-checked oo CLI installation method.
+
+Risk: The create_submission action changes Jotform state and can submit incorrect form data if IDs or payload values are wrong.
+
+Mitigation: Fetch the live action schema, confirm form IDs and payloads with the user, and only then run write actions.
+
+## Reference(s):
+
+- [ClawHub Jotform Skill](https://clawhub.ai/oomol/skills/oo-jotform)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Jotform Homepage](https://www.jotform.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the oo CLI Jotform connector; write actions require user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

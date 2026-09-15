@@ -1,45 +1,56 @@
-## Description: <br>
-Prospeo lets agents search and enrich people or company data through the OOMOL-managed Prospeo connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Prospeo lets agents search and read Prospeo company and person data through an OOMOL-connected oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to run Prospeo company and people search, enrichment, search suggestion, and account information actions through an OOMOL-connected Prospeo account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search and enrichment payloads may include sensitive people or company data and are sent to the Prospeo connector. <br>
-Mitigation: Confirm the lookup is appropriate, minimize submitted fields, and avoid sending sensitive data unless the user has authorization. <br>
-Risk: Prospeo or OOMOL account credits may be consumed by searches and enrichment requests. <br>
-Mitigation: Use targeted queries, check account information when needed, and stop on billing or insufficient-credit errors. <br>
-Risk: The skill runs shell commands through the oo CLI against a connected Prospeo account. <br>
-Mitigation: Fetch the live connector schema before building payloads and confirm any action that is marked write or destructive before execution. <br>
+## Use Case:
 
+Developers and external users use this skill to enrich companies or people, search Prospeo company and people data, retrieve autocomplete suggestions, and check Prospeo account information through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-prospeo) <br>
-- [Prospeo homepage](https://prospeo.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with bash commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live Prospeo connector schemas before constructing payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The setup fallback can run an unverified internet installer for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a pinned, documented installer with checksum or signature verification and explicitly approve any local software installation.
+
+Risk: Prospeo access depends on OOMOL acting as an intermediary for connector execution and credentials.
+
+Mitigation: Install and use the skill only when that intermediary model is acceptable for the user's Prospeo account and organization policy.
+
+## Reference(s):
+
+- [ClawHub Prospeo Skill](https://clawhub.ai/oomol/skills/oo-prospeo)
+- [Prospeo Homepage](https://prospeo.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before constructing JSON payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

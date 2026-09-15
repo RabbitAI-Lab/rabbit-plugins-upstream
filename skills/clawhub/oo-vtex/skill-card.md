@@ -1,43 +1,56 @@
-## Description: <br>
-VTEX (vtex.com). Use this skill for ANY VTEX request — searching and reading data. Whenever a task involves VTEX, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+VTEX helps agents search and read VTEX catalog data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect VTEX connector schemas and run read-only VTEX catalog actions through an OOMOL-connected account, including product lookup, brand listing, category tree retrieval, product/SKU ID listing, and storefront product search. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on the OOMOL oo CLI and a connected VTEX account; running setup or connection commands can change local authentication state or account connections. <br>
-Mitigation: Only install the CLI, sign in, or connect VTEX after explicit user approval or when a command fails with the documented setup or authentication error. <br>
-Risk: Future connector actions may include write or destructive operations even though the current disclosed action list is read-only. <br>
-Mitigation: Inspect the live action schema before building payloads and get explicit approval before running any action tagged write or destructive. <br>
+## Use Case:
 
+External developers and operators use this skill to inspect VTEX storefront and catalog data, including product lookup, brand lists, category trees, product and SKU IDs, and product search.
 
-## Reference(s): <br>
-- [VTEX homepage](https://vtex.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [VTEX connection setup](https://console.oomol.com/app-connections?provider=vtex) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector run responses are JSON objects with data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server evidence) <br>
+Risk: Fallback setup guidance can lead to running remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only through a trusted, reviewed, versioned method and avoid elevated shells.
+
+Risk: The skill depends on OOMOL account login, VTEX connection setup, and billing status.
+
+Mitigation: Confirm account, connector, and billing readiness before relying on the skill for operational VTEX access.
+
+## Reference(s):
+
+- [VTEX homepage](https://vtex.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-vtex)
+- [ClawHub publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill instructs the agent to inspect the live connector schema before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

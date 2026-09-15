@@ -1,42 +1,52 @@
-## Description: <br>
-BlazeMeter Functional (blazemeter.com). Use this skill for ANY BlazeMeter Functional request - searching and reading data. Whenever a task involves BlazeMeter Functional, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BlazeMeter Functional lets an agent use the OOMOL-connected oo CLI to search and read BlazeMeter Functional data instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to query BlazeMeter Functional data through an OOMOL-connected account. It supports reading active sessions, listing multi-tests in a workspace, and fetching a multi-test by collection ID. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill allows an agent to read BlazeMeter Functional data through the user's OOMOL-connected account. <br>
-Mitigation: Install only when the user intends to grant this read access, and review OOMOL CLI setup and account connection steps before first use. <br>
-Risk: Future connector versions could add write or destructive actions. <br>
-Mitigation: Keep write actions subject to exact payload review and require explicit user confirmation for destructive actions. <br>
+## Use Case:
 
+Developers, QA engineers, and external users use this skill to list BlazeMeter Functional multi-tests, retrieve multi-test details, and report active sessions through an OOMOL-managed connector.
 
-## Reference(s): <br>
-- [BlazeMeter Functional homepage](https://www.blazemeter.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-blaze-meter-functional) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Setup instructions include unverified remote installer commands that could execute arbitrary code on a user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not run curl|bash or irm|iex installer commands automatically; prefer an official, versioned installation path with checksum or signature verification after reviewing what it changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-blaze-meter-functional)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [BlazeMeter Functional homepage](https://www.blazemeter.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector actions are read-oriented in the provided artifact; live action schemas are inspected before execution.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

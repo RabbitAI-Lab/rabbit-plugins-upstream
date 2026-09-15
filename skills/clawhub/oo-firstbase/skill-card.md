@@ -1,42 +1,57 @@
-## Description: <br>
-Firstbase connector skill for searching and reading Firstbase account data through OOMOL's oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Firstbase (firstbase.com). Use this skill for ANY Firstbase request - searching and reading data. Whenever a task involves Firstbase, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators with an OOMOL-connected Firstbase account use this skill to inspect Firstbase catalog SKUs, inventory items, brands, categories, and organization inventory without handling raw Firstbase API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Firstbase account data through an OOMOL-connected account. <br>
-Mitigation: Install and use it only when the OOMOL and Firstbase connection is intentional and appropriate for the requested account data. <br>
-Risk: Future connector actions marked write or destructive could change or remove Firstbase data. <br>
-Mitigation: Require explicit user confirmation of the exact payload, target, and effect before running any write or destructive action. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Firstbase connector schemas and retrieve catalog SKUs, inventory items, brands, and categories through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Firstbase homepage](https://www.firstbase.com) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline bash commands and JSON CLI output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before running Firstbase actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: Setup instructions include remote installer scripts executed directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a trusted package manager or download, inspect, and verify the installer before running it.
+
+Risk: Connector access depends on an authenticated OOMOL-connected Firstbase account.
+
+Mitigation: Run actions only after schema inspection and use the documented setup flow only when authentication or connection errors occur.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-firstbase)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Firstbase Homepage](https://www.firstbase.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return Firstbase connector data as JSON through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,55 @@
-## Description: <br>
-Zenserp (zenserp.com). Use this skill for ANY Zenserp request - searching and reading data. Whenever a task involves Zenserp, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zenserp enables agents to run Google Search, Image Search, Maps local search, and News search through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to run Zenserp search, image search, maps local search, and news search through an OOMOL-connected account. It is intended for retrieving structured search results through the oo CLI after inspecting each action's live schema. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries and related parameters are sent to Zenserp and OOMOL services. <br>
-Mitigation: Avoid submitting sensitive or confidential search terms unless that use is approved for the connected account. <br>
-Risk: Zenserp actions may consume OOMOL account credit. <br>
-Mitigation: Run actions only for intended searches and stop retrying when billing or insufficient-credit errors occur. <br>
-Risk: The skill relies on the remote oo CLI installer and login flow for first-time setup. <br>
-Mitigation: Install or authenticate only when required by command failure and only when the OOMOL provider is trusted. <br>
+## Use Case:
 
+Developers and external users use this skill to retrieve Zenserp search results through an OOMOL-connected account while avoiding direct handling of raw API credentials.
 
-## Reference(s): <br>
-- [ClawHub Zenserp skill page](https://clawhub.ai/oomol/oo-zenserp) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Zenserp homepage](https://zenserp.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include action data and meta.executionId when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The setup guidance includes remote installer commands for the oo CLI, which should not be run automatically by an agent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only after inspecting and verifying the installer source, or use a safer trusted package channel.
+
+Risk: Connector calls use an OOMOL-connected account and may consume Zenserp or OOMOL credits.
+
+Mitigation: Inspect the live connector schema before running actions and stop on billing or credit errors until the account owner resolves them.
+
+## Reference(s):
+
+- [ClawHub Zenserp skill listing](https://clawhub.ai/oomol/skills/oo-zenserp)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Zenserp homepage](https://zenserp.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include returned data and a meta.executionId when actions run successfully.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

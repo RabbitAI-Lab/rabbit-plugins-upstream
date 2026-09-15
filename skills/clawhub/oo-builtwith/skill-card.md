@@ -1,42 +1,56 @@
-## Description: <br>
-BuiltWith. Use this skill for ANY BuiltWith request - searching and reading data. Whenever a task involves BuiltWith, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BuiltWith helps agents query BuiltWith technology intelligence through OOMOL's oo CLI using a connected BuiltWith account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to retrieve BuiltWith technology intelligence for domains through an OOMOL-connected BuiltWith account, including domain profiles, summaries, recommendations, redirect history, and social-profile domain matches. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected BuiltWith account and uses OOMOL as an intermediary for access. <br>
-Mitigation: Connect only the BuiltWith account and scopes intended for this skill, and rely on the connector flow instead of exposing raw tokens to the agent. <br>
-Risk: First-time setup may involve piping a remote installer into a shell. <br>
-Mitigation: Review the official oo CLI installation guide or installer before running the install command. <br>
+## Use Case:
 
+Agents and developers use this skill to retrieve BuiltWith domain technology profiles, summaries, recommendations, redirect history, and social-profile domain matches through an OOMOL-connected BuiltWith account.
 
-## Reference(s): <br>
-- [BuiltWith skill on ClawHub](https://clawhub.ai/oomol/oo-builtwith) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI installation guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON containing data and metadata, including an execution ID.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release metadata and skill metadata) <br>
+Risk: The security summary flags direct execution of remote installer scripts in the setup path.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review, pin, or integrity-verify the oo CLI installation path, and do not allow agents to automatically run curl|bash or irm|iex setup commands.
+
+Risk: BuiltWith lookups depend on OOMOL authentication, a connected BuiltWith account, valid credentials, and available billing credit.
+
+Mitigation: Run setup only after a matching failure, and have a human sign in, connect or refresh the account, or resolve billing before retrying.
+
+## Reference(s):
+
+- [ClawHub BuiltWith skill page](https://clawhub.ai/oomol/skills/oo-builtwith)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [BuiltWith connection setup](https://console.oomol.com/app-connections?provider=builtwith)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash and PowerShell examples, plus JSON CLI results from connector actions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only BuiltWith connector actions are run through the oo CLI after inspecting the live action schema.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

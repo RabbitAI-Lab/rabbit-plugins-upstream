@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "KnowBe4"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["knowbe4"]
   icon: "https://static.oomol.com/logo/third-party/knowbe4.png"
 ---

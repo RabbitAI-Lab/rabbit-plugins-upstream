@@ -1,44 +1,60 @@
-## Description: <br>
-Rentman support for searching and reading data through Rentman requests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Rentman (rentman.io) support for searching and reading Rentman contacts, contact persons, equipment, and projects through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to search and read Rentman contacts, contact persons, equipment, and projects through their connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Rentman business data through the user's connected OOMOL account. <br>
-Mitigation: Install and use it only when the user intends the agent to access Rentman data, and scope requests to the needed records. <br>
-Risk: Future connector actions that create, update, delete, or overwrite data could change Rentman state. <br>
-Mitigation: Require explicit user confirmation of the exact action, target, payload, and expected effect before running any write or destructive action. <br>
-Risk: First-time setup may require installing the oo CLI and signing in to OOMOL. <br>
-Mitigation: Run setup steps only after an auth, connection, or missing-command failure, and avoid exposing raw credentials in prompts or logs. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Rentman records and lists through the oo CLI without handling raw Rentman credentials directly. It supports read-focused workflows for contacts, contact persons, equipment, and projects.
 
-## Reference(s): <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Rentman homepage](https://rentman.io) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-rentman) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action calls; action responses are JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and skill metadata) <br>
+Risk: Fallback setup instructions include mutable remote installer scripts executed directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup commands before installation and prefer a verified package or download-then-verify process for the oo CLI.
+
+Risk: Rentman query payloads are sent through the OOMOL service and may expose operational business data to that connected service.
+
+Mitigation: Confirm the connected OOMOL account, Rentman scopes, requested fields, filters, and pagination before running broad list queries.
+
+Risk: Authentication, connection, scope, credential, or billing errors may require account setup actions.
+
+Mitigation: Run setup or billing steps only after a matching command failure and after the user confirms the account context.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-rentman)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Rentman Homepage](https://rentman.io)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before payload construction and limits documented Rentman actions to read-focused get and list operations.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

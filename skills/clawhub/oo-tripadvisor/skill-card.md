@@ -1,44 +1,60 @@
-## Description: <br>
-This skill helps agents search and read Tripadvisor data through the OOMOL Tripadvisor connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tripadvisor guides agents to use the OOMOL Tripadvisor connector for searching locations, finding nearby places, and retrieving location details or photos.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to search Tripadvisor locations, retrieve location details, and fetch location photos through an OOMOL-connected Tripadvisor account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected OOMOL account and Tripadvisor credentials managed through OOMOL. <br>
-Mitigation: Install and use it only when OOMOL is an acceptable operator for the connected Tripadvisor account. <br>
-Risk: The first-time setup path includes optional curl-to-shell and PowerShell installer commands for the oo CLI. <br>
-Mitigation: Prefer the official oo CLI installation guide or inspect and verify installer scripts before running them. <br>
-Risk: Future connector actions could include create, update, or delete behavior. <br>
-Mitigation: Require explicit user approval before running any action marked write or destructive, including the exact payload and intended effect. <br>
+## Use Case:
 
+External users and developers use this skill when they want an agent to search Tripadvisor locations, retrieve location details, fetch photos, or find nearby locations through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-tripadvisor) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Tripadvisor developer homepage](https://www.tripadvisor.com/developers) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects returned by the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Setup guidance includes remote installer commands that could run arbitrary code if fetched from an untrusted or compromised source.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified, user-controlled process, and prefer the published install guide over directly piping remote scripts into a shell.
+
+Risk: Tripadvisor requests are routed through OOMOL as an intermediary.
+
+Mitigation: Use the skill only when the user is comfortable with OOMOL handling Tripadvisor requests through the connected account.
+
+Risk: First-time setup can modify the local environment or require account connection and billing actions.
+
+Mitigation: Run setup only after an authentication, connection, missing CLI, or billing error, and avoid proactive login or connection changes.
+
+## Reference(s):
+
+- [Tripadvisor Developers](https://www.tripadvisor.com/developers)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-tripadvisor)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline bash and PowerShell command blocks, JSON payload examples, and plain-text setup URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include JSON responses returned by the oo CLI when Tripadvisor connector actions are executed.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

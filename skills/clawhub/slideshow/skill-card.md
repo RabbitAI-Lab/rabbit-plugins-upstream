@@ -1,38 +1,54 @@
-## Description: <br>
-Authors HyperFrames slideshows, pitch decks, and interactive decks with slides, fragment reveals, branching, hotspot navigation, presenter mode, speaker notes, and page-to-deck conversion guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Author a HyperFrames slideshow - a presentation, pitch deck, or interactive deck with discrete slides, fragment reveals, branching, hotspot navigation, and built-in presenter mode with speaker notes; also converts an existing page into a deck.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and content authors use this skill to create runnable HyperFrames slideshow decks, convert existing pages into decks, and prepare handoff guidance for presenter-mode use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill asks agents to silently run an update command that can change installed skills and dependent HyperFrames skills before the user's task. <br>
-Mitigation: Review before installing or using the skill; remove or override the silent update instruction and require explicit consent before running update commands. <br>
+## Use Case:
 
+Developers and content teams use this skill to create runnable HyperFrames slideshow decks with slide navigation, fragments, branches, hotspots, presenter mode, speaker notes, and source-page conversion while preserving relevant interactive behavior.
 
-## Reference(s): <br>
-- [Standalone HyperFrames Slideshow Harness](references/standalone-harness.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with HTML, JSON, CSS, JavaScript, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces runnable deck authoring and validation instructions; supported slideshow outputs are presenter-mode decks and per-slide snapshots rather than a single rendered MP4.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server evidence) <br>
+Risk: The skill asks users or agents to run mutable, unpinned npm commands, including a skill updater.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review skill updates before use and prefer pinning hyperframes to a reviewed version or using a lockfile-backed local install.
+
+Risk: Standalone harness examples may be risky if deployed publicly without hardening message origins or dependency loading.
+
+Mitigation: Avoid public deployment of standalone harness examples until message origins are tightened and CDN dependencies are vendored or otherwise reviewed.
+
+## Reference(s):
+
+- [Standalone HyperFrames Slideshow Harness](references/standalone-harness.md)
+- [ClawHub Skill Page](https://clawhub.ai/heygen-com/skills/slideshow)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with HTML, JSON, JavaScript, CSS, and shell command examples for runnable HyperFrames slideshow projects]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces navigable deck assets and presenter-mode handoff guidance rather than a rendered MP4.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

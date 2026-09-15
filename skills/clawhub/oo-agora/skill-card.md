@@ -1,44 +1,60 @@
-## Description: <br>
-Operate Agora through OOMOL's oo CLI for reading, creating, updating, and deleting Agora Console data without handling raw credentials. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Agora lets an agent manage Agora Console projects through an OOMOL-connected account, including listing projects, checking usage, creating projects, updating status, and managing primary certificates.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Agora Console projects and App Certificate settings through an OOMOL-connected account. It supports listing, retrieving, creating, enabling, disabling, usage lookup, and primary certificate reset workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create projects, change project status, enable or disable the primary App Certificate, and reset the primary App Certificate through a connected OOMOL account. <br>
-Mitigation: Confirm the exact project, action, payload, and expected effect with the user before approving any write or destructive operation. <br>
-Risk: Certificate reset is destructive and may overwrite credential material for an Agora project. <br>
-Mitigation: Require explicit user approval for the target project before running reset_primary_certificate. <br>
-Risk: Actions run against the user's connected OOMOL account and can affect live Agora resources. <br>
-Mitigation: Use schema inspection before constructing payloads and only proceed when the connected account, project, and requested operation are clear. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Agora Console projects from an OOMOL-connected account. It guides agents to inspect live action schemas and run read, write, and certificate-management actions through the oo CLI.
 
-## Reference(s): <br>
-- [Agora homepage](https://www.agora.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands call the Agora connector through the oo CLI and may return JSON responses containing data and an execution ID.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer step before use, prefer a versioned and verifiable official release or package manager, and do not allow an agent to run the remote installer automatically.
+
+Risk: Write actions can create projects, enable or disable projects, and enable or disable primary certificates.
+
+Mitigation: Confirm the exact action payload and intended effect with the user before running any write action.
+
+Risk: The reset_primary_certificate action is destructive and can overwrite an Agora project's primary App Certificate.
+
+Mitigation: Confirm the target project and get explicit approval before running certificate resets.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-agora)
+- [Agora Homepage](https://www.agora.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use oo connector schema and oo connector run; action responses include data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

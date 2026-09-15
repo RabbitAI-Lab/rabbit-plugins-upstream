@@ -1,40 +1,57 @@
-## Description: <br>
-AI-powered prompt engineering workbench that helps developers, prompt engineers, and AI product teams draft, test, diagnose, version, and optimize prompts for LLM applications. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Prompt Engineering Lab helps agents draft, diagnose, test, version, and optimize prompts for LLM applications.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers, prompt engineers, AI product teams, and other external users use this skill to improve prompts, design prompt evaluations, compare variants, and structure production prompt workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated prompts or prompt-analysis guidance may be incorrect, incomplete, or unsuitable for regulated medical, legal, financial, or customer-facing systems. <br>
-Mitigation: Review generated prompts before production use and require domain-expert review for regulated or high-impact use cases. <br>
-Risk: Prompt performance can vary across model providers and model versions. <br>
-Mitigation: Test prompt variants on the target model and monitor results across deployment environments before adopting changes. <br>
+## Use Case:
 
+Developers, prompt engineers, product teams, and other external users use this skill to design production prompts, compare prompt variants, define evaluations, diagnose failure modes, and plan prompt release controls.
 
-## Reference(s): <br>
-- [Prompt Engineering Lab on ClawHub](https://clawhub.ai/gechengling/prompt-engineering-lab) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Analysis, Markdown, Code, Configuration] <br>
-**Output Format:** [Markdown with prompt templates, comparison tables, rubrics, and example prompt text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No direct API execution; outputs should be reviewed before use in regulated or production settings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Generated prompts or prompt revisions may be unsuitable for production or regulated workflows without review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated prompts before production use, especially in regulated domains, and involve domain experts for medical, legal, financial, or similarly sensitive applications.
+
+Risk: Examples that request visible reasoning may conflict with a platform's reasoning-disclosure policies.
+
+Mitigation: Adapt reasoning-oriented examples to the target platform's policy, using concise explanations or hidden reasoning patterns where required.
+
+Risk: Prompts tuned for one model version can regress when the target model changes.
+
+Mitigation: Record the target model and version, keep evaluation sets with prompts, and run regression tests before releasing prompt changes.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/gechengling/skills/prompt-engineering-lab)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Configuration, Guidance]
+
+**Output Format:** [Markdown with prompt templates, rubrics, checklists, tables, and example snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces guidance only; it does not execute APIs, persist data, or use credentials.]
+
+## Skill Version(s):
+
+3.0.1 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

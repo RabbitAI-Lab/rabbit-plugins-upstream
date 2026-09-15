@@ -1,42 +1,56 @@
-## Description: <br>
-Operates Databar.ai through the OOMOL oo CLI for reading tables, creating tables, inserting rows, and running enrichment or waterfall tasks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Databar.ai lets agents read, create, and update Databar.ai data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage Databar.ai tables and submit enrichment or waterfall jobs from an agent through their connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create tables and insert rows in Databar.ai, so mistaken payloads can change workspace data. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before write actions, and inspect the live action schema before running commands. <br>
-Risk: Broad activation wording may cause an agent to use Databar.ai for loosely related requests. <br>
-Mitigation: Be explicit when requesting Databar.ai work and review proposed connector actions before approval. <br>
+## Use Case:
 
+External users and developers use this skill to operate Databar.ai through an OOMOL-connected account, including reading account, table, row, enrichment, and task data. With user confirmation, it can also create tables, insert rows, and submit enrichment or waterfall tasks.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-databar-ai) <br>
-- [Databar.ai Homepage](https://databar.ai/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API calls, Guidance] <br>
-**Output Format:** [Markdown instructions with shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo CLI connector schemas before execution; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing and prefer official signed packages or separately downloaded, verified releases.
+
+Risk: Write actions can create Databar.ai tables, insert rows, or submit enrichment and waterfall tasks.
+
+Mitigation: Confirm the exact table, rows, action, and payload with the user before execution.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-databar-ai)
+- [Databar.ai Homepage](https://databar.ai/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before building action payloads; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

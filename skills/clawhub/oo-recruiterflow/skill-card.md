@@ -1,41 +1,58 @@
-## Description: <br>
-Recruiterflow helps agents read candidates, jobs, and users from Recruiterflow through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Recruiterflow (recruiterflow.com). Use this skill for ANY Recruiterflow request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Recruiters, recruiting operations teams, and developers use this skill to retrieve Recruiterflow candidate, job, and user records through an authenticated OOMOL connection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Recruiting records can contain personal or business-sensitive data. <br>
-Mitigation: Install only for trusted OOMOL-connected accounts, review the oo CLI setup, and inspect outputs before sharing or using retrieved records. <br>
+## Use Case:
 
+Recruiting teams and agents use this skill to search and read Recruiterflow candidates, jobs, and users through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Recruiterflow skill page](https://clawhub.ai/oomol/skills/oo-recruiterflow) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Recruiterflow homepage](https://recruiterflow.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides agents to inspect live connector schemas before running read-only Recruiterflow actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The setup path asks users to run an unverified remote installer for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified installation method for the oo CLI when available and avoid running installer commands from an elevated shell.
+
+Risk: Recruiterflow data is accessed through OOMOL's connector using the user's connected account.
+
+Mitigation: Connect only the intended Recruiterflow account and confirm account scope before retrieving candidate, job, or user data.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-recruiterflow)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Recruiterflow Homepage](https://recruiterflow.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [OOMOL Recruiterflow Connection](https://console.oomol.com/app-connections?provider=recruiterflow)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reads Recruiterflow data through the oo CLI using schemas fetched before action execution.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

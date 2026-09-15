@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "The Colony"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["the_colony"]
   icon: "https://static.oomol.com/logo/third-party/the_colony.svg"
 ---

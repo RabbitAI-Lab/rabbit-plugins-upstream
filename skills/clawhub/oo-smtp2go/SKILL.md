@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "SMTP2GO"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["smtp2go"]
   icon: "https://static.oomol.com/logo/third-party/smtp2go.png"
 ---

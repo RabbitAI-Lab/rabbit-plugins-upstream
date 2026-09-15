@@ -1,40 +1,57 @@
-## Description: <br>
-Automates financial office tasks including document templates, email drafting, report summarization, and workflow approval guidance for daily productivity. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered financial office automation covers document processing, meeting minutes, email drafting, report summarization, and workflow automation for financial professionals' daily productivity.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Financial professionals use this skill to draft meeting minutes, emails, reports, and structured approval workflows. It provides bilingual templates and productivity guidance for routine office automation tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger phrases may activate the skill for emails, reports, or workflow advice when the user did not intend to use it. <br>
-Mitigation: Narrow trigger phrases or require explicit user intent before applying the skill to financial-office drafting or workflow guidance. <br>
-Risk: Generated financial-office templates or workflow guidance could be used without checking current policy or regulatory requirements. <br>
-Mitigation: Review generated documents and approval workflows against applicable internal policies and official regulatory sources before use. <br>
+## Use Case:
 
+Financial institution office, operations, and middle- or back-office teams use this skill to draft and check document templates, meeting minutes, emails, reports, approval workflows, action-item trackers, and information-handling checklists.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/finance-office-automation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown with structured templates and code-style snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Bilingual English and Chinese content; no external tools or credentials indicated.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: evidence release and SKILL.md frontmatter) <br>
+Risk: Generated drafts for approvals, submissions, seal use, or data transfers could be mistaken for completed institutional authorization.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require review and confirmation by the responsible authorized personnel under the institution's internal policies before taking action.
+
+Risk: Users may include regulated, confidential, or customer-sensitive financial information in prompts or drafts.
+
+Mitigation: Remove sensitive customer data before using the skill, apply data minimization and masking, and use approved channels for sensitive attachments.
+
+Risk: Office-writing guidance may be inaccurate or incomplete for a specific institution's current regulatory duties.
+
+Mitigation: Check outputs against official requirements and internal compliance procedures before external reporting or distribution.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/gechengling/skills/finance-office-automation)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown and structured plain text templates, checklists, workflow outlines, and draft correspondence]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs require human review before approvals, seal use, external submissions, data transfers, or use with sensitive financial information.]
+
+## Skill Version(s):
+
+3.0.2 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

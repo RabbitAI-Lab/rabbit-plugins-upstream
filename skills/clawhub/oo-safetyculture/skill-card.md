@@ -1,42 +1,56 @@
-## Description: <br>
-Use SafetyCulture through OOMOL's safetyculture connector for reading, creating, and updating SafetyCulture data instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate SafetyCulture through an OOMOL-connected account to inspect action schemas, read inspections and actions, search inspections, and create SafetyCulture actions with explicit confirmation for writes.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect SafetyCulture actions and inspections, list and search records, and create SafetyCulture actions through an OOMOL-connected account. The skill guides the agent to fetch live connector schemas before constructing payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The create_action operation can change SafetyCulture state. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running write actions. <br>
-Risk: The skill depends on OOMOL CLI and connector access to a connected SafetyCulture account. <br>
-Mitigation: Run installation, login, or connection steps only when needed and only when the user trusts the OOMOL CLI and connector setup. <br>
+## Use Case:
 
+Developers and operations teams use this skill to interact with SafetyCulture through the OOMOL `oo` CLI, including retrieving inspections, listing or searching actions, and preparing write requests with user confirmation.
 
-## Reference(s): <br>
-- [ClawHub SafetyCulture skill page](https://clawhub.ai/oomol/skills/oo-safetyculture) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [SafetyCulture homepage](https://safetyculture.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash, PowerShell, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live OOMOL connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: First-time setup documents remote installer commands that can execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official reviewed install path, verify the installer where possible, and do not run installer commands blindly.
+
+Risk: The `create_action` operation changes SafetyCulture data.
+
+Mitigation: Confirm the exact payload and expected effect with the user before allowing write operations.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-safetyculture)
+- [SafetyCulture Homepage](https://safetyculture.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing SafetyCulture action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: evidence release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

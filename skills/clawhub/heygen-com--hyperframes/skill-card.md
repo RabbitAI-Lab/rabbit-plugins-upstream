@@ -1,48 +1,70 @@
-## Description: <br>
-HyperFrames routes video, animation, and motion-graphics requests into the right workflow, resumes existing projects, and manages project inspection, validation, preview, rendering, publishing, and batch rendering. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HyperFrames routes agents through video, animation, motion-graphics, slideshow, and Remotion-to-HyperFrames workflows, including creation, editing, previewing, rendering, publishing, and batch rendering.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-External users, developers, and content teams use this skill as the entry point for creating, editing, validating, rendering, and publishing HyperFrames video projects from briefs, URLs, GitHub PRs, Figma inputs, existing footage, or music. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may run npx-based HyperFrames commands and install or refresh related workflow skills. <br>
-Mitigation: Review command summaries, keep projects under version control, and run HyperFrames validation after upgrades or workflow changes. <br>
-Risk: Site capture, Figma or GitHub inputs, media generation, and publishing can use networked services when requested. <br>
-Mitigation: Confirm external inputs and publishing intent before use, and avoid sending sensitive material to networked services unless approved. <br>
-Risk: Project edits, renders, and publishing actions may create or update video project artifacts. <br>
-Mitigation: Inspect diffs, previews, and validation results before treating generated output as final or public. <br>
+## Use Case:
 
+External creators, developers, and agent operators use HyperFrames to route briefs, URLs, PRs, Figma inputs, footage, music, or existing project files into HyperFrames video and deck workflows. The skill helps agents capture intent, select the owning workflow, update required tools, produce project artifacts, and verify or render the result.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/hyperframes) <br>
-- [Publisher profile](https://clawhub.ai/user/heygen-com) <br>
-- [HyperFrames entry point](SKILL.md) <br>
-- [Intent interview](references/intent-interview.md) <br>
-- [Capability menu](references/capability-menu.md) <br>
-- [Skill lifecycle](references/skill-lifecycle.md) <br>
-- [Workflow route contracts](references/routes/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, code, configuration, and project artifact descriptions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include workflow routing decisions, project file changes, validation summaries, preview or render commands, and publishing guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.19 (source: server release metadata) <br>
+Risk: The workflow can update CLI packages and workflow skills during use, which may change local project behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it in a constrained project workspace and review package or skill changes before accepting them.
+
+Risk: Untrusted STORYBOARD.md content is associated with a local Markdown file-inclusion weakness in blueprint path handling.
+
+Mitigation: Avoid untrusted STORYBOARD.md files until the blueprint path handling is fixed, and review generated frame packets before execution.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/heygen-com/skills/hyperframes)
+- [Brief Contract](references/brief-contract.md)
+- [Capability Menu](references/capability-menu.md)
+- [Intent Interview](references/intent-interview.md)
+- [Production Loop](references/production-loop.md)
+- [Review Loop](references/review-loop.md)
+- [Skill Lifecycle](references/skill-lifecycle.md)
+- [Storyboard Format](references/storyboard-format.md)
+- [Embedded Captions Route](references/routes/embedded-captions.md)
+- [Faceless Explainer Route](references/routes/faceless-explainer.md)
+- [General Video Route](references/routes/general-video.md)
+- [Motion Graphics Route](references/routes/motion-graphics.md)
+- [Music-to-Video Route](references/routes/music-to-video.md)
+- [PR-to-Video Route](references/routes/pr-to-video.md)
+- [Product Launch Video Route](references/routes/product-launch-video.md)
+- [Remotion-to-HyperFrames Route](references/routes/remotion-to-hyperframes.md)
+- [Slideshow Route](references/routes/slideshow.md)
+- [Talking Head Recut Route](references/routes/talking-head-recut.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, generated project files, and HTML or JavaScript composition code]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce or update BRIEF.md, STORYBOARD.md, frame specifications, composition HTML, media metadata, render outputs, and publish links depending on the selected workflow.]
+
+## Skill Version(s):
+
+1.0.27 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,56 @@
-## Description: <br>
-Operate Drata through an OOMOL-connected account to search and read company metadata, controls, personnel, vendors, and workspaces using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Drata lets agents retrieve and list Drata company, control, personnel, vendor, and workspace data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees and developers responsible for compliance operations use this skill to read Drata company, control, personnel, vendor, and workspace data through their connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent can read sensitive Drata company, personnel, vendor, control, and workspace records visible to the connected OOMOL account. <br>
-Mitigation: Install and use the skill only for intended Drata access, review Drata connection scopes, and prefer the least-privileged account that can complete the task. <br>
-Risk: Running setup or connection steps unnecessarily could change the user's local CLI session or OOMOL connection state. <br>
-Mitigation: Run setup, login, or connection steps only after an oo CLI, authentication, or Drata connection error requires them. <br>
+## Use Case:
 
+Developers and operators use this skill to retrieve Drata compliance data, including company metadata, controls, personnel, vendors, and workspaces, from a connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-drata) <br>
-- [Drata Homepage](https://drata.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, shell commands, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Drata data is returned through oo connector responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The first-time setup path includes one-line remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a trusted, versioned, verified method and do not let an agent run installer scripts automatically.
+
+Risk: The skill can read Drata business and personnel data visible to the connected account.
+
+Mitigation: Use least-privileged Drata and OOMOL credentials and review requested get or list actions before execution.
+
+## Reference(s):
+
+- [Drata homepage](https://drata.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-drata)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, JSON, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and meta.executionId when actions run with --json.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence release.version and SKILL.md metadata.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

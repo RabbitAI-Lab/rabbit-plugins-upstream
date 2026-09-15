@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "ProjectManager"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["projectmanager"]
   icon: "https://static.oomol.com/logo/third-party/projectmanager.svg"
 ---

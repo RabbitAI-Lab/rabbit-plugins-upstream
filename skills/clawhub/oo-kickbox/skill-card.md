@@ -1,45 +1,56 @@
-## Description: <br>
-Kickbox helps agents verify email deliverability and check whether an email address or domain uses a disposable email provider through the OOMOL oo CLI Kickbox connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Kickbox lets an agent verify individual email addresses and check disposable email providers through an OOMOL-connected Kickbox account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and support teams use this skill to let an agent perform Kickbox email checks from an OOMOL-connected account without handling raw API credentials. It supports single-address deliverability verification and disposable email detection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive Kickbox credentials through an OOMOL-connected account. <br>
-Mitigation: Use the documented OOMOL connection flow and server-side credential injection; do not expose raw Kickbox API tokens in prompts, files, or shell history. <br>
-Risk: Connector action payloads can become incorrect if the live action schema changes. <br>
-Mitigation: Inspect the authoritative schema with `oo connector schema "kickbox" --action "<action_name>"` before constructing each payload. <br>
-Risk: Authentication, connection, expired credential, or billing errors can block connector execution. <br>
-Mitigation: Run first-time setup, reconnect Kickbox, or resolve OOMOL billing only after a command fails with the matching error. <br>
+## Use Case:
 
+External users and developers use this skill to route Kickbox-related tasks through an OOMOL-connected account, including email deliverability verification and disposable email checks.
 
-## Reference(s): <br>
-- [ClawHub Kickbox skill page](https://clawhub.ai/oomol/oo-kickbox) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Kickbox homepage](https://kickbox.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and metadata with an executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Fallback setup instructions include curl-to-bash and PowerShell iex installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installation steps before use and prefer a verified, pinned, checksum- or signature-validated oo CLI installation method outside the agent workflow.
+
+Risk: Kickbox actions depend on live connector schemas and an OOMOL-connected account.
+
+Mitigation: Fetch the action schema before constructing payloads and only run setup or connection steps after an auth, scope, connection, or billing failure.
+
+## Reference(s):
+
+- [Kickbox homepage](https://kickbox.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-kickbox)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include live connector schema inspection before running Kickbox actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

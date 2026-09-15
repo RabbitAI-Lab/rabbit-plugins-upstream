@@ -1,42 +1,64 @@
-## Description: <br>
-A professional storyboard skill for film, advertising, short video, and educational narrative scenarios, built around a strict 'plan first, render later' flow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A professional storyboard skill for film, advertising, short video, and educational narrative scenarios, built around a strict 'plan first, render later' flow.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Creators, marketers, educators, and production teams use this skill to plan cinematic or narrative storyboards, confirm character and script gates, and generate storyboard images through the dLazy CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Storyboard prompts, parameters, and referenced media may be sent to dLazy cloud services for generation. <br>
-Mitigation: Avoid sensitive content in prompts or uploaded files, and use this skill only when remote prompt and media processing is acceptable. <br>
-Risk: The dLazy CLI stores an API key for authenticated generation workflows. <br>
-Mitigation: Use npx for non-persistent CLI use when preferred, and rotate or revoke the stored dLazy API key if needed. <br>
+## Use Case:
 
+Creative teams, agencies, educators, and agent operators use this skill to turn narrative briefs into structured cinematic or narrative storyboards. It guides requirements gathering, character reference development, script approval, image generation, and final storyboard assembly.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-image-storyboard) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands] <br>
-**Output Format:** [Markdown with storyboard plans, prompts, confirmation gates, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces staged storyboard planning guidance and generation commands; generated image URLs are returned by the dLazy CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: frontmatter and server release evidence) <br>
+Risk: The skill installs and runs a third-party CLI package.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the dLazy CLI package before installing and prefer npx or a project-local, sandboxed install when possible.
+
+Risk: Prompts and referenced media may be sent to dLazy services for generation.
+
+Mitigation: Use the skill only with content appropriate for dLazy processing and avoid sending unrelated, confidential, or sensitive files.
+
+Risk: User-controlled prompt text could be interpolated unsafely into shell commands.
+
+Mitigation: Pass prompt text through safe argument handling and run generation commands synchronously without shell chaining.
+
+Risk: The dLazy API key may be stored in local configuration or provided through an environment variable.
+
+Mitigation: Protect local configuration files, avoid exposing unrelated environment variables, and rotate or revoke API keys when needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-image-storyboard)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with structured bullets and inline bash command blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Storyboard outputs may include approved visual prompts, generation commands, hosted result URLs, and final layout guidance.]
+
+## Skill Version(s):
+
+1.3.17 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

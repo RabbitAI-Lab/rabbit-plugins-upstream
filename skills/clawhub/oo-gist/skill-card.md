@@ -1,45 +1,59 @@
-## Description: <br>
-Gist (gist.github.com). Use this skill for ANY Gist request, including reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gist lets an agent read, create, update, delete, fork, star, and manage GitHub Gists through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to manage GitHub Gists through an OOMOL-connected account, including reading gist data and performing create, update, star, fork, comment, and delete workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, star, fork, comment on, and delete GitHub Gists through the user's connected account. <br>
-Mitigation: Review payloads and confirm the intended effect before approving write actions; require explicit approval for destructive actions. <br>
-Risk: Delete actions may remove gists or comments in a way that is difficult to reverse. <br>
-Mitigation: Confirm the exact target identifier and user intent before running delete_gist or delete_gist_comment. <br>
-Risk: The skill requires a connected OOMOL account with access to GitHub Gist. <br>
-Mitigation: Install it only when agents should manage GitHub Gists through that connected account. <br>
+## Use Case:
 
+Developers and external users use this skill to manage GitHub Gists from an agent through an OOMOL-connected account, including read, write, comment, star, fork, and delete workflows.
 
-## Reference(s): <br>
-- [Gist homepage](https://gist.github.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-gist) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector action responses are returned as JSON by the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Gist access is delegated through an OOMOL connector with unclear permissions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after reviewing the connector permissions and use an account or scope appropriate for the intended Gist operations.
+
+Risk: The setup instructions include remote installer commands that pipe network content into a shell.
+
+Mitigation: Prefer a pinned, signed, or package-manager installation path, or independently verify the installer source before use.
+
+Risk: Write and destructive Gist actions can modify or delete user content.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Gist skill page](https://clawhub.ai/oomol/skills/oo-gist)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Gist homepage](https://gist.github.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the oo CLI and may return JSON responses containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: skill metadata and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

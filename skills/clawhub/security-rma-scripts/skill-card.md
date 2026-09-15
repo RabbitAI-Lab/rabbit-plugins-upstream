@@ -1,40 +1,53 @@
-## Description: <br>
-Generates compliant investment advisory scripts and talk points for China wealth-management workflows, including stock and fund recommendations, market commentary, client objections, and communication templates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates China-focused wealth-management communication scripts for stock and fund recommendations, market commentary, client objections, first-contact dialogue, and compliance self-checks.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Securities brokers, wealth-management advisors, and relationship managers use this skill to draft client-facing advisory scripts, product recommendation language, market commentary, objection handling, and compliance-aware communication templates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Compliance-sensitive financial content could be used as client-facing advice without sufficient review. <br>
-Mitigation: Route recommendations, sales scripts, and market commentary through the user's firm compliance process before client use. <br>
-Risk: Generated investment language may not match a client's jurisdiction, risk profile, language preference, or product suitability. <br>
-Mitigation: Confirm jurisdiction, language preference, risk profile, and product suitability before using or adapting outputs. <br>
+## Use Case:
 
+External wealth-management and securities advisory teams use this skill to draft client-facing talk points and compliance self-check rewrites for China-focused investment-advisory conversations. Outputs must be reviewed against suitability, product data, and current official compliance requirements before client use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/security-rma-scripts) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown and template text with occasional code-style structured examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are advisory communication templates and should be reviewed for jurisdiction, suitability, risk disclosure, and firm compliance before client use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: server release metadata and frontmatter) <br>
+Risk: The skill is China-focused and may not fit other jurisdictions or non-wealth-management use cases.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only for China-focused wealth-management communication templates, and confirm the applicable jurisdiction before client use.
+
+Risk: Generated scripts could be used with clients before customer suitability, product facts, or current compliance requirements are confirmed.
+
+Mitigation: Verify customer suitability, product data, and current official compliance requirements before using any generated script with clients.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/gechengling/skills/security-rma-scripts)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown text with script templates, checklists, and compliance review guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No executable output; generated advisory language requires human compliance and suitability review.]
+
+## Skill Version(s):
+
+3.0.2 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

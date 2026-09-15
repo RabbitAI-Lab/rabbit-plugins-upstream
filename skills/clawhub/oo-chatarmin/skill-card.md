@@ -1,42 +1,55 @@
-## Description: <br>
-Chatarmin lets an agent read, create, update, and delete Chatarmin data through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Chatarmin lets an agent operate Chatarmin through an OOMOL-connected account for reading, creating, updating, deleting, and sending WhatsApp messages.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate a connected Chatarmin account from an agent workflow, including contacts, campaigns, flows, voucher pools, webhooks, analytics, and WhatsApp messaging. It is suited to account-management tasks where the user can review proposed payloads before state-changing actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate a connected Chatarmin account and trigger sensitive account-management actions. <br>
-Mitigation: Install it only when the user intends to let an agent use the connected account, and review proposed payloads before approving writes, message sends, webhook changes, voucher changes, or deletions. <br>
-Risk: Destructive actions can remove contacts, voucher pools, webhooks, or voucher codes. <br>
-Mitigation: Require explicit approval for the exact target and effect before running destructive actions. <br>
+## Use Case:
 
+External users and developers use this skill to manage Chatarmin contacts, campaigns, flows, voucher pools, webhooks, analytics, and WhatsApp messaging through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Chatarmin homepage](https://chatarmin.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-chatarmin) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload or response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Unverified internet installer commands in the setup path could execute arbitrary local code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing and prefer a trusted, verifiable OOMOL CLI package or an installer that can be inspected and verified.
+
+Risk: Write, delete, webhook, voucher, or message actions can change Chatarmin state or send messages.
+
+Mitigation: Confirm the exact target and payload before running state-changing or destructive actions.
+
+## Reference(s):
+
+- [Chatarmin homepage](https://chatarmin.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or plain text with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return connector JSON data and execution identifiers from Chatarmin actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

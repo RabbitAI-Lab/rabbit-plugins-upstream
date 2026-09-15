@@ -1,7 +1,7 @@
 ---
 name: codex-ppt
 description: Generate visually unified image-based PPT/PPTX decks from articles, reports, papers, notes, or outlines.
-version: 0.5.5
+version: 0.6.0
 metadata:
   openclaw:
     requires:
@@ -17,7 +17,7 @@ metadata:
         description: API base URL.
       - name: CODEX_PPT_IMAGE_MODEL
         required: false
-        description: Image model, defaults to gpt-image-2.
+        description: Image model, defaults to gpt-image-2.5-flare.
       - name: CODEX_PPT_HOME
         required: false
         description: Runtime home override.

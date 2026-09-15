@@ -1,40 +1,60 @@
-## Description: <br>
-TimeCamp (timecamp.com). Use this skill for ANY TimeCamp request - reading, creating, and updating data. Whenever a task involves TimeCamp, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TimeCamp (timecamp.com). Use this skill for TimeCamp requests that read, create, or update TimeCamp data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to read TimeCamp account data, inspect connector schemas, manage time entries, and control TimeCamp timers through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [TimeCamp homepage](https://www.timecamp.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub TimeCamp skill page](https://clawhub.ai/oomol/skills/oo-timecamp) <br>
+Developers and end users with an OOMOL-connected TimeCamp account use this skill to inspect TimeCamp account data and manage time tracking workflows. It supports reading users, tasks, timer status, and time entries, plus creating or updating time entries and starting or stopping timers after user confirmation.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with shell command examples and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Inspect the live connector schema before constructing payloads; confirm write actions before execution.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.1 (source: evidence release version and skill metadata) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: The setup path may run an unverified internet installer directly in a shell.
+
+Mitigation: Prefer the official install guide or a signed/package-manager install path, inspect and verify any downloaded installer before running it, and avoid elevated shells.
+
+Risk: TimeCamp write actions can create or update time entries and start or stop timers.
+
+Mitigation: Confirm the exact payload and expected effect with the user before executing any write action.
+
+Risk: OOMOL mediates TimeCamp actions for the connected account.
+
+Mitigation: Install only when that mediation is acceptable for the account and workflow being used.
+
+## Reference(s):
+
+- [TimeCamp homepage](https://www.timecamp.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-timecamp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live oo connector schemas before constructing action payloads; TimeCamp write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

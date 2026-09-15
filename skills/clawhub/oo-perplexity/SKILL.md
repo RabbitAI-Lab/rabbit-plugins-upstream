@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Perplexity"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["perplexity"]
   icon: "https://static.oomol.com/logo/third-party/Perplexity%20AI.svg"
 ---

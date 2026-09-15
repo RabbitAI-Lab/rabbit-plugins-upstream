@@ -1,45 +1,56 @@
-## Description: <br>
-Deck.co lets agents read, create, and update Deck.co data through an OOMOL-connected account instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Deck.co lets agents read, create, and update Deck.co data through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Deck.co through an OOMOL-connected account, including listing or retrieving agents and sources, testing API-key access, and creating website sources after confirming write payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Read actions may expose Deck.co account data to the agent. <br>
-Mitigation: Install and use this skill only when the agent is expected to access the connected Deck.co account. <br>
-Risk: The create_source action can modify Deck.co state. <br>
-Mitigation: Confirm the exact URL, display name, payload, and expected effect with the user before running write actions. <br>
-Risk: First-time CLI setup or account connection can affect authentication state. <br>
-Mitigation: Run setup or connection steps only after an auth or connection error indicates they are needed. <br>
+## Use Case:
 
+Developers and external users use this skill to operate Deck.co sources and agents from an OOMOL-connected account, including listing and retrieving records, creating website sources, and checking API key authentication.
 
-## Reference(s): <br>
-- [ClawHub Deck.co skill page](https://clawhub.ai/oomol/skills/oo-deck-co) <br>
-- [Deck.co homepage](https://www.deck.co) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read actions can return Deck.co account data; write actions require user confirmation before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill frontmatter) <br>
+Risk: First-time setup may direct users to run remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the OOMOL CLI installation path before installing, prefer official versioned or checksum-verified installers, and avoid running one-line remote scripts from an elevated shell.
+
+Risk: Deck.co write actions can change account state when run with a payload.
+
+Mitigation: Fetch the live action schema and confirm the exact payload and effect with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub Deck.co skill page](https://clawhub.ai/oomol/skills/oo-deck-co)
+- [Deck.co homepage](https://www.deck.co)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [State-changing Deck.co actions require payload confirmation; first-time setup should be used only after authentication or connection failures.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

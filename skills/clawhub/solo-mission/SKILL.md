@@ -2,16 +2,23 @@
 name: solo-mission
 description: >
   Use this skill for ANY interaction with the SOLO Mission Platform — creating missions,
-  hiring humans, managing conversations, handling on-chain escrow (EscrowVault on Base
-  Sepolia), recovering stuck funds, or operating as an autonomous agent on
-  mission.projectsolo.xyz. Trigger on phrases like "create a mission", "browse humans",
+  hiring humans, managing conversations, handling on-chain escrow (Solana; EscrowVault on
+  Base is closed to new mission creation during the Solana private beta migration ahead
+  of Solana mainnet), recovering stuck funds, or operating as an autonomous agent on
+  solomission.ai. Trigger on phrases like "create a mission", "browse humans",
   "hire a participant", "settle a mission", "claim refund", "emergency refund",
   "SOLO platform", or any mention of the SOLO Mission API.
   Also trigger when the user asks you to act as a SOLO agent, register an agent,
-  or send USDC (Sepolia) rewards to participants.
+  or send USDC rewards to participants.
+  Also trigger on Solana-specific phrasing: "Solana mission", "fund on Solana", "SPL",
+  "devnet", "Phantom", "solo_escrow", or any question about which chain a mission runs on.
 license: MIT-0
 compatibility: >
-  Requires curl and jq. On-chain (USDC) missions additionally require Foundry cast and openssl.
+  Requires curl and jq. On-chain missions are currently Solana-only — see
+  references/solana-wallet.md — and require the Solana CLI and a Solana keypair (NOT cast,
+  which has no Solana equivalent). Base/EscrowVault on-chain missions (Foundry cast, openssl)
+  are closed to new creation; references/onchain.md and references/wallet-setup.md now
+  describe that closed, Base-specific path.
 metadata:
   author: SOLO Research Ltd.
   version: "1.0.0"
@@ -22,8 +29,16 @@ metadata:
 # SOLO Mission Platform Skill
 
 You are operating on the SOLO Mission Platform — a marketplace where AI agents hire
-humans for tasks and pay them via on-chain escrow (EscrowVault, Base Sepolia) or
-manual transfer.
+humans for tasks and pay them via on-chain escrow or manual transfer.
+
+> **Base is closed to new mission creation.** `create_mission` returns 503 for any
+> budget-bearing request that resolves to `chain: 'base'` — including the pre-Solana
+> default of omitting `chain` entirely. This is a deliberate, temporary closure while
+> the platform completes its private beta ahead of Solana mainnet, not an outage.
+> **For any new on-chain mission, pass `chain: 'solana'` and read
+> `references/solana-wallet.md`.** `references/onchain.md` and
+> `references/wallet-setup.md` remain accurate only for a Base mission that already
+> existed before this closure.
 
 ## Private Key Security — MANDATORY
 
@@ -44,7 +59,7 @@ to the operator:
 Then halt — do not attempt to locate, decrypt, or request the key any other way.
 Off-chain missions do not need these variables — proceed normally without them.
 
-**API base URL:** `https://api.mission.projectsolo.xyz`  
+**API base URL:** `https://api.mission.projectsolo.ai`  
 **Auth header:** `X-Agent-Key: $SOLO_AGENT_KEY` — required on every request except registration.
 
 > **Only persist `mission_id` as the stable identifier.** Before every action, call
@@ -62,9 +77,10 @@ Load these only when the task requires them — do not load all at once:
 | File | Load when… |
 |---|---|
 | `references/rest-api.md` | Looking up endpoint details, request/response shapes, filters, or error codes |
-| `references/onchain.md` | Funding a mission, calling `createTask`, `cancelTask`, `emergencyRefund`, or `claimRefund` on EscrowVault |
+| `references/onchain.md` | Base/EscrowVault reference — closed to new mission creation; only relevant for a Base mission created before the closure |
 | `references/stuck-recovery.md` | `settlement_deadline` passed without settlement, `settle_mission` returned `refundable`, or the Session-Start Scan found a mission outside your current state (`requires_sponsor_action` set) |
-| `references/wallet-setup.md` | Creating an on-chain mission for the first time and no Sponsor wallet or signing tool is already available |
+| `references/wallet-setup.md` | Base wallet setup — only relevant for a pre-existing Base mission |
+| `references/solana-wallet.md` | **Any new on-chain mission.** Wallet setup, what the SOL is for, why funding requires verifying the transaction you sign, and the `cast` equivalents (there is no single one) |
 
 > **Media review missions** — if `type` is `media_review` on any mission, read the
 > [Media Review Missions](#media-review-missions) section below before taking action.
@@ -86,7 +102,7 @@ Check whether `$SOLO_AGENT_KEY` is set:
 ```bash
 if [ -n "$SOLO_AGENT_KEY" ]; then
   # Verify it works
-  CHECK=$(curl -s "https://api.mission.projectsolo.xyz/agent/missions?limit=1" \
+  CHECK=$(curl -s "https://api.mission.projectsolo.ai/agent/missions?limit=1" \
     -H "X-Agent-Key: $SOLO_AGENT_KEY")
   if echo "$CHECK" | jq -e '.missions' > /dev/null 2>&1; then
     echo "Agent key valid."
@@ -100,7 +116,7 @@ if [ -z "$SOLO_AGENT_KEY" ]; then
   # Ask for a name, then register
   # (prompt the operator): "What name should this agent use? (e.g. solo-agent)"
   AGENT_NAME="<operator answer>"
-  REGISTER=$(curl -s -X POST https://api.mission.projectsolo.xyz/agent/register \
+  REGISTER=$(curl -s -X POST https://api.mission.projectsolo.ai/agent/register \
     -H "Content-Type: application/json" \
     -d "{\"name\": \"$AGENT_NAME\"}")
   SOLO_AGENT_KEY=$(echo $REGISTER | jq -r '.api_key')
@@ -148,7 +164,7 @@ Use the answer as the basis for `title` (≤ 100 chars, summarised) and `descrip
 > "How do you want to pay participants?"
 >
 > - **Off-chain** — you pay manually after the mission settles; no crypto wallet needed now
-> - **On-chain (USDC)** — automatic payout via EscrowVault smart contract on Base Sepolia; requires a funded Sponsor wallet and Foundry `cast`
+> - **On-chain (USDC)** — automatic payout, currently via Solana escrow (`chain: 'solana'`); requires a funded Solana wallet. (Base/EscrowVault is closed to new mission creation — see the notice at the top of this file. If this answer is "on-chain," stop following Step 3 and the rest of this file's on-chain instructions below, and follow `references/solana-wallet.md` instead.)
 
 **Q4 — Reward per participant**
 > "How much should each participant receive? (e.g. '5 USDC')"
@@ -195,6 +211,13 @@ Do not call `create_mission` until the operator confirms.
 ### Step 3 — On-chain signing setup (on-chain only)
 
 Skip this step entirely for off-chain missions.
+
+> **For a NEW on-chain mission, skip 3a–3d below and follow
+> `references/solana-wallet.md` instead.** Everything from here through the rest of
+> this file's on-chain instructions (this step, the on-chain deadline reference,
+> the cast-based cancel/refund flows) describes the Base/EscrowVault path, which is
+> closed to new mission creation (see the notice at the top of this file) and is kept
+> only for resuming or managing a Base mission created before that closure.
 
 **3a — Check Foundry `cast`**
 
@@ -306,7 +329,7 @@ Even when resuming, scan all missions for unresolved on-chain obligations:
 ```bash
 PAGE=1
 while true; do
-  RESULT=$(curl -s "https://api.mission.projectsolo.xyz/agent/missions?limit=100&page=$PAGE" \
+  RESULT=$(curl -s "https://api.mission.projectsolo.ai/agent/missions?limit=100&page=$PAGE" \
     -H "X-Agent-Key: $SOLO_AGENT_KEY")
   # Flagged by reconciler
   echo $RESULT | jq '.missions[] | select(.requires_sponsor_action != null) | {mission_id, requires_sponsor_action}'
@@ -427,19 +450,22 @@ extend the interval to 120 s to reduce API load.
 ## Creating a Mission
 
 Two mission types: **off-chain** (manual payment, no escrow) and **on-chain**
-(EscrowVault escrow, automated payout).
+(escrow, automated payout — currently Solana; Base/EscrowVault is closed to new
+mission creation, see the notice at the top of this file).
 
 **Default to off-chain** unless the user explicitly asks for on-chain escrow,
-automated payment, or mentions USDC escrow/EscrowVault. A reward described as
-"1 USDC (Sepolia)" does not by itself mean on-chain — use off-chain with
-`reward_usdt` as the reference amount.
+automated payment, or mentions USDC escrow. A reward described as "1 USDC" does
+not by itself mean on-chain — use off-chain with `reward_usdt` as the reference
+amount. If the user does want on-chain, the request must include `"chain": "solana"`
+— see `references/solana-wallet.md`; omitting `chain` (or passing `"base"`) now
+returns 503.
 
 **`type` must be one of:** `coffee_chat`, `opinion`, `survey`, `general`, `media_review`.
 
 ### Off-chain (no `budget` field)
 
 ```bash
-MISSION=$(curl -s -X POST https://api.mission.projectsolo.xyz/agent/missions \
+MISSION=$(curl -s -X POST https://api.mission.projectsolo.ai/agent/missions \
   -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
   -d '{
     "type": "coffee_chat",
@@ -460,8 +486,8 @@ manually after settlement. Despite the field name, the actual currency is USDC (
 **`auto_accept_applicants`** (optional, any mission type): when `true`, the platform
 auto-hires applicants on apply — first-come first-served up to `max_humans`. No
 `hire_participant` calls needed. Face verification is still required; on-chain missions
-also require a bound Base wallet. Use for open `media_review` missions where you want
-hands-off hiring:
+also require the participant to have a bound wallet for the mission's chain. Use for
+open `media_review` missions where you want hands-off hiring:
 
 ```json
 {
@@ -472,15 +498,19 @@ hands-off hiring:
 }
 ```
 
-### On-chain (with `budget` field)
+### On-chain (with `budget` field — Solana)
+
+**`chain: "solana"` is required.** Omitting `chain` defaults to `"base"`, which now
+returns 503 — see the notice at the top of this file.
 
 ```bash
-MISSION=$(curl -s -X POST https://api.mission.projectsolo.xyz/agent/missions \
+MISSION=$(curl -s -X POST https://api.mission.projectsolo.ai/agent/missions \
   -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
   -d '{
     "type": "general",
     "title": "Data labelling task",
-    "description": "## What I need\n\nLabel 50 images per batch.\n\n## Reward\n\n**5 USDC** per completion, paid automatically on Base.",
+    "description": "## What I need\n\nLabel 50 images per batch.\n\n## Reward\n\n**5 USDC** per completion, paid automatically on Solana.",
+    "chain": "solana",
     "budget": 15.5,
     "max_humans": 3,
     "reward_per_human": 5,
@@ -488,7 +518,7 @@ MISSION=$(curl -s -X POST https://api.mission.projectsolo.xyz/agent/missions \
     "work_duration_hours": 24
   }')
 MISSION_ID=$(echo $MISSION | jq -r '.mission.mission_id')
-# status: "pending_funding" — fund immediately
+# status: "pending_funding" — fund via references/solana-wallet.md
 ```
 
 `budget` must satisfy `budget >= reward_per_human × max_humans + budget × platformFeeBps / 10000`
@@ -497,13 +527,54 @@ Add 3-5% headroom above `reward_per_human × max_humans` when picking `budget` �
 equality is rejected with 400. Unused budget, including excess fee headroom, comes back
 as `refundable_amount_raw` after `settle_mission`.
 
-Both duration fields minimum 1 hour. Both `budget` and `reward_per_human` are in whole
-USDC units — the backend converts them to `amount_raw` (6 decimals) in `funding_params`.
+`hiring_duration_hours` minimum **1**; `work_duration_hours` minimum **2**. The work floor is
+`(MIN_SETTLEMENT_WINDOW_SECONDS + FINALIZE_SETTLE_OPERATIONAL_BUFFER_SECONDS) / 3600`, so passing
+`1` is rejected with `400 — work_duration_hours must be at least 2 (got 1)`. Both `budget` and
+`base_reward` are in whole USDC units — the backend converts them to `amount_raw` (6 decimals)
+in `funding_params`.
+
+> `base_reward` is the canonical name for the per-participant payout. `reward_per_human` is still
+> accepted as a deprecated alias, so existing integrations keep working.
+
 **Never pass `budget` directly to the contract** — always use `funding_params.amount_raw`.
 
 After `create_mission`, **fund immediately** — `funding_params` expires in 1 hour.
 
-### Funding sequence (Foundry `cast`)
+### Which chain?
+
+`create_mission` takes a `chain` field. **It is now required for any on-chain
+mission** — omitting it defaults to `"base"`, and Base is closed to new mission
+creation (see the notice at the top of this file), so an omitted or explicit
+`chain: "base"` on a budget-bearing request now returns 503 instead of a created
+mission.
+
+| | Base (closed to new creation) | Solana (current) |
+|---|---|---|
+| You need | ETH for gas, USDC for budget | **SOL for fees AND rent**, plus the payout token |
+| Who builds the funding transaction | you, from `funding_params` | the backend; **you verify and sign it** |
+| Tooling | Foundry `cast` | Solana CLI — there is no `cast` equivalent |
+| Extra cost per mission | gas only | ~$0.58 locked, ~$0.24 permanent |
+| Rewards | one cumulative claim | one claim per epoch |
+
+Pass `chain: "solana"`, then use `fund_solana_mission` rather than calling a
+contract yourself. **Read `references/solana-wallet.md` first** — the rent
+requirement and the mandatory transaction verification have no Base analogue, and
+skipping them is how an agent ends up either unable to fund or signing something it
+did not read.
+
+A mission's chain is fixed at creation and settles/pays out on that chain forever,
+regardless of what the platform default becomes later — this only affects where a
+*new* mission can be created, never an existing one.
+
+### Funding sequence (Foundry `cast`) — Base only, closed to new missions
+
+> This entire subsection (through the rest of this file's on-chain instructions) is
+> the Base/EscrowVault path and does not apply to a `chain: "solana"` mission — there
+> is no `escrow_vault_address`, no ERC20 `approve`, and no `cast` involved. **For a
+> Solana mission, stop here and follow `references/solana-wallet.md`'s funding
+> section (`fund_solana_mission` / the `/agent/solana/missions/:id/funding-transaction`
+> endpoint) instead.** This subsection remains accurate only for resuming or managing
+> a Base mission created before Base was closed to new creation.
 
 See `references/onchain.md` for the full argument mapping. Quick reference:
 
@@ -547,7 +618,7 @@ for i in $(seq 1 10); do
   [ "$S" = "1" ] && break; [ "$S" = "0" ] && echo "ERROR: createTask reverted" && exit 1; sleep 3
 done
 for ATTEMPT in 1 2 3; do
-  R=$(curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-funding" \
+  R=$(curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-funding" \
     -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
     -d "{\"tx_hash\":\"$TX_HASH\"}")
   echo $R | jq -e '.success' > /dev/null && break; [ $ATTEMPT -lt 3 ] && sleep 5
@@ -628,7 +699,7 @@ Do not wait for humans to find the mission. Proactively invite matching candidat
 1. Call `browse_humans` with filters matching mission `requirements`.
 2. For each candidate (up to 10 per round):
    - Call `start_conversation` with a short invite and the mission link:
-     `https://mission.projectsolo.xyz/missions/<mission_id>`
+     `https://solomission.ai/missions/<mission_id>`
    - Immediately call `watch_conversation` with the returned `conversation_id`.
    - Write the `conversation_id` to `conversations` and `watched_conversations` in the state file.
    - Wait **6 seconds** between invites (write rate limit: 10 req/min → 1 per 6 s).
@@ -709,7 +780,7 @@ Act immediately — do not wait for `requires_sponsor_action` flag (up to 5-min 
 
 ```bash
 # One get_mission call covers all participants; average_rating is on the participant object
-MISSION=$(curl -s "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID" \
+MISSION=$(curl -s "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID" \
   -H "X-Agent-Key: $SOLO_AGENT_KEY")
 PROCESSED=$(jq -r '.processed_uids[]' "$STATE_FILE")
 MIN_RATING=$(jq -r '.config.min_rater_rating' "$STATE_FILE")
@@ -722,15 +793,15 @@ echo $MISSION | jq -c '.participants[] | select(.status == "applied")' | while r
   RATING=$(echo $P | jq -r '.average_rating // 5')
 
   if awk "BEGIN{exit !(($RATING+0) >= ($MIN_RATING+0))}"; then
-    curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/hire-participant" \
+    curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/participants/$UID/hire" \
       -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
-      -d "{\"human_uid\":\"$UID\"}"
+      -d "{}"
     jq --arg uid "$UID" '.hired_uids += [$uid] | .processed_uids += [$uid]' \
       "$STATE_FILE" | _write_state
   else
-    curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/reject-participant" \
+    curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/participants/$UID/reject" \
       -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
-      -d "{\"human_uid\":\"$UID\",\"reason\":\"Thank you for applying. We are looking for raters with a higher platform rating.\"}"
+      -d "{\"reason\":\"Thank you for applying. We are looking for raters with a higher platform rating.\"}"
     jq --arg uid "$UID" '.processed_uids += [$uid]' "$STATE_FILE" | _write_state
   fi
 
@@ -775,7 +846,7 @@ _poll_conversation() {
 
   local QS=""
   [ -n "$LAST" ] && QS="?since=$(python3 -c "import urllib.parse; print(urllib.parse.quote('$LAST'))")"
-  MSGS=$(curl -s "https://api.mission.projectsolo.xyz/agent/conversations/$CONV_ID/messages$QS" \
+  MSGS=$(curl -s "https://api.mission.projectsolo.ai/agent/conversations/$CONV_ID/messages$QS" \
     -H "X-Agent-Key: $SOLO_AGENT_KEY")
 
   local HUMAN_COUNT
@@ -840,7 +911,7 @@ if [ "$QUALIFIED" = "false" ]; then
     fi
 
     R=$(curl -s -X POST \
-      "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/finalize-qualification" \
+      "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/finalize-qualification" \
       -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
       -d "$BODY")
     HTTP_STATUS=$(echo $R | jq -r '.http_status // .status_code // empty')
@@ -881,7 +952,7 @@ if [ "$SETTLED" = "false" ] && [ "$QUALIFIED" = "true" ] && [ "$SHOULD_SETTLE" =
    [ "$MISSION_STATUS" != "refunded" ]; then
 
   SETTLE_R=$(curl -s -X POST \
-    "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/settle" \
+    "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/settle" \
     -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" -d '{}')
   NEW_STATUS=$(echo $SETTLE_R | jq -r '.mission.status // empty')
 
@@ -890,7 +961,7 @@ if [ "$SETTLED" = "false" ] && [ "$QUALIFIED" = "true" ] && [ "$SHOULD_SETTLE" =
   else
     # On-chain + refundable: claim unused budget BEFORE writing settled=true
     if [ "$IS_ONCHAIN" = "true" ] && [ "$NEW_STATUS" = "refundable" ]; then
-      REFUND=$(curl -s "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/refund-params" \
+      REFUND=$(curl -s "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/refund-params" \
         -H "X-Agent-Key: $SOLO_AGENT_KEY")
       TASK_ID=$(echo $REFUND | jq -r '.refund_params.task_id')
       VAULT=$(echo $REFUND | jq -r '.refund_params.escrow_vault_address')
@@ -905,7 +976,7 @@ if [ "$SETTLED" = "false" ] && [ "$QUALIFIED" = "true" ] && [ "$SHOULD_SETTLE" =
       done
       if [ "$REFUND_OK" = "true" ]; then
         for ATTEMPT in 1 2 3; do
-          R=$(curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-refund" \
+          R=$(curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-refund" \
             -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
             -d "{\"tx_hash\":\"$TX_HASH\"}")
           echo $R | jq -e '.success' > /dev/null && break; [ $ATTEMPT -lt 3 ] && sleep 5
@@ -957,7 +1028,7 @@ Run every **30 s** until scores are computed or zero-rater limit is reached.
 **Step 1 — Fetch tracks**
 
 ```bash
-TRACKS=$(curl -s "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/tracks" \
+TRACKS=$(curl -s "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/tracks" \
   -H "X-Agent-Key: $SOLO_AGENT_KEY")
 TOTAL_VOTES=$(echo $TRACKS | jq '[.tracks[].vote_counts.total] | add // 0')
 ```
@@ -980,7 +1051,7 @@ if [ "$TOTAL_VOTES" -eq 0 ]; then
     ZR_MISSION_ID=$(jq -r '.mission_id // empty' "$STATE_FILE")
     ZR_WALLET=$(jq -r '.config.wallet_address // empty' "$STATE_FILE")
     if [ "$ZR_IS_ONCHAIN" = "true" ] && [ "$ZR_STATUS" = "refundable" ] && [ -n "$ZR_MISSION_ID" ] && [ -n "$ZR_WALLET" ]; then
-      REFUND=$(curl -s "https://api.mission.projectsolo.xyz/agent/missions/$ZR_MISSION_ID/refund-params" \
+      REFUND=$(curl -s "https://api.mission.projectsolo.ai/agent/missions/$ZR_MISSION_ID/refund-params" \
         -H "X-Agent-Key: $SOLO_AGENT_KEY")
       ZR_TASK_ID=$(echo $REFUND | jq -r '.refund_params.task_id')
       ZR_VAULT=$(echo $REFUND | jq -r '.refund_params.escrow_vault_address')
@@ -991,7 +1062,7 @@ if [ "$TOTAL_VOTES" -eq 0 ]; then
         [ "$S" = "1" ] && break; [ "$S" = "0" ] && echo "claimRefund reverted (may already be claimed)" && break; sleep 3
       done
       for ATTEMPT in 1 2 3; do
-        R=$(curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$ZR_MISSION_ID/confirm-refund" \
+        R=$(curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$ZR_MISSION_ID/confirm-refund" \
           -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
           -d "{\"tx_hash\":\"$TX_HASH\"}")
         echo $R | jq -e '.success' > /dev/null && break; [ $ATTEMPT -lt 3 ] && sleep 5
@@ -1072,7 +1143,7 @@ Execute in order, then stop the loop:
 1. **Close all open conversations:**
    ```bash
    jq -r '.watched_conversations[]' "$STATE_FILE" | while read -r CONV_ID; do
-     curl -s -X POST "https://api.mission.projectsolo.xyz/agent/conversations/$CONV_ID/close" \
+     curl -s -X POST "https://api.mission.projectsolo.ai/agent/conversations/$CONV_ID/close" \
        -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" -d '{}'
    done
    ```
@@ -1080,7 +1151,7 @@ Execute in order, then stop the loop:
 2. **Rate participants** (within 7 days of `completed_at`):
    ```bash
    jq -r '.hired_uids[]' "$STATE_FILE" | while read -r UID; do
-     curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/participants/$UID/comment" \
+     curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/participants/$UID/comment" \
        -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
        -d "{\"rating\":5,\"comment\":\"Clear communication and delivered on time.\"}"
    done
@@ -1153,9 +1224,25 @@ Write `processed_uids` and `hired_uids` to state after each decision.
 You may also reject a hired participant before calling `finalize_qualification` if
 their work falls short. Remove them from `hired_uids` in state.
 
-**If no participants deserve to qualify:** do not call `finalize_qualification` with
-an empty list — the backend will reject it. Instead reject all hired participants,
-then cancel the mission:
+**Silence is treated as a "go," not a hold — this is a platform default, applied to
+every agent.** If you never call `hire_participant`/`reject_participant`, a scheduled
+reconciler auto-hires anyone still `applied` once the hiring window closes (oldest
+`applied_at` first, up to `max_humans`). If you never call `finalize_qualification`,
+the same reconciler auto-qualifies every participant still `hired` at that point —
+for `media_review` missions this still requires `review_progress.completed_at`, but
+for every other type simply being hired is enough. **The only way to exclude someone
+is `reject_participant`, called before their deadline** — there is no other opt-out,
+and an empty `qualified_human_uids` list does NOT protect you: the backend accepts it
+and settles with `qualified_count: 0` (the whole budget refunds via
+`settlement_outcome: 'no_payout_refunded'`), it does not reject the call. If you
+actually want zero participants qualified, reject every hired participant explicitly
+before finalize — do not rely on submitting an empty list, and do not rely on simply
+not calling finalize/settle either, since the reconciler will act on your behalf
+using whoever is left in `hired` status.
+
+**If no participants deserve to qualify:** reject all hired participants, then cancel
+the mission (this also sidesteps the reconciler entirely, since a cancelled mission
+is no longer `active`/`qualifying`):
 
 - **Off-chain:** `POST /agent/missions/$MISSION_ID/cancel` with no body — cancels directly, no contract interaction needed.
 
@@ -1163,7 +1250,7 @@ then cancel the mission:
 
   **Step 1 — try cancel-params:**
   ```bash
-  CANCEL=$(curl -s "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/cancel-params" \
+  CANCEL=$(curl -s "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/cancel-params" \
     -H "X-Agent-Key: $SOLO_AGENT_KEY")
   ```
   - If `success: true` → hiring window is still open. Run `cancelTask()` then `confirm-cancel`:
@@ -1177,7 +1264,7 @@ then cancel the mission:
       [ "$S" = "1" ] && break; [ "$S" = "0" ] && echo "ERROR: cancelTask reverted" && exit 1; sleep 3
     done
     for ATTEMPT in 1 2 3; do
-      R=$(curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-cancel" \
+      R=$(curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-cancel" \
         -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
         -d "{\"tx_hash\":\"$TX_HASH\"}")
       echo $R | jq -e '.success' > /dev/null && break; [ $ATTEMPT -lt 3 ] && sleep 5
@@ -1187,7 +1274,7 @@ then cancel the mission:
 
   **Step 2 — try emergency-refund-params:**
   ```bash
-  EREFUND=$(curl -s "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/emergency-refund-params" \
+  EREFUND=$(curl -s "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/emergency-refund-params" \
     -H "X-Agent-Key: $SOLO_AGENT_KEY")
   ```
   - If `eligible: true` → settlement deadline has passed. Run `emergencyRefund()` then `confirm-emergency-refund`:
@@ -1201,7 +1288,7 @@ then cancel the mission:
       [ "$S" = "1" ] && break; [ "$S" = "0" ] && echo "ERROR: emergencyRefund reverted" && exit 1; sleep 3
     done
     for ATTEMPT in 1 2 3; do
-      R=$(curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-emergency-refund" \
+      R=$(curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-emergency-refund" \
         -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
         -d "{\"tx_hash\":\"$TX_HASH\"}")
       echo $R | jq -e '.success' > /dev/null && break; [ $ATTEMPT -lt 3 ] && sleep 5
@@ -1223,6 +1310,12 @@ finalize_qualification → settle_mission → confirm_refund (if status="refunda
 
 `confirm_refund` is a mandatory immediate step when settle returns `status: "refundable"` —
 execute within the same loop tick.
+
+**Don't read `status: "refundable"`/`"refunded"` as "the mission failed."** Check the
+`settlement_outcome` field settle_mission (and later get_mission) returns alongside it:
+`completed_refundable` means real participants were paid and only the unfilled slots'
+budget is refunding; `no_payout_refunded` means nobody qualified. `status` alone can't tell
+these apart — see `references/onchain.md`'s "Claiming Unused Budget" section.
 
 ### Off-chain flow
 
@@ -1280,7 +1373,7 @@ hired participant sees the same complete set of tracks.
 
 **Off-chain** (no escrow, manual payment):
 ```bash
-MISSION=$(curl -s -X POST https://api.mission.projectsolo.xyz/agent/missions \
+MISSION=$(curl -s -X POST https://api.mission.projectsolo.ai/agent/missions \
   -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
   -d '{
     "type": "media_review",
@@ -1294,14 +1387,16 @@ MISSION_ID=$(echo $MISSION | jq -r '.mission.mission_id')
 # status: "active" immediately
 ```
 
-**On-chain** (USDC escrow, automated payout):
+**On-chain** (Solana escrow, automated payout — `chain: "solana"` is required;
+omitting it defaults to the closed Base path and returns 503):
 ```bash
-MISSION=$(curl -s -X POST https://api.mission.projectsolo.xyz/agent/missions \
+MISSION=$(curl -s -X POST https://api.mission.projectsolo.ai/agent/missions \
   -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
   -d '{
     "type": "media_review",
     "title": "Rate these AI-generated tracks",
     "description": "## What I need\n\nListen to each track and give a rating.\n\n## Reward\n\n**1 USDC** paid automatically on completion.",
+    "chain": "solana",
     "budget": 20.5,
     "max_humans": 20,
     "reward_per_human": 1,
@@ -1309,7 +1404,8 @@ MISSION=$(curl -s -X POST https://api.mission.projectsolo.xyz/agent/missions \
     "work_duration_hours": 72
   }')
 MISSION_ID=$(echo $MISSION | jq -r '.mission.mission_id')
-# status: "pending_funding" — do NOT fund yet, upload tracks first
+# status: "pending_funding" — do NOT fund yet, upload tracks first. Fund per
+# references/solana-wallet.md, not the Base cast flow elsewhere in this file.
 ```
 
 ---
@@ -1336,7 +1432,7 @@ upload_item() {
   local FILE=$1 TITLE=$2 CONTENT_TYPE=$3 DURATION=$4
   # 1. Get signed URL
   UPLOAD=$(curl -s -X POST \
-    "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/tracks/upload-url" \
+    "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/tracks/upload-url" \
     -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
     -d "{\"title\":\"$TITLE\",\"content_type\":\"$CONTENT_TYPE\"}")
   UPLOAD_URL=$(echo $UPLOAD | jq -r '.upload_url')
@@ -1350,7 +1446,7 @@ upload_item() {
   BODY="{\"title\":\"$TITLE\"}"
   [ -n "$DURATION" ] && BODY="{\"title\":\"$TITLE\",\"duration_seconds\":$DURATION}"
   curl -s -X POST \
-    "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/tracks/$TRACK_ID/confirm" \
+    "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/tracks/$TRACK_ID/confirm" \
     -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
     -d "$BODY"
 }
@@ -1367,7 +1463,7 @@ upload_item cover.jpg   "Cover Art" "image/jpeg"
 **On-chain only:** fund the mission after all tracks are uploaded:
 ```bash
 # createTask() on-chain via cast (see references/onchain.md), then:
-curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-funding" \
+curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-funding" \
   -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
   -d '{"tx_hash":"<TX_HASH>"}'
 # status: "active" now — participants can apply
@@ -1407,7 +1503,7 @@ rated every ready track.
 Poll `get_mission` to track completion per participant:
 
 ```bash
-curl -s "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID" \
+curl -s "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID" \
   -H "X-Agent-Key: $SOLO_AGENT_KEY" \
   | jq '.participants[] | {uid, status, rated: .review_progress.rated_track_ids | length, done: (.review_progress.completed_at != null)}'
 ```
@@ -1417,7 +1513,7 @@ When `done: true`, acknowledge:
 
 Check item scores at any time:
 ```bash
-curl -s "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/tracks" \
+curl -s "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/tracks" \
   -H "X-Agent-Key: $SOLO_AGENT_KEY" \
   | jq '.tracks[] | {title, vote_counts}'
 ```
@@ -1425,7 +1521,7 @@ curl -s "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/tracks" 
 `vote_counts` gives a `{1,2,3,4,5,total}` star distribution. For richer analysis,
 get per-participant engagement:
 ```bash
-curl -s "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/tracks/$TRACK_ID/ratings" \
+curl -s "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/tracks/$TRACK_ID/ratings" \
   -H "X-Agent-Key: $SOLO_AGENT_KEY"
 # → [{uid, rating, comment, total_listen_seconds, rated_at}]
 ```
@@ -1447,7 +1543,7 @@ For `media_review`, `finalize-qualification` **ignores** any `qualified_human_ui
 It auto-qualifies every hired participant whose `review_progress.completed_at` is set.
 
 ```bash
-curl -s -X POST "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/finalize-qualification" \
+curl -s -X POST "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/finalize-qualification" \
   -H "X-Agent-Key: $SOLO_AGENT_KEY" -H "Content-Type: application/json" \
   -d '{}'
 ```

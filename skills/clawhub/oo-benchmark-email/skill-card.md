@@ -1,42 +1,56 @@
-## Description: <br>
-Benchmark Email (benchmarkemail.com). Use this skill for ANY Benchmark Email request - searching and reading data. Whenever a task involves Benchmark Email, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Benchmark Email lets an agent search and read Benchmark Email account, contact, and contact-list data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent read Benchmark Email account, contact list, and contact details through an OOMOL-connected Benchmark Email account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to a connected Benchmark Email account and can read account, contact, and list information. <br>
-Mitigation: Install only when agents should have read access to that Benchmark Email data through the user's OOMOL connection. <br>
-Risk: First-time setup may require installing the oo CLI or signing in before connector commands can run. <br>
-Mitigation: Run installation, login, or connection steps only when a command fails with the matching setup or authentication error. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Benchmark Email account summaries, image storage plan details, contact details, contact-list summaries, and paginated contact-list search results.
 
-## Reference(s): <br>
-- [Benchmark Email homepage](https://www.benchmarkemail.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Agent-facing guidance for read-only Benchmark Email connector actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: First-time setup includes remote installer commands that require review before execution.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified package or downloaded artifact and check signatures or checksums before running installer scripts.
+
+Risk: OOMOL-backed connector calls can read Benchmark Email account and contact-list data.
+
+Mitigation: Use an OOMOL connection with appropriate Benchmark Email access and run only the read action needed for the user's task.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-benchmark-email)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Benchmark Email Homepage](https://www.benchmarkemail.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

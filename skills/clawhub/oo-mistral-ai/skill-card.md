@@ -1,41 +1,61 @@
-## Description: <br>
-Mistral AI (mistral.ai). Use this skill for ANY Mistral AI request - reading, creating, updating, and deleting data through the OOMOL-connected Mistral AI connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mistral AI operates Mistral account workflows through the OOMOL mistral_ai connector and oo CLI for reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate Mistral AI through an OOMOL-connected account, including chat, agents, embeddings, moderation, OCR, audio transcription, files, libraries, conversations, batch jobs, and fine-tuning job workflows. The skill is intended for Mistral AI account operations that need schema inspection before execution and explicit review for write or destructive actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate a Mistral AI account through OOMOL and includes write, upload, sharing, and destructive actions. <br>
-Mitigation: Review the action, target resource, and JSON payload before approving any write, upload, sharing, or delete request. <br>
-Risk: First-time setup includes pipe-to-shell installer commands for the oo CLI. <br>
-Mitigation: Install the oo CLI manually from trusted documentation with verification instead of letting an agent run installer commands. <br>
+## Use Case:
 
+Developers and external users use this skill to route Mistral AI account tasks through the OOMOL connector, including chat, agents, embeddings, OCR, audio transcription, files, libraries, batch jobs, and fine-tuning workflows.
 
-## Reference(s): <br>
-- [Mistral AI homepage](https://mistral.ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI to inspect live connector schemas and run Mistral AI actions with JSON inputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Setup instructions include unverified remote installer execution.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installing and prefer a verified package, pinned release, checksum, signature check, or manual inspection instead of pipe-to-shell commands.
+
+Risk: The skill can perform write and destructive Mistral account operations.
+
+Mitigation: Use it only for intentional Mistral account work, inspect the live connector schema, and confirm exact payloads and targets before write or destructive actions.
+
+Risk: The activation scope is broader than necessary for a connector with account-level actions.
+
+Mitigation: Invoke the skill only when the user request clearly involves Mistral AI and choose the narrowest action needed for the task.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-mistral-ai)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Mistral AI homepage](https://mistral.ai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with bash commands and JSON payloads or results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Inspect the live connector schema before payload construction; confirm write and destructive actions before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

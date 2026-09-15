@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "SaaS Custom Domains"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["saas_custom_domains"]
   icon: "https://static.oomol.com/logo/third-party/saas_custom_domains.svg"
 ---

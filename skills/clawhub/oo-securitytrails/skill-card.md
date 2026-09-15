@@ -1,45 +1,56 @@
-## Description: <br>
-SecurityTrails lets agents query SecurityTrails domain intelligence through the OOMOL oo CLI connector without handling raw API tokens. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SecurityTrails connector skill for searching and reading domain intelligence, DNS records, SSL certificate details, associated domains, and subdomains through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and security analysts use this skill to retrieve SecurityTrails domain intelligence, including domain details, associated domains, subdomains, and SSL certificate information, through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The first-time setup path includes one-line shell and PowerShell installer commands for the oo CLI. <br>
-Mitigation: Prefer the official install guide, inspect the installer before execution, and confirm the oo CLI source before signing in. <br>
-Risk: The skill requires a connected SecurityTrails credential through OOMOL. <br>
-Mitigation: Use the OOMOL connector flow rather than exposing raw API tokens, and connect or refresh the SecurityTrails API key only when an auth or scope error requires it. <br>
-Risk: Connector failures can reflect account, scope, credential, app, or billing state rather than a failed domain lookup. <br>
-Mitigation: Check the returned error class before retrying, and resolve connection, credential, app readiness, or billing issues through the documented OOMOL console links. <br>
+## Use Case:
 
+Developers and security analysts use this skill to run read-only SecurityTrails lookups for domain investigation and DNS intelligence without handling raw API tokens directly.
 
-## Reference(s): <br>
-- [ClawHub SecurityTrails release page](https://clawhub.ai/oomol/oo-securitytrails) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [SecurityTrails connector setup](https://console.oomol.com/app-connections?provider=securitytrails) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only SecurityTrails connector actions return JSON data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: The setup instructions include remote installer snippets for the oo CLI, and the server security summary flags those snippets as suspicious if run without review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run installer snippets automatically; install the oo CLI only from a trusted, reviewable, version-pinned source and verify system changes before use.
+
+Risk: SecurityTrails lookups can reveal domain intelligence and DNS investigation results that may be sensitive in some environments.
+
+Mitigation: Use the skill only for authorized domains and share returned data according to the user's security and data-handling policies.
+
+## Reference(s):
+
+- [SecurityTrails Skill Page](https://clawhub.ai/oomol/skills/oo-securitytrails)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [SecurityTrails Connection Setup](https://console.oomol.com/app-connections?provider=securitytrails)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [SecurityTrails action responses are returned as JSON data from the oo CLI when commands are executed.]
+
+## Skill Version(s):
+
+1.0.3 (source: artifact frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,56 @@
-## Description: <br>
-Enables an agent to search and read Census Bureau data through OOMOL's `census_bureau` connector and the `oo` CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents discover Census Bureau datasets, inspect variables and groups, and query Census Data API datasets through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to discover Census Data API datasets, inspect variables and variable groups, and query datasets through an OOMOL-connected Census Bureau account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires the OOMOL oo CLI, OOMOL sign-in, and a connected Census Bureau API key. <br>
-Mitigation: Use it only in environments where those dependencies and credentials are approved, and rely on OOMOL's server-side credential handling rather than exposing raw tokens. <br>
-Risk: Census Bureau connector requests may consume OOMOL billing credits or fail when credits are unavailable. <br>
-Mitigation: Treat HTTP 402 or OOMOL_INSUFFICIENT_CREDIT responses as billing stops and resolve billing before retrying. <br>
-Risk: Incorrect action payloads can produce failed or misleading Census dataset queries. <br>
-Mitigation: Fetch the live connector schema for the selected action before building payloads and keep normal usage to the disclosed read-oriented actions. <br>
+## Use Case:
 
+Developers, analysts, and agents use this skill to search Census Bureau datasets, inspect schema details, and retrieve Census data through an authenticated OOMOL connector.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-census-bureau) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Census Bureau homepage](https://www.census.gov) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: First-time setup includes pipe-to-shell installer commands for the OOMOL CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified, pinned installation method from the vendor instead of running remote installer scripts blindly.
+
+Risk: Census queries are routed through OOMOL as an intermediary.
+
+Mitigation: Use the skill only when OOMOL's account, billing, and data-handling practices are acceptable, and avoid sending confidential or identifying context in connector payloads.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-census-bureau)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Census Bureau](https://www.census.gov)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The connector returns JSON data with execution metadata when actions are run with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

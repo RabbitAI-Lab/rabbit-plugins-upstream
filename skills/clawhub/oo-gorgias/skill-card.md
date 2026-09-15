@@ -1,43 +1,55 @@
-## Description: <br>
-Gorgias (gorgias.com). Use this skill for Gorgias searching and read-only data retrieval through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Gorgias through an OOMOL-connected account to search and read helpdesk account, ticket, customer, tag, and user data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Gorgias account, ticket, customer, tag, and user data through OOMOL's Gorgias connector. The skill is intended for read/search workflows and directs agents to inspect live connector schemas before running actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can retrieve sensitive Gorgias ticket, customer, account, tag, and user data from a connected account. <br>
-Mitigation: Treat lookup results as sensitive, confirm ambiguous requests before running them, and install only when the user intends to allow read access through OOMOL. <br>
-Risk: Setup commands and authentication flows can change the user's local CLI state or connect an external account. <br>
-Mitigation: Run the CLI installer, authentication flow, or connection URL only when setup is explicitly chosen or when a matching command failure requires it. <br>
+## Use Case:
 
+External users and support teams use this skill to let an agent retrieve Gorgias helpdesk records through their connected OOMOL account. It supports read workflows for accounts, tickets, customers, tags, and users with pagination, search, filtering, and ordering where the connector exposes them.
 
-## Reference(s): <br>
-- [ClawHub Gorgias Skill](https://clawhub.ai/oomol/skills/oo-gorgias) <br>
-- [Gorgias Homepage](https://www.gorgias.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server-resolved release metadata and skill frontmatter) <br>
+Risk: The release evidence flags broad command permission and setup guidance as riskier than the documented read-only Gorgias purpose requires.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the user trusts OOMOL, prefers verified or package-manager installation of the oo CLI, and restricts oo CLI permissions to Gorgias read actions where the environment supports it.
+
+Risk: The skill reads Gorgias account, ticket, customer, tag, and user data through a connected account.
+
+Mitigation: Authenticate deliberately and connect only the intended Gorgias account before running read actions.
+
+## Reference(s):
+
+- [Gorgias homepage](https://www.gorgias.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Gorgias skill page](https://clawhub.ai/oomol/skills/oo-gorgias)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live oo connector schema inspection before JSON payload construction.]
+
+## Skill Version(s):
+
+1.0.2 (source: evidence metadata and release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

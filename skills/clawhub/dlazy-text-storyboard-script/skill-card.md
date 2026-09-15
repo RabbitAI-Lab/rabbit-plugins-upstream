@@ -1,45 +1,56 @@
-## Description: <br>
-Generates detailed short-video storyboard scripts from user-provided themes, structured copy, or outlines while preserving supplied spoken copy word for word. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates detailed short-video storyboard scripts from user themes, outlines, or structured copy while preserving spoken-script text verbatim.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External creators, marketers, and production teams use this skill to turn structured short-video copy into shot-by-shot storyboard scripts with scene, camera, lighting, and spoken-script guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is framed as text-only storyboard generation but includes instructions to install and run a cloud media-generation CLI. <br>
-Mitigation: Use it only when cloud dLazy generation is intended, review the npm package and CLI behavior before installation, and require explicit confirmation before running any dlazy command. <br>
-Risk: Prompts, copy, and referenced local media paths may be sent to dLazy cloud endpoints during CLI use. <br>
-Mitigation: Avoid sensitive copy and private local media paths unless the user has approved cloud processing for that material. <br>
-Risk: The CLI stores API-key configuration locally. <br>
-Mitigation: Review API-key storage behavior, protect the local configuration file, and rotate or revoke keys when access is no longer needed. <br>
+## Use Case:
 
+External creators, marketers, and production teams use this skill to turn themes, outlines, or structured copy into shot-by-shot short-video storyboard scripts. It is intended for text planning and script layout, with separate review before any optional media-generation workflow is used.
 
-## Reference(s): <br>
-- [Dlazy Text Storyboard Script on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-text-storyboard-script) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown storyboard with video parameters and repeated shot sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes aspect ratio, resolution, calculated dimensions, paragraph function, scene, camera movement, notes, shooting technique, and spoken script.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.3 (source: evidence release and frontmatter) <br>
+Risk: The skill may move from text-only storyboard drafting into installing or running a third-party media-generation CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it as a text-only storyboard assistant unless the user explicitly opts into a separate media-generation workflow after reviewing the CLI and service terms.
+
+Risk: Prompts and selected media files may be sent to dLazy services, and API keys may be stored in local CLI configuration.
+
+Mitigation: Avoid sensitive prompts or media, prefer scoped or environment-provided credentials where appropriate, and rotate or revoke dLazy API keys when access changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-text-storyboard-script)
+- [dLazy CLI homepage](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown storyboard script with global video parameters and per-shot fields.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes aspect ratio, resolution, calculated dimensions, shot descriptions, camera movement, notes, shooting technique, and spoken-script text preserved verbatim from user input.]
+
+## Skill Version(s):
+
+1.2.13 (source: server release evidence; artifact frontmatter lists 1.2.3)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

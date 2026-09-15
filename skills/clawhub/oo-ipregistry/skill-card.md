@@ -1,42 +1,50 @@
-## Description: <br>
-Ipregistry helps an agent use the OOMOL Ipregistry connector to look up IP address, ASN, user-agent, geolocation, network, company, currency, time zone, and security data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Ipregistry helps agents run Ipregistry lookups through OOMOL's oo CLI for IP, ASN, and user-agent data without handling raw API tokens.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to query Ipregistry through the oo CLI for IP intelligence, ASN data, and user-agent parsing without handling raw service credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires connected service credentials through OOMOL. <br>
-Mitigation: Use it only after confirming the intended Ipregistry connection and review any permission or command prompts before approving installation or execution. <br>
-Risk: Lookup results may include security and network intelligence that can be misapplied if treated as complete ground truth. <br>
-Mitigation: Review returned Ipregistry data in context and corroborate high-impact security or compliance decisions with appropriate sources. <br>
+## Use Case:
 
+Developers and external users use this skill to retrieve Ipregistry geolocation, network, company, currency, time zone, security, ASN, and user-agent parsing data through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/oomol/oo-ipregistry) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Ipregistry homepage](https://ipregistry.co) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON command output.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return IP intelligence, ASN records, parsed user-agent data, command execution IDs, and setup guidance for OOMOL-managed credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: The setup instructions include remote installer commands that can execute arbitrary code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the installer source before use, and prefer a pinned, signed, or checksum-verified installation method.
+
+## Reference(s):
+
+- [Ipregistry homepage](https://ipregistry.co)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces schema-driven oo CLI commands and summarizes JSON responses from Ipregistry connector actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,49 +1,68 @@
-## Description: <br>
-Constant Contact API integration with managed OAuth for reading and administering contacts, email campaigns, contact lists, tags, custom fields, segments, bulk operations, and marketing analytics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Constant Contact API integration with managed OAuth for reading and administering contacts, campaigns, lists, tags, custom fields, segments, bulk operations, and marketing analytics.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Marketing operators, support teams, and developers use this skill to inspect and administer Constant Contact account data through Maton-managed OAuth. It supports guided read, write, bulk, campaign, and analytics workflows while requiring explicit approval before write or send actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write-capable Constant Contact actions can create, update, delete, or bulk-modify contacts, lists, tags, custom fields, segments, campaigns, and marketing analytics data. <br>
-Mitigation: Default to read-only checks first, retrieve the target resource, show the exact identifiers and intended effect, and wait for explicit approval before any write or bulk action. <br>
-Risk: Campaign send and schedule operations can deliver external email and may be irreversible once executed. <br>
-Mitigation: Preview the campaign and verify recipients, sender address, subject, content, and schedule before requesting final confirmation. <br>
-Risk: When multiple Constant Contact OAuth connections exist, an omitted connection selector can target the default account instead of the intended account. <br>
-Mitigation: Use the Maton-Connection header for the intended connection, especially before any write, bulk, send, or schedule action. <br>
+## Use Case:
 
+Developers and marketing operations teams use this skill to let an agent work with Constant Contact data through Maton-authenticated API calls. It is suited for tasks such as inspecting account state, managing contact records and lists, reviewing analytics, and preparing or approving high-impact campaign operations.
 
-## Reference(s): <br>
-- [ClawHub Constant Contact skill](https://clawhub.ai/byungkyu/skills/constant-contact) <br>
-- [Constant Contact V3 API Overview](https://developer.constantcontact.com/api_guide/getting_started.html) <br>
-- [Constant Contact API Reference](https://developer.constantcontact.com/api_reference/index.html) <br>
-- [Constant Contact Technical Overview](https://developer.constantcontact.com/api_guide/v3_technical_overview.html) <br>
-- [Constant Contact Contacts Overview](https://developer.constantcontact.com/api_guide/contacts_overview.html) <br>
-- [Constant Contact Email Campaigns Guide](https://developer.constantcontact.com/api_guide/email_campaigns_get_started.html) <br>
-- [Constant Contact Contact Lists Overview](https://v3.developer.constantcontact.com/api_guide/lists_overview.html) <br>
-- [Maton API key settings](https://maton.ai/settings) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with inline HTTP, JSON, Python, JavaScript, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and explicit user approval before write, bulk, send, or schedule operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: ClawHub release metadata) <br>
+Risk: The skill can administer Constant Contact data, including writes, bulk changes, exports, and campaign send or schedule actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review every write, export, campaign send, function, trigger, and destination before approval, with specific resource identifiers and expected consequences.
+
+Risk: Long-lived API keys and raw HTTP calls increase credential exposure risk.
+
+Mitigation: Prefer OAuth through the Maton CLI, avoid raw HTTP unless the CLI is unavailable, and never expose credentials in command arguments, files, destinations, or logs.
+
+Risk: Functions, triggers, and destinations can create persistent automation or data-forwarding paths.
+
+Mitigation: Approve automation separately, keep destinations on platform-controlled endpoints unless a specific external host is approved, and revoke or delete unused connections, functions, triggers, and destinations promptly.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/constant-contact)
+- [Maton](https://maton.ai)
+- [API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON examples, and API request snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose Maton CLI commands, raw HTTP fallbacks, hosted function code, and trigger configuration; write, export, send, automation, and destination operations require explicit user approval.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

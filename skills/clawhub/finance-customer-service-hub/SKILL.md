@@ -1,46 +1,59 @@
 ---
 name: Financial Industry Customer Service Hub
-slug: finance-customer-service
+slug: finance-customer-service-hub
 description: AI-powered unified customer service hub for financial industry — integrates banking, insurance, securities, and fund customer service into one platform. Covers cross-industry FAQ, intelligent routing, and unified knowledge management. Built for fintech platforms and multi-license financial conglomerates. Keywords: financial customer service, unified platform, cross-industry service, knowledge management, fintech, 金融客服中枢, 统一客服平台, 跨行业服务, 知识管理, 全渠道客服, 智能路由, 客服中台, 跨业务线客服, 统一知识库.
-version: "3.0.1"
+version: "3.0.2"
 ---
 
 # Financial Industry Customer Service Hub / 金融客服中枢
 
-> **English:** AI-powered unified customer service hub for financial industry.
+> **English:** AI-powered unified customer service hub for financial industry — cross-industry FAQ, intelligent routing, unified knowledge management, and service quality metrics. Built for fintech platforms and multi-license financial groups.
 >
-> **中文:** 金融客服中枢——整合银行、保险、证券、基金客服的统一平台。
+> **中文:** 金融客服中枢——整合银行、保险、证券、基金客服的统一平台，覆盖跨行业问答、智能路由、统一知识管理与服务质量指标。适用：金融科技平台、多牌照金融集团、客服中台团队。
+
+**输出物性质说明**：本技能产出的是**知识库结构设计、路由规则、服务标准与指标口径**等框架性内容，用于辅助客服中台规划与运营；具体话术与答复口径须经业务与合规部门审阅后使用，不构成对外承诺。
 
 ---
 
+### 金融监管最新动态 [2026-09-13更新]
 
-### 金融监管最新动态 [2026-05-25更新]
+| 动态类型 | 内容摘要 | 影响范围 | 客服中台侧应对动作 | 优先级 |
+|---------|---------|---------|-----------------|-------|
+| 消费者权益保护 | 消保审查前置于产品与宣传物料发布环节 | 客服知识库与答复口径 | 建立"物料—知识库"同步更新机制，避免口径不一致 | 高 |
+| 智能客服合规 | 智能客服的服务记录留存与用户告知要求提升 | 会话记录与告知话术 | 每次会话首屏明示智能服务身份并告知转人工方式 | 高 |
+| 适当性管理 | 投资者/投保人适当性要求细化，答复中不得越级推荐 | 产品咨询类话术 | 话术中增加适当性核验引导，禁止在会话中给出超风险等级建议 | 高 |
+| 反洗钱 | 客户身份识别与尽职调查要求在服务环节延伸 | 开户与信息变更环节 | 身份信息变更类工单须二次核验并留痕 | 高 |
+| 个人信息保护 | 个人信息处理的最小必要与告知同意要求持续强化 | 客户画像与查询权限 | 坐席查询字段按岗位最小化授权，敏感字段查询留痕 | 高 |
+| 服务时效 | 投诉与咨询处理的时效性要求受关注 | 工单流转与投诉处理 | 建立工单分级时效标准与超时升级机制 | 中 |
+| 无障碍服务 | 面向特殊群体的服务可达性要求提升 | 服务渠道与话术 | 保留人工与线下渠道，避免单一智能入口 | 中 |
 
-| 动态类型 | 内容摘要 | 影响范围 |
-|---------|---------|---------|
-| 金融监管 | 2026年Q1：金融行业客户服务合规要求提升 | 客服知识库和合规流程需更新 |
-| 金融监管 | 智能客服需满足合规留存和消费者保护要求 | 客服知识库和合规流程需更新 |
-| 金融监管 | 反洗钱客户身份识别流程需加强 | 客服知识库和合规流程需更新 |
-
-> **数据截止**: 2026-05-25 | 来源：证监会、NFRA、中证协、安永Q1分析
+> **数据截止**: 2026-09-13 | 来源：国家金融监督管理总局、中国人民银行、证监会、行业协会公开信息
 > **声明**: 以上动态供参考，具体以官方最新发布为准
+
+**动态解读示例（两类高频场景）**
+
+- **场景A｜智能身份未告知**：客户进线后由智能客服直接应答，全程未提示"当前为智能服务"且未说明转人工路径 → 检查中被认定为告知义务履行不足。**改进动作**：会话首条消息固定包含三要素——服务身份说明、可转人工、人工服务时间；并把该条消息纳入知识库版本管理，随口径调整同步更新。
+- **场景B｜跨业务线答复口径不一致**：同一客户在银行线问"提前支取手续费"与在基金线问"赎回费用"，两条线的知识库条款版本不同，答复出现差异 → 引发投诉。**改进动作**：对跨业务线的同类费用类问题建立"主数据源 + 引用关系"，各线知识库统一引用，避免各自维护。
 
 ## Industry Pain Points / 行业痛点
 
-| Pain Point / 痛点 | Impact / 影响 | Solution / 本Skill解决方案 |
-|------------------|-------------|------------------------|
-| **系统孤岛** | 各业务线客服独立，效率低 | 统一知识库+智能路由 |
-| **重复建设** | 每个业务线建一套客服系统 | 共享中台能力 |
-| **用户体验差** | 客户需在多个平台间切换 | 一站式服务入口 |
-| **数据分散** | 客户画像不完整 | 统一数据整合 |
+| Pain Point / 痛点 | Impact / 影响 | Solution / 本Skill解决方案 | 量化基线（示例） | 责任岗 |
+|------------------|-------------|------------------------|---------------|-------|
+| **系统孤岛** | 各业务线客服独立，重复问答效率低 | 统一知识库 + 智能路由 | 跨线问题一次解决率 ≥70% | 中台产品 |
+| **重复建设** | 每条业务线各建一套客服系统 | 共享中台能力（路由/知识/质检） | 公共能力复用率 ≥80% | 科技 |
+| **用户体验差** | 客户需在多个平台间切换 | 一站式服务入口 | 转接次数 ≤1 次/通 | 运营 |
+| **数据分散** | 客户画像不完整，答复缺乏上下文 | 统一客户视图（最小必要字段） | 上下文加载率 ≥95% | 数据/科技 |
+| **口径不一致** | 同类问题在不同线答复不同 | 主数据源 + 引用关系 | 口径冲突项每月归零 | 知识库管理员 |
+| **知识库老化** | 产品改动后知识库未同步 | 变更联动与版本管理 | 新规/新产品上线 5 个工作日内同步 | 知识库管理员 |
+| **智能服务投诉** | 无法转人工、答复机械化 | 转人工规则 + 兜底话术 | 转人工请求响应 ≤30 秒 | 客服中心 |
 
 ---
 
 ## Trigger Keywords / 触发关键词
 
-**English Triggers:** financial customer service, unified platform, cross-industry service, knowledge management, fintech
+**English Triggers:** financial customer service, unified platform, cross-industry service, knowledge management, fintech, customer service hub, intelligent routing, omnichannel service, service quality metrics
 
-**中文触发词（优先）：** 金融客服 / 统一客服 / 跨行业服务 / 知识管理 / 一站式服务 / 客户中枢 / 服务入口
+**中文触发词（优先）：** 金融客服 / 统一客服 / 跨行业服务 / 知识管理 / 一站式服务 / 客户中枢 / 服务入口 / 客服中台 / 全渠道客服 / 智能路由 / 统一知识库 / 跨业务线客服 / 工单流转 / 服务时效 / 转人工规则 / 客服质检 / 知识库更新
 
 ---
 
@@ -51,37 +64,173 @@ version: "3.0.1"
 ```python
 UNIFIED_KNOWLEDGE = {
     "banking": {
-        "categories": ["账户服务", "理财产品", "贷款业务", "信用卡"],
-        "kb_articles": [...]
+        "categories": ["账户服务", "理财产品", "贷款业务", "信用卡", "支付结算"],
+        "owner": "银行线知识库管理员",
+        "update_cycle": "产品变更后 5 个工作日内"
     },
     "insurance": {
-        "categories": ["投保咨询", "理赔报案", "保全变更", "续期服务"],
-        "kb_articles": [...]
+        "categories": ["投保咨询", "理赔报案", "保全变更", "续期服务", "条款解释"],
+        "owner": "保险线知识库管理员",
+        "update_cycle": "条款或费率调整后 5 个工作日内"
     },
     "securities": {
-        "categories": ["账户开立", "交易操作", "产品咨询", "投顾服务"],
-        "kb_articles": [...]
+        "categories": ["账户开立", "交易操作", "产品咨询", "投顾服务", "权限开通"],
+        "owner": "证券线知识库管理员",
+        "update_cycle": "业务规则调整后 5 个工作日内"
+    },
+    "fund": {
+        "categories": ["基金开户", "申购赎回", "费率说明", "净值查询", "定投服务"],
+        "owner": "基金线知识库管理员",
+        "update_cycle": "费率或规则调整后 5 个工作日内"
     }
 }
 
 def unified_query(query: str) -> dict:
-    """跨行业统一查询"""
-    # 意图识别
+    """跨行业统一查询（返回候选条目与引用关系，供坐席确认）"""
     intent = classify_intent(query)
-    
-    # 路由到对应知识库
-    if intent["domain"] == "banking":
-        return search_banking_kb(query)
-    elif intent["domain"] == "insurance":
-        return search_insurance_kb(query)
-    elif intent["domain"] == "securities":
-        return search_securities_kb(query)
+
+    domain_routes = {
+        "banking": search_banking_kb,
+        "insurance": search_insurance_kb,
+        "securities": search_securities_kb,
+        "fund": search_fund_kb
+    }
+
+    if intent["domain"] in domain_routes:
+        primary = domain_routes[intent["domain"]](query)
     else:
-        return multi_domain_search(query)
+        primary = multi_domain_search(query)
+
+    return {
+        "primary": primary,
+        "cross_reference": find_shared_articles(primary),  # 跨线共用条款
+        "need_human": intent["confidence"] < 0.75
+    }
+```
+
+#### 1.1 Knowledge Base Governance / 知识库治理规则
+
+| 规则 | 要求 | 检查方式 |
+|-----|------|---------|
+| 单一主数据源 | 费用、费率、时效类内容只保留一个主条目 | 每周查重 |
+| 引用而非复制 | 跨线共用内容通过引用关系调用 | 抽查引用链 |
+| 版本留痕 | 每次修改记录版本号、修改人、生效日 | 版本记录完整率 100% |
+| 到期复核 | 条款类条目每季度复核一次 | 到期未复核清单 |
+| 下架机制 | 已废止条目及时下架并保留历史 | 废止条目 3 日内下架 |
+| 口径对照 | 同类问题跨线口径一键对照 | 冲突项月度归零 |
+
+### 2. Intelligent Routing / 智能路由
+
+#### 2.1 Routing Rules / 路由规则
+
+| 识别情形 | 路由目标 | 前置动作 | 兜底策略 |
+|---------|---------|---------|---------|
+| 单一业务线明确问题 | 对应业务线队列 | 加载客户上下文（最小必要字段） | 队列超时转综合队列 |
+| 跨业务线复合问题 | 主责线 + 协办线 | 标注关联业务线 | 无法判定时转综合队列 |
+| 涉及资金安全/疑似欺诈 | 风险专席（优先） | 立即冻结建议权限内的操作提示 | 直接转人工，不经过智能应答 |
+| 投诉与情绪激烈 | 投诉专席 | 记录投诉要点与诉求 | 直接转人工，禁止智能兜底循环 |
+| 涉及适当性/权限判断 | 持证坐席 | 核验客户风险等级 | 不得由智能应答给出结论 |
+| 置信度低于阈值 | 人工队列 | 附带候选答案与不确定点 | 默认转人工 |
+
+#### 2.2 Handover Standard / 转人工与承接标准
+
+| 环节 | 标准 | 指标 |
+|-----|------|------|
+| 转人工入口 | 会话内固定位置可见，全程可用 | 入口可见率 100% |
+| 转人工响应 | 无排队场景 | ≤30 秒 |
+| 上下文承接 | 客户无需重复描述已提供信息 | 重复描述率 ≤10% |
+| 转接次数 | 同一诉求 | ≤1 次 |
+| 回访闭环 | 未解决工单 | 按承诺时限反馈 |
+
+### 3. Omnichannel Service Standard / 全渠道服务标准
+
+| 渠道 | 适用场景 | 首次响应目标 | 留痕要求 |
+|-----|---------|-----------|---------|
+| 在线文字 | 常规咨询、查询类 | ≤30 秒 | 全量会话留存 |
+| 电话 | 复杂问题、投诉、资金类 | ≤60 秒接入 | 录音留存并按规定期限保管 |
+| 移动端自助 | 查询、变更预约 | 即时 | 操作日志留存 |
+| 线下柜面 | 身份类、签约类、特殊群体 | 按排队规则 | 双录/凭证留存 |
+| 企业微信等私域 | 存量客户服务 | ≤5 分钟 | 会话合规留痕 |
+
+### 4. Compliance Requirements for Smart Service / 智能服务的合规要求
+
+| 要求 | 具体做法 | 检查点 |
+|-----|---------|-------|
+| 身份告知 | 首条消息明示智能服务身份与转人工方式 | 抽样 100 通检查首条 |
+| 不越权答复 | 投资建议、适当性结论、赔付金额等内容不由智能应答给出 | 抽查高风险问题应答 |
+| 记录留存 | 会话记录按规定期限留存并可回溯 | 留存完整率 100% |
+| 数据最小化 | 坐席查询字段按岗位授权，敏感字段查询留痕 | 权限矩阵与日志核对 |
+| 人工兜底 | 高风险场景直接转人工，不由智能应答循环 | 高风险场景转人工率 100% |
+| 无障碍 | 保留人工与线下渠道 | 渠道可用性检查 |
+
+### 5. Service Quality Metrics / 服务质量指标
+
+| 指标 | 定义 | 参考目标 | 数据来源 |
+|-----|------|---------|---------|
+| 一次解决率 | 首次接触即解决的工单占比 | ≥75% | 工单系统 |
+| 转人工率 | 进入人工的会话占比 | 按业务线设定基线 | 会话系统 |
+| 平均处理时长 | 工单从生成到关闭 | 按等级设定 | 工单系统 |
+| 口径一致率 | 抽检答复与知识库一致的比例 | ≥98% | 质检抽样 |
+| 投诉率 | 投诉工单 / 总工单 | 环比不上升 | 投诉系统 |
+| 知识库新鲜度 | 距最近一次复核的天数 | ≤90 天 | 知识库版本 |
+
+### 6. Ticket Classification / 工单分类与流转
+
+| 工单类型 | 典型场景 | 处理时效（示例） | 升级条件 |
+|---------|---------|--------------|---------|
+| 咨询类 | 产品、费率、流程咨询 | 1 个工作日 | 超时自动升级 |
+| 业务办理类 | 变更、开通、预约 | 2 个工作日 | 材料不全需联系客户 |
+| 投诉类 | 服务质量、费用争议 | 3 个工作日 | 客户不接受方案即升级 |
+| 风险类 | 疑似欺诈、账户异常 | 即时处理 | 一律优先并通知风控 |
+| 特殊群体 | 无障碍、老年客户协助 | 优先处理 | 不得仅提供智能入口 |
+
+---
+
+## Work Discipline / 数据使用与服务纪律
+
+| 要求 | 具体做法 |
+|-----|---------|
+| 最小必要 | 客户信息查询按岗位授权，仅取服务必需字段 |
+| 脱敏展示 | 会话界面敏感字段默认掩码，按需申请查看 |
+| 全程留痕 | 会话、工单、查询日志留存并可按客户维度回溯 |
+| 不越权答复 | 投资建议、适当性结论、赔付结果不由一线直接给出 |
+| 人工兜底 | 高风险与情绪激烈场景强制人工介入 |
+| 口径统一 | 对外答复统一引用知识库主条目，不自行解释 |
+
+---
+
+## Quick Command Templates / 快速指令模板
+
+**知识库结构设计：**
+```
+设计跨银行、保险、证券三条业务线的统一知识库结构：
+- 需要输出：分类体系、主条目与引用关系、更新责任岗、更新时限
+- 并说明费用类内容如何做到单一主数据源
+```
+
+**路由规则设计：**
+```
+为金融客服中台设计智能路由规则：
+- 场景：单一业务线问题、跨业务线复合问题、投诉、疑似欺诈、适当性判断
+- 需要输出：识别条件、路由目标、前置动作、兜底策略
+```
+
+**合规检查：**
+```
+检查智能客服的合规要素是否齐备：
+- 关注点：身份告知、记录留存、不越权答复、数据最小化、转人工可达
+- 需要输出：检查项、判定标准、常见缺陷、整改建议
+```
+
+**服务质量复盘：**
+```
+复盘上月客服服务质量：
+- 指标：一次解决率、转人工率、平均处理时长、口径一致率、投诉率
+- 需要输出：指标对比表、异常项归因、改进动作与责任岗
 ```
 
 ---
 
 ## Disclaimer
 
-This skill provides customer service framework for educational purposes.
+This skill provides customer service frameworks, knowledge base structures, and service standards for reference purposes only. All conversational scripts and reply standards must be reviewed and approved by business and compliance departments before external use; this skill does not constitute customer commitments, service level agreements, or regulatory opinions.

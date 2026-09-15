@@ -1,42 +1,59 @@
-## Description: <br>
-Docsend2pdf helps an agent convert a DocSend document URL to a PDF through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Docsend2pdf converts DocSend document URLs to PDF through OOMOL's docsend_2_pdf connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill when a task requires converting a specific DocSend document link into PDF download metadata through the Docsend2pdf connector. Users should confirm the document URL is intended for conversion before running it. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Converting a document sends the DocSend URL to OOMOL/Docsend2pdf for external processing. <br>
-Mitigation: Confirm the exact URL and intended conversion before running the convert action, and avoid sending sensitive links unless the user accepts that processing. <br>
-Risk: First-time setup may require installing the oo CLI from an external installer. <br>
-Mitigation: Use the install command only when the CLI is missing and the user trusts the OOMOL installer source. <br>
+## Use Case:
 
+Developers and agents use this skill to convert DocSend document URLs into PDF download metadata by inspecting the live connector schema and running the convert action through the oo CLI.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-docsend-2-pdf) <br>
-- [Docsend2pdf homepage](https://docsend2pdf.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown instructions with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action execution; converted PDF results are returned as JSON-safe download metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release and SKILL.md metadata) <br>
+Risk: The setup guidance includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install or update the CLI only after independently trusting and verifying the installer source.
+
+Risk: Token-bearing or private DocSend URLs may grant access to referenced content when sent to the connector.
+
+Mitigation: Use the skill only for DocSend URLs the user is authorized to process and avoid sharing private links unnecessarily.
+
+Risk: The skill's routing language is broader than necessary for a single conversion connector.
+
+Mitigation: Use it only for DocSend-to-PDF conversion tasks and inspect the live action schema before running the connector.
+
+## Reference(s):
+
+- [Docsend2pdf homepage](https://docsend2pdf.com)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-docsend-2-pdf)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The connector returns JSON-safe PDF download metadata and execution details.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

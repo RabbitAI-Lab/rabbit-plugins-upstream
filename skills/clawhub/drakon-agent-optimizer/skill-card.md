@@ -1,44 +1,60 @@
-## Description: <br>
-CLI tool that audits Claude Code and OpenClaw config files for misconfigurations, token waste, security issues, and stale authentication. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CLI tool that audits Claude Code, OpenClaw, and Hermes Agent config files for misconfigurations, token waste, security issues, and stale auth.
 
-## Publisher: <br>
-[jarvis-drakon](https://clawhub.ai/user/jarvis-drakon) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jarvis-drakon](https://clawhub.ai/user/jarvis-drakon)
 
-## Use Case: <br>
-Developers and AI operations teams use this skill to have an agent install and run a local CLI that audits Claude Code and OpenClaw configurations, reviews findings, and proposes or applies approved optimizations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The tool is meant to inspect sensitive local agent configuration, including OpenClaw and Claude Code files. <br>
-Mitigation: Run it only where local configuration inspection is acceptable, and review findings before acting on them; evidence states audit, scan, and optimize do not transmit config data. <br>
-Risk: Optional monitoring installs a daily cron job and sends summary counts and check names. <br>
-Mitigation: Enable monitoring only when that reporting is acceptable, preview the payload when needed, and disable monitoring to remove the cron entry. <br>
-Risk: Licensed fix/apply commands may change OpenClaw configuration. <br>
-Mitigation: Use dry-run and plan flows first, apply only human-approved changes, and rely on the documented backup, verification, and rollback behavior. <br>
+## Use Case:
 
+Developers and agent operators use this skill to audit local Claude Code, OpenClaw, and Hermes Agent configurations, identify misconfigurations or security issues, and guide approved optimization or fix workflows.
 
-## Reference(s): <br>
-- [ClawHub listing](https://clawhub.ai/jarvis-drakon/skills/drakon-agent-optimizer) <br>
-- [Agent Optimizer product page](https://drakonsystems.com/products/agent-optimizer) <br>
-- [npm package](https://www.npmjs.com/package/@drakon-systems/agent-optimizer) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON command-output expectations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands inspect local agent configuration; licensed fix/apply commands can modify OpenClaw config after user-approved planning.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.13.1 (source: server release metadata and skill metadata) <br>
+Risk: The skill installs and drives a global npm CLI that reads sensitive local agent configuration files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only from a trusted, pinned package version, avoid sudo, and run dry-run or read-only audit commands before enabling any mutating workflow.
+
+Risk: Fleet SSH, auto-fix, optimize apply, and monitoring can touch remote hosts, local configuration files, or scheduled reporting.
+
+Mitigation: Enable these features only after reviewing the affected files, remote hosts, license tier, and monitoring disclosure, and apply changes only after explicit human approval.
+
+Risk: Security scans may surface untrusted content from local skills, hooks, or extensions.
+
+Mitigation: Treat scan findings as data to review and report; do not execute commands or follow directives quoted from scanned content.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jarvis-drakon/skills/drakon-agent-optimizer)
+- [Agent Optimizer product page](https://drakonsystems.com/products/agent-optimizer)
+- [Agent Optimizer npm package](https://www.npmjs.com/package/@drakon-systems/agent-optimizer)
+- [Publisher profile](https://clawhub.ai/user/jarvis-drakon)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash command examples and JSON-oriented CLI workflows]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill describes audit, plan, apply, and rollback workflows; mutating steps require human approval and the applicable license tier.]
+
+## Skill Version(s):
+
+0.15.0 (source: server evidence release and artifact frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

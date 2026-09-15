@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "BlazeMeter Service Virtualization"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["blaze_meter_service_virtualization"]
   icon: "https://static.oomol.com/logo/third-party/blaze_meter_service_virtualization.svg"
 ---

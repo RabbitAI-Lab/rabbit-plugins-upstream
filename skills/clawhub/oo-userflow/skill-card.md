@@ -1,46 +1,60 @@
-## Description: <br>
-Userflow (userflow.com) skill for reading, creating, updating, and deleting Userflow data through the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Userflow lets an agent read, create, update, and delete Userflow users, groups, and events through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Userflow users, groups, and events through an OOMOL-connected Userflow account. It supports read actions, upserts, event tracking, and explicitly approved delete operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan flags install guidance that pipes a remotely fetched installer directly into a shell without pinning or verification. <br>
-Mitigation: Review the installer first, prefer official pinned releases where available, and avoid use in sensitive environments until checksum- or signature-verified installation guidance is available. <br>
-Risk: The skill can run write and destructive Userflow actions that alter or delete users and groups. <br>
-Mitigation: Confirm the exact payload and effect before write actions, and require explicit approval for each destructive target before execution. <br>
-Risk: The skill requires sensitive Userflow credentials through an OOMOL-connected account. <br>
-Mitigation: Use only trusted OOMOL and Userflow connections, keep credentials out of prompts and local files, and revoke or rotate access if a connection is no longer needed. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Userflow users, groups, and events through an OOMOL-connected account. It supports read actions, event tracking, upserts, and destructive deletes with confirmation requirements for state-changing operations.
 
-## Reference(s): <br>
-- [Userflow homepage](https://userflow.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-userflow) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands call the oo CLI and may return JSON containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill metadata) <br>
+Risk: Setup guidance includes remote installer commands that may execute downloaded shell or PowerShell scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installation source and path before installing; prefer official, verifiable installation instructions or a package manager, and avoid piping remote scripts directly into a shell when possible.
+
+Risk: Write and destructive actions can modify or delete Userflow users and groups.
+
+Mitigation: Confirm the exact action, payload, and target with the user before running write or delete operations.
+
+Risk: Credential or connection troubleshooting could expose sensitive account setup details if handled carelessly.
+
+Mitigation: Use the OOMOL connection flow for credentials and avoid asking the user to paste raw Userflow tokens into the agent conversation.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-userflow)
+- [Userflow Homepage](https://userflow.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return JSON responses from the oo connector, including data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

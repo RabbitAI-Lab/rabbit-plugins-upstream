@@ -1,40 +1,63 @@
-## Description: <br>
-Configures an agent to manage Google Calendar events and Google Meet spaces through the gogcli Calendar MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a Google Calendar and Google Meet MCP server via gogcli for authentication, calendar event management, and Meet space operations.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Developers and agent users use this skill to connect a Google account to a Calendar MCP server so an agent can schedule, list, create, update, delete, and respond to calendar events, and create or manage Google Meet spaces. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The configured MCP server can modify calendar and meeting data, including deleting events, responding to invitations, updating Meet settings, and ending conferences. <br>
-Mitigation: Install it only for a Google account the agent is intended to manage and require clear user confirmation before destructive or externally visible calendar and Meet actions. <br>
+## Use Case:
 
+Developers and agent users use this skill to let an MCP client schedule, search, update, delete, and respond to Google Calendar events and manage Google Meet spaces through an authenticated gogcli setup.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/gogcli-mcp-calendar) <br>
-- [gogcli](https://github.com/openclaw/gogcli) <br>
-- [gogcli-mcp](https://github.com/chrischall/gogcli-mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON configuration snippets and command-line setup guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an authenticated gogcli installation, Node.js 18 or later, and a selected Google account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.8.0 (source: server release evidence) <br>
+Risk: The skill can exercise broad control over Google Calendar and Meet data, including creating, updating, deleting, moving, and responding to events.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for accounts where that level of access is intended, review high-impact tool requests before approval, and use GOG_READONLY=1 when only read access is needed.
+
+Risk: Zoom Server-to-Server OAuth credential tools can store sensitive Zoom credentials for meeting attachment workflows.
+
+Mitigation: Configure Zoom credentials only in trusted environments and avoid exposing credential-bearing inputs, logs, or tool transcripts.
+
+Risk: Runtime remote-runner configuration can send Google or Zoom credentials to a configured endpoint.
+
+Mitigation: Leave remote-runner settings unset unless required, and restrict any configured remote runner to a trusted HTTPS endpoint.
+
+Risk: Escape-hatch and destructive tools can perform unexpected calendar or Meet changes if approved without review.
+
+Mitigation: Prefer pinned package versions and manually confirm delete, unsubscribe, end-conference, move, and escape-hatch requests before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/gogcli-mcp-calendar)
+- [gogcli project](https://github.com/openclaw/gogcli)
+- [Model Context Protocol](https://modelcontextprotocol.io)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Configuration]
+
+**Output Format:** [MCP tool responses from gogcli, typically text or JSON-like command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Node.js 18 or later and an authenticated gogcli setup; tool effects depend on the requested Calendar, Meet, auth, or Zoom operation.]
+
+## Skill Version(s):
+
+2.30.0 (source: package.json, manifest.json, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

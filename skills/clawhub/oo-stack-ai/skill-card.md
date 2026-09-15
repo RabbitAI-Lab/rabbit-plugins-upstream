@@ -1,45 +1,61 @@
-## Description: <br>
-StackAI helps agents use StackAI through the OOMOL oo CLI to inspect connector schemas, run deployed flows, and retrieve run metadata. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+StackAI lets agents operate StackAI through an OOMOL-connected account using the oo CLI connector to inspect schemas, run deployed flows, and fetch run metadata.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External developers and agent operators use this skill to access a connected StackAI account through OOMOL, run deployed StackAI flows, and fetch run metadata without handling raw API credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The setup path includes a visible CLI installer risk from running remote install scripts. <br>
-Mitigation: Install only if OOMOL is trusted, and review the oo CLI install guide or installer script before running the curl-to-bash or PowerShell setup. <br>
-Risk: The run_flow action executes a deployed StackAI flow rather than performing a read-only lookup. <br>
-Mitigation: Inspect the live connector schema, construct the payload from that schema, and confirm the intended flow inputs and effects before execution. <br>
-Risk: The skill requires a connected StackAI account and sensitive credentials managed through OOMOL. <br>
-Mitigation: Use the OOMOL connection flow rather than raw tokens, and install the skill only when connecting that StackAI account through OOMOL is intended. <br>
+## Use Case:
 
+Developers and external users use this skill to run deployed StackAI flows and retrieve run metadata through an OOMOL-managed StackAI connector.
 
-## Reference(s): <br>
-- [ClawHub StackAI skill page](https://clawhub.ai/oomol/oo-stack-ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [StackAI homepage](https://www.stack-ai.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance, Configuration instructions] <br>
-**Output Format:** [Markdown with inline shell commands and JSON results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; action results are returned as normalized JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Running deployed StackAI flows can trigger configured flow behavior or consume credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Inspect the live schema, confirm the exact run_flow payload and intended effect with the user, and stop on billing errors before retrying.
+
+Risk: The setup guidance includes remote installer commands that execute downloaded scripts.
+
+Mitigation: Use setup only after a matching CLI-missing or authentication failure, and prefer a verified installer, signed package, or reviewed script where possible.
+
+Risk: Connector inputs and outputs depend on live OOMOL and StackAI action schemas.
+
+Mitigation: Fetch the action schema before constructing payloads and avoid relying on stale assumptions about connector fields.
+
+## Reference(s):
+
+- [ClawHub StackAI skill page](https://clawhub.ai/oomol/skills/oo-stack-ai)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [StackAI homepage](https://www.stack-ai.com)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, JSON, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the oo CLI stack_ai connector and should fetch the live action schema before constructing payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

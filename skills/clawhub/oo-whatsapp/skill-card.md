@@ -1,45 +1,57 @@
-## Description: <br>
-WhatsApp (whatsapp.com). Use this skill for WhatsApp requests involving reading, creating, updating, and deleting data through the OOMOL WhatsApp connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+WhatsApp (whatsapp.com). Use this skill for WhatsApp requests that read, create, update, or delete data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external operators, and developers use this skill to inspect WhatsApp Business account data, send WhatsApp messages, manage media, and create or delete WhatsApp message templates through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive credentials through an OOMOL-connected WhatsApp account. <br>
-Mitigation: Install only for trusted workspaces and review requested permissions before use. <br>
-Risk: Write actions can send WhatsApp messages, upload media, or create message templates. <br>
-Mitigation: Confirm the exact recipient, payload, and expected effect before running write actions. <br>
-Risk: The destructive template deletion action removes all variants sharing the same template name. <br>
-Mitigation: Require explicit approval for the target template name before running destructive actions. <br>
+## Use Case:
 
+Developers and agent users use this skill to operate WhatsApp Business through the oo CLI, including profile and media reads, template management, and sending messages. It is intended for accounts already connected through OOMOL, with confirmation before write or destructive actions.
 
-## Reference(s): <br>
-- [WhatsApp homepage](https://www.whatsapp.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-whatsapp) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the live connector schema before action execution and returns connector responses as JSON when commands are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill frontmatter) <br>
+Risk: The setup path asks users to run an internet installer directly in a shell without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the install command first and prefer a verified, versioned, signed, or package-manager installation source for the oo CLI.
+
+Risk: WhatsApp write actions can send messages, upload media, or create templates, and the destructive action can delete message templates.
+
+Mitigation: Confirm the exact action, payload, target account, and recipient or template name before running write or destructive commands.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-whatsapp)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [WhatsApp](https://www.whatsapp.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and meta.executionId when actions run with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

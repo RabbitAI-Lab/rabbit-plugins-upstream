@@ -1,45 +1,52 @@
-## Description: <br>
-Pdfless (pdfless.com). Use this skill for ANY Pdfless request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pdfless (pdfless.com). Use this skill for ANY Pdfless request - searching and reading data. Whenever a task involves Pdfless, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to inspect a connected Pdfless workspace and list document templates through OOMOL-managed Pdfless connector actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill relies on OOMOL-managed credentials for Pdfless access. <br>
-Mitigation: Install and use it only when OOMOL is an acceptable credential broker for the target Pdfless workspace. <br>
-Risk: First-time setup may involve running shell installer commands for the oo CLI. <br>
-Mitigation: Verify the oo CLI install source before running curl or PowerShell installer commands. <br>
-Risk: Future connector actions may add write-capable behavior. <br>
-Mitigation: Review connector schemas and confirm any write or destructive payload with the user before execution. <br>
+## Use Case:
 
+Developers and external agents use this skill to operate Pdfless through an OOMOL-connected account, inspect live action schemas, get workspace details, and list document templates.
 
-## Reference(s): <br>
-- [Pdfless skill page](https://clawhub.ai/oomol/oo-pdfless) <br>
-- [Pdfless homepage](https://pdfless.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects with data and meta.executionId when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: First-time setup can direct an agent to run remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Have a human review and perform CLI installation through a trusted or verified method before allowing the agent to run Pdfless actions.
+
+## Reference(s):
+
+- [ClawHub Pdfless skill page](https://clawhub.ai/oomol/skills/oo-pdfless)
+- [Pdfless homepage](https://pdfless.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

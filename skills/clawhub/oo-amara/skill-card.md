@@ -1,45 +1,60 @@
-## Description: <br>
-Operates an OOMOL-connected Amara account for reading, creating, updating, and deleting Amara data through the oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Amara helps agents operate an Amara account through the OOMOL oo CLI for video, subtitle, team, user, language, and activity workflows.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent inspect Amara schemas and run Amara read, write, and subtitle workflow actions through a connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, or delete Amara data when write or destructive actions are used. <br>
-Mitigation: Require explicit user intent and confirm the exact payload, target, and expected effect before running write or destructive actions. <br>
-Risk: The skill operates through a connected Amara account and requires sensitive account credentials. <br>
-Mitigation: Install it only for intended Amara account operation, rely on the connected credential flow, and avoid exposing raw tokens in prompts, logs, or files. <br>
-Risk: Running setup or connection commands unnecessarily can alter authentication or connection state. <br>
-Mitigation: Use first-time setup steps only after an oo CLI, authentication, connection, scope, or billing error requires them. <br>
+## Use Case:
 
+Developers and operators use this skill to let an agent read and manage Amara videos, subtitles, source URLs, teams, users, languages, and activity through a connected OOMOL account. It supports read workflows plus confirmed write and destructive actions such as creating subtitles, updating video metadata, publishing or approving subtitles, and deleting video URLs.
 
-## Reference(s): <br>
-- [ClawHub Amara Skill](https://clawhub.ai/oomol/oo-amara) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Amara](https://amara.org) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands should inspect the live connector schema before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: First-time setup includes remote installer scripts that may execute unverified code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official signed or otherwise verifiable oo CLI installation method before using the skill.
+
+Risk: The skill can perform write and destructive Amara actions through a connected account.
+
+Mitigation: Confirm the exact action, target, and JSON payload before any write, delete, publish, approve, or reject operation.
+
+Risk: Installing the skill allows an agent to operate the user's Amara account through OOMOL.
+
+Mitigation: Install only when the publisher is trusted and the user intends the agent to access the connected Amara account.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-amara)
+- [Amara Homepage](https://amara.org)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Amara Icon](https://static.oomol.com/logo/third-party/Amara.svg)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas to validate action payloads before execution; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

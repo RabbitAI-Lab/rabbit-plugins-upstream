@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Snipe-IT"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["snipe_it"]
   icon: "https://static.oomol.com/logo/third-party/snipe_it.png"
 ---

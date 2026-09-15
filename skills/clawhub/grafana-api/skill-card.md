@@ -1,43 +1,77 @@
-## Description: <br>
-Grafana API integration with managed authentication for reading and managing dashboards, data sources, folders, annotations, alerts, and teams. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Grafana provides managed-authentication API access for reading and, with explicit approval, creating, updating, or deleting dashboards, data sources, folders, annotations, teams, and selected alerting resources.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers, SREs, and observability teams use this skill to inspect and manage Grafana dashboards, data sources, folders, annotations, teams, and alert rules through Maton's managed API gateway. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends Grafana API traffic through Maton and requires sensitive credentials. <br>
-Mitigation: Install only if you trust Maton, use a dedicated least-privilege Grafana service account token, avoid admin tokens unless required, and revoke the connection when finished. <br>
-Risk: Write-capable Grafana operations can create, update, or delete dashboards, data sources, folders, annotations, alerts, and teams. <br>
-Mitigation: Default to read-only inspection, review each proposed change, and require explicit approval with specific resource identifiers before any POST, PUT, PATCH, or DELETE request. <br>
-Risk: High-impact changes can affect monitoring and observability workflows. <br>
-Mitigation: Verify the target resource and summarize consequences before deleting dashboards, modifying alert rules, changing data sources, or reorganizing folders. <br>
+## Use Case:
 
+Developers, operators, and observability teams use this skill to inspect Grafana resources, manage dashboards and related objects, and set up approved Grafana-backed automation through Maton.
 
-## Reference(s): <br>
-- [Grafana skill listing on ClawHub](https://clawhub.ai/byungkyu/grafana-api) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python and HTTP request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and explicit user approval before write operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: High-impact Grafana writes can change or delete dashboards, data sources, folders, annotations, teams, or alerting resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use read/list calls first, identify the exact target resource, describe the intended effect, and wait for explicit user confirmation before any POST, PUT, PATCH, or DELETE.
+
+Risk: The connected Grafana credential may carry broad permissions in the selected instance.
+
+Mitigation: Use least-privilege Grafana credentials, prefer read-only scopes when possible, specify the intended connection, and revoke unused connections promptly.
+
+Risk: Long-lived API keys and raw responses can expose credentials or sensitive observability data.
+
+Mitigation: Prefer OAuth through the Maton CLI, avoid printing or storing tokens, and return only the response fields needed for the task.
+
+Risk: Hosted functions or trigger destinations can create persistent automation or data forwarding.
+
+Mitigation: Create or update automation only after separate approval that names the function, destination host, data fields, frequency, and persistence.
+
+## Reference(s):
+
+- [Grafana HTTP API Documentation](https://grafana.com/docs/grafana/latest/developers/http_api/)
+- [Dashboard API](https://grafana.com/docs/grafana/latest/developers/http_api/dashboard/)
+- [Folder API](https://grafana.com/docs/grafana/latest/developers/http_api/folder/)
+- [Data Source API](https://grafana.com/docs/grafana/latest/developers/http_api/data_source/)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, code, configuration]
+
+**Output Format:** [Markdown with shell commands, code blocks, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should default to read/list guidance and require explicit user confirmation before writes, new connections, or hosted automation.]
+
+## Skill Version(s):
+
+1.2.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

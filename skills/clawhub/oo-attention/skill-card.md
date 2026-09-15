@@ -1,42 +1,55 @@
-## Description: <br>
-Attention (attention.com). Use this skill for ANY Attention request - searching and reading data. Whenever a task involves Attention, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Attention connects agents to an OOMOL-managed Attention account to search, read, and analyze conversations, deals, teams, and users.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to search, read, and analyze Attention conversations, teams, users, and selected deal or conversation data through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Returned conversations, users, teams, and analysis results can contain sensitive business information. <br>
-Mitigation: Ask for narrow filters, specific IDs, or clear scopes before retrieving or analyzing Attention data. <br>
-Risk: The skill depends on the user's OOMOL-connected Attention account and may fail when CLI, authentication, connection, scope, credential, or billing prerequisites are missing. <br>
-Mitigation: Use the documented first-time setup guidance only after a command fails for the matching prerequisite issue. <br>
+## Use Case:
 
+Agents and operators use this skill to retrieve Attention conversations and organization records, then ask Attention to analyze selected conversations or deals through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Attention homepage](https://attention.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include Attention connector results, conversation summaries, user and team listings, execution IDs, and setup guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the installer source before running setup commands, and prefer a trusted installation path for the oo CLI.
+
+Risk: The skill can read Attention conversations and organization records through the connected account.
+
+Mitigation: Use an account with appropriate scopes and avoid requesting data beyond the user's authorized Attention workspace.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-attention)
+- [Attention homepage](https://attention.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance with oo CLI commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an installed oo CLI, OOMOL sign-in, and a connected Attention account.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,57 @@
-## Description: <br>
-Gong support for searching and reading Gong data through OOMOL's oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gong (gong.io). Use this skill for ANY Gong request - searching and reading data. Whenever a task involves Gong, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External developers and teams with OOMOL-connected Gong accounts use this skill to inspect live connector schemas and read Gong calls, transcripts, users, and call outcomes via the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Gong queries and returned call or transcript data are routed through OOMOL's CLI-backed connector service. <br>
-Mitigation: Install and use the skill only if OOMOL is trusted as a connector provider for the Gong account and the user is comfortable with that routing. <br>
-Risk: The fallback CLI installation path downloads and runs a remote installer. <br>
-Mitigation: Review the remote oo CLI installer source before using the fallback install command. <br>
-Risk: Future or schema-discovered actions tagged write or destructive could change, remove, or overwrite Gong data. <br>
-Mitigation: Fetch the authoritative action schema before constructing payloads and get explicit user confirmation for any write or destructive action. <br>
+## Use Case:
 
+Developers and operators use this skill to search and read Gong calls, call transcripts, users, and call outcome configuration through an OOMOL-connected Gong account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-gong) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Gong homepage](https://www.gong.io/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-oriented Gong connector actions; live schemas are fetched before payload construction.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: First-time setup includes unverified internet installer commands that can execute code on the user's computer.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run curl|bash or irm|iex automatically; prefer a verified, pinned installer or official package flow.
+
+Risk: The skill can read Gong call, transcript, and user data available to the connected account.
+
+Mitigation: Install and use it only with an account whose Gong access is appropriate for the task, and review returned data before sharing it further.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-gong)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Gong homepage](https://www.gong.io/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include Gong call, transcript, user, and action metadata available to the connected account.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

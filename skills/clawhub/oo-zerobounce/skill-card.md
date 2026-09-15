@@ -1,42 +1,55 @@
-## Description: <br>
-ZeroBounce (zerobounce.net) lets agents read, create, and update ZeroBounce data through the OOMOL oo CLI connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ZeroBounce helps agents validate email addresses, inspect account and usage data, and manage custom allow/block filter rules through an OOMOL-connected ZeroBounce account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to validate email addresses, inspect ZeroBounce account activity and usage, check credit balance, and manage ZeroBounce filter rules through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The setup guidance includes a network-fetched shell installer for the oo CLI. <br>
-Mitigation: Install the oo CLI only from a trusted, verified OOMOL source and review the installer before execution. <br>
-Risk: The skill can create or update ZeroBounce custom allow/block filter rules. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
+## Use Case:
 
+Developers and agents use this skill to operate ZeroBounce through an OOMOL-connected account for email validation, account usage checks, activity lookups, credit balance checks, and filter-rule management.
 
-## Reference(s): <br>
-- [ZeroBounce homepage](https://www.zerobounce.net) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub ZeroBounce skill page](https://clawhub.ai/oomol/oo-zerobounce) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schemas before running actions; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill frontmatter) <br>
+Risk: First-time setup guidance includes shell commands that execute unpinned remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path and install the oo CLI from a trusted, versioned source with checksum or signature verification; do not allow the agent to run the remote installer automatically.
+
+Risk: The skill can create or update ZeroBounce custom filter rules.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [ZeroBounce homepage](https://www.zerobounce.net)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides agents to inspect live connector schemas before running ZeroBounce actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

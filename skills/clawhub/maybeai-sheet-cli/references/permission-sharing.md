@@ -2,6 +2,20 @@
 
 Use this reference when the task is about spreadsheet visibility, public access, or user-specific sharing permissions rather than cell data editing.
 
+## Discover public sharing commands
+
+Do not use this reference as a command tree or flag contract. Confirm the
+installed public sharing surface before generating a command:
+
+```bash
+mbs --help
+mbs share --help
+mbs share <public-command> --help
+```
+
+Generate only commands shown by public root or nested `--help`. Do not
+generate hidden compatibility commands.
+
 ## Scope
 
 These APIs cover:
@@ -96,6 +110,7 @@ Use `share list` when the user asks who currently has access to a sheet.
 - Treat `gid` as `null` unless a narrower permission scope is explicitly required by the backend workflow.
 - If the user asks to "make it public", clarify whether they want public `viewer` or public `editor` access if that is not obvious from context.
 - If the caller is not the owner, visibility changes and permission mutations can fail even if the user can edit cells.
+- If `share visibility` returns 403 with an owner-only message such as "Only the sheet owner can update sheet visibility", classify it as `owner_permission_required` / `permission_skipped`. When `workbook inspect` already shows the requested public visibility and permission, this is a share warning, not a dashboard/render failure; otherwise the owner or service account must update visibility.
 
 ## Recommended Workflow
 

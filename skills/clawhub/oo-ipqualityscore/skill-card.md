@@ -1,42 +1,56 @@
-## Description: <br>
-IPQualityScore (ipqualityscore.com) helps an agent inspect and run IPQualityScore connector actions for IP reputation checks, URL or domain scans, email validation, and phone validation through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+IPQualityScore helps agents use OOMOL's oo CLI to check IP reputation, scan URLs or domains, and validate email addresses or phone numbers through a connected IPQualityScore account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, analysts, and external users use this skill to run IPQualityScore lookups from an OOMOL-connected account without handling raw service credentials. It supports reputation, abuse-risk, deliverability, and threat-signal checks for IP addresses, URLs or domains, email addresses, and phone numbers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive credentials through an OOMOL-connected IPQualityScore account. <br>
-Mitigation: Install only when the publisher is trusted and use the documented OOMOL connection flow so raw service tokens are not handled by the agent. <br>
-Risk: Connector actions can send IP addresses, URLs, domains, email addresses, or phone numbers to IPQualityScore for analysis. <br>
-Mitigation: Confirm that submitted data is appropriate for the user's account, policy, and jurisdiction before running lookups. <br>
+## Use Case:
 
+External users and developers use this skill to run IPQualityScore reputation, URL safety, email validation, and phone validation checks from an agent through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub IPQualityScore Skill Page](https://clawhub.ai/oomol/oo-ipqualityscore) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [IPQualityScore Homepage](https://www.ipqualityscore.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses OOMOL server-side credential injection and returns connector data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence and skill metadata) <br>
+Risk: Fallback setup includes remote installer commands that could execute unreviewed shell or PowerShell content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Inspect and verify the official installer path before use, and require explicit approval before installing or updating the oo CLI.
+
+Risk: IPQualityScore access is mediated through OOMOL-connected credentials.
+
+Mitigation: Use the skill only when the user accepts OOMOL-mediated access and has intentionally connected the relevant IPQualityScore account.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-ipqualityscore)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+- [IPQualityScore homepage](https://www.ipqualityscore.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution; normal action responses include data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

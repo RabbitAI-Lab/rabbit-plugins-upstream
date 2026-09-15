@@ -1,43 +1,59 @@
-## Description: <br>
-Plasmic (plasmic.app). Use this skill for searching and reading Plasmic CMS data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Plasmic support for searching and reading CMS data through an OOMOL-connected Plasmic account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and content operators use this skill to inspect the live Plasmic connector schema, list Plasmic CMS rows, and count matching CMS rows with filters, draft mode, and locale selection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on OOMOL's oo CLI and a connected Plasmic account, so commands can fail when the CLI is missing, authentication is stale, connection scope is missing, or billing is blocked. <br>
-Mitigation: Install only when OOMOL oo CLI and Plasmic access are intended; use the setup fallback only after an auth, connection, or billing failure. <br>
-Risk: Broad Plasmic requests could be mistaken for permission to edit or administer Plasmic content beyond the listed read actions. <br>
-Mitigation: Treat the skill as appropriate for listing and counting CMS items; require explicit user confirmation and verify the live action schema before any edit, delete, or broader administration action. <br>
+## Use Case:
 
+Developers and external users use this skill to inspect Plasmic connector schemas and run read-only CMS count and list operations through an OOMOL-connected Plasmic account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-plasmic) <br>
-- [Plasmic Homepage](https://www.plasmic.app) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the live connector schema before constructing payloads; read actions can be run directly, while write or destructive actions require explicit confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: Setup instructions include remote installer commands that execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the installer source and integrity independently before running installation commands.
+
+Risk: Plasmic request parameters and returned CMS data are routed through OOMOL.
+
+Mitigation: Use a least-privilege Plasmic account and install only if this data routing is acceptable.
+
+Risk: Only count_items and list_items are reviewed read actions in the supplied evidence.
+
+Mitigation: Require explicit user confirmation before running any other connector action, especially actions that write, delete, remove, or overwrite data.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-plasmic)
+- [Plasmic Homepage](https://www.plasmic.app)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses OOMOL connector responses that include data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,60 @@
-## Description: <br>
-CustomGPT.ai helps agents read, create, and update CustomGPT.ai data through the OOMOL connector instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CustomGPT.ai enables agents to operate a user's CustomGPT.ai account through OOMOL, including listing agents, conversations, messages, and documents, creating conversations, and sending non-streaming prompts.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect CustomGPT.ai agents, conversations, documents, and messages, and to create conversations or send non-streaming prompts after confirming write actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create CustomGPT.ai conversations and send messages that change account state. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: The skill depends on OOMOL account access and the oo CLI to operate a CustomGPT.ai account. <br>
-Mitigation: Install or authenticate the oo CLI only when the user intends to use this connector and trusts OOMOL for the connection. <br>
-Risk: Connector action schemas may change over time. <br>
-Mitigation: Inspect the live connector schema before constructing every action payload. <br>
+## Use Case:
 
+Developers, operators, and other CustomGPT.ai users can use this skill to inspect account resources, create conversations, and send prompts to CustomGPT agents through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [CustomGPT.ai homepage](https://customgpt.ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill listing](https://clawhub.ai/oomol/skills/oo-customgpt) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before each action payload.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: The first-time setup fallback documents pipe-to-shell installation for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified package or download and inspect the installer before execution.
+
+Risk: Write actions can create conversations and send prompts through a connected CustomGPT.ai account.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running any write action.
+
+Risk: The skill depends on OOMOL as the CustomGPT.ai connector and on server-side credentials.
+
+Mitigation: Use it only when that connector relationship is acceptable and reconnect or refresh credentials only after an auth or connection failure.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-customgpt)
+- [CustomGPT.ai homepage](https://customgpt.ai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live action schema inspection before constructing CustomGPT.ai connector payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: evidence.release.version and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

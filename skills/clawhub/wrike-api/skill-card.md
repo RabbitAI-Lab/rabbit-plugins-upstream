@@ -1,43 +1,78 @@
-## Description: <br>
-Wrike API integration with managed OAuth for managing tasks, folders, projects, spaces, collaboration, and administrative functions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Wrike API integration with managed OAuth for managing tasks, folders, projects, spaces, team collaboration, and administrative functions.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Employees, administrators, and agents use this skill to inspect and manage Wrike workspaces, tasks, folders, projects, spaces, time logs, users, invitations, access roles, audit logs, and data exports through an authenticated Wrike connection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Maton API key that can access a connected Wrike account. <br>
-Mitigation: Keep MATON_API_KEY private, install only when Wrike access through Maton is intended, and scope usage to the correct connection. <br>
-Risk: Write, administrative, audit-log, invitation, user-management, and data-export operations can expose sensitive data or change account governance. <br>
-Mitigation: Review and explicitly approve the target, scope, and intended effect before any sensitive or account-changing operation. <br>
+## Use Case:
 
+Employees, project managers, and developers use this skill to inspect and update Wrike work items, collaboration resources, time logs, and account resources through a managed OAuth connection. It is also used for approved Wrike automation through Maton functions and triggers.
 
-## Reference(s): <br>
-- [ClawHub Wrike Skill](https://clawhub.ai/byungkyu/wrike-api) <br>
-- [Maton](https://maton.ai) <br>
-- [Wrike API Documentation](https://developers.wrike.com/) <br>
-- [Wrike OAuth 2.0 Authorization](https://developers.wrike.com/oauth-20-authorization/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration, text] <br>
-**Output Format:** [Markdown with inline shell, Python, JavaScript, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; use Maton-Connection when selecting among multiple Wrike connections.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill can access broad Wrike workspace data, including administrative resources and data exports.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use OAuth with least-privilege scopes, prefer read/list operations, and require explicit confirmation for admin, export, and write actions.
+
+Risk: API keys and trigger destination secrets could be exposed if placed in shell commands, logs, headers, or body templates.
+
+Mitigation: Prefer managed OAuth and OS credential storage; never print, log, or embed Maton or provider credentials in trigger destinations.
+
+Risk: Triggers and destinations can create persistent forwarding of future event data.
+
+Mitigation: Create triggers or destinations only after the user approves the exact source, scope, destination host, payload fields, and persistence, and remove them when no longer needed.
+
+Risk: Hosted functions can continue acting with the deploying Maton account's connected app access.
+
+Mitigation: Deploy only user-authored or user-reviewed handlers, prefer DENY_ALL network policy, summarize reachable connections before deployment, and delete functions after their task is complete.
+
+## Reference(s):
+
+- [Wrike API Documentation](https://developers.wrike.com/)
+- [Wrike API Overview](https://developers.wrike.com/overview/)
+- [OAuth 2.0 Authorization](https://developers.wrike.com/oauth-20-authorization/)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Maton Homepage](https://maton.ai)
+- [Wrike Skill on ClawHub](https://clawhub.ai/byungkyu/skills/wrike-api)
+- [API Gateway Skill on ClawHub](https://clawhub.ai/byungkyu/api-gateway)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, JSON examples, and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access and an authorized Wrike connection; write, admin, export, connection, function, and trigger actions require explicit user approval.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

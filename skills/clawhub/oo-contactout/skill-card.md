@@ -1,43 +1,59 @@
-## Description: <br>
-ContactOut helps agents use an OOMOL-connected ContactOut account to search people and companies, enrich profiles, verify emails, retrieve contact availability, and read usage stats. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ContactOut helps an agent use the OOMOL oo CLI to search, count, enrich, and verify ContactOut people and company data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and sales or recruiting operators use this skill to run ContactOut people and company search, enrichment, email verification, contact availability checks, and account usage lookups through the OOMOL oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: ContactOut actions may retrieve personal emails, phone availability, LinkedIn profile data, company enrichment data, and account usage stats. <br>
-Mitigation: Run requests only when user-directed, review search and enrichment inputs before execution, and limit retrieved data to the user's stated task. <br>
-Risk: Connector actions consume the user's connected ContactOut service and may affect billing, credits, or usage quotas. <br>
-Mitigation: Use usage stats when relevant, watch for billing or credit errors, and confirm high-volume or broad searches before running them. <br>
-Risk: Authentication or connection troubleshooting could expose unnecessary setup steps or connection flows. <br>
-Mitigation: Use the existing OOMOL-connected account by default and fall back to setup or connection guidance only after an auth, scope, credential, or missing CLI failure. <br>
+## Use Case:
 
+External users and developers use this skill to run authorized ContactOut workflows through an OOMOL-connected account, including people and company search, enrichment, contact availability checks, email verification, and usage-stat retrieval.
 
-## Reference(s): <br>
-- [ContactOut homepage](https://contactout.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, JSON, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId fields when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and skill metadata) <br>
+Risk: The setup instructions include remote shell installation commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verifiable channel and review installer contents before running setup commands.
+
+Risk: ContactOut actions can retrieve or check sensitive contact data such as email addresses, phone availability, and profile enrichment.
+
+Mitigation: Run lookups only for authorized workflows with a lawful basis, clear user intent, and any required consent or policy approval.
+
+Risk: Treating contact-data lookup actions as direct reads can encourage automatic use without considering privacy impact.
+
+Mitigation: Confirm the purpose and identifiers before enrichment or contact-info retrieval, and inspect the live connector schema before sending payloads.
+
+## Reference(s):
+
+- [ContactOut homepage](https://contactout.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub ContactOut skill page](https://clawhub.ai/oomol/skills/oo-contactout)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can produce oo CLI commands and ContactOut connector JSON responses for agent use.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

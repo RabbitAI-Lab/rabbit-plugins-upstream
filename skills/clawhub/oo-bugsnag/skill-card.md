@@ -1,44 +1,56 @@
-## Description: <br>
-Bugsnag lets an agent search and read Bugsnag organizations, projects, errors, releases, and events through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Bugsnag connector for searching and reading Bugsnag organizations, projects, errors, events, and releases through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, support engineers, and incident responders use this skill to query Bugsnag data from an OOMOL-connected account without handling raw Bugsnag tokens directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Setup instructions include a remote installer run directly in a shell. <br>
-Mitigation: Review and trust the OOMOL install guide or use a verified package-manager path before running the installer. <br>
-Risk: The skill requires account access and sensitive credentials through an OOMOL-connected Bugsnag account. <br>
-Mitigation: Install only when the OOMOL publisher and connected account are trusted, and keep credential scope limited to the needed Bugsnag access. <br>
+## Use Case:
 
+Developers and support engineers use this skill to inspect Bugsnag organizations, projects, errors, events, and releases from an OOMOL-connected Bugsnag account.
 
-## Reference(s): <br>
-- [Bugsnag skill page](https://clawhub.ai/oomol/oo-bugsnag) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Bugsnag homepage](https://www.bugsnag.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runs Bugsnag connector actions through the oo CLI and can return JSON responses from Bugsnag.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: First-time setup includes remotely fetched shell and PowerShell installers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source before execution and prefer a verified package, pinned release, checksum or signature verification, and non-admin execution.
+
+Risk: Bugsnag credentials are managed through an OOMOL-connected account.
+
+Mitigation: Confirm the account owner accepts OOMOL server-side credential management before connecting Bugsnag.
+
+## Reference(s):
+
+- [ClawHub Bugsnag Skill](https://clawhub.ai/oomol/skills/oo-bugsnag)
+- [Bugsnag Homepage](https://www.bugsnag.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands call the oo CLI and may return JSON data from Bugsnag connector actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

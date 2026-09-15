@@ -1,44 +1,61 @@
-## Description: <br>
-This skill lets agents operate Databricks through OOMOL-connected oo CLI actions for reading, creating, updating, and deleting Databricks resources. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Databricks (databricks.com). Use this skill for Databricks requests, including reading, creating, updating, and deleting data through the OOMOL `oo` CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and workspace operators use this skill to inspect Databricks schemas and run OOMOL-connected Databricks actions for jobs, clusters, repositories, secret scopes, and workspace files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, start, trigger, cancel, overwrite, or delete Databricks resources and workspace files. <br>
-Mitigation: Require explicit user approval for every state-changing action and confirm the exact payload, target resource, and expected effect before execution. <br>
-Risk: The skill requires an OOMOL-connected Databricks account with sensitive workspace credentials. <br>
-Mitigation: Use least-privileged Databricks access and keep credentials in the OOMOL connection rather than exposing raw tokens in prompts or files. <br>
-Risk: First-time setup may install or invoke the external oo CLI. <br>
-Mitigation: Review the oo CLI installer before running it and only perform setup when an auth, connection, or missing-command error requires it. <br>
+## Use Case:
 
+Developers and data platform operators use this skill to inspect Databricks action schemas and run Databricks connector actions through an OOMOL-connected account. It supports workspace, cluster, job, run, repo, and secret administration, including read, write, and destructive operations.
 
-## Reference(s): <br>
-- [Databricks](https://www.databricks.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-databricks) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads or results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI to execute Databricks connector actions; state-changing and destructive actions require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: The setup instructions include remote installer commands for the `oo` CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified, version-pinned installation path before enabling the skill.
+
+Risk: The skill can run write and destructive Databricks actions.
+
+Mitigation: Confirm the exact payload, target resource, and expected effect before running write or destructive operations.
+
+Risk: The connector performs broad Databricks administration through an OOMOL-connected account.
+
+Mitigation: Install only when that delegation model is acceptable and the connected Databricks account has appropriate least-privilege access.
+
+## Reference(s):
+
+- [Databricks homepage](https://www.databricks.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-databricks)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill instructs the agent to inspect live Databricks connector schemas before constructing payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

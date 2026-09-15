@@ -1,41 +1,60 @@
-## Description: <br>
-Circle connector skill for reading, creating, and updating Circle data through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Circle (circle.so). Use this skill for Circle requests that read, create, or update data through the OOMOL oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Circle connector schemas and run Circle community, member, post, space group, and space member actions through the oo CLI with OOMOL-managed credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent can access connected Circle account data and may run actions that affect Circle content. <br>
-Mitigation: Install only when Circle access through OOMOL is intended, inspect the live action schema before payload construction, and confirm write or destructive payloads with the user before execution. <br>
-Risk: Setup commands can trigger unnecessary CLI installation, login, connection, or billing flows if run proactively. <br>
-Mitigation: Use first-time setup steps only after an oo command, authentication, connection, scope, or billing error indicates they are needed. <br>
+## Use Case:
 
+External users and developers use this skill to operate Circle communities through an OOMOL-connected account, including retrieving community details, members, space groups, spaces, and posts. The skill also guides agents to inspect live action schemas before constructing requests.
 
-## Reference(s): <br>
-- [Circle homepage](https://circle.so) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with bash command examples; connector responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill instructs the agent to inspect the live connector schema before building action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The setup flow includes remote shell install commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the CLI through a verified method and review installer contents before execution.
+
+Risk: The allowed command permission grants broad access to oo CLI commands.
+
+Mitigation: Prefer a narrower permission profile that only allows Circle connector schema inspection and connector run commands.
+
+Risk: Circle write actions can change community data.
+
+Mitigation: Confirm the exact action payload and expected effect with the user before running state-changing actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-circle)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Circle Homepage](https://circle.so)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are returned as JSON data with execution metadata when actions run.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

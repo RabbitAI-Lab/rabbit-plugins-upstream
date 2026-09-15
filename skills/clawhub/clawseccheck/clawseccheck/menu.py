@@ -1,8 +1,9 @@
 """Capability menu — the guided Welcome screen as a runnable command.
 
 ``clawseccheck --menu`` prints the compact entry screen the skill shows in
-``SKILL.md`` Step 1: the four common things you can do, plus two status nudges —
-when you last ran a check, and an offline hint if this build looks stale.
+``SKILL.md`` Step 1: the three modes plus a way into everything else, the rule
+that decides whether a run gets a grade at all, and two status nudges — when you
+last ran a check, and an offline hint if this build looks stale.
 Read-only, no network, pure stdlib (Python 3.9+).
 
 ``render_menu()`` is pure and fully injectable (version, ages, staleness) so it is
@@ -16,16 +17,30 @@ from datetime import date
 from . import brand
 
 # (number, emoji, title, hint). The emoji is dropped in --ascii mode.
-# Each item maps to a real capability: 1 -> --full (audit + live self-test),
-# 2 -> --vet / --vet-mcp, 3 -> the report/save/trend/badge family, 4 -> the full
-# function list. The "⚡" in item 1's hint discloses the live-agent test up front,
-# so picking it is informed consent (read-only-by-default stays honest).
+#
+# The three product modes, on the one axis that separates them — how often you
+# reach for each — plus a way into everything else. Item 1 -> the audit (--full
+# and its instruments), 2 -> the periodic watch (--monitor / --trend / …),
+# 3 -> the pre-install vet (--vet family), 4 -> the full palette (--functions).
+# The hint column is deliberately the *question the mode answers*, not a list of
+# flags: a flag list is what Screen 12 is for, and it is what made this screen
+# unreadable before.
 _ITEMS = (
-    ("1", "🔍", "Check everything", "config + live agent test ⚡"),
-    ("2", "📦", "Check before install", "skill · plugin · MCP"),
-    ("3", "📄", "Report & history", "show · save · trend · badge"),
-    ("4", "📋", "Menu", "everything else: verify · version · HTML · SARIF…"),
+    # B-469: item 1 said "config + live agent test ⚡", wrong twice over — the audit is
+    # entirely read-only and never touches the running agent, and the live injection test
+    # is a separate, opt-in step. The live tests now live inside mode A on Screen 12,
+    # where their ⚡ tag and confirm-gate are stated next to them.
+    ("1", "🔍", "Full check", "how safe is this setup?"),
+    ("2", "👀", "Watch", "what changed since last time?"),
+    ("3", "📦", "Before you install", "is this thing safe to add?"),
+    ("4", "📋", "Everything else", "the full list of instruments"),
 )
+
+# The grade rule, stated up front rather than discovered at the end of a report.
+# A check earns a letter only when all five layers ran; anything short of that
+# shows findings and names what is missing. Keeping it on this screen means the
+# user is told before they choose, not after they read a number that isn't there.
+_GRADE_RULE = "A grade only when all five layers ran — otherwise findings, and what's missing."
 
 # Title column width, so hints line up. Padding is by plain-title length; emoji
 # prefixes shift the emoji rows by a constant, so the columns still read.
@@ -87,12 +102,22 @@ def compute_ages(*, released=None, last_check=None, today=None):
 
 
 def render_onboarding(*, reason: str, home: str, n_checks: int | None = None,
-                      ascii_only: bool = False) -> str:
+                      ascii_only: bool = False, sandboxed: bool = False) -> str:
     """Screen 13 — first-run onboarding when there is nothing to audit.
 
     Shown instead of a wall of UNKNOWNs when the OpenClaw home is *missing*
     (``reason="missing"``) or an *empty* directory (``reason="empty"``). Pure —
-    no I/O; the caller passes the (already-sanitized) home path and check count.
+    no I/O; the caller passes the (already-sanitized) home path, check count, and
+    (B-776) whether this run's own process carries the sandbox signal.
+
+    *sandboxed* is a SEPARATE axis from *reason*, not a third reason value: it changes
+    only the ADVICE, never the diagnosis — a sandboxed run genuinely does have "nothing
+    there" at *home*, exactly like the ordinary missing/empty case, but "re-run with
+    --home <path>" is not an instruction a container with no view of the host filesystem
+    can act on. Distinguish it from the case this advice DOES fit: a config that simply
+    isn't at the default path but is reachable somewhere else on the same filesystem —
+    that case has no sandbox signal, and keeps the unchanged --home advice below.
+
     English only; the host agent localizes. Read-only, fabricates no findings.
     """
     head = brand.header(subtitle="welcome", ascii_only=ascii_only)
@@ -104,18 +129,36 @@ def render_onboarding(*, reason: str, home: str, n_checks: int | None = None,
 
     count = str(n_checks) if n_checks else "the full set of"
     bullet = "-" if ascii_only else "•"
-    lines = [
-        head,
-        "",
-        lead,
-        "",
-        "ClawSecCheck audits an OpenClaw setup for security holes — I just need to find yours:",
-        f"  {bullet} Default location:  ~/.openclaw",
-        f"  {bullet} Config elsewhere?  re-run with  --home <path>",
-        f"  {bullet} No OpenClaw yet?   install it, then run me again.",
-        "",
-        f'Once I can see it, say "check" and I\'ll run {count} security checks across your setup.',
-    ]
+    if sandboxed:
+        # B-776: this chat session IS the sandbox — no `--home` on this filesystem can
+        # ever reach the host's real OpenClaw setup, so the ordinary bullets below would
+        # be sending the reader to fix something that cannot be fixed from here.
+        lines = [
+            head,
+            "",
+            lead,
+            "",
+            "This chat session runs inside a sandboxed container, with no access to your "
+            "host's real OpenClaw setup — that isn't fixable by pointing --home anywhere "
+            "else on this filesystem, because the host's config simply isn't reachable "
+            "from in here.",
+            "",
+            f"  {bullet} To audit your real setup: run me from your agent's main session "
+            "(not a sandboxed/dashboard one), or from a terminal on the host itself.",
+        ]
+    else:
+        lines = [
+            head,
+            "",
+            lead,
+            "",
+            "ClawSecCheck audits an OpenClaw setup for security holes — I just need to find yours:",
+            f"  {bullet} Default location:  ~/.openclaw",
+            f"  {bullet} Config elsewhere?  re-run with  --home <path>",
+            f"  {bullet} No OpenClaw yet?   install it, then run me again.",
+            "",
+            f'Once I can see it, say "check" and I\'ll run {count} security checks across your setup.',
+        ]
     out = "\n".join(lines)
     return _ascii(out) if ascii_only else out
 
@@ -132,6 +175,8 @@ def render_menu(*, version, build_age_days=None, last_check_days=None,
         hint_text = _ascii(hint) if ascii_only else hint
         lines.append(f"{prefix}{title}{' ' * pad}{hint_text}")
 
+    lines.append("")
+    lines.append("  " + (_ascii(_GRADE_RULE) if ascii_only else _GRADE_RULE))
     lines.append("")
     lines.append("  " + _last_check_line(last_check_days, ascii_only))
     lines.append("  " + _update_line(build_age_days, stale, ascii_only))

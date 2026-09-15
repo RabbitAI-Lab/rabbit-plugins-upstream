@@ -1,46 +1,59 @@
-## Description: <br>
-Operates HubSpot through an OOMOL-connected account for reading, creating, and updating CRM data with the oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HubSpot (hubspot.com). Use this skill for ANY HubSpot request -- reading, creating, and updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and business users use this skill to search HubSpot records, inspect CRM schemas, and create or update companies, contacts, deals, CRM objects, activities, and campaign reporting data through an OOMOL-connected HubSpot account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: HubSpot write actions can change CRM business records. <br>
-Mitigation: Confirm the exact action, target records, payload, and expected effect with the user before running create, update, manage, or feedback actions. <br>
-Risk: The skill depends on an OOMOL account, the oo CLI, OAuth connection state, and account billing. <br>
-Mitigation: Review the one-time installer and OAuth connection steps, and use setup or billing actions only after the matching error occurs. <br>
-Risk: Payloads can be wrong if they are built from stale assumptions about HubSpot connector schemas. <br>
-Mitigation: Fetch the live connector schema for the selected action before constructing JSON payloads. <br>
+## Use Case:
 
+External users and developers use this skill to operate HubSpot through an OOMOL-connected account, including reading CRM data, creating or updating contacts, companies, and deals, inspecting properties, and retrieving campaign analytics.
 
-## Reference(s): <br>
-- [ClawHub HubSpot skill page](https://clawhub.ai/oomol/skills/oo-hubspot) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [HubSpot](https://www.hubspot.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands may perform HubSpot reads or user-confirmed writes through an OOMOL-connected account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: The fallback setup path can run an unverified remote installer for the required oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified, pinned, or package-manager installation source, and review the installer payload before executing setup commands.
+
+Risk: Write actions can create or update HubSpot CRM records and activities.
+
+Mitigation: Inspect the live action schema, construct the exact JSON payload, and confirm the payload and expected effect with the user before running write actions.
+
+Risk: Commands run against the user's connected HubSpot account and can access account-specific CRM data.
+
+Mitigation: Use read/list/search actions narrowly, request only needed fields, and verify the connected account context before sensitive operations.
+
+## Reference(s):
+
+- [HubSpot homepage](https://www.hubspot.com)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the oo CLI to inspect action schemas before running HubSpot connector actions; command responses are JSON.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

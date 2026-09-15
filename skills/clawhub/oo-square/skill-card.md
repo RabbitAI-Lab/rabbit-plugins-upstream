@@ -1,45 +1,56 @@
-## Description: <br>
-Square (squareup.com). Use this skill for ANY Square request: reading, creating, and updating data through an OOMOL-connected Square account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Square integration for reading, creating, searching, listing, and updating customer and location data through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Square customer and seller-location workflows from an agent through the OOMOL Square connector. It supports reading customer and location data, and creating or updating customer records after user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Square customer and seller-location data through the connected OOMOL account. <br>
-Mitigation: Use only trusted OOMOL and Square connections, and limit use to accounts whose customer and location data the user is authorized to access. <br>
-Risk: Write actions can create or update Square customer records. <br>
-Mitigation: Review the exact payload and effect with the user, then require explicit confirmation before running write actions. <br>
-Risk: Connector action schemas can change over time. <br>
-Mitigation: Inspect the live Square connector schema before constructing each payload so inputs match the current action contract. <br>
+## Use Case:
 
+Developers and operators use this skill to work with Square through an OOMOL-connected account, including customer creation, retrieval, listing, searching, updates, and seller location listing.
 
-## Reference(s): <br>
-- [ClawHub Square Skill](https://clawhub.ai/oomol/skills/oo-square) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Square](https://squareup.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration guidance, Markdown guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill instructs agents to inspect live connector schemas before execution and to request confirmation before write actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: First-time setup includes remote install scripts that could execute arbitrary local code if the source is compromised or unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI from a verified, versioned, checksum- or signature-checked source, and avoid running curl-to-bash or irm-to-iex commands as an administrator.
+
+Risk: Square write actions can create or update customer records in the connected account.
+
+Mitigation: Confirm the exact payload and expected effect with the user before allowing create or update actions.
+
+## Reference(s):
+
+- [Square homepage](https://squareup.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-square)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live Square connector schemas before action execution and returns structured JSON responses with execution metadata.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

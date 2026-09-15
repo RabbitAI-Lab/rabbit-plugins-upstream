@@ -1,42 +1,56 @@
-## Description: <br>
-Wiza (wiza.co). Use this skill for Wiza requests that read, create, or update data through an OOMOL-connected Wiza account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Wiza enables agents to read, create, and update Wiza data through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent operate Wiza through the OOMOL oo connector, including reading credits and reveal results, searching prospects, and starting individual contact reveals with confirmation for write actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can spend Wiza credits or create Wiza-side state. <br>
-Mitigation: Confirm the exact action payload and expected effect with the user before starting an individual reveal. <br>
-Risk: Setup may require installing and running the OOMOL oo CLI. <br>
-Mitigation: Install or run setup only when the user needs the connector and trusts the OOMOL CLI. <br>
+## Use Case:
 
+External users and developers use this skill to check Wiza credits, search prospects, retrieve lists and reveal records, and start individual contact enrichment reveals through a connected Wiza account.
 
-## Reference(s): <br>
-- [ClawHub Wiza Skill](https://clawhub.ai/oomol/skills/oo-wiza) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Wiza Homepage](https://wiza.co) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return connector responses as JSON containing data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: release evidence and SKILL.md metadata) <br>
+Risk: The setup guidance uses downloaded installer scripts executed directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path before use, prefer verified official packages or inspectable installers, and apply integrity checks where available.
+
+Risk: The Wiza connector includes write actions that can change account state.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions such as starting an individual reveal.
+
+## Reference(s):
+
+- [ClawHub Wiza skill page](https://clawhub.ai/oomol/skills/oo-wiza)
+- [Wiza homepage](https://wiza.co)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, JSON, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action payload construction; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

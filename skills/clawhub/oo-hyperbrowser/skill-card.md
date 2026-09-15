@@ -1,42 +1,57 @@
-## Description: <br>
-Hyperbrowser lets agents use an OOMOL-connected Hyperbrowser account to fetch pages, search the web, and manage asynchronous web crawls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Hyperbrowser lets an agent fetch pages, search the web, retrieve crawl results, check crawl status, and start Hyperbrowser crawl jobs through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to browse, search, and retrieve structured Hyperbrowser results through an OOMOL-connected account. It supports read actions and user-confirmed crawl-start workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can start Hyperbrowser crawl jobs through the user's connected account. <br>
-Mitigation: Confirm the exact crawl payload and expected effect before running state-changing actions such as start_web_crawl. <br>
-Risk: The skill requires an OOMOL-connected Hyperbrowser account and may use account credentials or billing credits. <br>
-Mitigation: Connect only accounts and billing sources the user is comfortable letting the agent use, and stop for user action on authentication, connection, or billing errors. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Hyperbrowser through OOMOL for web search, page fetching, and crawl workflows while relying on live connector schemas for action payloads.
 
-## Reference(s): <br>
-- [ClawHub Hyperbrowser Skill](https://clawhub.ai/oomol/oo-hyperbrowser) <br>
-- [Hyperbrowser Homepage](https://www.hyperbrowser.ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before building action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Fallback setup includes remote installer one-liners executed directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified package, pinned release, checksum or signature validation, or inspect the downloaded installer before execution.
+
+Risk: The start_web_crawl action changes Hyperbrowser account state.
+
+Mitigation: Confirm the exact crawl payload and intended effect with the user before running the write action.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-hyperbrowser)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Hyperbrowser Homepage](https://www.hyperbrowser.ai)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [OOMOL Hyperbrowser Connection](https://console.oomol.com/app-connections?provider=hyperbrowser)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector command results are returned as JSON when the agent executes the documented commands.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

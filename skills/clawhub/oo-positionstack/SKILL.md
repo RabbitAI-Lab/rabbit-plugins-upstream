@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Positionstack"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["positionstack"]
   icon: "https://static.oomol.com/logo/third-party/positionstack.png"
 ---

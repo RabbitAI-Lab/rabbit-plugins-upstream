@@ -1,46 +1,56 @@
-## Description: <br>
-OnceHub helps agents search and read booking pages, bookings, and event types through an OOMOL-connected OnceHub account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OnceHub supports agent-led searching and reading of OnceHub booking pages, bookings, and event types through the OOMOL oncehub connector instead of direct API calls.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and agent users use this skill to retrieve OnceHub booking pages, bookings, and event types from an OOMOL-connected OnceHub account. The skill supports booking lookup workflows, including last-update filtering where the live connector schema allows it. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on OOMOL as the broker for the user's OnceHub account. <br>
-Mitigation: Install and use it only when OOMOL is an acceptable broker for the account and organization. <br>
-Risk: The first-time setup path includes shell-based oo CLI installation commands. <br>
-Mitigation: Review installation commands before execution and use official installation guidance appropriate for the user's platform. <br>
-Risk: Future connector actions may include write or destructive operations even though this release lists only read actions. <br>
-Mitigation: Keep use to listed read-only actions unless a future version clearly documents write actions and the user explicitly confirms the payload and effect. <br>
-Risk: Connector input and output schemas may change over time. <br>
-Mitigation: Inspect the live connector schema before constructing each action payload. <br>
+## Use Case:
 
+Developers and external users use this skill to let an agent inspect OnceHub connector schemas and run read-only OnceHub workflows for booking pages, bookings, and event types through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [OnceHub homepage](https://www.oncehub.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-oncehub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action payload construction; action responses are JSON from the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release, artifact metadata) <br>
+Risk: The setup instructions may run remote oo CLI installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified package when available, or download, inspect, and verify the installer before running it.
+
+Risk: The skill can read OnceHub booking-related data through the connected OOMOL account.
+
+Mitigation: Use an account with appropriate OnceHub access, inspect the live connector schema before each action, and limit use to the documented read-only actions unless a future release adds write actions with explicit review.
+
+## Reference(s):
+
+- [ClawHub OnceHub skill page](https://clawhub.ai/oomol/skills/oo-oncehub)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [OnceHub homepage](https://www.oncehub.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Text, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON response descriptions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are based on live OnceHub connector schemas and read-only connector responses.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

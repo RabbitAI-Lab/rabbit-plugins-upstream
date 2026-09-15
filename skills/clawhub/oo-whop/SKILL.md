@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Whop"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["whop"]
   icon: "https://static.oomol.com/logo/third-party/whop.svg"
 ---

@@ -1,43 +1,60 @@
-## Description: <br>
-Pinecone (pinecone.io). Use this skill for ANY Pinecone request — reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pinecone (pinecone.io). Use this skill for Pinecone requests including reading, creating, updating, and deleting data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate Pinecone indexes and vectors through an OOMOL-connected account, including read, write, and destructive index or vector workflows. It is intended for Pinecone tasks where the agent should inspect the live connector schema before constructing a command payload. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate a user's Pinecone account through OOMOL and requires sensitive connected-account credentials. <br>
-Mitigation: Install it only when Pinecone account access through OOMOL is intended, and ensure the user trusts the oo CLI and OOMOL connection model before setup. <br>
-Risk: Write and destructive actions can create, update, delete, or overwrite Pinecone indexes and vectors. <br>
-Mitigation: Review write and delete payloads carefully and obtain explicit approval before running delete_index, delete_vectors, update_vector, or upsert_vectors. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Pinecone indexes and vector data through the OOMOL oo CLI connector. It supports index lifecycle, vector query and retrieval, and state-changing vector or index operations with explicit safety checks.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-pinecone) <br>
-- [Pinecone Homepage](https://www.pinecone.io/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: The setup path can ask an agent to execute remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path first and prefer a verified official release or package-manager installation before allowing any remote installer command.
+
+Risk: Write and destructive Pinecone actions can change or delete indexes and vector data.
+
+Mitigation: Require explicit user approval for the exact target, payload, and expected effect before running any action marked write or destructive.
+
+Risk: Incorrect action payloads can send malformed or unintended Pinecone operations.
+
+Mitigation: Inspect the live oo connector schema before each action and build payloads only from the returned contract.
+
+## Reference(s):
+
+- [Pinecone homepage](https://www.pinecone.io/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-pinecone)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live oo connector schema inspection before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

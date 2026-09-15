@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Dropbox"
   author: "OOMOL"
-  version: "1.0.3"
+  version: "1.0.5"
   services: ["dropbox"]
   icon: "https://static.oomol.com/logo/third-party/Dropbox.svg"
 ---

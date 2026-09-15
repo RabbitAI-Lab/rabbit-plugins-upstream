@@ -1,48 +1,78 @@
-## Description: <br>
-Google Workspace Admin SDK integration with managed OAuth for reading and managing users, groups, organizational units, roles, and domain settings. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Workspace Admin SDK integration with managed OAuth for reading and managing users, groups, organizational units, roles, and domain settings.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Workspace administrators and operators use this skill to let an agent assist with Google Workspace directory administration through the Maton OAuth/API gateway. It is intended for tasks such as reviewing users and groups, managing organizational units, assigning roles, and making explicitly approved administrative changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can assist with high-impact Google Workspace administration, including account, group, role, organizational unit, and domain changes. <br>
-Mitigation: Use a least-privileged admin account, restrict OAuth scopes to the task, start with read-only checks, and require explicit approval with the exact method, endpoint path, target identifier, and consequences before any write action. <br>
-Risk: A request may target the wrong Google Workspace connection when multiple Maton connections exist. <br>
-Mitigation: Include the intended `Maton-Connection` header on every request and verify the connection before making changes. <br>
-Risk: The skill depends on Maton as the OAuth/API gateway and requires a Maton API key. <br>
-Mitigation: Install only when Maton is trusted for the intended administration workflow, protect the `MATON_API_KEY`, and revoke or delete the OAuth connection when the work is complete. <br>
+## Use Case:
 
+Workspace administrators, IT operators, and developers use this skill to let an agent perform approved Google Workspace administration through Maton, including account, group, organizational unit, role, and domain tasks.
 
-## Reference(s): <br>
-- [Google Workspace Admin on ClawHub](https://clawhub.ai/byungkyu/skills/google-workspace-admin) <br>
-- [Maton](https://maton.ai) <br>
-- [Google Admin SDK Overview](https://developers.google.com/admin-sdk) <br>
-- [Directory API Users](https://developers.google.com/admin-sdk/directory/reference/rest/v1/users) <br>
-- [Directory API Groups](https://developers.google.com/admin-sdk/directory/reference/rest/v1/groups) <br>
-- [Directory API Org Units](https://developers.google.com/admin-sdk/directory/reference/rest/v1/orgunits) <br>
-- [Directory API Roles](https://developers.google.com/admin-sdk/directory/reference/rest/v1/roles) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline Python, JavaScript, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce HTTP request examples against Maton endpoints; write actions require explicit approval before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata) <br>
+Risk: The skill can support high-impact Google Workspace administration, including changes to users, groups, roles, organizational units, and domain settings.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for Google Workspace administration, use a least-privileged admin account, confirm every write by exact target and consequence, and avoid broad or bulk changes.
+
+Risk: Long-lived credentials or stale connections can preserve access after the administrative task is complete.
+
+Mitigation: Prefer OAuth over API keys and revoke Maton connections, functions, or triggers when the task is finished.
+
+Risk: Hosted functions or triggers can turn approved actions into continuing automation.
+
+Mitigation: Use user-reviewed handlers, restrict network access where supported, keep destinations within the intended platform flow unless explicitly approved, and confirm each deploy, invocation, or persistent trigger separately.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/google-workspace-admin)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Google Admin SDK](https://developers.google.com/admin-sdk)
+- [Google Admin SDK Directory API Guides](https://developers.google.com/admin-sdk/directory/v1/guides)
+- [Directory API Users](https://developers.google.com/admin-sdk/directory/reference/rest/v1/users)
+- [Directory API Groups](https://developers.google.com/admin-sdk/directory/reference/rest/v1/groups)
+- [Directory API Members](https://developers.google.com/admin-sdk/directory/reference/rest/v1/members)
+- [Directory API Org Units](https://developers.google.com/admin-sdk/directory/reference/rest/v1/orgunits)
+- [Directory API Domains](https://developers.google.com/admin-sdk/directory/reference/rest/v1/domains)
+- [Directory API Roles](https://developers.google.com/admin-sdk/directory/reference/rest/v1/roles)
+- [API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON examples, HTTP/API call patterns, and Python function snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Write-capable administrative actions are framed for explicit user approval and least-privilege operation.]
+
+## Skill Version(s):
+
+1.2.7 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

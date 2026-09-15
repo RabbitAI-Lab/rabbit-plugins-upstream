@@ -1,5 +1,35 @@
 # Content plan spec
 
+## Audience brief — write this FIRST, and aim the gathering at it
+
+🔴 **Before the comprehension brief, before any search: what do the people in the room have to
+DECIDE, in the order they will face it, and what do they need in hand to decide each one?** That
+list is the frame, and the frame is what aims the information gathering — so a wrong frame gathers
+the wrong facts and every later gate passes.
+
+    "audience_brief": {
+      "who": "<who is in the room, and what they are about to do>",
+      "decisions": [{"decision": "<what they must decide>",
+                     "needs": "<what they need in hand to decide it>"}, …]
+    }
+
+At least three decisions, each with its `needs` — the `needs` half is what does the aiming; a
+decision with no stated need gathers nothing. Contract, carves and messages:
+`scripts/audience_brief.py`, imported by `deck_gates.py`, `render_deck.py --gate-check` and
+`codex_delivery_gate.py`.
+
+🔴 **On a NO-SOURCE deck this REPLACES the comprehension brief below.** There is no source to
+comprehend; a brief written anyway becomes a summary of the SUBJECT, and that is the failure this
+field exists for. Measured: a deck built from `audience = people planning a trip` and `goal = they
+leave able to plan one` shipped a thesis on an 1837 land survey, because Step 1 described the city,
+the arc candidates were all generated inside that frame, and the winner was scored on elegance
+rather than on the recorded goal. The research followed the frame — chain lengths and inscription
+years verified, daily cost and distances never asked for.
+
+**The test when you cannot tell which you have written:** read the takeaway spine top to bottom. If
+it reads as true statements ABOUT the subject rather than as answers to what this room must decide,
+the frame is wrong. Patching the missing topic onto it fixes the symptom and keeps the frame.
+
 ## Comprehension brief — the required fields and the claim-ledger columns
 
 - The **one-sentence message** + the verbatim source sentence it derives from (+ where).
@@ -11,6 +41,18 @@
   name the carrying element (it drives which row the build highlights + the assertion title).
   A figure whose carrying element you cannot name is one you haven't understood.
 - Any **nuance/limitation** the authors stress, quoted.
+- 🔴 **The OPEN ledger — every claim the SOURCE ITSELF marks as NOT yet established**, one row:
+  `claim | where the source says so | absent from the deck, or stated AS OPEN on slide N`.
+  Sweep for the source's own hedges: *future work · next steps · a roadmap · a gate · "cannot
+  establish" · "not yet" · "to be tested" · TODO · an untested flag*. **A row here may never appear
+  on a slide in the established voice.** This is a DIFFERENT failure from inventing: the fact is
+  really in the source, promoted from hypothesis to result — which the never-invent rule and the
+  claim ledger both wave through, because the claim *is* traceable. Measured on a delivered
+  research deck: a slide asserted that extra respiratory bins helped the reconstruction while the
+  source listed *"tests whether each bin helps"* as an open gate; an expert room catches that
+  instantly and it costs the whole deck's credibility. `[]` is a legitimate value — it records that
+  the sweep happened. Recorded as `content.open_ledger`; `deck_gates.py check` blocks the missing
+  KEY, never the count.
 - A **claim ledger** (per `content-planner.md` §2): every number/date/name/citation/superlative/
   dated-event as a row with source + verbatim value + verified?(Y/N) + as-of date; an unverifiable
   claim is cut or marked open, never shipped.
@@ -53,7 +95,7 @@
   faithfully in a single pass — is NOT read front-to-back: a faked linear read either overflows or,
   worse, *fits* and goes shallow, then invents plausible-but-absent points. Run the planner's
   **Long-source mode** (`agents/content-planner.md` §1): (1) **classify size deterministically** —
-  PDF/EPUB → `python scripts/extract_pdf.py map <src>` (CJK-correct load + token estimate); `.docx`/
+  PDF/EPUB → `python3 scripts/extract_pdf.py map <src>` (CJK-correct load + token estimate); `.docx`/
   `.md`/Google-Doc/web → convert to PDF first or use a `wc`-style count (**never raw `wc -w` on CJK
   text — it undercounts ~6–30×; count CJK chars ÷ 2 + Latin words, or convert to PDF and let `map`
   do it**); a code repo → size the file

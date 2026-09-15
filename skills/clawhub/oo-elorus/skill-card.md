@@ -1,44 +1,55 @@
-## Description: <br>
-Operates Elorus through an OOMOL-connected account so an agent can read, create, and update contacts, invoices, and products or services. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Elorus helps agents read, create, and update Elorus contacts, invoices, and products or services through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Business users and developers can use this skill to have an agent list, inspect, create, and update Elorus contacts, invoices, and products or services through the OOMOL connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create and update Elorus contacts, invoices, and products or services. <br>
-Mitigation: Require user confirmation of the exact payload and intended effect before approving any write action. <br>
-Risk: The skill depends on a connected OOMOL account and server-side connector credentials. <br>
-Mitigation: Install and use it only when OOMOL handling connector credentials is acceptable for the deployment. <br>
+## Use Case:
 
+External users, finance operators, and developers use this skill to list and retrieve Elorus contacts, invoices, and products or services, and to create or update those records after confirming write payloads.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-elorus) <br>
-- [Elorus Homepage](https://www.elorus.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [OOMOL Elorus Connection](https://console.oomol.com/app-connections?provider=elorus) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live connector schema inspection before constructing payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Setup instructions include remote installer commands that could be unsafe if run blindly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official, version-pinned installation method with checksum or signature verification before installing the oo CLI.
+
+Risk: Write actions can change Elorus contacts, invoices, and products or services.
+
+Mitigation: Inspect the live action schema and confirm the exact payload and expected effect with the user before executing write actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-elorus)
+- [Elorus homepage](https://www.elorus.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Elorus read results or proposed write payloads; write actions require user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

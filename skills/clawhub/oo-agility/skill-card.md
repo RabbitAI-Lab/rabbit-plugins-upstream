@@ -1,45 +1,57 @@
-## Description: <br>
-Agility CMS (agilitycms.com). Use this skill for Agility CMS search and read requests through the OOMOL-connected oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agent access to read Agility CMS content, pages, sitemaps, and content models through an OOMOL-connected oo CLI workflow.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect Agility CMS connector schemas and run read-oriented content, page, sitemap, and content-model actions through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill relies on OOMOL as the intermediary for Agility CMS access. <br>
-Mitigation: Install it only when that intermediary is intended for the deployment. <br>
-Risk: Remote oo CLI installer commands may change over time. <br>
-Mitigation: Review the installer before running remote install commands. <br>
-Risk: Future write or destructive Agility actions could modify or remove CMS data. <br>
-Mitigation: Confirm the exact payload and effect with the user before allowing any write or destructive action to run. <br>
+## Use Case:
 
+Developers and content operators use this skill to retrieve Agility CMS content items, content lists, pages, flat and nested sitemaps, and content models from an OOMOL-connected Agility CMS account.
 
-## Reference(s): <br>
-- [Agility CMS homepage](https://agilitycms.com/) <br>
-- [oo CLI repository](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-agility) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON request or response payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include Agility CMS data and an execution id under meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: artifact metadata and release evidence) <br>
+Risk: First-time setup suggests piping remote installer scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the install process first, prefer a verified package or documented manual install path, and run remote scripts only after trusting the publisher and accepting the local execution risk.
+
+Risk: The skill depends on an authenticated OOMOL Agility CMS connection.
+
+Mitigation: Use first-time authentication or connection setup only after an oo CLI command fails with an auth or connection error, and avoid exposing raw credentials.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-agility)
+- [Agility CMS Homepage](https://agilitycms.com/)
+- [oo CLI Repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [OOMOL Agility Connection](https://console.oomol.com/app-connections?provider=agility)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live oo connector schemas before constructing action payloads; normal action output is JSON returned by the oo CLI.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

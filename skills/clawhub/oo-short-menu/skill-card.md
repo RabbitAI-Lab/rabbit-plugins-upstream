@@ -1,45 +1,56 @@
-## Description: <br>
-Short Menu (shortmenu.com). Use this skill for any Short Menu request, including creating, updating, and deleting short links through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Short Menu (shortmenu.com) enables an agent to create, update, and delete Short Menu short links through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage Short Menu short links from an agent through the OOMOL oo CLI connector. It supports create, update, and delete workflows while requiring live schema inspection and explicit confirmation for write or destructive actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, or delete Short Menu links. <br>
-Mitigation: Confirm the exact target, payload, and expected effect with the user before running write or destructive actions. <br>
-Risk: The skill depends on the OOMOL oo CLI and a connected Short Menu account. <br>
-Mitigation: Install and use it only when the user trusts OOMOL's CLI and account connection, and follow setup steps only after an auth or connection failure. <br>
-Risk: Remote installer commands are referenced for first-time setup. <br>
-Mitigation: Review installer commands before execution and avoid running setup commands proactively. <br>
+## Use Case:
 
+External users and developers use this skill to manage Short Menu short links from an agent workflow after connecting Short Menu through OOMOL. It supports create, update, and delete actions and requires confirmation before write or destructive changes.
 
-## Reference(s): <br>
-- [Short Menu homepage](https://shortmenu.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-short-menu) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May execute OOMOL connector actions that return JSON responses containing data and an execution ID.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: First-time setup includes a pipe-to-shell installer for the oo CLI, which the security evidence flags as an unverified remote installer pattern.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI from a verified official package or reviewed download instead of running the pipe-to-shell installer blindly.
+
+Risk: The skill can create, update, and delete Short Menu links, including destructive deletion.
+
+Mitigation: Require explicit user confirmation of the target, payload, and expected effect before write or destructive actions.
+
+## Reference(s):
+
+- [Short Menu ClawHub listing](https://clawhub.ai/oomol/skills/oo-short-menu)
+- [Short Menu homepage](https://shortmenu.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

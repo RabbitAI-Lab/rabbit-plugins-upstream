@@ -1,43 +1,53 @@
-## Description: <br>
-BoxHero lets an agent read BoxHero inventory items, team information, and locations through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BoxHero helps an agent search and read BoxHero inventory data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent inspect BoxHero inventory data, including items, locations, and linked team information, from an already connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads BoxHero inventory data through a connected account. <br>
-Mitigation: Install and use it only when the user trusts OOMOL and intends to grant agent access to that BoxHero inventory data. <br>
-Risk: First-time setup may require running an external oo CLI installer. <br>
-Mitigation: Review the installer URL before running setup, and run setup only when the oo command is missing or authentication fails. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve BoxHero inventory items, locations, and linked team information through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub BoxHero skill page](https://clawhub.ai/oomol/oo-boxhero) <br>
-- [BoxHero homepage](https://www.boxhero-app.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL BoxHero connection settings](https://console.oomol.com/app-connections?provider=boxhero) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector runs return JSON with data and meta.executionId when executed through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Setup instructions include remote installer commands that can execute arbitrary local code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only through a trusted, verified method and avoid letting an agent automatically run curl-to-bash or PowerShell installer commands.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-boxhero)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [BoxHero Homepage](https://www.boxhero-app.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with shell command examples; connector responses are JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-oriented BoxHero actions include item lookup, team information, item listing with filters and pagination, and location listing.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

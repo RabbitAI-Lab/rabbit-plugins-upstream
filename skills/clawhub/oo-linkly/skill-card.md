@@ -1,45 +1,61 @@
-## Description: <br>
-Linkly (linklyhq.com). Use this skill for ANY Linkly request: reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Linkly (linklyhq.com) supports reading, creating, updating, and deleting Linkly data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate a connected Linkly account from an agent, including workspace discovery, link lookup, short-link creation, updates, and deletion. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create or update Linkly links in a connected account. <br>
-Mitigation: Review the exact action payload and intended effect with the user before approving write actions. <br>
-Risk: The skill can delete Linkly short links. <br>
-Mitigation: Confirm the target link and obtain explicit approval before running destructive deletion actions. <br>
-Risk: Setup and recovery commands can initiate account login, connection, installation, or billing workflows. <br>
-Mitigation: Use setup commands only after a command fails with the matching missing CLI, authentication, connection, or billing error. <br>
+## Use Case:
 
+External users and agents use this skill to manage Linkly short links through an OOMOL-connected account, including listing workspaces, listing or retrieving links, creating links, updating links, and deleting links.
 
-## Reference(s): <br>
-- [Linkly homepage](https://linklyhq.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-linkly) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Fallback setup includes remote installer commands that execute downloaded shell or PowerShell scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official, version-pinned installation method with checksum or signature verification before running the oo CLI.
+
+Risk: The skill can create, update, or delete Linkly resources.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before write or destructive actions.
+
+Risk: The skill operates through OOMOL-mediated access to a Linkly account.
+
+Mitigation: Use it only when the user is comfortable with the OOMOL connection model and has connected the intended Linkly account.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-linkly)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Linkly homepage](https://linklyhq.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill may also return connector JSON data when Linkly actions are executed.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

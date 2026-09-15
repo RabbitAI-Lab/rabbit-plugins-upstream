@@ -1,48 +1,77 @@
-## Description: <br>
-Manus AI Agent API integration with managed API key authentication for creating and managing AI agent tasks, projects, files, and webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manus provides managed access to the Manus AI Agent API for creating and managing agent tasks, projects, files, and webhooks through Maton-authenticated calls.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and external users use this skill to call the Manus API through Maton, manage Manus connections, create and inspect tasks, manage projects and files, and configure task lifecycle webhooks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses sensitive Maton and Manus credentials and can expose prompts, files, task metadata, and outputs through the API. <br>
-Mitigation: Install only if you trust Maton and Manus, keep MATON_API_KEY secret, and avoid sending data that should not leave the current environment. <br>
-Risk: Create, delete, upload, and webhook actions can change resources in the connected Manus account. <br>
-Mitigation: Approve write actions only after checking the target account, target resource, and intended effect. <br>
-Risk: Requests may target the wrong Manus account when multiple connections are active. <br>
-Mitigation: Include the Maton-Connection header when multiple connections exist so each request targets the intended account. <br>
-Risk: Webhook setup can send task lifecycle data to an external destination URL. <br>
-Mitigation: Use webhook endpoints you control and trust, and verify the destination URL before registering it. <br>
+## Use Case:
 
+Developers and automation builders use this skill to run Manus agent tasks, inspect projects and files, and set up approved webhooks or scheduled/event-driven automations through a Maton connection.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/manus-api) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [Manus API Overview](https://open.manus.im/docs) <br>
-- [Manus API Reference](https://open.manus.im/docs/api-reference) <br>
-- [Manus Website](https://manus.im) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell, Python, JavaScript, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include API requests that require MATON_API_KEY and explicit user approval for write actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Installing or upgrading the Maton CLI from an untrusted or unpinned source could change the reviewed behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the CLI only from trusted Maton channels and use the pinned versions documented by the skill unless the user deliberately approves an upgrade.
+
+Risk: Raw HTTP fallback requires handling a long-lived Maton API key that could leak through logs, shell history, child processes, or persisted environment files.
+
+Mitigation: Prefer OAuth login through the Maton CLI; when raw HTTP is unavoidable, read the key only from the runtime environment, never print or persist it, send it only to api.maton.ai, and rotate it if exposed.
+
+Risk: Webhooks, triggers, and hosted functions can create persistent or automated data forwarding for Manus task activity and connected app events.
+
+Mitigation: Require explicit user approval for the exact destination, scope, host ownership, data being forwarded, function code, and network policy; prefer narrow scopes and DENY_ALL network policy where possible.
+
+Risk: Write, delete, connection, webhook, trigger, or hosted function actions can affect user data or connected accounts.
+
+Mitigation: Default to read and list operations, summarize the least-privilege action first, identify the exact connection or resource, and proceed only after user confirmation.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/manus-api)
+- [Maton Homepage](https://maton.ai)
+- [Manus API Overview](https://open.manus.im/docs)
+- [Manus API Reference](https://open.manus.im/docs/api-reference)
+- [Manus Website](https://manus.im)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with Maton CLI commands, SDK snippets, raw HTTP examples, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Default outputs should favor read/list calls and concise extracted response fields; writes, new connections, functions, triggers, and webhooks require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.2.5 (source: server release metadata; skill frontmatter metadata.version is 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

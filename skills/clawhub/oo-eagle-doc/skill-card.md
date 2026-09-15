@@ -1,44 +1,60 @@
-## Description: <br>
-Eagle Doc helps agents use the Eagle Doc connector through OOMOL's oo CLI for usage reporting, quota checks, request logs, and Finance OCR document processing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents operate Eagle Doc through an OOMOL-connected account to inspect usage, quota, request logs, and process finance documents with OCR.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate Eagle Doc through an OOMOL-connected account, including usage and quota reporting, request log review, and structured Finance OCR extraction from selected invoices, receipts, and PDFs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected Eagle Doc account and uses sensitive credentials through the connector. <br>
-Mitigation: Install it only when comfortable connecting OOMOL to Eagle Doc, and use the OOMOL auth and connection flow without exposing raw API tokens. <br>
-Risk: Finance OCR processing sends selected invoices, receipts, or PDFs to Eagle Doc. <br>
-Mitigation: Process only documents intended for upload and confirm the target document before running OCR. <br>
-Risk: Usage, quota, and request-log actions can expose account activity or billing-related information. <br>
-Mitigation: Request only the reporting data needed for the task and avoid sharing returned logs outside the intended audience. <br>
+## Use Case:
 
+External users and developers use this skill when an agent needs to work with a connected Eagle Doc account, including checking billing-month usage, quota summaries, monthly history, request logs, or extracting structured data from invoices, receipts, and PDFs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-eagle-doc) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Eagle Doc APIs](https://www.eagle-doc.com/en/products/eagle-doc-apis/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action calls; selected invoices, receipts, or PDFs may be uploaded for OCR.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill can access a connected Eagle Doc account and upload documents for OCR when used by an agent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only when the user intends that account access or document upload, and confirm payloads for any action that changes state.
+
+Risk: Setup instructions include remote installer commands for the oo CLI.
+
+Mitigation: Install the oo CLI through a trusted, versioned, verifiable method and review any installer before execution.
+
+Risk: The security summary reports that the trigger scope is broader than necessary.
+
+Mitigation: Invoke the skill only for explicit Eagle Doc tasks and avoid using it for unrelated document or billing requests.
+
+## Reference(s):
+
+- [Eagle Doc API Product Page](https://www.eagle-doc.com/en/products/eagle-doc-apis/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Skill Release Page](https://clawhub.ai/oomol/skills/oo-eagle-doc)
+- [Publisher Profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, JSON, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON action results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

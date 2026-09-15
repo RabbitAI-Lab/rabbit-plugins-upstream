@@ -1,43 +1,56 @@
-## Description: <br>
-Paperform lets agents search and read Paperform data through the OOMOL oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paperform enables agents to read Paperform forms, fields, products, coupons, submissions, and partial submissions through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Agents and users with OOMOL-connected Paperform accounts use this skill to list accessible forms and retrieve form data such as fields, submissions, partial submissions, products, and coupons. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Paperform data through the user's OOMOL-connected account. <br>
-Mitigation: Install and use it only when an agent is authorized to access that Paperform data. <br>
-Risk: First-time setup may require running the OOMOL oo CLI installer if the CLI is missing. <br>
-Mitigation: Review the OOMOL installer source before running the one-time setup command. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Paperform account data through the OOMOL oo CLI without handling raw Paperform credentials directly.
 
-## Reference(s): <br>
-- [ClawHub Paperform skill](https://clawhub.ai/oomol/skills/oo-paperform) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Paperform homepage](https://paperform.co) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, text, json, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Fetches live connector schemas before actions; Paperform actions described by the artifact are read-only get and list operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence) <br>
+Risk: The skill permits broad oo CLI shell commands for the connected Paperform account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep agent approval scoped to Paperform connector schema and run commands rather than arbitrary oo subcommands.
+
+Risk: The first-time setup section includes remote installer commands.
+
+Mitigation: Install the oo CLI through a verified, reviewed method before allowing the agent to use the connector.
+
+## Reference(s):
+
+- [ClawHub Paperform skill](https://clawhub.ai/oomol/skills/oo-paperform)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Paperform homepage](https://paperform.co)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-oriented connector actions return JSON data with execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

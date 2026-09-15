@@ -1,43 +1,56 @@
-## Description: <br>
-AeroLeads lets agents search and read prospect data through an OOMOL-connected AeroLeads account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Runs AeroLeads searches and reads through the OOMOL oo CLI, including prospect-detail lookup from public LinkedIn profile URLs.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Agents assisting sales, recruiting, or prospect research teams use this skill to retrieve AeroLeads prospect details from public LinkedIn profile URLs. It is intended for users who already have an OOMOL-connected AeroLeads account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires connecting an AeroLeads account or API key through OOMOL and can return emails, phone numbers, and profile details. <br>
-Mitigation: Install it only for intended AeroLeads workflows, use authorized accounts, and treat returned contact and profile data as sensitive personal data. <br>
-Risk: First-time setup guidance includes remote shell and PowerShell installer commands for the oo CLI. <br>
-Mitigation: Review OOMOL's official installation guidance and verify the installer source before running remote installer commands. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve AeroLeads prospect details from public LinkedIn profile URLs through an OOMOL-connected AeroLeads account.
 
-## Reference(s): <br>
-- [ClawHub AeroLeads skill](https://clawhub.ai/oomol/oo-aeroleads) <br>
-- [AeroLeads homepage](https://aeroleads.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an OOMOL-connected AeroLeads account; connector responses may include personal contact and profile data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: The setup path includes an unverified internet installer executed directly from a URL.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing and prefer a pinned, verifiable oo CLI release or a package manager with integrity checks.
+
+Risk: AeroLeads credentials and prospect data are brokered through OOMOL connector access.
+
+Mitigation: Connect AeroLeads credentials to OOMOL only after confirming the account owner accepts that service path for prospect data.
+
+## Reference(s):
+
+- [ClawHub AeroLeads skill page](https://clawhub.ai/oomol/skills/oo-aeroleads)
+- [OOMOL CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [AeroLeads homepage](https://aeroleads.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

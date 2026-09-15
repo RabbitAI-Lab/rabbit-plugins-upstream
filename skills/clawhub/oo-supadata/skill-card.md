@@ -1,42 +1,51 @@
-## Description: <br>
-Supadata helps agents search YouTube data, retrieve transcripts and metadata, map website links, and scrape web pages through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Supadata lets agents query Supadata through the OOMOL oo CLI to retrieve account details, YouTube metadata and transcripts, YouTube search results, and website links or Markdown content.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to perform read-oriented Supadata account, YouTube, transcript, link-mapping, and web-scraping tasks without directly handling Supadata API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected Supadata account and sends Supadata requests through OOMOL as an intermediary. <br>
-Mitigation: Install only when comfortable with OOMOL-mediated access, and review the OOMOL account connection and credential scope before use. <br>
-Risk: Connector actions run through shell commands and depend on the live connector schema for valid payloads. <br>
-Mitigation: Inspect the target action schema before building a payload, and approve any future write or destructive connector action only after checking the exact target and effect. <br>
+## Use Case:
 
+Developers and external users use this skill when an agent needs to search or read Supadata-backed content, including YouTube channel, playlist, video, transcript, and web page data.
 
-## Reference(s): <br>
-- [ClawHub Supadata Skill](https://clawhub.ai/oomol/oo-supadata) <br>
-- [Supadata Homepage](https://supadata.ai/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects with data and meta.executionId when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup may ask the agent to run remote installer scripts for the OOMOL CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before use and prefer a signed, versioned, checksum-verified installer or package manager flow; do not run first-time setup automatically without explicit approval.
+
+## Reference(s):
+
+- [Supadata homepage](https://supadata.ai/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Markdown, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON command payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; connector responses include data and an execution id.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

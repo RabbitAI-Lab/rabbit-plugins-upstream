@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "PDF.co"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["pdf_co"]
   icon: "https://static.oomol.com/logo/third-party/pdf_co.svg"
 ---

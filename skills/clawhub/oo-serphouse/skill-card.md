@@ -1,42 +1,56 @@
-## Description: <br>
-SERPHouse helps agents search and read SERP data through an OOMOL-connected SERPHouse account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SERPHouse helps agents use an OOMOL-connected SERPHouse account to inspect connector schemas and run read-oriented search, account, domain, language, and location actions through the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill when an agent needs to inspect SERPHouse connector schemas, look up account or credit status, list supported SERP options, or run synchronous web SERP searches. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search requests and connector responses may include sensitive terms or account-related data processed by OOMOL and SERPHouse. <br>
-Mitigation: Use the skill only when comfortable with OOMOL and SERPHouse processing the submitted search terms and returned data. <br>
-Risk: The skill depends on the local oo CLI, user sign-in state, and an active SERPHouse connection. <br>
-Mitigation: Review the OOMOL CLI install and sign-in flow before running setup commands, and retry setup only after an auth or connection error. <br>
+## Use Case:
 
+External developers and agents use this skill to query SERPHouse data and run synchronous web SERP searches through an existing OOMOL connection without handling raw SERPHouse tokens.
 
-## Reference(s): <br>
-- [SERPHouse homepage](https://www.serphouse.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [SERPHouse skill page](https://clawhub.ai/oomol/skills/oo-serphouse) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and structured JSON connector results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing SERPHouse action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: The first-time setup path can lead an agent to execute remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not allow an agent to run installer commands automatically; install the oo CLI only from a trusted official source with version pinning and checksum or signature verification after reviewing the installer.
+
+Risk: SERPHouse actions use the connected account and may consume account credit during searches.
+
+Mitigation: Use account_info when needed to check credit status, confirm user intent before broad searches, and stop on billing or insufficient-credit errors.
+
+## Reference(s):
+
+- [ClawHub SERPHouse skill page](https://clawhub.ai/oomol/skills/oo-serphouse)
+- [SERPHouse homepage](https://www.serphouse.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and structured JSON action responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Successful action responses include connector data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

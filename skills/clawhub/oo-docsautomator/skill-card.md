@@ -1,45 +1,56 @@
-## Description: <br>
-DocsAutomator (docsautomator.co). Use this skill for ANY DocsAutomator request - reading, creating, and updating data. Whenever a task involves DocsAutomator, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+DocsAutomator (docsautomator.co) helps agents read, create, and update DocsAutomator data through the OOMOL-connected oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate DocsAutomator through an OOMOL-connected account for listing automations, inspecting templates, generating documents, and checking queued document jobs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires trust in OOMOL and DocsAutomator with the connected account. <br>
-Mitigation: Install only when the user trusts OOMOL and DocsAutomator with the account and workspace being connected. <br>
-Risk: The first-time CLI setup includes a remote installer command. <br>
-Mitigation: Review the official installer or installation guide before running the pipe-to-shell command. <br>
-Risk: Document-generation actions can change DocsAutomator state. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
+## Use Case:
 
+External users and developers use this skill to operate DocsAutomator from an authorized OOMOL account, including listing automations, inspecting template placeholders, creating documents, checking async job status, and reviewing queue statistics.
 
-## Reference(s): <br>
-- [DocsAutomator homepage](https://www.docsautomator.co) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-docsautomator) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration guidance, Text, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before building action payloads; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The setup instructions include remote installer commands that execute downloaded shell or PowerShell scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let the agent run those installers automatically; install the oo CLI only through a trusted and verified method.
+
+Risk: DocsAutomator connector actions operate through an account-authorized OOMOL connection, and write actions can create documents or queue generation jobs.
+
+Mitigation: Inspect the live action schema and confirm the exact payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-docsautomator)
+- [DocsAutomator homepage](https://www.docsautomator.co)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Guidance, Configuration]
+
+**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include DocsAutomator action results such as document URLs, signing metadata, job handles, job status, automation details, placeholders, or queue statistics.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,56 @@
-## Description: <br>
-Pilvio helps an agent read Pilvio account, billing, location, and virtual machine data through an OOMOL-connected account using the oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pilvio lets agents read Pilvio account, billing, location, and virtual machine data through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers with OOMOL-connected Pilvio accounts use this skill to inspect Pilvio user profile, billing account, data center location, and virtual machine information. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Setup guidance may ask the user to run remote installer scripts for the oo CLI. <br>
-Mitigation: Run installer commands only after intentional user approval and only from the documented OOMOL CLI install locations. <br>
-Risk: The skill reads Pilvio account data through the user's connected OOMOL account. <br>
-Mitigation: Use it only for intended read-only Pilvio profile, billing, location, and virtual machine queries, and handle returned account data as sensitive. <br>
+## Use Case:
 
+External users and developers use this skill to inspect Pilvio account information, billing accounts, available locations, and virtual machines from an already connected Pilvio account.
 
-## Reference(s): <br>
-- [Pilvio homepage](https://pilvio.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-pilvio) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector runs return JSON data with execution metadata when commands are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release and artifact metadata) <br>
+Risk: The first-time setup path includes remote installer commands that execute downloaded scripts in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the setup path only after an auth or CLI failure, review the installer source first, and prefer a verified package-manager installation path when available.
+
+Risk: The skill depends on an authenticated OOMOL-connected Pilvio account and server-side credential injection.
+
+Mitigation: Run read actions only after confirming the intended account context and fetch each action schema before constructing payloads.
+
+## Reference(s):
+
+- [Pilvio homepage](https://pilvio.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-pilvio)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are returned as JSON with data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

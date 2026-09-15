@@ -1,43 +1,61 @@
-## Description: <br>
-Operates Zoom through an OOMOL-connected account to read, create, list, and update Zoom user and meeting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zoom (zoom.com). Use this skill for Zoom requests that read, create, or update Zoom data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, developers, and automation agents use this skill to inspect Zoom schemas and run Zoom connector actions for user lookup and meeting scheduling or updates through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Creating or updating Zoom meetings can change real Zoom or calendar state. <br>
-Mitigation: Confirm the exact action, target user or meeting ID, and JSON payload before running write actions. <br>
-Risk: The connected OOMOL Zoom account or OAuth scopes may not match the user's intended account or permissions. <br>
-Mitigation: Review the connected Zoom account and granted OAuth scopes in OOMOL before use, especially before write actions. <br>
+## Use Case:
 
+Employees, external users, and developers use this skill to inspect Zoom connector schemas and operate Zoom through OOMOL-backed actions for user lookup and meeting creation, listing, or updates.
 
-## Reference(s): <br>
-- [ClawHub Zoom skill page](https://clawhub.ai/oomol/oo-zoom) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Zoom homepage](https://www.zoom.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON with data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server evidence and skill frontmatter) <br>
+Risk: The security evidence reports setup instructions that tell an agent to run unverified remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified, user-reviewed process before using the skill, and avoid allowing an agent to run remote installer commands automatically.
+
+Risk: Using the skill relies on OOMOL as the Zoom connector provider.
+
+Mitigation: Install and use the skill only when the organization is comfortable with OOMOL providing the Zoom connector.
+
+Risk: Write actions can create or update Zoom meetings.
+
+Mitigation: Confirm the exact payload and expected meeting changes with the user before running create_meeting or update_meeting.
+
+## Reference(s):
+
+- [ClawHub Zoom skill page](https://clawhub.ai/oomol/skills/oo-zoom)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Zoom homepage](https://www.zoom.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown instructions with shell command examples and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands run through the oo CLI; action responses are JSON objects containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

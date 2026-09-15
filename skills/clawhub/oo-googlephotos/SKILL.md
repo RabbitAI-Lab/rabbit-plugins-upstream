@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Google Photos"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["googlephotos"]
   icon: "https://static.oomol.com/logo/third-party/Google%20Photos.svg"
 ---

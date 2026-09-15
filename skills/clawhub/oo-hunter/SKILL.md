@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Hunter"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.4"
   services: ["hunter"]
   icon: "https://static.oomol.com/logo/third-party/hunter.png"
 ---

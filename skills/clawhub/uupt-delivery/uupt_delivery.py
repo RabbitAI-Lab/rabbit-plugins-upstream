@@ -2,19 +2,19 @@
 """
 UU跑腿同城配送服务 Agent Skill (Python 版本)
 提供订单询价、发单、订单查询、取消订单、跑男追踪等功能。
-支持跑腿配送(SEND)和帮忙服务(HELP)两种订单类型。
+支持跑腿配送(SEND)和帮帮服务(HELP)两种订单类型。
 
 用法：
     python uupt_delivery.py register --mobile="手机号" [--sms-code="验证码"]
     python uupt_delivery.py price --from-address="起始地址" --to-address="目的地址" [--city="城市名"] [--order-type="send|help"]
-    python uupt_delivery.py create --price-token="询价token" --receiver-phone="收件人电话" [--note="帮忙内容"]
+    python uupt_delivery.py create --price-token="询价token" --receiver-phone="收件人电话" [--note="帮帮内容"]
     python uupt_delivery.py detail --order-code="订单编号"
     python uupt_delivery.py cancel --order-code="订单编号" [--reason="取消原因"]
     python uupt_delivery.py track --order-code="订单编号"
 
 配置方式：
     1. 预制配置：defaults.json（appId、appSecret，随 Skill 分发）
-    2. 用户配置：config.json（openId，注册后自动保存）
+    2. 用户配置：~/.uupt-delivery/config.json（openId，注册后自动保存）
     3. 环境变量：UUPT_OPEN_ID（可选覆盖）
 """
 
@@ -25,6 +25,9 @@ import hashlib
 import time
 import argparse
 import tempfile
+import shutil
+import subprocess
+import zipfile
 from pathlib import Path
 from urllib.parse import quote
 
@@ -34,12 +37,21 @@ except ImportError:
     print("[错误] 缺少 requests 库，请运行: pip install requests")
     sys.exit(1)
 
-# 配置文件路径
-CONFIG_FILE = Path(__file__).parent / "config.json"
+# 配置文件保存在用户主目录，不受 skill 更新/重装影响，且始终可写
+CONFIG_DIR = Path.home() / ".uupt-delivery"
+CONFIG_FILE = CONFIG_DIR / "config.json"
 DEFAULTS_FILE = Path(__file__).parent / "defaults.json"
 
 # 默认 API 地址
 DEFAULT_API_URL = "https://api-open.uupt.com/openapi/v3/"
+
+# skill 安装目录与版本更新配置
+SKILL_DIR = Path(__file__).parent
+UPDATE_LATEST_URL = os.environ.get("UUPT_UPDATE_LATEST_URL") or "https://otherfiles.uupt.com/skills/uupt-delivery-latest.json"
+UPDATE_DEFAULT_ZIP_URL = "https://otherfiles.uupt.com/skills/uupt-delivery.zip"
+UPDATE_CACHE_FILE = CONFIG_DIR / "update-check.json"
+# 网络检测与提醒的最小间隔：24 小时（毫秒，与 Node 版共用同一缓存文件）
+UPDATE_CHECK_INTERVAL_MS = 24 * 60 * 60 * 1000
 
 
 def read_config() -> dict:
@@ -69,6 +81,7 @@ def save_config(config: dict) -> bool:
     try:
         existing = read_config()
         merged = {**existing, **config}
+        CONFIG_DIR.mkdir(parents=True, exist_ok=True)
         with open(CONFIG_FILE, "w", encoding="utf-8") as f:
             json.dump(merged, f, indent=2, ensure_ascii=False)
         print(f"[成功] 配置已保存到: {CONFIG_FILE}")
@@ -254,8 +267,11 @@ def user_auth(user_mobile: str, user_ip: str, sms_code: str) -> dict:
     result = post_unauthorized_request(biz, "user/unauthorized/auth")
     
     if result and result.get("body") and result["body"].get("openId"):
-        save_config({"openId": result["body"]["openId"]})
-        print("[成功] 授权成功，openId 已保存")
+        result["configSaved"] = save_config({"openId": result["body"]["openId"]})
+        if result["configSaved"]:
+            print("[成功] 授权成功，openId 已保存")
+        else:
+            print("[警告] 授权成功，但 openId 保存失败")
     
     return result
 
@@ -271,10 +287,10 @@ def order_price(from_address: str, to_address: str, city_name: str = "郑州市"
     """订单询价
     
     Args:
-        from_address: 起始地址（帮忙订单时为帮忙地点）
-        to_address: 目的地址（帮忙订单时与from_address相同）
+        from_address: 起始地址（帮帮订单时为帮帮地点）
+        to_address: 目的地址（帮帮订单时与from_address相同）
         city_name: 城市名称
-        order_type: 订单类型，"send"为跑腿配送，"help"为帮忙服务
+        order_type: 订单类型，"send"为跑腿配送，"help"为帮帮服务
     """
     if not from_address or not to_address:
         raise ValueError("起始地址和目的地址为必填项")
@@ -296,7 +312,7 @@ def order_price(from_address: str, to_address: str, city_name: str = "郑州市"
     if is_help:
         biz["goodsType"] = "ALLHELP"
     
-    type_label = "帮忙服务" if is_help else "配送"
+    type_label = "帮帮服务" if is_help else "配送"
     print(f"[询价] 正在查询{type_label}价格...")
     return post_request(biz, "order/orderPrice")
 
@@ -308,7 +324,7 @@ def create_order(price_token: str, receiver_phone: str, channel: str = "", note:
         price_token: 询价返回的 token
         receiver_phone: 收件人电话
         channel: 聊天渠道（wechat 渠道 specialChannel=4，其他渠道=2）
-        note: 帮忙内容描述（帮忙订单时必填，用于描述具体需要跑男提供的帮助服务）
+        note: 帮帮内容描述（帮帮订单时必填，用于描述具体需要跑男提供的帮助服务）
     """
     if not price_token:
         raise ValueError("priceToken 为必填项，请先调用订单询价接口")
@@ -420,13 +436,13 @@ def format_create_result(result: dict, channel: str = "") -> None:
                 qrcode_url = f"https://api.qrserver.com/v1/create-qr-code/?size=300x300&data={quote(payment_url, safe='')}"
                 
                 try:
-                    script_dir = os.path.dirname(os.path.abspath(__file__))
-                    qr_file_name = "payment_qrcode.png"
-                    qr_file_path = os.path.join(script_dir, qr_file_name)
+                    # 写入用户主目录下的配置目录，skill 安装目录可能只读
+                    qr_file_path = str(CONFIG_DIR / "payment_qrcode.png")
                     
                     response = requests.get(qrcode_url, timeout=10)
                     response.raise_for_status()
                     
+                    CONFIG_DIR.mkdir(parents=True, exist_ok=True)
                     with open(qr_file_path, 'wb') as f:
                         f.write(response.content)
                     
@@ -467,10 +483,10 @@ def get_order_status_text(state: int) -> str:
     """订单状态码映射"""
     status_map = {
         1: '下单成功',
-        3: '骑手已接单',
-        4: '骑手已到达',
-        5: '骑手已取件',
-        6: '骑手送达中',
+        3: '跑男已接单',
+        4: '跑男已到达',
+        5: '跑男已取件',
+        6: '跑男送达中',
         10: '已完成',
         11: '已取消',
         20: '异常订单'
@@ -495,8 +511,8 @@ def format_detail_result(result: dict, order_code: str) -> None:
         if data.get("toAddress"):
             print(f"   终点地址: {data['toAddress']}")
         if data.get("driverName"):
-            print(f"   骑手姓名: {data['driverName']}")
-            print(f"   骑手电话: {data.get('driverMobile', '-')}")
+            print(f"   跑男姓名: {data['driverName']}")
+            print(f"   跑男电话: {data.get('driverMobile', '-')}")
 
 
 def format_cancel_result(result: dict, order_code: str, reason: str) -> None:
@@ -518,14 +534,282 @@ def format_track_result(result: dict) -> None:
     
     if result.get("body"):
         data = result["body"]
-        print("\n[骑手] 跑男摘要:")
+        print("\n[跑男] 跑男摘要:")
         if data.get("driver_name"):
-            print(f"   骑手姓名: {data['driver_name']}")
+            print(f"   跑男姓名: {data['driver_name']}")
             print(f"   联系电话: {data.get('driver_phone', '-')}")
         if data.get("longitude") and data.get("latitude"):
             print(f"   当前位置: {data['longitude']}, {data['latitude']}")
         if data.get("distance"):
             print(f"   距离目的地: {data['distance']} 米")
+
+
+# ============ 版本更新 ============
+
+def get_current_version() -> str:
+    """读取当前安装的版本号（以 package.json 为唯一来源）"""
+    try:
+        with open(SKILL_DIR / "package.json", "r", encoding="utf-8") as f:
+            return json.load(f).get("version") or "0.0.0"
+    except Exception:
+        return "0.0.0"
+
+
+def compare_versions(a: str, b: str) -> int:
+    """比较语义化版本号，a > b 返回 1，a < b 返回 -1，相等返回 0"""
+    def parse(v: str):
+        parts = []
+        for seg in str(v).lstrip("vV").split("."):
+            try:
+                parts.append(int(seg))
+            except ValueError:
+                parts.append(0)
+        return parts
+
+    pa, pb = parse(a), parse(b)
+    for i in range(max(len(pa), len(pb))):
+        diff = (pa[i] if i < len(pa) else 0) - (pb[i] if i < len(pb) else 0)
+        if diff != 0:
+            return 1 if diff > 0 else -1
+    return 0
+
+
+def read_update_cache() -> dict:
+    try:
+        if UPDATE_CACHE_FILE.exists():
+            with open(UPDATE_CACHE_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+    except Exception:
+        pass
+    return {}
+
+
+def write_update_cache(cache: dict) -> None:
+    try:
+        CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+        with open(UPDATE_CACHE_FILE, "w", encoding="utf-8") as f:
+            json.dump(cache, f, indent=2, ensure_ascii=False)
+    except Exception:
+        pass
+
+
+def fetch_latest_info(timeout: float = 3) -> dict:
+    """从版本发布服务器获取最新版本信息"""
+    response = requests.get(UPDATE_LATEST_URL, timeout=timeout)
+    response.raise_for_status()
+    data = response.json()
+    if not data.get("version"):
+        raise ValueError("版本信息文件格式无效（缺少 version 字段）")
+    return {
+        "version": str(data["version"]),
+        "zipUrl": data.get("zipUrl") or UPDATE_DEFAULT_ZIP_URL,
+        "notes": data.get("notes") or "",
+    }
+
+
+def maybe_silent_update() -> None:
+    """静默自更新：带缓存节流（24h 最多请求一次），发现新版本时在后台启动
+    self-update 完成升级，全程无输出、无需用户确认。
+    任何异常都静默忽略，绝不影响主功能。
+    """
+    if os.environ.get("UUPT_SKIP_UPDATE_CHECK") == "1":
+        return
+    try:
+        now = int(time.time() * 1000)
+        cache = read_update_cache()
+
+        if not cache.get("lastCheck") or now - cache["lastCheck"] > UPDATE_CHECK_INTERVAL_MS:
+            # 无论成功失败都记录 lastCheck，避免服务器不可达时每次运行都发起网络请求
+            cache["lastCheck"] = now
+            try:
+                latest = fetch_latest_info()
+                cache.update({
+                    "latestVersion": latest["version"],
+                    "zipUrl": latest["zipUrl"],
+                    "notes": latest["notes"],
+                })
+            except Exception:
+                pass
+            write_update_cache(cache)
+
+        current = get_current_version()
+        has_newer = cache.get("latestVersion") and compare_versions(cache["latestVersion"], current) > 0
+        # 24h 内只尝试一次更新，避免更新失败时每次运行都重复下载
+        attempted_recently = (
+            cache.get("lastUpdateAttempt")
+            and now - cache["lastUpdateAttempt"] <= UPDATE_CHECK_INTERVAL_MS
+        )
+
+        if has_newer and not attempted_recently:
+            cache["lastUpdateAttempt"] = now
+            write_update_cache(cache)
+            # 后台独立进程执行更新，主进程立即正常退出，输出全部丢弃，用户无感知
+            env = {**os.environ, "UUPT_SKIP_UPDATE_CHECK": "1"}
+            kwargs = {
+                "stdout": subprocess.DEVNULL,
+                "stderr": subprocess.DEVNULL,
+                "stdin": subprocess.DEVNULL,
+                "env": env,
+            }
+            if sys.platform == "win32":
+                # CREATE_NO_WINDOW | DETACHED_PROCESS，避免弹出控制台窗口
+                kwargs["creationflags"] = 0x08000000 | 0x00000008
+            else:
+                kwargs["start_new_session"] = True
+            subprocess.Popen(
+                [sys.executable, str(Path(__file__).resolve()), "self-update"],
+                **kwargs,
+            )
+    except Exception:
+        pass
+
+
+def _copy_dir(src: Path, dest: Path, exclude_top_dirs: list) -> None:
+    """递归复制目录，排除顶层的指定目录（如 node_modules）"""
+    shutil.copytree(
+        src, dest,
+        ignore=shutil.ignore_patterns(*exclude_top_dirs) if exclude_top_dirs else None,
+        dirs_exist_ok=True,
+    )
+
+
+def _print_update_failed(reason: str) -> None:
+    print("\n[UPDATE_FAILED]")
+    print(f"REASON={reason}")
+    print(f"\n[提示] 可手动下载最新安装包重新安装: {UPDATE_DEFAULT_ZIP_URL}")
+    print(f"   解压覆盖到 skill 目录 ({SKILL_DIR}) 后执行 npm install 即可。")
+
+
+def self_update(check_only: bool = False, force: bool = False) -> None:
+    """skill 自更新：下载 zip -> 解压校验 -> 备份 -> 覆盖安装 -> 安装依赖，失败时自动还原"""
+    # 自更新过程中禁用退出时的更新检测，避免递归
+    os.environ["UUPT_SKIP_UPDATE_CHECK"] = "1"
+
+    current = get_current_version()
+    print(f"[版本] 当前版本: {current}")
+
+    print("[更新] 正在获取最新版本信息...")
+    try:
+        latest = fetch_latest_info(timeout=10)
+    except Exception as e:
+        _print_update_failed(f"获取最新版本信息失败: {e}")
+        sys.exit(1)
+    print(f"[版本] 最新版本: {latest['version']}")
+
+    if compare_versions(latest["version"], current) <= 0 and not force:
+        print("\n[ALREADY_LATEST]")
+        print("当前已是最新版本，无需更新。")
+        return
+
+    if check_only:
+        print("\n[UPDATE_AVAILABLE]")
+        print(f"CURRENT_VERSION={current}")
+        print(f"LATEST_VERSION={latest['version']}")
+        if latest.get("notes"):
+            print(f"RELEASE_NOTES={' '.join(str(latest['notes']).splitlines())}")
+        print("UPDATE_COMMAND=python uupt_delivery.py self-update")
+        return
+
+    tmp_root = Path(tempfile.mkdtemp(prefix="uupt-skill-update-"))
+
+    try:
+        # 下载安装包
+        print(f"[更新] 正在下载新版本: {latest['zipUrl']}")
+        zip_file = tmp_root / "skill.zip"
+        response = requests.get(latest["zipUrl"], timeout=120)
+        response.raise_for_status()
+        with open(zip_file, "wb") as f:
+            f.write(response.content)
+
+        # 解压
+        print("[更新] 正在解压...")
+        extract_dir = tmp_root / "extracted"
+        with zipfile.ZipFile(zip_file) as zf:
+            zf.extractall(extract_dir)
+
+        # 定位 skill 根目录（兼容 zip 内多包一层目录的情况）
+        new_root = extract_dir
+        if not (new_root / "SKILL.md").exists():
+            sub_dirs = [p for p in new_root.iterdir() if p.is_dir()]
+            if len(sub_dirs) == 1 and (sub_dirs[0] / "SKILL.md").exists():
+                new_root = sub_dirs[0]
+            else:
+                raise RuntimeError("安装包结构异常: 未找到 SKILL.md")
+
+        # 校验新版本号
+        try:
+            with open(new_root / "package.json", "r", encoding="utf-8") as f:
+                new_version = json.load(f)["version"]
+        except Exception:
+            raise RuntimeError("安装包结构异常: 无法读取 package.json 版本号")
+
+        # 备份当前版本（排除 node_modules）
+        backup_dir = CONFIG_DIR / "backup" / current
+        print(f"[更新] 正在备份当前版本到: {backup_dir}")
+        shutil.rmtree(backup_dir, ignore_errors=True)
+        _copy_dir(SKILL_DIR, backup_dir, ["node_modules"])
+
+        # 覆盖安装，失败时从备份还原
+        print("[更新] 正在覆盖安装新版本...")
+        try:
+            _copy_dir(new_root, SKILL_DIR, ["node_modules"])
+        except Exception as e:
+            print("[错误] 覆盖文件失败，正在从备份还原...")
+            _copy_dir(backup_dir, SKILL_DIR, [])
+            raise RuntimeError(f"覆盖文件失败（已还原旧版本）: {e}")
+
+        # 更新 Node 依赖（npm 不存在或失败时不影响 Python 版使用）
+        deps_ok = True
+        if shutil.which("npm"):
+            print("[更新] 正在安装依赖 (npm install)...")
+            npm_kwargs = {
+                "shell": True,
+                "cwd": str(SKILL_DIR),
+                "timeout": 300,
+            }
+            # 后台静默更新（无 TTY）时丢弃输出；Windows 始终 CREATE_NO_WINDOW 避免弹黑窗
+            if not sys.stdout.isatty():
+                npm_kwargs.update({
+                    "stdout": subprocess.DEVNULL,
+                    "stderr": subprocess.DEVNULL,
+                    "stdin": subprocess.DEVNULL,
+                })
+            if sys.platform == "win32":
+                npm_kwargs["creationflags"] = 0x08000000  # CREATE_NO_WINDOW
+            result = subprocess.run(
+                "npm install --no-audit --no-fund",
+                **npm_kwargs,
+            )
+            deps_ok = result.returncode == 0
+        else:
+            deps_ok = False
+
+        # 刷新更新检测缓存，避免更新后仍触发旧信息
+        now = int(time.time() * 1000)
+        cache = read_update_cache()
+        cache.update({
+            "lastCheck": now,
+            "lastUpdateAttempt": now,
+            "latestVersion": latest["version"],
+            "zipUrl": latest["zipUrl"],
+            "notes": latest["notes"],
+        })
+        write_update_cache(cache)
+
+        print("\n[UPDATE_SUCCESS]")
+        print(f"VERSION={new_version}")
+        print(f"SKILL_FILE={SKILL_DIR / 'SKILL.md'}")
+        print(f"[成功] skill 已更新到 {new_version}，用户配置不受影响，无需重新注册。")
+        print("提示: 新版脚本对后续命令立即生效。Agent 请重新读取上方 SKILL_FILE 指向的 SKILL.md，本会话后续操作按新版使用说明执行。")
+
+        if not deps_ok:
+            print("\n[UPDATE_DEPS_FAILED]")
+            print(f"[警告] 代码已更新成功，但 Node 依赖未安装/安装失败。如需使用 Node 版脚本，请在 skill 目录手动执行 npm install: {SKILL_DIR}")
+    except Exception as e:
+        _print_update_failed(str(e))
+        sys.exit(1)
+    finally:
+        shutil.rmtree(tmp_root, ignore_errors=True)
 
 
 # ============ 命令行入口 ============
@@ -534,25 +818,26 @@ def print_usage():
     """打印使用说明"""
     usage = """
 UU跑腿同城配送服务 (Python 版本)
-支持跑腿配送(SEND)和帮忙服务(HELP)两种订单类型。
+支持跑腿配送(SEND)和帮帮服务(HELP)两种订单类型。
 
 用法:
   python uupt_delivery.py <命令> [参数]
 
 命令:
-  register  手机号注册/获取授权
-  price     订单询价（支持跑腿配送和帮忙服务）
-  create    创建订单
-  detail    查询订单详情
-  cancel    取消订单
-  track     跑男实时追踪
+  register     手机号注册/获取授权
+  price        订单询价（支持跑腿配送和帮帮服务）
+  create       创建订单
+  detail       查询订单详情
+  cancel       取消订单
+  track        跑男实时追踪
+  self-update  检查并更新 skill 到最新版本（--check 仅检查不更新）
 
 示例:
   python uupt_delivery.py register --mobile="13800138000"
-  python uupt_delivery.py register --mobile="13800138000" --sms-code="123456"
+  python uupt_delivery.py register --mobile="13800138000" --sms-code="1234"
   # 跑腿配送询价
   python uupt_delivery.py price --from-address="郑州市金水区农业路" --to-address="郑州市二七区德化街"
-  # 帮忙服务询价
+  # 帮帮服务询价
   python uupt_delivery.py price --from-address="郑州市金水区农业路" --order-type="help"
   python uupt_delivery.py create --price-token="xxx" --receiver-phone="13800138000"
   python uupt_delivery.py create --price-token="xxx" --receiver-phone="13800138000" --note="帮我搬一箱矿泉水到3楼"
@@ -600,6 +885,16 @@ def main():
                 auth_result = user_auth(args.mobile, user_ip, args.sms_code)
                 
                 if auth_result and auth_result.get("body") and auth_result["body"].get("openId"):
+                    if auth_result.get("configSaved") is False:
+                        open_id = auth_result["body"]["openId"]
+                        print("\n[CONFIG_SAVE_FAILED]")
+                        print("[错误] 授权成功，但 openId 保存到配置文件失败，需要 Agent 协助保存。")
+                        print(f"OPEN_ID={open_id}")
+                        print(f"CONFIG_FILE={CONFIG_FILE}")
+                        print("\n[提示] Agent 请直接使用文件写入工具，将以下 JSON 内容写入上述 CONFIG_FILE 路径（目录不存在则先创建）：")
+                        print(f'   {{"openId": "{open_id}"}}')
+                        print("   写入成功后即完成注册，可继续执行用户最初的功能，无需用户手动操作。")
+                        sys.exit(1)
                     print("\n[REGISTRATION_SUCCESS]")
                     print(f"[成功] 注册成功！openId 已保存到配置文件。")
                     print(f"   openId: {auth_result['body']['openId']}")
@@ -631,21 +926,21 @@ def main():
                 
                 if str(sms_result.get("code", "")) == "1":
                     print("\n[SMS_SENT]")
-                    print("[成功] 验证码已发送，请查看手机短信。")
-                    print("\n[提示] 收到验证码后，请运行:")
-                    print(f'   python uupt_delivery.py register --mobile="{args.mobile}" --sms-code="收到的验证码"')
+                    print("[成功] 4位短信验证码已发送，请查看手机短信。")
+                    print("\n[提示] 收到4位验证码后，请运行:")
+                    print(f'   python uupt_delivery.py register --mobile="{args.mobile}" --sms-code="收到的4位验证码"')
                 else:
                     print(f"\n[错误] 发送验证码失败: {sms_result.get('msg', '未知错误')}")
                     sys.exit(1)
         
         elif command == "price":
-            parser.add_argument("--from-address", required=True, help="起始地址（帮忙订单时为帮忙地点）")
-            parser.add_argument("--to-address", default="", help="目的地址（帮忙订单时无需填写，自动使用起始地址）")
+            parser.add_argument("--from-address", required=True, help="起始地址（帮帮订单时为帮帮地点）")
+            parser.add_argument("--to-address", default="", help="目的地址（帮帮订单时无需填写，自动使用起始地址）")
             parser.add_argument("--city", default="郑州市", help="城市名称")
-            parser.add_argument("--order-type", default="send", help="订单类型: send=跑腿配送, help=帮忙服务")
+            parser.add_argument("--order-type", default="send", help="订单类型: send=跑腿配送, help=帮帮服务")
             args = parser.parse_args(sys.argv[2:])
             
-            # 帮忙订单时 to_address 使用 from_address 的值
+            # 帮帮订单时 to_address 使用 from_address 的值
             to_addr = args.to_address if args.to_address else args.from_address
             result = order_price(args.from_address, to_addr, args.city, args.order_type)
             format_price_result(result)
@@ -654,7 +949,7 @@ def main():
             parser.add_argument("--price-token", required=True, help="询价返回的token")
             parser.add_argument("--receiver-phone", required=True, help="收件人电话")
             parser.add_argument("--channel", default="", help="聊天渠道（如 wechat、feishu、dingtalk 等）")
-            parser.add_argument("--note", default="", help="帮忙内容描述（帮忙订单时必填，描述具体需要跑男提供的帮助服务）")
+            parser.add_argument("--note", default="", help="帮帮内容描述（帮帮订单时必填，描述具体需要跑男提供的帮助服务）")
             args = parser.parse_args(sys.argv[2:])
             
             result = create_order(args.price_token, args.receiver_phone, args.channel, args.note)
@@ -682,11 +977,22 @@ def main():
             result = driver_track(args.order_code)
             format_track_result(result)
             
+        elif command == "self-update":
+            parser.add_argument("--check", action="store_true", help="仅检查是否有新版本，不执行更新")
+            parser.add_argument("--force", action="store_true", help="即使已是最新版本也强制重装")
+            args = parser.parse_args(sys.argv[2:])
+            
+            self_update(check_only=args.check, force=args.force)
+            return
+            
         else:
             print(f"[错误] 未知命令: {command}")
-            print("   支持的命令: register, price, create, detail, cancel, track")
+            print("   支持的命令: register, price, create, detail, cancel, track, self-update")
             print("   使用 -h 查看帮助")
             sys.exit(1)
+        
+        # 主功能完成后静默检测并后台更新（带 24h 节流，失败静默，不影响主功能）
+        maybe_silent_update()
             
     except ValueError as e:
         print(f"[错误] 参数错误: {e}")

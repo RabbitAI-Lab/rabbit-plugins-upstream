@@ -1,45 +1,61 @@
-## Description: <br>
-Novu (novu.co) helps agents read, create, and update Novu data through the OOMOL connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to read, create, and update Novu data through the OOMOL-connected oo CLI instead of calling the Novu API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate Novu through an OOMOL-connected account, including subscriber lookup, subscriber changes, and workflow event triggering through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Create, update, and trigger-event actions can change Novu subscribers or send workflow events. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running any write action. <br>
-Risk: Running setup commands unnecessarily can install software or start authentication flows the user did not need. <br>
-Mitigation: Run setup only after a matching command failure, such as a missing oo CLI, authentication error, expired credential, or missing Novu connection. <br>
-Risk: Payloads built without the live connector schema can be malformed or affect the wrong target. <br>
-Mitigation: Inspect the action schema with the oo CLI before constructing the JSON payload for an action. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Novu subscribers and trigger workflow events through an OOMOL-connected Novu account. It supports read, search, create, update, and event-triggering workflows while requiring confirmation for state-changing actions.
 
-## Reference(s): <br>
-- [ClawHub Novu Skill](https://clawhub.ai/oomol/skills/oo-novu) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Novu Homepage](https://novu.co) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution; state-changing actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: The setup path includes remote installer commands that execute downloaded scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review or verify the installer through official, versioned installation steps before running it.
+
+Risk: The connector can create or update subscribers and trigger workflow events in a Novu account.
+
+Mitigation: Confirm each state-changing action and exact JSON payload with the user before execution.
+
+Risk: Using the skill delegates Novu account operations to OOMOL's connected-service flow.
+
+Mitigation: Install only when the operator accepts OOMOL connector access to the relevant Novu account.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-novu)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Novu Homepage](https://novu.co)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing Novu action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

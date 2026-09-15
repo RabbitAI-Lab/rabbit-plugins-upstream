@@ -1,44 +1,64 @@
-## Description: <br>
-Identifies sleep stages including falling asleep, light sleep, deep sleep, and REM; monitors body movement, nighttime awakenings, and sleep apnea for sleep monitoring scenarios. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies sleep stages, body movement, nighttime awakenings, and sleep apnea from sleep-monitoring video inputs and returns structured sleep quality reports.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and developers can use this skill to analyze sleep-monitoring video files or URLs and obtain structured sleep quality reports. It supports sleep stage recognition, body movement statistics, nighttime awakening counts, sleep apnea indicators, report links, and cloud-backed historical report queries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive sleep-monitoring videos and report queries are sent to the publisher's cloud service. <br>
-Mitigation: Use only media that is appropriate to share with the publisher service, avoid unnecessary personal or clinical content, and review the service destination before deployment. <br>
-Risk: The skill can silently create or reuse a persistent local or backend identity and token records. <br>
-Mitigation: Review or clear the workspace data directory and stored account records when persistent identity association is not desired. <br>
-Risk: Sleep analysis output is health-related and may be incomplete or misleading if treated as a diagnosis. <br>
-Mitigation: Present results as sleep-quality reference information and route medical decisions to qualified professionals or validated clinical workflows. <br>
+## Use Case:
 
+External users and developers use this skill to submit sleep-monitoring videos or video URLs for sleep stage, movement, awakening, and sleep apnea analysis, then view structured reports or cloud-hosted report history. The generated reports are health-related reference material and are not a substitute for professional diagnosis.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-sleep-quality-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON sleep analysis reports with report links and optional saved text output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include structured sleep metrics, sleep-stage summaries, apnea indicators, historical report records, and cloud report export links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata; artifact frontmatter is 1.0.7) <br>
+Risk: Sleep-monitoring videos, analysis reports, and report history are sensitive health-related data sent to the publisher's cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only in workspaces approved for that data, avoid shared environments, and confirm retention and deletion controls before processing real user recordings.
+
+Risk: The security evidence flags unsafe network configuration, including development HTTP endpoints and endpoint override behavior.
+
+Mitigation: Require HTTPS production endpoints and review configuration before installation or execution.
+
+Risk: The security evidence flags unsafe local token storage behavior.
+
+Mitigation: Use isolated workspaces and rotate or clear credentials after testing until credential storage is fixed.
+
+Risk: The security evidence flags dependency declaration issues.
+
+Mitigation: Review and pin/install dependencies in a controlled environment before use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-sleep-quality-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API documentation](artifact/references/api_doc.md)
+- [Analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, configuration guidance]
+
+**Output Format:** [Markdown or JSON analysis reports with report links and optional shell command guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local video files or video URLs, historical report listing, and optional output-file writing.]
+
+## Skill Version(s):
+
+1.0.14 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,55 @@
-## Description: <br>
-Roam SCIM lets an agent read, create, update, and delete Roam SCIM users and groups through the OOMOL oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Roam SCIM helps agents read, create, update, and delete Roam SCIM data through OOMOL's oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to administer Roam SCIM through an OOMOL-connected account, including user lifecycle operations, group management, and service provider configuration lookup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change or archive Roam SCIM users and groups through the connected OOMOL account. <br>
-Mitigation: Require explicit user approval of the exact target, payload, and expected effect before running write or destructive actions. <br>
-Risk: Full replacement actions can overwrite supported user attributes or group member lists. <br>
-Mitigation: Fetch the live action schema first and review replacement payloads carefully before execution. <br>
-Risk: The skill depends on the user's OOMOL authentication, service connection, scopes, and billing state. <br>
-Mitigation: Only run setup, reconnection, or billing guidance after the oo command reports the corresponding error. <br>
+## Use Case:
 
+Developers and administrators use this skill to manage Roam SCIM users and groups, including reads, creates, replacements, archival/reactivation, deletion/archive operations, and group membership updates.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-roam-scim) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Roam SCIM Homepage](https://ro.am) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI commands and JSON payload or response details] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before building action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: The documented pipe-to-shell installer commands could execute arbitrary local code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a signed or checksum-verified installer when available, and inspect downloaded installer scripts before execution.
+
+Risk: Write and destructive SCIM actions can change, archive, or delete Roam users and groups.
+
+Mitigation: Fetch the live connector schema, review the exact payload and target, and require explicit user approval before executing state-changing actions.
+
+## Reference(s):
+
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Roam homepage](https://ro.am)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before state-changing Roam SCIM actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,60 @@
-## Description: <br>
-Discord lets an agent read and manage Discord data through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to operate Discord through an OOMOL-connected account for reading account and guild data and performing confirmed write or destructive actions.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Discord account, guild, invite, connection, entitlement, and public key data, and to perform approved Discord account-related updates through the OOMOL connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use a connected Discord account and may perform write or destructive actions. <br>
-Mitigation: Confirm the exact payload and effect before write actions, and get explicit user approval before destructive actions. <br>
-Risk: Connector access depends on OOMOL-managed credentials and first-time oo CLI setup. <br>
-Mitigation: Install only if you trust OOMOL as the connector provider, and run installer, authentication, or connection steps only when a command fails for that setup reason. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect Discord connector schemas, run Discord actions through the oo CLI, and manage Discord account, guild, invite, widget, entitlement, OAuth, and role-connection workflows.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-discord) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Discord Homepage](https://discord.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON connector payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Fetch the live connector schema before building payloads; user confirmation is required for write actions and explicit approval is required for destructive actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: evidence.release.version and frontmatter metadata.version) <br>
+Risk: The install guidance includes an unverified remote installer pipeline.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installation steps before use and prefer official signed or checksum-verified installation methods.
+
+Risk: Discord account, guild, authorization, and linked-connection reads can expose private user data.
+
+Mitigation: Run read actions only for explicit user requests and handle returned Discord data as private.
+
+Risk: Write and destructive Discord actions can change or remove account role-connection data.
+
+Mitigation: Confirm the exact action, target, payload, and expected effect with the user before execution.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-discord)
+- [Discord Homepage](https://discord.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return Discord connector JSON responses through the oo CLI when actions are executed.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

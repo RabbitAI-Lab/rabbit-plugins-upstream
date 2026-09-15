@@ -1,42 +1,60 @@
-## Description: <br>
-Positionstack helps agents operate Positionstack geocoding through an OOMOL-connected account using the oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Positionstack helps agents use OOMOL's oo CLI to inspect and run Positionstack connector actions for forward and reverse geocoding.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to convert addresses or place queries into geocoding results and to resolve coordinates or IP addresses through Positionstack via an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Geocoding requests may send addresses, coordinates, or IP addresses through OOMOL and Positionstack. <br>
-Mitigation: Install only when OOMOL should act as the intermediary for Positionstack geocoding, and review request payloads before execution. <br>
-Risk: Actions marked as write may change Positionstack state or usage-related records. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running actions marked as write. <br>
+## Use Case:
 
+Developers and agents use this skill to perform Positionstack geocoding tasks through an OOMOL-connected account, including converting addresses or place names to coordinates and resolving coordinates or IP inputs to location results.
 
-## Reference(s): <br>
-- [Positionstack homepage](https://positionstack.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline bash commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the live Positionstack connector schema before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill grants broad oo CLI command authority.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only where broad oo CLI access is acceptable, and review the exact Positionstack action before execution.
+
+Risk: The setup guidance includes remote installer commands that are not independently verified in the evidence.
+
+Mitigation: Install the oo CLI from a trusted, verifiable source and prefer a version-pinned or checksum-verified installation path.
+
+Risk: Address, coordinate, or IP lookup data may be sent to the connected Positionstack service.
+
+Mitigation: Confirm the intended action and payload before sending location-related data.
+
+## Reference(s):
+
+- [Positionstack homepage](https://positionstack.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-positionstack)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with bash commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include a data object and meta.executionId when actions run successfully.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

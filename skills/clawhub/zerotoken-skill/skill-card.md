@@ -1,44 +1,58 @@
-## Description: <br>
-Token-efficient assistant discipline for concise answers and task execution. Use when the user asks for direct, low-token work, or invokes this skill; includes optional file and Windows encoding utilities declared below. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Token-efficient assistant discipline for concise, direct answers and minimal-context task execution, with optional local file-encoding and Windows PowerShell utilities.
 
-## Publisher: <br>
-[phoenixlucky](https://clawhub.ai/user/phoenixlucky) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-GPL-3.0 <br>
+## Publisher:
 
+[phoenixlucky](https://clawhub.ai/user/phoenixlucky)
 
-## Use Case: <br>
-Developers and agent users use this skill to keep assistant work concise, proportional, and task-focused while preserving necessary validation. It also provides optional local file-editing and encoding utilities for workflows that need them. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+GPL-3.0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide broad local file reads, writes, and batch edits. <br>
-Mitigation: Review target paths and diffs before applying changes, and keep edits scoped to the user-requested files. <br>
-Risk: Encoding repair and conversion utilities can rewrite file contents. <br>
-Mitigation: Run scan or preview modes first, and use backup options before convert or fix operations. <br>
-Risk: Browser or web search guidance may send query content to external services. <br>
-Mitigation: Avoid sensitive data in search queries and prefer trusted sources for research. <br>
+## Use Case:
 
+Developers and agent users use ZeroToken to guide assistants toward concise, task-focused responses, bounded context gathering, and predictable workflows. The bundled utilities support local encoding checks, encoding repair workflows, version checks, and Windows PowerShell-safe file handling.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/phoenixlucky/skills/zerotoken-skill) <br>
-- [README](README.md) <br>
-- [Skill instructions](SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with concise text, inline commands, and code snippets when needed] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Task-dependent concise responses; optional file edits, batch text replacements, and encoding utility commands when explicitly needed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.2 (source: frontmatter, package.json, changelog, server release) <br>
+Risk: Encoding repair and conversion utilities can recursively overwrite files, and backups are not enforced.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run utilities on scoped paths, review scan or preview output first, and keep version control or separate backups before write operations.
+
+Risk: Environment detection can persist workspace details in .zerotoken/environment.json.
+
+Mitigation: Confirm local policy allows this workspace metadata before enabling persistence, and remove the file when it is not needed.
+
+## Reference(s):
+
+- [ZeroToken README](README.md)
+- [Skill Definition](SKILL.md)
+- [Tool Mapping](references/tool-mapping.md)
+- [Windows PowerShell Guidance](references/windows-powershell.md)
+- [Unicode Encoding Specification](docs/unicode-encoding-spec.md)
+- [ClawHub Skill Page](https://clawhub.ai/phoenixlucky/skills/zerotoken-skill)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline commands and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Concise, user-facing responses with optional local utility commands.]
+
+## Skill Version(s):
+
+1.14.0 (source: SKILL.md frontmatter, package.json, CHANGELOG, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
