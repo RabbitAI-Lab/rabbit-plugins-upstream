@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/latchbio-integration",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/latchbio-integration",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/latchbio-integration",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "0131715d6c14e9d89cbf4a569cbea5efbc67e527328e41afe0c4c917d1e3c79e",
+  "fetchedAt": "2026-09-15T12:44:33.035Z"
+}

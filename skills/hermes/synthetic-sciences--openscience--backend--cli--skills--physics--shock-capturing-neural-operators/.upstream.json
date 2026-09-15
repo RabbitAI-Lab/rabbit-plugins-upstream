@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/shock-capturing-neural-operators",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/shock-capturing-neural-operators",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/shock-capturing-neural-operators",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "329c0a6149feb3570ce1ba022e1539b9f435e4fee4b5cb6ace3ee3310092c038",
+  "fetchedAt": "2026-09-15T12:44:33.130Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/diffdock",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/diffdock",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/diffdock",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "f4837a704bba418e9b2c5a1f08fb1c1dccc940f0632ae2211349e5a8f20ee2e5",
+  "fetchedAt": "2026-09-15T12:44:32.979Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/visualization/scientific-visualization",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/visualization/scientific-visualization",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/visualization/scientific-visualization",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "651121891046e073cfb4206d07ac23e561c8ed3f93fe801c864c98bfd14cfe95",
+  "fetchedAt": "2026-09-15T12:44:33.123Z"
+}

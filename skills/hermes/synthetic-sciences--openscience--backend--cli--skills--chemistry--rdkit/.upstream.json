@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/rdkit",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/rdkit",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/rdkit",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "8deb76399af045620766dc1156268922c9bd1fab5f7382e1499a921df78fcc53",
+  "fetchedAt": "2026-09-15T12:44:33.116Z"
+}

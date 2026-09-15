@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/writing/markdown-mermaid-writing",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/writing/markdown-mermaid-writing",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/writing/markdown-mermaid-writing",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "5c0c31ed3f4dbe1dbf95b84a5874d9163fa02979f07e397ca715a2c9554227e5",
+  "fetchedAt": "2026-09-15T12:44:33.043Z"
+}

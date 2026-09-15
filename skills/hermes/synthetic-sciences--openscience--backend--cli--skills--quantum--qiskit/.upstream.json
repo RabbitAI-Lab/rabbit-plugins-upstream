@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/quantum/qiskit",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/quantum/qiskit",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/quantum/qiskit",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "c8f7ae9374642cf3bd6aff30aad37a7abe526a03d15479fb8ed13723533a1806",
+  "fetchedAt": "2026-09-15T12:44:33.113Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/esm",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/esm",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/esm",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "a04ed6fdae2f088f1c00d42b49a19a738a80cc737b515af6362e6544a58e9a90",
+  "fetchedAt": "2026-09-15T12:44:32.991Z"
+}

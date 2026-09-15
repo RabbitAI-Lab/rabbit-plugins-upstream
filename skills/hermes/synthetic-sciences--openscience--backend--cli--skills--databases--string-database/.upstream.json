@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/string-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/string-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/string-database",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "5923234ee72355aba617b04f25786b3fceb0ce7eb3a8538ff009477ad88d03d5",
+  "fetchedAt": "2026-09-15T12:44:33.139Z"
+}

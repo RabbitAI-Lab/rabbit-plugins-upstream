@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/bulk-rnaseq",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/bulk-rnaseq",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/bulk-rnaseq",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "2e82f82fbcb6aa7138a1e08d14bfc3c7dc05ae182180945685264b478bf4e30f",
+  "fetchedAt": "2026-09-15T12:44:32.951Z"
+}

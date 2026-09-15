@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/flowio",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/flowio",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/flowio",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "5a172207c8c23ffee9eadf948775aba85b27873e75be94003ecf3e86785bf117",
+  "fetchedAt": "2026-09-15T12:44:32.998Z"
+}

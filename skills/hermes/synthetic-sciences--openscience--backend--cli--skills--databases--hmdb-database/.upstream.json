@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/hmdb-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/hmdb-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/hmdb-database",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "f775d9acedce3459e8e51464566347a7195abc92dd491eb9c91f5ac98732d087",
+  "fetchedAt": "2026-09-15T12:44:33.014Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/imaging-data-commons",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/imaging-data-commons",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/imaging-data-commons",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "84f5490e1af9b84b46b06d571041b9699f4046ef2bb146696e3af12d9a3f45a0",
+  "fetchedAt": "2026-09-15T12:44:33.023Z"
+}

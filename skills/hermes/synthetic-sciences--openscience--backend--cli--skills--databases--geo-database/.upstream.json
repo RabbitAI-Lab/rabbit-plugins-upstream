@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/geo-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/geo-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/geo-database",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "481836df795e3164d99a61479582fe44e40c94fe75f6f3f1945dc63b8aea3f25",
+  "fetchedAt": "2026-09-15T12:44:33.003Z"
+}

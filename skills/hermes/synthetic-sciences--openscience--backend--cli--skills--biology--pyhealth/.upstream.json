@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/pyhealth",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/pyhealth",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/pyhealth",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "bd8f24de86c4542b6fc2ced004af4deff6e615473644dc261733c9b69c55c6ae",
+  "fetchedAt": "2026-09-15T12:44:33.103Z"
+}

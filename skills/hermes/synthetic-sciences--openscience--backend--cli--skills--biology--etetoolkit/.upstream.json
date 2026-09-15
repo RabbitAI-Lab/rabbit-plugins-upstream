@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/etetoolkit",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/etetoolkit",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/etetoolkit",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "7187b04e0bea189d307292072deede409de483ead780efaa607df5433782d8cd",
+  "fetchedAt": "2026-09-15T12:44:32.991Z"
+}

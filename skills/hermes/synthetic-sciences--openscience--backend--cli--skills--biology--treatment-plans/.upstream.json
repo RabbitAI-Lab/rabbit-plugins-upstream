@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/treatment-plans",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/treatment-plans",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/treatment-plans",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "46e9a982de9353805eb47e772cae92bc7192c230e30c4104a0ec3182a3202294",
+  "fetchedAt": "2026-09-15T12:44:33.157Z"
+}

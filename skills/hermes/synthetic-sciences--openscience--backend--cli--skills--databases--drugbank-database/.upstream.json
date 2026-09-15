@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/drugbank-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/drugbank-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/drugbank-database",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "cd419c736d625fdc6376add2607dd33fe55ffaa2af65115c0ab51cecc6e71c22",
+  "fetchedAt": "2026-09-15T12:44:32.988Z"
+}

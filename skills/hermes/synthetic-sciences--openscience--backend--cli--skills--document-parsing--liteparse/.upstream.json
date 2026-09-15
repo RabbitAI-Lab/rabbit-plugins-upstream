@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/document-parsing/liteparse",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/document-parsing/liteparse",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/document-parsing/liteparse",
+  "branch": "main",
+  "pushedAt": "2026-09-15T10:39:55Z",
+  "contentHash": "973c21e94b0e3b375e63744efe260bc635d36e8f327b5a32ba3eb3cc11341b49",
+  "fetchedAt": "2026-09-15T12:44:33.037Z"
+}
