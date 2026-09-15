@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/iam-helper-for-policy-management",
+  "repo": "google/skills",
+  "skillId": "iam-helper-for-policy-management",
+  "branch": "main",
+  "pushedAt": "2026-09-14T18:58:50Z",
+  "contentHash": "de2d608cf19c42b3659420ffbae9dd2d4b9a8d28609dce901697dd86db707b23",
+  "fetchedAt": "2026-09-15T12:46:39.548Z"
+}
