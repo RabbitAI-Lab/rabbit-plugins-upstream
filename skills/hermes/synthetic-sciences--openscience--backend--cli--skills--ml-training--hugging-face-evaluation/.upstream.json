@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/hugging-face-evaluation",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/hugging-face-evaluation",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/hugging-face-evaluation",
+  "branch": "main",
+  "pushedAt": "2026-09-16T11:31:46Z",
+  "contentHash": "7f0b2dc72adffb39480170c478c9f5279ff5601b81aa3b77eaa2b99283fc5e66",
+  "fetchedAt": "2026-09-16T12:40:07.930Z"
+}

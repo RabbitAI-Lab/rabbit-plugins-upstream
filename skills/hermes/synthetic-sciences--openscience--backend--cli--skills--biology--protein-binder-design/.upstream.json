@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/protein-binder-design",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/protein-binder-design",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/protein-binder-design",
+  "branch": "main",
+  "pushedAt": "2026-09-16T11:31:46Z",
+  "contentHash": "492c534262bc6f336730f23ca2b2dfdf91efb5045b1bba27fb3afaa8b9535f3e",
+  "fetchedAt": "2026-09-16T12:40:07.971Z"
+}

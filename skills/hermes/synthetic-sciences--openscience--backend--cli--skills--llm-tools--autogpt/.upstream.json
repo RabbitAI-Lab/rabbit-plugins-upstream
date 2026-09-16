@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/autogpt",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/autogpt",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/autogpt",
+  "branch": "main",
+  "pushedAt": "2026-09-16T11:31:46Z",
+  "contentHash": "d399c47f38041a496e5c7368c7b9e50d335fe538829fbe95426f422207de9d7a",
+  "fetchedAt": "2026-09-16T12:40:07.882Z"
+}

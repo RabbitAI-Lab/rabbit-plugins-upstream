@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/autonomous-ai-agents/agent-merge-conflict-arbiter",
+  "identifier": "official/autonomous-ai-agents/agent-merge-conflict-arbiter",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/autonomous-ai-agents/agent-merge-conflict-arbiter",
+  "branch": "main",
+  "pushedAt": "2026-09-16T12:01:33Z",
+  "contentHash": "2cc895695c3032e06520997da2cdd21a34b2a1896eb85af9ff3536911f9f51a8",
+  "fetchedAt": "2026-09-16T12:40:15.989Z"
+}
