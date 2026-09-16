@@ -8,6 +8,10 @@ See [SKILL.md](../SKILL.md#security--safety) for the full destructive-operation 
 - Codex auth: `OPENAI_API_KEY` (pay-as-you-go) or a ChatGPT Plus/Pro/Team subscription (`codexbox login --device-auth`)
 - Optional: SSH key for git-over-SSH inside the container (the installer generates one)
 
+For ordinary agent work, use the installed `codexbox` command from the target
+workspace. Do not replace it with a hand-written Docker invocation. The
+wrapper handles the workspace, state, SSH, image, and nested launch context.
+
 ## Quick Install (wrapper)
 
 The one-liner installer pulls the image, creates persistent Codex/SSH dirs, and installs the `codexbox` wrapper on `PATH`.
@@ -24,7 +28,42 @@ bash install.sh          # minimal image — default
 
 `CODEXBOX_FULL=1` must be set before `install.sh` runs — the installer needs it in `bash`'s environment. The choice is baked into the installed wrapper; you don't need to set it again afterward.
 
+### Install from a local checkout
+
+From this repository, build and install without pulling a published codexbox
+image:
+
+```bash
+make install       # minimal image
+make install-full  # full image
+
+# wrapper only — no build or pull; select full when needed
+make install-wrapper
+CODEXBOX_FULL=1 make install-wrapper
+```
+
+The installer-only `CODEXBOX_SRC_LOCAL=true` flag skips `docker pull` and
+requires the selected local image to already exist. `make install-wrapper`
+uses that existing image without rebuilding it.
+
 **Verify:** `codexbox --version` should print the codex CLI version.
+
+```bash
+codexbox                                  # interactive
+codexbox exec "inspect this workspace"    # one-shot
+CODEXBOX_FULL=1 codexbox exec "run tests" # temporary full image
+```
+
+For a wrapper-started server, use `CODEXBOX_ENV_` before every variable that
+must reach the container. For example,
+`CODEXBOX_ENV_CODEXBOX_API_MODE=1 codexbox` starts API mode.
+
+### Sibling boxes
+
+Install `codexbox`, `claudebox`, and `pibox` in the same command directory,
+normally `/usr/local/bin`, to make the sibling commands available inside a
+box. The parent mounts only the wrapper files read-only. A sibling wrapper then
+runs through the host Docker daemon and mounts its own host data directory.
 
 ## Image Variants
 
@@ -37,7 +76,9 @@ bash install.sh          # minimal image — default
 
 ## Manual Docker Use
 
-Use raw Docker for one-shot runs or long-running API/Telegram/cron services (the wrapper is meant for the interactive per-directory shell case). All the `docker run` shapes for each mode are in [../SKILL.md](../SKILL.md).
+Use raw Docker only for an explicitly requested container deployment. Use the
+wrapper for interactive, one-shot, and local service runs. All direct Docker
+shapes for service deployment are in [../SKILL.md](../SKILL.md).
 
 Minimal foreground-mode boilerplate:
 
@@ -61,7 +102,7 @@ docker run -d --name codexbox \
 | `OPENAI_BASE_URL` | — | Point codex at an OpenAI-compatible endpoint instead of the default API |
 | `CODEXBOX_IMAGE` | installed image | Override the image the wrapper runs |
 | `CODEXBOX_FULL` | installed choice (`0` initially) | `0` forces minimal, `1` forces full |
-| `CODEXBOX_DATA_DIR` | `~/.codex` | Host dir mounted as `CODEX_HOME` (auth + config + sessions) |
+| `CODEXBOX_DATA_DIR` | `~/.codex` | Host dir mounted as `CODEX_HOME` (auth + config + sessions + per-workspace root-session pins) |
 | `CODEXBOX_SSH_DIR` | `~/.ssh/codexbox` | SSH key dir mounted into the container |
 | `CODEXBOX_MAX_MEM` | `10g` | Per-container memory limit |
 | `CODEXBOX_CONTAINER_NAME` | derived from `$PWD` | Override the per-workspace container name |

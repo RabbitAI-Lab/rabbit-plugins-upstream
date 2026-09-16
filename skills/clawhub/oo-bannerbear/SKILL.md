@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Bannerbear"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["bannerbear"]
   icon: "https://static.oomol.com/logo/third-party/bannerbear.svg"
 ---

@@ -1,50 +1,62 @@
-## Description: <br>
-Miao Vision helps agents create local-first article infographics, self-contained HTML charts and reports from local structured data, browser-based data decks, chart recommendations, and Miao Vision spec validation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Miao Vision creates local-first reports, data posters, article infographics, and browser decks from user-supplied local data, text, or article URLs, and can validate Miao Vision report or deck specs.
 
-## Publisher: <br>
-[miaoshou.dev](https://clawhub.ai/user/miaoshou.dev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[miaoshou.dev](https://clawhub.ai/user/miaoshou.dev)
 
-## Use Case: <br>
-Developers and agent users use Miao Vision to turn article content or local CSV, TSV, XLSX, and JSON files into self-contained visual HTML artifacts, browser-based decks, or validated visualization specs. It is intended for local workflows where the agent can run shell commands and review generated specs before rendering. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run local shell commands and may install a miao-viz CLI binary when no compatible CLI is present. <br>
-Mitigation: Review the command plan before execution, approve installation only when expected, and rely on the documented checksum verification path for downloaded binaries. <br>
-Risk: Article URL fetching can access private or internal URLs if the user supplies them. <br>
-Mitigation: Use only URLs intended for local processing and avoid private or internal URLs unless that access is deliberate. <br>
-Risk: Local datasets and generated HTML outputs may contain sensitive information in /tmp/miao-vision. <br>
-Mitigation: Treat generated files as sensitive when source data is confidential and remove local outputs after use. <br>
-Risk: Visualization claims can be misleading if generated specs include unsupported metrics or conclusions. <br>
-Mitigation: Validate specs before rendering and keep numeric claims grounded in the available evidence context. <br>
+## Use Case:
 
+Developers and end users use this skill through compatible coding agents to turn local CSV, TSV, XLSX, JSON, Markdown, text, or article URL inputs into self-contained visualization artifacts. It is also used to validate and repair Miao Vision report or deck specifications before rendering.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/miaoshou.dev/skills/miao-vision-skill) <br>
-- [Miao Vision installation](install/README.md) <br>
-- [Article URL / Markdown To Infographic](references/article-infographic.md) <br>
-- [Data File To Visualization Report](references/data-report.md) <br>
-- [Data File To Browser Deck](references/browser-deck.md) <br>
-- [Chart Selection](references/chart-selection.md) <br>
-- [Miao Vision VizSpec Reference](references/vizspec.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with shell commands and visualization specifications that render to self-contained HTML artifacts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated work is local-first and commonly uses /tmp/miao-vision for intermediate specs, evidence contexts, and rendered artifacts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.26 (source: ClawHub release evidence) <br>
+Risk: Install and runtime paths can run or download persistent command-line software from mutable or environment-selected sources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a pinned, version-specific plugin or CLI source, verify the resolved miao-viz path before use, and clear unexpected MIAO_VISION_HOME or MIAO_VISION_RELEASE_REPOSITORY environment variables.
+
+Risk: The shared CLI can remain installed under ~/.miao-vision after plugin removal.
+
+Mitigation: Remove ~/.miao-vision explicitly when the shared Miao Vision CLI should be fully uninstalled.
+
+Risk: User-provided files, webpages, metadata, specs, and CLI output may contain untrusted instructions or misleading content.
+
+Mitigation: Treat those sources as data, execute only the resolved Miao Vision CLI, fetch only user-provided article URLs, and require separate authorization for installation, network access, overwrites, deletion, publication, or repository operations.
+
+## Reference(s):
+
+- [Miao Vision ClawHub listing](https://clawhub.ai/miaoshou.dev/skills/miao-vision-skill)
+- [Miao Vision release bundle](https://github.com/miaoshou-dev/miao-vision/releases/latest/download/miao-vision-plugin.zip)
+- [Article Infographic Workflow](artifact/references/article.md)
+- [Data Report Workflow](artifact/references/report.md)
+- [Browser Deck Workflow](artifact/references/deck.md)
+- [Outcome Brief Plan-First Workflow](artifact/references/outcome-brief.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, files, guidance]
+
+**Output Format:** [Markdown responses with command snippets and self-contained HTML, PNG, PDF, or browser-deck artifact files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Keeps source data local, returns artifact paths, and reports blocking structured errors when rendering or validation cannot proceed.]
+
+## Skill Version(s):
+
+0.7.1 (source: release evidence, cli-compatibility.json, install/README.md)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

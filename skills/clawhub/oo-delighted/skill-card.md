@@ -1,45 +1,60 @@
-## Description: <br>
-Operate Delighted through an OOMOL-connected account to read, create, update, delete, and unsubscribe Delighted people and retrieve metrics and survey data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Delighted enables agents to read, create, update, and delete Delighted data through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External developers and operators use this skill to manage Delighted account data through the OOMOL oo CLI, including metrics, people, bounced or unsubscribed lists, survey responses, and guarded write or destructive actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to a connected Delighted account through the OOMOL oo CLI. <br>
-Mitigation: Install and use it only when OOMOL CLI access to the Delighted account is intended. <br>
-Risk: Create or update actions can change Delighted account data. <br>
-Mitigation: Review the exact JSON payload and expected effect before approving write actions. <br>
-Risk: Delete and unsubscribe actions can remove survey history or suppress future contact. <br>
-Mitigation: Confirm the target person and get explicit approval before running destructive actions. <br>
+## Use Case:
 
+Developers, operators, and customer-experience teams use this skill to manage Delighted people, survey responses, unsubscribes, bounces, and NPS metrics through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Delighted skill page](https://clawhub.ai/oomol/oo-delighted) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Delighted homepage](https://delighted.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration instructions, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup includes remote installer commands that could execute changing code on a user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing and prefer a pinned, verified, or publisher-documented oo CLI package flow.
+
+Risk: Write and destructive actions can modify or delete Delighted people, unsubscribe records, or survey history.
+
+Mitigation: Confirm the exact action, target, payload, and expected effect with the user before executing state-changing commands.
+
+Risk: Read actions can expose customer contact, survey, bounce, unsubscribe, and account metric data from the connected Delighted account.
+
+Mitigation: Retrieve only data needed for the user's request and rely on the connected account's authorization boundaries.
+
+## Reference(s):
+
+- [ClawHub Delighted Skill](https://clawhub.ai/oomol/skills/oo-delighted)
+- [Delighted Homepage](https://delighted.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires the oo CLI, an authenticated OOMOL account, and a connected Delighted account; write and destructive actions require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

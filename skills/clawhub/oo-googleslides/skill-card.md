@@ -1,46 +1,56 @@
-## Description: <br>
-Google Slides (workspace.google.com). Use this skill for ANY Google Slides request - reading, creating, and updating data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Slides (workspace.google.com). Use this skill for ANY Google Slides request: reading, creating, and updating data through the OOMOL Google Slides connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, developers, and agents use this skill to read, create, copy, update, and inspect Google Slides presentations through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and modify Google Slides through an OOMOL-connected account. <br>
-Mitigation: Install and use it only when that account-level access is intended. <br>
-Risk: Write actions, especially raw batchUpdate requests, can change presentation content or structure. <br>
-Mitigation: Review the exact payload and expected effect with the user before approving write actions. <br>
-Risk: The first-time setup path includes a remote CLI installer command. <br>
-Mitigation: Verify the OOMOL CLI installer source before running the install command. <br>
+## Use Case:
 
+External users, developers, and agent operators use this skill to inspect Google Slides schemas, retrieve presentations and pages, generate thumbnails, create presentations, copy templates, and apply confirmed Google Slides updates through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-googleslides) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Google Slides](https://workspace.google.com/products/slides/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions return JSON data with execution metadata when run through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: Fallback setup directs users to run a remote oo CLI installer script without built-in verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer before use and prefer a signed, checksum-verified, or documented package-manager installation path.
+
+Risk: Write actions can create or modify Google Slides presentations when supplied payloads are executed.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-googleslides)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Google Slides](https://workspace.google.com/products/slides/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and metadata such as execution IDs when actions run successfully.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

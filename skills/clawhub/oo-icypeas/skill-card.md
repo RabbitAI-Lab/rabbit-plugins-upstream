@@ -1,43 +1,60 @@
-## Description: <br>
-Icypeas lets agents read, create, and update Icypeas data through the OOMOL oo CLI using a connected Icypeas account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Icypeas helps an agent operate Icypeas through an OOMOL-connected account, including reading search and subscription data and submitting email discovery, verification, reverse lookup, and domain scan requests.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to run Icypeas email discovery, email verification, reverse email lookup, domain scans, search-item retrieval, and subscription credit checks through an OOMOL-connected Icypeas account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can submit Icypeas searches or scans and may use account credits. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running write actions, and check subscription credit status when needed. <br>
-Risk: The optional CLI installation command runs an external OOMOL installer. <br>
-Mitigation: Run the installer only when the oo CLI is missing and the user trusts the OOMOL installer source; prefer the published install guide. <br>
+## Use Case:
 
+Developers and external users use this skill to let an agent query Icypeas account and search data and run Icypeas email enrichment actions through OOMOL-managed credentials. It supports operational email discovery, verification, reverse lookup, and role-based domain scan workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-icypeas) <br>
-- [Icypeas homepage](https://www.icypeas.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands use the OOMOL oo CLI and return connector JSON when executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: evidence release and skill frontmatter) <br>
+Risk: The skill requests broad oo CLI authority beyond the listed Icypeas connector actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installation and constrain agent use to the documented Icypeas connector schema and run commands where possible.
+
+Risk: First-time setup includes direct execution of remote installer scripts.
+
+Mitigation: Prefer a verified or package-manager-based installation method, or review the installer before running it.
+
+Risk: Write actions can consume Icypeas credits or change account state.
+
+Mitigation: Confirm the exact JSON payload and expected effect before submitting domain scans, email searches, or email verification requests.
+
+## Reference(s):
+
+- [ClawHub Icypeas skill page](https://clawhub.ai/oomol/skills/oo-icypeas)
+- [Icypeas homepage](https://www.icypeas.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with bash commands and JSON connector payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the oo CLI with server-side OOMOL credentials; write actions should be confirmed before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: evidence release.version and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

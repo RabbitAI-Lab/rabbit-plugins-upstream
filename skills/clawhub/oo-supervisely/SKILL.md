@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Supervisely"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["supervisely"]
   icon: "https://static.oomol.com/logo/third-party/supervisely.svg"
 ---

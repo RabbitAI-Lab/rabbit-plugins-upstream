@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Juniper Mist"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["juniper_mist"]
   icon: "https://static.oomol.com/logo/third-party/juniper_mist.png"
 ---

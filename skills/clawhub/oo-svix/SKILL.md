@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Svix"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["svix"]
   icon: "https://static.oomol.com/logo/third-party/Svix.svg"
 ---

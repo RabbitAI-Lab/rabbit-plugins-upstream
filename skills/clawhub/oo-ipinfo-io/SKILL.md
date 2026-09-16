@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "IPinfo"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["ipinfo_io"]
   icon: "https://static.oomol.com/logo/third-party/ipinfo_io.png"
 ---

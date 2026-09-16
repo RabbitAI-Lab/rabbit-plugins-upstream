@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Zeplin"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["zeplin"]
   icon: "https://static.oomol.com/logo/third-party/zeplin.svg"
 ---

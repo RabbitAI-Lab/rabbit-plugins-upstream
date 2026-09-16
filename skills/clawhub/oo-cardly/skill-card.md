@@ -1,41 +1,55 @@
-## Description: <br>
-Cardly (card.ly) helps agents search and read Cardly account data through the OOMOL Cardly connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cardly (card.ly). Use this skill for Cardly requests that search, read, or inspect account data through the OOMOL-connected Cardly connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to retrieve Cardly balances, credit history, available media, fonts, and writing styles from an OOMOL-connected Cardly account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Setup, login, Cardly connection, billing, or echo-debugging steps can affect the user's account or environment. <br>
-Mitigation: Approve those steps explicitly, and avoid sending sensitive personal data in echo payloads unless intentionally testing the authenticated endpoint. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Cardly balances, credit histories, fonts, media options, and writing styles through an authenticated OOMOL connection without handling raw credentials.
 
-## Reference(s): <br>
-- [ClawHub Cardly skill page](https://clawhub.ai/oomol/skills/oo-cardly) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Cardly homepage](https://www.card.ly) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector action responses are JSON objects containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Setup instructions include direct execution of internet installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a trusted and verifiable method, preferably with version pinning or checksum/signature verification.
+
+Risk: The skill reads data from the Cardly account connected through OOMOL.
+
+Mitigation: Connect only the Cardly account the agent is intended to access and review requested actions before execution.
+
+## Reference(s):
+
+- [Cardly homepage](https://www.card.ly)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-cardly)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with oo CLI commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before actions; OOMOL injects credentials server-side.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

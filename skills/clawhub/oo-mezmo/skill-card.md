@@ -1,46 +1,53 @@
-## Description: <br>
-Use this skill for Mezmo requests involving searching or reading account data instead of calling the Mezmo API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mezmo helps agents inspect live action schemas and read Mezmo ingestion status and usage data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to query Mezmo ingestion status and usage reporting through an OOMOL-connected account. It supports read-only status checks and usage summaries grouped by app, host, or tag. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Mezmo account and OOMOL service-mediated credentials. <br>
-Mitigation: Install only if you trust OOMOL and are comfortable connecting Mezmo through its service. <br>
-Risk: The setup flow includes installing and authenticating the oo CLI. <br>
-Mitigation: Review the oo CLI install step before running it and use first-time setup only after an authentication or connection failure. <br>
-Risk: Future versions could add actions beyond the currently listed read-only status and usage operations. <br>
-Mitigation: Keep the connector scoped to the listed read-only Mezmo actions unless a later release is reviewed and approved. <br>
+## Use Case:
 
+Developers and operators use this skill to check Mezmo ingestion status and retrieve usage summaries grouped by app, host, or tag through the oo CLI.
 
-## Reference(s): <br>
-- [Mezmo homepage](https://www.mezmo.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-mezmo) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces agent guidance for read-only Mezmo connector actions; live command responses are JSON from the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: Setup instructions include remote installer commands that execute scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path, prefer an official signed or package-manager installation method, verify checksums or signatures where available, and avoid elevated shells for pipe-to-shell installation.
+
+## Reference(s):
+
+- [ClawHub Mezmo Skill](https://clawhub.ai/oomol/skills/oo-mezmo)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Mezmo Homepage](https://www.mezmo.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector actions return JSON data and execution metadata through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

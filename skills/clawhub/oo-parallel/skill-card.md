@@ -1,42 +1,61 @@
-## Description: <br>
-Parallel (parallel.ai) helps agents read, create, and update Parallel data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Parallel lets an agent use Parallel for web search, public URL content extraction, and task-run based web research or structured data enrichment through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate Parallel through an OOMOL-connected account for web research, structured data enrichment, URL extraction, ranked web search, and task-run retrieval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create Parallel task runs that change account state. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before approving create_task_run or any future write/destructive connector action. <br>
-Risk: The skill depends on OOMOL account setup, the oo CLI, and a connected Parallel account. <br>
-Mitigation: Run first-time setup only when a command fails with an authentication, missing CLI, missing scope, expired credential, or connection error. <br>
+## Use Case:
 
+Developers and agents use this skill to search the web, extract content from public URLs, and create or retrieve Parallel task runs for research and structured enrichment. It is intended for users who have the oo CLI installed, are signed in to OOMOL, and have connected Parallel.
 
-## Reference(s): <br>
-- [Parallel homepage](https://parallel.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-parallel) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce Parallel task-run status, ranked source excerpts, extracted content, or setup guidance depending on the requested action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: artifact metadata and release evidence) <br>
+Risk: First-time setup documentation includes commands that pipe remote installer scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official, verifiable installation path, review installer contents before running them, and avoid piping remote scripts directly into bash or PowerShell.
+
+Risk: The skill operates through OOMOL as an intermediary for Parallel credentials and action execution.
+
+Mitigation: Install only when comfortable with OOMOL handling the Parallel connection server-side, and confirm that the connected OOMOL and Parallel accounts are expected.
+
+Risk: Actions tagged as write, such as create_task_run, can create Parallel state.
+
+Mitigation: Confirm the exact payload and intended effect with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-parallel)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Parallel Homepage](https://parallel.ai)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live action schemas before execution; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

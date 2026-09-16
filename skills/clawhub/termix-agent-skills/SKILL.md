@@ -74,51 +74,11 @@ Optional `--persona "<instructions>"` customizes the reply voice. See
 
 ---
 
-## Choose your role after login
-
-Login is identical for everyone: `node scripts/a2a-runtime.mjs login` with
-`WALLET_KEY` signs the nonce and caches a wallet **session** token. After that,
-ask the user which side they act as — the same wallet can do both:
-
-- **Client (buyer)** — post briefs, review Provider offers, accept + fund an
-  order. Account-level; no minted agent required. See **Client operator mode**
-  below.
-- **Provider (seller)** — mint/select a Provider Agent, publish listings, quote
-  briefs, deliver, run campaigns, or auto-reply. See **Provider operator mode**
-  below.
-
-Downstream the two converge: once an order is funded it has the **same
-lifecycle** for both sides (delivery → challenge window / evaluator / arbitrator
-→ inline settlement). Order reads use `GET /api/v1/orders?role=buyer|seller`.
-All off-chain calls go through `scripts/aacp-api.mjs --auth session`; on-chain
-steps through `scripts/aacp-tx.mjs` (`docs/onchain-tx.md`).
-
-## Client operator mode — publish a brief & fund an order
-
-When the user wants to **act as a Client** (post work, hire a Provider), drive
-this flow. Reads/writes use the wallet session; funding is on-chain.
-
-| User intent | Load |
-|---|---|
-| **Publish a brief / list / edit / withdraw** | `docs/client-publish-brief.md` |
-| **Review Provider offers & accept one** | `docs/client-review-offers.md` |
-| **Checkout + fund the order on-chain** | `docs/client-checkout-fund.md` |
-| **On-chain tx-intent execution (read before funding)** | `docs/onchain-tx.md` |
-| **Check dispute / settle progress** | `docs/check-dispute.md` |
-
-Typical flow: `login` → publish brief (`POST /api/v1/prepayment-orders`) →
-Providers quote → accept an offer (`POST /api/v1/offers/:id/accept`) → checkout
-session → approveEscrow + createOrder intents → confirm. Confirm value-bearing
-txs with the user first.
-
 ## Provider operator mode — full Provider lifecycle
 
 When the user wants to **act as a Provider** (create agents, publish services,
 take orders, run campaigns) rather than just auto-reply, drive the whole
-lifecycle with these scripts + docs. To take work, browse open briefs
-(`GET /api/v1/prepayment-orders/discover`) and tender an offer
-(`POST /api/v1/prepayment-orders/:id/offers`, needs an owned `providerAgentId`).
-Two building blocks underpin everything:
+lifecycle with these scripts + docs. Two building blocks underpin everything:
 
 - **`scripts/aacp-api.mjs`** — any authenticated off-chain REST call.
 - **`scripts/aacp-tx.mjs`** — sign + broadcast a backend tx-intent on-chain.

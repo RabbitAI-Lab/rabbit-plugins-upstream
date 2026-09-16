@@ -1,39 +1,57 @@
-## Description: <br>
-Klazify helps agents inspect Klazify connector schemas and run read-oriented domain enrichment actions through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Klazify routes Klazify website categorization and domain-enrichment requests through the OOMOL-connected oo CLI instead of direct API calls.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill when they want an agent to categorize URLs, retrieve company and domain details, find similar domains, or inspect social and technology signals through Klazify. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-klazify) <br>
-- [Klazify homepage](https://www.klazify.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+Developers and external users use this skill to inspect Klazify action schemas and run read-only website categorization, company profile, domain expiration, logo, IAB category, similar-domain, social-link, and technology-stack lookups through an OOMOL-connected account.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and frontmatter) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: First-time setup instructions include internet-downloaded installers executed directly in a shell.
+
+Mitigation: Install only from a trusted OOMOL CLI distribution path, and prefer a verified or package-manager install when available.
+
+Risk: Website and domain lookups may send confidential internal URLs to OOMOL or Klazify.
+
+Mitigation: Submit internal or confidential URLs only when authorized to share them with OOMOL and Klazify.
+
+## Reference(s):
+
+- [ClawHub Klazify Skill](https://clawhub.ai/oomol/skills/oo-klazify)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Klazify Homepage](https://www.klazify.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before requests; OOMOL injects credentials server-side.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

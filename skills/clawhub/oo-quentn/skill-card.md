@@ -1,44 +1,56 @@
-## Description: <br>
-This skill lets agents operate Quentn (quentn.com) through an OOMOL-connected account for reading, creating, updating, and deleting CRM data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Quentn lets agents operate Quentn through an OOMOL-connected account to read, create, update, and delete contacts, terms, and users via the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to run Quentn CRM read, write, and destructive actions through the OOMOL connector while first checking each action schema and confirming state-changing payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create or modify Quentn CRM records. <br>
-Mitigation: Review the exact action payload and expected effect with the user before approving create, update, or set actions. <br>
-Risk: Destructive actions can delete contacts or terms or remove contact-term assignments. <br>
-Mitigation: Confirm the target record, action name, and payload explicitly before approving delete or remove actions. <br>
+## Use Case:
 
+Developers and external users use this skill to automate Quentn CRM workflows through an OOMOL-connected account, including contact lookup, contact and term management, and user or term listing.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-quentn) <br>
-- [Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Quentn Homepage](https://quentn.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [State-changing write and destructive actions require user confirmation before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: skill frontmatter and release evidence) <br>
+Risk: First-time setup directs users to run remote oo CLI installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer through a safer channel first, or prefer a pinned or package-manager installation when available.
+
+Risk: Write and destructive actions can change or delete Quentn contacts and terms.
+
+Mitigation: Inspect the live connector schema, confirm the exact target and payload with the user, and require explicit approval before state-changing actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-quentn)
+- [Quentn homepage](https://quentn.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live connector schema inspection before payload construction; command responses are JSON.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

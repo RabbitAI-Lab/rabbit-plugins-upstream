@@ -1,44 +1,51 @@
-## Description: <br>
-The Swarm connector helps agents search and read The Swarm company and profile data through the OOMOL `oo` CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+The Swarm connector helps agents search and read company, profile, and credit usage data through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill when they need an agent to fetch The Swarm company or profile records, search for matching IDs, or report authenticated team API credit usage through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill operates through an authenticated OOMOL connection and can return The Swarm company, profile, search, and credit-usage data. <br>
-Mitigation: Use it only for requested The Swarm tasks, inspect the live connector schema before building payloads, and avoid sending secrets, API keys, customer data, or unrelated personal information. <br>
-Risk: Credentialed connector access could be mistaken for approval to perform sensitive exports or actions in other systems. <br>
-Mitigation: Treat OOMOL credentials and grant tokens as connector access only; require separate human or platform approval for payments, databases, exports, or other sensitive operations. <br>
+## Use Case:
 
+Developers and external users use this skill to query The Swarm company and profile records, fetch records by known identifiers, and check authenticated team credit usage from an OOMOL-connected account.
 
-## Reference(s): <br>
-- [The Swarm homepage](https://www.theswarm.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-the-swarm) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill instructs the agent to inspect live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Setup instructions include direct execution of remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Have a human review the installer source and prefer a versioned, signed, or checksum-verified install path before allowing an agent to run installation commands.
+
+## Reference(s):
+
+- [The Swarm homepage](https://www.theswarm.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects returned by the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

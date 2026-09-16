@@ -1,43 +1,56 @@
-## Description: <br>
-Riveter (riveterhq.com) connector for searching and reading Riveter data through the OOMOL oo CLI instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Riveter enables agents to operate Riveter through an OOMOL-connected account for account lookup and public webpage scraping.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to run read-oriented Riveter tasks through an OOMOL-connected account, including retrieving connected account and API-key details and scraping public webpages for extracted text. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The connector can retrieve Riveter account and API-key details for the connected account. <br>
-Mitigation: Install and use the skill only when the user trusts OOMOL and intends to use the oo CLI with their Riveter account. <br>
-Risk: The skill depends on live OOMOL authentication, a connected Riveter account, and available OOMOL billing credits. <br>
-Mitigation: Run setup or billing steps only after an auth, connection, scope, credential, app readiness, or billing error occurs. <br>
+## Use Case:
 
+Developers and agents use this skill to access Riveter through the OOMOL oo CLI, retrieve connected account details, and scrape public webpages for extracted text.
 
-## Reference(s): <br>
-- [ClawHub Riveter Skill Page](https://clawhub.ai/oomol/skills/oo-riveter) <br>
-- [Riveter Homepage](https://riveterhq.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include JSON responses from oo CLI connector actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Fallback setup includes remote shell installers for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI manually from a trusted, verifiable source and approve installation commands before an agent runs them.
+
+Risk: The skill depends on OOMOL authentication and a connected Riveter API key.
+
+Mitigation: Have the user perform login and connection steps directly, and only retry actions after authentication or connection errors are resolved.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-riveter)
+- [Riveter Homepage](https://riveterhq.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON CLI responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Action results return data with execution metadata from the oo CLI connector.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

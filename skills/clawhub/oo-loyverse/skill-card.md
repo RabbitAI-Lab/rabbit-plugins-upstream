@@ -1,43 +1,56 @@
-## Description: <br>
-Loyverse (loyverse.com). Use this skill for ANY Loyverse request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Loyverse (loyverse.com). Use this skill for ANY Loyverse request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to look up Loyverse merchant, store, category, item, customer, and receipt data through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Loyverse account and OOMOL oo CLI access, so failed or unnecessary setup steps could expose authentication or billing workflows. <br>
-Mitigation: Install only when the user intends to use OOMOL's oo CLI with a connected Loyverse account; run setup, billing, or authentication steps only after a matching command failure or explicit user request. <br>
-Risk: The current action list is read-only, but future connector actions may change Loyverse state. <br>
-Mitigation: Treat this release as a read-only lookup helper and confirm the exact payload and effect before any future write or destructive action. <br>
+## Use Case:
 
+External users and developers use this skill to read Loyverse business data through an OOMOL-connected account, including merchant profiles, stores, categories, items, customers, and receipts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-loyverse) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Loyverse homepage](https://loyverse.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action execution; connector responses include data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence release.version and frontmatter metadata.version) <br>
+Risk: First-time setup may execute remote installer code from OOMOL directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing, prefer a verified and versioned oo CLI installation channel when possible, and run setup commands only after an actual authentication or connection failure.
+
+Risk: Connecting Loyverse grants OOMOL access to read-only business data available through the connector.
+
+Mitigation: Connect Loyverse only when that access is acceptable for the account and data being queried.
+
+## Reference(s):
+
+- [Loyverse homepage](https://loyverse.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Loyverse ClawHub page](https://clawhub.ai/oomol/skills/oo-loyverse)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence release version and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

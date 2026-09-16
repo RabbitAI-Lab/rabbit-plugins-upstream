@@ -6,7 +6,7 @@ last-reviewed: 2026-07-09
 
 # societeInfo (Societe Info)
 
-French-market company and contact data, anchored on the official registry: registration numbers, NAF activity codes, juridical forms, conventions collectives, filed financials (`minSales` / `minProfits`). Two actions, both premium at 4 credits — `search` bills **4 per item returned**, `enrich` a fixed 4. Reach for it only when the target is a **French entity** and the generalist stack (`cargo` native → `waterfall`, 0.25–1 for companies) lacks the registry depth you need; for everything else it's 8–16× the going rate ([`../references/stage-action-map.md`](../references/stage-action-map.md)).
+French-market company and contact data, anchored on the official registry: registration numbers, NAF activity codes, juridical forms, conventions collectives, filed financials (`minSales` / `minProfits`). Two actions, both premium at 4 credits — `search` bills **4 per item returned**, `enrich` a fixed 4. Reach for it only when the target is a **French entity** and the generalist stack (`aiArk` → `companyEnrich` → `waterfall`, 0.01–1 for companies) lacks the registry depth you need; for everything else it's 8–16× the going rate ([`../references/stage-action-map.md`](../references/stage-action-map.md)).
 
 ## Credits-based actions
 
@@ -21,7 +21,7 @@ French-market company and contact data, anchored on the official registry: regis
 - ✅ **Registry-grade company resolution** — `enrich` from a domain, name + address, or LinkedIn URL to the official record (registration number and legal identity).
 - ✅ **Contacts at a registered company** — contact `search` keyed on the `registrationNumber` you got from a company search/enrich, filtered by role/level.
 - ❌ **Non-French targets** — it's a France-scoped registry source; the stack covers everything else far cheaper.
-- ❌ **Cheap firmographics on French companies** — if you don't need registry fields, `companyEnrich.enrichByDomain` (0.25) or `cargo` (0.5) suffices.
+- ❌ **Cheap firmographics on French companies** — if you don't need registry fields, `aiArk.enrichCompany` (0.01) or `companyEnrich.enrichByDomain` (0.25) suffices.
 
 ## Patterns
 
@@ -29,8 +29,8 @@ French-market company and contact data, anchored on the official registry: regis
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"societeInfo","actionSlug":"search","config":{}}' \
-  --record '{"objectType":"company","limit":10,"withSite":true,"searchFields":[{"name":"query","value":"logiciel"},{"name":"where","value":"Paris"},{"name":"minStaff","value":50}]}' \
+  --action '{"kind":"connector","integrationSlug":"societeInfo","actionSlug":"search"}' \
+  --data '{"objectType":"company","limit":10,"withSite":true,"searchFields":[{"name":"query","value":"logiciel"},{"name":"where","value":"Paris"},{"name":"minStaff","value":50}]}' \
   --wait-until-finished
 ```
 
@@ -40,8 +40,8 @@ cargo-ai orchestration action execute \
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"societeInfo","actionSlug":"enrich","config":{}}' \
-  --record '{"objectType":"company","enrichFields":[{"name":"domainName","value":"acme.fr"},{"name":"minMatchScore","value":0.8}]}' \
+  --action '{"kind":"connector","integrationSlug":"societeInfo","actionSlug":"enrich"}' \
+  --data '{"objectType":"company","enrichFields":[{"name":"domainName","value":"acme.fr"},{"name":"minMatchScore","value":0.8}]}' \
   --wait-until-finished
 ```
 
@@ -62,6 +62,12 @@ cargo-ai orchestration action execute \
 - `enrich` — **ENRICH (company/contact), French specialist rung**: outside the default chain; promote per-batch for French entities needing registry fields.
 - `search` — **SOURCE, French specialist**: registry-filtered sourcing feeding the normal ENRICH → VERIFY path (found contacts' emails still verify via `waterfall.verifyEmail`, 0.1).
 
+## Recurring use
+
+- **No schedule fit** — registry identity (registration number, NAF code, juridical form) is near-immutable; a scheduled re-`search` or re-`enrich` just re-bills 4 credits per unchanged row.
+- **Recurring role = in-play enrich node:** run `enrich` only on net-new French rows entering a play, gated on an empty `registrationNumber` column so segment re-evaluation never re-bills resolved rows.
+- **Filed financials move yearly at most** — if `minSales`/`minProfits`-derived fields need refreshing, do it as a rare, explicitly-approved capped batch, not a cadence.
+
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"societeInfo","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"societeInfo","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.**

@@ -1,43 +1,58 @@
-## Description: <br>
-SupportBee helps agents operate a connected SupportBee account through OOMOL to read, create, update, and delete support-desk data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SupportBee (supportbee.com). Use this skill for ANY SupportBee request -- reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Support teams and developers use this skill to inspect SupportBee connector schemas and run OOMOL connector actions for tickets, labels, teams, users, and customer groups. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and destructive SupportBee actions can change support-desk records, including tickets, replies, comments, users, and labels. <br>
-Mitigation: Confirm the exact action, target, payload, and expected effect with the user before running write or destructive actions. <br>
-Risk: The skill operates a connected SupportBee account through OOMOL, so actions may affect real customer-support data. <br>
-Mitigation: Install and use it only for accounts where agent operation through OOMOL is intended, and prefer read-only actions unless a change is explicitly requested. <br>
+## Use Case:
 
+External users, support operators, and developers use this skill to inspect SupportBee action schemas and operate tickets, replies, comments, users, teams, labels, and search through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [SupportBee Skill Page](https://clawhub.ai/oomol/skills/oo-supportbee) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [SupportBee Homepage](https://supportbee.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector action responses are JSON objects with data and meta.executionId when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and artifact metadata) <br>
+Risk: The setup instructions include remote installer commands that can execute code from OOMOL-controlled URLs on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup instructions before installing, prefer a verified release or package manager, and run the pipe-to-shell or iex commands only when the installer source is trusted.
+
+Risk: Write and destructive SupportBee actions can create, update, or remove SupportBee records.
+
+Mitigation: Inspect the live action schema before building a payload, confirm the exact payload and effect with the user for write actions, and require explicit approval for destructive actions.
+
+## Reference(s):
+
+- [SupportBee Homepage](https://supportbee.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [SupportBee Skill Page](https://clawhub.ai/oomol/skills/oo-supportbee)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [SupportBee Icon](https://static.oomol.com/logo/third-party/supportbee.png)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the oo CLI to inspect action schemas before execution and return JSON responses when run with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

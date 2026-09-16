@@ -1,46 +1,60 @@
-## Description: <br>
-MetatextAI (metatext.ai) operates a connected MetatextAI account through the OOMOL oo CLI connector for reading, creating, and updating guardrail-related data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MetatextAI connector skill for reading, creating, and updating MetatextAI data through the OOMOL-connected oo CLI instead of direct API calls.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect MetatextAI connector schemas, manage guardrail policies, evaluate chat transcripts against configured guardrails, and run selected red-team test scans for a connected application. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to a connected MetatextAI account through OOMOL. <br>
-Mitigation: Install it only when you intend the agent to operate that account, and keep account connection and billing state under user control. <br>
-Risk: Policy creation changes MetatextAI guardrail configuration. <br>
-Mitigation: Review the exact policy payload and expected effect with the user before running write actions. <br>
-Risk: First-time setup may require installing the oo CLI from a shell command. <br>
-Mitigation: Verify the oo CLI installer source before running setup commands. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect MetatextAI action schemas, evaluate chat transcripts against configured guardrails, list and create guardrail policies, and run red-team test scans through an authenticated OOMOL connection.
 
-## Reference(s): <br>
-- [MetatextAI ClawHub page](https://clawhub.ai/oomol/oo-metatextai) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
-- [MetatextAI homepage](https://metatext.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; action responses are JSON from the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: evidence.release.version and SKILL.md frontmatter) <br>
+Risk: The setup flow includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installer commands before use, prefer verified official documentation or a package manager, and do not let an agent run the remote installer automatically.
+
+Risk: Transcript evaluation can send chat content to the connected MetatextAI service.
+
+Mitigation: Evaluate only authorized transcripts and remove unnecessary secrets or personal data before submission.
+
+Risk: Policy creation changes guardrail configuration in the connected MetatextAI application.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-metatextai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [MetatextAI homepage](https://metatext.ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May call MetatextAI connector actions through the oo CLI after checking live action schemas.]
+
+## Skill Version(s):
+
+1.0.4 (source: server evidence and frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

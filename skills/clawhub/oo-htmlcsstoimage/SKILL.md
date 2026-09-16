@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "HTML/CSS to Image"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["htmlcsstoimage"]
   icon: "https://static.oomol.com/logo/third-party/htmlcsstoimage.svg"
 ---

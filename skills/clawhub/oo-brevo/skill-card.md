@@ -1,45 +1,57 @@
-## Description: <br>
-Brevo lets an agent read, create, update, and delete Brevo data through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Brevo helps agents read, create, update, and delete Brevo data through the OOMOL-connected oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent manage Brevo account, contact, contact-list, and folder workflows through an OOMOL-connected Brevo account. It supports read actions directly and requires confirmation before write or destructive actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill operates a Brevo account through OOMOL and may require sensitive account connections or scopes. <br>
-Mitigation: Connect only the Brevo account and scopes intended for agent use, and rely on OOMOL server-side credential injection rather than handling raw tokens. <br>
-Risk: Installer commands fetch and execute the oo CLI installer from a remote URL. <br>
-Mitigation: Review the oo CLI installer before running it, and run setup only when the CLI is missing. <br>
-Risk: Write and destructive actions can create, update, delete, or remove Brevo contact and list data. <br>
-Mitigation: Inspect the live action schema before building payloads, confirm write payloads and effects with the user, and require explicit approval for destructive actions. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Brevo account details, contacts, contact lists, folders, and list memberships from an agent while relying on OOMOL-managed credentials.
 
-## Reference(s): <br>
-- [ClawHub Brevo skill](https://clawhub.ai/oomol/oo-brevo) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Brevo homepage](https://www.brevo.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions return JSON data with execution metadata; write and destructive actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: Setup instructions include unverified remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before use and prefer a verified, versioned oo CLI source with checksum or signature validation.
+
+Risk: Brevo write and destructive actions can create, update, remove, or delete contact and list data.
+
+Mitigation: Confirm the exact payload, target, and expected effect with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Brevo Skill](https://clawhub.ai/oomol/skills/oo-brevo)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Brevo Homepage](https://www.brevo.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live Brevo connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

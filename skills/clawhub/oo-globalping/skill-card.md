@@ -1,45 +1,56 @@
-## Description: <br>
-Globalping handles Globalping requests through OOMOL, including reading, creating, and updating data instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Globalping actions through the OOMOL oo CLI for creating measurements, checking limits and credits, retrieving measurement results, and listing online probes.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to run Globalping connector actions through an OOMOL-connected account, including creating measurements, retrieving measurement status and results, checking account limits, and listing online probes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create Globalping measurements through an OOMOL-connected account. <br>
-Mitigation: Confirm the exact create_measurement payload and expected effect with the user before execution. <br>
-Risk: The skill depends on OOMOL as the broker for Globalping access and may use connected account credentials. <br>
-Mitigation: Install it only when OOMOL brokerage is intended, review the OOMOL CLI install command, and connect only the expected Globalping account and scopes. <br>
-Risk: Connector action schemas can change over time. <br>
-Mitigation: Inspect the live connector schema before constructing or running an action payload. <br>
+## Use Case:
 
+Developers and operators use this skill to run Globalping network measurements and inspect account limits, measurement status, results, and available probes through an OOMOL-connected Globalping account.
 
-## Reference(s): <br>
-- [Globalping homepage](https://globalping.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-globalping) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return connector JSON responses that include action data and an execution ID.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The first-time setup path can execute a remote oo CLI installer directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official package-manager or verified release installation path, and use the remote installer only after reviewing and trusting the OOMOL installer source.
+
+Risk: The create_measurement action changes Globalping state and may consume account quota or credits.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [Globalping homepage](https://globalping.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-globalping)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

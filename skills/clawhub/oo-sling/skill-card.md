@@ -1,42 +1,61 @@
-## Description: <br>
-Sling (getsling.com) skill for searching and reading Sling data through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Sling (getsling.com). Use this skill for ANY Sling request: searching and reading data through an OOMOL-connected Sling account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Sling schedules, shifts, users, groups, tasks, and calendar events through an already connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sling responses can expose sensitive schedule, user, group, task, and calendar data from the connected OOMOL account. <br>
-Mitigation: Install and use the skill only when those Sling queries are intended, and avoid invoking it for ambiguous Sling mentions. <br>
-Risk: Authentication, connection, scope, credential, or billing failures can interrupt connector access. <br>
-Mitigation: Use the documented setup and recovery steps only after a matching command failure, rather than proactively opening login or connection flows. <br>
+## Use Case:
 
+Employees, operators, and agents use this skill to retrieve Sling sessions, shifts, groups, tasks, users, coworker details, and calendar events through the OOMOL `oo` CLI connector.
 
-## Reference(s): <br>
-- [ClawHub Sling skill page](https://clawhub.ai/oomol/skills/oo-sling) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Sling homepage](https://getsling.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live Sling connector schemas before actions; current artifact actions are read-only get and list operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Setup instructions include direct remote installer execution.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use official, verifiable installation instructions and do not allow an agent to run curl-to-shell or irm-to-iex installer commands automatically.
+
+Risk: Connecting Sling through OOMOL may expose connected Sling organization data to connector actions.
+
+Mitigation: Confirm the intended OOMOL account, Sling connection, and organization before login or connector use.
+
+Risk: Billing setup or recharge actions may be needed after OOMOL insufficient-credit errors.
+
+Mitigation: Require explicit user confirmation before any billing or recharge step.
+
+## Reference(s):
+
+- [Sling Skill Page](https://clawhub.ai/oomol/skills/oo-sling)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Sling Homepage](https://getsling.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reads Sling organization data through OOMOL connector actions after the user has installed the oo CLI, signed in, and connected Sling.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

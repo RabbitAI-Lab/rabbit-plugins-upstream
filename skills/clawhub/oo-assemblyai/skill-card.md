@@ -1,45 +1,61 @@
-## Description: <br>
-Use AssemblyAI through the OOMOL oo CLI to create, list, retrieve, and delete transcripts without calling the AssemblyAI API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate AssemblyAI through an OOMOL-connected account to create, delete, list, and retrieve transcript data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate AssemblyAI transcript workflows from an OOMOL-connected account, including creating transcripts from media URLs and retrieving transcript details, paragraphs, or sentences. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create transcripts and delete transcripts in the connected AssemblyAI account. <br>
-Mitigation: Confirm write payloads and require explicit approval for destructive transcript deletion before running the action. <br>
-Risk: The first-time setup path may run a remote oo CLI installer. <br>
-Mitigation: Run the installer only when the oo command is missing and the user trusts OOMOL's installation path. <br>
-Risk: Connector inputs may drift from documented examples. <br>
-Mitigation: Fetch the live action schema with oo connector schema before constructing each payload. <br>
+## Use Case:
 
+Developers and external users use this skill to operate AssemblyAI through an OOMOL-connected account, including creating transcripts, listing transcripts, retrieving transcript details, and getting paragraph or sentence views of transcripts.
 
-## Reference(s): <br>
-- [AssemblyAI homepage](https://www.assemblyai.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub AssemblyAI skill page](https://clawhub.ai/oomol/skills/oo-assemblyai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash, PowerShell, JSON, and text blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects with data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md metadata) <br>
+Risk: The security review flags unverified remote installer commands as high impact.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official package or verified download path instead of running curl|bash or irm|iex installer commands blindly.
+
+Risk: The skill can create and delete AssemblyAI transcripts through a connected account.
+
+Mitigation: Review write and delete requests carefully, confirm the exact payload and target transcript, and require explicit approval for destructive actions.
+
+Risk: OOMOL brokers access to the user's AssemblyAI account.
+
+Mitigation: Install only when the user is comfortable with OOMOL-brokered access and has connected the intended AssemblyAI account.
+
+## Reference(s):
+
+- [ClawHub AssemblyAI Skill](https://clawhub.ai/oomol/skills/oo-assemblyai)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [AssemblyAI Homepage](https://www.assemblyai.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May invoke AssemblyAI connector actions through the oo CLI and return JSON responses containing action data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

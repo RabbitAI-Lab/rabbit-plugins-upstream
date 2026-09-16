@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Zixflow"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["zixflow"]
   icon: "https://static.oomol.com/logo/third-party/zixflow.svg"
 ---

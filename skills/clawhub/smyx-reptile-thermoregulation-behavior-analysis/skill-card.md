@@ -1,42 +1,54 @@
-## Description: <br>
-Analyzes fixed-camera reptile enclosure videos to report basking and hiding dwell time, zone transitions, thermal preference, activity rhythm, and abnormal thermoregulation alerts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Through fixed enclosure cameras, the skill analyzes reptile behavior videos to detect movement frequency, dwell duration, activity rhythms, and basking-versus-hiding zone use.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users, reptile keepers, breeders, and smart-enclosure app integrations use this skill to analyze enclosure video, identify thermoregulation patterns, and generate daily zone-utilization reports with non-diagnostic recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Reptile videos, video URLs, and report requests may be sent to the publisher's cloud service, and the security evidence notes local identity, external account session, and cached token behavior. <br>
-Mitigation: Use only footage and URLs appropriate for the publisher to process, avoid private signed URLs or sensitive camera footage, and review account and retention behavior before deployment. <br>
-Risk: Behavior reports and alerts could be mistaken for veterinary diagnosis or automatic device-control decisions. <br>
-Mitigation: Treat outputs as behavior analysis and husbandry guidance only; confirm health concerns with a qualified reptile veterinarian and require user confirmation for any equipment changes. <br>
+## Use Case:
 
+External reptile keepers, vivarium operators, and developers use this skill to analyze fixed-camera enclosure videos, generate thermal-zone utilization reports, and surface behavior-based reminders when activity patterns appear abnormal. The skill is intended for welfare and environment-optimization support, not veterinary diagnosis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-reptile-thermoregulation-behavior-analysis) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown summaries and JSON analysis reports with optional shell command invocations.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links, historical report tables, alert levels, and non-diagnostic husbandry recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence; artifact frontmatter reports 1.0.5) <br>
+Risk: The security review flags automatic account linkage and unsafe handling of enclosure videos, credentials, and historical reports.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after confirming that users accept vendor-cloud processing under the automatically managed identity and that credential-bearing requests are limited to trusted hosts.
+
+Risk: Development HTTP configuration and shared workspace token storage can expose video, report, or credential data.
+
+Mitigation: Require HTTPS production endpoints, remove development HTTP settings before deployment, and avoid storing reusable tokens in a shared workspace database.
+
+## Reference(s):
+
+- [API Interface Documentation](references/api_doc.md)
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-reptile-thermoregulation-behavior-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or JSON report with thermal-zone metrics, activity labels, alert level, recommendations, and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should avoid disease diagnosis, medication names, dosing, and unauthorized device-control actions.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

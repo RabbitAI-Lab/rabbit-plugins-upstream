@@ -1,43 +1,57 @@
-## Description: <br>
-This skill supports Google Analytics requests involving reading, creating, and updating data through the OOMOL Google Analytics connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Analytics helps an agent operate Google Analytics through an OOMOL-connected account, including reporting, account and property discovery, metadata lookup, quota inspection, and selected property configuration updates.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect Google Analytics account and property setup, run GA4 reports, and manage selected property or custom definition settings through the OOMOL connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill includes actions that can change Google Analytics property settings and custom definitions. <br>
-Mitigation: Confirm the exact action, target, payload, and expected effect with the user before running write or destructive actions. <br>
-Risk: Connector actions depend on the connected Google Analytics account and live action schemas. <br>
-Mitigation: Inspect the connector schema before each action and use first-time setup steps only when an authentication or connection error occurs. <br>
+## Use Case:
 
+Developers and analysts use this skill to let an agent query Google Analytics accounts, properties, reports, metadata, and quotas through an OOMOL-connected Google Analytics account. It also supports guarded write actions for custom dimensions, custom metrics, data retention, and property settings.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-google-analytics) <br>
-- [Google Analytics](https://analytics.google.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before building action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: First-time setup includes remote installer commands that execute local code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat setup as high-trust local code execution; prefer an official package manager or separately download, inspect, and verify the installer before running it.
+
+Risk: Some actions can change Google Analytics custom definitions, data retention, or property settings.
+
+Mitigation: Confirm the exact Google Analytics property, action, and payload with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-google-analytics)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Google Analytics](https://analytics.google.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Google Analytics Icon](https://static.oomol.com/logo/third-party/google_analytics.svg)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

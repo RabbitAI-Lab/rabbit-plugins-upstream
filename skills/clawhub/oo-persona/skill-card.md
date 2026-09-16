@@ -1,42 +1,55 @@
-## Description: <br>
-Persona helps agents inspect schemas and run Persona inquiry actions through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Persona helps agents read, create, list, and update Persona inquiries through an OOMOL-connected oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Persona inquiries from an agent, including creating inquiries from templates, retrieving and listing inquiries, and updating supported inquiry metadata after reviewing write payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persona workflows can involve sensitive identity and inquiry data. <br>
-Mitigation: Use a narrowly scoped Persona connection, review requested actions, and avoid exposing returned identity data beyond the user's task. <br>
-Risk: Write actions can create or update Persona inquiries. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
+## Use Case:
 
+External users and developers use this skill to operate Persona inquiries from an agent, including retrieval, listing, creation, and updates through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/oomol/skills/oo-persona) <br>
-- [Persona homepage](https://withpersona.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands execute through the oo CLI and may return JSON from Persona connector actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: Fallback setup guidance may lead users to run an unverified internet installer directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified oo CLI install path with checksums or signed packages before installation.
+
+Risk: Create and update actions can change Persona inquiry state.
+
+Mitigation: Inspect the live connector schema and confirm the exact payload and expected effect before executing write actions.
+
+## Reference(s):
+
+- [Persona homepage](https://withpersona.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live connector schema inspection before action payloads; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Ambient Weather"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["ambient_weather"]
   icon: "https://static.oomol.com/logo/third-party/Ambient%20Weather.svg"
 ---

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/google-messages-local-archive",
   "slug": "google-messages-local-archive",
   "ownerHandle": null,
-  "version": "0.3.1",
-  "updatedAt": 1780505438365,
-  "contentHash": "3713db36d936a812dab5d504e95640a4d383c192b474c604f240a8e8a71eb183",
-  "fetchedAt": "2026-07-26T18:35:51.547Z"
+  "version": "1.1.0",
+  "updatedAt": 1789510168832,
+  "contentHash": "3d01308c8b5882aaf7f6134a52843ab6e19877d3788fdda44d28057cb6079b07",
+  "fetchedAt": "2026-09-16T12:45:46.092Z"
 }

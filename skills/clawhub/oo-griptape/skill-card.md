@@ -1,42 +1,58 @@
-## Description: <br>
-Operates Griptape Cloud through an OOMOL-connected account using the oo CLI for assistant, run, and organization workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Griptape lets agents operate Griptape Cloud through an OOMOL-connected account, including assistant, run, event, and organization actions.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Griptape connector schemas and manage Griptape Cloud assistants, runs, and organizations through OOMOL's oo CLI. It supports read workflows plus confirmed write and destructive lifecycle actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, cancel, and delete Griptape resources. <br>
-Mitigation: Require confirmation of the exact target, payload, and expected effect before write or destructive actions. <br>
-Risk: Connected account scopes may allow access to or changes in Griptape data. <br>
-Mitigation: Install only for intended Griptape account operations, review connection scopes, and require confirmation before state-changing actions. <br>
+## Use Case:
 
+Developers and external users use this skill to inspect Griptape connector schemas, run Griptape Cloud actions through the oo CLI, and manage assistants, runs, events, and organizations from an agent workflow.
 
-## Reference(s): <br>
-- [Griptape homepage](https://www.griptape.ai) <br>
-- [oo CLI repository](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-griptape) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Setup instructions include remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the install path before use, prefer a verified package or inspected installer, and avoid running remote shell pipelines directly.
+
+Risk: The skill can perform account-changing Griptape Cloud actions, including writes and assistant deletion.
+
+Mitigation: Confirm every write or delete action against the exact Griptape resource and payload before execution.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-griptape)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Griptape Homepage](https://www.griptape.ai)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Skill Icon](https://static.oomol.com/logo/third-party/griptape.svg)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include oo CLI commands that perform read, write, or destructive Griptape Cloud actions after schema inspection and user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

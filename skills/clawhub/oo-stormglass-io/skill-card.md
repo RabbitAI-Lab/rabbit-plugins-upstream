@@ -1,39 +1,56 @@
-## Description: <br>
-Stormglass helps an agent retrieve forecast weather, hourly tide sea-level data, and high or low tide extremes for a single coordinate through an OOMOL-connected Stormglass account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Stormglass (stormglass.io) supports Stormglass data requests such as tide extremes, tide sea level, and point weather forecasts through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill when they want an agent to answer Stormglass weather or tide questions by running the OOMOL oo CLI connector instead of calling Stormglass directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: First-time use can require installing the oo CLI and creating a persistent OOMOL and Stormglass connection. <br>
-Mitigation: Install and connect only when needed, and clarify ambiguous Stormglass requests before running connector commands. <br>
+## Use Case:
 
+Developers and agents use this skill to query Stormglass marine and weather data through the OOMOL oo CLI after the user has connected a Stormglass account. It supports coordinate-based tide extremes, hourly tide sea-level data, and weather forecasts.
 
-## Reference(s): <br>
-- [Stormglass homepage](https://stormglass.io/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and connector JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Stormglass connector actions return JSON data with an execution id; first-time setup may require oo CLI authentication and a Stormglass connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release and artifact metadata) <br>
+Risk: Setup instructions include remote installer commands that pipe downloaded scripts into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not allow an agent to run installer commands automatically; install the oo CLI from a trusted, reviewed source with version pinning and checksum or signature verification where possible.
+
+Risk: Stormglass access depends on a connected OOMOL account and server-side credentials.
+
+Mitigation: Connect Stormglass deliberately through the user's OOMOL account and retry setup only after explicit authentication or connection errors.
+
+## Reference(s):
+
+- [Stormglass homepage](https://stormglass.io/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-stormglass-io)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses include connector data and meta.executionId when actions are run with --json.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

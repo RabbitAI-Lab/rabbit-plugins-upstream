@@ -1,45 +1,60 @@
-## Description: <br>
-Use this skill for WooCommerce requests, including reading, creating, and updating store data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+WooCommerce helps an agent read, create, and update WooCommerce store data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect WooCommerce action schemas and run connector actions for products, orders, customers, coupons, categories, tags, attributes, variations, order notes, and WordPress media uploads through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change WooCommerce store data, including products, orders, coupons, order notes, variations, order status, and media. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running actions tagged as write or destructive. <br>
-Risk: Connector payloads can become invalid if action schemas change. <br>
-Mitigation: Inspect the live WooCommerce connector schema before building and running each action payload. <br>
-Risk: Use requires the oo CLI, OOMOL sign-in, and a connected WooCommerce account. <br>
-Mitigation: Run setup steps only after a command fails with the matching install, authentication, connection, or billing error. <br>
+## Use Case:
 
+Developers, store operators, and support agents use this skill to inspect and manage WooCommerce products, variations, categories, tags, customers, orders, coupons, media, and order notes through OOMOL-mediated connector actions.
 
-## Reference(s): <br>
-- [ClawHub WooCommerce skill](https://clawhub.ai/oomol/oo-woocommerce) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [WooCommerce homepage](https://woocommerce.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are expected as JSON with data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: WooCommerce store operations are routed through a third-party OOMOL connector.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when OOMOL mediation is intended, review OOMOL data handling and account scopes, and limit connected account permissions to the needed store operations.
+
+Risk: The artifact includes remote pipe-to-shell installer commands for the oo CLI.
+
+Mitigation: Avoid running the pipe-to-shell installer as written; inspect the installer or use a controlled installation process before deployment.
+
+Risk: Write actions can change orders, products, coupons, media, notes, and customer-visible store state.
+
+Mitigation: Require explicit user confirmation of the target, payload, and expected effect before running any store-changing action.
+
+## Reference(s):
+
+- [WooCommerce homepage](https://woocommerce.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-woocommerce)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before payload construction; connector runs can return JSON when --json is used.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

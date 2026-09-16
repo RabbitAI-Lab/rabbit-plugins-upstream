@@ -1,46 +1,59 @@
-## Description: <br>
-Google Tasks (tasks.google.com). Use this skill for ANY Google Tasks request: reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an agent read, create, update, move, and delete Google Tasks data through the OOMOL-connected Google Tasks connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent manage Google Tasks through an OOMOL-connected account, including listing, fetching, creating, updating, moving, clearing, and deleting tasks and task lists. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create, update, or move Google Tasks data. <br>
-Mitigation: Confirm the exact action payload and expected effect before approving write actions. <br>
-Risk: Destructive actions can clear completed tasks or delete tasks and task lists. <br>
-Mitigation: Require explicit approval for the target task list or task before running destructive actions. <br>
-Risk: Incorrect connector payloads can affect the wrong Google Tasks item. <br>
-Mitigation: Inspect the live connector schema before building each action payload. <br>
+## Use Case:
 
+External users and developers use this skill when they want an agent to operate Google Tasks task lists and tasks through an authenticated OOMOL connection. It supports read workflows as well as confirmed write and destructive task-management actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-googletasks) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Google Tasks](https://tasks.google.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions may return JSON data and an execution ID from the OOMOL connector.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: Setup instructions include remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified, versioned oo CLI installation path and do not run remote installer commands automatically.
+
+Risk: Write and destructive connector actions can change or delete Google Tasks data.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running any write or destructive action.
+
+Risk: The skill relies on an OOMOL-managed Google Tasks connection.
+
+Mitigation: Use it only when the user accepts OOMOL handling the Google Tasks connection and required account access.
+
+## Reference(s):
+
+- [ClawHub Google Tasks skill page](https://clawhub.ai/oomol/skills/oo-googletasks)
+- [Google Tasks homepage](https://tasks.google.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON when commands run with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

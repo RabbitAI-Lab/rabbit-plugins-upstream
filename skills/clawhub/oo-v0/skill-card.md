@@ -1,42 +1,58 @@
-## Description: <br>
-Operates v0 through an OOMOL-connected account for chat, project, deployment, environment variable, webhook, billing, usage, and account-scope actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to operate v0 through the OOMOL oo CLI connector for reading, creating, updating, and deleting v0 account data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and teams use this skill to let an agent manage a connected v0 workspace, including creating and updating chats, projects, deployments, environment variables, webhooks, and related account information. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform broad v0 account actions, including writes and deletes across chats, projects, deployments, webhooks, environment variables, billing, and account scope. <br>
-Mitigation: Review every write or delete request before approval and confirm the exact target, payload, and expected effect. <br>
-Risk: The skill depends on an OOMOL-connected account and the oo CLI, so use transfers trust to that connector and account connection. <br>
-Mitigation: Install and run it only when you want OOMOL-mediated v0 workspace management, and use the OOMOL CLI installer only if you trust that provider. <br>
+## Use Case:
 
+Developers and agents use this skill to manage v0 chats, projects, deployments, environment variables, webhooks, billing, plans, scopes, and user information through a connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-v0) <br>
-- [v0 homepage](https://v0.dev) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: SKILL.md frontmatter and release evidence) <br>
+Risk: The skill can change or delete v0 account data through write and destructive actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact payload and expected effect before write actions, and require explicit approval before destructive actions.
+
+Risk: The security summary flags broad activation and remote installer instructions as reasons for review before installation.
+
+Mitigation: Use the skill only for intentional v0 account operations, and avoid remote installer commands unless the installer source and integrity have been independently verified.
+
+Risk: Connector action contracts may change over time.
+
+Mitigation: Inspect the live connector schema before running an action so payloads match current v0 contracts.
+
+## Reference(s):
+
+- [v0 homepage](https://v0.dev)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires connector schema inspection before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

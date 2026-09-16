@@ -29,6 +29,7 @@ import hmac
 import json
 import os
 import sys
+import threading
 import time
 import urllib.error
 import urllib.request
@@ -100,6 +101,24 @@ def main():
             'resolve who holds delivery before polling'); sys.exit(2)
     token_hash = hashlib.md5(token.encode()).hexdigest()
     log(f"polling as @{me.get('username')} → 127.0.0.1:{args.port} sd={sd_id[:8]}")
+
+    # 0.9.0 [P1/P3] — this is an owner-polling box (the owner's own long-poller
+    # consumes Telegram callbacks; the platform holds no webhook). Self-pulse so
+    # MC shows it alive and declare tg_callback_routing='owner_polling' so the
+    # platform routes callbacks to polling, not a (nonexistent) platform
+    # webhook. One shared implementation — imported from telegram_listener, not
+    # copied. Best-effort: a missing sibling never stops the poller.
+    api_base = cfg.get('api_base', 'https://beak.spaceduckling.com').rstrip('/')
+    try:
+        from telegram_listener import _pulse_loop
+        threading.Thread(
+            target=_pulse_loop,
+            args=(beak_key, sd_id, api_base, False),
+            kwargs={'tg_callback_routing': 'owner_polling'},
+            daemon=True).start()
+        log('pulse thread started (routing=owner_polling)')
+    except Exception as e:
+        log(f'pulse-keepalive unavailable: {e}')
 
     offset = 0
     try:

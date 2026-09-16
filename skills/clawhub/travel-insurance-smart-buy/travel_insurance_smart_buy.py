@@ -442,9 +442,9 @@ INSURANCE_PROVIDERS = {
 
 # 购买渠道链接
 PURCHASE_CHANNELS = {
-    "飞猪": {
-        "desc": "飞猪旅行保险频道，支持支付宝支付，出单快",
-        "search_url": "https://www.fliggy.com/insurance/list.htm",
+    "慧择网": {
+        "desc": "慧择网保险平台，产品丰富，支持在线对比",
+        "search_url": "https://www.huize.com/",
         "tips": "搜索"旅游保险"即可看到各公司产品"
     },
     "支付宝·蚂蚁保": {

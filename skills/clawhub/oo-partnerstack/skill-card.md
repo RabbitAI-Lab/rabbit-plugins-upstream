@@ -1,46 +1,61 @@
-## Description: <br>
-Helps agents operate PartnerStack through an OOMOL-connected account by inspecting live connector schemas and running read/list or customer-creation actions with the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PartnerStack helps agents use the OOMOL oo CLI to read PartnerStack records and create customers through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to retrieve PartnerStack customers, partnerships, deals, and leads, and to create PartnerStack customers after confirming the payload. It is intended for agents operating through an already connected OOMOL account rather than direct PartnerStack API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: State-changing customer creation can modify PartnerStack data when a payload is wrong or unintended. <br>
-Mitigation: Confirm the exact create_customer payload and expected effect with the user before running the write action. <br>
-Risk: The skill depends on an OOMOL-brokered PartnerStack connection and the oo CLI installation/authentication path. <br>
-Mitigation: Install and authenticate only after trusting OOMOL, and treat CLI installation and account connection as separate trust decisions. <br>
-Risk: Expired credentials, missing scopes, unavailable app connections, or billing stops can block connector execution. <br>
-Mitigation: Resolve connection, scope, credential, and billing failures through the documented OOMOL console paths before retrying. <br>
+## Use Case:
 
+External users and developers use this skill to operate PartnerStack through a connected OOMOL account, including listing customers, deals, leads, and partnerships, retrieving specific customer or partnership records, and creating customers when approved.
 
-## Reference(s): <br>
-- [PartnerStack homepage](https://partnerstack.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [OOMOL PartnerStack connection](https://console.oomol.com/app-connections?provider=partnerstack) <br>
-- [ClawHub PartnerStack skill page](https://clawhub.ai/oomol/skills/oo-partnerstack) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill frontmatter) <br>
+Risk: Fallback setup guidance may lead users or agents to execute remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the official install guide and verify the installer through a trusted method before installation; avoid one-line shell installers when that verification is not possible.
+
+Risk: The skill can create PartnerStack customers through a write action.
+
+Mitigation: Confirm the exact customer-creation payload and expected effect with the user before running the write action.
+
+Risk: PartnerStack access depends on OOMOL acting as an intermediary for account credentials and connector execution.
+
+Mitigation: Install and use the skill only when the user accepts OOMOL as the intermediary for PartnerStack operations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-partnerstack)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+- [PartnerStack homepage](https://partnerstack.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands are expected to return JSON from the oo CLI when run with --json.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

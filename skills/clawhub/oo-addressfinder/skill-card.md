@@ -1,43 +1,57 @@
-## Description: <br>
-Uses the OOMOL oo CLI to search, retrieve metadata for, and verify Addressfinder addresses in Australia and New Zealand. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Addressfinder (addressfinder.com) lets an agent search, retrieve metadata for, verify, and enrich Australian and New Zealand addresses through an OOMOL-connected Addressfinder account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to run Addressfinder autocomplete, address metadata retrieval, and address verification through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can propose commands that authenticate to services or use an OOMOL-connected Addressfinder account. <br>
-Mitigation: Review proposed oo commands before execution and run setup or authentication steps only after a relevant failure or explicit user approval. <br>
-Risk: Address verification requests may send address data to the connected Addressfinder service. <br>
-Mitigation: Confirm that the address data is appropriate to submit through the connected account before running verification actions. <br>
+## Use Case:
 
+Developers and external users use this skill to operate Addressfinder from an agent workflow without handling raw Addressfinder API credentials directly. It supports autocomplete search, address metadata lookup, and address verification for Australia and New Zealand.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-addressfinder) <br>
-- [Addressfinder Homepage](https://addressfinder.com/au) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands use the oo CLI and should inspect the live connector schema before sending an action payload.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: Setup guidance includes remote installer commands that execute downloaded scripts in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only through a trusted, user-approved process, verify the source before execution, and do not let an agent run the installer commands automatically.
+
+Risk: Address lookup and verification may involve user-provided address data.
+
+Mitigation: Confirm that the user intends to submit the address data to Addressfinder through the connected OOMOL account before running connector actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-addressfinder)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Addressfinder Homepage](https://addressfinder.com/au)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, JSON, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include a data payload and execution metadata when actions run successfully.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,59 @@
-## Description: <br>
-OpenCage lets agents run forward, reverse, and GeoJSON geocoding through an OOMOL-connected OpenCage account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OpenCage helps agents geocode addresses, return GeoJSON geocoding results, and reverse geocode latitude and longitude coordinates through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to geocode addresses or places, reverse geocode coordinates, and request GeoJSON geocoding results through their connected OpenCage account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected OOMOL/OpenCage account and sends geocoding inputs through that integration. <br>
-Mitigation: Install only when OpenCage access through OOMOL is intended, and avoid submitting sensitive location data unless the user accepts that service flow. <br>
-Risk: The artifact can install and invoke the oo CLI when the command is missing or authentication fails. <br>
-Mitigation: Review the oo CLI installation path and only run setup steps after an auth or connection failure. <br>
-Risk: Forward geocoding is tagged as a write action in the artifact even though the described behavior is geocoding lookup. <br>
-Mitigation: Inspect the live connector schema and confirm the exact payload and expected effect before running tagged actions. <br>
+## Use Case:
 
+Developers and agents use this skill to look up OpenCage geocoding results, convert coordinates to address data, and format geocoding responses as GeoJSON.
 
-## Reference(s): <br>
-- [OpenCage homepage](https://opencagedata.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub OpenCage release](https://clawhub.ai/oomol/oo-opencage) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution and returns connector responses that include data and metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: The security scan flags unsafe one-line remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a pinned, signed, or package-manager CLI installation path and review the installer before use.
+
+Risk: The security scan flags overbroad or mismatched capability labels for a read-oriented geocoding skill.
+
+Mitigation: Inspect the live action schema before execution and confirm the exact payload and effect with the user for any action tagged as write or destructive.
+
+Risk: Authentication, connection, or billing failures can interrupt OpenCage connector actions.
+
+Mitigation: Run setup or recovery steps only after matching failures, and keep credential handling within the connected OOMOL account.
+
+## Reference(s):
+
+- [OpenCage Homepage](https://opencagedata.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Skill Listing](https://clawhub.ai/oomol/skills/oo-opencage)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Successful connector actions return JSON data with execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

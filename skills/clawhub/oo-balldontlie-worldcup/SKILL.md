@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "BALLDONTLIE World Cup"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["balldontlie_worldcup"]
   icon: "https://static.oomol.com/logo/third-party/balldontlie_worldcup.png"
 ---

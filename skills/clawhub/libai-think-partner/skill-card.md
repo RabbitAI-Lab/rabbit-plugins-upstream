@@ -1,41 +1,55 @@
-## Description: <br>
-A Chinese-language Li Bai-inspired thinking partner that helps users reframe creativity, timing, emotion, aesthetics, and perseverance through literary prompts and reflective guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-first Li Bai-inspired thinking partner that helps users reframe creative, emotional, aesthetic, timing, and perseverance challenges through poetic models and practical prompts.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Users seeking creative coaching or reflective writing support use this skill to approach problems through Li Bai-inspired models for imagination, opportunity timing, emotional transformation, independent aesthetics, and belief under difficulty. It is suitable for general creative and motivational guidance, not high-stakes professional advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The broad creative coaching persona may activate for emotional or motivational prompts and be mistaken for mental health, legal, financial, medical, or other high-stakes advice. <br>
-Mitigation: Use it for general creative reflection only, and route high-stakes or clinical decisions to qualified professionals or authoritative sources. <br>
-Risk: Literary persona framing can produce persuasive motivational language that overstates confidence or downplays practical constraints. <br>
-Mitigation: Ask the agent to separate inspiration from actionable steps and review recommendations against the user's real-world constraints before acting. <br>
+## Use Case:
 
+Developers, writers, product thinkers, and other creative workers use this skill as a Chinese-language coaching partner for generating distinctive ideas, balancing imagination with execution, transforming difficult emotions into usable insight, and evaluating creative work against an independent aesthetic standard.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/gechengling/libai-think-partner) <br>
-- [Publisher Profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style conversational guidance with quoted prompts, model selection, and reflective recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Primarily Chinese-language output with selected English terms where useful.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: server release evidence) <br>
+Risk: Users may receive guidance primarily in Chinese even when they expect another language.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Ask explicitly for the desired language or translation style when using the skill.
+
+Risk: Creative or emotional coaching may be mistaken for professional mental health advice.
+
+Mitigation: Use the skill for reflection and ideation only; seek qualified professional support for persistent distress or urgent mental health concerns.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/libai-think-partner)
+- [Publisher profile](https://clawhub.ai/user/gechengling)
+- [Li Bai source notes in artifact](artifact/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Analysis]
+
+**Output Format:** [Markdown prose, tables, and structured step-by-step coaching prompts, primarily in Chinese]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Chinese literary quotations, contemporary creative-work framing, and practical validation or stop-loss checkpoints.]
+
+## Skill Version(s):
+
+2.0.2 (source: server release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

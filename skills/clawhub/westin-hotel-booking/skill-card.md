@@ -1,41 +1,50 @@
-## Description: <br>
-Searches Westin hotels under Marriott, returns current prices and booking links, and helps retrieve hotel details and package offers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a Chinese-language service-adjustment notice for Westin hotel queries and directs users to general hotel search or comparison skills.
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-Travelers and travel-planning agents use this skill to search Westin hotel availability, compare prices and locations, inspect hotel details, and find package offers before following external booking links. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Hotel search terms, dates, and keywords are sent to the publisher cloud proxy and downstream travel APIs. <br>
-Mitigation: Avoid entering sensitive personal details in search keywords and review the disclosed data flow before deployment. <br>
-Risk: The artifact uses a configurable proxy endpoint and a hardcoded fallback token. <br>
-Mitigation: Use a trusted PROXY_URL and PROXY_TOKEN from the environment, and prefer a version that validates the proxy endpoint and removes the fallback token. <br>
+## Use Case:
 
+External users and travel assistants use this skill as a compatibility entry point for Westin hotel search, detail, and package requests. The skill returns guidance to use general hotel search or hotel comparison skills rather than searching, pricing, or booking hotels itself.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/westin-hotel-booking) <br>
-- [Publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API Calls, guidance] <br>
-**Output Format:** [Markdown text with hotel results, prices, details, package summaries, and booking links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns search results and guidance only; it does not complete bookings directly.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.4 (source: server release evidence) <br>
+Risk: Users may expect the skill to search or book Westin hotels even though the dedicated data source is unavailable.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: The response explicitly states that Westin-specific search, details, packages, and booking are unavailable and points users to general hotel search or comparison skills.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/westin-hotel-booking)
+- [ClawHub publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text]
+
+**Output Format:** [Plain text service notice]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns the same Chinese-language service-adjustment notice for search, detail, and packages compatibility entry points.]
+
+## Skill Version(s):
+
+1.1.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

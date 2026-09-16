@@ -1,44 +1,56 @@
-## Description: <br>
-Givebutter connector helper for searching and reading campaigns, chapters, contacts, funds, recurring plans, and transactions through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Givebutter lets agents search and read Givebutter campaigns, chapters, contacts, funds, recurring plans, and transactions through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill when a Givebutter task requires reading campaign, chapter, contact, fund, recurring plan, or transaction data through the oo CLI. The skill guides agents to inspect the live connector schema before constructing action payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Connected Givebutter accounts may expose donor, contact, campaign, recurring plan, and transaction records. <br>
-Mitigation: Install and use the skill only if OOMOL is trusted, and keep use to the documented read-only get and list actions unless a future release clearly documents additional operations. <br>
-Risk: CLI actions can fail when the oo CLI is missing, the user is not signed in, the Givebutter connection is expired or missing scopes, or OOMOL billing blocks execution. <br>
-Mitigation: Use the documented setup, login, connection, or billing recovery step only after the matching command failure occurs. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Givebutter fundraising data through an OOMOL-managed connector instead of calling the Givebutter API directly.
 
-## Reference(s): <br>
-- [Givebutter homepage](https://givebutter.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub Givebutter skill page](https://clawhub.ai/oomol/skills/oo-givebutter) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON payload conventions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector action responses are returned as JSON when the generated oo CLI command uses --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: Remote installer scripts in first-time setup can execute arbitrary code if the download source is compromised.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path first and prefer a packaged, versioned, and verifiable oo CLI installer before installing.
+
+Risk: Connecting Givebutter can grant connector access to donor, contact, campaign, and transaction data.
+
+Mitigation: Connect Givebutter only when that account-level access is acceptable for the intended task.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-givebutter)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Givebutter homepage](https://givebutter.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-oriented connector actions return data and execution metadata; first-time setup may require CLI installation, account sign-in, and Givebutter connection.]
+
+## Skill Version(s):
+
+1.0.2 (source: skill metadata and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

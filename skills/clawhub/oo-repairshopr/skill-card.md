@@ -1,46 +1,56 @@
-## Description: <br>
-RepairShopr (repairshopr.com). Use this skill for ANY RepairShopr request - searching and reading data through the OOMOL oo CLI connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+RepairShopr connector for reading RepairShopr user, account, customer, and ticket data through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect RepairShopr account, customer, and ticket data through an OOMOL-connected account. It guides agents to inspect the live connector schema, run read actions with JSON payloads, and fall back to setup steps only after an authentication or connection failure. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads RepairShopr customer and ticket data from a connected account. <br>
-Mitigation: Install and use it only when comfortable with OOMOL's oo CLI and the connected RepairShopr account, as recommended by the security guidance. <br>
-Risk: The oo CLI installer and account connection are prerequisites outside the skill artifact. <br>
-Mitigation: Review the oo CLI installer and OOMOL account connection before first use. <br>
-Risk: Future expansion could add RepairShopr write or destructive actions. <br>
-Mitigation: Require explicit user approval for any future write or destructive RepairShopr action and its exact payload. <br>
+## Use Case:
 
+Developers and agent operators use this skill to inspect RepairShopr account, customer, and ticket records through an OOMOL-connected RepairShopr account.
 
-## Reference(s): <br>
-- [RepairShopr homepage](https://www.repairshopr.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-repairshopr) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses schema-first oo CLI commands and read-only RepairShopr connector actions documented by the skill.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: Fallback setup includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path first and prefer a version-pinned, verifiable oo CLI release or a trusted package manager; do not let an agent run the remote installer automatically.
+
+Risk: RepairShopr customer, ticket, user, and account data may be routed through OOMOL-connected tooling.
+
+Mitigation: Confirm that this data flow matches account policy and data-handling expectations before using the connector.
+
+## Reference(s):
+
+- [ClawHub RepairShopr skill page](https://clawhub.ai/oomol/skills/oo-repairshopr)
+- [RepairShopr homepage](https://www.repairshopr.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, JSON, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-oriented RepairShopr connector actions with paginated list support]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

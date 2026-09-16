@@ -1,42 +1,60 @@
-## Description: <br>
-Harmonic.ai helps agents search, enrich, and read Harmonic.ai company and person data through a connected OOMOL account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Harmonic.ai lets an agent use an OOMOL-connected Harmonic.ai account to search, enrich, and retrieve company and person data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to ask an agent for Harmonic.ai company and person enrichment, profile lookup, employee listing, and enrichment status checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Company websites, LinkedIn URLs, email addresses, and similar identifiers may be sent to OOMOL and Harmonic.ai for enrichment or lookup. <br>
-Mitigation: Submit only identifiers the user intends to use for that Harmonic.ai action and avoid unnecessary sensitive data. <br>
-Risk: The skill depends on an authenticated OOMOL account with a connected Harmonic.ai credential. <br>
-Mitigation: Use first-time setup steps only after an authentication or connection error, and confirm account readiness before retrying. <br>
+## Use Case:
 
+Developers, business operations teams, and external agents use this skill to retrieve Harmonic.ai company or person profiles, list company employee URNs, check enrichment status, and request enrichment through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Harmonic.ai homepage](https://harmonic.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-harmonic-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include Harmonic.ai data plus connector execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: First-time setup includes remote installer commands that may be unsafe if run automatically.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified or manual process, and run setup only after a matching missing-command, authentication, or connection error.
+
+Risk: Enrichment actions may use Harmonic.ai account resources or create remote enrichment jobs.
+
+Mitigation: Confirm the exact enrichment payload and expected account effect with the user before running enrichment actions.
+
+Risk: Connector authentication, connection scope, or billing state can block action execution.
+
+Mitigation: Use the OOMOL account connection and billing pages only when the corresponding error is returned, then retry after the user resolves the account state.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-harmonic-ai)
+- [Harmonic.ai homepage](https://harmonic.ai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Action responses are returned as JSON; payloads are based on the connector schema inspected at runtime.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

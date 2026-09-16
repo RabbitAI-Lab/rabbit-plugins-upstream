@@ -1,61 +1,61 @@
-# Command Contract Appendix
+# 命令合同附录
 
-This document only retains operation contracts: purpose, required fields, templates, and limits. Routing see `semantic/catalog.yml` (`required_context`; `triggers` as auxiliary, full triggers/refusal see `SKILL.md`), semantic boundary see `semantic/billing-ontology.yml` entity `evidence_boundary`.
+本文件只保留 operation 合同：用途、必填、模板和限制。路由看 `semantic/catalog.yml`（`required_context`；`triggers` 为辅助，完整触发/拒答见 `SKILL.md`），语义边界看 `semantic/billing-ontology.yml` 各实体 `evidence_boundary`。
 
-## Command Format Standard
+## 命令格式标准
 
-**Service name always `BSS`** — Do not use `account`, `bill` or other `hcloud` sub-services; balance, bills, reconciliation are all under `BSS` `List*` / `Show*`.
+**服务名恒为 `BSS`** — 不得使用 `account`、`bill` 等其它 `hcloud` 子服务；余额、账单、对账均在 `BSS` 的 `List*` / `Show*` 下。
 
-**Core format**: `hcloud BSS <Operation> --param=value --cli-region=<region> --cli-output=json` (`<Operation>` must be operation name in current entity `source_operations`)
+**核心格式**：`hcloud BSS <Operation> --param=value --cli-region=<region> --cli-output=json`（`<Operation>` 须为当前实体 `source_operations` 中的操作名）
 
-### Format Rules
+### 格式规则
 
-| Element | Format | Example |
+| 元素 | 格式 | 示例 |
 | --- | --- | --- |
-| Service name | Fixed `BSS` | `hcloud BSS ShowCustomerAccountBalances` |
-| Operation name | `List*` / `Show*` | `ListCosts`, `ShowCustomerMonthlySum` |
-| Regular parameter | `--key=value` | `--bill_cycle=2024-12`, `--limit=10` |
-| Array parameter | `--key.1=value1` | `--resource_ids.1=<resource_id>` |
-| Nested object | `--key.sub_key=value` | `--time_condition.begin_time=2024-12-01` |
+| 服务名 | 固定 `BSS` | `hcloud BSS ShowCustomerAccountBalances` |
+| 操作名 | `List*` / `Show*` | `ListCosts`, `ShowCustomerMonthlySum` |
+| 普通参数 | `--key=value` | `--bill_cycle=2024-12`, `--limit=10` |
+| 数组参数 | `--key.1=value1` | `--resource_ids.1=<resource_id>` |
+| 嵌套对象 | `--key.sub_key=value` | `--time_condition.begin_time=2024-12-01` |
 
-## Global Constraints
+## 全局约束
 
-- **Command whitelist** — Consistent with current entity `source_operations`; only `hcloud BSS <Operation>`. First query must copy this document `####` template; if no template then stop. Do not use `--help` to discover op or construct parameters; if template still errors, can use `--help` for that op only to verify fields (see `SKILL.md` verification path).
-- Only execute `List*` / `Show*`; `List*` / `Show*` with `Change` in name are still read-only queries (e.g., account/coupon transactions), not write operations.
-- Refuse payment, renewal, refund, unsubscribe, recovery, create, update, delete, send verification code, change balance or resources.
-- Default `limit<=10`, `offset=0`; find prerequisite IDs at most recent 3 billing periods, 3 pages per command, `limit<=50` per page.
-- Array and object parameters only use verified dot notation; if no template then stop, do not try JSON strings.
-- Account, customer, resource, order, transaction, coupon, card, partner IDs default desensitized.
+- **命令白名单** — 与当前实体 `source_operations` 一致；仅 `hcloud BSS <Operation>`。首查须抄本文件 `####` 模板；无模板则停下。不用 `--help` 发现 op 或拼参；按模板仍报错可对该 op `--help` 仅核对字段（见 `SKILL.md` 查证路径）。
+- 只执行 `List*` / `Show*`；名称含 `Change` 的 `List*` / `Show*` 仍为只读查询（如账户/券流水），不是写操作。
+- 拒绝支付、续费、退款、退订、回收、创建、更新、删除、发送验证码、改余额或资源。
+- 默认 `limit<=10`、`offset=0`；找前置 ID 最多近 3 个账期、每命令 3 页、每页 `limit<=50`。
+- 数组和对象参数只用已验证的 dot notation；没有模板就停下，不试 JSON 字符串。
+- 账号、客户、资源、订单、交易、券、卡、伙伴 ID 默认脱敏。
 
 ## customer_billing
 
-| Operation | Purpose | Required | Note |
+| 操作 | 用途 | 必填 | 说明 |
 | --- | --- | --- | --- |
-| `ShowCustomerAccountBalances` | Balance, debt, account composition snapshot | - | Current profile first query; see template |
-| `ShowCustomerMonthlySum` | Monthly consumption summary | `bill_cycle` | Full account billing period overview; **cannot** filter by enterprise project (enterprise project ranking use `ListCosts`) |
-| `ListCustomerBillsFeeRecords` | Billing period transaction, payment status, transaction reconciliation | `bill_cycle` | Cost center transaction side; billing period must be same month; see template |
-| `ListCustomerselfResourceRecords` | Locate continuously charging resources | `cycle` | Resource ID default desensitized |
-| `ListCustomerselfResourceRecordDetails` | Resource detail daily level | `cycle` | Export bill/resource detail side; see template; may have precision difference with summary |
-| `ListCustomerBillsMonthlyBreakDown` | Monthly amortization | `shared_month` | Recent 18 months; non-cash deduction basis |
-| `ListCustomerAccountChangeRecords` | Account transaction | `balance_type` | Read-only; not applicable for partner resale customers |
-| `ListStoredValueCards` | Stored-value card status and face value | `status` | Card ID default desensitized |
+| `ShowCustomerAccountBalances` | 余额、欠费、账户构成快照 | - | 当前 profile 首查；见模板 |
+| `ShowCustomerMonthlySum` | 月度消费汇总 | `bill_cycle` | 全账号账期总览；**不能**按企业项目过滤（企业项目排行用 `ListCosts`） |
+| `ListCustomerBillsFeeRecords` | 账期流水、支付状态、交易对账 | `bill_cycle` | 费用中心流水侧；账期须同月；见模板 |
+| `ListCustomerselfResourceRecords` | 定位持续扣费资源 | `cycle` | 资源 ID 默认脱敏 |
+| `ListCustomerselfResourceRecordDetails` | 资源详单日级 | `cycle` | 导出账单/资源详单侧；见模板；与汇总可能有精度差 |
+| `ListCustomerBillsMonthlyBreakDown` | 月度摊销 | `shared_month` | 近 18 月；非现金扣费口径 |
+| `ListCustomerAccountChangeRecords` | 账户流水 | `balance_type` | 只读；伙伴转售客户不适用 |
+| `ListStoredValueCards` | 储值卡状态和面额 | `status` | 卡 ID 默认脱敏 |
 
 ## cost_and_usage
 
-| Operation | Purpose | Required | Note |
+| 操作 | 用途 | 必填 | 说明 |
 | --- | --- | --- | --- |
-| `ListCosts` | Cost analysis aggregation, TopN, trend | See template | `amount_type`/`cost_type` use string enum; `operator=0` include, `1` exclude |
-| `ListResourceUsageSummary` | CDN/OBS/IEC/VPC usage summary | See template | 95 billing and usage verification |
-| `ListResourceUsage` | Resource usage details | See template | First get resource and usage type from summary or detail |
+| `ListCosts` | 成本分析聚合、TopN、趋势 | 见模板 | `amount_type`/`cost_type` 用字符串枚举；`operator=0` 包含、`1` 排除 |
+| `ListResourceUsageSummary` | CDN/OBS/IEC/VPC 用量汇总 | 见模板 | 95 计费与用量核验 |
+| `ListResourceUsage` | 资源使用量明细 | 见模板 | 先汇总或详单拿资源与用量类型 |
 
-### cost_and_usage Example Templates
+### cost_and_usage 示例模板
 
-`ListCosts` enums: `amount_type` = `PAYMENT_AMOUNT` (payable) or `NET_AMOUNT` (paid); `cost_type` = `ORIGINAL_COST` or `AMORTIZED_COST`.
-Filter keys: `REGION_CODE`, `ENTERPRISE_PROJECT_ID` (**not** `ENTERPRISE_PROJECT`). Filter empty → write "no records for that project/condition"; **Prohibited**: remove filter to query full account ranking.
+`ListCosts` 枚举：`amount_type` = `PAYMENT_AMOUNT`（应付）或 `NET_AMOUNT`（实付）；`cost_type` = `ORIGINAL_COST` 或 `AMORTIZED_COST`。
+过滤键：`REGION_CODE`、`ENTERPRISE_PROJECT_ID`（**非** `ENTERPRISE_PROJECT`）。过滤为空 → 写「该项目/条件下无记录」；**禁止** 去掉过滤改查全账号排行。
 
 #### `ListCosts`
 
-By region (billing period 2025-04):
+按区域（账期 2025-04）：
 
 ```bash
 hcloud BSS ListCosts \
@@ -75,7 +75,7 @@ hcloud BSS ListCosts \
   --offset=0
 ```
 
-By enterprise project + cloud service ranking (`EP-FINANCE` example):
+按企业项目 + 云服务排行（`EP-FINANCE` 示例）：
 
 ```bash
 hcloud BSS ListCosts \
@@ -97,7 +97,7 @@ hcloud BSS ListCosts \
 
 #### `ShowCustomerAccountBalances`
 
-Balance/debt first query:
+余额/欠费首查：
 
 ```bash
 hcloud BSS ShowCustomerAccountBalances \
@@ -107,7 +107,7 @@ hcloud BSS ShowCustomerAccountBalances \
 
 #### `ListCustomerBillsFeeRecords`
 
-Cost center billing period transaction (reconciliation transaction side):
+费用中心账期流水（对账流水侧）：
 
 ```bash
 hcloud BSS ListCustomerBillsFeeRecords \
@@ -120,7 +120,7 @@ hcloud BSS ListCustomerBillsFeeRecords \
 
 #### `ListCustomerselfResourceRecordDetails`
 
-Export resource details (reconciliation export side):
+导出资源详单（对账导出侧）：
 
 ```bash
 hcloud BSS ListCustomerselfResourceRecordDetails \
@@ -131,33 +131,33 @@ hcloud BSS ListCustomerselfResourceRecordDetails \
   --offset=0
 ```
 
-## reconciliation (Minimum Read-Only Sequence)
+## reconciliation（最小只读序列）
 
-Default current profile; if billing period not given use **current billing period** (delivery summary states clearly). Recommended sequence:
+默认当前 profile；未给账期用**当前账期**（交付小结写明）。建议顺序：
 
-1. `ListCustomerBillsFeeRecords` — Cost center billing period transaction.
-2. `ListCustomerselfResourceRecordDetails` — Same month resource details.
-3. If still cannot connect difference, then query `ListCustomerOrders` / `ShowCustomerOrderDetails`.
+1. `ListCustomerBillsFeeRecords` — 费用中心账期流水。
+2. `ListCustomerselfResourceRecordDetails` — 同月资源详单。
+3. 仍无法连接差异时，再查 `ListCustomerOrders` / `ShowCustomerOrderDetails`。
 
-Insufficient evidence no blame; do not use `ShowCustomerMonthlySum` to replace this sequence.
+证据不足不断责；不用 `ShowCustomerMonthlySum` 代替本序列。
 
 ## discount_entitlement
 
-| Operation | Purpose | Required | Note |
+| 操作 | 用途 | 必填 | 说明 |
 | --- | --- | --- | --- |
-| `ListFreeResourceInfos` | Resource package list | - | Array parameters only use `.1`, `.2` increment; see template below |
-| `ListFreeResourceUsages` | Resource package remaining quota | `free_resource_ids.1` | Usually no pagination; see template below |
-| `ListFreeResourcesUsageRecords` | Package deduction details | See template | Span ≤90 days |
-| `ListCustomerCouponChangeRecords` | Coupon transaction | `balance_type` | Coupon ID, transaction ID default desensitized |
-| `ListQuotaCoupons` | Partner coupon quota | - | Read-only quota; see template below |
-| `ListIssuedCouponQuotas` | Issued coupon quota | - | Master reseller scenario |
-| `ListCouponQuotasRecords` | Coupon quota operation records | - | Read-only records |
-| `ListIssuedPartnerCoupons` | Issued coupons | - | Coupon ID, customer ID default desensitized |
-| `ListPartnerCouponsRecord` | Coupon issue/recovery records | - | Read-only records; see template below |
-| `ListSubCustomerCoupons` | Partner own coupons | - | Read-only |
-| `ListOrderCouponsByOrderId` | Order available coupons | `order_id` | Near payment, read-only explanation |
+| `ListFreeResourceInfos` | 资源包列表 | - | 数组参数只用 `.1`、`.2` 递增；见下方模板 |
+| `ListFreeResourceUsages` | 资源包余量 | `free_resource_ids.1` | 通常不分页；见下方模板 |
+| `ListFreeResourcesUsageRecords` | 包抵扣明细 | 见模板 | 跨度 ≤90 天 |
+| `ListCustomerCouponChangeRecords` | 代金券流水 | `balance_type` | 券 ID、交易 ID 默认脱敏 |
+| `ListQuotaCoupons` | 伙伴优惠券额度 | - | 只读额度；见下方模板 |
+| `ListIssuedCouponQuotas` | 已发放券额度 | - | 总经销商场景 |
+| `ListCouponQuotasRecords` | 券额度操作记录 | - | 只读记录 |
+| `ListIssuedPartnerCoupons` | 已发放优惠券 | - | 券 ID、客户 ID 默认脱敏 |
+| `ListPartnerCouponsRecord` | 优惠券发放/回收记录 | - | 只读记录；见下方模板 |
+| `ListSubCustomerCoupons` | 伙伴自身优惠券 | - | 只读 |
+| `ListOrderCouponsByOrderId` | 订单可用券 | `order_id` | 靠近支付，只读解释 |
 
-### discount_entitlement Example Templates
+### discount_entitlement 示例模板
 
 #### `ListFreeResourceInfos`
 
@@ -199,42 +199,42 @@ hcloud BSS ListPartnerCouponsRecord \
 
 ## order_evidence
 
-| Operation | Purpose | Required | Note |
+| 操作 | 用途 | 必填 | 说明 |
 | --- | --- | --- | --- |
-| `ListCustomerOrders` | Order list | - | Only query evidence, do not guide payment |
-| `ShowCustomerOrderDetails` | Order details | `order_id` | Order ID default desensitized |
-| `ShowRefundOrderDetails` | Unsubscribe/downgrade refund details | `order_id` | Only explain refund evidence, do not execute unsubscribe refund |
-| `ListOrderDiscounts` | Order available discounts | `order_id` | Near payment, read-only explanation |
+| `ListCustomerOrders` | 订单列表 | - | 仅查证据，不引导支付 |
+| `ShowCustomerOrderDetails` | 订单详情 | `order_id` | 订单 ID 默认脱敏 |
+| `ShowRefundOrderDetails` | 退订/降配退款详情 | `order_id` | 只解释退款证据，不执行退订退款 |
+| `ListOrderDiscounts` | 订单可用折扣 | `order_id` | 靠近支付，只读解释 |
 
 ## enterprise_multi_account
 
-| Operation | Purpose | Required | Note |
+| 操作 | 用途 | 必填 | 说明 |
 | --- | --- | --- | --- |
-| `ListEnterpriseOrganizations` | Enterprise organization structure | - | Enterprise master account scenario |
-| `ListEnterpriseSubCustomers` | Enterprise sub-account list | - | Sub-account ID default desensitized |
-| `ListEnterpriseMultiAccount` | Sub-account recoverable balance | See template | Read-only; do not recover |
-| `ShowMultiAccountTransferAmount` | Master account transferable | `balance_type` | Read-only; do not transfer |
-| `ListMultiAccountTransferCoupons` | Master account transferable coupons | - | Read-only; do not issue |
-| `ListMultiAccountRetrieveCoupons` | Sub-account recoverable coupons | `sub_customer_id` | Read-only; do not recover |
-| `ListConsumeSubCustomers` | Sub-customers with consumption | `bill_cycle` | Enterprise/partner entry |
-| `ListSubcustomerMonthlyBills` | Sub-customer monthly bills | `cycle`, `charge_mode` | Customer ID desensitized |
-| `ListSubCustomerBillDetail` | Sub-customer details | `bill_cycle`, `customer_id` | First confirm authorization |
+| `ListEnterpriseOrganizations` | 企业组织结构 | - | 企业主账号场景 |
+| `ListEnterpriseSubCustomers` | 企业子账号列表 | - | 子账号 ID 默认脱敏 |
+| `ListEnterpriseMultiAccount` | 子账号可回收余额 | 见模板 | 只读；不回收 |
+| `ShowMultiAccountTransferAmount` | 主账号可拨款 | `balance_type` | 只读；不划拨 |
+| `ListMultiAccountTransferCoupons` | 主账号可拨券 | - | 只读；不发放 |
+| `ListMultiAccountRetrieveCoupons` | 子账号可回收券 | `sub_customer_id` | 只读；不回收 |
+| `ListConsumeSubCustomers` | 有消费子客户 | `bill_cycle` | 企业/伙伴入口 |
+| `ListSubcustomerMonthlyBills` | 子客户月账单 | `cycle`, `charge_mode` | 客户 ID 脱敏 |
+| `ListSubCustomerBillDetail` | 子客户明细 | `bill_cycle`, `customer_id` | 先确认授权 |
 
 ## partner_resale
 
-| Operation | Purpose | Required | Note |
+| 操作 | 用途 | 必填 | 说明 |
 | --- | --- | --- | --- |
-| `ListSubCustomers` | Partner customer list | - | Customer information sensitive, default summary |
-| `ListSubCustomerNewTag` | New customer tag | - | Read-only; see template |
-| `ListCustomerOnDemandResources` | Resale on-demand resources | `customer_id` | Resource ID desensitized; see template |
-| `ListPayPerUseCustomerResources` | Annual/monthly package resources | - | Historical naming; see template |
-| `ListCustomersBalancesDetail` | Resale balance | See template | Sensitive; see template |
-| `ListPartnerBalances` | Partner/reseller balance | - | Partner perspective |
-| `ListPartnerAccountChangeRecords` | Partner transaction records | `balance_type` | Read-only transaction |
-| `ListPartnerAdjustRecords` | Partner adjustment records | - | Read-only records; do not execute transfer or recovery |
-| `ListIndirectPartners` | Secondary reseller list | - | Master reseller scenario |
+| `ListSubCustomers` | 伙伴客户列表 | - | 客户信息敏感，默认摘要 |
+| `ListSubCustomerNewTag` | 新客标签 | - | 只读；见模板 |
+| `ListCustomerOnDemandResources` | 代售按需资源 | `customer_id` | 资源 ID 脱敏；见模板 |
+| `ListPayPerUseCustomerResources` | 包年包月资源 | - | 历史命名；见模板 |
+| `ListCustomersBalancesDetail` | 代售余额 | 见模板 | 敏感；见模板 |
+| `ListPartnerBalances` | 伙伴/经销商余额 | - | 伙伴视角 |
+| `ListPartnerAccountChangeRecords` | 伙伴收支流水 | `balance_type` | 只读流水 |
+| `ListPartnerAdjustRecords` | 伙伴调账记录 | - | 只读记录；不执行拨款或回收 |
+| `ListIndirectPartners` | 二级经销商列表 | - | 总经销商场景 |
 
-### partner_resale Example Templates
+### partner_resale 示例模板
 
 #### `ListSubCustomerNewTag`
 
@@ -276,27 +276,27 @@ hcloud BSS ListCustomersBalancesDetail \
 
 ## reference_dimensions
 
-| Operation | Purpose | Required | Note |
+| 操作 | 用途 | 必填 | 说明 |
 | --- | --- | --- | --- |
-| `ListServiceTypes` | Cloud service type dictionary | - | Translate `service_type_code` |
-| `ListResourceTypes` | Resource type dictionary | - | Translate `resource_type_code` |
-| `ListUsageTypes` | Usage type dictionary | - | Translate `usage_type` |
-| `ListMeasureUnits` | Measurement unit dictionary | - | Translate amount and usage units |
-| `ListConversions` | Measurement unit conversion | - | For unit conversion |
-| `ListServiceResources` | Service to resource type relation | `service_type_code` | Service/resource mapping dictionary |
-| `ListProvinces` | Province dictionary | - | Partner sales platform geography |
-| `ListCities` | City dictionary | `province_code` | Partner sales platform geography |
-| `ListCounties` | District/county dictionary | `city_code` | Partner sales platform geography |
+| `ListServiceTypes` | 云服务类型字典 | - | 翻译 `service_type_code` |
+| `ListResourceTypes` | 资源类型字典 | - | 翻译 `resource_type_code` |
+| `ListUsageTypes` | 使用量类型字典 | - | 翻译 `usage_type` |
+| `ListMeasureUnits` | 计量单位字典 | - | 翻译金额和用量单位 |
+| `ListConversions` | 计量单位进制换算 | - | 用于单位换算 |
+| `ListServiceResources` | 服务到资源类型关系 | `service_type_code` | 服务/资源映射字典 |
+| `ListProvinces` | 省份字典 | - | 伙伴销售平台地域 |
+| `ListCities` | 城市字典 | `province_code` | 伙伴销售平台地域 |
+| `ListCounties` | 区县字典 | `city_code` | 伙伴销售平台地域 |
 
-## Out of Scope (Refuse Routing)
+## 范围外（拒绝路由）
 
-| Category | Refuse Reason | Alternative |
+| 类别 | 拒绝原因 | 替代去处 |
 | --- | --- | --- |
-| Price trial / renewal quote / discount strategy | Not billed fact; pricing cannot be used as deduction evidence | Console price calculator or sales-side pricing tool |
-| Real-name authentication review result | Identity dimension not within BSS billing boundary | Console account center |
-| Non-Huawei Cloud billing | Only serve Huawei Cloud BSS | Corresponding cloud vendor tool |
+| 价格试算 / 续订报价 / 折扣策略 | 不属于已出账事实；定价不可作为扣费证据 | 控制台价格计算器或销售侧定价工具 |
+| 实名认证审核结果 | 身份维度不在 BSS 账务边界内 | 控制台账号中心 |
+| 非华为云账务 | 仅服务华为云 BSS | 对应云厂商工具 |
 
-## Product-Side Read-Only Cross-Validation
+## 产品侧只读交叉验证
 
-BSS is billing fact source. Product API only answers "whether resource can currently be found", does not overturn historical bill;
-Only after BSS has clues, then query product-side `List` / `Show` / `Get`.
+BSS 是账务事实源。产品 API 只答「当前能否查到资源」，不推翻历史账单；
+仅在 BSS 已有线索后，再查产品侧 `List` / `Show` / `Get`。

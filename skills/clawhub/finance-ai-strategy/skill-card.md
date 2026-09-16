@@ -1,42 +1,53 @@
-## Description: <br>
-Helps financial institutions plan AI transformation, prioritize AI investments, and design AI governance frameworks using finance-focused AI strategy models. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助金融机构制定AI转型战略、评估AI投资优先级、设计AI治理框架，从数字金融迈向数智金融的战略规划指导。融合阿里百技图Agent体系与保险AI应用研究报告精华。
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Strategy, innovation, and governance teams at financial institutions use this skill to structure AI readiness assessments, investment prioritization, governance design, and ROI analysis. Outputs are educational strategy guidance and require qualified human review before real-world financial, legal, insurance, or regulatory decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat the generated strategy content as professional financial, legal, insurance, or regulatory advice. <br>
-Mitigation: Use the output as an educational strategy aid only and consult qualified professionals before applying recommendations. <br>
-Risk: AI and financial regulation claims may be incomplete, outdated, or jurisdiction-specific. <br>
-Mitigation: Verify regulatory and market claims against official sources before using them in planning or governance decisions. <br>
-Risk: Reference code snippets may be copied into operational workflows without review. <br>
-Mitigation: Treat code examples as illustrative only; review, test, and adapt them before any real-world use. <br>
+## Use Case:
 
+Financial-services strategy, transformation, and governance teams use this skill to frame AI transformation roadmaps, assess AI readiness, prioritize AI initiatives, design governance controls, and discuss ROI before qualified human review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/finance-ai-strategy) <br>
+### Deployment Geography for Use:
 
+Global; includes China-specific regulatory examples that should be verified locally before use.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown prose with tables, strategy frameworks, checklists, and reference Python snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory-only output; no executable behavior, tool access, persistence, or credential handling is included in the skill.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.2.0 (source: server evidence and frontmatter) <br>
+Risk: Outputs may be mistaken for financial, legal, insurance, regulatory, or investment advice.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat outputs as strategic planning aids only and require qualified human review before real institutional decisions.
+
+Risk: Regulatory and market claims can become outdated or vary by jurisdiction.
+
+Mitigation: Verify current requirements against authoritative regulators, local counsel, and current institutional policy before applying the guidance.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/gechengling/skills/finance-ai-strategy)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Guidance]
+
+**Output Format:** [Markdown responses with analytical frameworks, tables, checklists, and reference code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory-only output that requires qualified human review for real financial, legal, regulatory, insurance, or investment decisions.]
+
+## Skill Version(s):
+
+5.2.1 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,56 @@
-## Description: <br>
-FFHub helps agents operate FFHub FFmpeg transcoding tasks through the OOMOL oo CLI connector, including creating tasks and checking task status or outputs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+FFHub (ffhub.io). Use this skill for reading, creating, and updating FFHub task data through the OOMOL-connected FFHub connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and media workflow operators use this skill to create FFmpeg transcoding tasks in FFHub and inspect task status, timing, errors, and generated outputs through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected FFHub account and can act through credentials managed by that connection. <br>
-Mitigation: Install or use it only when the user intends to grant that account access, and run authentication or connection recovery steps only after matching command failures. <br>
-Risk: Creating an FFmpeg task changes FFHub state and may consume account resources or credits. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before write actions, and inspect the live connector schema before building the payload. <br>
-Risk: Connector schemas, authentication state, and billing state can change at runtime. <br>
-Mitigation: Use the live schema as authoritative for each action and treat authentication, connection, or billing failures as explicit recovery paths. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect FFHub action schemas and run FFmpeg task actions, including creating tasks and checking task status or task lists.
 
-## Reference(s): <br>
-- [FFHub homepage](https://ffhub.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub release page](https://clawhub.ai/oomol/oo-ffhub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The setup guidance includes commands that execute remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an installation path that lets the user review and verify the installer before execution.
+
+Risk: The skill can create FFHub FFmpeg tasks that change account state or consume service credits.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [FFHub homepage](https://ffhub.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-ffhub)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read actions can be run directly; write actions require user confirmation of the exact payload and effect.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

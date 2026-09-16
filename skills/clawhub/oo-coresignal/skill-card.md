@@ -1,42 +1,51 @@
-## Description: <br>
-Coresignal (coresignal.com). Use this skill for ANY Coresignal request -- searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Coresignal (coresignal.com). Use this skill for searching and reading Coresignal data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to search and read Coresignal Base Company data through an OOMOL-connected Coresignal account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Connector calls may access paid or account-bound Coresignal data. <br>
-Mitigation: Install and run the skill only when the user intends to use an OOMOL-connected Coresignal account, and inspect the live connector schema before sending payloads. <br>
-Risk: The oo CLI installer is invoked only when the command is missing. <br>
-Mitigation: Run the CLI installer only from the documented OOMOL source and only after setup is actually needed. <br>
+## Use Case:
 
+Developers and agents use this skill to search Coresignal Base Company records, preview matching companies, and collect company data through the OOMOL oo CLI connector.
 
-## Reference(s): <br>
-- [Coresignal homepage](https://coresignal.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-coresignal) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Setup instructions include remote installer commands that execute downloaded scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installer source and provenance first; prefer a signed package or pinned release with checksum or signature verification, and avoid elevated or sensitive shell environments.
+
+## Reference(s):
+
+- [Coresignal homepage](https://coresignal.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses include Coresignal connector data and meta.executionId when actions run successfully.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

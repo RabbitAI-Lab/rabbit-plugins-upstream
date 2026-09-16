@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/dlazy-qwen-tts",
   "slug": "dlazy-qwen-tts",
   "ownerHandle": null,
-  "version": "1.3.5",
-  "updatedAt": 1784605479871,
-  "contentHash": "56f434f3dbd544d5665728924f4ea125437266deefdc6e9b35de5eecce2b7b53",
-  "fetchedAt": "2026-07-26T18:09:30.664Z"
+  "version": "1.3.16",
+  "updatedAt": 1789349238625,
+  "contentHash": "614710177da2bcd3b76338d426b60236e70bfc57aac53ecba0d190ca3e82dc42",
+  "fetchedAt": "2026-09-16T13:02:31.572Z"
 }

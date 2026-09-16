@@ -1,42 +1,56 @@
-## Description: <br>
-Certn (certn.co). Use this skill for Certn requests that search and read data through the OOMOL Certn connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Certn lets agents search and read Certn background-check cases, groups, users, packages, questionnaires, tags, and events through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to retrieve and list Certn background-check cases, events, groups, packages, questionnaires, tags, and Client Portal users through an OOMOL-connected Certn account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Certn background-check data can contain sensitive personal information. <br>
-Mitigation: Use only the intended OOMOL-connected Certn account, review case and user identifiers before execution, and avoid sharing returned data beyond the authorized task. <br>
-Risk: First-time setup or connection steps can link the agent environment to a Certn account. <br>
-Mitigation: Run authentication or account-connection steps only after an auth or connection failure and only when the user intends to connect that account. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Certn background-check resources through the OOMOL `oo` CLI without handling raw API tokens. It supports read-only retrieval and paginated listing for Certn cases, groups, users, packages, questionnaires, tags, and events.
 
-## Reference(s): <br>
-- [ClawHub Certn skill page](https://clawhub.ai/oomol/skills/oo-certn) <br>
-- [Certn homepage](https://certn.co) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects returned by the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: First-time setup directs users to execute remote installer scripts in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installation and prefer a verified or signed oo CLI installation method.
+
+Risk: A connected account can read Certn cases, users, groups, events, packages, questionnaires, and tags available to that OOMOL connection.
+
+Mitigation: Use a least-privileged Certn/OOMOL connection and confirm the account scope before running connector actions.
+
+## Reference(s):
+
+- [ClawHub Certn skill page](https://clawhub.ai/oomol/skills/oo-certn)
+- [Certn homepage](https://certn.co)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Text, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only Certn connector actions return JSON data with meta.executionId; live action schemas should be checked before building payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,57 @@
-## Description: <br>
-Adyen helps agents search and read Adyen company, merchant, and API credential details through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Adyen (adyen.com). Use this skill for ANY Adyen request - searching and reading data. Whenever a task involves Adyen, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect Adyen account data through the OOMOL oo CLI, including company accounts, merchant accounts, and the connected API credential. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill operates through OOMOL as an intermediary for an Adyen account. <br>
-Mitigation: Install and use it only after reviewing the OOMOL connection scopes and confirming that this intermediary access is acceptable. <br>
-Risk: Setup commands can install the oo CLI or start an authentication flow if run unnecessarily. <br>
-Mitigation: Run setup steps only after an auth, connection, or missing-CLI failure, as the artifact directs. <br>
-Risk: Future connector actions could change or delete Adyen data if write or destructive actions are added. <br>
-Mitigation: Require explicit user confirmation of the exact payload and effect before any write or destructive Adyen action. <br>
+## Use Case:
 
+Developers and operations teams use this skill to inspect Adyen connector schemas and retrieve Adyen company, merchant, and API credential details through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-adyen) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Adyen homepage](https://www.adyen.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides agents to fetch the live connector schema before running an Adyen action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: Installer commands include direct pipe-to-shell patterns.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installation steps before running them and prefer official, verifiable installer documentation.
+
+Risk: The get_api_credential action can return credential metadata and account information may be sensitive.
+
+Mitigation: Use a narrowly scoped Adyen connection, invoke credential-detail actions only when needed, and handle returned account data as sensitive.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-adyen)
+- [Publisher Profile](https://clawhub.ai/user/oomol)
+- [Adyen Homepage](https://www.adyen.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON response descriptions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses oo CLI connector schema and run commands; connector responses include data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.2 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,56 @@
-## Description: <br>
-Operate Stability AI through OOMOL's oo CLI connector for supported actions such as text-to-audio generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides OOMOL-backed access to Stability AI through the oo CLI, including schema inspection and text-to-audio generation with uploaded results.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate Stability AI through an OOMOL-connected account, inspect live connector schemas, and run supported Stability AI actions through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The documented text_to_audio action can generate audio and upload a file even though the skill summary emphasizes searching and reading data. <br>
-Mitigation: Treat generation as a write and cost-incurring action; require explicit user confirmation of the prompt, target action, and expected effect before running it. <br>
-Risk: The skill depends on a connected OOMOL account and Stability AI credentials injected server-side. <br>
-Mitigation: Use it only with an intended connected account and do not expose, request, or store raw API tokens in prompts, logs, or payload files. <br>
-Risk: Generated files are uploaded to connector transit storage. <br>
-Mitigation: Review where generated files are stored or shared before treating outputs as private or reusable artifacts. <br>
+## Use Case:
 
+Developers and agent users use this skill to inspect Stability AI connector schemas and run Stability AI actions through an OOMOL-connected account, including text-to-audio generation.
 
-## Reference(s): <br>
-- [Stability AI homepage](https://stability.ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-stabilityai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce or reference connector JSON responses and generated audio files stored in connector transit storage.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill can generate and upload audio, so treating it as read-only may lead to unintended content creation or storage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the live action schema and confirm the text-to-audio payload and expected upload behavior before running the action.
+
+Risk: The setup guidance includes remote installer pipe commands.
+
+Mitigation: Verify the OOMOL installer source through a safer method before executing installation commands.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-stabilityai)
+- [ClawHub Publisher Profile](https://clawhub.ai/user/oomol)
+- [Stability AI Homepage](https://stability.ai)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce uploaded audio files through connector transit storage.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

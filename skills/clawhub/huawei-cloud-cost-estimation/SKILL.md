@@ -1,81 +1,123 @@
 ---
 name: huawei-cloud-cost-estimation
-description: Generate Huawei Cloud pre-order price estimates, safely provision allowlisted resources via hcloud, and guide unsubscribe requests to the console only. Use this skill whenever the user mentions 华为云/Huawei Cloud/hcloud with 报价/询价/价格/quote/pricing/budget, 开通/购买/创建/provision/create, or 退订/unsubscribe. Create requires runtime help, --dryrun, fee review, and confirmation. Never run or emit unsubscribe CLI/API. Refuse other clouds, credentials, payment/renewal/delete, and non-allowlisted writes.
-compatibility: hcloud KooCLI 7.2+, IAM permissions matching requested read/write operations, outbound network; no agent auto-install
+description:
+  Generates Huawei Cloud pre-order estimates, provisions allowlisted resources through hcloud, and
+  routes unsubscribe requests to console guidance. Use for Huawei Cloud pricing, budgets, creation,
+  provisioning, or unsubscribe. Creates require runtime help, --dryrun, fee review, and
+  confirmation. Never emits or runs unsubscribe operations, accepts credentials, or performs
+  non-allowlisted writes.
+compatibility:
+  hcloud KooCLI 7.2+, matching IAM permissions, and outbound network; the agent does not install
+  dependencies
 metadata:
-  author: ontology-of-everything
-  version: "3.1.0"
+  language: en
+  translation_of: huawei-cloud-cost-estimation-cn
+  author: concept-git
+  version: "3.2.4"
   openclaw:
     requires:
       bins: [hcloud]
     primaryEnv: HUAWEICLOUD_SDK_AK
+    homepage: https://github.com/concept-git/cloud-concept-skills/tree/main/skills/en/huawei-cloud-cost-estimation
     envVars:
-      - {name: HUAWEICLOUD_SDK_AK, required: false}
-      - {name: HUAWEICLOUD_SDK_SK, required: false}
-      - {name: HUAWEICLOUD_SDK_REGION, required: false}
+      - { name: HUAWEICLOUD_SDK_AK, required: false }
+      - { name: HUAWEICLOUD_SDK_SK, required: false }
+      - { name: HUAWEICLOUD_SDK_REGION, required: false }
 ---
 
-# 华为云成本估算与资源开通
+# Huawei Cloud Cost Estimation and Provisioning
 
-> **华为社区版** · 社区维护，非华为云官方；结论以当次 hcloud 响应为准。
+> Community edition, not an official Huawei Cloud skill. Treat the current hcloud response as
+> authoritative.
 
-价格只认当次响应，**不臆造、不类比、不记忆**；仅开通可写，退订只指引官网控制台。
+Prices come only from the current response: never guess, analogize, or recall them. Provisioning is
+the only permitted write path; unsubscribe is console guidance only.
 
 ## Route
 
-- **询价 / 预算 / 比价** → Pricing。
-- **开通 / 购买 / 创建资源** → Lifecycle Create（仅 `references/lifecycle/commands.md` 白名单内）。
-- **退订 / 停止使用资源** → Unsubscribe Guidance（仅控制台指引，不调用 CLI/API）。
-- 历史账单/余额/对账 → 费用中心或 BSS 账单只读 API；非华为云 → 拒绝；白名单外写操作 → 给控制台指引。
+- Quote, budget, or comparison → Pricing.
+- Provision, purchase, or create → Lifecycle Create, limited to `references/lifecycle/commands.md`.
+- Unsubscribe or stop using → console-only Unsubscribe Guidance.
+- Historical bills, balance, or reconciliation → Cost Center or read-only BSS billing; other clouds
+  → refuse; non-allowlisted writes → console guidance.
+
+## Execution Pace
+
+Complete chains of at most three hcloud commands directly to the next safety gate. For longer
+chains, run only two or three commands per round, report progress and the next step, then ask
+whether to continue. A user may request uninterrupted execution, but clarification, unknown-cost
+approval, `--dryrun`, and write confirmation remain mandatory.
 
 ## Pricing
 
-1. **Parse** — 抽取四元组 `cloud_service_type / resource_type / region / resource_spec` + 周期或使用量；读 `references/pricing/semantic/catalog.yml` 路由到 period / on-demand 模型。
-2. **Clarify** — 缺 region/数量/周期或用量/线性 size，或产品类目模糊、多变种未定 → 停下一轮问完（带 2–4 候选）。仅 safe-default 缺失（OS=linux、AZ=空、`fee_installment_mode=NA`）→ 披露后继续。确认话术用口语四元组，不暴露内部名。
-3. **Query** — 按 `references/pricing/commands.md`：先 `BSS/ListResourceSpecs` 实查规格，再询价（period → `ListRateOnPeriodDetail`；on-demand → `ListOnDemandResourceRatings`）；多产品一次放进 `product_infos.N.*`。
-4. **Verify & Present** — 分项加和 = 总价；币种/周期/数量对齐用户口径。分项 `[服务] [规格] [region] [数量×周期] = ¥<金额>` + 加总 + 「非最终账单」；默认官网价，响应有折扣才附折后。
+1. **Parse** `cloud_service_type / resource_type / region / resource_spec` plus period or usage;
+   route through `references/pricing/semantic/catalog.yml`.
+2. **Clarify** missing region, quantity, duration/usage, linear size, ambiguous categories, or
+   unresolved variants in one question with two to four candidates. Disclose and apply only safe
+   defaults: OS=linux, empty AZ, and `fee_installment_mode=NA`.
+3. **Query** using `references/pricing/commands.md`: `ListServiceResources` → `ListResourceSpecs` →
+   on-demand `ListUsageTypes(--resource_type_code)` → measure resolution → quotation. Ask on
+   multiple matches; a spec match may still fail. Never invent duration or mix capacity and usage
+   slots.
+4. **Verify and present** that line items sum to the total and currency, period, and quantity align.
+   Present `[service] [spec] [region] [quantity × period] = amount`, total, and “not a final bill.”
+   Show discounts only when returned.
 
 ## Lifecycle Create
 
-读 `references/lifecycle/concepts.md` 后按序执行，跳步即违规：
+Read `references/lifecycle/concepts.md`, then perform every gate in order:
 
-1. **Allowlist** — 意图映射到 `references/lifecycle/commands.md` 命令主体；未命中即拒绝。
-2. **Help** — `hcloud <Service> <Operation> --help` 取必填/条件必填；`[APIE_ERROR]` 或无 schema 即停止，不猜参数。
-3. **Resolve** — 自动跑必要只读依赖查询（VPC/子网/AZ/镜像/规格等）；多候选让用户选，缺失项一轮问完。
-4. **Cost** — 能询价先走 Pricing 回表；不能询价则声明「价格未知且可能收费」并取得额外确认。
-5. **Dry** — 完整命令强制加全局 `--dryrun`（本地构造请求，非接口级 `dry_run`）；失败则修正重跑，不得转正式。
-6. **Confirm** — 回显资源/region/规格/数量/计费/金额或未知费用/批次顺序，等用户明确确认。
-7. **Execute** — 仅移除 `--dryrun`，其余不变；多命令顺序执行、失败即停、不自动回滚，报告成功/失败/未执行。
+1. **Allowlist** — Map intent to an operation in `references/lifecycle/commands.md`; refuse misses.
+2. **Help** — Run `hcloud <Service> <Operation> --help` for required and conditional fields. Stop on
+   `[APIE_ERROR]` or missing schema; never guess.
+3. **Resolve** — Run required read-only dependencies such as VPC, subnet, AZ, image, and flavor. Let
+   the user choose among multiple matches.
+4. **Cost** — Use Pricing when possible. Otherwise disclose “price unknown and may incur charges”
+   and obtain separate approval.
+5. **Dry** — Add global `--dryrun` to the complete command. Fix and rerun failures; never promote a
+   failed dry run.
+6. **Confirm** — Show resource, region, spec, quantity, billing, known or unknown price, and batch
+   order; wait for explicit confirmation.
+7. **Execute** — Remove only `--dryrun`. Run multiple commands in order, stop on failure, never
+   auto-rollback, and report succeeded, failed, and unexecuted items.
 
-任何参数、region、数量或 operation 变化 → dry 与确认作废，回到 Help 重来。
+Any parameter, region, quantity, or operation change invalidates the dry run and confirmation and
+returns to Help.
 
 ## Unsubscribe Guidance
 
-不运行、不生成退订 CLI/API 命令，也不以 `--dryrun` 代替控制台预览：
+Never run or generate unsubscribe CLI/API operations, and never use `--dryrun` as a substitute for
+console preview.
 
-- **包年/包月**：引导登录华为云控制台 → 费用中心 → 订单管理 → 云服务退订（若显示「退订与退换货」，从该入口进入），按资源 ID/名称/订单号定位。提醒先备份或迁移数据，并在提交前核对账号、资源、关联资源、退款金额/手续费及退款流向。
-- **按需**：不适用退订；引导到对应云服务控制台，在备份后自行删除。本技能不代为删除。
+- **Subscription resources:** direct the user to Huawei Cloud Console → Cost Center → Orders →
+  Unsubscriptions. Ask them to back up or migrate data and verify the account, resource, related
+  resources, refund, fees, and refund destination before submission.
+- **Pay-per-use resources:** unsubscribe does not apply. Direct the user to the service console to
+  delete the resource after backup; do not delete it for them.
 
-若用户坚持自动执行，仍保持上述边界，并附官方退订规则：<https://support.huaweicloud.com/usermanual-billing/unsubscription_topic_2000010.html>。
+If automation is requested, preserve this boundary and provide the
+[official unsubscribe rules](https://support.huaweicloud.com/usermanual-billing/unsubscription_topic_2000010.html).
 
 ## Critical Rules
 
-1. **Never guess prices / params** — 价格只来自当次响应；参数只来自当次 help。
-2. **Never skip create dry & confirm** — 无 `--dryrun` 成功 + 用户确认，不产生真实开通调用。
-3. **Never automate unsubscribe** — 不运行或输出退订 CLI/API；只给控制台路径与核对清单。
-4. **Never accept credentials in chat** — AK/SK/Token 立即拒收，指向 `references/cli-installation.md` 自行配置。
-5. **BSS 端点** — `hcloud BSS` 固定 `--cli-region=cn-north-1`；`product_infos.N.region` 仍是资源部署区。
-6. **Route, don't refuse blankly** — 超范围请求给出正确去向（费用中心/控制台/只读账单）。
+1. Prices come from the current response; parameters come from current help.
+2. No real create call without a successful `--dryrun` and explicit confirmation.
+3. Never automate or emit unsubscribe operations.
+4. Refuse AK, SK, and tokens in chat; point to `references/cli-installation.md` for
+   self-configuration.
+5. Every BSS call uses `--cli-region=cn-north-1`; `product_infos.N.region` remains the deployment
+   region.
+6. Route out-of-scope work to Cost Center, the appropriate console, or read-only billing.
 
-> 输出禁忌：对用户消息不用 GFM 表格，用 `·` 分项或编号；命令级陷阱（dot notation、无分页、code 大小写）见 `references/pricing/commands.md` 顶部。
+Use bullets or numbered items, not GFM tables, in user-facing responses. For command-level traps,
+read `references/pricing/commands.md`.
 
-## Reference Index（按需加载）
+## Reference Index
 
-| 何时读 | 文件 |
-| --- | --- |
-| 询价入口 | `references/pricing/semantic/catalog.yml` + `rfq-*.yml` |
-| 询价命令 / 响应字段 / 陷阱 | `references/pricing/commands.md` |
-| 开通安全 / 退订控制台指引 | `references/lifecycle/concepts.md` |
-| 开通命令白名单与依赖 | `references/lifecycle/commands.md` |
-| 403 或权限问题 | `references/pricing/iam-policies.md` |
-| hcloud 未就绪 | `references/cli-installation.md`（**仅转述给用户**，不代为执行） |
+| Domain    | Concepts                                                  | Commands                           |
+| --------- | --------------------------------------------------------- | ---------------------------------- |
+| Pricing   | `references/pricing/semantic/catalog.yml` and `rfq-*.yml` | `references/pricing/commands.md`   |
+| Lifecycle | `references/lifecycle/concepts.md`                        | `references/lifecycle/commands.md` |
+
+For 403 or permission failures, read `references/iam-policies.md`. If hcloud is unavailable, relay
+`references/cli-installation.md`; never install it for the user.

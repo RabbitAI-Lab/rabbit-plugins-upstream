@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Smartsheet"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["smartsheet"]
   icon: "https://static.oomol.com/logo/third-party/smartsheet.svg"
 ---

@@ -1,43 +1,57 @@
-## Description: <br>
-Formspree (formspree.io) support for searching and reading Formspree data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Formspree through an OOMOL-connected account to list form submissions with optional filters using the oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect the live Formspree connector schema and list submissions for a Formspree form through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Formspree submissions can contain personal or business-sensitive information. <br>
-Mitigation: Use the skill only with an intended OOMOL-connected Formspree account and review returned submission data before sharing it outside the authorized workflow. <br>
-Risk: The connector depends on local oo CLI installation, sign-in, Formspree connection state, scopes, credentials, and billing status. <br>
-Mitigation: Run the requested read action first, then follow the documented setup or recovery step only when the matching command failure occurs. <br>
+## Use Case:
 
+Developers and agents use this skill to retrieve Formspree submission data through an OOMOL-connected account. It is intended for Formspree read workflows where the agent should inspect the live connector schema before running an action.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-formspree) <br>
-- [Formspree homepage](https://formspree.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Formspree submission access through the oo CLI connector.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and frontmatter) <br>
+Risk: The setup path includes one-line remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a versioned, checksum- or signature-verified installation path before running installer commands.
+
+Risk: Formspree submission data may pass through OOMOL connector infrastructure and can contain sensitive user-provided content.
+
+Mitigation: Use the skill only when that data path is acceptable, and ask for confirmation before retrieving sensitive submissions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-formspree)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Formspree homepage](https://formspree.io)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON payload instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector action responses are JSON; the skill instructs agents to inspect the live action schema before constructing payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

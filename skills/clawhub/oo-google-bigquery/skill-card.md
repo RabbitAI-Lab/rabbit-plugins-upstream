@@ -1,44 +1,56 @@
-## Description: <br>
-Google BigQuery (cloud.google.com). Use this skill for ANY Google BigQuery request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Google BigQuery through an OOMOL-connected account for reading, querying, creating, updating, and deleting BigQuery resources with the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and data teams use this skill to let an agent inspect BigQuery schemas, run queries, and manage datasets, tables, routines, models, jobs, and table data through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and change BigQuery resources using the connected OOMOL account. <br>
-Mitigation: Review the Google account and project permissions before installation, and confirm the exact payload and effect before write actions. <br>
-Risk: Destructive actions can remove datasets, tables, routines, or models. <br>
-Mitigation: Require explicit approval for destructive actions and verify the target project, dataset, and resource before execution. <br>
+## Use Case:
 
+Developers and data teams use this skill to inspect BigQuery projects, datasets, tables, jobs, routines, and models; run SQL queries; manage resources; insert rows; and start Cloud Storage load or extract jobs through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-google-bigquery) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Google BigQuery homepage](https://cloud.google.com/bigquery) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON when actions are run with the documented --json flag.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup instructions include remote installer commands that can execute arbitrary code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only if OOMOL and the oo CLI are trusted; avoid direct remote installer execution unless the installer source and integrity can be verified through safer, signed, or pinned installation instructions.
+
+Risk: The skill can run BigQuery write and destructive actions that change or delete datasets, tables, routines, models, jobs, or data.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before write actions, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-google-bigquery)
+- [Google BigQuery homepage](https://cloud.google.com/bigquery)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce or execute oo CLI connector commands; write and destructive BigQuery actions require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

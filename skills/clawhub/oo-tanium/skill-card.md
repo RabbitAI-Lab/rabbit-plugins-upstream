@@ -1,43 +1,55 @@
-## Description: <br>
-Tanium (tanium.com). Use this skill for ANY Tanium request - searching and reading data. Whenever a task involves Tanium, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tanium lets an agent inspect schemas and run GraphQL documents against a connected Tanium Gateway endpoint through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Tanium through an OOMOL-connected account, inspect live connector schemas, and execute Tanium Gateway GraphQL operations through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill exposes a broad raw GraphQL action against a high-impact endpoint management system. <br>
-Mitigation: Review each GraphQL document before execution, especially mutation-like operations, and require explicit user confirmation for changes to Tanium assets, endpoints, or configuration. <br>
-Risk: The skill describes untagged actions as read-oriented, but the available GraphQL action can express operations whose effects depend on the submitted document. <br>
-Mitigation: Fetch the live action schema, inspect the operation text and variables, and treat any state-changing or ambiguous operation as requiring confirmation before running it. <br>
+## Use Case:
 
+Security operations and endpoint management practitioners use this skill to query Tanium through an OOMOL-connected account, with schema inspection before running connector actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-tanium) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Tanium homepage](https://www.tanium.com) <br>
-- [OOMOL Tanium connection](https://console.oomol.com/app-connections?provider=tanium) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks and JSON command payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands should fetch the live connector schema before execution and preserve the execution id from JSON responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server metadata and skill frontmatter) <br>
+Risk: The skill can use broad GraphQL access against a connected Tanium account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review GraphQL mutations, administrative operations, target scope, and expected effects with the user before execution.
+
+Risk: The skill includes remote installer commands that pipe downloaded scripts to a shell.
+
+Mitigation: Avoid running pipe-to-shell installers unless the installer has been independently verified through a trusted channel.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-tanium)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Tanium Homepage](https://www.tanium.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects with data and execution metadata when actions are run.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

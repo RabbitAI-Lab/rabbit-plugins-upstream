@@ -1,43 +1,54 @@
-## Description: <br>
-搜索万豪集团旗下丽思卡尔顿酒店，返回实时价格与预订链接，支持酒店详情查询和套餐优惠搜索。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+丽思卡尔顿酒店查询服务已调整，原品牌酒店数据专区数据源暂停，现引导用户使用全球酒店搜索、酒店比价等通用酒店技能查询丽思卡尔顿/Ritz-Carlton等品牌酒店。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External users use this skill to search Ritz-Carlton hotels, inspect hotel details, compare package offers, and follow booking links returned by travel-platform results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Hotel-search details are sent to an unspecified proxy and downstream travel APIs. <br>
-Mitigation: Use the skill only when the publisher and proxy configuration are trusted, and avoid entering sensitive itinerary details. <br>
-Risk: Prices, availability, package terms, and booking links come from third-party travel results. <br>
-Mitigation: Verify all prices, availability, and booking terms on the destination booking page before relying on them. <br>
-Risk: The security verdict is suspicious because the skill uses an embedded proxy token and may overstate data-source transparency. <br>
-Mitigation: Review the proxy configuration and token handling before deployment, and document the actual data sources exposed to users. <br>
+## Use Case:
 
+External travel users use this skill as a compatibility entry point for Ritz-Carlton hotel queries after the dedicated Marriott-brand data source was paused. It returns guidance directing users to general hotel search, hotel price comparison, or travel-platform skills for current Ritz-Carlton availability, pricing, and booking links.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/ritz-carlton-hotel-booking) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown-formatted text with hotel details, prices, package summaries, and booking links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Results depend on proxy and downstream travel API responses; booking links and availability should be verified on the destination booking page.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.4 (source: server release evidence; artifact frontmatter lists 1.1.2 and _meta.json lists 1.1.3) <br>
+Risk: Users may mistake the preserved Ritz-Carlton entry points for live dedicated hotel search or booking functionality.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: The skill should clearly state that dedicated Marriott-brand search is offline and direct users to separate hotel-search or price-comparison skills for live availability, pricing, and booking links.
+
+Risk: Any live pricing or booking action depends on other hotel-search skills with separate permissions and trust considerations.
+
+Mitigation: Review and trust the downstream hotel-search skills before relying on their prices, availability, or booking links.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/ritz-carlton-hotel-booking)
+- [Publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, guidance, shell commands]
+
+**Output Format:** [Plain text guidance returned by preserved search, detail, and packages tool entry points; Markdown may describe example command usage.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Does not directly search, price, or book hotels; live hotel results depend on separate hotel-search skills.]
+
+## Skill Version(s):
+
+1.1.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

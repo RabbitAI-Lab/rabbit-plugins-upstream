@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "APIpie AI"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["apipie_ai"]
   icon: "https://static.oomol.com/logo/third-party/apipie_ai.png"
 ---

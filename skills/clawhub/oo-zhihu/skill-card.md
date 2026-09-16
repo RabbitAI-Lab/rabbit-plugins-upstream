@@ -1,42 +1,61 @@
-## Description: <br>
-Zhihu (zhihu.com). Use this skill for ANY Zhihu request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zhihu lets agents read, create, and update Zhihu and Zhida data through the OOMOL `oo` CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to search Zhihu content, inspect hot-list results, and run non-streaming Zhihu Zhida chat completions through an OOMOL-connected Zhihu account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queries and prompts may be sent through the OOMOL connector to a connected Zhihu account. <br>
-Mitigation: Review prompts before sending sensitive queries and install only if OOMOL oo CLI account connection is acceptable for the deployment. <br>
-Risk: Future connector actions could add write or destructive behavior. <br>
-Mitigation: Require explicit user confirmation for any write or destructive action and confirm the exact payload and effect before execution. <br>
+## Use Case:
 
+Developers and external agents use this skill to operate Zhihu through an OOMOL-connected account, including search, hot lists, user content, collections, followees, Zhida knowledge bases, document search, PDF parsing, PPT generation, and chat completions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-zhihu) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Zhihu Homepage](https://www.zhihu.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup documents remote installer commands for the OOMOL CLI, which can execute code from a network source.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only from a trusted or verified distribution path, and prefer reviewing the installer or using signed, package-manager, or checksum-verified installation before running setup commands.
+
+Risk: Write actions can change Zhihu or Zhida state, including uploads, PDF parsing submissions, and PPT generation tasks.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running any action tagged as write or destructive.
+
+Risk: The skill depends on an OOMOL-connected Zhihu account and server-side credential injection.
+
+Mitigation: Use only accounts and scopes the user authorizes, and avoid proactively triggering authentication or connection setup unless an action fails for that reason.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-zhihu)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Zhihu](https://www.zhihu.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return connector JSON responses containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

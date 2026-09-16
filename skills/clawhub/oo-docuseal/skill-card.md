@@ -1,43 +1,55 @@
-## Description: <br>
-DocuSeal helps agents read document templates and create DocuSeal signature submissions through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+DocuSeal skill for reading, creating, and updating DocuSeal data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect DocuSeal action schemas, list or retrieve templates, and create signature submissions after confirming write payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive credentials through the connected DocuSeal account. <br>
-Mitigation: Use the existing OOMOL credential flow and avoid exposing raw tokens in prompts, command output, or files. <br>
-Risk: The create_submission action changes DocuSeal state and may send signature requests. <br>
-Mitigation: Inspect the live action schema and confirm the exact payload, recipients, and intended effect with the user before running write actions. <br>
+## Use Case:
 
+External users and developers use this skill to manage DocuSeal templates and create signature submissions through the oo CLI after inspecting live connector schemas.
 
-## Reference(s): <br>
-- [DocuSeal homepage](https://www.docuseal.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-docuseal) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with bash, PowerShell, and JSON command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector action responses are JSON objects with data and meta.executionId when commands run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence and SKILL.md metadata) <br>
+Risk: Setup instructions include remote installer scripts executed directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a signed, version-pinned package where available, or manually download and verify the installer before execution.
+
+Risk: The create_submission action changes DocuSeal state by creating signature requests.
+
+Mitigation: Inspect the live connector schema and confirm the exact payload and intended effect with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub DocuSeal skill page](https://clawhub.ai/oomol/skills/oo-docuseal)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [DocuSeal homepage](https://www.docuseal.com)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include connector schema checks, action commands, and confirmation guidance for state-changing DocuSeal actions.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

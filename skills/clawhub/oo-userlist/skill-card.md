@@ -1,43 +1,61 @@
-## Description: <br>
-Operate Userlist through an OOMOL-connected account, including reading records and creating or updating users, companies, relationships, events, and transactional messages. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Userlist (userlist.com). Use this skill for ANY Userlist request - reading, creating, and updating data. Whenever a task involves Userlist, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to run Userlist connector actions through the oo CLI for customer, company, relationship, event, and transactional messaging workflows. It is intended for agents working with a Userlist account that has already been connected through OOMOL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan reports that create-or-update actions are mislabeled as untagged actions, which could let an agent change Userlist customer or business data without confirmation. <br>
-Mitigation: Treat push_user, push_company, and push_relationship as write actions and require explicit user confirmation of the exact payload before execution. <br>
-Risk: Connector actions can create events, send transactional messages, and update users, companies, or relationships in a connected Userlist account. <br>
-Mitigation: Fetch the live action schema before building payloads, review the target account and action effect, and run only with a Userlist account where these changes are acceptable. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Userlist connector schemas and run OOMOL-connected Userlist actions for reading, creating, and updating users, companies, relationships, events, and transactional messages.
 
-## Reference(s): <br>
-- [ClawHub Userlist skill page](https://clawhub.ai/oomol/skills/oo-userlist) <br>
-- [oo CLI repository](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Userlist homepage](https://userlist.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May execute oo CLI connector schema and run commands that return JSON responses from Userlist.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: Write actions can create or update Userlist records or send transactional messages with an incorrect target or payload.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Inspect the live action schema first and obtain explicit user confirmation for write targets and payloads before running the action.
+
+Risk: The first-time setup section includes pipe-to-shell installer commands that may be unsafe if run without verification.
+
+Mitigation: Prefer a verified OOMOL installation guide, pinned release, checksum, signature, or package manager before installing the oo CLI.
+
+Risk: The connected OOMOL account may have inappropriate service permissions or billing state for the requested Userlist operation.
+
+Mitigation: Use an OOMOL account with appropriate connected services and permissions, and resolve authentication, connection, scope, or billing errors before retrying.
+
+## Reference(s):
+
+- [Userlist homepage](https://userlist.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-userlist)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces oo CLI schema and run commands; write actions require confirmation of the target and payload.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

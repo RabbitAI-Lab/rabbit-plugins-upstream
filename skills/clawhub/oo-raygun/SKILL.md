@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Raygun"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["raygun"]
   icon: "https://static.oomol.com/logo/third-party/raygun.png"
 ---

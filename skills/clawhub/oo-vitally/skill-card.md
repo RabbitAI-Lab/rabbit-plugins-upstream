@@ -1,43 +1,57 @@
-## Description: <br>
-Vitally (vitally.io) lets an agent read, create, update, and delete Vitally account data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Vitally (vitally.io). Use this skill for ANY Vitally request - reading, creating, updating, and deleting data. Whenever a task involves Vitally, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage Vitally accounts through the OOMOL oo CLI while relying on connected credentials instead of raw API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and delete actions can change or remove Vitally account data. <br>
-Mitigation: Confirm the exact action, target account, payload, and effect before create, update, or delete operations; require explicit approval for destructive actions. <br>
-Risk: Agent actions use the user's OOMOL-connected Vitally account. <br>
-Mitigation: Install this skill only when agent-mediated Vitally access is intended, and review prompts carefully before allowing account changes. <br>
+## Use Case:
 
+External users and customer success operators use this skill to manage Vitally accounts through the OOMOL-connected oo CLI, including listing, reading, creating, updating, and deleting account records.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-vitally) <br>
-- [Vitally Homepage](https://www.vitally.io/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and an execution id when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and frontmatter) <br>
+Risk: The security scan reports that first-time setup fallback instructions include remote shell installer commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installation, install the oo CLI through a trusted and reviewable method, and do not let an agent run curl-to-bash or irm-to-iex installer commands automatically.
+
+Risk: The skill can create, update, and delete Vitally account records.
+
+Mitigation: Require explicit user approval for every create, update, or delete action and confirm the exact payload and target before execution.
+
+## Reference(s):
+
+- [ClawHub Vitally skill page](https://clawhub.ai/oomol/skills/oo-vitally)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Vitally homepage](https://www.vitally.io/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Prompts the agent to inspect live action schemas before requests and to require confirmation for write or destructive Vitally actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

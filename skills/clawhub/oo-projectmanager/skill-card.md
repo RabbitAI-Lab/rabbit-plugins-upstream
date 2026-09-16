@@ -1,42 +1,56 @@
-## Description: <br>
-ProjectManager helps agents search and read ProjectManager projects and tasks through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ProjectManager helps an agent search and read ProjectManager projects and tasks through OOMOL's ProjectManager connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill when they need to retrieve ProjectManager project or task information from a connected account, including project lookups and OData-filtered project or task lists. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The broad ProjectManager trigger may invoke the skill for prompts where the user intended only general discussion. <br>
-Mitigation: Use the skill when ProjectManager data retrieval or workflow help is intended, and confirm intent before running external actions. <br>
-Risk: The skill runs external oo CLI connector commands against a connected ProjectManager account. <br>
-Mitigation: Inspect the live connector schema before constructing payloads and review external actions before allowing them. <br>
+## Use Case:
 
+Developers and agents use this skill to retrieve ProjectManager project records and query tasks without handling raw ProjectManager API credentials directly.
 
-## Reference(s): <br>
-- [ClawHub ProjectManager skill](https://clawhub.ai/oomol/skills/oo-projectmanager) <br>
-- [ProjectManager homepage](https://www.projectmanager.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Text, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON responses from the oo CLI.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only ProjectManager actions retrieve project and task data; connector responses include data and an execution id when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release and SKILL.md metadata) <br>
+Risk: Setup guidance includes mutable remote installer scripts run directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer the official installation guide, inspect installer contents, and verify the source before running Bash or PowerShell install commands.
+
+Risk: Connector commands depend on live ProjectManager action schemas and server-side credentials.
+
+Mitigation: Inspect the action schema before each action and run first-time setup or connection recovery only after an auth or connection failure.
+
+## Reference(s):
+
+- [ProjectManager homepage](https://www.projectmanager.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub ProjectManager skill page](https://clawhub.ai/oomol/skills/oo-projectmanager)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only connector actions require live schema inspection before building command payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

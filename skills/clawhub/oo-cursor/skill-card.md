@@ -1,41 +1,56 @@
-## Description: <br>
-This skill lets agents query connected Cursor team usage, spend, audit logs, and member data through OOMOL's Cursor connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Cursor through OOMOL's oo CLI to read, create, update, and delete Cursor cloud-agent data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and team administrators use this skill to retrieve Cursor team usage metrics, billing-cycle spend, audit log events, and visible team members from a connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation wording could route general Cursor requests into a connector that accesses private team usage, spend, audit logs, and member data. <br>
-Mitigation: Use this skill only for explicit requests about connected Cursor team data; answer general Cursor product questions without invoking private account access. <br>
-Risk: Cursor team usage, spend, audit logs, and member lists can expose sensitive operational or billing information. <br>
-Mitigation: Review the requested action and filters before execution and retrieve only the data needed for the user's stated task. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Cursor cloud-agent sessions, runs, team usage, spend, models, team members, and audit logs through an authenticated OOMOL-connected account.
 
-## Reference(s): <br>
-- [Cursor homepage](https://cursor.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Cursor team data queries through the oo CLI; credentials are handled by OOMOL server-side.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill metadata) <br>
+Risk: The setup path includes shell execution of remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review or replace the installer flow with a verified installation method before installing.
+
+Risk: Write and destructive Cursor actions can change, archive, cancel, or permanently delete cloud session data.
+
+Mitigation: Confirm exact payloads and targets before write actions, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [ClawHub Cursor skill page](https://clawhub.ai/oomol/skills/oo-cursor)
+- [Cursor homepage](https://cursor.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector actions return JSON data and execution metadata when run.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

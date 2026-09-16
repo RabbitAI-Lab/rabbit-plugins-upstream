@@ -1,43 +1,61 @@
-## Description: <br>
-Operates Google Forms through OOMOL's googleforms connector and oo CLI for reading, creating, and updating forms and responses. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to read, create, and update Google Forms through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent inspect Google Forms schemas, read form data and responses, create forms, and apply form updates through an OOMOL-connected Google Forms account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: State-changing Google Forms actions can create forms, batch update forms, or change publish and response-acceptance settings. <br>
-Mitigation: Confirm the exact write payload and intended effect with the user before running actions tagged as write. <br>
-Risk: OOMOL setup or login commands can initiate account access changes when run unnecessarily. <br>
-Mitigation: Run installer, login, or connection steps only when a command fails with the matching setup or authentication error. <br>
+## Use Case:
 
+Developers, employees, and external users use this skill to inspect Google Forms structure and responses, create forms, update form content, and manage publish settings through connected OOMOL credentials.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-googleforms) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Google Forms homepage](https://workspace.google.com/products/forms/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action payload construction.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: The setup instructions include remote installer scripts that could execute unreviewed code if run directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation process first and prefer official, verifiable installation steps that download, inspect, and validate the installer before execution.
+
+Risk: Write actions can create forms, apply batch updates, change publish settings, or otherwise alter Google Forms state.
+
+Mitigation: Confirm the exact payload, target form, and expected effect with the user before running any write action.
+
+Risk: The skill operates through an OOMOL-connected Google Forms account and can act with the permissions granted to that connection.
+
+Mitigation: Use the skill only for intended Google Forms tasks and reconnect or expand scopes only when an auth or scope error proves it is necessary.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-googleforms)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Google Forms](https://workspace.google.com/products/forms/)
+- [OOMOL Google Forms Connection](https://console.oomol.com/app-connections?provider=googleforms)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands call the googleforms connector through the oo CLI and may return JSON responses containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: evidence.release.version and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

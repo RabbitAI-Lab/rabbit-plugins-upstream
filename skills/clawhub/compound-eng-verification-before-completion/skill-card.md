@@ -1,42 +1,59 @@
-## Description: <br>
-Enforces fresh verification evidence before any completion claim. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enforces fresh verification evidence before any completion claim, especially before claiming tests pass, a bug is fixed, work is done, a branch is ready to merge, or scope is clear enough to edit.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering agents use this discipline skill to require immediate, command-backed verification before claiming work is complete. It also helps agents confirm ambiguous change scope before editing and select verification strategies suited to the change type. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can cause agents to propose or run broad verification commands on large projects or long-running suites. <br>
-Mitigation: Review proposed verification commands when they touch large projects, long-running test suites, or broad filesystem scope. <br>
-Risk: Incorrect or stale verification guidance could lead an agent to overstate completion confidence. <br>
-Mitigation: Require fresh command output and explicit failure reporting before accepting any completion claim. <br>
+## Use Case:
 
+Developers and engineering agents use this skill before claiming work complete, committing, pushing, opening a PR, or handing off work. It guides them to identify claim-matched verification, run fresh proof, read the full result, and report only outcomes supported by evidence.
 
-## Reference(s): <br>
-- [Isolated Verification](references/isolated-verification.md) <br>
-- [System-Wide Test Check](references/system-wide-test-check.md) <br>
-- [ClawHub release page](https://clawhub.ai/iliaal/skills/compound-eng-verification-before-completion) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands] <br>
-**Output Format:** [Markdown guidance with inline shell commands and structured completion reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prompts the agent to provide fresh verification evidence, scope confirmation, and command results before completion claims.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: The skill can cause agents to spend additional time running and reading verification commands before reporting completion.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Apply it where stricter engineering handoff discipline is desired and report any skipped or failed checks concisely.
+
+Risk: Verification commands may operate on repositories or environments outside the user's intended scope if the agent does not constrain them.
+
+Mitigation: Keep verification limited to repositories and environments the user has authorized, and resolve materially ambiguous scope before editing or running broad checks.
+
+## Reference(s):
+
+- [Change Strategies](references/change-strategies.md)
+- [Claims and Failures](references/claims-and-failures.md)
+- [Isolated Verification](references/isolated-verification.md)
+- [Proof Integrity](references/proof-integrity.md)
+- [Scope and Sweeps](references/scope-and-sweeps.md)
+- [System-Wide Test Check](references/system-wide-test-check.md)
+- [Verification Oracles](references/verification-oracles.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands]
+
+**Output Format:** [Markdown guidance with inline shell commands and concise completion reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Markdown-only discipline skill; no API calls, credentials, or generated files are required by the skill itself.]
+
+## Skill Version(s):
+
+4.5.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

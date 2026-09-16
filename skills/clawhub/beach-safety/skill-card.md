@@ -1,45 +1,61 @@
-## Description: <br>
-Comprehensive beach surf conditions via mcporter MCP call for surf, waves, swim conditions, rip currents, or beach safety at beaches worldwide. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Comprehensive beach surf conditions via mcporter MCP call. Use when asked about surf, waves, swim conditions, rip currents, or beach safety at any beach worldwide.
 
-## Publisher: <br>
-[evanfoglia](https://clawhub.ai/user/evanfoglia) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[evanfoglia](https://clawhub.ai/user/evanfoglia)
 
-## Use Case: <br>
-External users and agents use this skill to retrieve beach safety, surf, UV, wind, wave, and rip-current condition summaries or structured data for a named beach or coordinates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Beach names or coordinates may be sent to public mapping and weather providers. <br>
-Mitigation: Avoid using highly sensitive location queries when that sharing is a concern. <br>
-Risk: Beach safety reports can be incomplete or unavailable when upstream public data sources do not provide local conditions. <br>
-Mitigation: Use the report as situational guidance and follow local lifeguard, posted, or official emergency advisories. <br>
+## Use Case:
 
+External users and agents use this skill to retrieve surf, UV, wind, temperature, rip-current, and beach-safety reports for named beaches or coordinates. Outputs should support planning and situational awareness, not replace lifeguards, posted warnings, or official local advisories.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/evanfoglia/beach-safety) <br>
-- [NOAA National Weather Service API](https://api.weather.gov) <br>
-- [Open-Meteo Marine API](https://marine-api.open-meteo.com/v1/marine) <br>
-- [Open-Meteo Forecast API](https://api.open-meteo.com/v1/forecast) <br>
-- [OpenStreetMap Nominatim Search](https://nominatim.openstreetmap.org/search) <br>
-- [Photon Geocoder](https://photon.komoot.io/api/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, guidance] <br>
-**Output Format:** [Plain text safety reports or structured JSON returned by MCP tools] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include beach coordinates, timestamps, safety scores, rip-current risk, UV index, wave, swell, wind, temperature, and recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.2 (source: server release metadata) <br>
+Risk: The skill can produce reassuring safety guidance when important hazard data is missing or official alerts are not incorporated.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat outputs as informational only and check lifeguards, posted warnings, and official local advisories before entering the water.
+
+Risk: Requested beach names and coordinates are sent to external geocoding and weather providers.
+
+Mitigation: Avoid querying sensitive locations and review relevant provider privacy and usage terms before deployment.
+
+Risk: The overall safety score can understate danger when upstream data sources fail or return incomplete data.
+
+Mitigation: Review raw conditions, unavailable fields, and official alerts instead of relying only on the summarized safety score.
+
+## Reference(s):
+
+- [Nominatim OpenStreetMap search API](https://nominatim.openstreetmap.org/search)
+- [Photon geocoder API](https://photon.komoot.io/api/)
+- [NOAA National Weather Service API](https://api.weather.gov)
+- [Open-Meteo Forecast API](https://api.open-meteo.com/v1/forecast)
+- [Open-Meteo Marine API](https://marine-api.open-meteo.com/v1/marine)
+
+## Skill Output:
+
+**Output Type(s):** [text, json, guidance]
+
+**Output Format:** [Plain text reports and structured JSON from MCP tool calls]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Depends on external geocoding and weather APIs; outputs are informational and are not official safety determinations.]
+
+## Skill Version(s):
+
+1.1.3 (source: server release metadata; artifact MCP server reports 1.1.3; SKILL.md frontmatter says 1.1.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

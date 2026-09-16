@@ -1,45 +1,56 @@
-## Description: <br>
-Stormboard lets an agent search and read Stormboard data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Stormboard connector for searching and reading Stormboard data through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and Stormboard users use this skill to let an agent inspect Stormboard profile, board, access, idea, user, tag, connector, and template data from a connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Stormboard data available to the user's connected OOMOL/Stormboard account. <br>
-Mitigation: Install only when agent access to that Stormboard data is intended, and keep use to the documented get and list actions. <br>
-Risk: First-time setup may ask the user to install or sign in to the oo CLI when a command fails. <br>
-Mitigation: Review any requested installation or login step before allowing it, and do not run connection steps unless the matching error occurs. <br>
-Risk: Future connector actions could claim to change or delete Stormboard data. <br>
-Mitigation: Require explicit user confirmation before any action that writes, overwrites, or deletes Stormboard data. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Stormboard profiles, storms, access levels, participants, tags, ideas, connectors, templates, and template categories from an OOMOL-connected Stormboard account.
 
-## Reference(s): <br>
-- [ClawHub Stormboard Skill](https://clawhub.ai/oomol/skills/oo-stormboard) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Stormboard](https://stormboard.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI commands and JSON connector responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-oriented get/list actions; requires an installed, signed-in oo CLI and a connected Stormboard account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and skill frontmatter) <br>
+Risk: Setup instructions include direct remote installer execution.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review OOMOL's official installation process and prefer a verified package or installer with a checksum or signature before installing.
+
+Risk: Stormboard requests are sent through OOMOL and require an OOMOL-connected Stormboard account.
+
+Mitigation: Use an account and workspace appropriate for the data being accessed, and confirm OOMOL and Stormboard access requirements before routine use.
+
+## Reference(s):
+
+- [Stormboard homepage](https://stormboard.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Stormboard skill page](https://clawhub.ai/oomol/skills/oo-stormboard)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before issuing requests; routine actions described in evidence are read-only.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

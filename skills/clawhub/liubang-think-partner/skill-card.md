@@ -1,42 +1,50 @@
-## Description: <br>
-A Chinese-language thinking partner that applies Liu Bang-inspired leadership, talent, strategy, and decision-making models to team and competition questions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Chinese-language leadership, strategy, delegation, team alignment, and decision-making guidance through thinking models based on Liu Bang's historical leadership practices.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users and leaders use this skill to frame team-building, delegation, strategic patience, competition, and uncertain decisions through Liu Bang-inspired historical models. Its guidance is advisory and should be checked against current facts and the user's own business context. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Leadership and strategy recommendations may not fit a user's current organization, market, or decision context. <br>
-Mitigation: Treat outputs as advisory framing and validate recommendations against current facts, stakeholder input, and local constraints before acting. <br>
-Risk: The artifact includes current-looking 2026 claims that may be stale or unsupported by server provenance. <br>
-Mitigation: Verify time-sensitive claims independently and do not infer GitHub or external provenance when the evidence marks provenance as unavailable. <br>
+## Use Case:
 
+Employees, managers, founders, and strategy practitioners use this skill as a Chinese-language thinking partner for leadership dilemmas, talent delegation, team incentives, competitive positioning, and information-driven decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/liubang-think-partner) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
-- [Artifact SKILL.md](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance in Chinese with occasional English terms] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory leadership and strategy analysis; no executable output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: server-resolved release evidence) <br>
+Risk: Historically framed leadership advice may be over-applied to sensitive workplace, interpersonal, legal, HR, compliance, or personal safety decisions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use normal judgment, seek qualified review for regulated or high-impact decisions, and treat the skill's recommendations as advisory rather than authoritative.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/liubang-think-partner)
+- [Publisher profile](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, text]
+
+**Output Format:** [Markdown or plain text leadership and strategy advice, primarily in Chinese]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No executable code output is expected.]
+
+## Skill Version(s):
+
+2.0.2 (source: evidence.release.version and artifact identity)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

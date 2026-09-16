@@ -1,42 +1,52 @@
-## Description: <br>
-Bolna (bolna.ai). Use this skill for ANY Bolna request: searching and reading data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Bolna helps agents search and read data from Bolna through the OOMOL-connected oo CLI connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External developers and operators use this skill to inspect Bolna voice agents, execution history, raw execution logs, and workspace user or wallet summaries through OOMOL's oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Bolna agents, execution history, raw execution logs, and workspace/user wallet summaries, which may contain sensitive information. <br>
-Mitigation: Install and use it only with an intended OOMOL-connected Bolna account, and treat returned data as sensitive. <br>
-Risk: Future write or destructive connector actions could alter or remove Bolna data. <br>
-Mitigation: Review action tags, payloads, and expected effects, and obtain explicit user approval before running write or destructive actions. <br>
+## Use Case:
 
+Developers and external users use this skill to inspect Bolna connector schemas and retrieve read-only voice agent, execution, raw log, workspace user, and agent execution history data from an authenticated Bolna workspace.
 
-## Reference(s): <br>
-- [Bolna homepage](https://www.bolna.ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub Bolna skill](https://clawhub.ai/oomol/oo-bolna) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an OOMOL-connected Bolna account and may expose sensitive workspace, execution, log, wallet, or user data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server evidence) <br>
+Risk: First-time setup includes mutable remote installer commands for the oo CLI without artifact-level integrity verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the OOMOL CLI through a trusted process, prefer a pinned release with integrity verification, and do not allow an agent to run installer commands automatically.
+
+## Reference(s):
+
+- [ClawHub Bolna Skill](https://clawhub.ai/oomol/skills/oo-bolna)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Bolna Homepage](https://www.bolna.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an authenticated OOMOL account, installed oo CLI, and connected Bolna provider.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,56 @@
-## Description: <br>
-Lightfield lets agents search and read Lightfield accounts, contacts, opportunities, custom object records, and API key metadata through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lightfield helps agents search and read Lightfield accounts, contacts, opportunities, custom object records, object definitions, and API key metadata through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill when an agent needs read-only access to Lightfield CRM-style data through the OOMOL CLI. It supports listing and retrieving Lightfield accounts, contacts, opportunities, custom object records, object definitions, and connected API key metadata. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The broad trigger wording can cause an agent to use connected Lightfield account access for casual questions that do not require live data. <br>
-Mitigation: Use the skill only when the user asks to search, list, validate, or read Lightfield data from the connected account. <br>
-Risk: Connector results can expose business records such as accounts, contacts, opportunities, and custom object records. <br>
-Mitigation: Treat returned data as connected-account data and avoid unnecessary retrieval or disclosure beyond the user's Lightfield task. <br>
-Risk: Action payloads may be incorrect if an agent relies on stale assumptions about connector inputs. <br>
-Mitigation: Fetch the live action schema with oo connector schema before constructing each oo connector run payload. <br>
+## Use Case:
 
+Developers and operators use this skill to let an agent retrieve Lightfield records, inspect live action schemas, and handle setup, authentication, connection, and billing errors for Lightfield access.
 
-## Reference(s): <br>
-- [Lightfield homepage](https://lightfield.app) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-lightfield) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution; connector responses are JSON objects containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill frontmatter) <br>
+Risk: Setup instructions include remote installer scripts that execute directly on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use verified, versioned vendor installation instructions and inspect installer sources before allowing an agent or shell session to run them.
+
+Risk: The skill can retrieve Lightfield business records through connected account credentials.
+
+Mitigation: Limit requests to the user's stated task, use the disclosed OOMOL credential flow, and avoid collecting raw API tokens.
+
+## Reference(s):
+
+- [ClawHUB skill page](https://clawhub.ai/oomol/skills/oo-lightfield)
+- [Lightfield homepage](https://lightfield.app)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-oriented connector actions; live schemas are inspected before JSON payload construction.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

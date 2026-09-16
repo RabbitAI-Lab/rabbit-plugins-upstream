@@ -1,42 +1,54 @@
-## Description: <br>
-OKX News & Sentiment helps agents retrieve crypto news, coin sentiment, sentiment trends, source-filtered articles, and macroeconomic calendar data through the OKX CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents to use the OKX CLI for crypto news aggregation, coin sentiment analysis, sentiment trends, and macro-economic calendar queries.
 
-## Publisher: <br>
-[numpy0001](https://clawhub.ai/user/numpy0001) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[numpy0001](https://clawhub.ai/user/numpy0001)
 
-## Use Case: <br>
-External users and developers use this skill to answer crypto market intelligence questions, produce market briefings, and analyze sentiment or macroeconomic calendar events using OKX news data. It is intended for news, sentiment, and calendar workflows, not direct order placement. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Live OKX credentials may allow workflows to read private account positions or balances when position-impact analysis is requested. <br>
-Mitigation: Require explicit user confirmation before any account-data access, prefer least-privileged read-only credentials, and require separate confirmation before any order-related action. <br>
-Risk: News, sentiment, macro, and position-impact outputs can be interpreted as personalized trading guidance. <br>
-Mitigation: Present outputs as informational analysis, include data source and timing context, and tell users to verify conclusions before making trading decisions. <br>
+## Use Case:
 
+Developers and agents use this skill to answer crypto market-intelligence questions with OKX CLI commands for news, sentiment, and economic-calendar data. It supports market briefings, coin sentiment checks, source-filtered news, and macro impact analysis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/numpy0001/okx-sentiment-tracker) <br>
-- [OKX homepage](https://www.okx.com) <br>
-- [Cross-Skill Workflows & MCP Tool Reference](references/workflows.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown summaries with inline shell commands and optional JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires configured live OKX API credentials; economic calendar calls are rate-limited to 1 request per 5 seconds.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.8 (source: server release evidence; artifact metadata references 1.3.7) <br>
+Risk: Live OKX credentials may be exposed or used unsafely when configuring or invoking the CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a safer credential setup path where available, avoid pasting real API secrets into command-line examples, and install only when comfortable with a global OKX CLI.
+
+Risk: Some workflows may read private account balances or positions.
+
+Mitigation: Run account-data workflows only when the user explicitly intends to share that account information.
+
+## Reference(s):
+
+- [Cross-Skill Workflows & MCP Tool Reference](references/workflows.md)
+- [OKX](https://www.okx.com)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown with inline shell commands and optional JSON-producing CLI invocations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May require a global OKX CLI installation, live OKX credentials, rate-limited economic calendar calls, and cross-skill market or portfolio commands for some workflows.]
+
+## Skill Version(s):
+
+1.3.8 (source: server release metadata; artifact frontmatter reports 1.3.7)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

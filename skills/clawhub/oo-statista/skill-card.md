@@ -1,44 +1,52 @@
-## Description: <br>
-Statista enables agents to search Statista data and retrieve statistics through an OOMOL-connected Statista account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Statista helps an agent search Statista content and retrieve statistic chart data and metadata through an OOMOL-connected Statista account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to search Statista statistics, Consumer Insights, and Market Insights, then retrieve chart data and metadata for Statista statistic identifiers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Statista searches or statistic identifiers may be sent through the OOMOL/Statista connector. <br>
-Mitigation: Review the requested query or identifier before execution and avoid sending sensitive or unnecessary information. <br>
-Risk: First-time setup can require installing the oo CLI or starting an account login flow. <br>
-Mitigation: Run installer or login commands only when the corresponding command failure occurs and after reviewing the setup step. <br>
-Risk: Future Statista connector actions could add write or destructive behavior. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running any action tagged write or destructive. <br>
+## Use Case:
 
+External users and developers use this skill when they need an agent to search Statista statistics, Consumer Insights survey questions, Market Insights indicators, or retrieve statistic data by identifier.
 
-## Reference(s): <br>
-- [Statista homepage](https://www.statista.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON connector payloads or responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing payloads; listed actions are read-only, while future write or destructive actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence.release.version and artifact metadata.version) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a package manager or pinned release with checksum or signature verification; inspect installer contents first and run setup only after deciding to trust OOMOL's CLI installer.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-statista)
+- [Statista Homepage](https://www.statista.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector action schemas before execution and returns connector responses containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

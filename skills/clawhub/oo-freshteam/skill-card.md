@@ -1,42 +1,55 @@
-## Description: <br>
-Freshteam lets agents search and read Freshteam HR and recruiting data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Freshteam enables agents to search and read Freshteam employee and recruiting data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees and developers use this skill to retrieve Freshteam employees, job postings, applicant fields, job posting fields, candidate sources, and related directory data without handling raw credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Freshteam HR and recruiting data through the user's connected account. <br>
-Mitigation: Install only for users who should access that Freshteam data, and verify the OOMOL CLI and Freshteam connection are controlled by the user or organization. <br>
-Risk: Future Freshteam actions that write, delete, or change data could affect production HR or recruiting records. <br>
-Mitigation: Require explicit user approval for any action marked as write, destructive, or state-changing before running it. <br>
+## Use Case:
 
+Employees, recruiting operators, and developers use this skill to retrieve Freshteam employee directory data, job postings, applicant fields, candidate sources, and related recruiting metadata from a connected Freshteam account.
 
-## Reference(s): <br>
-- [Freshteam Skill Page](https://clawhub.ai/oomol/skills/oo-freshteam) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Freshteam Homepage](https://www.freshworks.com/freshteam/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include JSON data and a metadata execution ID when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: Setup instructions include running an unverified internet installer directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified or package-manager installation method for the oo CLI before using the skill.
+
+Risk: Freshteam employee and recruiting data passes through the OOMOL connector.
+
+Mitigation: Use the skill only if OOMOL and the oo CLI are trusted, and connect Freshteam with the minimum permissions needed.
+
+## Reference(s):
+
+- [ClawHub Freshteam Skill](https://clawhub.ai/oomol/skills/oo-freshteam)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Freshteam Homepage](https://www.freshworks.com/freshteam/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing Freshteam requests.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

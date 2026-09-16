@@ -1,42 +1,55 @@
-## Description: <br>
-AlgoDocs lets agents read, create, and update AlgoDocs data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AlgoDocs helps agents read, create, and update AlgoDocs data through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate AlgoDocs from an agent session: inspect schemas, list extractors, folders, and extracted data, fetch document records, check account identity, and import public document URLs after confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use a connected AlgoDocs account for account-scoped reads and one confirmed write action. <br>
-Mitigation: Install it only when AlgoDocs account access is intended, and confirm the exact upload payload and expected effect before running write actions. <br>
-Risk: Broad or vague AlgoDocs mentions could trigger connector use when the user only wants general information. <br>
-Mitigation: Use the skill for explicit AlgoDocs account operations, and avoid invoking it for general AlgoDocs background questions. <br>
+## Use Case:
 
+External users and developers use this skill to list AlgoDocs extractors, folders, and extracted records, fetch data for a document, check connected account identity, and import public document URLs into AlgoDocs.
 
-## Reference(s): <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [AlgoDocs homepage](https://algodocs.com) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON payload notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI to inspect connector schemas before running account-scoped AlgoDocs actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release metadata and skill metadata) <br>
+Risk: First-time setup may run remote installer scripts that execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review or verify the installer before use, and prefer an official package manager or pinned release when available.
+
+Risk: The upload document action changes AlgoDocs state by importing a public document URL into an extractor and folder.
+
+Mitigation: Confirm the exact URL, extractor, folder, and expected effect with the user before running the write action.
+
+## Reference(s):
+
+- [AlgoDocs homepage](https://algodocs.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [AlgoDocs skill on ClawHub](https://clawhub.ai/oomol/skills/oo-algo-docs)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce oo CLI commands for AlgoDocs connector actions and guidance for confirming write payloads before execution.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

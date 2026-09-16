@@ -1,45 +1,60 @@
-## Description: <br>
-Typeform lets agents search and read data from a connected Typeform account through the OOMOL oo connector instead of calling the Typeform API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agents with schema-first, read-oriented access to Typeform account data, forms, workspaces, and form responses through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent retrieve Typeform account, workspace, form, and response data from an OOMOL-connected Typeform account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent can read data from the connected Typeform account, including submitted form responses. <br>
-Mitigation: Use a Typeform account whose data is appropriate for the agent workflow, and review returned data before sharing or storing it elsewhere. <br>
-Risk: The skill requires OAuth or other sensitive credentials through the OOMOL connector. <br>
-Mitigation: Connect only the intended Typeform account and rerun setup steps only after an authentication or connection failure. <br>
-Risk: Future connector versions may expose write or destructive Typeform actions. <br>
-Mitigation: Confirm the exact payload, target, and expected effect with the user before running any action marked write or destructive. <br>
+## Use Case:
 
+Developers and external agents use this skill to retrieve Typeform user, form, workspace, and response data from a connected Typeform account without calling the Typeform API directly.
 
-## Reference(s): <br>
-- [ClawHub Typeform skill](https://clawhub.ai/oomol/oo-typeform) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Typeform homepage](https://www.typeform.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the live Typeform connector schema before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Typeform request and response data is routed through OOMOL.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use the connector only for Typeform accounts whose data can be processed through OOMOL, especially when forms contain sensitive responses.
+
+Risk: Setup instructions include remote installer scripts for the oo CLI.
+
+Mitigation: Prefer a verified, signed, or checksum-checked oo CLI installation method before using the connector.
+
+Risk: Connector execution depends on the live action schema and connected account scopes.
+
+Mitigation: Inspect the action schema with `oo connector schema` before execution and reconnect Typeform only when an auth, scope, or credential error requires it.
+
+## Reference(s):
+
+- [ClawHub Typeform Skill](https://clawhub.ai/oomol/skills/oo-typeform)
+- [Typeform Homepage](https://www.typeform.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, JSON, guidance]
+
+**Output Format:** [Markdown with inline bash code blocks and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution; response data may include Typeform account and response contents.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

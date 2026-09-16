@@ -21,6 +21,7 @@ import sqlite3
 import ssl
 import sys
 import time
+import unicodedata
 from datetime import datetime
 from pathlib import Path
 import urllib.request
@@ -30,20 +31,121 @@ import urllib.parse
 DB_DIR = Path.home() / ".dropmail"
 DB_PATH = DB_DIR / "dropmail.db"
 
-# macOS Python (python.org installer) doesn't bundle system CA certs.
-# Use certifi if available, otherwise fall back to unverified context.
-try:
-    import certifi
-    _SSL_CTX = ssl.create_default_context(cafile=certifi.where())
-except ImportError:
-    _SSL_CTX = ssl._create_unverified_context()
+def _make_ssl_context():
+    """Build a TLS context that ALWAYS verifies certificates.
+
+    Uses the system trust store by default. Some Python builds (notably the
+    python.org macOS installer) ship no system CAs; in that case we augment the
+    context with certifi's bundle if it is installed. We never fall back to an
+    unverified context — doing so would silently expose session cookies and
+    inbox contents to a man-in-the-middle.
+    """
+    ctx = ssl.create_default_context()
+    if not ctx.get_ca_certs():
+        try:
+            import certifi
+            ctx.load_verify_locations(cafile=certifi.where())
+        except ImportError:
+            print(
+                "[warn] No system CA certificates found and 'certifi' is not "
+                "installed. TLS verification may fail; install certifi with "
+                "'pip install certifi'.",
+                file=sys.stderr,
+            )
+    return ctx
+
+
+_SSL_CTX = _make_ssl_context()
 API_BASE = "https://api.guerrillamail.com/ajax.php"
 SESSION_FILE = DB_DIR / "sessions.json"
 
+# Language sent to the GuerrillaMail API (affects returned welcome/excerpt text).
+# Configurable so non-English users aren't forced to "en"; overridable per run
+# with the --lang flag. Defaults to English.
+LANG = os.environ.get("DROPMAIL_LANG", "en")
+
+# Basic email shape check for CLI args (defense-in-depth, better errors).
+_EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+
+# Codepoints we keep even though they are technically control characters.
+_KEEP = {"\t", "\n"}
+
+# Dangerous format (Cf) characters that are not caught by a "strip all Cc"
+# rule because Unicode classes them as Cf, not Cc. Left-to-right / right-to-left
+# overrides, embeddings, and isolates let a crafted message reorder how the
+# terminal renders text (bidi spoofing, e.g. hiding a trailing command).
+_BIDI = {
+    "‎", "‏",                          # LRM / RLM
+    "‪", "‫", "‬", "‭", "‮",  # LRE RLE PDF LRO RLO
+    "⁦", "⁧", "⁨", "⁩",       # LRI RLI FSI PDI
+}
+
+
+def _valid_email(email: str) -> bool:
+    return bool(email) and len(email) <= 254 and bool(_EMAIL_RE.match(email))
+
+
+def _clean(text) -> str:
+    """Strip terminal control/escape characters from server-supplied content.
+
+    Inbox contents come from anyone who emails a disposable address, i.e. they
+    are fully attacker-controlled. Printing them raw would let a crafted message
+    inject escape sequences into the user's terminal (ANSI/OSC screen spoofing,
+    clipboard/title manipulation) or reorder text with Unicode bidi overrides.
+
+    We drop, unicode-aware:
+      - all C0 controls (\\x00-\\x1f) and DEL (\\x7f) except tab and newline;
+      - all C1 controls (\\x80-\\x9f), including CSI \\x9b and OSC \\x9d;
+      - every character in Unicode category Cc (control) not already covered;
+      - dangerous Cf (format) characters: bidi overrides/embeddings/isolates.
+    Everything else — normal printable text — is preserved.
+    """
+    if text is None:
+        return ""
+    out = []
+    for ch in str(text):
+        if ch in _KEEP:
+            out.append(ch)
+            continue
+        if ch in _BIDI:
+            continue
+        cat = unicodedata.category(ch)
+        # Cc = C0/C1 controls (incl. \x7f, \x80-\x9f). Drop them.
+        if cat == "Cc":
+            continue
+        out.append(ch)
+    return "".join(out)
+
+# ── Filesystem helpers ────────────────────────────────────────────────────────
+def _ensure_private_dir():
+    """Create ~/.dropmail owned by the user only (0700). Session cookies and
+    cached inbox contents live here; other local users must not read them."""
+    DB_DIR.mkdir(parents=True, exist_ok=True)
+    try:
+        os.chmod(DB_DIR, 0o700)
+    except OSError:
+        pass
+
+
+def _write_private(path: Path, text: str):
+    """Write text to a file that only the owner can read/write (0600)."""
+    fd = os.open(str(path), os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    with os.fdopen(fd, "w") as f:
+        f.write(text)
+    try:
+        os.chmod(path, 0o600)  # tighten if the file pre-existed with looser perms
+    except OSError:
+        pass
+
+
 # ── DB Setup ──────────────────────────────────────────────────────────────────
 def init_db():
-    DB_DIR.mkdir(parents=True, exist_ok=True)
+    _ensure_private_dir()
     con = sqlite3.connect(DB_PATH)
+    try:
+        os.chmod(DB_PATH, 0o600)  # the DB caches received message bodies
+    except OSError:
+        pass
     cur = con.cursor()
     cur.executescript("""
         CREATE TABLE IF NOT EXISTS emails (
@@ -77,7 +179,8 @@ def load_sessions():
 
 
 def save_sessions(sessions):
-    SESSION_FILE.write_text(json.dumps(sessions, indent=2))
+    _ensure_private_dir()
+    _write_private(SESSION_FILE, json.dumps(sessions, indent=2))
 
 
 def api_call(params: dict, email: str = None) -> dict:
@@ -95,8 +198,10 @@ def api_call(params: dict, email: str = None) -> dict:
     # Inject saved PHPSESSID
     if "phpsessid" in session_data:
         req.add_header("Cookie", f"PHPSESSID={session_data['phpsessid']}")
-        req.add_header("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0")
 
+    # GuerrillaMail rejects non-browser User-Agents with 403, so we send a
+    # browser UA. This is a compatibility requirement of their public API, not
+    # an attempt to evade anything — no credentials or PII are sent.
     req.add_header("User-Agent", "Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0")
     try:
         with urllib.request.urlopen(req, timeout=10, context=_SSL_CTX) as resp:
@@ -123,7 +228,7 @@ def api_call(params: dict, email: str = None) -> dict:
 # ── Commands ──────────────────────────────────────────────────────────────────
 def cmd_new(args, con):
     """Fetch a new disposable email address."""
-    data = api_call({"f": "get_email_address", "lang": "en"})
+    data = api_call({"f": "get_email_address", "lang": LANG})
     email = data.get("email_addr", "")
     ts = int(data.get("email_timestamp", time.time()))
     expires_at = ts + 3600  # 1 hour TTL
@@ -194,8 +299,8 @@ def cmd_inbox(args, con, email):
     for msg_id, mail_from, subject, excerpt, received_at, read in rows:
         date_str = datetime.fromtimestamp(received_at).strftime("%m-%d %H:%M") if received_at else "?"
         read_mark = "✓" if read else "●"
-        from_trunc = (mail_from or "")[:29]
-        subj_trunc = (subject or "(no subject)")[:34]
+        from_trunc = _clean(mail_from or "")[:29]
+        subj_trunc = _clean(subject or "(no subject)")[:34]
         print(f"  {msg_id:<12} {from_trunc:<30} {subj_trunc:<35} {date_str:<16} {read_mark}")
     print(f"\n  Use: dropmail {email} read <id>  to read a message")
 
@@ -210,7 +315,7 @@ def cmd_refresh(args, con, email):
 
     # Set the email user in the API session
     username = email.split("@")[0]
-    api_call({"f": "set_email_user", "email_user": username, "lang": "en"}, email=email)
+    api_call({"f": "set_email_user", "email_user": username, "lang": LANG}, email=email)
 
     # Fetch messages
     data = api_call({"f": "check_email", "seq": "0"}, email=email)
@@ -251,7 +356,6 @@ def cmd_read(args, con, email, msg_id):
         data = api_call({"f": "fetch_email", "email_id": msg_id}, email=email)
         body = data.get("mail_body", "(empty)")
         # Strip basic HTML tags
-        import re
         body = re.sub(r"<[^>]+>", "", body)
         body = body.replace("&nbsp;", " ").replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&")
         cur.execute("UPDATE messages SET body=?, read=1 WHERE id=?", (body, msg_id))
@@ -262,11 +366,11 @@ def cmd_read(args, con, email, msg_id):
 
     date_str = datetime.fromtimestamp(received_at).strftime("%Y-%m-%d %H:%M") if received_at else "?"
     print(f"\n{'─'*60}")
-    print(f"From:    {mail_from}")
-    print(f"Subject: {subject}")
+    print(f"From:    {_clean(mail_from)}")
+    print(f"Subject: {_clean(subject)}")
     print(f"Date:    {date_str}")
     print(f"{'─'*60}\n")
-    print(body.strip())
+    print(_clean(body).strip())
     print(f"\n{'─'*60}")
 
 
@@ -315,6 +419,11 @@ def build_parser():
     parser = argparse.ArgumentParser(
         prog="dropmail",
         description="Disposable email manager powered by GuerrillaMail"
+    )
+    parser.add_argument(
+        "--lang", default=None,
+        help="Language code sent to the GuerrillaMail API "
+             "(default: $DROPMAIL_LANG or 'en')",
     )
     sub = parser.add_subparsers(dest="command")
 
@@ -366,6 +475,19 @@ def main():
 
     parser = build_parser()
     args = parser.parse_args()
+
+    # --lang overrides the env-var/default language for this run.
+    if getattr(args, "lang", None):
+        global LANG
+        LANG = args.lang
+
+    # Validate untrusted CLI input before it reaches the DB/API layer.
+    if getattr(args, "email", None) is not None and not _valid_email(args.email):
+        print(f"[error] Not a valid email address: {args.email}", file=sys.stderr)
+        sys.exit(2)
+    if getattr(args, "id", None) is not None and not args.id.isdigit():
+        print(f"[error] Message ID must be numeric: {args.id}", file=sys.stderr)
+        sys.exit(2)
 
     con = init_db()
 

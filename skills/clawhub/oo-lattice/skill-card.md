@@ -1,44 +1,55 @@
-## Description: <br>
-Lattice helps agents search and read Lattice users, departments, goals, and tags through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lattice helps agents search and read Lattice data through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, operators, and developers use this skill to answer Lattice questions by reading current-user, user, department, goal, and tag data through the configured OOMOL connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Lattice may contain private employee and HR data. <br>
-Mitigation: Use the skill only for explicit Lattice tasks and require confirmation before reading sensitive records, listing many users, exporting data, or making changes. <br>
-Risk: Connector payloads can be wrong if built from stale assumptions. <br>
-Mitigation: Inspect the live action schema with `oo connector schema` before each action and build JSON payloads from that schema. <br>
-Risk: Setup and connection steps can trigger account authentication, app connection, or billing flows. <br>
-Mitigation: Run setup, login, connection, or billing recovery steps only after the matching command failure. <br>
+## Use Case:
 
+Employees and developers use this skill to retrieve Lattice users, departments, goals, tags, and current-user information from a connected Lattice account.
 
-## Reference(s): <br>
-- [ClawHub Lattice skill page](https://clawhub.ai/oomol/skills/oo-lattice) <br>
-- [Lattice homepage](https://lattice.com) <br>
-- [oo CLI repository](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live action schema inspection before constructing connector payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release and frontmatter) <br>
+Risk: The security summary reports that the setup path tells an agent to run an unverified remote installer when the oo CLI is missing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only through a verified, pinned, or manually inspected method before using the skill.
+
+Risk: Lattice data flows through the OOMOL connector.
+
+Mitigation: Install only when the user trusts OOMOL and is comfortable with using its connector for the listed read-only Lattice actions.
+
+## Reference(s):
+
+- [ClawHub Lattice Skill](https://clawhub.ai/oomol/skills/oo-lattice)
+- [Lattice Homepage](https://lattice.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands can return JSON from the oo connector when run with --json.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

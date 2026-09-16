@@ -1,42 +1,59 @@
-## Description: <br>
-Helps agents search and read Mixpanel analytics data through OOMOL's Mixpanel connector and oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mixpanel (mixpanel.com). Use this skill for ANY Mixpanel request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, analysts, and support teams use this skill to query Mixpanel events, funnels, cohorts, reports, retention, profiles, and related analytics from an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may use existing local or connected credentials when running Mixpanel actions. <br>
-Mitigation: Confirm the intended Mixpanel account, project, action, and payload before running connector commands, and only initiate setup or reauthentication when an auth or connection error requires it. <br>
+## Use Case:
 
+External users and developers use this skill to query Mixpanel data through an OOMOL-connected account, including raw event exports, profiles, cohorts, funnels, retention, segmentation, saved reports, and top-event analytics.
 
-## Reference(s): <br>
-- [ClawHub Mixpanel Skill](https://clawhub.ai/oomol/oo-mixpanel) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Mixpanel](https://mixpanel.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown responses with shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Mixpanel query results returned by the oo CLI when the user's connected account authorizes the requested action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: The setup guidance includes remote installer commands that execute downloaded shell or PowerShell scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified package-manager or signed installer path, and inspect installer contents before execution.
+
+Risk: Mixpanel event and profile exports can contain sensitive customer or product analytics data.
+
+Mitigation: Limit access to trusted workspaces, avoid unnecessary raw exports, and handle returned data according to the user's data handling policy.
+
+Risk: The skill operates through OOMOL as an intermediary for Mixpanel access.
+
+Mitigation: Install only when the user trusts OOMOL with the connected Mixpanel account and accepts the server-side credential flow.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-mixpanel)
+- [Mixpanel](https://mixpanel.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Mixpanel query results returned as JSON from the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

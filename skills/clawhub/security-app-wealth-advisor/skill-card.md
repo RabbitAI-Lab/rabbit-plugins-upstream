@@ -1,40 +1,60 @@
-## Description: <br>
-AI-powered wealth advisor for bank mobile apps offering personalized product matching, investment consultation, and compliance-compliant customer interaction. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered wealth advisor for bank mobile apps offering personalized product matching, investment consultation, and compliance-compliant customer interaction.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[gechengling](https://clawhub.ai/user/gechengling)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Digital banking teams and wealth management advisors use this skill to draft bank mobile app product-matching logic, customer-facing wealth advisory text, and compliance checks. It is oriented toward China commercial banking contexts and outputs should be reviewed by qualified advisory and compliance staff before use.
+
+### Deployment Geography for Use:
+
+China
+
+## Known Risks and Mitigations:
+
+Risk: Customer profiles can contain sensitive financial personal information such as risk preference, asset size, holdings, and transaction intent.
+
+Mitigation: Use anonymized or synthetic profiles for design and testing, and do not paste real customer names, account numbers, IDs, full holdings, or live transaction data into general chat.
+
+Risk: Draft advisory language or product-matching output could be mistaken for personalized financial, legal, or insurance advice.
+
+Mitigation: Treat outputs as drafts only and require review by qualified advisory and compliance staff before customer-facing or real-world use.
+
+Risk: Regulatory summaries and compliance wording may become outdated or may not match an institution's current policy.
+
+Mitigation: Verify recommendations, disclosures, and workflow requirements against official current regulators' guidance and the deploying institution's compliance rules.
+
+Risk: Illustrative Python snippets describe matching logic but are not a production implementation.
+
+Mitigation: Adapt, test, and harden any implementation separately, including suitability validity checks, over-risk blocking or special confirmation, concentration controls, logging, and traceability.
+
+## Reference(s):
 
 
-## Use Case: <br>
-External digital banking and wealth-management teams use this skill as an advisor-assist reference for bank mobile app product matching, investment consultation scripts, financial planning prompts, and compliance-aware customer interaction. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Guidance, Markdown, Code]
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat generated wealth-advisory guidance as real financial advice. <br>
-Mitigation: Require qualified human review before using recommendations in customer-facing or regulated workflows. <br>
-Risk: Customer-profile examples and inputs may contain sensitive financial information. <br>
-Mitigation: Avoid identifiable customer financial data unless the organization has proper consent, retention, and compliance controls. <br>
+**Output Format:** [Markdown and text with illustrative Python snippets]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/security-app-wealth-advisor) <br>
+**Other Properties Related to Output:** [Advisory drafts and reference material requiring qualified human review before customer-facing or real-world use.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown guidance with illustrative Python and compliance-checklist snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory-only output requiring qualified human review before real-world financial use] <br>
+3.0.3 (source: server release evidence and frontmatter)
 
-## Skill Version(s): <br>
-3.0.2 (source: server release evidence; artifact frontmatter says 3.0.1) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

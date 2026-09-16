@@ -1,50 +1,66 @@
-## Description: <br>
-Assists with Chinese undergraduate, master's, and course-paper writing tasks, including outlines, drafted sections, revisions, reviews, proposals, literature reviews, citation checks, long-manuscript consistency, and evidence-bounded style refinement. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assists with Chinese undergraduate, master's, course-paper, proposal, and literature-review writing tasks by drafting, revising, reviewing, checking evidence and citations, maintaining long-form consistency, and reducing template-like prose when supported by author-provided or explicitly authorized sources.
 
-## Publisher: <br>
-[gongyu0918-debug](https://clawhub.ai/user/gongyu0918-debug) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gongyu0918-debug](https://clawhub.ai/user/gongyu0918-debug)
 
-## Use Case: <br>
-Students, researchers, and academic writers use this skill to plan, draft, revise, and review Chinese academic manuscripts from provided materials, school requirements, and explicitly authorized source searches. It is intended to keep claims, citations, research status, and manuscript structure within the evidence supplied or verified. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill could be misused to create unsupported academic work or substitute for the author's own scholarly contribution. <br>
-Mitigation: Use it for evidence-bounded planning, drafting, revision, and review; require author-provided or verified materials for claims, research process, data, citations, results, and conclusions. <br>
-Risk: Citation or source errors could make a manuscript misleading even when citation markers are present. <br>
-Mitigation: Use the skill's source authorization and evidence-led citation workflow, and treat local citation audit output as structural candidates rather than proof of semantic support. <br>
-Risk: Manuscripts may contain private, unpublished, or institutionally sensitive material. <br>
-Mitigation: Do not search or transmit source material unless explicitly authorized; limit authorized searches to public-source queries and avoid uploading non-public full text or sensitive research material. <br>
-Risk: Long-draft project notes may retain manuscript state on disk. <br>
-Mitigation: Use local project-state notes only when helpful for long manuscripts, and disable or avoid them when the user does not want persistent notes. <br>
+## Use Case:
 
+Students, researchers, and academic writers use this skill to plan, draft, revise, and review Chinese academic papers, opening reports, and literature reviews. It is also used to check citation coverage, preserve source attribution, and manage consistency across longer manuscripts.
 
-## Reference(s): <br>
-- [中文论文写作](SKILL.md) <br>
-- [普通中文论文专项叶](references/academic-writing.md) <br>
-- [中文论文开题报告专项叶](references/academic-proposal.md) <br>
-- [中文论文独立文献综述专项叶](references/academic-literature-review.md) <br>
-- [学术来源检索与引用覆盖](references/citation-research.md) <br>
-- [中文论文长稿稳定与全文一致性](references/long-form-consistency.md) <br>
-- [论文 ANTI-AI 语义复核](references/anti-ai-writing.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Chinese prose, Markdown outlines or review tables, optional shell commands, and optional JSON findings from read-only local audit scripts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May maintain local long-draft project notes when useful; search is used only after explicit authorization.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.6 (source: server release evidence) <br>
+Risk: Academic writing assistance can introduce unsupported claims, fabricated sources, or content that exceeds the author's actual contribution.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use author-provided or explicitly authorized sources, keep source attribution visible, and have the author review final academic content under applicable institutional rules.
+
+Risk: External source lookup may expose sensitive research material or rely on sources that have not been fully verified.
+
+Mitigation: Approve web lookup only for the agreed task scope and send only the search terms or public metadata needed for source discovery and verification.
+
+Risk: Cross-session state files may retain project details that the user did not intend to persist.
+
+Mitigation: Allow `.academic-writing/` project state files only when cross-session continuity is desired, and avoid placing sensitive or unnecessary material in saved state.
+
+Risk: Bundled read-only scanners can consume excessive resources on very large or suspicious DOCX/text inputs.
+
+Mitigation: Run scanner scripts only on trusted, appropriately sized files, and apply host file-size and resource limits for untrusted inputs.
+
+## Reference(s):
+
+- [普通中文论文专项叶](references/academic-writing.md)
+- [中文论文开题报告专项叶](references/academic-proposal.md)
+- [中文论文独立文献综述专项叶](references/academic-literature-review.md)
+- [论文 ANTI-AI 语义复核](references/anti-ai-writing.md)
+- [学术来源检索与引用覆盖](references/citation-research.md)
+- [中文论文长稿稳定与全文一致性](references/long-form-consistency.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Shell commands]
+
+**Output Format:** [Markdown or plain text, with optional shell command snippets for local read-only audit scripts.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include outlines, academic prose, revision notes, review findings, citation-check results, source lists, or scanner JSON summaries when requested.]
+
+## Skill Version(s):
+
+0.1.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

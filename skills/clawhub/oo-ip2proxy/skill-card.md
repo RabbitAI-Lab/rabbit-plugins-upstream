@@ -1,43 +1,55 @@
-## Description: <br>
-IP2Proxy helps an agent inspect IP2Proxy requests by looking up whether an IPv4 or IPv6 address is a proxy through the OOMOL IP2Proxy connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+IP2Proxy helps an agent inspect the live IP2Proxy connector schema and run proxy-detection lookups for IPv4 or IPv6 addresses through the OOMOL `oo` CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill when they need an agent to check whether an IP address is associated with proxy usage through an OOMOL-connected IP2Proxy account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected OOMOL account and sensitive IP2Proxy credentials to run lookups. <br>
-Mitigation: Keep credentials scoped in the connected account, review each oo command before execution, and resolve authentication, scope, or billing errors only when command output requires it. <br>
-Risk: Incorrect connector payloads could send unintended lookup inputs or fail against the live IP2Proxy action contract. <br>
-Mitigation: Inspect the live action schema before constructing payloads and confirm any future write or destructive actions before running them. <br>
+## Use Case:
 
+Developers and operators use this skill to check whether an IP address is associated with proxy usage while keeping IP2Proxy credentials mediated through the OOMOL connector. It is suited for agent workflows that need live schema inspection before issuing a read-only IP2Proxy lookup.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-ip2proxy) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [IP2Proxy homepage](https://www.ip2location.com/web-service/ip2proxy) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema checks before running IP2Proxy lookup requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The fallback setup path tells users to run installer scripts directly from the web.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only from a trusted OOMOL CLI source, prefer a verified or package-managed install path, or inspect installer scripts before running them on sensitive systems.
+
+Risk: IP address lookups and connector execution metadata may be handled by OOMOL and IP2Proxy services.
+
+Mitigation: Use the skill only where sharing lookup targets and related metadata with those services is acceptable under the user's data-handling policy.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-ip2proxy)
+- [IP2Proxy Web Service](https://www.ip2location.com/web-service/ip2proxy)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON command responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill retrieves the live connector schema before constructing lookup payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

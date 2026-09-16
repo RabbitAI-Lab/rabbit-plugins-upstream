@@ -1,41 +1,65 @@
-## Description: <br>
-Prose editing, rewriting, and humanizing text for natural tone across copy, documentation, blog posts, emails, and PRs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Prose editing, rewriting, and humanizing text for natural tone, plus audit-only detection of AI writing tells for copy, docs, blog posts, emails, and PRs.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Writers, developers, and reviewers use this skill to audit and rewrite prose so it sounds direct, specific, and less machine-generated. It supports copy, docs, blog posts, emails, PR descriptions, and similar text-heavy work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may change tone or wording aggressively during edits. <br>
-Mitigation: Review suggested edits before publishing or merging them, especially where tone, attribution, or meaning matters. <br>
+## Use Case:
 
+Writers, developers, and reviewers use this skill to edit human-facing prose while preserving meaning, factual accuracy, and voice. It also supports audit-only review for AI writing tells without claiming authorship.
 
-## Reference(s): <br>
-- [Two-Phase Audit Workflow](references/audit-workflow.md) <br>
-- [Before/After Examples](references/examples.md) <br>
-- [Extended Phrase Reference](references/phrases.md) <br>
-- [PR and MR Description Style](references/pr-descriptions.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or plain text with audit notes, corrected text, and concise change summaries when appropriate] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code, network access, credential handling, or persistence is described in the release evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: Edited prose can accidentally change factual meaning, citations, URLs, or PR issue references.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the final text against the original source material before using it in docs, releases, emails, or PRs.
+
+Risk: Audit findings identify writing patterns but do not prove whether text was written by AI.
+
+Mitigation: Use detect-mode output as review guidance, not as an authorship verdict.
+
+Risk: The skill can prepare publishable text but does not grant authority to post or publish it.
+
+Mitigation: Confirm the user or deployment workflow has the required approval before publishing any edited content.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/iliaal/skills/compound-eng-writing)
+- [ia-writing Specification](SPEC.md)
+- [Two-Phase Audit Workflow](references/audit-workflow.md)
+- [Editing and Voice](references/editing-and-voice.md)
+- [Before/After Examples](references/examples.md)
+- [Language and Patterns](references/language-and-patterns.md)
+- [Extended Phrase Reference](references/phrases.md)
+- [PR and MR Description Style](references/pr-descriptions.md)
+- [Publication Surfaces](references/publication-surfaces.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Plain text or Markdown with corrected text, audit findings, and concise changelog notes.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Review outputs before use where factual accuracy, citations, URLs, PR issue references, or posting authority matter.]
+
+## Skill Version(s):
+
+4.5.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

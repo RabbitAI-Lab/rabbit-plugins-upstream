@@ -1,0 +1,6 @@
+[
+  {"filename": "www.example-chem.ir/catalog/product-1.html", "status": "new"},
+  {"filename": "www.example-chem.ir/catalog/product-2.html", "status": "modified"},
+  {"filename": "www.example-chem.ir/catalog/product-3.html", "status": "unchanged"},
+  {"filename": "www.example-chem.ir/catalog/product-4.html", "status": "removed"}
+]

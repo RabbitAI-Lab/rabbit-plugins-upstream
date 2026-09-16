@@ -1,43 +1,56 @@
-## Description: <br>
-Operates Grist through an OOMOL-connected account using the oo CLI to read, create, update, and delete data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Grist (getgrist.com). Use this skill for Grist requests, including reading, creating, updating, and deleting data through the OOMOL Grist connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect Grist workspaces, documents, tables, columns, and records, and to perform confirmed row mutations through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive credentials through an OOMOL-connected Grist account. <br>
-Mitigation: Install only when the skill name, publisher, and requested permissions match expectations; reconnect or authenticate only after an action fails with a relevant auth or connection error. <br>
-Risk: Write and destructive actions can change or delete Grist records. <br>
-Mitigation: Confirm the exact payload, target records, and intended effect with the user before running write or destructive actions. <br>
+## Use Case:
 
+External users and developers use this skill to operate Grist through an OOMOL-connected account, including listing workspaces, documents, tables, columns, and records. The skill also supports adding, updating, and deleting Grist records with user confirmation for state-changing actions.
 
-## Reference(s): <br>
-- [ClawHub Grist skill page](https://clawhub.ai/oomol/oo-grist) <br>
-- [Grist homepage](https://www.getgrist.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, API calls] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema lookup before building Grist action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Remote installer one-liners can execute unverified code during setup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the OOMOL CLI only through a trusted, verified method and do not let an agent run remote installer commands automatically.
+
+Risk: Write and destructive Grist actions can change or delete user data.
+
+Mitigation: Confirm the exact payload, target document or table, and expected effect before writes; require explicit approval before delete operations.
+
+## Reference(s):
+
+- [ClawHub Grist Skill](https://clawhub.ai/oomol/skills/oo-grist)
+- [Grist Homepage](https://www.getgrist.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with shell command examples and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before execution; write and destructive actions require confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "IP2Location.io"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["ip2location"]
   icon: "https://static.oomol.com/logo/third-party/ip2location.png"
 ---

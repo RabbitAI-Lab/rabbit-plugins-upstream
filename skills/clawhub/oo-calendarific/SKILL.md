@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Calendarific"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["calendarific"]
   icon: "https://static.oomol.com/logo/third-party/calendarific.png"
 ---

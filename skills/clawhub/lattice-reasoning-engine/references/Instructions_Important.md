@@ -1,5 +1,5 @@
 # Instructions — Important!
-## How to Load LATTICE v4.0 on a Fresh AI Instance
+## How to Load LATTICE v3.4 FINAL on a Fresh AI Instance
 
 ---
 

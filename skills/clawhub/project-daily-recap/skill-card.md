@@ -1,5 +1,5 @@
 ## Description: <br>
-Project Daily Recap sends a scheduled daily project recap reminder through OpenClaw to WeCom or WeChat without relying on an LLM. <br>
+项目进度定时复盘提醒 — 每晚8点自动推送复盘消息到微信，零LLM依赖，cron触发，适合工控/自动化/制造项目用 <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,30 @@ MIT <br>
 
 
 ## Use Case: <br>
-External users and project teams use this skill to schedule a daily recap prompt for project progress, next-day planning, and configurable checklist reminders. It is aimed at industrial automation, manufacturing, and similar project workflows that need reliable scheduled messaging without AI API dependencies. <br>
+Developers and operations teams running OpenClaw use this skill to install a scheduled daily project recap reminder that sends fixed-template WeChat messages for industrial, automation, manufacturing, or project-management workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The installer can add a persistent cron job that runs the reminder script on a schedule. <br>
-Mitigation: Inspect the cron line before installation and confirm it points to the intended local skill directory and reminder schedule. <br>
-Risk: Reminder messages may be sent to hardcoded or default messaging recipients that are not controlled by the installer. <br>
-Mitigation: Edit reminder.sh and config before use so the channel, account, and recipient are explicitly yours. <br>
-Risk: Project details in TODAY_PROGRESS or TOMORROW_PLAN may be delivered to the configured messaging destination. <br>
-Mitigation: Avoid putting sensitive project information in recap fields unless the delivery endpoint has been verified. <br>
+Risk: Hardcoded default WeChat recipient and account values can send reminders to the wrong account. <br>
+Mitigation: Replace WEIXIN_TARGET and WEIXIN_ACCOUNT in config with your own verified recipient and account before running setup.sh or reminder.sh. <br>
+Risk: The setup script installs a recurring cron job that sends through the logged-in OpenClaw messaging channel. <br>
+Mitigation: Review the exact crontab entry during installation and remove it manually when the recurring reminder is no longer needed. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/lynnsudo/skills/project-daily-recap) <br>
+- [Project Daily Recap ClawHub page](https://clawhub.ai/lynnsudo/skills/project-daily-recap) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and configuration values] <br>
+**Output Type(s):** [Text, Shell commands, Configuration] <br>
+**Output Format:** [Shell scripts and configuration values that produce fixed-template WeChat reminder text through OpenClaw] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Installs or runs shell scripts that create scheduled reminder messages and write local logs.] <br>
+**Other Properties Related to Output:** [Runs on a cron schedule and writes reminder.log when executed.] <br>
 
 ## Skill Version(s): <br>
-1.2.0 (source: server release metadata) <br>
+1.1.0 (source: server release metadata; artifact frontmatter and changelog report 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

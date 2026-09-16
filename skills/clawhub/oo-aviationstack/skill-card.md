@@ -1,42 +1,52 @@
-## Description: <br>
-Aviationstack (aviationstack.com). Use this skill for ANY Aviationstack request - searching and reading data. Whenever a task involves Aviationstack, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Aviationstack lets agents search and read Aviationstack flight, route, and aviation reference data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to query Aviationstack data through an OOMOL-connected account, including aircraft, airlines, airports, cities, countries, taxes, flights, and routes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected Aviationstack account, so queries may use connected account access or billing credits. <br>
-Mitigation: Confirm trust in OOMOL and the oo CLI before use, and monitor billing or credit limits before retrying failed requests. <br>
-Risk: The fallback setup path includes installing the oo CLI if it is missing. <br>
-Mitigation: Run the installer only when the oo command is actually unavailable and after reviewing the installation source. <br>
+## Use Case:
 
+Developers and external users use this skill to query Aviationstack data through an OOMOL-connected account, including real-time or recent historical flights, airline routes, and aviation reference datasets.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-aviationstack) <br>
-- [Aviationstack Homepage](https://aviationstack.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill uses read-only connector actions and may return Aviationstack records with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: The first-time setup path can lead an agent to execute unverified remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI manually from a trusted source and prefer a pinned release or verification step before allowing the skill to run Aviationstack queries.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-aviationstack)
+- [Aviationstack homepage](https://aviationstack.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the live oo connector schema before submitting action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

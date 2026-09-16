@@ -1,44 +1,61 @@
-## Description: <br>
-Elasticsearch (elastic.co). Use this skill for ANY Elasticsearch request: searching and reading data through the OOMOL Elasticsearch connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Elasticsearch (elastic.co). Use this skill for ANY Elasticsearch request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Elasticsearch connectivity, list accessible indices, inspect index schemas, and search index data from an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The first-time setup path documents running a remote installer directly in the shell. <br>
-Mitigation: Review OOMOL's official install guide or installer contents before running the installer. <br>
-Risk: The connector can read or search Elasticsearch data visible to the connected account. <br>
-Mitigation: Connect only Elasticsearch credentials and scopes appropriate for the data the agent is allowed to inspect. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Elasticsearch action schemas and run search, document, index, alias, shard, node, task, and cluster-health operations through the OOMOL-connected oo CLI.
 
-## Reference(s): <br>
-- [ClawHub Elasticsearch Skill](https://clawhub.ai/oomol/oo-elasticsearch) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Elasticsearch Homepage](https://www.elastic.co/elasticsearch) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs depend on the connected Elasticsearch account and may include index metadata, field statistics, health status, and search results visible to that account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and server release metadata) <br>
+Risk: First-time setup recommends remote installer scripts that are executed directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installer contents or use an official signed or checksummed install path before installing the oo CLI.
+
+Risk: The skill can perform write and destructive Elasticsearch actions.
+
+Mitigation: Require explicit confirmation of the target, payload, and expected effect before running write or destructive actions.
+
+Risk: Access to Elasticsearch is mediated through the oo CLI and OOMOL-connected credentials.
+
+Mitigation: Install only when the publisher is trusted and the user is comfortable with OOMOL mediating access to the connected Elasticsearch account.
+
+## Reference(s):
+
+- [Elasticsearch skill on ClawHub](https://clawhub.ai/oomol/skills/oo-elasticsearch)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Elasticsearch homepage](https://www.elastic.co/elasticsearch)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose oo CLI connector commands and JSON request payloads; write and destructive Elasticsearch actions require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

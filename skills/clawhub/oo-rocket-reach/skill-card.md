@@ -1,43 +1,56 @@
-## Description: <br>
-RocketReach helps agents search and read RocketReach account, person, and company data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+RocketReach helps agents search and read RocketReach people, company, and account data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, employees, and developers use this skill to inspect RocketReach action schemas and run account-connected people, company, and account lookups through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: RocketReach queries can expose person, company, and account-profile data available to the connected OOMOL account. <br>
-Mitigation: Review the live action schema and payload before sending lookup or search data, and only query data the user is authorized to access. <br>
-Risk: Setup and login steps connect a RocketReach account and may use sensitive credentials managed through OOMOL. <br>
-Mitigation: Run setup or login only when the user intends to connect RocketReach or when an action fails with an authentication or connection error. <br>
+## Use Case:
 
+External users and developers use this skill when an agent needs to look up RocketReach people, companies, funding, industry, company size, account profile, or lookup status data through an OOMOL-connected RocketReach account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-rocket-reach) <br>
-- [RocketReach Homepage](https://rocketreach.co) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and frontmatter) <br>
+Risk: The first-time setup path includes an unverified internet installer script for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official package-manager or verified release path; if using the documented installer, inspect it first and avoid elevated privileges.
+
+Risk: Lookup and search actions use the user's OOMOL-connected RocketReach account and may consume applicable service credits.
+
+Mitigation: Confirm the connected account and expected billing impact before running high-volume searches or repeated lookups.
+
+## Reference(s):
+
+- [RocketReach on ClawHub](https://clawhub.ai/oomol/skills/oo-rocket-reach)
+- [RocketReach homepage](https://rocketreach.co)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas and returns data from the authenticated OOMOL-connected RocketReach account.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

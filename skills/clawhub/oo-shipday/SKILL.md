@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Shipday"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.4"
   services: ["shipday"]
   icon: "https://static.oomol.com/logo/third-party/shipday.png"
 ---

@@ -1,42 +1,61 @@
-## Description: <br>
-MSG91 (msg91.com). Use this skill for ANY MSG91 request -- reading, creating, and updating data. Whenever a task involves MSG91, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MSG91 lets agents operate an OOMOL-connected MSG91 account for Flow SMS and OTP send, resend, and verification actions.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to work with MSG91 through an OOMOL-connected account, including sending approved Flow SMS messages and managing OTP send, resend, and verification workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The resend_otp action can send messages through the user's MSG91 account even though the skill text does not label it as a write action. <br>
-Mitigation: Review the action and payload before allowing OTP resend, send OTP, or SMS send actions to run. <br>
-Risk: The skill depends on the OOMOL oo CLI and a connected MSG91 account. <br>
-Mitigation: Install the oo CLI only from OOMOL when that provider is trusted, and connect MSG91 only when the user intends to grant account access. <br>
+## Use Case:
 
+External users and developers use this skill to send MSG91 Flow template SMS messages and manage OTP delivery or verification through an OOMOL-connected MSG91 account.
 
-## Reference(s): <br>
-- [MSG91 Homepage](https://msg91.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live OOMOL connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release metadata and skill frontmatter) <br>
+Risk: First-time setup includes remote installer commands that fetch and execute scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use installer recovery only when the oo CLI is missing, and independently verify the installer source before execution.
+
+Risk: resend_otp can affect a recipient even though the source skill does not tag it as a write action.
+
+Mitigation: Treat resend_otp as a write action and confirm the recipient, channel, and intended effect before use.
+
+Risk: The skill operates through OOMOL-mediated MSG91 access.
+
+Mitigation: Use it only when the user accepts OOMOL-connected MSG91 credential handling, and inspect the live connector schema before building payloads.
+
+## Reference(s):
+
+- [ClawHub MSG91 skill](https://clawhub.ai/oomol/skills/oo-msg91)
+- [MSG91 homepage](https://msg91.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [OOMOL MSG91 connection](https://console.oomol.com/app-connections?provider=msg91)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live connector schema inspection before action execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

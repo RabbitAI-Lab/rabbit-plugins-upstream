@@ -1,45 +1,60 @@
-## Description: <br>
-Generates high-fidelity text-to-vector assets with 4MP-tier quality for production-grade SVG-style assets and detailed illustrations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates high-fidelity vector artwork from text prompts using the Recraft V4 Pro Vector model for production-grade SVG assets and detailed illustrations.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to call the dLazy hosted Recraft V4 Pro Vector CLI, submit prompts, and receive generated vector or image output URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends prompts and selected local files to dLazy-hosted services. <br>
-Mitigation: Review prompts and files for sensitive data before execution and use the service only when that data transfer is acceptable. <br>
-Risk: Authentication requires a dLazy API key that may be stored in local CLI configuration. <br>
-Mitigation: Use DLAZY_API_KEY per invocation when local persistence is undesirable, and rotate or revoke keys from dLazy when needed. <br>
-Risk: Installing the pinned npm CLI adds third-party executable code to the environment. <br>
-Mitigation: Review the pinned @dlazy/cli package or source before installing, and consider npx @dlazy/cli@1.2.3 to avoid a persistent global install. <br>
+## Use Case:
 
+External users, developers, and design teams use this skill to generate vector artwork from prompts through the dLazy CLI and hosted API.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-recraft-v4-pro-vector) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON output containing generated asset URLs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; generated outputs are returned as files.dlazy.com URLs, with optional async task status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Prompts and referenced media paths may be sent to dLazy's hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting confidential prompts or media unless the user accepts dLazy's service handling for that data.
+
+Risk: Authentication stores a dLazy API key locally when using login or auth set.
+
+Mitigation: Use least-privilege API keys when available, rotate or revoke keys from the dLazy dashboard, and protect the local CLI config file.
+
+Risk: The skill installs and runs the third-party @dlazy/cli package through npm or npx.
+
+Mitigation: Review or trust the package before installation and prefer npx or an isolated environment when a global CLI is not desired.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-recraft-v4-pro-vector)
+- [dLazy CLI homepage](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, JSON, Files, Guidance]
+
+**Output Format:** [JSON response with generated output URLs; optional downloaded asset file when --save is used]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a dLazy API key; prompts and referenced media files may be sent to dLazy API and media storage endpoints.]
+
+## Skill Version(s):
+
+1.3.16 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

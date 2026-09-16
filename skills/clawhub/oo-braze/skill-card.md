@@ -1,46 +1,56 @@
-## Description: <br>
-Braze skill for searching and reading Braze campaign and Canvas data through OOMOL's oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Braze helps agents search and read Braze campaign and Canvas data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users who operate Braze through OOMOL-connected accounts use this skill to list and inspect campaigns and Canvases without handling raw Braze credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill brokers Braze access through OOMOL, so users rely on OOMOL for credential handling and connector execution. <br>
-Mitigation: Install only when OOMOL is an approved broker for the user's Braze account and intended read workflows. <br>
-Risk: Broad wording could lead an agent to attempt actions beyond the listed read-only campaign and Canvas operations. <br>
-Mitigation: Before approving any unlisted action, require the exact action name, payload, and expected effect. <br>
-Risk: Connector schemas may change after release. <br>
-Mitigation: Inspect the live connector schema before constructing or running each payload. <br>
+## Use Case:
 
+External users and developers use this skill to inspect Braze campaigns and Canvases from an already connected OOMOL account without handling raw Braze API tokens.
 
-## Reference(s): <br>
-- [Braze homepage](https://www.braze.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL Braze connection](https://console.oomol.com/app-connections?provider=braze) <br>
-- [ClawHub Braze skill](https://clawhub.ai/oomol/skills/oo-braze) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands; connector responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions include remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run installer commands automatically; use a trusted, version-pinned, integrity-checked oo CLI install path.
+
+Risk: The skill can access Braze data through a connected OOMOL account.
+
+Mitigation: Confirm which Braze account and scopes are connected before use, and keep execution limited to the listed read-focused actions unless future write or destructive actions are explicitly confirmed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-braze)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Braze Homepage](https://www.braze.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions return JSON from the oo CLI when run with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

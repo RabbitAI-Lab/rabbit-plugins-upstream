@@ -1,44 +1,60 @@
-## Description: <br>
-CloudConvert helps agents operate CloudConvert through an OOMOL-connected account by inspecting live connector schemas and running CloudConvert actions with the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CloudConvert lets agents operate CloudConvert through an OOMOL-connected account for file conversion jobs, task and job management, conversion type discovery, and current user or credit lookup.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage CloudConvert jobs, tasks, conversion types, and account information from an agent workflow. It supports read actions, state-changing actions, and destructive delete actions with confirmation guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The evidence security verdict is suspicious and notes powerful maintainer or moderation workflows. <br>
-Mitigation: Install only when the intended workflow matches the release purpose, review the skill before use, and run production-affecting commands only with the correct account and confirmed target. <br>
-Risk: The skill requires sensitive credentials through an OOMOL-connected CloudConvert account. <br>
-Mitigation: Use server-side credential injection, avoid handling raw tokens directly, and confirm write or destructive CloudConvert actions before execution. <br>
+## Use Case:
 
+Developers and agent users use this skill to run CloudConvert conversion workflows through the oo CLI, inspect jobs and tasks, discover conversion types, and manage retries, cancellations, or deletions with confirmation.
 
-## Reference(s): <br>
-- [CloudConvert homepage](https://cloudconvert.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-cloudconvert) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May execute CloudConvert connector actions through the oo CLI when the user has configured the required account connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup guidance includes remote installer commands that execute downloaded code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer installing the oo CLI through a verified package or signed release, and review installer source before execution.
+
+Risk: The granted oo CLI permission is broader than CloudConvert-only actions.
+
+Mitigation: Review the skill before installing and restrict agent use to the documented cloudconvert connector actions.
+
+Risk: Destructive CloudConvert actions can delete jobs, tasks, and related data.
+
+Mitigation: Require explicit user approval for the exact target before running destructive actions.
+
+## Reference(s):
+
+- [CloudConvert homepage](https://cloudconvert.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [CloudConvert on ClawHub](https://clawhub.ai/oomol/skills/oo-cloudconvert)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON command responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions can read account data, create or retry conversion jobs, wait for task completion, cancel tasks, or delete jobs and tasks.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

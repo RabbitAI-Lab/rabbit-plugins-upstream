@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "IPGeolocation.io"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["ipgeolocation_io"]
   icon: "https://static.oomol.com/logo/third-party/ipgeolocation_io.svg"
 ---

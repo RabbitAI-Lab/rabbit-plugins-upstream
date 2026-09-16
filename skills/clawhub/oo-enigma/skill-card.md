@@ -1,44 +1,59 @@
-## Description: <br>
-Enigma lets an agent read, create, update, and delete Enigma data through the OOMOL Enigma connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enigma enables agents to operate Enigma through an OOMOL-connected account for business search, entity lookup, aggregate counts, KYB verification, account metadata, list management, and background task tracking.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Enigma through an OOMOL-connected account, including account lookup, business and list searches, GraphQL search workflows, list creation, suggestions, and guarded list deletion. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an OOMOL-connected Enigma account and may access account, billing, business, list, and search data. <br>
-Mitigation: Use the skill only with trusted agents and maintain Enigma credentials and account access according to the organization's credential handling policy. <br>
-Risk: Write actions can create Enigma lists or submit data correction and enrichment suggestions. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running any action tagged as write. <br>
-Risk: The delete_list action can remove a user-managed Enigma list. <br>
-Mitigation: Require explicit user approval for the target list before running any destructive action. <br>
+## Use Case:
 
+Developers and agents use this skill to call Enigma through the OOMOL `oo` CLI while relying on the connected OOMOL account for credentials. It supports read workflows, list creation and deletion, suggestions, KYB verification, schema inspection, and asynchronous task status checks.
 
-## Reference(s): <br>
-- [Enigma homepage](https://www.enigma.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-enigma) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions may return JSON responses from the oo CLI, including data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup instructions include remote installer scripts that may execute unverified code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified, version-pinned oo CLI installation method and review installer contents before running shell or PowerShell installer commands.
+
+Risk: The skill can propose create, update, delete, billing, or KYB-related Enigma actions.
+
+Mitigation: Confirm the exact action, payload, target resource, and expected effect with the user before executing state-changing, destructive, billing, or KYB-related commands.
+
+Risk: Action payloads can become stale or incorrect if they are constructed without current schema details.
+
+Mitigation: Inspect the live connector schema before building payloads and match command data to the authoritative schema returned by the connector.
+
+## Reference(s):
+
+- [ClawHub Enigma skill page](https://clawhub.ai/oomol/skills/oo-enigma)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Enigma homepage](https://www.enigma.com)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, code]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should be reviewed before executing write, destructive, billing, or KYB-related Enigma actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

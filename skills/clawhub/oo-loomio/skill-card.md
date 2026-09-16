@@ -1,44 +1,56 @@
-## Description: <br>
-Loomio lets an agent search and read Loomio poll data through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Loomio (loomio.com). Use this skill for ANY Loomio request: searching and reading poll data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to retrieve Loomio poll details and list polls in a group through an OOMOL-connected account without handling raw Loomio API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive Loomio credentials through OOMOL and depends on OOMOL as an intermediary for Loomio access. <br>
-Mitigation: Install only if that intermediary model is acceptable, connect Loomio through OOMOL intentionally, and avoid exposing raw API tokens in prompts or command payloads. <br>
-Risk: First-time setup commands can install the oo CLI or start account connection flows. <br>
-Mitigation: Use setup steps only after an auth, connection, or missing-CLI failure, as directed by the skill. <br>
+## Use Case:
 
+External users and developers use this skill to inspect Loomio poll information from an OOMOL-connected Loomio account. It supports reading a specific poll and listing polls for a group with schema-first command guidance.
 
-## Reference(s): <br>
-- [ClawHub Loomio skill page](https://clawhub.ai/oomol/oo-loomio) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Loomio homepage](https://www.loomio.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo connector schema before oo connector run; Loomio connector responses are JSON with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: Setup instructions include running a remotely downloaded installer without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation source before use and prefer a signed package, pinned version, checksum, or signature verification with explicit user approval.
+
+Risk: Connected Loomio accounts may expose private Loomio content through OOMOL even though the listed actions are read-only.
+
+Mitigation: Use an account with appropriate access scope and confirm that requested poll or group data may be shared before returning sensitive results.
+
+## Reference(s):
+
+- [ClawHub Loomio Skill Page](https://clawhub.ai/oomol/skills/oo-loomio)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Loomio Homepage](https://www.loomio.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Markdown, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Runs read-only Loomio connector actions through the oo CLI after inspecting the live action schema.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

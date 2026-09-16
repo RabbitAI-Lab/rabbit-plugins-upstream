@@ -1,42 +1,60 @@
-## Description: <br>
-Clerk lets an agent manage Clerk users through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Clerk helps an agent manage Clerk users through OOMOL's oo CLI connector, including account reads, filtering, creation, updates, locks, bans, and deletion.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect, create, update, lock, ban, unban, or delete Clerk users through an OOMOL-connected Clerk account. It is suited for Clerk account administration workflows where the agent should fetch live action schemas before running commands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact Clerk account changes, including deletes, bans, locks, and metadata updates. <br>
-Mitigation: Confirm the exact target, payload, and intended effect with the user before write or destructive actions. <br>
-Risk: The skill depends on an OOMOL-connected Clerk account and first-time setup may require installing the oo CLI. <br>
-Mitigation: Use the existing signed-in OOMOL connection when available, avoid handling raw Clerk tokens, and verify the oo CLI installer source before setup. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Clerk user accounts from an agent, using live action schemas before requests and explicit confirmation for write or destructive actions.
 
-## Reference(s): <br>
-- [Clerk skill on ClawHub](https://clawhub.ai/oomol/oo-clerk) <br>
-- [Clerk homepage](https://clerk.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands call the oo CLI and may return JSON data with an execution id.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server evidence release.version and skill metadata) <br>
+Risk: The first-time setup path uses remote installer commands that can execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only through a trusted OOMOL CLI distribution path and manually review or verify the installer before running it.
+
+Risk: Write and destructive Clerk actions can change, ban, lock, or delete user accounts.
+
+Mitigation: Require explicit user confirmation of the target, payload, and intended effect before running any write, ban, lock, or delete action.
+
+Risk: The skill depends on connecting Clerk through OOMOL.
+
+Mitigation: Use it only when the user is comfortable authorizing Clerk through OOMOL and has connected the account with appropriate scopes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-clerk)
+- [Clerk homepage](https://clerk.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses Clerk connector action schemas and returns connector JSON responses when commands are run.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

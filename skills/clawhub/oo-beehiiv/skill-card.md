@@ -1,47 +1,59 @@
-## Description: <br>
-Beehiiv connector for reading, creating, and updating Beehiiv data through an OOMOL-connected account instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to operate Beehiiv through an OOMOL-connected account for reading, creating, and updating Beehiiv data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Beehiiv publications, posts, and subscriptions through the OOMOL connector with live schema inspection before each action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Beehiiv subscriber lists, publication data, and draft or post content may be sensitive and are handled through the OOMOL connector. <br>
-Mitigation: Install and use the skill only when OOMOL is an intended connector, and treat returned Beehiiv data as sensitive. <br>
-Risk: Write or destructive actions can change or remove Beehiiv data if an incorrect payload is sent. <br>
-Mitigation: Inspect the live connector schema, review the exact payload and expected effect, and get explicit user confirmation before state-changing or destructive actions. <br>
-Risk: Unneeded setup or account connection commands can expose unnecessary account or billing workflow risk. <br>
-Mitigation: Run one-time CLI installation, sign-in, and Beehiiv connection steps only when a command fails for the corresponding setup reason. <br>
+## Use Case:
 
+Developers and external users use this skill to let an agent inspect Beehiiv connector schemas and run Beehiiv actions through OOMOL-managed credentials for publications, posts, and subscriptions.
 
-## Reference(s): <br>
-- [Beehiiv ClawHub listing](https://clawhub.ai/oomol/oo-beehiiv) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Beehiiv homepage](https://www.beehiiv.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Beehiiv connection settings](https://console.oomol.com/app-connections?provider=beehiiv) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects with data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server evidence and artifact metadata) <br>
+Risk: One-step remote installer commands can execute unreviewed code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a reviewed, versioned, and verified installation path for the oo CLI, and do not let an agent run curl-to-bash or PowerShell installer commands automatically.
+
+Risk: Beehiiv requests and responses route through OOMOL-managed services.
+
+Mitigation: Install only if this routing is acceptable for the Beehiiv data involved, and avoid sending data outside the intended Beehiiv workflow.
+
+Risk: Connector actions can change Beehiiv data when the action is write-capable or destructive.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running any write or destructive action.
+
+## Reference(s):
+
+- [ClawHub Beehiiv Skill Page](https://clawhub.ai/oomol/skills/oo-beehiiv)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Beehiiv Homepage](https://www.beehiiv.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector action responses are JSON when run through the oo CLI; the skill directs agents to inspect live schemas before constructing payloads.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

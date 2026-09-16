@@ -1,44 +1,57 @@
-## Description: <br>
-Viggle helps agents operate Viggle through an OOMOL-connected account by reading account data, creating characters and render jobs, importing templates, checking render status, and managing Viggle resources. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Viggle lets an agent read and manage Viggle characters, scenes, render jobs, and account credit through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to route Viggle tasks through the OOMOL oo CLI, including listing resources, creating reusable characters or scenes, starting render jobs, and retrieving completed video URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use a connected OOMOL/Viggle account to create render jobs, create reusable characters or scenes, check credits, and soft-delete Viggle resources. <br>
-Mitigation: Approve write or delete actions only after reviewing the exact payload, target resource, and expected effect. <br>
-Risk: Installing or relying on the optional oo CLI adds a separate trust decision outside the skill content. <br>
-Mitigation: Review the CLI installation source and account connection flow before installing or authenticating. <br>
+## Use Case:
 
+External users and developers use this skill to operate Viggle from an agent session, including creating reusable characters and scenes, submitting render jobs, checking job status, and retrieving account resources.
 
-## Reference(s): <br>
-- [ClawHub Viggle Skill](https://clawhub.ai/oomol/skills/oo-viggle) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Viggle Homepage](https://viggle.ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands should inspect the live connector schema before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and skill metadata) <br>
+Risk: Setup instructions include unverified remote installer commands that could execute changing code on a user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the OOMOL CLI installation path before use and prefer a version-pinned or package-manager install with checksum or signature verification.
+
+Risk: Write and destructive Viggle actions can create, modify, or delete account resources.
+
+Mitigation: Approve write or delete actions only after checking the exact target and payload, with explicit approval for destructive actions.
+
+## Reference(s):
+
+- [ClawHub Viggle skill page](https://clawhub.ai/oomol/skills/oo-viggle)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Viggle homepage](https://viggle.ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown text with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before building payloads and requires user confirmation for write or destructive actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

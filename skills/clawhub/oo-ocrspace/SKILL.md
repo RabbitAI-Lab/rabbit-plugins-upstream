@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "OCR.space"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["ocrspace"]
   icon: "https://static.oomol.com/logo/third-party/ocrspace.svg"
 ---

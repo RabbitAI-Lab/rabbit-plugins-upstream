@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "incident.io"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["incident_io"]
   icon: "https://static.oomol.com/logo/third-party/incident_io.svg"
 ---

@@ -1,43 +1,60 @@
-## Description: <br>
-Kustomer lets an agent read, create, search, and update Kustomer customer records through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Kustomer lets an agent read, search, create, and update Kustomer customer records through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, support teams, and agents use this skill to retrieve, search, create, and update Kustomer customer records through an OOMOL-connected Kustomer account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use a connected Kustomer account to read or update customer records. <br>
-Mitigation: Install it only when that access is intended, and review write payloads before approving state-changing actions. <br>
-Risk: First-time setup may require installing the OOMOL CLI or connecting a Kustomer account. <br>
-Mitigation: Verify the CLI installer and account connection before running setup steps. <br>
+## Use Case:
 
+Support, operations, and developer agents use this skill to retrieve, search, create, and update Kustomer customer records after the user has connected Kustomer through OOMOL.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-kustomer) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Kustomer homepage](https://www.kustomer.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before payload construction; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: Kustomer customer data may be processed through OOMOL and the connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review OOMOL connector permissions and data-routing expectations before install or use.
+
+Risk: Curl-or-PowerShell pipe install commands can execute remote installer content.
+
+Mitigation: Prefer a verified installer or approved package source and confirm the installer payload before running it.
+
+Risk: Create and update actions can change Kustomer customer records.
+
+Mitigation: Inspect the connector schema and confirm the exact payload and effect with the user before write actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-kustomer)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Kustomer homepage](https://www.kustomer.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown text with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires inspecting the live connector schema before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

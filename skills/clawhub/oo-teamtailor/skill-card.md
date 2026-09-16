@@ -1,44 +1,56 @@
-## Description: <br>
-Provides agent guidance for reading Teamtailor departments, jobs, locations, and job details through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Teamtailor (teamtailor.com). Use this skill for ANY Teamtailor request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and recruiting teams use this skill to let an agent inspect Teamtailor connector schemas and read departments, jobs, locations, and individual job records through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Teamtailor job, department, and location data through an OOMOL-connected account. <br>
-Mitigation: Install and use it only where that Teamtailor read access is intended, and keep OOMOL and Teamtailor account permissions aligned with the agent's task. <br>
-Risk: Authentication or connection setup could grant account access if approved unexpectedly. <br>
-Mitigation: Approve OOMOL sign-in or Teamtailor connection steps only when intentionally connecting the account for this skill. <br>
-Risk: Future versions could add write or destructive actions. <br>
-Mitigation: Review security evidence, action tags, and live schemas before upgrading, and require explicit user confirmation for any write or destructive action. <br>
+## Use Case:
 
+External users and developers use this skill to search and read Teamtailor data through an OOMOL-connected account. It supports listing departments, jobs, and locations, and retrieving individual jobs with optional included relationships.
 
-## Reference(s): <br>
-- [ClawHub Teamtailor skill page](https://clawhub.ai/oomol/skills/oo-teamtailor) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Teamtailor homepage](https://www.teamtailor.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides read-only Teamtailor actions; connector command responses are JSON when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup instructions include direct execution of remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the OOMOL CLI installation source before use, and prefer a pinned, signed, or package-manager installation method when available.
+
+Risk: Use outside the listed read-only Teamtailor actions could exceed the documented release behavior.
+
+Mitigation: Use only the documented read-only actions unless a future version clearly documents and scopes write operations.
+
+## Reference(s):
+
+- [ClawHub Teamtailor skill page](https://clawhub.ai/oomol/skills/oo-teamtailor)
+- [Teamtailor homepage](https://www.teamtailor.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector actions return JSON data with execution metadata when run through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

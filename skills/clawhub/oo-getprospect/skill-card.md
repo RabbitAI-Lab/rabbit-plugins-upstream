@@ -1,43 +1,57 @@
-## Description: <br>
-GetProspect (getprospect.com). Use this skill for ANY GetProspect request - searching and reading data. Whenever a task involves GetProspect, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+GetProspect (getprospect.com). Use this skill for GetProspect searching and reading tasks through the OOMOL-connected oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate GetProspect through an OOMOL-connected account for business email discovery, email verification, contact lookup, and structured company or lead searches. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate against a real OOMOL-connected GetProspect account when explicitly used. <br>
-Mitigation: Inspect the live connector schema before constructing payloads, run read actions directly, and confirm exact payloads and effects before any write or destructive action. <br>
-Risk: Setup, connection, credential, or billing failures can block execution or send the user into account-management flows. <br>
-Mitigation: Run first-time setup, reconnection, or billing-related steps only after a command fails with the matching error. <br>
+## Use Case:
 
+Developers and agents use this skill to search GetProspect lead and company data, find or verify business email addresses, and look up saved contact profiles through an authenticated OOMOL connector.
 
-## Reference(s): <br>
-- [GetProspect homepage](https://getprospect.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-getprospect) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution and returns connector responses as JSON when commands are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill frontmatter) <br>
+Risk: Setup instructions may run remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer first, prefer signed or versioned packages with checksum or signature verification, and avoid elevated shells unless required.
+
+Risk: Connector actions can query business contact and lead data through an authenticated account.
+
+Mitigation: Use the live action schema before sending payloads and confirm any action marked write or destructive before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-getprospect)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [GetProspect homepage](https://getprospect.com)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, code, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; command responses are JSON when --json is used.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence release.version and skill frontmatter metadata.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,53 @@
-## Description: <br>
-SuperSaaS lets agents read SuperSaaS scheduling data through the OOMOL oo CLI using a connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SuperSaaS helps an agent read SuperSaaS schedules, appointments, resources, groups, forms, fields, and recent booking changes through the OOMOL-connected SuperSaaS connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and SuperSaaS users use this skill to let an agent inspect schedules, appointments, slots, recent booking changes, resources, services, groups, SuperForms, and available fields from a connected SuperSaaS account. It is intended for read-only scheduling and discovery workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Read operations can expose appointment, schedule, and account data from the connected SuperSaaS account. <br>
-Mitigation: Use the skill only when SuperSaaS access is intended, and review requested actions, payloads, and returned data before sharing results. <br>
-Risk: Future connector actions tagged as write or destructive could change or remove SuperSaaS data. <br>
-Mitigation: Confirm the exact payload, target, and expected effect with the user before running any write action, and require explicit approval for destructive actions. <br>
-Risk: Setup, connection, or billing fallback commands can initiate account or payment-related flows. <br>
-Mitigation: Run setup, login, connection, or billing steps only after a connector command fails for the matching reason. <br>
+## Use Case:
 
+External users and agents with an OOMOL-connected SuperSaaS account use this skill to inspect live connector schemas and read SuperSaaS schedules, appointments, slots, resources, groups, SuperForms, available fields, and recent booking changes.
 
-## Reference(s): <br>
-- [ClawHub SuperSaaS listing](https://clawhub.ai/oomol/oo-super-saas) <br>
-- [SuperSaaS homepage](https://www.supersaas.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands, JSON payloads, and JSON connector results.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only connector actions; fetch the live action schema before constructing payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The setup flow includes unverified remote installer scripts for the oo CLI, which could alter the local environment if executed automatically.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Have a human install oo from a trusted, versioned source with checksum or signature verification where available, and do not let an agent run the installer proactively.
+
+## Reference(s):
+
+- [ClawHub SuperSaaS skill page](https://clawhub.ai/oomol/skills/oo-super-saas)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [SuperSaaS homepage](https://www.supersaas.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Normal connector responses are JSON objects containing data and metadata, including an execution id.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,53 @@
-## Description: <br>
-AI-powered bank credit due diligence assistant for analyzing borrowers, financials, industry risk, ESG factors, and generating investigation report drafts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered bank credit due diligence assistant - analyze borrowers, financials, industry risk, and generate complete investigation reports.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Commercial bank credit officers, credit analysts, risk managers, and relationship managers use this skill to structure borrower due diligence, review financial and industry risk, and draft credit investigation reports for qualified internal review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Draft credit ratings, pricing, collateral, covenant, and lending recommendations may be incomplete or unsuitable for a real borrower. <br>
-Mitigation: Use outputs only as analytical support and require review by qualified bank officers under internal credit policy before any lending decision. <br>
-Risk: Borrower financials, ownership details, and investigation materials may contain confidential information. <br>
-Mitigation: Share borrower data only in chat environments approved for that information and minimize sensitive data where possible. <br>
+## Use Case:
 
+Bank credit officers, loan analysts, risk managers, and relationship managers use this skill to structure borrower due diligence, analyze financial and industry risk, assess ESG and collateral considerations, and draft credit investigation reports for human review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/bank-credit-investigation) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown narrative, tables, checklists, and report templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory draft outputs requiring qualified human review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.0.1 (source: server release evidence) <br>
+Risk: Users may enter sensitive borrower, customer, employee, account, or identity information during credit investigation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use aggregated and redacted inputs, avoid raw customer records and account details, and follow the skill's data minimization guidance.
+
+Risk: Credit reports, ratings, or facility recommendations may be mistaken for final financial, legal, or approval decisions.
+
+Mitigation: Treat outputs as report-drafting and analytical support only; qualified banking staff must verify facts, perform offline checks, and approve any formal use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/bank-credit-investigation)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown reports, checklists, risk assessments, and credit investigation guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory output only; final use requires qualified human review.]
+
+## Skill Version(s):
+
+5.0.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,47 +1,56 @@
-## Description: <br>
-This skill helps agents read, create, and update SendGrid data through an OOMOL-connected SendGrid account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SendGrid operates a connected SendGrid account through the OOMOL oo CLI for account, scope, template, and transactional email tasks.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect SendGrid account details, list transactional templates, check user scopes, and send transactional email through an OOMOL-connected SendGrid account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may operate a SendGrid account using sensitive connected credentials. <br>
-Mitigation: Install only if the user trusts OOMOL and wants this connector to operate the linked SendGrid service. <br>
-Risk: The optional first-time setup path includes remote installer commands. <br>
-Mitigation: Prefer official installation documentation or verify the installer before running remote scripts in a shell. <br>
-Risk: The send_email action changes external service state by sending transactional email. <br>
-Mitigation: Confirm the exact payload and effect with the user before running write actions. <br>
+## Use Case:
 
+External users and developers use this skill to inspect SendGrid account details, API key scopes, transactional templates, and to send transactional email through a connected SendGrid account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-sendgrid) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [SendGrid Homepage](https://sendgrid.com) <br>
-- [SendGrid Connection Setup](https://console.oomol.com/app-connections?provider=sendgrid) <br>
-- [SendGrid Icon](https://static.oomol.com/logo/third-party/SendGrid.svg) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May execute oo CLI connector actions that return JSON data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Setup instructions include unverified remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from a trusted, versioned source with verification before using this skill.
+
+Risk: The send_email action sends transactional email through SendGrid.
+
+Mitigation: Confirm the exact email payload and intended effect with the user before execution.
+
+## Reference(s):
+
+- [ClawHub SendGrid Skill](https://clawhub.ai/oomol/skills/oo-sendgrid)
+- [SendGrid Homepage](https://sendgrid.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include SendGrid action results, live schema inspection steps, setup guidance, and confirmation prompts for email-send operations.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

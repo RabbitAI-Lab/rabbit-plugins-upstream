@@ -1,45 +1,52 @@
-## Description: <br>
-AddressZen helps agents search AddressZen address suggestions, retrieve USA-formatted address details, and check key availability through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AddressZen lets an agent search and retrieve AddressZen address data through an OOMOL-connected oo CLI account instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to query AddressZen through an OOMOL-connected account for address autocomplete, USA address retrieval, and key availability checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected AddressZen account and may depend on sensitive credentials managed outside the agent. <br>
-Mitigation: Use OOMOL server-side credential injection and do not expose raw AddressZen credentials in prompts, files, or command payloads. <br>
-Risk: First-time setup can install or invoke the OOMOL CLI and connect external services. <br>
-Mitigation: Verify the OOMOL CLI installer source before installation and run setup only when an auth or connection error requires it. <br>
-Risk: Address queries, connection status, and billing or credit state are sent to external services. <br>
-Mitigation: Use the skill only for intended AddressZen workflows and confirm that the user accepts external service and billing implications before retrying failed requests. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect AddressZen connector schemas, autocomplete partial addresses, check key availability, and retrieve USA-formatted address records through the oo CLI.
 
-## Reference(s): <br>
-- [ClawHub AddressZen Skill](https://clawhub.ai/oomol/oo-addresszen) <br>
-- [AddressZen](https://addresszen.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON wrappers that include data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: First-time setup includes remote installer one-liners that run shell code from a URL.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run installer one-liners automatically; install the oo CLI only from a trusted, verified source and have the user confirm authentication and connection setup.
+
+## Reference(s):
+
+- [ClawHub AddressZen skill page](https://clawhub.ai/oomol/skills/oo-addresszen)
+- [AddressZen homepage](https://addresszen.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-oriented AddressZen connector actions; live action schemas should be inspected before payload construction.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

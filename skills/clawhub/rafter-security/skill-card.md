@@ -1,41 +1,59 @@
-## Description: <br>
-Security toolkit for AI workflows that supports scanning code or repositories for vulnerabilities, auditing third-party skills, MCPs, and agent configurations before installation, evaluating shell commands before running them, and generating secure design questions for new features. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Rafter Security helps agents and developers scan code and repositories for vulnerabilities, audit third-party skills and agent configurations, classify shell-command risk, and generate secure design questions.
 
-## Publisher: <br>
-[rafter](https://clawhub.ai/user/rafter) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[rafter](https://clawhub.ai/user/rafter)
 
-## Use Case: <br>
-Developers, engineers, and agent users use this skill to run Rafter security checks, scan for secrets, review third-party skills or agent configurations, and evaluate risky shell commands before execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The command-validation workflow may be unclear about whether `rafter agent exec <command>` classifies a command or executes it. <br>
-Mitigation: Confirm the Rafter CLI behavior before use and prefer a documented dry-run mode when the intent is only risk assessment. <br>
-Risk: Initialization can add agent integrations or hooks through the Rafter CLI. <br>
-Mitigation: Install only after deciding which integrations are trusted, and use the documented opt-in `--with-*` flags for targeted setup. <br>
+## Use Case:
 
+Developers and security reviewers use this skill to apply Rafter CLI checks for secrets, dependency and application scanning, command-risk validation, audit logs, and third-party skill reviews in AI-assisted development workflows.
 
-## Reference(s): <br>
-- [Rafter homepage](https://rafter.so) <br>
-- [ClawHub skill page](https://clawhub.ai/rafter/skills/rafter-security) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and optional JSON scan output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Secret scan JSON output redacts raw secret values when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.9.1 (source: frontmatter and server release metadata) <br>
+Risk: The skill can change agent behavior through integrations or hooks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after reviewing Rafter CLI trust, initialization flags, hook behavior, audit logging, output filtering, and disable controls.
+
+Risk: Remote scans may send code or repository data to Rafter services when RAFTER_API_KEY is used.
+
+Mitigation: Use offline rafter secrets for local-only secret scanning when remote analysis is not acceptable, and confirm data handling policies before running rafter run.
+
+Risk: Command validation workflows may be confused with real command execution.
+
+Mitigation: Confirm whether a command is only classified or actually executed before routing it through rafter agent exec or /rafter-bash.
+
+## Reference(s):
+
+- [Rafter homepage](https://rafter.so)
+- [ClawHub skill page](https://clawhub.ai/rafter/skills/rafter-security)
+- [ClawHub publisher profile](https://clawhub.ai/user/rafter)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and structured audit reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May describe CLI requirements such as the rafter binary and optional RAFTER_API_KEY; scan findings should be reviewed before acting.]
+
+## Skill Version(s):
+
+0.10.4 (source: SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

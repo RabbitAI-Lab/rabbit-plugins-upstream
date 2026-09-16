@@ -1,46 +1,56 @@
-## Description: <br>
-Uses an OOMOL-connected Contentstack account through the oo CLI to read, create, and update Contentstack content and schemas. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Contentstack Content Management (contentstack.com) helps agents read, create, and update Contentstack data through the OOMOL `oo` CLI connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, content teams, and agents use this skill to inspect Contentstack content types and entries, then create or update entries through an OOMOL-connected account when the user approves write actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create and update real Contentstack entries through a connected account. <br>
-Mitigation: Before approving a write action, verify the stack, content type, entry target, payload, and expected publishing workflow. <br>
-Risk: A command may run against the wrong or expired OOMOL-connected Contentstack account. <br>
-Mitigation: Confirm the intended connection and resolve authentication or scope errors before retrying state-changing actions. <br>
-Risk: Connector schemas may differ from assumptions in a generated payload. <br>
-Mitigation: Run the connector schema command for the selected action before constructing or executing a payload. <br>
+## Use Case:
 
+Developers and content operations teams use this skill to let an agent inspect Contentstack schemas, list or retrieve content, and prepare confirmed create or update actions through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-contentstack-content-management) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Contentstack homepage](https://www.contentstack.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline bash, PowerShell, JSON, and text blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Fetches the live connector schema before action payload construction; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release and skill metadata) <br>
+Risk: Fallback setup includes remote installer commands that pipe downloaded scripts directly to a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review official installation steps, prefer a pinned or verified installer, and do not allow an agent to run the installer automatically.
+
+Risk: Create and update actions can change Contentstack state.
+
+Mitigation: Inspect the live action schema and confirm the exact payload and intended effect with the user before running any write action.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-contentstack-content-management)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Contentstack Homepage](https://www.contentstack.com/)
+- [OOMOL oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live action-schema inspection before constructing connector payloads; write actions require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

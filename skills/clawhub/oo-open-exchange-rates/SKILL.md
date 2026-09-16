@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Open Exchange Rates"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["open_exchange_rates"]
   icon: "https://static.oomol.com/logo/third-party/open_exchange_rates.jpg"
 ---

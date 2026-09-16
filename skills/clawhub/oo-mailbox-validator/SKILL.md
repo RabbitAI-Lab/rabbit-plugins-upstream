@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "MailboxValidator"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.4"
   services: ["mailbox_validator"]
   icon: "https://static.oomol.com/logo/third-party/mailbox_validator.svg"
 ---

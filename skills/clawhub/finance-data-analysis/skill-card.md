@@ -1,41 +1,57 @@
-## Description: <br>
-Provides educational financial data analysis guidance for financial statements, KPI tracking, trend analysis, data visualization, and automated reporting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides bilingual finance-analysis frameworks for financial statement analysis, KPI tracking, trend analysis, data visualization, and automated reporting.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users, financial analysts, CFO offices, and data practitioners can use this skill for educational frameworks and templates for financial reporting, KPI analysis, dashboard design, and trend analysis. Outputs require qualified human review before real-world business, financial, legal, insurance, or compliance use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Financial or regulatory conclusions may be incorrect, outdated, or unsuitable for a specific real-world context. <br>
-Mitigation: Treat outputs as educational guidance and verify conclusions with current official sources and a qualified human reviewer. <br>
-Risk: Broad trigger terms may activate the skill for non-finance data analysis tasks. <br>
-Mitigation: Confirm that the requested task is finance-related before applying the skill's templates or conclusions. <br>
-Risk: Illustrative Python examples could be mistaken for automatically executed or production-ready code. <br>
-Mitigation: Use the examples only as reference material; review, test, and adapt any code before execution in a controlled environment. <br>
+## Use Case:
 
+Finance analysts, CFO offices, and data-driven business teams use this skill for KPI definition, statement analysis, dashboard planning, data-quality checks, attribution analysis, and report drafting. Outputs are advisory references and examples that require human review before operational or financial decisions.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown guidance with illustrative Python code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only; no executable files, tools, persistence, credential handling, hidden data access, or automatic data processing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.0.2 (source: frontmatter and server release evidence) <br>
+Risk: Financial, regulatory, or market claims may become outdated or may not match a user's jurisdiction or institution.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify claims against current official sources and internal policy before using outputs for decisions, reports, or disclosures.
+
+Risk: Example Python and SQL blocks could be copied into controlled data environments without adequate safeguards.
+
+Mitigation: Treat code blocks as educational examples, remove or anonymize customer and account data, and follow approved access, approval, and audit workflows.
+
+Risk: Generated analysis may be mistaken for financial, legal, insurance, audit, or investment advice.
+
+Mitigation: Require qualified human review and label outputs as analytical support rather than professional advice.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/finance-data-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code]
+
+**Output Format:** [Markdown with Python and SQL example code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory-only reference output; example code and financial conclusions require human review before real-world use.]
+
+## Skill Version(s):
+
+5.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

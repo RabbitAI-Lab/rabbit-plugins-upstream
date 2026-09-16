@@ -1,38 +1,52 @@
-## Description: <br>
-Manage tasks, communications, and scheduling with proactive and organized support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage tasks, communications, and scheduling with proactive and organized support.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-Employees and individual users use this skill to guide personal assistant work across task tracking, communication drafting, scheduling support, information organization, follow-ups, and proactive planning. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Broad assistant guidance may lead an agent to draft messages, alter calendars, or reuse sensitive personal information without sufficient review. <br>
-Mitigation: Review prompts and proposed actions before allowing communication, scheduling, or sensitive personal-information use. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [Assistant skill page](https://clawhub.ai/ivangdavila/assistant) <br>
-- [Publisher profile](https://clawhub.ai/user/ivangdavila) <br>
+## Use Case:
 
+External users and teams use this skill to guide an assistant in organizing tasks, communications, scheduling, notes, follow-ups, and routine support while respecting approval boundaries.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Natural-language text or Markdown guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May draft or summarize personal, scheduling, and communication content for user review.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The assistant may handle private messages, calendars, documents, or business information.
+
+Mitigation: Set clear boundaries for sensitive content and keep private material out of notes or memory unless explicitly approved.
+
+Risk: Broad assistant behavior may lead to actions or stored context that exceed the user's expectations.
+
+Mitigation: Define when the assistant must ask before acting, especially for scheduling, communications, commitments, and retained preferences.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ivangdavila/skills/assistant)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, text, markdown]
+
+**Output Format:** [Markdown guidance for agent behavior and responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No executable code or hidden install behavior was identified in the provided security evidence.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

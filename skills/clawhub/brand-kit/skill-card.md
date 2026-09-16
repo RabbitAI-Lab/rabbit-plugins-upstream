@@ -1,49 +1,64 @@
-## Description: <br>
-Generates an end-to-end enterprise brand asset package from requirements, including logo variants, SVG assets, PNG and ICO conversions, HTML handoff pages, brand guidelines, and validation guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Brand Kit helps agents apply a shared brand.yaml visual standard for ecommerce image generation so product SKUs keep consistent models, lighting, composition, spacing, and tone.
 
-## Publisher: <br>
-[wangjiaocheng](https://clawhub.ai/user/wangjiaocheng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Designers, founders, brand teams, and developers use this skill to transform company details and design preferences into a structured brand kit with logo systems, VI assets, favicon files, display pages, and handoff checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill generates and modifies brand asset files in a project directory. <br>
-Mitigation: Run it only in the intended workspace and review generated SVG, PNG, ICO, and HTML outputs before use. <br>
-Risk: Business contact details may be inserted into generated assets. <br>
-Mitigation: Review company and personal contact information before generation and again in the final handoff package. <br>
-Risk: Rendering uses an Edge executable selected from the environment. <br>
-Mitigation: Use a trusted Edge installation when setting the EDGE environment variable. <br>
-Risk: Cleanup commands may remove generated files if pointed at the wrong targets. <br>
-Mitigation: Confirm cleanup and rm command targets are limited to generated brand asset files. <br>
+## Use Case:
 
+Ecommerce operators and agents use this skill to create and reuse a brand.yaml standard that appends consistent visual constraints and reference images to product image-generation tasks. It is intended for store-scale visual consistency across many SKUs.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/wangjiaocheng/skills/brand-kit) <br>
-- [Publisher Profile](https://clawhub.ai/user/wangjiaocheng) <br>
-- [Brand Kit Catalog](artifact/references/brand-kit-catalog.md) <br>
-- [Brand Kit Requirements](artifact/references/brand-kit-requirements.md) <br>
-- [Exemplars Index](artifact/references/exemplars.md) <br>
-- [SVG Specification](http://www.w3.org/2000/svg) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance with SVG, HTML, Python, shell command, and generated asset file outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can produce a full brand asset package of 87 files: 2 HTML, 33 SVG, 51 PNG, and 1 ICO.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Credentialed cloud image-generation providers may be selected from environment keys or local provider configuration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review provider credentials before use, run the doctor or dry-run mode first, and install only when cloud generation is intended.
+
+Risk: Untrusted image URLs or reference images may be fetched and sent to a configured provider.
+
+Mitigation: Use trusted local image assets or trusted URLs, and review all image inputs before running generation.
+
+Risk: The default brand template includes model demographic fields that may not match the user's brand requirements.
+
+Mitigation: Replace or remove the default model description and reference image before applying the brand file to production SKUs.
+
+Risk: A custom Ark base URL can redirect requests to an endpoint outside the expected provider path.
+
+Mitigation: Use ARK_BASE_URL only for endpoints the user fully trusts and controls.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/brand-kit)
+- [brand.yaml field reference](artifact/references/brand-schema.md)
+- [Provider CLI reference](artifact/references/provider-cli.md)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown guidance with YAML configuration examples and Node.js shell commands; helper scripts can emit JSON dry-run or generation envelopes.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can append brand constraints to prompts, add a model reference image when available, run dry-runs, and save generated image or video files through configured cloud providers.]
+
+## Skill Version(s):
+
+1.0.7 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

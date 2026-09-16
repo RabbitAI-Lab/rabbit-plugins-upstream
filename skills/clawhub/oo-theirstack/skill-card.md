@@ -1,45 +1,56 @@
-## Description: <br>
-TheirStack (theirstack.com) helps agents search and read TheirStack data through the OOMOL-connected `oo` CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TheirStack helps agents search and read TheirStack data through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to query TheirStack through an OOMOL-connected account for credit balance checks, company search, job search, and company technographics. It helps agents inspect live connector schemas and run read-only TheirStack actions with structured JSON payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use the connected TheirStack account for broad search and credit-balance read requests. <br>
-Mitigation: Review the requested connector action and payload before execution, and re-check permissions if future connector actions are marked write or destructive. <br>
-Risk: Connector schemas may change over time. <br>
-Mitigation: Inspect the live TheirStack connector schema before constructing each payload. <br>
-Risk: Authentication, connection, credential, or billing failures can block execution. <br>
-Mitigation: Use the documented first-time setup and billing guidance only after a command fails with the matching error. <br>
+## Use Case:
 
+Developers and agents use this skill to operate TheirStack through an OOMOL-connected account for company search, job search, technographic lookup, buying-intent keyword lookup, and team credit balance retrieval.
 
-## Reference(s): <br>
-- [TheirStack homepage](https://theirstack.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [TheirStack skill on ClawHub](https://clawhub.ai/oomol/skills/oo-theirstack) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only connector actions use live schema inspection before execution; OOMOL handles TheirStack credentials server-side.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: The setup path recommends executing remote installer scripts directly from the shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official package manager or downloaded, versioned installer that can be verified and inspected; avoid running curl-to-bash or irm-to-iex from an elevated shell unless the user accepts that risk.
+
+Risk: Connector actions depend on authenticated OOMOL and TheirStack account state.
+
+Mitigation: Run first-time setup steps only after commands fail with matching authentication, connection, scope, credential, app, or billing errors.
+
+## Reference(s):
+
+- [TheirStack homepage](https://theirstack.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL TheirStack connection settings](https://console.oomol.com/app-connections?provider=theirstack)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-theirstack)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing JSON action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,60 @@
-## Description: <br>
-Metronome helps an agent search and read Metronome customers, invoices, and billable metrics through the OOMOL oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Metronome (metronome.com). Use this skill for Metronome requests that search and read customer, invoice, billable metric, and related account data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent inspect Metronome customers, invoices, and billable metrics through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The trigger wording is broad and could cause Metronome account lookups to be considered in contexts where that access was not intended. <br>
-Mitigation: Use the skill only in contexts where Metronome customer, invoice, or billable metric lookups are intended. <br>
-Risk: First-time setup may require installing the oo CLI or connecting an OOMOL account. <br>
-Mitigation: Review any first-time oo CLI install or account-connection step before proceeding, and run setup only after an auth or connection failure. <br>
+## Use Case:
 
+Developers and external users use this skill to operate Metronome through an OOMOL-connected account, inspect live action schemas, and retrieve customer details, invoices, billable metrics, and customer lists.
 
-## Reference(s): <br>
-- [ClawHub Metronome skill page](https://clawhub.ai/oomol/skills/oo-metronome) <br>
-- [Metronome homepage](https://metronome.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Metronome get and list operations; connector responses include data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and frontmatter) <br>
+Risk: The setup path can execute remote installer scripts before the oo CLI is available.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installation, prefer an official versioned oo CLI installation method, and verify installers before running them.
+
+Risk: Connecting Metronome through OOMOL grants the connector access to business billing and customer data within the account scope.
+
+Mitigation: Grant only the required Metronome account scope, keep credentials server-side, and review access before connecting or reconnecting the provider.
+
+Risk: Authentication, connection, CLI, or billing failures may require setup or recovery actions before Metronome requests can complete.
+
+Mitigation: Run setup or recovery steps only after a matching command failure and avoid repeating sign-in or connection steps proactively.
+
+## Reference(s):
+
+- [Metronome homepage](https://metronome.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-metronome)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include oo CLI commands, action names, schema inspection steps, JSON payload examples, and guided recovery steps for authentication, connection, CLI, or billing errors.]
+
+## Skill Version(s):
+
+1.0.2 (source: artifact frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

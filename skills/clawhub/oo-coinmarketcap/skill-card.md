@@ -1,42 +1,56 @@
-## Description: <br>
-CoinMarketCap lets an agent retrieve cryptocurrency market data, pricing, listings, global metrics, and API key usage information through an OOMOL-connected CoinMarketCap account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CoinMarketCap lets agents search and read cryptocurrency market data through the CoinMarketCap connector using the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to query CoinMarketCap data for cryptocurrency discovery, quotes, listings, price conversion, global market metrics, and API key plan usage. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The server security verdict is suspicious, with scanner guidance warning about workflows that may use more authority than a review task needs. <br>
-Mitigation: Review the release before deployment, use least-privilege execution settings where available, and require explicit confirmation for moderation, publishing, or other high-impact actions. <br>
-Risk: The skill requires a connected CoinMarketCap account and API key, so requests depend on sensitive credentials and account limits. <br>
-Mitigation: Use OOMOL server-side credential handling, inspect the live connector schema before each action payload, and reconnect or recharge only when an authentication, scope, expiration, or billing error requires it. <br>
+## Use Case:
 
+Developers and agents use this skill to retrieve CoinMarketCap market data, cryptocurrency identifiers, quotes, listings, global metrics, key usage information, and price conversions through a connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-coinmarketcap) <br>
-- [CoinMarketCap homepage](https://coinmarketcap.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI command examples and JSON payload instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Action responses are connector JSON with data and meta.executionId when commands are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup tells users to run a remote OOMOL installer script directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path before use, prefer a pinned package or verified installer from OOMOL, inspect downloaded scripts before execution, and avoid administrator privileges unless OOMOL clearly requires them.
+
+Risk: The skill depends on an authenticated OOMOL account connected to CoinMarketCap.
+
+Mitigation: Use the normal read connector actions after sign-in, avoid handling raw credentials, and reconnect only when the oo CLI reports an authentication or connection error.
+
+## Reference(s):
+
+- [CoinMarketCap ClawHub skill page](https://clawhub.ai/oomol/skills/oo-coinmarketcap)
+- [CoinMarketCap homepage](https://coinmarketcap.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires the OOMOL oo CLI, a signed-in OOMOL account, and a connected CoinMarketCap account.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

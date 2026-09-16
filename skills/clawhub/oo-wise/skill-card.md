@@ -1,44 +1,59 @@
-## Description: <br>
-Wise (wise.com). Use this skill for searching and reading Wise data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Wise helps agents retrieve exchange rates, supported transfer currencies, and available personal or business profiles through an OOMOL-connected Wise account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to retrieve Wise exchange rates, supported currencies, and available personal or business profiles from a connected Wise account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Commands run against the connected Wise account and can return account profile or currency data. <br>
-Mitigation: Use the intended OOMOL account and Wise connection, keep credentials least-privilege, and avoid sharing sensitive returned data. <br>
-Risk: Future connector actions tagged as write or destructive could change Wise state. <br>
-Mitigation: Confirm the exact action, target, and JSON payload with the user before running actions tagged write or destructive. <br>
-Risk: First-time setup may require installing the oo CLI before the skill can run actions. <br>
-Mitigation: Run setup only after a matching command failure and use the referenced OOMOL install guide. <br>
+## Use Case:
 
+Developers and agents use this skill to answer Wise account and transfer-data questions by fetching exchange rates, transfer currencies, and profile information from an OOMOL-connected Wise account.
 
-## Reference(s): <br>
-- [Wise homepage](https://wise.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Fetches the live connector schema before constructing action payloads; documented actions are read-only.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and SKILL.md metadata) <br>
+Risk: The skill includes broad activation wording for Wise-related requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for explicit Wise connector tasks and confirm the user's intent before retrieving profile or account metadata.
+
+Risk: The first-time setup includes remote installer commands that execute downloaded scripts.
+
+Mitigation: Prefer an independently verified official installation path or review the installer before running setup commands.
+
+Risk: Profile and account metadata may be returned from the connected Wise account.
+
+Mitigation: Request only the data needed for the user's task and avoid exposing unnecessary profile details.
+
+## Reference(s):
+
+- [ClawHub Wise skill page](https://clawhub.ai/oomol/skills/oo-wise)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Wise homepage](https://wise.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include live Wise connector data returned by the oo CLI when the agent executes read actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: ClawHub release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

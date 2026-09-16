@@ -1,40 +1,56 @@
-## Description: <br>
-Lob helps agents run OOMOL-connected Lob address autocomplete and verification actions through the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lob (lob.com) skill for address autocomplete, verification, and standardization through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to run Lob address autocomplete and single or bulk US/international address verification through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-lob) <br>
-- [Lob homepage](https://www.lob.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+External users and developers use this skill to run Lob address autocomplete and address verification actions through an OOMOL-connected Lob account. It supports single and bulk US or international address verification workflows.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an installed oo CLI and an OOMOL-connected Lob account; inspect the live connector schema before constructing payloads and keep use to Lob address autocomplete or verification unless the user explicitly confirms broader scope.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill metadata) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: First-time setup directs users to run remote installer scripts directly in a shell.
+
+Mitigation: Review setup instructions before installing and prefer an independently verified or package-manager installation path for the oo CLI.
+
+Risk: Lob requests are executed through OOMOL's connector with server-side credential handling.
+
+Mitigation: Use the skill only for the listed Lob address autocomplete and verification actions unless you intentionally want OOMOL to handle that Lob request.
+
+## Reference(s):
+
+- [ClawHub Lob Skill](https://clawhub.ai/oomol/skills/oo-lob)
+- [Lob Homepage](https://www.lob.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Live Lob action schemas are fetched before payload construction; command responses are JSON when the oo CLI is run with --json.]
+
+## Skill Version(s):
+
+1.0.4 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

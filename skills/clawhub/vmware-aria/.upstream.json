@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/vmware-aria",
   "slug": "vmware-aria",
   "ownerHandle": null,
-  "version": "1.8.8",
-  "updatedAt": 1784668771221,
-  "contentHash": "609c0d60ecc852c75b02111ed86bf77a49551b20fabd986bda39360a1d0eb7f6",
-  "fetchedAt": "2026-07-26T18:08:52.851Z"
+  "version": "1.15.0",
+  "updatedAt": 1789463054257,
+  "contentHash": "b969edba729817b0a1a350fea1c4161d285bcb72a30c73b530ad377aec27571b",
+  "fetchedAt": "2026-09-16T12:48:26.747Z"
 }

@@ -1,42 +1,56 @@
-## Description: <br>
-AI assistant for China insurance live streaming that generates compliant scripts, explains products, engages audiences, and optimizes sales conversion. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI assistant for China insurance live streaming that generates compliant scripts, explains products, supports audience interaction, and optimizes sales conversion.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[gechengling](https://clawhub.ai/user/gechengling)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+External insurance companies, agents, and marketing teams use this skill to draft China-focused insurance livestream scripts, product explanations, audience responses, compliance rewrites, and sales-conversion copy. The output is intended to support regulated content preparation and should be reviewed by qualified compliance staff before publication or sales use.
+
+### Deployment Geography for Use:
+
+China
+
+## Known Risks and Mitigations:
+
+Risk: Regulatory claims, product wording, or cited insurance practices may become outdated or may not match a specific product or sales channel.
+
+Mitigation: Verify current regulatory claims, product terms, and sales-channel requirements against official sources and qualified compliance staff before publishing or selling.
+
+Risk: Generated livestream copy could imply prohibited discounts, guarantees, unsuitable recommendations, or incomplete risk disclosures.
+
+Mitigation: Review generated copy for prohibited claims, suitability prompts, risk disclosures, contract-term references, and approval records before use.
+
+Risk: Customer examples, chat records, or screenshots used in livestream content could expose personal information.
+
+Mitigation: Remove or anonymize customer data and obtain required consent before using customer examples or interaction records.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Insurance companies, agents, and supervised marketing teams use this skill to draft live-stream scripts, product explanations, audience responses, and sales conversion content for China-focused insurance marketing. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-China <br>
+**Output Type(s):** [Text, Markdown, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Insurance sales and marketing content may be regulated and may require review before use. <br>
-Mitigation: Use only in licensed or supervised insurance marketing workflows and route outputs through approved compliance review. <br>
-Risk: Outputs could be mistaken for compliance, investment, underwriting, or claims decisions. <br>
-Mitigation: Do not use the skill as a substitute for compliance review, investment advice, underwriting, or claims decisions. <br>
-Risk: Lead-generation and audience interaction workflows may involve sensitive customer information. <br>
-Mitigation: Collect and process customer information only with clear consent and approved data-handling procedures. <br>
+**Output Format:** [Markdown prose, tables, and template-style script snippets]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/gechengling/insurance-digital-live) <br>
+**Other Properties Related to Output:** [Produces compliance-aware insurance livestream copy, review prompts, risk scoring guidance, and suggested wording; final publication decisions remain with qualified reviewers.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or structured text templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces insurance live-streaming scripts, compliance language, audience interaction responses, and sales conversion guidance.] <br>
+5.0.1 (source: frontmatter and server release metadata)
 
-## Skill Version(s): <br>
-5.0.0 (source: frontmatter and server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

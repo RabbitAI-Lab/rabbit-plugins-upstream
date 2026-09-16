@@ -1,45 +1,56 @@
-## Description: <br>
-Mailtrap (mailtrap.io). Use this skill for Mailtrap requests that read, create, update, or delete data through the OOMOL connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mailtrap (mailtrap.io). Use this skill for Mailtrap requests that read, create, update, or delete data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and support teams use this skill to operate Mailtrap inboxes, projects, contacts, templates, sending domains, suppressions, and sending statistics from an agent session. It supports both read workflows and confirmed state-changing Mailtrap operations through the OOMOL CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The inbox-cleaning action deletes messages and is not tagged for explicit confirmation under the skill's own safety rules. <br>
-Mitigation: Require explicit user confirmation of the target inbox before running clean_inbox. <br>
-Risk: The skill may ask users to run one-time remote installer commands for the OOMOL CLI. <br>
-Mitigation: Verify the OOMOL CLI install source before executing remote installation commands. <br>
-Risk: The skill requires sensitive credentials through a connected Mailtrap account. <br>
-Mitigation: Use the OOMOL-managed connection flow and avoid exposing raw Mailtrap API tokens in prompts, logs, or shell history. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Mailtrap schemas and run Mailtrap connector actions for inboxes, messages, projects, contacts, templates, domains, lists, billing usage, and sending statistics.
 
-## Reference(s): <br>
-- [ClawHub Mailtrap skill page](https://clawhub.ai/oomol/oo-mailtrap) <br>
-- [Mailtrap homepage](https://mailtrap.io/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce live action schemas, connector command payloads, and Mailtrap operation guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The fallback setup path documents direct shell execution of a remote oo CLI installer.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installing, and install the oo CLI through a verified, version-pinned, checksum- or signature-checked method where possible.
+
+Risk: Write and destructive Mailtrap actions can change or remove account data.
+
+Mitigation: Confirm the exact payload, target resource, and intended effect with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [Mailtrap homepage](https://mailtrap.io/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub Mailtrap skill page](https://clawhub.ai/oomol/skills/oo-mailtrap)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

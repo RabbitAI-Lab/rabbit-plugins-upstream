@@ -1,43 +1,57 @@
-## Description: <br>
-TalentLMS lets agents read and manage TalentLMS users and learning platform data through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents handle TalentLMS requests through OOMOL-connected TalentLMS actions for reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect TalentLMS users, courses, branches, categories, and groups, and to create, update, or delete users through an OOMOL-connected TalentLMS account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read TalentLMS account data through an OOMOL-connected account. <br>
-Mitigation: Install it only for intended TalentLMS workflows and keep the OOMOL TalentLMS connection limited to the access the workflow needs. <br>
-Risk: Write and destructive actions can create, update, or delete TalentLMS users. <br>
-Mitigation: Review every proposed payload, confirm the exact target and intended effect, and require explicit approval before create_user, update_user, or delete_user. <br>
+## Use Case:
 
+Agents use this skill to operate TalentLMS through an OOMOL-connected account, including user administration and read-only access to branches, categories, courses, groups, and users. Write and destructive TalentLMS actions require user confirmation before execution.
 
-## Reference(s): <br>
-- [ClawHub TalentLMS Skill](https://clawhub.ai/oomol/skills/oo-talentlms) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [TalentLMS](https://www.talentlms.com) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI, an OOMOL sign-in, and a connected TalentLMS API key; write and destructive actions require explicit confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: First-time setup may ask users to run remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing and prefer a verified package or separately downloaded and verified installer.
+
+Risk: Write and delete actions can change or remove TalentLMS data.
+
+Mitigation: Require explicit user confirmation for TalentLMS write actions and destructive actions before running them.
+
+## Reference(s):
+
+- [ClawHub TalentLMS Skill](https://clawhub.ai/oomol/skills/oo-talentlms)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [TalentLMS](https://www.talentlms.com)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, API calls, JSON, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the oo CLI to inspect connector schemas and run TalentLMS actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

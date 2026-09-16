@@ -1,45 +1,55 @@
-## Description: <br>
-Telegram Bot (core.telegram.org) enables an agent to read, create, update, and delete Telegram Bot data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Telegram Bot (core.telegram.org). Use this skill for Telegram Bot requests involving reading, creating, updating, and deleting data through the OOMOL connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Telegram bot state, send and manage messages, configure webhooks, and perform bot administration through approved OOMOL CLI actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Telegram Bot credential managed through OOMOL. <br>
-Mitigation: Install and use it only when the user trusts OOMOL with the Telegram Bot connection, and avoid login or connection setup unless the user intentionally wants this environment connected. <br>
-Risk: Confirmed write and destructive actions can post, edit, configure webhooks, create invite links, or delete bot-accessible messages. <br>
-Mitigation: Review the exact action, target, and JSON payload with the user before approving write or destructive commands. <br>
-Risk: Some history and update polling behavior depends on webhook delivery being disabled. <br>
-Mitigation: Check webhook status and explain the delivery requirement before using polling-based chat history or update actions. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Telegram Bot accounts through OOMOL, including message sending, chat administration, webhook management, updates, and bot profile checks. It supports both read-only bot inspection and user-confirmed write or destructive Telegram actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-telegram) <br>
-- [Telegram Bot documentation](https://core.telegram.org/bots) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses from connector runs are JSON objects containing data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill can perform broad Telegram write, moderation, webhook, and delete actions through an intermediary service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Grant only the bot capabilities needed for the intended chats and require explicit confirmation before any send, edit, moderation, webhook, or delete action.
+
+Risk: The setup path includes remote installer commands for the oo CLI.
+
+Mitigation: Prefer a verified or package-manager install path for the oo CLI before using the connector.
+
+## Reference(s):
+
+- [Telegram Bot homepage](https://core.telegram.org/bots)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-telegram)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write and destructive actions require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

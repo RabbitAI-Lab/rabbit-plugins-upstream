@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Better Proposals"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["better_proposals"]
   icon: "https://static.oomol.com/logo/third-party/better_proposals.svg"
 ---

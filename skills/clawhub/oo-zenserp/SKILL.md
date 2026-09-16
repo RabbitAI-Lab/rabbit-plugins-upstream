@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Zenserp"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["zenserp"]
   icon: "https://static.oomol.com/logo/third-party/zenserp.svg"
 ---

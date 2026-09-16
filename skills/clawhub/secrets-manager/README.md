@@ -1,155 +1,119 @@
-# Secrets Manager
+# Secrets Manager 🔐
 
-**Encrypted local secret storage for OpenClaw agents.** AES-256-GCM authenticated encryption, rotation tracking, audit, and safe command injection.
+**Encrypted local secret store.** AES-256-GCM authenticated encryption, rotation
+tracking, audit, and delete. A **PURE STORE** — it encrypts, retrieves, lists,
+rotates, audits, and deletes secrets. It does **not** generate executable command
+scripts and does **not** write plaintext secrets to disk.
 
-> **TL;DR**: Secrets are encrypted at rest with AES-256-GCM. The master key is stored separately in `.master-key` (chmod 0600). If you lose `.master-key`, your secrets are unrecoverable — back it up.
+> **Important**: If you lose `.master-key`, all stored secrets become unrecoverable. Back it up.
+
+## Security model
+
+- **AES-256-GCM** authenticated encryption (tamper → decrypt returns `null`)
+- 256-bit master key, auto-generated on first store, stored in
+  `memory/secrets/.master-key` (chmod 0600)
+- Per-secret random 96-bit IV, 128-bit GCM auth tag
+- Encrypted secrets persist in `memory/secrets/secrets.json` (chmod 0600)
+- No plaintext secrets are ever written to disk or to logs
+
+## Quick Start
+
+```bash
+# Store a secret (encrypted at rest)
+node secrets-manager.js --store openai-key sk-abc123
+# → Stored: openai-key (masked: sk-****23)
+
+# Get a secret (masked by default)
+node secrets-manager.js --get openai-key
+# → openai-key: sk-****23
+
+# Get the raw value (prints to stdout — use only when you must pass it onward)
+node secrets-manager.js --get --raw openai-key > /tmp/key.txt && chmod 600 /tmp/key.txt
+
+# List secret names + metadata (never values)
+node secrets-manager.js --list
+
+# Delete a secret (irreversible)
+node secrets-manager.js --delete old-key
+
+# Rotate a secret (generates a new random value; old value archived as retired)
+node secrets-manager.js --rotate openai-key
+
+# Rotate all secrets
+node secrets-manager.js --rotate --all
+
+# Audit for exposure / rotation issues
+node secrets-manager.js --audit
+node secrets-manager.js --audit --expired
+node secrets-manager.js --audit --stale
+
+# Status overview
+node secrets-manager.js --status
+```
 
 ## Features
 
-- **AES-256-GCM Encryption** — secrets encrypted at rest with a 256-bit master key and per-secret random 96-bit IVs. Authenticated encryption (GCM auth tag) detects tampering.
-- **Secure Storage** — `store`, `get`, `list`, `delete` lifecycle
-- **Auto-Expiry & Rotation** — 90-day default rotation cycle with audit reporting
-- **Safe Command Injection** — substitutes `{{placeholder}}` and writes to a private temp file (chmod 0600) by default. NEVER prints secrets to stdout unless you opt in.
-- **Masked Output** — default output shows masked values (`sup****ue`)
-- **Status & Audit** — health checks, expired/stale secret reporting
-- **Zero External Dependencies** — pure Node.js `crypto` module
+- **Encryption** — AES-256-GCM, per-secret IV, authenticated (tamper detection)
+- **Rotation tracking** — 90-day default cycle, expiration warnings, one-command rotation
+- **Audit system** — flags expired/stale secrets, weak patterns, decryption failures
+- **Masked by default** — values never printed unless explicitly requested via `--get --raw`
+- **Zero plaintext-on-disk** — secrets are encrypted at rest; no temp scripts are generated
 
-## ⚠️ Security Warnings
+## Configuration
 
-### Raw Mode (`--get --raw`) Prints Secrets to stdout
-The secret value goes to stdout, which may be captured in:
-- Shell history / terminal scrollback
-- Process logs / journald / syslog
-- CI/CD pipeline output
-- Agent transcripts / OpenClaw session history
-- Downstream tool output
+Data stored in `memory/secrets/`:
+- `secrets.json` — encrypted secrets (chmod 0600)
+- `.master-key` — 256-bit master key as hex (chmod 0600)
+- `permissions.json` — per-secret access rules (chmod 0600)
 
-Use only when piping directly to a private process or writing to a chmod-0600 file:
+Override storage location:
 ```bash
-node secrets-manager.js --get --raw api-key > /tmp/api-key.txt && chmod 600 /tmp/api-key.txt
+SECRETS_DIR=/path/to/secrets node secrets-manager.js --status
 ```
 
-### Command Injection (`--inject`) Default: Safe
-By default, `--inject` substitutes `{{secrets}}` and writes the resolved command to a temp file (chmod 0600), then prints **only the file path** to stdout. Run the command with `sh /path/to/file`.
-
-To print the resolved command to stdout (DANGEROUS — leaks secrets to logs), use **both** flags:
+Override master key (ephemeral/CI only):
 ```bash
-node secrets-manager.js --inject-stdout --confirm-expose "curl -H 'Authorization: Bearer {{api-key}}' https://api.example.com"
+SECRETS_MASTER_KEY=<64-hex-chars> node secrets-manager.js --get openai-key
 ```
-The skill will refuse to print the resolved command unless you pass `--confirm-expose`.
+> Never set `SECRETS_MASTER_KEY` in shared, containerized, CI, or logged
+> environments — anyone who can read process env or logs can recover the key.
+> Prefer the file-based `.master-key` (chmod 0600) on a single-user host.
 
-### Master Key Backup
-The master key lives in `memory/secrets/.master-key` (chmod 0600). If you lose this file, all stored secrets are unrecoverable. Back it up to a secure location (encrypted disk, password manager, OS keychain).
+## Agent Protocol
 
-You can also use `SECRETS_MASTER_KEY=<hex>` env var instead of the file (useful for ephemeral environments).
+1. **Store with encryption** — `--store <name> <value>` writes AES-256-GCM ciphertext
+2. **Default to masked output** — `--get` (not `--get --raw`) for display
+3. **Audit regularly** — `--audit` during heartbeats
+4. **Rotate proactively** — rotate secrets flagged as expiring
+5. **Back up `.master-key`** — without it, stored secrets are unrecoverable
 
-### Not for Production Credentials (But Better Than Plain JSON)
-This is a local agent tool with file-based key storage. For production-grade secret management with HSM-backed keys, audit trails, and access policies, use HashiCorp Vault, AWS Secrets Manager, etc. That said, **this skill provides real AES-256-GCM encryption** — secrets are not stored in plaintext or base64.
+## Security Notes
 
-## Installation
+- AES-256-GCM authenticated encryption — secrets encrypted at rest, not base64
+- Master key in `memory/secrets/.master-key` (chmod 0600) — back it up
+- For production-grade secrets with HSM-backed keys, use a real vault
+  (HashiCorp, AWS Secrets Manager, OS keychain)
+- `SECRETS_MASTER_KEY` env var for ephemeral/CI environments
+- **No plaintext is written to disk** — the store only ever holds ciphertext
 
-```bash
-# Auto-loaded by OpenClaw via the skill registry.
-# For standalone use:
-const SM = require('./secrets-manager.js');
-SM.storeSecret('api-key', 'sk-abc123');
-```
+## What This Skill Does NOT Do
 
-## Commands
+- Does NOT store secrets in plaintext or base64 — all values are AES-256-GCM encrypted
+- Does NOT print secret values to stdout unless explicitly requested via `--get --raw`
+- Does NOT generate executable command scripts (no `--inject`)
+- Does NOT install npm packages
+- Does NOT phone home or transmit secrets anywhere
+- Does NOT log secret values
+- Does NOT require a separate key server — master key is a local file
 
-```
-store <name> <value>        Store a secret (encrypted)
-get <name>                  Get secret (masked)
-get <name> --raw            Get secret (⚠️ raw value to stdout)
-list                        List all secret names + metadata
-delete <name>               Delete a secret
-rotate <name>               Generate new random value
-rotate --all                Rotate all secrets
-inject <command>            Substitute {{secrets}} → write to temp file (safe)
-inject-stdout --confirm-expose <command>
-                            Substitute and print (DANGEROUS)
-audit                       Check for expired/stale secrets
-status                      Show storage health
-```
+## Design Principles
 
-## API (require as module)
+1. **Zero setup** — Works immediately, no config needed
+2. **No dependencies** — Pure Node.js crypto, no npm packages
+3. **Safe by default** — Masked output, encrypted at rest, no plaintext-on-disk
+4. **Transparent** — Audit reports show exactly what's wrong
+5. **Recoverable** — Master key + encrypted secrets = full recovery
 
-```javascript
-const SM = require('./secrets-manager.js');
-
-SM.storeSecret('api-key', 'sk-abc123');
-const value = SM.getSecret('api-key');              // returns plaintext value
-const masked = SM.getSecret('api-key');             // prints masked, returns value
-SM.listSecrets();                                    // prints table
-SM.deleteSecret('api-key');
-SM.rotateSecret('api-key');
-SM.auditSecrets('expired');
-SM.showStatus();
-```
-
-## Security Architecture
-
-- **AES-256-GCM** authenticated encryption (256-bit key, 96-bit IV per secret, 128-bit auth tag)
-- **Master key** auto-generated on first `store`, stored in `memory/secrets/.master-key` (chmod 0600)
-- **Per-secret IVs** — same plaintext encrypted twice produces different ciphertext
-- **Auth tag verification** — tampered ciphertext returns `null` from decrypt (no partial decryption)
-- **Atomic file writes** — temp file + rename to prevent corruption on crash
-- **chmod 0600** on all sensitive files (POSIX)
-- **No external dependencies** — pure Node.js `crypto`
-
-## Data Layout
-
-```
-memory/secrets/
-  .master-key       # 32 random bytes as hex, chmod 0600
-  secrets.json      # { name: { iv, ct, tag, created, updated, ... } }, chmod 0600
-  permissions.json  # Per-secret access rules (optional), chmod 0600
-```
-
-## Testing
-
-```bash
-# Self-test suite (isolated temp directory)
-node tests/run-self-tests.js
-
-# Quick smoke test
-node test/run-tests.js
-```
-
-### Test Coverage
-
-| Suite | Tests | Status |
-|---|---|---|
-| Self-tests (isolated) | 29 | ✅ Passing |
-| Quick tests | 9 | ✅ Passing |
-
-## Examples
-
-**Store an API key:**
-```javascript
-SM.storeSecret('github-token', 'ghp_abc123...');
-```
-
-**Get for use in a script:**
-```javascript
-const key = SM.getSecret('github-token');  // returns plaintext (handle carefully)
-```
-
-**Audit for expired secrets:**
-```javascript
-SM.auditSecrets('expired');
-```
-
-**Rotate all secrets:**
-```javascript
-SM.rotateAllSecrets();
-```
-
-**Inject into a command (safe):**
-```bash
-$ node secrets-manager.js --inject "curl -H 'Authorization: Bearer {{api-key}}' https://api.example.com"
-[secrets-manager] ✅ Injected 1 secret(s) into: /tmp/secrets-inject-12345-1234567890.sh
-[secrets-manager]    Run with: sh /tmp/secrets-inject-12345-1234567890.sh
-$ sh /tmp/secrets-inject-12345-1234567890.sh
-# ... command output ...
-```
+> **Need to inject a secret into a shell command?** Use the separate
+> `secrets-inject` skill (high-privilege, clearly labeled). This store
+> deliberately does not do that.

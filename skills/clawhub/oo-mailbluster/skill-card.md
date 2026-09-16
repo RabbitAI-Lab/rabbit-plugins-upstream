@@ -1,47 +1,55 @@
-## Description: <br>
-MailBluster helps agents read, create, update, and delete MailBluster data through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MailBluster (mailbluster.com). Use this skill for MailBluster requests including reading, creating, updating, and deleting data through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage MailBluster leads and custom fields through an OOMOL-connected account. It supports routine lead lookup as well as carefully reviewed create, update, and delete actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can modify MailBluster lead data. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running create or update actions. <br>
-Risk: Destructive actions can delete lead records. <br>
-Mitigation: Confirm the target lead and obtain explicit user approval before running delete actions. <br>
-Risk: Broad account access could expose more MailBluster data than needed for a task. <br>
-Mitigation: Use a MailBluster account with only the access needed for the intended work. <br>
-Risk: Incorrect payloads can produce unintended changes. <br>
-Mitigation: Fetch the live connector schema before constructing action payloads. <br>
+## Use Case:
 
+External users and developers use this skill to operate MailBluster through an OOMOL-connected account, including lead creation, retrieval, updates, deletion, and custom-field listing.
 
-## Reference(s): <br>
-- [ClawHub MailBluster Skill](https://clawhub.ai/oomol/skills/oo-mailbluster) <br>
-- [MailBluster Homepage](https://mailbluster.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI and an OOMOL-connected MailBluster account; write and destructive actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup includes remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer step before use and prefer a pinned, verified release or documented package manager path.
+
+Risk: Write and destructive actions can create, update, or delete MailBluster lead data.
+
+Mitigation: Confirm the exact payload, target lead hash, and intended effect before approving write or delete actions.
+
+## Reference(s):
+
+- [MailBluster homepage](https://mailbluster.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands return JSON responses from the oo CLI when run with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

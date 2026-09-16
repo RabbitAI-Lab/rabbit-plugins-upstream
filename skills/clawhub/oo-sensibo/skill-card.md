@@ -1,43 +1,55 @@
-## Description: <br>
-Sensibo helps an agent list linked Sensibo devices, inspect device and AC state, and update AC state through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Sensibo devices through an OOMOL-connected account by listing devices, reading AC state, and setting AC state when explicitly confirmed.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Sensibo devices from an agent after the oo CLI is installed, the OOMOL account is signed in, and Sensibo is connected. It supports device discovery, state inspection, and confirmed AC state updates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can update AC state for a Sensibo device through the `set_ac_state` write action. <br>
-Mitigation: Confirm the exact device, payload, and intended AC state with the user before running any write action. <br>
-Risk: The skill requires access to an OOMOL-connected Sensibo account and depends on the local `oo` CLI installation. <br>
-Mitigation: Review the `oo` CLI installation path, connect only the intended Sensibo account, and use the connector only for requested Sensibo actions. <br>
+## Use Case:
 
+External users and support agents use this skill to manage Sensibo-connected air-conditioning devices through OOMOL without handling raw Sensibo tokens. It supports reading device details and current or previous AC states, then changing full AC state payloads after user confirmation.
 
-## Reference(s): <br>
-- [Sensibo homepage](https://home.sensibo.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-sensibo) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read actions may run directly; write actions require confirming the exact Sensibo device and AC state before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: The setup guidance includes remote installer commands for the oo CLI, which may be risky if the installer source is not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installing, prefer a trusted and pinned oo CLI release or official package manager, and inspect or verify any installer before running it.
+
+Risk: The set_ac_state action changes Sensibo device state.
+
+Mitigation: Confirm the exact payload and expected AC state change with the user before running any write action.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-sensibo)
+- [Sensibo Homepage](https://home.sensibo.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read actions can run directly; write actions require confirming the exact AC state payload and effect.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

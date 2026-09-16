@@ -1,41 +1,56 @@
-## Description: <br>
-Recall.ai (recall.ai). Use this skill for ANY Recall.ai request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Recall.ai (recall.ai). Use this skill for ANY Recall.ai request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Recall.ai meeting bots through an OOMOL-connected account, including bot creation, retrieval, listing, removal from active calls, and deletion of completed bot media. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate a user's Recall.ai account through OOMOL and may create bots, remove bots from calls, or delete bot media. <br>
-Mitigation: Install only when that account access is intended, review prompts carefully, and require explicit approval before write or destructive actions. <br>
-Risk: First-time setup may require installing the oo CLI. <br>
-Mitigation: Verify the oo CLI installer source before running setup commands. <br>
+## Use Case:
 
+External users and developers use this skill to operate Recall.ai through an OOMOL-connected account, including creating, retrieving, listing, removing, and deleting bot-related meeting resources.
 
-## Reference(s): <br>
-- [Recall.ai homepage](https://www.recall.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The first-time setup path tells users to execute remote installer scripts for the oo CLI, which the security evidence flags as high-impact enough to require review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installing and prefer an official versioned package, signed installer, package manager, or checksum-verified download.
+
+Risk: The skill can create Recall.ai bots, remove active bots from calls, and delete completed bot media.
+
+Mitigation: Confirm the exact payload, target resource, and user intent before running write or destructive actions.
+
+## Reference(s):
+
+- [Recall.ai homepage](https://www.recall.ai)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Recall.ai ClawHub skill page](https://clawhub.ai/oomol/skills/oo-recallai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include action schemas, connector command output, execution identifiers, and setup guidance.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

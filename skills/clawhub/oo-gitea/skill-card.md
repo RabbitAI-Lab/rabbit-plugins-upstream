@@ -1,43 +1,61 @@
-## Description: <br>
-This skill lets agents operate Gitea through an OOMOL-connected account for repository discovery, issue workflows, and approved issue or comment creation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to operate Gitea through the OOMOL oo CLI for repository, issue, pull request, release, webhook, key, label, milestone, topic, and collaborator workflows.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and teams use this skill to inspect Gitea account, repository, issue, and comment data through an OOMOL-connected Gitea account. With explicit confirmation, it can also create issues and issue comments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Gitea account and repository information through the connected OOMOL account. <br>
-Mitigation: Connect only a Gitea account whose repositories you are comfortable exposing to this connector. <br>
-Risk: The skill can create Gitea issues and issue comments when write actions are approved. <br>
-Mitigation: Review the exact payload and expected effect before allowing any write action. <br>
+## Use Case:
 
+Developers and operations teams use this skill to inspect Gitea schemas, run Gitea connector actions, and manage repositories, issues, pull requests, releases, hooks, keys, labels, milestones, topics, and collaborators through an authenticated OOMOL connection.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-gitea) <br>
-- [Gitea product page](https://about.gitea.com/products/gitea/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return JSON data from Gitea connector actions when commands are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: The first-time setup path tells users to run remote installer scripts when the oo CLI is missing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI from verified, version-pinned vendor packages when possible, or inspect and verify installer contents before execution.
+
+Risk: The skill can perform high-impact write and destructive changes in Gitea.
+
+Mitigation: Require exact repository targets, action names, and payloads before approving write or destructive operations.
+
+Risk: Live Gitea action schemas may differ from assumptions in a prompt.
+
+Mitigation: Inspect the live action schema with the oo CLI before constructing each payload.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-gitea)
+- [Gitea product page](https://about.gitea.com/products/gitea/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Gitea icon](https://static.oomol.com/logo/third-party/Gitea.svg)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include oo CLI schema inspection commands and Gitea connector run commands that return JSON responses.]
+
+## Skill Version(s):
+
+1.0.4 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

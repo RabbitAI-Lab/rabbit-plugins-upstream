@@ -1,44 +1,56 @@
-## Description: <br>
-This skill handles Spotify requests that read, create, update, or delete Spotify data through the OOMOL `oo` CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Spotify through the OOMOL oo CLI so agents can read, search, create, update, and delete Spotify data using live action schemas.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to search Spotify, inspect account and catalog data, manage playlists and saved library items, and control playback from an OOMOL-connected Spotify account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform Spotify write actions that change playlists, saved library items, playback state, follows, queue, and device settings. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running actions tagged as write. <br>
-Risk: The skill can perform destructive actions that remove or overwrite Spotify data. <br>
-Mitigation: Require explicit approval for the target and action before running commands tagged as destructive. <br>
-Risk: Connector actions depend on account authentication, scopes, app readiness, and OOMOL account credit. <br>
-Mitigation: Use first-time setup and connection recovery steps only after a command fails for the matching reason. <br>
+## Use Case:
 
+External users and agents use this skill to inspect and manage Spotify catalog, library, playlist, and playback data through an OOMOL-connected Spotify account.
 
-## Reference(s): <br>
-- [Spotify homepage](https://spotify.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: First-time setup may execute remote installer scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer verified official installation steps, inspect downloaded scripts before execution, and avoid administrator privileges.
+
+Risk: Write and destructive Spotify actions can alter playlists, saved content, follows, playback state, queue, volume, shuffle, repeat, or device routing.
+
+Mitigation: Confirm the exact target, payload, and effect before write actions, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [ClawHub Spotify skill page](https://clawhub.ai/oomol/skills/oo-spotify)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Spotify homepage](https://spotify.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Spotify connector responses are JSON; the skill expects live schema inspection before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

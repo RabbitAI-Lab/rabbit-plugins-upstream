@@ -1,42 +1,56 @@
-## Description: <br>
-Enables an agent to search and read Shopify REST Admin data through the OOMOL Shopify connector and oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Shopify REST Admin (Legacy) helps agents inspect and read Shopify shop, blog, article, page, author, and tag data through the OOMOL Shopify connector and oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an assistant inspect Shopify REST Admin resources such as shops, blogs, pages, articles, and article tags through documented read-only actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill has a broad Shopify trigger and relies on third-party CLI setup. <br>
-Mitigation: Install it only if you trust OOMOL, review CLI installation and authentication steps before running them, and keep use to the listed read-only actions. <br>
-Risk: Shopify Admin reads may expose shop configuration or content data. <br>
-Mitigation: Run actions only against the intended connected shop and do not treat the broad trigger as approval for write or destructive Shopify operations. <br>
+## Use Case:
 
+Developers and store operations teams use this skill to safely search and read Shopify REST Admin (Legacy) content through an existing OOMOL-connected Shopify account. It is intended for read-only operational queries without calling the Shopify API directly.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-shopify) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Shopify REST Admin Homepage](https://www.shopify.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Command results are JSON returned by the oo CLI for read-only Shopify REST Admin actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Setup instructions include unverified remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an already-installed or package-manager-installed oo CLI, review or verify any installer before running it, and avoid administrative shells.
+
+Risk: The connected Shopify account may expose data according to the scopes granted through OOMOL.
+
+Mitigation: Confirm the Shopify scopes connected to OOMOL match the data intended for use before running actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-shopify)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Shopify](https://www.shopify.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before action execution; expected action results are JSON from the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

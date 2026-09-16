@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Trent"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["trent"]
   icon: "https://static.oomol.com/logo/third-party/trent.svg"
 ---

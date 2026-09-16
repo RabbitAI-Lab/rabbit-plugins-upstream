@@ -1,44 +1,55 @@
-## Description: <br>
-Better Stack (betterstack.com). Use this skill for ANY Better Stack request — reading, creating, and updating data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Better Stack lets agents read, create, and update Better Stack data through the OOMOL-connected oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and incident responders use this skill to read and manage Better Stack incidents, comments, metadata, and escalation workflows through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Incident-management actions can affect alerting, escalation, or on-call routing. <br>
-Mitigation: Require explicit user approval before creating, acknowledging, or escalating incidents, and review payloads before execution. <br>
-Risk: The skill requires access to Better Stack through an OOMOL-connected account. <br>
-Mitigation: Install only where Better Stack account permissions are appropriate for the intended operational scope. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Better Stack incidents and metadata from an agent session, including reading incident state and performing confirmed incident changes.
 
-## Reference(s): <br>
-- [ClawHub Better Stack Skill](https://clawhub.ai/oomol/oo-better-stack) <br>
-- [Better Stack Homepage](https://betterstack.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Better Stack Icon](https://static.oomol.com/logo/third-party/Better%20Stack.svg) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution; Better Stack credentials are required through the connected OOMOL account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill includes direct installer commands for the oo CLI, including pipe-to-shell installation flows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installation commands before use and prefer inspected or documented installation steps instead of running remote installer scripts directly.
+
+Risk: Incident-management actions can create, acknowledge, or escalate Better Stack incidents.
+
+Mitigation: Require explicit user confirmation of the exact payload and expected effect before running any state-changing incident action.
+
+## Reference(s):
+
+- [Better Stack homepage](https://betterstack.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May issue oo CLI commands that return JSON responses from Better Stack connector actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

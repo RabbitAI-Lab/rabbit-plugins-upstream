@@ -1,45 +1,52 @@
-## Description: <br>
-CompanyEnrich helps agents search, count, enrich, and find similar company profiles through an OOMOL-connected CompanyEnrich account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CompanyEnrich (companyenrich.com) lets an agent search, count, enrich, and compare company records through an OOMOL-connected CompanyEnrich account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and business users use this skill to query CompanyEnrich company data, enrich company profiles, find similar companies, and inspect account capabilities through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an authenticated OOMOL account with CompanyEnrich connected credentials. <br>
-Mitigation: Use an account and CompanyEnrich connection with the minimum scopes needed, and reconnect only when an auth or connection error requires it. <br>
-Risk: Connector actions depend on live schemas and may fail if the user is not signed in, the provider is not connected, credentials expire, or billing credit is unavailable. <br>
-Mitigation: Inspect the live action schema before building payloads and follow the documented setup or billing recovery steps only after the matching failure occurs. <br>
-Risk: Search and enrichment results come from an external company-data service and may be incomplete or outdated. <br>
-Mitigation: Treat returned company data as source data for review and verify business-critical decisions against authoritative records. <br>
+## Use Case:
 
+External users, developers, and sales or research teams use this skill to query CompanyEnrich data, enrich company profiles by domain or properties, find similar companies, and inspect account capabilities without handling raw service credentials.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-companyenrich) <br>
-- [CompanyEnrich homepage](https://companyenrich.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Agent actions may return JSON data from the CompanyEnrich connector with an execution id in response metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and frontmatter) <br>
+Risk: First-time setup directs users to run remote oo CLI installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source and prefer a pinned, signed, or checksum-verified oo CLI installation method before first use; once oo is installed and connected, run only the scoped CompanyEnrich read, search, and enrichment commands.
+
+## Reference(s):
+
+- [CompanyEnrich homepage](https://companyenrich.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub CompanyEnrich skill page](https://clawhub.ai/oomol/skills/oo-companyenrich)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses OOMOL oo CLI commands that return JSON responses from CompanyEnrich connector actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: artifact metadata and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

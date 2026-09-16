@@ -1,43 +1,58 @@
-## Description: <br>
-Toggl Track lets an agent read, create, update, stop, and delete Toggl Track records through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Toggl Track lets an agent read, create, update, stop, and delete Toggl Track data through OOMOL's oo CLI instead of direct API calls.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage Toggl Track workspaces, projects, tasks, tags, and time entries from an agent workflow. It supports read operations and user-confirmed write or destructive actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, stop, and delete Toggl Track projects, tasks, tags, and time entries. <br>
-Mitigation: Confirm the exact payload and effect with the user before write actions, and require explicit approval before destructive actions. <br>
-Risk: The skill requires an OOMOL account and an active Toggl Track connection with sensitive credentials handled by the connector. <br>
-Mitigation: Use only trusted OOMOL and Toggl connections, and retry setup steps only after authentication, connection, scope, credential, or billing errors. <br>
+## Use Case:
 
+External users and developers use this skill to operate Toggl Track from an agent-connected OOMOL account, including listing workspace data, managing projects, tasks, tags, and time entries, and stopping running entries.
 
-## Reference(s): <br>
-- [Toggl Track skill page](https://clawhub.ai/oomol/oo-toggl) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Toggl Track homepage](https://toggl.com/track/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and frontmatter) <br>
+Risk: The first-time setup instructions include one-line remote installer commands that can execute code on a user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid running the remote installer commands unless the OOMOL installer endpoint and delivery chain are trusted; prefer a signed or package-manager install path, or download and verify the installer before execution.
+
+Risk: Write and destructive Toggl Track actions can change or delete user data.
+
+Mitigation: Confirm the exact payload, target, and expected effect with the user before running write actions, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-toggl)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+- [Toggl Track homepage](https://toggl.com/track/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Toggl Track connection setup](https://console.oomol.com/app-connections?provider=toggl)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions should inspect the live connector schema before payload construction and confirm write or destructive operations before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

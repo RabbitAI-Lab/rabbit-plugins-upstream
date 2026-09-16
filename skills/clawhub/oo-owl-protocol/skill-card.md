@@ -1,44 +1,56 @@
-## Description: <br>
-Operates Owl Protocol through an OOMOL-connected account to read project information, retrieve token metadata, and patch token metadata. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Owl Protocol helps agents read project summaries and token metadata, and update token metadata through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Owl Protocol data through the OOMOL oo CLI, including reading project summaries, retrieving token metadata, and preparing confirmed metadata updates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to an OOMOL-connected Owl Protocol account. <br>
-Mitigation: Install and use it only when the agent is intended to operate that connected Owl Protocol account. <br>
-Risk: The patch_project_token action changes token metadata. <br>
-Mitigation: Review the exact payload and intended effect with the user before running write actions. <br>
-Risk: The optional first-time setup can run an external CLI installer. <br>
-Mitigation: Avoid the installer unless the oo CLI is needed and the OOMOL installer is trusted in the execution environment. <br>
+## Use Case:
 
+Developers and operators use this skill to access Owl Protocol data through an OOMOL-connected account, inspect action schemas, run read actions, and patch token metadata after explicit confirmation.
 
-## Reference(s): <br>
-- [ClawHub Owl Protocol Skill](https://clawhub.ai/oomol/oo-owl-protocol) <br>
-- [Owl Protocol Homepage](https://owlprotocol.xyz) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, JSON] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands use the OOMOL oo CLI and return JSON responses from Owl Protocol connector actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The security review flags the first-time setup instructions because they tell users to execute unverified remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer delivery path before installing the oo CLI, and prefer a versioned, signed, or checksum-verified installation method.
+
+Risk: The skill can patch Owl Protocol token metadata, which changes connected project state.
+
+Mitigation: Require explicit user confirmation of the exact payload and expected effect before running write actions.
+
+## Reference(s):
+
+- [Owl Protocol ClawHub page](https://clawhub.ai/oomol/skills/oo-owl-protocol)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Owl Protocol homepage](https://owlprotocol.xyz)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands may return JSON responses from Owl Protocol connector actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

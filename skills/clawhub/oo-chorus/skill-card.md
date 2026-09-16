@@ -1,46 +1,56 @@
-## Description: <br>
-Chorus (chorus.ai). Use this skill for ANY Chorus request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Chorus (chorus.ai). Use this skill for ANY Chorus request - searching and reading data. Whenever a task involves Chorus, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees and business users with an OOMOL-connected Chorus account use this skill to search and read Chorus conversations, teams, engagements, scorecards, and current-user details through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Chorus conversations and business records visible to the connected account. <br>
-Mitigation: Install it only for agents and users that should access that Chorus account, and rely on Chorus and OOMOL account permissions to limit scope. <br>
-Risk: Setup may require installing or signing into the oo CLI and connecting Chorus in OOMOL. <br>
-Mitigation: Run setup steps only after CLI, authentication, or connection errors, and review the destination before opening connection or billing links. <br>
-Risk: Payloads built from assumptions can be invalid or request unintended fields. <br>
-Mitigation: Fetch the live action schema with `oo connector schema` before constructing each action payload. <br>
+## Use Case:
 
+Developers and external users with an OOMOL-connected Chorus account use this skill to inspect Chorus action schemas and retrieve conversations, teams, scorecards, engagements, and current-user details through the oo CLI.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-chorus) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Chorus homepage](https://www.chorus.ai) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads; connector results are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Chorus data is limited to records visible to the connected account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md metadata) <br>
+Risk: First-time setup includes unverified internet installer commands for the oo CLI, and the security verdict flags the release as suspicious for that reason.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source before execution; prefer a verified package, pinned release, checksum or signature validation, and only run setup when the CLI is missing.
+
+Risk: The connector uses an OOMOL-connected Chorus account, so retrieved Chorus data is limited by the connected account's scopes and may include sensitive business information.
+
+Mitigation: Connect Chorus with the least permissions needed and avoid requesting or exposing data beyond the user's task.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-chorus)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Chorus homepage](https://www.chorus.ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May execute read-only Chorus connector actions through the oo CLI and return JSON responses containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

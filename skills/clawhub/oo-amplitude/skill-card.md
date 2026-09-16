@@ -1,45 +1,55 @@
-## Description: <br>
-Use this skill to search and read Amplitude analytics data through an OOMOL-connected Amplitude account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to search and read Amplitude event and user data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and analysts use this skill to query Amplitude event segmentation, user activity, visible events, and user search through the oo CLI after connecting an Amplitude account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill operates against an external Amplitude account and can return account analytics data in command output. <br>
-Mitigation: Review the external service access before use and grant only the Amplitude permissions needed for the task. <br>
-Risk: Payloads built without the current connector schema can fail or query unintended data. <br>
-Mitigation: Inspect the live action schema with `oo connector schema` before constructing each `oo connector run` payload. <br>
-Risk: Future write or destructive connector actions could change or remove Amplitude data. <br>
-Mitigation: Confirm the exact target, payload, and effect with the user before running any action tagged `[write]` or `[destructive]`. <br>
+## Use Case:
 
+Developers and operators use this skill to query Amplitude analytics, inspect live connector schemas, retrieve event segmentation metrics, view user activity, list events, and search users.
 
-## Reference(s): <br>
-- [ClawHub Amplitude Skill](https://clawhub.ai/oomol/skills/oo-amplitude) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Amplitude](https://amplitude.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include JSON results from the oo CLI with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: The setup flow includes remote installer one-liners for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a versioned official package or download-and-verify flow before execution, and install only after confirming trust in OOMOL.
+
+Risk: Amplitude queries can expose user activity and event analytics through the connector.
+
+Mitigation: Review query payloads before execution and limit requests to the user's intended scope.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-amplitude)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Amplitude homepage](https://amplitude.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce oo connector commands and JSON payloads; connector responses are JSON from Amplitude through OOMOL.]
+
+## Skill Version(s):
+
+1.0.2 (source: artifact frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

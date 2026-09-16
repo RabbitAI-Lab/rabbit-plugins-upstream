@@ -1,42 +1,60 @@
-## Description: <br>
-Coinbase helps an agent use the OOMOL Coinbase connector to search and read Coinbase account data without handling raw Coinbase tokens. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reads Coinbase Advanced Trade brokerage account details through the OOMOL oo CLI and connected account credentials.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and end users use this skill when they want an agent to retrieve Coinbase account information through an OOMOL-connected Coinbase account. The documented actions list accessible Coinbase Advanced Trade brokerage accounts and fetch a specific account by UUID. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to sensitive Coinbase account information through OOMOL-managed credentials. <br>
-Mitigation: Install only when you trust OOMOL to mediate Coinbase access and intend the agent to read Coinbase account data. <br>
-Risk: Future or connector-discovered write, trading, or transfer actions could affect Coinbase state if treated like the documented read actions. <br>
-Mitigation: Treat those actions as out of scope unless the agent shows the exact payload and receives explicit user approval. <br>
+## Use Case:
 
+External users and developers use this skill to list Coinbase brokerage accounts or retrieve one account by UUID through an OOMOL-connected Coinbase account.
 
-## Reference(s): <br>
-- [Coinbase homepage](https://www.coinbase.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-coinbase) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before building action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: Setup guidance includes remote script execution commands for installing the OOMOL CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and independently verify the installer source before running curl|bash or irm|iex commands.
+
+Risk: The routing language is broader than the listed read actions.
+
+Mitigation: Use the skill only for list_accounts and get_account unless a separate workflow clearly scopes additional Coinbase actions.
+
+Risk: The skill accesses Coinbase account data through connected credentials.
+
+Mitigation: Confirm the OOMOL account connection and requested account UUID before retrieving account data, and avoid trading, transfers, or account changes.
+
+## Reference(s):
+
+- [ClawHub Coinbase Skill](https://clawhub.ai/oomol/skills/oo-coinbase)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Coinbase](https://www.coinbase.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON when the generated oo CLI command is run with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

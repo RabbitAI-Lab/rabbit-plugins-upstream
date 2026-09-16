@@ -18,11 +18,6 @@
  *   --audit                           → Check for exposure risks
  *   --audit --expired                 → Only expired
  *   --audit --stale                   → Only expiring soon
- *   --inject <command>                → Substitute {{secrets}} into command
- *                                        By default: writes resolved command to a temp file
- *                                        and prints the file path (does NOT print secrets)
- *                                        Use --inject-stdout to print resolved command
- *                                        (⚠️ REQUIRES --confirm-expose flag)
  *   --status                          → Secrets status overview
  *
  * Security model:
@@ -39,7 +34,6 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const os = require('os');
 
 const WORKSPACE = (() => {
   if (process.env.SECRETS_DIR) return process.env.SECRETS_DIR;
@@ -81,6 +75,8 @@ function loadJSON(file, fallback) {
     return JSON.parse(fs.readFileSync(file, 'utf8'));
   } catch { return fallback || {}; }
 }
+
+// ─── SECRET STORAGE HELPERS ─────────────────────────────────────────────────
 
 // ─── MASTER KEY MANAGEMENT ────────────────────────────────────────────────
 
@@ -362,47 +358,6 @@ function auditSecrets(filter = null) {
   }
 }
 
-// ─── INJECT (default: safe — write to temp file) ──────────────────────────
-
-function injectSecrets(command, secrets, options = {}) {
-  const { stdoutMode = false, confirmExpose = false } = options;
-  let result = command;
-  let injected = 0;
-  
-  for (const [name, secret] of Object.entries(secrets)) {
-    const placeholder = `{{${name}}}`;
-    if (result.includes(placeholder)) {
-      const value = decrypt(secret);
-      if (value === null) {
-        console.log(`[secrets-manager] ⚠️ Skipped ${placeholder}: decrypt failed (tampered or wrong key)`);
-        continue;
-      }
-      result = result.replace(new RegExp(placeholder.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), value);
-      injected++;
-    }
-  }
-  
-  if (stdoutMode) {
-    if (!confirmExpose) {
-      console.log(`[secrets-manager] ❌ Refusing to print resolved command to stdout (leaks secrets to logs).`);
-      console.log(`[secrets-manager]    Re-run with --confirm-expose to acknowledge the risk.`);
-      return null;
-    }
-    console.log(`[secrets-manager] ⚠️ Resolved command below contains ${injected} secret value(s) in plaintext:`);
-    console.log(result);
-    return result;
-  } else {
-    // Default: write to a private temp file (chmod 0600) and print path
-    const tmpFile = path.join(os.tmpdir(), `secrets-inject-${process.pid}-${Date.now()}.sh`);
-    writeSecure(tmpFile, '#!/bin/sh\n' + result + '\n');
-    console.log(`[secrets-manager] ✅ Injected ${injected} secret(s) into: ${tmpFile}`);
-    console.log(`[secrets-manager]    Run with: sh ${tmpFile}`);
-    console.log(`[secrets-manager]    File mode 0600, removed automatically on next rotate/delete.`);
-    console.log(`[secrets-manager]    To print to stdout instead, use --inject-stdout --confirm-expose`);
-    return tmpFile;
-  }
-}
-
 // ─── STATUS ────────────────────────────────────────────────────────────────
 
 function showStatus() {
@@ -434,7 +389,6 @@ function parseCLI() {
     positional: [],
     flags: {
       raw: false,
-      injectStdout: false,
       confirmExpose: false
     }
   };
@@ -448,7 +402,6 @@ function parseCLI() {
     else if (arg === '--delete') { result.mode = 'delete'; break; }
     else if (arg === '--rotate') { result.mode = 'rotate'; break; }
     else if (arg === '--audit') { result.mode = 'audit'; break; }
-    else if (arg === '--inject' || arg === '--inject-stdout') { result.mode = 'inject'; break; }
     else if (arg === '--status') { result.mode = 'status'; break; }
     // --confirm-expose, --raw, --all, --expired, --stale, --dir are sub-flags
   }
@@ -457,7 +410,6 @@ function parseCLI() {
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
     if (arg === '--raw') result.flags.raw = true;
-    else if (arg === '--inject-stdout') result.flags.injectStdout = true;
     else if (arg === '--confirm-expose') result.flags.confirmExpose = true;
     else if (arg === '--all' && result.mode === 'rotate') result.mode = 'rotate-all';
     else if (arg === '--expired' && result.mode === 'audit') result.mode = 'audit-expired';
@@ -466,16 +418,7 @@ function parseCLI() {
       process.env.SECRETS_DIR = args[++i];
     }
     else if (!arg.startsWith('--')) {
-      // For --inject, the whole rest is the command (positional[0])
-      if (result.mode === 'inject') {
-        if (result.positional.length === 0) {
-          result.positional.push(arg);
-        } else {
-          result.positional[0] += ' ' + arg;
-        }
-      } else {
-        result.positional.push(arg);
-      }
+      result.positional.push(arg);
     }
     // Skip mode-flag args (already handled in pass 1)
   }
@@ -528,20 +471,6 @@ function runCLI() {
     case 'audit-stale':
       auditSecrets('stale');
       break;
-    case 'inject': {
-      const cmd = positional[0];
-      if (!cmd) {
-        console.log('Usage: secrets-manager.js --inject <command with {{secret_name}} placeholders>');
-        console.log('       secrets-manager.js --inject-stdout --confirm-expose <command>  (prints to stdout, leaks to logs)');
-      } else {
-        const secrets = loadJSON(SECRETS_FILE, {});
-        injectSecrets(cmd, secrets, {
-          stdoutMode: flags.injectStdout,
-          confirmExpose: flags.confirmExpose
-        });
-      }
-      break;
-    }
     default:
       showStatus();
       break;
@@ -558,7 +487,6 @@ module.exports = {
   rotateSecret,
   rotateAllSecrets,
   auditSecrets,
-  injectSecrets,
   showStatus,
   encrypt,
   decrypt,

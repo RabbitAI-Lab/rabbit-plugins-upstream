@@ -1,39 +1,57 @@
-## Description: <br>
-Iaiops routes industrial and OT troubleshooting tasks to the appropriate edition skill and MCP profile for read-first diagnostics, analytics, and gated writes across PLC, SCADA, machine tool, IIoT, building, and fab protocols. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+iaiops is a vendor-neutral industrial and OT router skill that helps agents select the appropriate edition skill and MCP profile for PLCs, controllers, machine tools, IIoT brokers, diagnostics, and downtime analysis.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-External developers and OT engineers use Iaiops to select the right industrial protocol profile, inspect configured endpoints, run diagnostics, and prepare governed dry-run write actions for authorized control systems. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can route users toward high-impact write-capable OT operations. <br>
-Mitigation: Use it only with authorized OT systems, keep credentials narrowly scoped, and require dry-run plus approval controls before any production write. <br>
-Risk: A broad MCP profile can expose more protocol tools than needed for a site. <br>
-Mitigation: Select the narrowest MCP profile that covers the target equipment or protocol before starting diagnostic work. <br>
+## Use Case:
 
+Developers, engineers, and OT operators use this skill to route industrial automation tasks to the right iaiops edition skill and MCP profile. It is suited for read-first troubleshooting, protocol selection, site readiness checks, and guided investigation planning across supported industrial and facility protocols.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration instructions] <br>
-**Output Format:** [Markdown with inline shell commands and configuration values] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Routes users toward narrower MCP profiles and emphasizes read-first, dry-run, and approval-controlled operation for write-capable OT actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.19.0 (source: server release evidence) <br>
+Risk: The skill routes agents toward industrial and OT MCP profiles and downstream edition packages that may interact with real equipment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only reviewed profiles and review downstream packages before using the skill on real equipment.
+
+Risk: Write-capable profiles could affect production control systems if enabled without controls.
+
+Mitigation: Do not enable writes against production equipment unless approvals, dry-run behavior, double confirmation, rollback, and downstream tool behavior have been independently verified.
+
+Risk: The separate iaiops-energy package is referenced for energy protocols and is outside this artifact.
+
+Mitigation: Pin or internally mirror the separate iaiops-energy package before installation, as recommended by the server security guidance.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands and configuration selections]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Router skill; the provided artifact contains no bundled executable code.]
+
+## Skill Version(s):
+
+0.28.0 (source: server evidence release.version and user changelog)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

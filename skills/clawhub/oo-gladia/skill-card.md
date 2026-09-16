@@ -1,45 +1,56 @@
-## Description: <br>
-Gladia lets an agent operate an OOMOL-connected Gladia account for pre-recorded transcription jobs, uploads, downloads, listing, retrieval, and deletion. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gladia helps agents manage Gladia pre-recorded transcription workflows through the OOMOL oo CLI, including listing, starting, retrieving, downloading, uploading, and deleting transcription jobs.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Gladia transcription workflows through an OOMOL-connected account, including starting jobs from public media URLs, uploading media, retrieving results, downloading original audio, listing jobs, and deleting transcription data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can start transcription jobs and upload media through the connected Gladia account. <br>
-Mitigation: Review the proposed action, payload, media source, and expected account impact before approving write actions. <br>
-Risk: The delete_transcription action can remove a transcription job and its associated data. <br>
-Mitigation: Require explicit user confirmation of the target transcription before running destructive actions. <br>
-Risk: The one-time oo CLI installer and connector access depend on trusting OOMOL as the connector provider. <br>
-Mitigation: Install and authenticate the oo CLI only when the user intends to let Codex operate their connected Gladia account through OOMOL. <br>
+## Use Case:
 
+Developers, operators, and external users use this skill to operate Gladia transcription jobs through an OOMOL-connected account without handling raw API tokens directly.
 
-## Reference(s): <br>
-- [Gladia homepage](https://app.gladia.io/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub Gladia skill page](https://clawhub.ai/oomol/skills/oo-gladia) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create transcription jobs, upload media up to 100 MiB, download audio files, or delete transcription data after user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: Fallback first-time setup asks users to run remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official package manager or manually download and verify the installer before running first-time setup commands.
+
+Risk: The skill can start uploads or transcription jobs and can delete transcription data.
+
+Mitigation: Review exact payloads before approval, and require explicit confirmation for write and destructive actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-gladia)
+- [Gladia homepage](https://app.gladia.io/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include JSON action responses and file references when upload or download actions run.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

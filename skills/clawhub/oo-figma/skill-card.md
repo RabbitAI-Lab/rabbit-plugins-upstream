@@ -1,45 +1,56 @@
-## Description: <br>
-Operate Figma through an OOMOL-connected account for reading, creating, updating, and deleting Figma data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Figma (figma.com). Use this skill for Figma requests that read, create, update, delete, inspect, or render Figma data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect Figma files, metadata, comments, libraries, rendered images, projects, and team resources, and to perform approved Figma write actions through the OOMOL connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access a connected Figma account or workspace through OOMOL. <br>
-Mitigation: Install only if you trust OOMOL with the connected Figma account and review the requested Figma action before execution. <br>
-Risk: Write and destructive actions can change or delete Figma comments, reactions, or dev resources. <br>
-Mitigation: Confirm the exact payload and target with the user before write actions, and require explicit approval before destructive actions. <br>
-Risk: First-time setup may install the oo CLI or require account connection. <br>
-Mitigation: Run setup only after an auth, connection, or missing-command failure and use the documented OOMOL setup flow. <br>
+## Use Case:
 
+Developers and design-automation agents use this skill to operate on Figma files, nodes, metadata, components, styles, comments, dev resources, and rendered node images without handling raw Figma credentials directly.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-figma) <br>
-- [Figma homepage](https://www.figma.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and a meta.executionId when actions run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: evidence release version and SKILL.md metadata) <br>
+Risk: Setup instructions include remote installer commands that could execute unverified local code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before installation, prefer a verified or package-manager installation of the oo CLI, and avoid piping remote scripts directly into a shell.
+
+Risk: Write and destructive Figma actions can change or remove comments, reactions, or dev resources.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Figma skill](https://clawhub.ai/oomol/skills/oo-figma)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Figma](https://www.figma.com)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects with data and meta.executionId fields when actions are run with --json.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

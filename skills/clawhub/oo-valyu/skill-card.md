@@ -1,45 +1,56 @@
-## Description: <br>
-Valyu lets agents search and read web, academic, financial, and proprietary data through an OOMOL-connected Valyu account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Valyu lets an agent search and read web, academic, financial, and proprietary data through the OOMOL Valyu connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to run Valyu searches through the oo CLI with an OOMOL-connected account. The skill retrieves live connector schemas before running actions so search payloads match the current Valyu contract. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected Valyu account, so queries and credential-brokered activity may be visible to OOMOL or Valyu. <br>
-Mitigation: Install only if OOMOL is an acceptable credential broker for Valyu and avoid submitting sensitive queries unless that data sharing is acceptable. <br>
-Risk: Fallback setup commands install the oo CLI from remote installer URLs. <br>
-Mitigation: Review the oo CLI installer before running fallback install commands. <br>
-Risk: Valyu searches may consume connected-account credits. <br>
-Mitigation: Monitor Valyu and OOMOL billing state before retrying searches after billing errors. <br>
+## Use Case:
 
+Developers and agent operators use this skill to route Valyu search requests through the oo CLI, inspect live action schemas, and handle setup, authentication, connection, credential, or billing failures.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-valyu) <br>
-- [Valyu homepage](https://valyu.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runs Valyu connector actions through the oo CLI and returns response data with an execution id under meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup instructions include direct execution of remote installer scripts in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a pinned, verifiable oo CLI release or trusted package manager, and review the installer before running shell-based installation commands.
+
+Risk: Normal use depends on an authenticated OOMOL account, a connected Valyu provider, valid credentials, and available billing credit.
+
+Mitigation: Run setup steps only after matching command failures, use the server-side credential injection path, and avoid handling raw API tokens directly.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-valyu)
+- [Valyu homepage](https://valyu.ai)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector action responses are JSON objects containing data and meta.executionId when actions run.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

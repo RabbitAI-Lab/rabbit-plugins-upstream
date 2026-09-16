@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Twelve Data"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["twelve_data"]
   icon: "https://static.oomol.com/logo/third-party/Twelve%20Data.svg"
 ---

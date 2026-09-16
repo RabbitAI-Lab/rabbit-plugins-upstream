@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/ceph-aiops",
   "slug": "ceph-aiops",
   "ownerHandle": null,
-  "version": "0.7.0",
-  "updatedAt": 1784668557461,
-  "contentHash": "2b66a087509c8569cfd46565c9c7c037c5e296ae54d6d4fc6c8dd39f5875bd8e",
-  "fetchedAt": "2026-07-26T18:08:53.845Z"
+  "version": "0.11.4",
+  "updatedAt": 1789451640573,
+  "contentHash": "7fb793c4b85a290cd67b3e5c64db7218684fd99f403912f3fc35d69916b862bd",
+  "fetchedAt": "2026-09-16T12:49:44.958Z"
 }

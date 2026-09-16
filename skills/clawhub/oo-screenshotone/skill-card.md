@@ -1,45 +1,59 @@
-## Description: <br>
-ScreenshotOne helps an agent use an OOMOL-connected ScreenshotOne account to capture screenshots, animated captures, bulk captures, usage details, and device presets. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ScreenshotOne guides agents to use the OOMOL oo CLI connector for checking ScreenshotOne account usage, listing device presets, and capturing screenshots from URLs, HTML, or Markdown.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers can use this skill when they want an agent to capture website, HTML, or Markdown screenshots through their connected ScreenshotOne account. It also supports usage checks, device preset discovery, animated captures, and bulk screenshot submission. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Screenshot inputs are shared with the connected OOMOL and ScreenshotOne services. <br>
-Mitigation: Install and use the skill only when that data sharing is acceptable for the target URLs, HTML, or Markdown content. <br>
-Risk: Bulk capture requests can send many screenshot jobs through the connected account. <br>
-Mitigation: Review bulk capture payloads before execution and confirm the requested targets and volume are intentional. <br>
-Risk: The optional CLI installer uses shell or PowerShell commands fetched from OOMOL-hosted URLs. <br>
-Mitigation: Use automatic installation only when the OOMOL CLI source is trusted, or install the CLI through a reviewed internal process. <br>
+## Use Case:
 
+Developers and external users use this skill to run ScreenshotOne connector actions through an OOMOL-connected account for usage checks, viewport preset discovery, and website or markup screenshot capture.
 
-## Reference(s): <br>
-- [ScreenshotOne ClawHub skill page](https://clawhub.ai/oomol/oo-screenshotone) <br>
-- [ScreenshotOne homepage](https://screenshotone.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON payloads; connector actions may return JSON metadata and screenshot, video, or GIF files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The agent should inspect the live action schema before building payloads and should review bulk capture requests before running them.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill frontmatter) <br>
+Risk: Screenshot, animated screenshot, and bulk screenshot actions use an OOMOL-connected ScreenshotOne account and may trigger external, billable capture operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the exact URL, HTML, Markdown, and JSON payload before running capture actions, and confirm account or billing impact when relevant.
+
+Risk: The skill includes first-time installer commands that pipe remote scripts into a shell.
+
+Mitigation: Avoid curl-to-bash and irm-to-iex installer commands unless the installer source has been independently trusted and verified.
+
+Risk: Capture actions are treated like safe reads in the artifact even though they can initiate external rendering work.
+
+Mitigation: Treat take_screenshot, take_animated_screenshot, and take_bulk_screenshots as externally effectful operations and confirm payloads before execution.
+
+## Reference(s):
+
+- [ClawHub ScreenshotOne skill page](https://clawhub.ai/oomol/skills/oo-screenshotone)
+- [ScreenshotOne homepage](https://screenshotone.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector actions may return JSON responses and generated screenshot, video, or GIF artifacts.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

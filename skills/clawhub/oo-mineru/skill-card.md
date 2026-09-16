@@ -1,42 +1,61 @@
-## Description: <br>
-MinerU helps agents operate MinerU document extraction through OOMOL's oo CLI for reading, creating, and updating extraction tasks and batches. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MinerU helps agents operate the MinerU connector through an OOMOL-connected account for creating extraction tasks and batches and retrieving extraction status and result URLs.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and operations teams use this skill to create MinerU document extraction tasks or batches from document URLs and retrieve extraction status and result URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill submits document URLs and extraction requests through an OOMOL-connected MinerU account, so sensitive documents or extraction results may be exposed to that service. <br>
-Mitigation: Confirm OOMOL and MinerU are trusted for the submitted documents and avoid sending confidential URLs unless the user has approved that handling. <br>
-Risk: Task and batch creation actions can change MinerU state or consume credits. <br>
-Mitigation: Inspect the live action schema, review the exact payload and effect with the user, and require confirmation before running write actions. <br>
+## Use Case:
 
+External users and developers use this skill to run MinerU document extraction workflows from an agent, including creating precise extraction tasks or batches from document URLs and checking their results.
 
-## Reference(s): <br>
-- [ClawHub MinerU Skill](https://clawhub.ai/oomol/oo-mineru) <br>
-- [MinerU Homepage](https://mineru.net) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, Text] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live MinerU action schemas before running connector commands; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: First-time setup instructions include remote installer commands that execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official version-pinned installer, or inspect and verify the installer before running it.
+
+Risk: Write actions create MinerU extraction tasks or batches from supplied document URLs.
+
+Mitigation: Confirm the exact document URLs and expected effect with the user before creating tasks or batches.
+
+Risk: Connector schemas can change over time.
+
+Mitigation: Inspect the live action schema before constructing or running connector payloads.
+
+## Reference(s):
+
+- [ClawHub MinerU skill page](https://clawhub.ai/oomol/skills/oo-mineru)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [MinerU homepage](https://mineru.net)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include MinerU task or batch status, result URLs, and connector execution metadata when returned by the service.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

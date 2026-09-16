@@ -1,43 +1,56 @@
-## Description: <br>
-ApiFlash helps agents operate ApiFlash through an OOMOL-connected account to capture website screenshots, check quota information, and retrieve screenshot metadata. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ApiFlash (apiflash.com). Use this skill for ApiFlash screenshot capture, quota retrieval, and screenshot metadata requests through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to run ApiFlash screenshot and quota actions through the oo CLI after connecting an OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may require installing or using the oo CLI before actions can run. <br>
-Mitigation: Install the CLI only from trusted OOMOL documentation, inspect remote installer scripts before execution, or use a pinned package when available. <br>
-Risk: The skill operates through connected ApiFlash credentials. <br>
-Mitigation: Use it only when the user intends to access ApiFlash through an OOMOL-connected account and follow the skill's auth recovery steps only after a command fails. <br>
+## Use Case:
 
+Developers and agent users use this skill to operate ApiFlash through an OOMOL-connected account, including capturing website screenshots, checking screenshot quota, and reading screenshot metadata.
 
-## Reference(s): <br>
-- [ApiFlash ClawHub page](https://clawhub.ai/oomol/oo-apiflash) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ApiFlash homepage](https://apiflash.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can return ApiFlash screenshot URLs, quota details, screenshot metadata, and oo CLI recovery guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup guidance includes remote installer commands that execute downloaded scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a safer installation path where available, such as a signed or checksum-verified release, and run installer commands only after trusting OOMOL's delivery path.
+
+Risk: Connector actions can interact with an ApiFlash account and should stay limited to user-requested ApiFlash work.
+
+Mitigation: Inspect the live action schema before constructing payloads and confirm any state-changing action with the user before execution.
+
+## Reference(s):
+
+- [ApiFlash homepage](https://apiflash.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-apiflash)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId when actions are run with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

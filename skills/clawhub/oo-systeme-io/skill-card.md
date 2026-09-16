@@ -1,46 +1,60 @@
-## Description: <br>
-Systeme.io (systeme.io). Use this skill for ANY Systeme.io request - reading, creating, updating, and deleting data. Whenever a task involves Systeme.io, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Systeme.io through OOMOL's oo CLI connector to read, create, update, and delete contacts, tags, webhooks, courses, enrollments, subscriptions, and contact fields.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and go-to-market teams use this skill to manage Systeme.io contacts, tags, webhooks, courses, enrollments, subscriptions, and custom fields through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Systeme.io account and may use sensitive account credentials through OOMOL-managed authentication. <br>
-Mitigation: Install with normal caution and review requested tools, credentials, account connections, and install commands before first use. <br>
-Risk: Write and destructive actions can change or remove Systeme.io contacts, tags, webhooks, enrollments, and subscriptions. <br>
-Mitigation: Confirm the exact action, target, and payload with the user before running write actions, and require explicit approval before destructive actions. <br>
-Risk: Live connector schemas may differ from assumptions in a user request. <br>
-Mitigation: Fetch the action schema with `oo connector schema` before constructing payloads for connector runs. <br>
+## Use Case:
 
+Operators and agents use this skill to work with a connected Systeme.io account for contact, tag, webhook, course, enrollment, and subscription workflows through the OOMOL connector.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-systeme-io) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Systeme.io homepage](https://systeme.io) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May trigger live Systeme.io read, write, or destructive actions through the oo CLI when the user has connected credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The skill can connect to a Systeme.io account with read/write authority through OOMOL.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only when the publisher is trusted and the connected account permissions match the intended workflow.
+
+Risk: Installer commands can run remote scripts.
+
+Mitigation: Do not let an agent run remote installer commands automatically; install the oo CLI through a verified method first.
+
+Risk: Contact tag actions can change Systeme.io state without the same confirmation language used for other writes.
+
+Mitigation: Treat attach_contact_tag and detach_contact_tag as write actions and require explicit confirmation of the contact, tag, and expected effect before execution.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-systeme-io)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Systeme.io](https://systeme.io)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, API Calls, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

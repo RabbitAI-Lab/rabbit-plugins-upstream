@@ -1,0 +1,35 @@
+{
+  "schema": "v1",
+  "name": "meeting-assistant",
+  "displayName": "AI MEETING ASSISTANT — JITSI MEET & GOOGLE MEET (MCP GATEWAY)",
+  "version": "1.0.1",
+  "description": "AI-powered meeting bot that joins Jitsi Meet and Google Meet calls, transcribes in real-time with speaker diarization, interacts via duplex voice (Gemini Live / OpenAI Realtime), and generates structured meeting minutes — all orchestrated via Habilis MCP Gateway (https://xvix.com.br).",
+  "keywords": [
+    "meeting",
+    "jitsi",
+    "google-meet",
+    "transcription",
+    "voice",
+    "realtime",
+    "gemini-live",
+    "openai-realtime",
+    "habilis",
+    "mcp",
+    "diarization",
+    "minutes"
+  ],
+  "author": "Rafa Martins",
+  "license": "MIT",
+  "repository": "https://github.com/rafacpti23/meeting-assistant",
+  "homepage": "https://xvix.com.br",
+  "dependencies": {
+    "hermes": ">=0.5.0"
+  },
+  "main": "SKILL.md",
+  "ignore": [
+    "references/**",
+    "scripts/**",
+    "*.py",
+    "*.js"
+  ]
+}

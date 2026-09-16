@@ -1,45 +1,56 @@
-## Description: <br>
-BoloForms connector skill for reading, creating, and updating BoloForms data through an OOMOL-connected account via the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BoloForms (boloforms.com). Use this skill for ANY BoloForms request - reading, creating, and updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect BoloForms documents, retrieve form responses, review template respondents, and send existing templates for signing through an authenticated OOMOL connection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an OOMOL-connected BoloForms account and can access workspace documents, form responses, and signing participant data. <br>
-Mitigation: Install it only for users who intend to let the oo CLI access their BoloForms workspace, and keep the OOMOL connection scoped to the needed account. <br>
-Risk: The send_template_for_signing action changes BoloForms state by sending an existing template for signing. <br>
-Mitigation: Review the exact payload and expected effect with the user before approving the write action. <br>
-Risk: First-time setup may use remote installer commands for the oo CLI. <br>
-Mitigation: Use the remote installer commands only when the CLI is missing and the OOMOL CLI source is trusted. <br>
+## Use Case:
 
+External users and developers use this skill to operate BoloForms through an OOMOL-connected account, including listing documents and form responses, checking signing participants, and sending templates for signing after confirmation.
 
-## Reference(s): <br>
-- [BoloForms homepage](https://www.boloforms.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-boloforms) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an installed oo CLI, a signed-in OOMOL account, and a connected BoloForms workspace.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Setup instructions can involve unverified remote installer scripts with broad local execution power.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source and prefer a signed, versioned, checksum-verified oo CLI installation before using the skill.
+
+Risk: The send_template_for_signing action changes BoloForms state by starting a signing request.
+
+Mitigation: Confirm the exact recipients, template, and payload with the user before allowing the action to run.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-boloforms)
+- [BoloForms homepage](https://www.boloforms.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown instructions with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live oo connector schemas and returns oo CLI JSON responses when actions run.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

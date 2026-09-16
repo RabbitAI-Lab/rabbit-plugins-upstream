@@ -1,5 +1,5 @@
 ## Description: <br>
-Guides Termix Platform marketplace operations including agent inspection, Provider Agent auto-reply, order and brief workflows, campaign reads, and dispute checks. <br>
+Use this skill for Termix Platform dev-v2 operations, including agent inspection, Provider Agent A2A auto-reply via OpenClaw inbox polling, order, brief, and campaign reads, and dispute checks. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,44 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and marketplace operators use this skill to run Termix client and provider workflows, inspect agents, prepare API and shell commands, manage Provider Agent auto-replies, and review marketplace state before acting. <br>
+External developers and Termix Provider operators use this skill to inspect Termix agents, manage Provider Agent marketplace workflows, run inbox auto-replies, issue authenticated API calls, upload artifacts, and prepare or execute wallet-signed on-chain transactions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Wallet private keys and bearer tokens are used for marketplace and runtime actions. <br>
-Mitigation: Use a dedicated low-value wallet, avoid sharing production private keys, and do not echo keys or tokens in chat or logs. <br>
-Risk: The skill can prepare or run live blockchain transaction flows. <br>
-Mitigation: Review every value-bearing action with --dry-run and obtain explicit confirmation before broadcasting. <br>
-Risk: Auto-reply sends buyer messages to the configured LLM provider and runs as a background process. <br>
-Mitigation: Use an approved LLM provider, avoid sensitive buyer content where possible, monitor the worker log, and stop the worker when it is no longer needed. <br>
-Risk: Authenticated API helpers may carry wallet-scoped authority. <br>
-Mitigation: Use relative API paths for authenticated helpers and avoid passing absolute URLs unless they are intentionally unauthenticated. <br>
+Risk: The skill can operate with wallet-level authority through a private key. <br>
+Mitigation: Use a dedicated low-balance wallet, avoid entering a primary private key in chat or shell history, and require explicit confirmation before signing or transaction commands. <br>
+Risk: The skill can send live blockchain transactions. <br>
+Mitigation: Prefer dry-run first, then verify contract addresses, chain, token amounts, and transaction intent before broadcasting. <br>
+Risk: The skill can cache authentication and runtime tokens. <br>
+Mitigation: Treat token cache files as sensitive, avoid printing tokens, and clear or rotate sessions when the workflow is complete. <br>
+Risk: The skill can run a background auto-reply worker for a Provider Agent. <br>
+Mitigation: Stop the auto-reply worker when no longer needed and monitor its log for unintended replies. <br>
+Risk: The authenticated API helper is broad enough to reach many Termix Platform endpoints. <br>
+Mitigation: Use relative API paths from the workflow docs and avoid passing full external URLs to authenticated helper commands. <br>
 
 
 ## Reference(s): <br>
-- [Termix Agent Skills on ClawHub](https://clawhub.ai/termixai-it/skills/termix-agent-skills) <br>
-- [termixai-it publisher profile](https://clawhub.ai/user/termixai-it) <br>
+- [ClawHub skill page](https://clawhub.ai/termixai-it/skills/termix-agent-skills) <br>
+- [Publisher profile](https://clawhub.ai/user/termixai-it) <br>
+- [Skill router](artifact/SKILL.md) <br>
+- [A2A Runtime](artifact/docs/a2a-openclaw.md) <br>
+- [Environment Reference](artifact/docs/env.md) <br>
+- [On-chain Transactions](artifact/docs/onchain-tx.md) <br>
+- [Provider Order Delivery](artifact/docs/provider-order-delivery.md) <br>
 - [Termix Platform API base](https://platform-backend.prod.termix.live) <br>
-- [OpenRouter API base](https://openrouter.ai/api/v1) <br>
+- [OpenRouter OpenAI-compatible API base](https://openrouter.ai/api/v1) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline code, shell commands, JSON request bodies, and operational guidance.] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, API calls] <br>
+**Output Format:** [Markdown guidance with inline shell commands and JSON snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference Node.js helper scripts, wallet-scoped environment variables, API requests, and dry-run transaction review steps.] <br>
+**Other Properties Related to Output:** [Outputs may include commands that depend on local environment variables and may produce JSON API responses; wallet keys, session tokens, and runtime tokens should be redacted.] <br>
 
 ## Skill Version(s): <br>
-1.3.0 (source: server-resolved release metadata) <br>
+1.2.0 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

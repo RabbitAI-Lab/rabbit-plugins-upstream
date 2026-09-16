@@ -1,43 +1,55 @@
-## Description: <br>
-Use this skill for NeverBounce (neverbounce.com) requests, including reading, creating, and updating data through the OOMOL connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+NeverBounce helps agents verify single email addresses, manage bulk verification jobs, check account credits, and retrieve job results through an OOMOL-connected NeverBounce account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to verify single email addresses, manage NeverBounce bulk verification jobs, download results, and check account status through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Bulk verification jobs may upload or process email lists and consume NeverBounce or OOMOL account credits. <br>
-Mitigation: Review job payloads, remote file sources, filters, and expected credit impact before approving write actions. <br>
-Risk: The skill requires a connected NeverBounce account with sensitive credentials managed through OOMOL. <br>
-Mitigation: Use the OOMOL CLI connection flow and do not request or handle raw NeverBounce tokens; troubleshoot authentication only after a command reports an auth or connection failure. <br>
+## Use Case:
 
+External users and developers use this skill to operate NeverBounce email verification workflows through the oo CLI, including single checks, bulk job lifecycle management, result downloads, and account credit review.
 
-## Reference(s): <br>
-- [NeverBounce homepage](https://neverbounce.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [NeverBounce skill on ClawHub](https://clawhub.ai/oomol/oo-neverbounce) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON payload examples, and connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return NeverBounce JSON responses or CSV job-result downloads through the oo connector.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup guidance includes remote installer commands that can execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source before use and prefer an official signed or checksum-verified installer path.
+
+Risk: Bulk job actions can create or start NeverBounce jobs and may change account state or consume credits.
+
+Mitigation: Inspect the live action schema and confirm the exact payload and effect with the user before running state-changing actions.
+
+## Reference(s):
+
+- [NeverBounce Homepage](https://neverbounce.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return connector JSON responses, execution identifiers, paginated result data, or CSV job downloads from NeverBounce actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

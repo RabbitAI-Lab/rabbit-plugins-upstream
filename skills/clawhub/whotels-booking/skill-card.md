@@ -1,40 +1,54 @@
-## Description: <br>
-搜索万豪集团旗下W酒店，返回实时价格与预订链接，支持酒店详情查询和套餐优惠搜索，多旅游平台数据直连。暑期潮流旅行打卡，全球W酒店查询预订 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides users from the paused W Hotels dedicated search, detail, and package tools to general hotel search and price-comparison skills for W Hotels queries.
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-Travelers and travel-planning agents use this skill to search W Hotels by destination, review hotel details and package offers, and return booking links for follow-up purchase. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Hotel search details are sent to the skill's proxy and downstream travel services. <br>
-Mitigation: Use the skill only when that data sharing is acceptable, and avoid submitting sensitive personal or itinerary details unless the publisher's terms cover that use. <br>
-Risk: The release evidence reports an embedded shared proxy token and an environment-defined proxy URL. <br>
-Mitigation: The publisher should replace shared credentials with managed per-deployment credentials and document the expected proxy endpoint before broad use. <br>
+## Use Case:
 
+External users use this skill when they ask about W Hotels search, pricing, details, or packages after the dedicated W Hotels data source has paused. The skill returns a service-adjustment notice and directs them to general hotel search or price-comparison skills that can handle W Hotels queries.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/whotels-booking) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API Calls, Guidance] <br>
-**Output Format:** [Markdown-formatted Chinese text with hotel search results, details, package offers, prices, and booking links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prices, availability, and booking completion depend on the proxy and downstream travel services; users should verify final terms on the booking page.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.4 (source: server release metadata) <br>
+Risk: Users may expect this skill to perform live W Hotels search, pricing, details, or package lookups.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Make clear before use that the dedicated W Hotels data source is paused and that the skill returns guidance to use general hotel-search or price-comparison skills.
+
+Risk: The current notice is Chinese-only.
+
+Mitigation: Provide translation or locale-appropriate surrounding agent responses when serving users who do not read Chinese.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/whotels-booking)
+- [ClawHub publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, guidance]
+
+**Output Format:** [Plain text notice in Chinese]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Static notice; retained search, detail, and packages entry points return the same guidance.]
+
+## Skill Version(s):
+
+1.1.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

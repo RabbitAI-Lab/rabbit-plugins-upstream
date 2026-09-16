@@ -1,46 +1,56 @@
-## Description: <br>
-Coda lets agents read, create, and update Coda data through an OOMOL-connected account instead of calling the Coda API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Coda (coda.io) enables an agent to read, create, and update Coda data through the OOMOL-connected oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect live Coda connector schemas, read Coda docs, pages, tables, columns, and rows, and perform confirmed write actions such as creating pages or upserting rows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Setup guidance includes running a remote installer directly in a shell. <br>
-Mitigation: Review and verify the official oo CLI installation path before installation, inspect installer contents where possible, and do not let an agent run the pipe-to-shell setup automatically. <br>
-Risk: The skill can perform write actions that change Coda state. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running actions tagged as write or destructive. <br>
-Risk: The connector requires authenticated access to a Coda account. <br>
-Mitigation: Use the OOMOL-connected account flow and avoid exposing raw Coda API tokens to the agent. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect Coda connector schemas, run read actions, and prepare confirmed write actions for docs, pages, tables, columns, rows, users, and asynchronous mutations.
 
-## Reference(s): <br>
-- [ClawHub Coda Skill](https://clawhub.ai/oomol/oo-coda) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Coda Homepage](https://coda.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are expected as JSON when commands are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md metadata) <br>
+Risk: Setup guidance includes unverified remote installer commands for the oo CLI, which could execute arbitrary local code if the installer path is compromised or not independently trusted.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installer provenance before use and prefer an official, versioned, signed, or checksum-verified oo CLI installation path.
+
+Risk: Write actions can create pages or upsert rows in Coda.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running any action tagged as write.
+
+## Reference(s):
+
+- [ClawHub Coda skill](https://clawhub.ai/oomol/skills/oo-coda)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Coda homepage](https://coda.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Coda connector schema inspection, JSON action payloads, command results, setup guidance, and confirmation prompts for write actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: SKILL.md metadata and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

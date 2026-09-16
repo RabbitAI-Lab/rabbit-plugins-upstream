@@ -1,44 +1,56 @@
-## Description: <br>
-Use this skill to search and read Intelliprint data from intelliprint.net. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Intelliprint helps an agent search and read Intelliprint data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent read Intelliprint backgrounds, mailing lists, recipients, and print jobs through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Mailing lists, recipients, and print jobs may contain business or customer information. <br>
-Mitigation: Use the skill for read-only lookup tasks through an authorized OOMOL-connected account and avoid exposing retrieved data beyond the user's requested task. <br>
-Risk: Future connector actions could write, overwrite, or delete Intelliprint data if added later. <br>
-Mitigation: Require explicit user confirmation before running any action tagged write or destructive. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Intelliprint backgrounds, mailing lists, recipients, and print jobs, and to list those resources with supported filters, pagination, sorting, and field selection.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-intelliprint) <br>
-- [Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Intelliprint Homepage](https://www.intelliprint.net) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Guidance, Text] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces read-only Intelliprint lookup guidance and oo CLI commands; connector responses are JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence release metadata and artifact frontmatter) <br>
+Risk: Fallback setup includes remote installer commands that could execute arbitrary code if run without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official, versioned installation method with verification before installing the oo CLI, and avoid running curl-to-bash or PowerShell iex installer commands blindly.
+
+Risk: The skill depends on OOMOL as the connector between the agent and Intelliprint.
+
+Mitigation: Use the skill only when that connector relationship is acceptable, and approve account login or Intelliprint connection steps yourself.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-intelliprint)
+- [Intelliprint homepage](https://www.intelliprint.net)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill directs the agent to inspect live connector schemas before execution and to return connector results in JSON when commands run successfully.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

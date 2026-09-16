@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "IT Glue"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["it_glue"]
   icon: "https://static.oomol.com/logo/third-party/it_glue.svg"
 ---

@@ -1,47 +1,55 @@
-## Description: <br>
-Operates Payhip through the OOMOL payhip connector to read, create, update, and delete Payhip data using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Payhip (payhip.com). Use this skill for ANY Payhip request: reading, creating, updating, and deleting data through the Payhip connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Payhip coupons and license keys from an agent session through OOMOL-connected tooling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill enables OOMOL-backed tooling to access a user's Payhip account. <br>
-Mitigation: Install only when Payhip account access through OOMOL is intended, and keep Payhip connected only for approved workflows. <br>
-Risk: Coupon and license actions can change Payhip state. <br>
-Mitigation: Review the live action schema and confirm the exact JSON payload and expected effect before running write actions. <br>
-Risk: Destructive actions can delete Payhip data. <br>
-Mitigation: Require explicit user approval for the target resource before running destructive actions such as coupon deletion. <br>
-Risk: Setup commands install or invoke external CLI tooling. <br>
-Mitigation: Verify the oo CLI installer source before running setup commands. <br>
+## Use Case:
 
+External users and developers use this skill to operate Payhip through an OOMOL-connected account, including coupon management and license verification workflows. It is intended for agent-assisted Payhip read, write, and delete operations via the oo CLI.
 
-## Reference(s): <br>
-- [Payhip homepage](https://payhip.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-payhip) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector command output is JSON when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md metadata) <br>
+Risk: Setup instructions include direct remote shell installation commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup instructions before installing and prefer verified or package-manager installation instructions over direct curl-to-shell or PowerShell execution.
+
+Risk: The skill can perform Payhip write and destructive actions such as creating, updating, and deleting coupons or changing license state.
+
+Mitigation: Confirm the exact payload, target, and expected effect with the user before write actions, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-payhip)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Payhip Homepage](https://payhip.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return Payhip connector JSON responses when actions are executed]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

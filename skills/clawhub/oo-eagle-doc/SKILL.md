@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Eagle Doc"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["eagle_doc"]
   icon: "https://static.oomol.com/logo/third-party/eagle_doc.png"
 ---

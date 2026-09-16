@@ -1,42 +1,59 @@
-## Description: <br>
-OpenAI (openai.com). Use this skill for ANY OpenAI request — reading, creating, and updating data. Whenever a task involves OpenAI, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OpenAI helps agents operate OpenAI through an OOMOL-connected account using the oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate an OOMOL-connected OpenAI account through the oo CLI for model lookup, Responses API calls, batches, embeddings, image generation, moderation, transcription, translation, and speech synthesis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access a user's OOMOL-connected OpenAI account and run write actions that create or modify OpenAI resources. <br>
-Mitigation: Review exact payloads before approving write actions, avoid sending sensitive data unless intended, and reserve first-time setup steps for actual authentication or connection failures. <br>
-Risk: The first-time setup path installs the oo CLI through a remote installer when the CLI is missing. <br>
-Mitigation: Inspect the oo CLI installer before using that setup path. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect live OpenAI connector schemas and run supported OpenAI actions through an OOMOL-connected account. It covers common OpenAI workflows including responses, embeddings, image generation, audio, moderation, token counting, model lookup, stored response retrieval, and batch management.
 
-## Reference(s): <br>
-- [ClawHub OpenAI skill page](https://clawhub.ai/oomol/oo-openai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OpenAI API](https://openai.com/api/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Text, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution and returns connector data with execution metadata when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server evidence) <br>
+Risk: The skill routes OpenAI requests and payloads through OOMOL.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only when that routing is intended for the task and acceptable for the data being sent.
+
+Risk: The first-time setup guidance includes pipe-to-shell installer commands.
+
+Mitigation: Use a verified installation method, or inspect and verify the installer before running it.
+
+Risk: Write actions can change OpenAI state or submit sensitive payloads.
+
+Mitigation: Review payloads carefully and require explicit user confirmation before file uploads, write actions, or other state-changing operations.
+
+## Reference(s):
+
+- [ClawHub OpenAI skill page](https://clawhub.ai/oomol/skills/oo-openai)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OpenAI API](https://openai.com/api/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution and returns connector responses as JSON when commands are run with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

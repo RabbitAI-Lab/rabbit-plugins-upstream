@@ -1,43 +1,55 @@
-## Description: <br>
-Agiled (agiled.app) lets an agent read, create, update, and delete Agiled CRM contacts, projects, and tasks through an OOMOL-connected `oo` CLI account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Agiled (agiled.app). Use this skill for Agiled requests to read, create, update, and delete contacts, projects, and tasks through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Agiled CRM, project, and task data from an agent session after their OOMOL account is signed in and connected to Agiled. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, and delete Agiled contacts, projects, and tasks. <br>
-Mitigation: Review the exact target and JSON payload with the user before approving write or destructive actions. <br>
-Risk: The skill depends on a third-party OOMOL CLI connection to the user's Agiled account. <br>
-Mitigation: Install and run it only when the user trusts OOMOL and is comfortable connecting Agiled through the `oo` CLI. <br>
+## Use Case:
 
+Developers and external users use this skill to operate Agiled CRM, project, and task records through an OOMOL-connected account. It supports read actions directly and requires confirmation before write or destructive actions.
 
-## Reference(s): <br>
-- [Agiled homepage](https://agiled.app) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-agiled) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses from connector runs include a data object and meta.executionId when commands succeed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter metadata) <br>
+Risk: First-time setup includes remote installer commands, and the security summary marks the release suspicious pending review before installation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and trust the OOMOL installer source before executing it; prefer a verified, pinned, or package-manager installation method when available.
+
+Risk: The skill can create, update, and delete Agiled records.
+
+Mitigation: Confirm exact payloads and effects before write actions, and obtain explicit approval before destructive actions.
+
+## Reference(s):
+
+- [Agiled homepage](https://agiled.app)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-agiled)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the oo CLI to inspect live connector schemas before running Agiled actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
