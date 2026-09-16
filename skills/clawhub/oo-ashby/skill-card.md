@@ -1,44 +1,55 @@
-## Description: <br>
-Operate Ashby through an OOMOL-connected account to read and search candidates, jobs, and API key information with the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Ashby (ashbyhq.com). Use this skill for Ashby requests that search and read recruiting data through an OOMOL-connected Ashby account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and recruiting operations users use this skill to let an agent inspect live Ashby connector schemas and run read/search actions against Ashby data through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent can query Ashby through the user's OOMOL account. <br>
-Mitigation: Install and use the skill only when the user is comfortable with agent-mediated Ashby queries, and review the oo CLI setup and Ashby connection before use. <br>
-Risk: Future write, delete, or overwrite actions could change Ashby data if enabled. <br>
-Mitigation: Require explicit user confirmation before enabling or running any future action that writes, deletes, or overwrites Ashby data. <br>
+## Use Case:
 
+Developers and agent users use this skill to inspect Ashby connector schemas and run read-oriented Ashby actions for candidates, jobs, API key information, and candidate search without handling raw Ashby API tokens.
 
-## Reference(s): <br>
-- [ClawHub Ashby skill page](https://clawhub.ai/oomol/skills/oo-ashby) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Ashby homepage](https://www.ashbyhq.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution and returns oo CLI execution metadata when available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: The setup instructions include remote installer scripts that are piped directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path first and prefer a signed or checksum-verified, version-pinned installer.
+
+Risk: The skill accesses Ashby recruiting data through an OOMOL-connected account.
+
+Mitigation: Connect only an Ashby account and scopes whose recruiting data are appropriate to access through OOMOL.
+
+## Reference(s):
+
+- [Ashby homepage](https://www.ashbyhq.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-ashby)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with bash commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution; read actions return JSON data and execution metadata through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

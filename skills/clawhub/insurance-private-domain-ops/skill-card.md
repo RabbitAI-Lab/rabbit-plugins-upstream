@@ -1,42 +1,56 @@
-## Description: <br>
-Provides China insurance private-domain customer operations guidance for RFM and lifecycle segmentation, churn reactivation, renewal workflows, WeChat and WeCom operations, AI personalization, and PIPL-aware CRM practices. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides insurance customer segmentation, lapse reactivation, renewal management, WeCom outreach, and PIPL-aware private-domain operations guidance for China-focused insurance teams.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[gechengling](https://clawhub.ai/user/gechengling)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Insurance operations, renewal, customer service, and brokerage teams use this skill to plan customer segmentation, churned-customer reactivation, renewal outreach, WeCom private-domain operations, and compliant marketing content review.
+
+### Deployment Geography for Use:
+
+China
+
+## Known Risks and Mitigations:
+
+Risk: Customer operations prompts may expose personal information or policy identifiers if users paste real customer lists.
+
+Mitigation: Use only aggregated or anonymized customer attributes, keep real customer records in approved internal systems, and limit any generated lists to minimum necessary fields.
+
+Risk: Generated marketing, renewal, or outreach text could be inaccurate, non-compliant, or unsuitable for a customer segment.
+
+Mitigation: Require compliance or operations approval before sending content, review benefit and guarantee language, and preserve review records for auditability.
+
+Risk: Users may treat advisory workflows as authorization to send messages or export data.
+
+Mitigation: Use the skill as planning guidance only; it has no tools for messaging, file export, CRM writes, or database modification.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Insurance CRM, private-domain operations, and agency service teams use this skill to segment existing customers, plan reactivation and renewal campaigns, draft WeChat and WeCom touch scripts, and structure customer lifecycle operations for China insurance scenarios. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-China <br>
+**Output Type(s):** [Text, Markdown, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Customer segmentation, outreach scripts, SQL templates, and renewal or reactivation campaigns may involve personal data, marketing consent, channel permissions, or insurance compliance obligations. <br>
-Mitigation: Before using outputs with real customers, confirm lawful basis, marketing consent, identity verification, unsubscribe handling, and local insurance and privacy compliance with the organization's approved CRM and compliance process. <br>
-Risk: Generated customer-operation guidance may be incomplete, outdated, or unsuitable for a specific insurer, product, jurisdiction, or customer segment. <br>
-Mitigation: Have qualified insurance, legal, compliance, and CRM operations reviewers approve plans and scripts before deployment. <br>
+**Output Format:** [Markdown with tables, SOPs, checklists, and sample outreach copy]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [Churn Activation SOP and Conversation Templates](references/churn_activation.md) <br>
-- [Insurance Customer Segmentation Model](references/customer_segmentation.md) <br>
-- [WeCom Private Domain SOP and Content Calendar](references/private_domain_sop.md) <br>
+**Other Properties Related to Output:** [Advisory operational content; no connector, messaging, export, or database actions.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, SQL, Guidance] <br>
-**Output Format:** [Markdown guidance with tables, SOPs, conversation scripts, campaign plans, and SQL snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only skill; users supply their own customer data and compliance context.] <br>
+4.1.2 (source: frontmatter and server release evidence)
 
-## Skill Version(s): <br>
-4.1.1 (source: server release metadata and SKILL.md frontmatter) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

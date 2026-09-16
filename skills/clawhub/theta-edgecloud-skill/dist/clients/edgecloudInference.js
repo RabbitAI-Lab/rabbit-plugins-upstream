@@ -1,4 +1,5 @@
 import { getJson, postJson } from './http.js';
+import { thetaUrl } from '../security.js';
 const ALLOWED_INFERENCE_DOMAIN_SUFFIXES = ['.thetaedgecloud.com', '.onthetaedgecloud.com'];
 function isLoopbackOrPrivateHost(hostname) {
     const host = hostname.toLowerCase();
@@ -45,7 +46,7 @@ function endpoint(cfg, e) {
     const v = e ?? cfg.inferenceEndpoint;
     if (!v)
         throw new Error('THETA_INFERENCE_ENDPOINT missing');
-    const parsed = parseEndpoint(v, 'THETA_INFERENCE_ENDPOINT');
+    const parsed = parseEndpoint(thetaUrl(v, 'dedicated'), 'THETA_INFERENCE_ENDPOINT');
     if (!isAllowedHost(parsed.hostname)) {
         throw new Error('THETA_INFERENCE_ENDPOINT host is not allowed; use a Theta EdgeCloud endpoint');
     }

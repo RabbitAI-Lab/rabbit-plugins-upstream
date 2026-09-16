@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Countdown API"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["countdown_api"]
   icon: "https://static.oomol.com/logo/third-party/countdown_api.webp"
 ---

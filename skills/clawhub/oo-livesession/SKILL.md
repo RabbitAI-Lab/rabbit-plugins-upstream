@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "LiveSession"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["livesession"]
   icon: "https://static.oomol.com/logo/third-party/livesession.jpg"
 ---

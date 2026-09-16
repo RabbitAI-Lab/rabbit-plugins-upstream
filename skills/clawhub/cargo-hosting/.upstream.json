@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cargo-hosting",
   "slug": "cargo-hosting",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1783644964560,
-  "contentHash": "03c1a14ae094171e5f9bad7d5cd8bf44b8aae79384fcd02f283f451815788b9e",
-  "fetchedAt": "2026-07-26T18:17:17.674Z"
+  "version": "1.0.2",
+  "updatedAt": 1789367463493,
+  "contentHash": "7974f5279116b93ce89d14df823f97172b408f9b4745d56f5f952237caaae650",
+  "fetchedAt": "2026-09-16T12:59:57.219Z"
 }

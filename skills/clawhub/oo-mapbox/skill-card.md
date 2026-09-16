@@ -1,45 +1,55 @@
-## Description: <br>
-Mapbox (mapbox.com). Use this skill for Mapbox requests including geocoding, routing, and travel matrix tasks through the OOMOL-connected Mapbox connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mapbox (mapbox.com) skill for reading, creating, and updating Mapbox data through the OOMOL-connected oo CLI instead of direct API calls.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to operate Mapbox through an OOMOL-connected account for forward, reverse, and batch geocoding, directions, and travel time or distance matrices. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires connecting Mapbox through OOMOL, so prompts and action requests are sent to the OOMOL connector for Mapbox API actions. <br>
-Mitigation: Install only when that connection model is acceptable and confirm the connected Mapbox account before use. <br>
-Risk: First-time setup may involve running a CLI installer command. <br>
-Mitigation: Review installer commands before execution and run setup steps only when an auth, connection, or missing-command error requires them. <br>
-Risk: Write, destructive, billing-impacting, or bulk requests can change data or incur cost. <br>
-Mitigation: Require explicit user confirmation for the exact payload and intended effect before running those requests. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect Mapbox connector schemas, run geocoding, directions, and matrix actions, and handle Mapbox setup issues through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-mapbox) <br>
-- [Mapbox homepage](https://www.mapbox.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Mapbox icon](https://static.oomol.com/logo/third-party/Mapbox.svg) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce oo CLI commands and JSON request payloads based on the live connector schema.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: Setup instructions include remote installer commands that can execute changing code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a safer oo CLI installation path when available, verify the installer source and integrity before running it, and avoid repeating setup commands unless an auth or connection failure requires them.
+
+Risk: Mapbox requests are routed through OOMOL using the connected account, and write actions can change Mapbox state.
+
+Mitigation: Confirm write action payloads and expected effects with the user before execution, and fetch the live connector schema before constructing each request.
+
+## Reference(s):
+
+- [ClawHub Mapbox Skill](https://clawhub.ai/oomol/skills/oo-mapbox)
+- [Mapbox Homepage](https://www.mapbox.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance, Configuration]
+
+**Output Format:** [Markdown guidance with shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before execution and requires confirmation before write or destructive actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

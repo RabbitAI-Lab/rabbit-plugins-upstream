@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Reducto"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["reducto"]
   icon: "https://static.oomol.com/logo/third-party/reducto.svg"
 ---

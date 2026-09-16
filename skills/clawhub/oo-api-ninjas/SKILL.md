@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "API Ninjas"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["api_ninjas"]
   icon: "https://static.oomol.com/logo/third-party/API%20Ninjas.svg"
 ---

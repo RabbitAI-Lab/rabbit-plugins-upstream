@@ -1,42 +1,56 @@
-## Description: <br>
-PartnerStack Partner helps agents retrieve PartnerStack Partner marketplace programs, partnerships, payouts, and rewards through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PartnerStack Partner (partnerstack.com). Use this skill for ANY PartnerStack Partner request -- searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill when they need to search or read PartnerStack Partner account data, including marketplace programs, partnerships, payouts, and rewards, without calling the PartnerStack API directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose connected PartnerStack Partner account data, including payouts and rewards, in the agent conversation. <br>
-Mitigation: Install it only for accounts where the agent should read PartnerStack Partner data, and keep requests specific to the data retrieval task. <br>
-Risk: First-time setup may require installing the OOMOL CLI and connecting the account. <br>
-Mitigation: Review the CLI install source and account connection flow before first use. <br>
+## Use Case:
 
+External agents and developers use this skill to query PartnerStack Partner data through an OOMOL-connected account, including marketplace programs, partnerships, payouts, and rewards. It is intended for schema-first read workflows that call the oo CLI rather than constructing PartnerStack API calls directly.
 
-## Reference(s): <br>
-- [PartnerStack Partner homepage](https://partnerstack.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-partner-stack-partner) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema checks before action execution and returns JSON responses from the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release metadata and skill metadata) <br>
+Risk: PartnerStack payout, reward, partnership, and account data may pass through OOMOL during use.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with an approved OOMOL-connected account and avoid requesting or exposing sensitive PartnerStack data unless it is necessary for the task.
+
+Risk: The first-time setup guidance includes remote installer commands for the oo CLI.
+
+Mitigation: Verify the oo CLI installation source and use a trusted installation path before running setup commands.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-partner-stack-partner)
+- [PartnerStack Homepage](https://partnerstack.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON output from oo CLI actions.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read actions return PartnerStack data through OOMOL with an execution id under meta.executionId.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

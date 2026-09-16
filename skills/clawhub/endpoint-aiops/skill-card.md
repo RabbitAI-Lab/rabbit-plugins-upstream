@@ -1,47 +1,62 @@
-## Description: <br>
-Endpoint Aiops helps agents triage and operate managed-endpoint fleets with health, inventory, login-storm, drift, patch, profile-assignment, reboot, audit, budget, and undo workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Endpoint AIops helps agents triage managed-endpoint fleets by summarizing health, inventory, login sessions, drift, patch posture, and audited remediation actions such as profile assignment and reboot.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, IT operators, and endpoint administrators use this skill to inspect managed-endpoint fleet health, diagnose login storms and drift, rank endpoint risk, and perform guarded remediation such as profile assignment or reboot. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change or reboot managed endpoints and has no enforced read-only or approval gate for agent-driven writes. <br>
-Mitigation: Install it with a tightly scoped management account, preferably read-only until writes are intentionally needed; use dry-run and confirmation paths before profile assignment or reboot. <br>
-Risk: Endpoint credentials and local audit or undo data may expose sensitive endpoint, user, profile, or management-server information. <br>
-Mitigation: Treat ENDPOINT_AIOPS_MASTER_PASSWORD as a secret, avoid long-lived shell exports where possible, and review local ~/.endpoint-aiops data handling for sensitive environments. <br>
-Risk: The REST paths and some dialect behavior are modelled and have not been exercised against a live endpoint-management server. <br>
-Mitigation: Run endpoint-aiops doctor and validate behavior against a non-production or read-only target before relying on results or enabling write operations. <br>
+## Use Case:
 
+Developers and endpoint operations teams use this skill to inspect managed-endpoint fleet health, diagnose login storms, rank risky endpoints, review patch or configuration drift, and run controlled remediation workflows.
 
-## Reference(s): <br>
-- [Endpoint Aiops ClawHub page](https://clawhub.ai/zw008/skills/endpoint-aiops) <br>
-- [Endpoint-AIops project homepage](https://github.com/AIops-tools/Endpoint-AIops) <br>
-- [Capabilities reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup and security guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, Analysis, JSON] <br>
-**Output Format:** [Markdown guidance with shell commands and structured tool results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Tool results may include capped list envelopes with returned, limit, and truncated fields; write workflows may record audit and undo state locally.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: server release metadata and target metadata) <br>
+Risk: The release may run an unpinned external executable.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Pin or otherwise verify the endpoint-aiops package before installation or execution.
+
+Risk: Write-capable tools can assign profiles or reboot endpoints without an enforceable skill-side approval gate.
+
+Mitigation: Start with a read-only endpoint-management account and expose write-capable tools only behind an external approval process.
+
+Risk: The master password unlocks the encrypted credential store for non-interactive use.
+
+Mitigation: Protect ENDPOINT_AIOPS_MASTER_PASSWORD as a secret and limit where it is exported.
+
+## Reference(s):
+
+- [Endpoint AIops on ClawHub](https://clawhub.ai/zw008/skills/endpoint-aiops)
+- [Source repository](https://github.com/AIops-tools/Endpoint-AIops)
+- [Capabilities reference](references/capabilities.md)
+- [CLI reference](references/cli-reference.md)
+- [Setup and security guide](references/setup-guide.md)
+- [Agent guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and structured tool-result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include capped list summaries, risk-tier notes, audit or undo guidance, and dry-run command suggestions.]
+
+## Skill Version(s):
+
+0.10.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

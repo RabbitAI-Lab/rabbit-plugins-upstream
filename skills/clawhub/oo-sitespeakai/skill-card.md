@@ -1,45 +1,55 @@
-## Description: <br>
-SiteSpeakAI helps an agent operate SiteSpeakAI through the OOMOL oo CLI for reading, creating, updating, querying, and deleting SiteSpeakAI data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SiteSpeakAI helps agents operate SiteSpeakAI through the OOMOL oo CLI to read, query, create, update, and delete chatbot-related data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to run SiteSpeakAI account, chatbot, conversation, lead, source, suggested-message, and updated-answer actions through an OOMOL-connected SiteSpeakAI account. It can also query a chatbot and manage updated-answer entries when the user confirms write or destructive actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected SiteSpeakAI account and server-side managed credentials, so actions may access account, chatbot, conversation, lead, source, and answer data. <br>
-Mitigation: Install only after reviewing the skill text and publisher, and use the connected account scopes appropriate for the intended SiteSpeakAI tasks. <br>
-Risk: Write and destructive actions can create, update, or delete SiteSpeakAI updated-answer entries. <br>
-Mitigation: Confirm the exact payload, target chatbot, and expected effect with the user before running write actions, and obtain explicit approval before destructive deletion. <br>
-Risk: The security scan is a low-confidence clean pass because scanner evidence says artifact contents were not available for direct review. <br>
-Mitigation: Review the installed skill text and metadata before use, especially commands involving credentials, network access, file access, or account-changing actions. <br>
+## Use Case:
 
+External users, developers, and support teams use this skill to inspect SiteSpeakAI chatbot settings, users, conversations, leads, sources, suggested messages, and updated answers. They can also query chatbots and manage updated-answer entries with confirmation for write and delete actions.
 
-## Reference(s): <br>
-- [SiteSpeakAI skill page](https://clawhub.ai/oomol/oo-sitespeakai) <br>
-- [SiteSpeakAI homepage](https://sitespeak.ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses server-side managed credentials through OOMOL; write and destructive actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: First-time setup recommends installer commands that execute downloaded code directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup commands before installation and prefer verified, versioned, signed, or checksum-validated oo CLI sources.
+
+Risk: Write and destructive actions can change or delete SiteSpeakAI data.
+
+Mitigation: Confirm the exact action target, payload, and expected effect with the user before running write or delete actions.
+
+## Reference(s):
+
+- [ClawHub Skill Listing](https://clawhub.ai/oomol/skills/oo-sitespeakai)
+- [SiteSpeakAI Homepage](https://sitespeak.ai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands inspect live connector schemas before running actions; responses are JSON objects containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

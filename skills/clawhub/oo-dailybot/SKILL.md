@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Dailybot"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["dailybot"]
   icon: "https://static.oomol.com/logo/third-party/dailybot.svg"
 ---

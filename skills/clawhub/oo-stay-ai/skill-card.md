@@ -1,42 +1,52 @@
-## Description: <br>
-Stay AI lets an agent query account settings, subscriptions, and orders through the OOMOL stay_ai connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Stay AI lets agents inspect action schemas and run read actions for account settings, orders, and subscriptions through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and operators use this skill to have an agent read Stay AI account, subscription, and order information through an OOMOL-connected account. It is intended for lookup, filtering, and pagination workflows rather than direct API handling by the user. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent can query Stay AI account, subscription, and order data through the user's connected OOMOL account. <br>
-Mitigation: Install only when that read access is acceptable, and review requested filters or identifiers before running commands that expose customer or order details. <br>
-Risk: Future connector actions may include write or destructive operations even though this version lists read-oriented actions. <br>
-Mitigation: Confirm the exact action and payload with the user before any action tagged write or destructive, and rely on the live connector schema before sending data. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Stay AI account settings, subscriptions, and orders without handling raw Stay AI credentials directly.
 
-## Reference(s): <br>
-- [Stay AI homepage](https://stay.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Skill page](https://clawhub.ai/oomol/skills/oo-stay-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Bash commands and JSON payloads; connector responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing payloads and treats current untagged actions as read-oriented.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release and skill metadata) <br>
+Risk: Setup instructions include unverified pipe-to-shell installer commands that can execute arbitrary remote code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source before use; avoid curl | bash or PowerShell iex unless the source is trusted, and prefer a pinned, signed, or checksum-verified installation method when available.
+
+## Reference(s):
+
+- [ClawHub Stay AI skill page](https://clawhub.ai/oomol/skills/oo-stay-ai)
+- [Stay AI homepage](https://stay.ai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector runs return JSON with data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

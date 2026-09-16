@@ -1,45 +1,56 @@
-## Description: <br>
-Grafana Cloud support for reading organization usage, stack connectivity, regions, and stacks through the OOMOL grafana_cloud connector and oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Grafana Cloud (grafana.com). Use this skill for ANY Grafana Cloud request - searching and reading data. Whenever a task involves Grafana Cloud, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Grafana Cloud organization information through an OOMOL-connected account, including billed usage, stack metadata, stack connectivity, and available regions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The connector can read Grafana Cloud organization information such as billed usage, stack metadata, regions, and connectivity. <br>
-Mitigation: Use the skill only when the connected Grafana Cloud account and OOMOL connector access are intended for the requested task. <br>
-Risk: First-time setup can install the oo CLI or open account-connection and authentication flows. <br>
-Mitigation: Review and approve setup, login, and connection steps before running them; normal actions should not repeat setup unless an auth or connection error occurs. <br>
-Risk: Connector schemas may expose write or destructive actions in addition to the read-only actions listed in this artifact. <br>
-Mitigation: Require explicit user confirmation of the exact target, payload, and effect before approving any action tagged write or destructive. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Grafana Cloud organization data through an OOMOL-connected account, including billed usage, stack connectivity, available regions, and stack listings.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-grafana-cloud) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Grafana Cloud](https://grafana.com/products/cloud/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, JSON, configuration guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId when actions are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup guidance includes direct remote shell installers that could be risky if run without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official, version-pinned oo CLI installation method with checksum or signature verification before connecting a Grafana Cloud account.
+
+Risk: The skill operates against the connected Grafana Cloud account and may expose organization billing or stack metadata to the agent session.
+
+Mitigation: Use only the intended Grafana Cloud account and connector permissions, and review connector action schemas before execution.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-grafana-cloud)
+- [Grafana Cloud Homepage](https://grafana.com/products/cloud/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Installation Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown or text responses with inline oo CLI commands and JSON connector results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill instructs the agent to inspect live connector schemas before running actions and to use server-side credential injection.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

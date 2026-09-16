@@ -1,43 +1,52 @@
-## Description: <br>
-Rosette Text Analytics lets agents use OOMOL-connected Rosette Text Analytics actions to analyze sentiment, extract entities, identify categories and languages, and tokenize text. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Rosette Text Analytics helps agents analyze sentiment, extract entities, identify document language and categories, and tokenize text through an OOMOL-connected Rosette connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to route Rosette Text Analytics requests through an OOMOL-connected account for text analytics tasks such as sentiment analysis, entity extraction, category identification, language identification, and tokenization. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected text is sent to Rosette Text Analytics through OOMOL when actions are run. <br>
-Mitigation: Send only text the user intends to analyze and connect a Rosette account only when using this service. <br>
-Risk: First-time setup may require installing or authenticating the oo CLI. <br>
-Mitigation: Use setup steps only after command, authentication, connection, or billing errors, and review the oo CLI installer source before first-time installation. <br>
+## Use Case:
 
+Developers and analysts use this skill to run Rosette Text Analytics actions from an agent for text analysis tasks such as sentiment analysis, named entity extraction, language detection, categorization, and token identification.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-rosette-text-analytics) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Rosette Text Analytics Homepage](https://www.babelstreet.com/babel-street-insights) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payload and response expectations.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill directs the agent to inspect the live connector schema before sending JSON payloads and to expect action responses with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Fallback setup may lead an agent to run mutable remote installer scripts without verification or explicit user approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require human approval for installation, use a trusted and versioned oo CLI installation method, and keep agent use limited to the listed Rosette analytics actions.
+
+## Reference(s):
+
+- [Rosette Text Analytics homepage](https://www.babelstreet.com/babel-street-insights)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-rosette-text-analytics)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

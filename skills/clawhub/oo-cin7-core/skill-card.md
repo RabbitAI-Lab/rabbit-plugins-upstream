@@ -1,42 +1,55 @@
-## Description: <br>
-Use this skill to search and read Cin7 Core data through the OOMOL cin7_core connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents search and read Cin7 Core account, customer, and product data through the OOMOL-connected `oo` CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Cin7 Core account settings, customers, and products through an OOMOL-connected account. It supports read-only list and get workflows while relying on server-side credential handling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The routing language is broad and may cause an agent to use the connector for general Cin7 Core requests. <br>
-Mitigation: Give the agent explicit instructions to use this skill only when retrieving or inspecting Cin7 Core account, customer, or product data. <br>
-Risk: The skill can expose connected-account business data for customers, products, and account settings. <br>
-Mitigation: Install it only for agents and users that are permitted to read that Cin7 Core data through the configured OOMOL connection. <br>
+## Use Case:
 
+Developers, operators, and business users use this skill to inspect live Cin7 Core action schemas and read connected account, customer, and product data through the OOMOL `oo` CLI.
 
-## Reference(s): <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Cin7 Core homepage](https://www.cin7.com/solutions/core/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; responses include data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: artifact frontmatter and release evidence) <br>
+Risk: Inline remote installer commands can execute unreviewed setup code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified package or official installation flow, or review the installer before running it.
+
+Risk: The allowed OOMOL CLI access is broader than the documented read-only Cin7 Core purpose.
+
+Mitigation: Keep use limited to documented `cin7_core` schema and run actions, and watch for `oo` commands outside those actions.
+
+## Reference(s):
+
+- [Cin7 Core homepage](https://www.cin7.com/solutions/core/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-cin7-core)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing requests; documented actions are read-oriented account, customer, and product operations.]
+
+## Skill Version(s):
+
+1.0.3 (source: skill frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,60 @@
-## Description: <br>
-Featurebase (featurebase.app). Use this skill for ANY Featurebase request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Featurebase helps agents manage Featurebase boards, posts, and contacts through the OOMOL-connected oo CLI and featurebase connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage Featurebase boards, contacts, and feedback posts through an OOMOL-connected Featurebase account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Create, update, upsert, and delete actions can change live Featurebase data. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running write or destructive actions. <br>
-Risk: Deleting contacts or posts removes live Featurebase records. <br>
-Mitigation: Require explicit approval for the target contact or post before running destructive actions. <br>
-Risk: Connector action schemas may change over time. <br>
-Mitigation: Inspect the live action schema with oo connector schema before constructing each payload. <br>
+## Use Case:
 
+Product, support, and operations teams can use this skill through an agent to read Featurebase boards, posts, and contacts, and to manage feedback records when changes are explicitly confirmed.
 
-## Reference(s): <br>
-- [Featurebase homepage](https://www.featurebase.app/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-featurebase) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution and returns Featurebase action results as JSON when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: The setup path may ask an agent to run remote install scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer first or install the oo CLI through a trusted official method before enabling the skill.
+
+Risk: The skill can create, update, upsert, or delete Featurebase records.
+
+Mitigation: Require explicit user confirmation of the target, payload, and expected effect before any write or destructive action.
+
+Risk: Connector schemas may change over time and stale payloads could fail or affect the wrong fields.
+
+Mitigation: Fetch the live connector schema before constructing each action payload.
+
+## Reference(s):
+
+- [Featurebase homepage](https://www.featurebase.app/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-featurebase)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector actions may return JSON data from Featurebase through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.2 (source: evidence release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

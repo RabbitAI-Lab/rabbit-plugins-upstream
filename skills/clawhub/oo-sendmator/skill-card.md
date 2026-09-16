@@ -1,47 +1,59 @@
-## Description: <br>
-Operates Sendmator through OOMOL for reading, creating, updating, and deleting contacts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables an agent to read, create, update, and delete Sendmator contact data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and operators use this skill to manage Sendmator contacts from an agent through their OOMOL-connected account. It supports contact lookup, listing, creation, updates, deletion, and first-time connection guidance when execution fails for setup reasons. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Create and update actions can change Sendmator contact data. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: Delete actions can permanently remove Sendmator contacts. <br>
-Mitigation: Confirm the target contact and get explicit approval before running destructive actions. <br>
-Risk: Connector schema drift or malformed payloads can cause failed requests or unintended contact changes. <br>
-Mitigation: Inspect the live Sendmator action schema before constructing payloads and match its fields exactly. <br>
-Risk: Using the skill requires trusting the OOMOL account connection that executes Sendmator actions. <br>
-Mitigation: Complete OOMOL connection or setup steps only for an account integration the user trusts. <br>
+## Use Case:
 
+External users and developers use this skill to manage Sendmator contacts from an agent session, including listing, reading, creating, updating, and deleting contact records through the OOMOL connector.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-sendmator) <br>
-- [Sendmator Homepage](https://sendmator.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline bash, PowerShell, text, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution and returns connector JSON responses with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions include remote installer commands that can execute changing code on the user's computer.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run pipe-to-shell or invoke-expression installer commands automatically; inspect official installation steps before installing.
+
+Risk: Write and destructive actions can change or permanently delete Sendmator contact data.
+
+Mitigation: Confirm the exact payload and expected effect before write actions, and require explicit approval before delete actions.
+
+Risk: Incorrect payloads could target the wrong contact fields or fail against the live connector contract.
+
+Mitigation: Fetch the action schema with the oo CLI before constructing each payload.
+
+## Reference(s):
+
+- [Sendmator homepage](https://sendmator.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Sendmator skill page](https://clawhub.ai/oomol/skills/oo-sendmator)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector action responses are JSON objects that include data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

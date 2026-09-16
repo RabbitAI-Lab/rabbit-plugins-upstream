@@ -1,45 +1,56 @@
-## Description: <br>
-OpenRouter lets agents operate OpenRouter through an OOMOL-connected account for model discovery, account lookups, usage details, and completion requests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate OpenRouter through an OOMOL-connected account using the oo CLI for read and write actions.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill when they want an agent to inspect OpenRouter account data, list models and providers, or create OpenRouter chat and message requests through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an OOMOL-connected OpenRouter account, so actions may access account, key, credit, and routing information. <br>
-Mitigation: Install it only if OOMOL is an acceptable intermediary for the account and review account-scope expectations before use. <br>
-Risk: Write actions can create model usage or credits-related charge records. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: First-time setup may involve remote oo CLI installer commands. <br>
-Mitigation: Prefer the official oo CLI installation guide and inspect remote installer scripts before running shell or PowerShell install commands. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect OpenRouter action schemas, run OpenRouter connector actions, and retrieve account, model, provider, generation, and credit information through an OOMOL-connected account. Write actions require confirmation of the exact payload and effect before execution.
 
-## Reference(s): <br>
-- [OpenRouter homepage](https://openrouter.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-openrouter) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads; connector responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI, OOMOL sign-in, and a connected OpenRouter account; action schemas should be inspected before payload construction.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: Setup instructions include direct execution of a remote installer.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only from a trusted OOMOL source and inspect or verify the installer before running it.
+
+Risk: Write actions can create completions, messages, charges, or otherwise affect the connected OpenRouter account.
+
+Mitigation: Require explicit user confirmation of the exact payload and expected effect before running any write action.
+
+## Reference(s):
+
+- [ClawHub OpenRouter Skill](https://clawhub.ai/oomol/skills/oo-openrouter)
+- [OpenRouter Homepage](https://openrouter.ai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands may return JSON responses from the oo CLI, including data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence release.version and skill metadata.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

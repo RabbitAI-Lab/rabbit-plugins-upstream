@@ -1,44 +1,61 @@
-## Description: <br>
-Storyblok lets an agent search and read Storyblok spaces, stories, links, tags, datasources, and datasource entries through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Storyblok (storyblok.com). Use this skill for ANY Storyblok request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, content operators, and agents use this skill to inspect Storyblok content through OOMOL's Storyblok connector. It supports read-oriented content lookup and retrieval for Storyblok spaces, stories, links, tags, datasources, and datasource entries when the user has connected a Storyblok account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Storyblok content available to the connected OOMOL account. <br>
-Mitigation: Install it only for accounts where agent-assisted read access is acceptable, and review the connected account's access before use. <br>
-Risk: Future connector actions marked write or destructive could change or remove Storyblok data. <br>
-Mitigation: Require confirmation of the exact payload and effect before write actions, and explicit approval before destructive actions. <br>
-Risk: The skill depends on the OOMOL oo CLI, authentication, Storyblok connection status, and billing state. <br>
-Mitigation: Use the documented recovery steps only after matching command failures, rather than repeating setup proactively. <br>
+## Use Case:
 
+Developers and agents use this skill to read Storyblok space, story, datasource, link, and tag data through an OOMOL-connected Storyblok account.
 
-## Reference(s): <br>
-- [ClawHub Storyblok skill page](https://clawhub.ai/oomol/skills/oo-storyblok) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Storyblok homepage](https://www.storyblok.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill tells the agent to inspect live action schemas before constructing JSON payloads and to treat the documented Storyblok actions as read-oriented unless future actions are explicitly tagged otherwise.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Fallback setup includes one-line remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the official installer source, version, and integrity before running installer commands, or use a reviewed installation path.
+
+Risk: The skill relies on OOMOL-mediated access to a Storyblok space.
+
+Mitigation: Install only when OOMOL-mediated access is acceptable for the target Storyblok workspace and account.
+
+Risk: Future connector actions could change Storyblok content or account state.
+
+Mitigation: Treat the current artifact as read-only and require explicit user confirmation before any future write or destructive action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-storyblok)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+- [Storyblok homepage](https://www.storyblok.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

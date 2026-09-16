@@ -1,44 +1,60 @@
-## Description: <br>
-Plisio (plisio.net) enables an agent to operate Plisio through OOMOL, including creating hosted invoices, checking balances, and retrieving or listing operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Plisio (plisio.net) supports reading, creating, and updating Plisio data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage Plisio merchant workflows from an agent, including hosted invoice creation and read access to balances, operations, and invoices. Write actions should be reviewed with the user before execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create hosted Plisio invoices, which changes merchant workflow state. <br>
-Mitigation: Confirm the exact invoice payload and intended effect with the user before running the write action. <br>
-Risk: The skill depends on an authenticated OOMOL connection to Plisio and may require sensitive account credentials managed outside the skill. <br>
-Mitigation: Use server-side credential injection through OOMOL and avoid handling raw Plisio API tokens directly. <br>
+## Use Case:
 
+External users and developers use this skill to operate Plisio payment workflows from an agent, including invoice creation, balance checks, and operation lookup or listing.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-plisio) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Plisio homepage](https://plisio.net) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo CLI connector calls and returns connector JSON responses when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill frontmatter) <br>
+Risk: The skill connects to a financial and cryptocurrency service and can create Plisio invoices.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation for invoice-creation payloads before running write actions.
+
+Risk: Setup guidance includes remote installer commands for the oo CLI.
+
+Mitigation: Prefer a verified or manually inspected oo CLI installation path instead of running remote installer commands blindly.
+
+Risk: The release security verdict is suspicious because of the financial-service scope and installer guidance.
+
+Mitigation: Review the skill and security guidance before installation or deployment.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-plisio)
+- [Plisio Homepage](https://plisio.net)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses oo CLI connector responses, commonly JSON objects containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

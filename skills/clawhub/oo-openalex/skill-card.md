@@ -1,44 +1,52 @@
-## Description: <br>
-OpenAlex (openalex.org). Use this skill for ANY OpenAlex request - searching and reading data. Whenever a task involves OpenAlex, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OpenAlex connector skill for searching and reading OpenAlex works and entities through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to search and read OpenAlex data through OOMOL's OpenAlex connector and the oo CLI, including autocomplete, entity lookup, work lookup, and list or group queries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires OOMOL-mediated OpenAlex access and may use connected credentials or scopes. <br>
-Mitigation: Connect only the OpenAlex credentials and scopes intended for this skill, and review OOMOL access before use. <br>
-Risk: Fallback setup includes remote installer commands for the oo CLI. <br>
-Mitigation: Review OOMOL's official install instructions or installer contents before running remote installer commands. <br>
-Risk: Connector schemas may change over time, which can make stale payloads fail or behave unexpectedly. <br>
-Mitigation: Fetch the live action schema with `oo connector schema` before constructing each action payload. <br>
+## Use Case:
 
+Developers and agents use this skill to retrieve OpenAlex works and entities, get autocomplete suggestions, and run search, filter, pagination, or grouping queries through an OOMOL-connected OpenAlex account.
 
-## Reference(s): <br>
-- [OpenAlex homepage](https://openalex.org/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution and returns connector responses as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: evidence release version and SKILL.md metadata) <br>
+Risk: Setup instructions include unverified remote installer commands that can execute changing network code on a user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from a trusted OOMOL delivery path, prefer a signed, versioned, or checksum-verified source, and avoid administrator or root privileges.
+
+## Reference(s):
+
+- [OpenAlex homepage](https://openalex.org/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-openalex)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and structured JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live OpenAlex connector schemas before constructing request payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

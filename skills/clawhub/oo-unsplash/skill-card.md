@@ -1,46 +1,55 @@
-## Description: <br>
-Guides agents to search and fetch Unsplash photos and topics through an OOMOL-connected oo CLI Unsplash connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read Unsplash photos, topics, and random photo selections through the OOMOL Unsplash connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill when an agent needs to discover, search, list, or retrieve Unsplash photos and topics through a connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires use of OOMOL's oo CLI and an Unsplash connection with credentials injected server-side. <br>
-Mitigation: Install only when OOMOL-mediated Unsplash access is intended, keep account connections scoped to the expected use, and avoid handling raw Unsplash tokens directly. <br>
-Risk: First-time setup may ask the agent to run a remote CLI installer if the oo command is missing. <br>
-Mitigation: Review the OOMOL CLI install step before execution and run setup commands only after an actual missing-CLI, authentication, connection, or billing error. <br>
-Risk: Connector requests route through OOMOL rather than direct Unsplash API calls. <br>
-Mitigation: Review OOMOL account, billing, and connector trust requirements before using the skill in production workflows. <br>
+## Use Case:
 
+External users and developers use this skill to search Unsplash, fetch photo details, list curated topics, and retrieve random or topic-specific public photos through an authenticated OOMOL connection.
 
-## Reference(s): <br>
-- [ClawHub Unsplash skill page](https://clawhub.ai/oomol/oo-unsplash) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI repository](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Unsplash homepage](https://unsplash.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are expected as JSON with data and meta.executionId fields when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent automatically run installer pipelines; install the oo CLI through a trusted, verifiable method and manually confirm authentication or account-connection steps.
+
+Risk: The skill depends on an authenticated OOMOL-connected Unsplash account and can fail when authentication, connection scopes, credentials, or billing are unavailable.
+
+Mitigation: Run normal read actions directly only after setup is complete, and handle auth, connection, credential, or billing failures with user-confirmed setup steps.
+
+## Reference(s):
+
+- [Unsplash homepage](https://unsplash.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-unsplash)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-oriented Unsplash actions return JSON data through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

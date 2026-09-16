@@ -1,42 +1,56 @@
-## Description: <br>
-BidSketch uses the OOMOL connector to let agents search, read, and retrieve BidSketch client or proposal data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BidSketch lets agents retrieve BidSketch clients, proposals, and proposal content through an authenticated OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Agents use this skill to inspect BidSketch clients and proposals from an OOMOL-connected account, including proposal content and client-specific proposal lists. It is intended for read-oriented BidSketch workflows where the agent should fetch the live action schema before running connector commands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill includes a visible CLI installer command that can modify the user's shell or CLI environment. <br>
-Mitigation: Review the OOMOL CLI installer source or use the official install guide or package manager before running installation commands. <br>
-Risk: The skill requires a connected BidSketch account and sensitive credentials managed through OOMOL. <br>
-Mitigation: Run connector actions only in an environment where the user has intentionally connected BidSketch, and do not request or handle raw BidSketch tokens. <br>
+## Use Case:
 
+External users, employees, and developers use this skill to search and read data from an authenticated BidSketch account, including clients, proposals, proposal content, and proposals for a specific client.
 
-## Reference(s): <br>
-- [BidSketch homepage](https://www.bidsketch.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include BidSketch data and an execution ID when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The first-time setup path tells users to run remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer the vendor installation documentation or an installation package with checksum or signature verification before running setup commands.
+
+Risk: The skill relies on OOMOL as an intermediary for BidSketch account access.
+
+Mitigation: Install and connect BidSketch only if OOMOL is an acceptable intermediary for the account and data being accessed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-bidsketch)
+- [BidSketch Homepage](https://www.bidsketch.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only BidSketch get and list actions; connector responses include action data and an execution identifier.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

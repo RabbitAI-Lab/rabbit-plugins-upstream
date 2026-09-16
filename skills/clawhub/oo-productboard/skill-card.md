@@ -1,45 +1,55 @@
-## Description: <br>
-Helps agents search and read Productboard workspace data through OOMOL's Productboard connector and oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Productboard lets an agent search and read Productboard workspace data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and product teams use this skill to let an agent retrieve Productboard entities, notes, teams, members, and workspace configurations through their connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill allows an agent to read Productboard workspace data through OOMOL's connector. <br>
-Mitigation: Install it only when the user trusts OOMOL's connector and intends to grant Productboard read/search access. <br>
-Risk: Broad Productboard routing could make the skill eligible for ambiguous Productboard requests. <br>
-Mitigation: Clarify ambiguous requests and inspect the live action schema before running commands with uncertain scope. <br>
-Risk: Future actions tagged write or destructive could change or remove Productboard data. <br>
-Mitigation: Require explicit user confirmation of the target, payload, and expected effect before any write or destructive action. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Productboard entities, notes, configurations, members, teams, and team memberships from an OOMOL-connected Productboard account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-productboard) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Productboard Homepage](https://www.productboard.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documents read-oriented Productboard get/list actions and directs agents to inspect live action schemas before constructing payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: artifact frontmatter and server release evidence) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded scripts in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified, versioned installer or official package-manager method when available, and only run the setup path after reviewing and trusting OOMOL's CLI distribution source.
+
+Risk: Productboard connector requests depend on live action schemas and may fail or behave unexpectedly if payloads are guessed.
+
+Mitigation: Inspect the connector schema for the selected action before building each payload and keep requests limited to the documented read actions unless the skill adds explicit write guidance.
+
+## Reference(s):
+
+- [Productboard homepage](https://www.productboard.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-productboard)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides agents to inspect live connector schemas before constructing Productboard requests.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

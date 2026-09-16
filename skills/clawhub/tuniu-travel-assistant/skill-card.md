@@ -1,43 +1,54 @@
-## Description: <br>
-途牛旅行助手 helps agents search and book hotels, flights, trains, scenic tickets, cruises, and vacation products with formatted result summaries and images. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+途牛全品类旅行查询预订技能，酒店/机票/火车票/景点门票/邮轮/度假17个工具一站式服务，含图片展示和跨品类推荐。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External users can use this skill through an agent to search travel options, compare availability and prices, and initiate hotel, flight, train, scenic-ticket, cruise, or vacation booking workflows. Booking workflows may require personal travel and contact information. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review reports under-disclosed cancellation and order-detail actions. <br>
-Mitigation: Require explicit user confirmation before order-detail lookup or cancellation, including the exact tool name and affected order identifier. <br>
-Risk: The security review reports a hard-coded fallback proxy token despite the artifact claiming no embedded key. <br>
-Mitigation: Remove the fallback token and require PROXY_TOKEN to be supplied through the runtime environment before use. <br>
-Risk: Travel booking flows can transmit personal information such as names, phone numbers, and identity document details to the proxy and travel platform. <br>
-Mitigation: Use only with trusted publisher and proxy infrastructure, and collect booking personal information only after the user explicitly asks to place an order. <br>
+## Use Case:
 
+External travel users and agents use this skill to search hotels, flights, trains, scenic tickets, cruises, and vacation packages, compare results, and initiate supported bookings after providing the required details.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/tuniu-travel-assistant) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-formatted text with travel search results, prices, recommendations, booking prompts, and optional image links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return booking or order-management responses from a configured proxy service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.2 (source: server release evidence) <br>
+Risk: Booking and cancellation tools can send personal booking data through a proxy with weak endpoint checks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an exact HTTPS PROXY_URL and require explicit user confirmation before booking, cancellation, or submission of identity information.
+
+Risk: The security scan reports a hard-coded fallback token.
+
+Mitigation: Require a user-provided PROXY_TOKEN and do not rely on the bundled fallback token.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/tuniu-travel-assistant)
+- [ClawHub publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [JSON responses containing formatted Markdown result summaries, error messages, or booking and order data.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Hotel and cruise results may include Markdown image links; booking and cancellation actions require user-provided order or identity details.]
+
+## Skill Version(s):
+
+2.1.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,61 @@
-## Description: <br>
-Snipe-IT (snipeitapp.com). Use this skill for ANY Snipe-IT request: searching and reading data through the OOMOL Snipe-IT connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill supports Snipe-IT requests for searching and reading data through an OOMOL-connected account instead of direct API calls.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to search and read Snipe-IT inventory records, including users, hardware assets, categories, companies, status labels, and the current connected user, through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Inventory data exposure <br>
-Mitigation: Only install and run the skill when the agent session is allowed to view asset and user records from the connected Snipe-IT account. <br>
-Risk: Unexpected write or destructive connector actions <br>
-Mitigation: Approve write or destructive connector actions only after reviewing the target, schema-derived payload, and expected effect. <br>
-Risk: Incorrect connector payloads <br>
-Mitigation: Fetch the live action schema with `oo connector schema` before constructing and running an action payload. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect and retrieve Snipe-IT inventory data through an OOMOL-connected account. It supports read-oriented tasks such as getting the current user and listing categories, companies, hardware assets, status labels, and users.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-snipe-it) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Snipe-IT Homepage](https://snipeitapp.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution; read actions return JSON data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The setup instructions include remote installer commands that could execute unreviewed code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a reviewed, signed, version-pinned oo CLI installation method and confirm setup commands before running them.
+
+Risk: The skill depends on OOMOL as the Snipe-IT connector provider.
+
+Mitigation: Install only when the user accepts OOMOL handling the connector flow and verify the Snipe-IT connection before use.
+
+Risk: Using the connector beyond the listed read-only actions could affect Snipe-IT data.
+
+Mitigation: Limit routine use to the documented get, list, and search actions; require explicit user confirmation for any action tagged write or destructive.
+
+## Reference(s):
+
+- [ClawHub Snipe-IT Skill Page](https://clawhub.ai/oomol/skills/oo-snipe-it)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Snipe-IT Homepage](https://snipeitapp.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing requests; documented normal actions are read-only get, list, and search operations.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

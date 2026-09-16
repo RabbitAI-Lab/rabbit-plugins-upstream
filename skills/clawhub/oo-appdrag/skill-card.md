@@ -1,45 +1,55 @@
-## Description: <br>
-This skill lets an agent inspect schemas and execute AppDrag Cloud Backend API functions through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AppDrag operates the AppDrag connector through an OOMOL-connected account to inspect action schemas and execute AppDrag Cloud Backend API functions.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent operate AppDrag backend functions through their connected OOMOL account. It is suited for AppDrag workflows where the user can review the function name, HTTP method, and payload before state-changing calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can execute AppDrag backend API functions through the connected OOMOL account. <br>
-Mitigation: Use it only with AppDrag projects where this level of agent access is acceptable, and confirm function name, HTTP method, and payload before calls that could change data. <br>
-Risk: Setup guidance includes direct pipe-to-shell CLI installation commands. <br>
-Mitigation: Prefer a verified or pinned CLI installation method before authorizing agent use. <br>
-Risk: The scanner flagged a mismatch between read-oriented description and broad backend function execution. <br>
-Mitigation: Treat the skill as capable of backend execution, not only search or read access, during review and installation decisions. <br>
+## Use Case:
 
+Developers and operators use this skill to run AppDrag Cloud Backend API functions through the OOMOL `oo` CLI after checking the live connector schema. It is intended for AppDrag tasks where the agent should use the managed connector instead of calling the API directly.
 
-## Reference(s): <br>
-- [ClawHub AppDrag skill page](https://clawhub.ai/oomol/oo-appdrag) <br>
-- [AppDrag homepage](https://appdrag.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing AppDrag action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: The skill exposes broad AppDrag backend function execution through an authenticated OOMOL-connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation before every `execute_function` call, especially non-GET methods or functions that could modify or delete data.
+
+Risk: The first-time setup instructions include pipe-to-shell installer commands.
+
+Mitigation: Avoid running installer commands unless the installer source and integrity have been independently verified.
+
+## Reference(s):
+
+- [AppDrag homepage](https://appdrag.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-appdrag)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return connector JSON responses containing execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,47 +1,59 @@
-## Description: <br>
-HeyGen (heygen.com). Use this skill for ANY HeyGen request - reading, creating, updating, and deleting data. Whenever a task involves HeyGen, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate HeyGen through an OOMOL-connected account to read, create, update, delete, and generate HeyGen account resources and videos.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate a connected HeyGen account through OOMOL for avatar and template video generation, status checks, quota/account reads, asset management, and video retrieval. It supports both read-only account inspection and state-changing HeyGen actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can route broad HeyGen-related requests through a connected account. <br>
-Mitigation: Install only when the agent should operate HeyGen, and review generated video requests before spending credits or using the output. <br>
-Risk: Write actions can create videos or upload assets in the connected HeyGen account. <br>
-Mitigation: Confirm the exact payload and intended account effect before running actions tagged as write operations. <br>
-Risk: Destructive actions can delete HeyGen assets or videos. <br>
-Mitigation: Require explicit user approval for the target asset or video before running destructive actions. <br>
-Risk: The skill depends on a connected OOMOL account and HeyGen credentials. <br>
-Mitigation: Use the connected-account flow described by the skill and avoid exposing or handling raw HeyGen API tokens. <br>
+## Use Case:
 
+Developers and operators use this skill to manage HeyGen resources from an agent session, including account details, quotas, assets, avatars, voices, templates, folders, videos, and video generation workflows.
 
-## Reference(s): <br>
-- [HeyGen homepage](https://www.heygen.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-heygen) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector calls may return asynchronous job IDs, execution IDs, status data, download URLs, account data, quota data, asset IDs, or deletion results depending on the selected HeyGen action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The skill can direct an agent to run oo CLI commands against a connected HeyGen account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and authenticate the oo CLI yourself from a trusted source, then review the proposed command and target account before execution.
+
+Risk: Some supported actions upload assets, start video generation jobs, or delete HeyGen resources.
+
+Mitigation: Require explicit user approval for every state-changing or destructive action, including the exact payload, action name, and affected resource IDs.
+
+Risk: Incorrect JSON payloads could trigger unintended HeyGen operations.
+
+Mitigation: Fetch the live action schema with `oo connector schema` before constructing payloads and verify generated JSON against that schema.
+
+## Reference(s):
+
+- [HeyGen homepage](https://www.heygen.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub HeyGen skill page](https://clawhub.ai/oomol/skills/oo-heygen)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, JSON payloads, Configuration guidance]
+
+**Output Format:** [Markdown guidance with bash commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands may return JSON responses from the oo CLI; uploads, video generation, deletions, and other state-changing actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,56 @@
-## Description: <br>
-Provides agent access to Hugging Face search, repository metadata, dataset previews, user information, inference endpoints, chat completions, and embeddings through an OOMOL-connected oo CLI workflow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill lets agents use Hugging Face through the OOMOL-connected `oo` CLI for searching, reading data, generating chat completions, and generating embeddings.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to search and inspect Hugging Face models, datasets, Spaces, files, endpoints, and account metadata. It also supports generation and embedding workflows when the user intends to call Hugging Face inference services. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generation and embedding actions can send prompts or input text to external Hugging Face inference services and may affect account usage or billing. <br>
-Mitigation: Confirm the prompt or input text, target model or provider, and possible account or billing impact before running generation or embedding actions. <br>
-Risk: The security summary reports that the skill under-discloses generation actions and treats untagged actions as safe reads even though some can send data to inference services. <br>
-Mitigation: Treat generation and embedding actions as external inference operations, not simple reads, and review payloads before execution. <br>
+## Use Case:
 
+Developers and agents use this skill to access Hugging Face through an OOMOL-connected account for model, dataset, Space, endpoint, repository, trending-content, chat-completion, and embedding tasks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-huggingface) <br>
-- [Hugging Face homepage](https://huggingface.co) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill frontmatter) <br>
+Risk: The setup guidance includes pipe-to-shell installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified or package-manager installation path for the oo CLI, and review installer contents before execution.
+
+Risk: Inference actions can send prompts or embedding text to Hugging Face Inference Providers and may affect billing.
+
+Mitigation: Send sensitive text only when the user intends external processing, and confirm cost-sensitive inference use before running those actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-huggingface)
+- [Hugging Face](https://huggingface.co)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects with data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

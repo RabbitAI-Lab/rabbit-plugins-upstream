@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Dialpad WFM"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["dialpad_wfm"]
   icon: "https://static.oomol.com/logo/third-party/dialpad_wfm.svg"
 ---

@@ -1,42 +1,56 @@
-## Description: <br>
-TomTom helps agents search and read TomTom location data through OOMOL's oo CLI connector instead of calling the TomTom API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TomTom (developer.tomtom.com). Use this skill for ANY TomTom request: searching and reading data through the TomTom connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to let an agent perform TomTom location search workflows such as autocomplete, fuzzy search, nearby POI search, geocoding, and reverse geocoding through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected TomTom credential to run connector actions. <br>
-Mitigation: Grant or refresh TomTom access only for the intended account and task, and rely on OOMOL's server-side credential injection rather than exposing raw tokens to the agent. <br>
-Risk: Incorrect action payloads can produce failed or misleading location search results. <br>
-Mitigation: Inspect each action's live connector schema before sending data and keep the listed TomTom actions limited to read-only search and geocoding workflows. <br>
+## Use Case:
 
+Agents and developers use this skill to retrieve TomTom location data, including autocomplete, place search, geocoding, nearby points of interest, and reverse geocoding through an OOMOL-connected TomTom account.
 
-## Reference(s): <br>
-- [ClawHub TomTom Skill](https://clawhub.ai/oomol/oo-tomtom) <br>
-- [TomTom Developer](https://developer.tomtom.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; TomTom responses are returned as JSON data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup suggests piping a remote installer directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official, versioned, verifiable oo CLI installation path before authenticating or connecting TomTom.
+
+Risk: The skill relies on OOMOL as the TomTom credential broker.
+
+Mitigation: Deploy only where use of OOMOL-managed TomTom credentials is acceptable and verify account connection status before running actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-tomtom)
+- [TomTom Developer](https://developer.tomtom.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Action results are returned by the oo CLI as JSON; the skill tells the agent to inspect live connector schemas before constructing payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

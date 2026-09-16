@@ -1,44 +1,51 @@
-## Description: <br>
-OpenGraph.io helps agents inspect OpenGraph.io connector schemas and run URL metadata, scrape, raw HTML, and screenshot actions through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OpenGraph.io (opengraph.io). Use this skill for ANY OpenGraph.io request -- searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill when they want an agent to retrieve site metadata, fetch page HTML, or capture webpage screenshots through OpenGraph.io without handling raw API tokens directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires connected OpenGraph.io credentials through OOMOL. <br>
-Mitigation: Confirm the publisher and connected OpenGraph.io account before installation or use. <br>
-Risk: URL scrape and screenshot requests may send private or internal page URLs through the OOMOL/OpenGraph.io service. <br>
-Mitigation: Avoid using the skill on sensitive internal or private pages unless that routing is intended and approved. <br>
-Risk: Connector action parameters can affect caching, proxying, rendering, retries, viewport, delay, and element selection. <br>
-Mitigation: Inspect the live connector schema before constructing payloads and review unusual scrape or screenshot options before execution. <br>
+## Use Case:
 
+Developers and agents use this skill to retrieve webpage metadata, raw HTML, and screenshots through an OOMOL-connected OpenGraph.io account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-opengraph-io) <br>
-- [OpenGraph.io homepage](https://www.opengraph.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON from the oo CLI when actions are executed with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server metadata and skill frontmatter) <br>
+Risk: First-time setup directs users to execute mutable remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI from a verified, versioned source or inspect the installer before running it, and avoid elevated shells.
+
+## Reference(s):
+
+- [OpenGraph.io homepage](https://www.opengraph.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live OpenGraph.io connector schemas before action execution; connector calls can return JSON data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

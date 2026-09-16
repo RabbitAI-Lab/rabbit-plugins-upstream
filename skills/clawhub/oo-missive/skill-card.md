@@ -1,43 +1,56 @@
-## Description: <br>
-Missive (missiveapp.com). Use this skill for Missive searching and read-only data retrieval through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Missive (missiveapp.com) support for searching and reading Missive data through an OOMOL-connected account and the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to search and retrieve Missive contacts, contact books, conversations, organizations, teams, and users through the OOMOL oo CLI. It is intended for read-focused Missive workflows where the agent should inspect live action schemas before constructing payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad Missive searches can expose more workspace content than the user intended. <br>
-Mitigation: Ask for specific conversations, mailboxes, teams, date ranges, or other narrow filters before running broad searches or retrievals. <br>
-Risk: The skill uses the user's connected Missive access to retrieve contact, conversation, organization, team, and user data. <br>
-Mitigation: Install and use it only when the user is comfortable granting the agent read-only Missive access through their OOMOL-connected account. <br>
+## Use Case:
 
+Developers and external users use this skill to let an agent retrieve Missive contacts, conversations, contact books, organizations, teams, and users through a connected OOMOL account.
 
-## Reference(s): <br>
-- [Missive homepage](https://missiveapp.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-missive) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include Missive connector data and execution metadata returned by the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: The setup path includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installer commands before execution and prefer a verified package, pinned release, checksum or signature verification, or manual review.
+
+Risk: The skill enables agent access to Missive data through the user's connected OOMOL account.
+
+Mitigation: Use the skill only when the user intends the agent to access Missive data, and rely on the listed read-oriented actions unless a future action is clearly confirmed.
+
+## Reference(s):
+
+- [ClawHub Missive skill page](https://clawhub.ai/oomol/skills/oo-missive)
+- [Missive homepage](https://missiveapp.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include oo CLI connector schema and run commands; connector results are JSON responses with data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

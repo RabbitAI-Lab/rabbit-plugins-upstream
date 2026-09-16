@@ -1,45 +1,57 @@
-## Description: <br>
-This skill lets an agent read, create, and update flomo memos, tags, daily reviews, memory context, and profile data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use flomo through an OOMOL-connected account to read, create, update, search, and manage memos and tags via the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent work with their flomo account for memo creation, memo search and retrieval, daily reviews, memory context, user profile, formatting guidance, and tag management. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access private flomo account content, including memos, tags, daily reviews, and generated memory/profile data. <br>
-Mitigation: Install only when the user trusts OOMOL and expects agent access to the connected flomo account. <br>
-Risk: Write actions can create memos, update existing memos, or rename tags. <br>
-Mitigation: Require explicit user confirmation of the exact payload and intended effect before running write actions. <br>
-Risk: Broad trigger wording can cause the skill to be selected for many flomo-related requests. <br>
-Mitigation: Use the skill for flomo tasks, but confirm before any state-changing action and rely on the live action schema before constructing payloads. <br>
+## Use Case:
 
+External users and developers use this skill to operate their connected flomo workspace from an agent, including memo search, memo creation and updates, tag management, daily review retrieval, and related memo recommendations.
 
-## Reference(s): <br>
-- [flomo homepage](https://flomoapp.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-flomo) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read private flomo account data and may propose or execute write actions after user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and release evidence) <br>
+Risk: First-time setup directs users to run remote installer scripts in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup steps before installing, prefer a verifiable official package or an inspected installer script, and do not let an agent run the remote installer automatically.
+
+Risk: Write actions can create or change flomo memos and tags.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions such as create_memo, memo_update, or tag_rename.
+
+## Reference(s):
+
+- [flomo homepage](https://flomoapp.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-flomo)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and meta.executionId when actions are run with --json.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

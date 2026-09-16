@@ -1,41 +1,58 @@
-## Description: <br>
-AI Agent Evaluator helps AI engineers, product managers, and ML teams design agent evaluation suites, run structured benchmarks, compare frameworks, analyze failures, and generate assessment reports for production agent workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI Agent Evaluator helps teams design AI-agent evaluation suites, run structured assessments, compare agent frameworks, generate benchmark reports, and choose evaluation methods for production agent applications.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers, AI engineers, ML platform teams, QA engineers, researchers, and product managers use this skill to choose evaluation methods, design test suites, benchmark agent behavior, diagnose failures, and prepare production readiness reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Scanner guidance notes that related maintainer workflows can affect production accounts, packages, emails, and data when used with valid admin credentials. <br>
-Mitigation: Install only in trusted staff environments and follow the built-in confirmation and dry-run gates. <br>
-Risk: The artifact notes that benchmark scores are time-sensitive and evaluation results can influence production readiness decisions. <br>
-Mitigation: Check current published leaderboards and have qualified ML engineers review evaluation results before deployment decisions. <br>
-Risk: Production safety evaluations may miss adversarial or domain-specific failures if reviewed only as a methodology exercise. <br>
-Mitigation: Involve the security team for production safety evaluations and include adversarial test cases before release decisions. <br>
+## Use Case:
 
+Developers, ML platform teams, product managers, and QA engineers use this skill to design agent evaluation suites, interpret benchmarks, analyze failure modes, plan red-team tests, and generate readiness reports before production release.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with scorecards, comparison tables, test plans, rubrics, and benchmark report outlines.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill provides methodology and guidance rather than direct code execution; benchmark scores are time-sensitive and should be checked against current leaderboards.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.2 (source: frontmatter and server release metadata) <br>
+Risk: Users may share logs, transcripts, prompts, or outputs that contain personal data, secrets, regulated data, or confidential business information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Redact names, contact details, account identifiers, secrets, credentials, regulated data, and confidential business information before sharing material with the agent.
+
+Risk: Evaluation guidance could be treated as an automated release decision.
+
+Mitigation: Have qualified ML engineers review evaluation results and sign off before using them for deployment decisions.
+
+Risk: Benchmark, governance, and tooling information can become stale.
+
+Mitigation: Verify current benchmark results, vendor capabilities, licenses, and governance requirements against official sources before standardizing on them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/ai-agent-evaluator)
+- [ClawHub publisher profile](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown guidance with scorecards, comparison tables, evaluation rubrics, and readiness report outlines]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include anonymization reminders, red-team checklists, benchmark selection guidance, framework comparisons, and recommended review steps.]
+
+## Skill Version(s):
+
+3.0.3 (source: SKILL.md frontmatter and ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

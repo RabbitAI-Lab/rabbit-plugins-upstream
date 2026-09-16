@@ -1,46 +1,65 @@
-## Description: <br>
-AI Insurance Advisor provides mainland China insurance guidance for coverage planning, product comparison, premium estimates, protection-gap analysis, underwriting compliance, claims questions, and agent sales support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI Insurance Advisor provides Chinese-language insurance needs analysis, product comparison, premium calculation, plan design, insurance knowledge answers, and compliance prompts for consumers and families in mainland China.
 
-## Publisher: <br>
-[mnetfairy](https://clawhub.ai/user/mnetfairy) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mnetfairy](https://clawhub.ai/user/mnetfairy)
 
-## Use Case: <br>
-External users in mainland China use this skill to compare insurance products, estimate premiums, design household coverage plans, and receive insurance knowledge or compliance-oriented guidance. Agents can also use it to draft Chinese-language sales, training, and objection-handling materials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Mainland China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Product recommendations or premium estimates may be outdated because the skill relies on static local product data. <br>
-Mitigation: Verify current product terms, availability, and pricing with licensed insurance providers before making purchase decisions. <br>
-Risk: Insurance guidance may be mistaken for professional financial, legal, or compliance advice. <br>
-Mitigation: Present outputs as informational guidance and route final plan, underwriting, claims, and compliance decisions to qualified professionals. <br>
-Risk: The skill can name a specific insurance sales company when asking whether the user wants contact information. <br>
-Mitigation: Disclose that any contact suggestion is informational and encourage users to compare multiple licensed providers. <br>
+## Use Case:
 
+External users in mainland China use this skill to identify insurance coverage gaps, compare product options, estimate premiums, and receive plan suggestions. Because outputs can influence high-stakes financial decisions, product and compliance details should be verified against current insurer or regulator sources before purchase decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mnetfairy/skills/ai-insurance-advisor) <br>
-- [Insurance knowledge reference](references/insurance-knowledge.md) <br>
-- [Compliance reference](references/compliance.md) <br>
-- [Product database](references/products.json) <br>
-- [Product validation report](references/validation_report_20260524_090219.md) <br>
+### Deployment Geography for Use:
 
+Mainland China
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, JSON, Shell commands] <br>
-**Output Format:** [Chinese-language Markdown responses with structured JSON from local helper scripts when analysis, plan design, or premium calculation is requested] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses static local product data and local Python scripts; recommendations and premiums should be verified with licensed providers before purchase decisions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.402 (source: server release metadata) <br>
+Risk: High-stakes insurance recommendations may be based on static or inconsistent product and compliance data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat outputs as advisory, verify product availability, premiums, terms, and regulatory requirements against official insurer or regulator sources, and route final purchase decisions to qualified professionals.
+
+Risk: The skill collects sensitive planning information such as age, family structure, income, existing coverage, budget, and health-related disclosures.
+
+Mitigation: Collect only information needed for the requested analysis, obtain user consent, avoid unnecessary retention or sharing, and redact sensitive details when escalating to another system or person.
+
+Risk: The skill repeatedly steers users toward specific insurance intermediaries.
+
+Mitigation: Clearly disclose that intermediary suggestions are not mandatory, present alternatives where appropriate, and let users compare providers independently before contacting any sales channel.
+
+Risk: Server security evidence assigns a suspicious verdict.
+
+Mitigation: Review the skill before installation, limit execution to the declared local Python scripts, and confirm that no network, persistence, or data-exfiltration behavior is introduced in deployment.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/mnetfairy/skills/ai-insurance-advisor)
+- [Insurance Product Database](references/products.json)
+- [Insurance Knowledge Base](references/insurance-knowledge.md)
+- [Compliance Reference](references/compliance.md)
+- [National Financial Regulatory Administration](https://www.nfra.gov.cn/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, guidance]
+
+**Output Format:** [Chinese-language Markdown responses with structured JSON from calculator and planner tools]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include insurance needs analysis, premium estimates, product comparison tables, plan recommendations, disclaimers, and compliance prompts.]
+
+## Skill Version(s):
+
+2.0.109 (source: server release metadata; artifact frontmatter reports 2.0.90)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

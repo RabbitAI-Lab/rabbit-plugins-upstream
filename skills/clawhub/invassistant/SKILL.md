@@ -1,14 +1,40 @@
 ---
+slug: invassistant
 name: invassistant
+displayName: InvAssistant
 description: >
   Multi-asset investment portfolio management framework with A/B/C asset-class differentiated rules,
   7 red-line portfolio risk controls, and 4-factor QMS quality scoring.
   Covers US, A-share (China), and HK stocks with disciplined entry/exit logic.
+  Documentation-driven framework with optional bundled Python scripts (portfolio checker,
+  red-line and exit engines, notification helpers) — scripts are decision-support tools
+  and never place trades autonomously.
+  中文摘要：多资产投资组合管理框架——A/B/C 类资产差异化规则、7 条红线组合风险控制、四因
+  子质量管理，覆盖美股/A股/港股的纪律化进出场逻辑。触发词：投资组合管理、持仓复盘、
+  风险红线检查、仓位规则.
+description_zh: "多资产投资组合管理框架：A/B/C 类资产差异化规则、7 条红线组合风险控制、四因子质量管理；覆盖美股、A 股、港股，纪律化进出场逻辑。"
+version: "2.3.15"
+read_when:
+  - "User requests portfolio review, A/B/C asset classification, or 7-red-line risk check for their holdings"
+  - "User asks about entry/exit logic for US stocks, A-shares (China), or HK stocks under the framework"
+  - "User requests QMS (quality scoring) evaluation of a stock candidate"
+  - "User asks about portfolio risk controls, warning lines, or position sizing rules"
+  - "User wants to log a trade or review trade history against the framework"
+not_for:
+  - "Real-time trading signals or market timing predictions"
+  - "Specific stock buy/sell recommendations without portfolio context"
+  - "Tax, legal, or regulatory advice — this is a portfolio management framework, not financial advice"
+  - "Analysis of assets outside US / A-share / HK stocks (crypto, commodities, fixed income) without adaptation"
+
+
 allowed-tools:
   - read_file
+  - file_read
   - write_to_file
+  - file_write
   - replace_in_file
   - execute_command
+  - env
 disable: false
 metadata:
   openclaw:
@@ -30,8 +56,29 @@ metadata:
 
 # InvAssistant
 
-> Multi-asset investment portfolio management framework — current version v2.1.2 (2026-06-06).
+> Multi-asset investment portfolio management framework — current version v2.3.15 (2026-09-16).
 > Core philosophy: portfolio before stock-picking, discipline before inspiration. Rules are guardrails, not cages.
+
+> ⚠️ **Risk Warning**: This is a decision-support framework, not financial advice. AI guidance is probabilistic; all action triggers — including rule-based alerts and entry thresholds — require human review before any execution. Author assumes no liability for trading losses.
+
+---
+
+## Framework Scope and Bundled Scripts
+
+This is a **documentation-driven framework**: SKILL.md and the references define the rules. The bundled Python scripts under `scripts/` are optional decision-support helpers, not autonomous agents — they never place orders and hold no broker credentials.
+
+| Script | Role | Notes |
+|--------|------|-------|
+| `portfolio_checker.py` | Main portfolio check orchestrator (positions, red lines, classification) | Reads local YAML config only |
+| `redline_engine.py` | Entry filter engine (trend, volume, valuation gates) | **Fail-closed**: missing config, unavailable metric or unevaluated gate counts as FAIL — never silently auto-passes |
+| `exit_engine.py` | Exit engine (stop-loss, trend break, momentum ladders) | Reads position state files |
+| `init_config.py` | First-run interactive config generator | Ships sample watchlist with generic tickers only |
+| `data_fetcher.py` | Market-data fetch helper | Outbound quote-API requests only |
+| `send_wecom.py` / `send_dingtalk.py` / `send_feishu.py` | Optional report push to a user-configured webhook | **Opt-in, inert until configured**; posts only the report body to the endpoint the user sets |
+
+**Data transmission notice**: the three `send_*.py` scripts are the only components that transmit data off-machine. They stay disabled until you provide a webhook URL and send nothing beyond the report you choose to push. Review the endpoint config before enabling.
+
+**Language policy**: documentation is English with Chinese summaries; runtime report language follows the user's request — no language is forced.
 
 ---
 
@@ -69,7 +116,7 @@ Key insight: A-class price drawdowns ≠ sell signals. Using trailing stops on A
 
 | Mode | Applies To | Logic |
 |------|-----------|-------|
-| **A (Panic Mispricing)** | B-Class (TSLA/NVDA extreme) | Emotion release + technical support + VIX <25 |
+| **A (Panic Mispricing)** | B-Class (high-beta narrative) | Emotion release + technical support + VIX <25 |
 | **B (Trend Confirmation)** | B-Class | Price > MA50 + breakout + fundamentals + valuation |
 | **C (Rebalancing)** | Portfolio-level | Triggered by Red Lines 1-3 only |
 | **D (A-Class Candidate Zone Entry)** | Candidate pool (non-tech diversification targets) | Callback-based, no observation delay |
@@ -86,11 +133,13 @@ Applied to new A-class candidates before they join the core portfolio. Designed 
 | Add | -15% (or >3% further drop after first) | 30% | Execute on trigger |
 | Final | -20% (or 5+ days sideways without new low) | 20% | Within zone |
 
-**Constraints**: total ≤2% portfolio; MCO requires PE percentile <60%; no chasing after rebound.
+**Constraints**: total ≤2% portfolio; some candidates carry an additional valuation gate (e.g. an entry PE-percentile cap); no chasing after rebound.
 
-### Why Different from TSLA Mode A
+**Anchor discipline**: the anchor is the **20-day high, frozen at position open**. Do not substitute a 12-month or 52-week range high — that belongs to the range-position rule (§13 D1). A level computed off the wrong window is arithmetically correct and semantically wrong.
 
-TSLA (B-Class satellite) needs bottom confirmation — the drop might be fundamentally justified. A-class candidates (moat compounders) only need price confirmation — a -10% discount on a quality business is self-evidently an opportunity.
+### Why Different from Panic-Entry Mode A
+
+Narrative-driven, high-beta satellites need bottom confirmation — the drop might be fundamentally justified. A-class candidates (moat compounders) only need price confirmation — a -10% discount on a quality business is self-evidently an opportunity.
 
 ---
 
@@ -170,7 +219,17 @@ QMS = 0.35 × Earnings Trend
 
 ---
 
-## 9. Data Sources
+## 9. Output Format
+
+Portfolio reviews and risk checks produce:
+- **Structured review report** — A/B/C classification table, red-line pass/fail flags, position-sizing check, QMS scores for candidates
+- **Action list** — framework-compliant observations (never directives): what to watch, what violates a rule, what needs human decision
+- **Data-source annotations** — each number carries its source and timestamp; unsourced values are marked
+
+
+---
+
+## 10. Data Sources
 
 | Data Type | Primary | Fallback |
 |-----------|---------|----------|
@@ -183,7 +242,7 @@ QMS = 0.35 × Earnings Trend
 
 ---
 
-## 10. Common Mistakes
+## 11. Common Mistakes
 
 | # | Mistake | Fix |
 |---|---------|-----|
@@ -192,6 +251,184 @@ QMS = 0.35 × Earnings Trend
 | P3 | Cross-market strategy pushed to sub-pages | Cross-market → main page; specific rules → sub-page |
 | P4 | LaTeX `$xxx` swallows first digit | Use `US$` / `HK$` / `¥` / `\$` |
 | P5 | Wrong code block language (`'plain'`) | Must use `'plain text'` (with space) |
+| P6 | Adopting a capital plan without running the consistency audit (§12) | Run A1-A5 before adopting any multi-sleeve plan |
+| P7 | Writing a threshold on a metric without pinning its caliber (§12 A5) | Name the adopted caliber and list the banned ones in the rule file |
+| P8 | Applying a derived price level without declaring which anchor window it came from | Resolve the window from the rule's own definition, never from whichever high is nearest in the file |
+| P9 | Editing a level in every file where it appears instead of editing the registry (§13 D3) | One writable copy; everything else is a mirror — fix the registry, then propagate |
+| P10 | Building an example config out of your own live holdings (§13 D8) | Sample tickers must be generic and must not coincide with anything you hold |
+
+---
+
+## 12. Capital Plan Consistency Audit
+
+Run these checks before adopting any multi-sleeve capital plan (account-level targets, DCA schedules, subtype caps). All of them caught real defects on first use; all are arithmetic, not judgment — detect them by computing, not by reading.
+
+| # | Check | Failure signature | Detection |
+|---|-------|-------------------|-----------|
+| A1 | **Fixed-amount vs percentage cap** | A fixed monthly split silently breaches a percentage cap partway through the horizon | `monthly_amount × horizon > cap_remaining` for any sleeve |
+| A2 | **Target attainability** | The headline target is unreachable under currently active constraints (frozen / blocked sleeves) | `Σ deployable across OPEN sleeves only < required deployment` |
+| A3 | **Label vs look-through exposure** | Subtype labels understate true industry concentration; ETF holdings carry hidden weights | `direct_holding + Σ(ETF_value × constituent_weight)` vs cap |
+| A4 | **Drag vs protection breakeven** | "Idle cash is waste" conclusions ignore the option value given up | `p* = annual_drag_eliminated / protection_given_up` |
+| A5 | **Metric caliber pinned** | A rule fires off a metric whose caliber is undefined, so conflicting published values are interchangeable | See A5 below |
+
+**A1 fix**: allocate by remaining gap to cap, recomputed monthly — never by fixed amount. A fixed amount and a percentage cap are mathematically inconsistent whenever prices move.
+
+**A2 fix**: state cash targets as two stages — a transitional range that is actually reachable with the sleeves open today, and the strategic range that becomes reachable on a stated trigger. Writing an unreachable target puts the rule in violation from day one.
+
+**A3 fix**: set a look-through industry cap that takes precedence over the subtype label cap. Re-test before every new position, since adding a direct holding and growing an ETF sleeve compound.
+
+**A4 fix**: report the breakeven probability, not the drag alone. Drag is certain and annual; protection is contingent and only pays on drawdown. A drag of 0.1% p.a. is not worth buying with concentration risk.
+
+### A5 — Pin the caliber of every threshold metric
+
+If a rule says "yield < X triggers Y" without defining how yield is measured, the rule is undefined, not implemented. Published values for the same instrument routinely differ by 2x. Worked example on a dividend ETF — four circulating figures, four different calibers:
+
+| Figure | Caliber | Verdict |
+|---|---|---|
+| 2.44% | Year-to-date distributions ÷ price. **Not annualised**; at mid-year only half of the year's four payments are counted, so it understates at every mid-year point | Ban |
+| 4.34% | Trailing four actual distributions ÷ current price | **Adopt** |
+| 4.88% | Index yield, rolling, pre-tax, before fund fees | Ban |
+| 4.93% | Index yield, index-provider periodic-review basis — updated once a year, denominator is a lagged average market cap | Ban |
+
+**A5 procedure**: enumerate every published value with its caliber; adopt the one that measures what the holder actually receives; write the adopted caliber and the banned calibers into the rule file itself. Then apply A5 to the *other* side of the comparison too — a yield-vs-bond threshold also needs the bond yield pinned (curve yield vs on-the-run yield vs third-party quote differ by 5-15bp), and stale reference rates silently inflate the buffer.
+
+Two follow-on habits that A5 surfaced:
+
+- **Reconstruct suspicious figures before trusting or discarding them.** Back-solving `dividends ÷ yield` gave an implied price of 1.4344 against an actual NAV of 1.4522, which identified the caliber definitively. A number you cannot reconstruct is a number you have not checked.
+- **Check whether the payout is contractually guaranteed.** Distributions may be conditional (e.g. fund contract requiring excess return over the benchmark before any distribution). A conditional payout makes the yield a binary variable — it can go to zero — which no continuous threshold handles. Track it as a separate monitoring item.
+
+**Related — DCA stop/resume**: model DCA as a state machine (ACTIVE / PAUSED / STOPPED / FROZEN / BLOCKED) with explicit downgrade and upgrade conditions. **Downgrades may be automatic; upgrades must require human confirmation.** An auto-resume buys back right after a rebound, which is a systematic momentum-chasing switch. Also separate "plan completed" (position count reached — resume needs a new plan) from "risk halt" (cap breached — resume when the ratio falls back); treating both as one frozen state loses the distinction.
+
+Give a thin threshold buffer a false-trigger guard (require two consecutive confirmations) plus a fast path for genuine deterioration (a single large move suspends immediately). Pausing inflows is cheap; breaking DCA continuity is not, since continuity is the point of DCA.
+
+---
+
+## 13. Derived Price Level Governance
+
+Every price in this framework that is *computed* rather than *quoted* is a derived level: mode-D add lines, mode-B pullback triggers, range-position bands, B-class trailing stops, and derived thresholds such as a yield-versus-bond gate. They share one failure mode — none of them is self-contained. Each is `f(anchor)`, so a level is only as trustworthy as the anchor behind it, and an anchor that is never declared cannot be checked.
+
+This section exists because a live portfolio once carried the same add-line at two different values in three different files. The trigger line sat within 1% of the price, so the disagreement was not academic. Root cause: a wide-window range high had been reused as the anchor for a narrow-window rule.
+
+### D1 — Anchor windows are per-rule, not per-instrument
+
+A single instrument legitimately has several "highs." They are not interchangeable:
+
+| Rule type | Anchor window | Typical semantics |
+|---|---|---|
+| Short-horizon add line (e.g. candidate staged entry) | **Recent N-day high** | Short-term drawdown reference; frozen at position open |
+| Pullback add on an existing holding | Recent N-day high | Rolling |
+| Range-position monetisation | **52-week / 12-month high** | Upper edge of a long box; rolling, reviewed monthly |
+| Trailing stop | Rolling high | Rolling, paired with a buffer |
+| Derived threshold (yield, spread) | A reference rate or curve point | Refreshed on a fixed calendar |
+
+A 52-week high answers "how far below the one-year top are we." A 20-day high answers "how far below the recent local peak are we." Substituting one for the other produces a level that is arithmetically correct and semantically wrong — which is worse than an arithmetic error, because it looks plausible.
+
+### D2 — Never reverse-engineer an anchor from a target level
+
+Solving `anchor = level ÷ factor` to explain an existing level manufactures an anchor out of nothing. It always "works" — any level divides by any factor — and it launders a bad number into a registered one. Two independent tells that this has happened:
+
+- **Anchor self-inconsistency.** If a rule generates several levels from one anchor, back-solving each level must return the same anchor. Two different implied anchors means neither is real.
+- **Anchor coincidence.** If the implied anchor lands within a fraction of a percent of another rule's anchor for the same instrument, the level was almost certainly computed off the wrong window.
+
+Anchor first, from market data. Levels second. Never the reverse.
+
+### D3 — One source of truth, everything else is a mirror
+
+Levels get copied into whatever file needs to read them — position state, risk state, dashboards. The moment there are three writable copies, they drift. Fix the topology, not the values:
+
+- A **registry** holds each level once, with `anchor.type`, `anchor.value`, `anchor.date`, freeze semantics, the per-level `formula`, and a `status`.
+- **Every other occurrence is a mirror.** Edit the registry, then propagate. A mirror mismatch is never a judgement call — it is an error.
+- Write the **anchor-window convention table** into a machine-readable file next to the registry, not into prose. A convention that exists only in a report has no enforcement power; the next scan will re-derive the level from whatever high it happens to have loaded.
+
+### D4 — Validate mechanically, and be explicit about what the validator judges
+
+Reading the numbers does not find these defects — they are all internally plausible. Only recomputation does. A level validator should check, in this order:
+
+| # | Check | Detection |
+|---|---|---|
+| D-a | **Anchor rebuild** | Rebuild the anchor independently from daily data over the declared window and freeze date; compare |
+| D-b | **Formula recompute** | Recompute each level from the registered anchor and compare |
+| D-c | **Mirror consistency** | Every copy outside the registry must equal the registry value |
+| D-d | **Cross-window suspicion** | Anchor within ~0.5% of another rule's anchor or range high for the same instrument |
+| D-e | **Branch ordering** | When a level has two trigger branches, the higher price must trigger first |
+| D-f | **Level already breached** | A live add line above the current price means it fired, or the level is wrong — either way it needs an owner |
+
+Two design rules matter more than the checks themselves:
+
+**The validator audits whether the truth is faithfully registered, not whether the truth is correct.** A mismatch on an entry marked `verified` is a hard failure. The same mismatch on an entry already registered as `unverified`, `suspected` or `conflicting` is a warning — the defect is on record and under repair. Without this split, a known open item turns the gate permanently red and the gate stops meaning anything; red must mean "new problem," or nobody reads it.
+
+**An unverifiable anchor is not a passing anchor.** When the data window does not reach back far enough to rebuild the anchor, the correct output is "unverified," not "no problems found." Silence is not evidence.
+
+### D5 — Declare, register, validate, resolve, trace
+
+The five-step loop, applied before acting on any level:
+
+1. **Declare** — name the rule, then take the anchor window and freeze semantics from that rule's definition.
+2. **Register** — the level must be in the registry with a complete anchor record. An unregistered level is not usable for a decision.
+3. **Validate** — run the validator. Its output is the only accepted evidence.
+4. **Resolve** — a hard failure blocks the action. Warnings and open entries are surfaced in the output, never silently absorbed.
+5. **Trace** — an anchor or formula change keeps the previous value, the reason and the date. Anchors get edited by scans, merges and hand fixes; without a trace, nobody can tell a correction from a corruption.
+
+### D6 — Resolve every percentage cap against the owning account, not the portfolio
+
+A percentage-of-capital limit is only meaningful once its base is named. Portfolio documents tend to say "≤N% of total assets" in dozens of places while defining "total assets" nowhere, and the same phrase quietly drifts into meaning four different numbers: portfolio net asset value, securities market value, and each account's own total.
+
+The rule: **an add-size cap resolves against the total value of the account the instrument sits in**, because cross-account cash is not fungible. Portfolio-level limits — concentration, drawdown, allocation drift — resolve against portfolio net asset value. Account-scoped ceilings resolve against that account. State which base was used whenever a cap comes into play.
+
+Two corollaries:
+
+- **Ratify before you rewrite.** Check how the historical trade log actually computed the percentage before declaring a base. If the log has been using the owning-account basis all along, the formal definition ratifies existing practice rather than changing it — and it must not alter any past decision.
+- **Beware same-named account fields.** An accounts block may store one book's value cash-inclusive and another's securities-only. Summing the block then silently drops cash. Resolve totals from the aggregate block, never by adding up account entries.
+
+A cap whose base is unstated is not a cap — it is a number that will be computed two ways by two people.
+
+### D7 — Date every balance, and reconcile it with a rollforward
+
+Prices get validated; balances usually do not. A price series is visibly wrong when it is stale — the change column gives it away. A cash figure is invisible: it sits in a state file looking exactly like a fresh number until someone reads the broker.
+
+The rule: **every balance-like field carries its own as-of date and source.** A balance with no as-of marker is treated as unverified, never as current. And any account-level correction ships with a **cash rollforward** — an anchor balance, every cash-moving entry in the interval, and the residual. A non-zero residual must be attributed explicitly (rounded anchor, unlogged entry, or genuinely unresolved). Never absorb it silently.
+
+Three corollaries:
+
+- **Match the check strength to the field's liquidity.** A field that becomes spendable cash tomorrow deserves a stronger gate than an analytical estimate. If your derived levels have a multi-check validator and your balances have none, the asymmetry is the bug.
+- **Arbitrate by tier, not by recency.** A first-party broker statement wins on account-level truth — net liquidation value, cash, share counts. The exchange close wins on price. Reconcile both, state the delta and its cause, and never let one silently overwrite the other.
+- **A displayed number is not a stored number.** Broker apps round. When a panel shows a rounded figure, recover the precise value from the account identity (net liquidation value minus market value) and record the rounding delta rather than quoting the display.
+
+A stale balance is the most expensive kind of stale data, because nothing about it looks stale.
+
+### D8 — Example configs carry no author positions
+
+Sample data is built by copying the shape of whatever book the author happens to run. That is convenient, and it is also an export: a shipped example watchlist, a `--detail` example in a docstring, or a sample trade log quietly publishes the author's positions to everyone who installs the package. Nothing marks it as a disclosure, so nobody reviews it as one.
+
+The rule: **sample tickers are generic and must not coincide with anything actually held.** A demo exists to show the shape of the config — strategy types, exit ladders, adapter wiring — and every one of those survives substitution. Cost bases, share counts and account balances are left at zero or plainly synthetic values for the same reason.
+
+Two corollaries:
+
+- **Comment residue counts.** Reviewers check the config body and skip the docstrings. A ticker sitting inside a usage example or an `Args:` block is exactly as public as one in the watchlist, and it is the one a scan for "does this file contain a symbol I hold" is least likely to cover.
+- **Re-check on release, not on authoring.** A ticker that was neutral when the example was written becomes a disclosure the day it is bought. Audit before publishing, not when the sample is first drafted.
+
+An example that mirrors your book is not a demo — it is a position disclosure shipped without review.
+
+---
+
+### Two rules that make this structural rather than procedural
+
+**Opposing rules on the same instrument need a mutex.** An add line below the price and a reduce band above it are both legitimate, but if both can fire in the same period the framework contradicts itself. Resolve by first-trigger-wins on a logged timestamp, freeze the other side for the period, and re-evaluate next period. Never allow a same-period add and reduce.
+
+**A level near the price is a live commitment, not a monitor.** The closer a line sits to the current price, the more it needs a registered anchor, a named owner and an execution plan. Distance creates the illusion of safety; the level that is 0.5% away is the one that will be hit while nobody is watching.
+
+**A definition backfill is not a rule change — label it as such.** When a term the rules lean on was never actually defined, defining it changes no threshold and no mode; it only removes the room for two people to compute the same situation differently. Publish it under its own version, call it a backfill, and leave every number untouched. Silently "clarifying" a value is how a definition becomes a rule change nobody signed off on.
+
+---
+
+## Reference Files
+
+| File | Use when |
+|------|----------|
+| `references/a_share_strategy.md` | A-share selection and DCA rules |
+| `references/us_stock_strategy.md` | US/HK position management |
+| `references/risk_control_and_overrides.md` | Red lines, macro levels, override procedure |
+| `references/candidate_admission_gates.md` | **Promoting a candidate to watchlist** — G0-G5 gates, S6 dividend-yield water level, look-through industry cap. Read before any "add to watchlist" request. |
 
 ---
 
@@ -199,6 +436,15 @@ QMS = 0.35 × Earnings Trend
 
 | Version | Date | Summary |
 |---------|------|---------|
+| v2.3.15 | 2026-09-16 | Hardening per scanner findings: valuation gate + volume confirmation fail-closed in `redline_engine.py`; Framework Scope and Bundled Scripts section; allowed-tools completion; data-transmission notices; pinned requirements |
+| v2.3.14 | 2026-09-11 | Add D8 (example configs carry no author positions — sample tickers must be generic and must never coincide with real holdings, because a shipped example that mirrors your book is a disclosure, not a demo) + P10; purged real tickers from `scripts/init_config.py` sample watchlist and from two inline code comments |
+| v2.3.13 | 2026-09-11 | Add D7 (every balance carries an as-of and source; account corrections ship with a cash rollforward; arbitrate broker-vs-exchange by tier; never quote a rounded display) — prompted by a 6-week-stale cash field that produced a phantom discrepancy, while derived price levels already had eight mechanical checks |
+| v2.3.12 | 2026-09-11 | Add D6 (capital-base resolution — caps resolve against the owning account; ratify historical practice, never sum mixed-basis account blocks) + definition-backfill principle. Frame D1-D5 list as §13 D1-D7 |
+| v2.3.11 | 2026-09-11 | Add §13 Derived Price Level Governance (D1-D5) + P8/P9 — anchor-window declaration, single source of truth for levels, mirror discipline, and mechanical level validation |
+| v2.3.10 | 2026-09-08 | Add not-individualized-advice disclaimer to risk_control_and_overrides.md (scanner finding) |
+| v2.3.9 | 2026-09-07 |
+| v2.3.3 | 2026-08-07 | Sync SKILL.md version declaration with ClawHub package metadata |
+| v2.3.2 | 2026-06-06 | Fix display name (remove Clean suffix) |
 | v2.1.2 | 2026-06-06 | Audit cleanup: bilingual README, remove legacy files |
 | v2.1.1 | 2026-06-04 | Mode D: A-class candidate zone entry (no observation delay) |
 | v2.1 | 2026-05-18 | A/B/C asset classification; 7 red lines; 4-factor QMS; trailing stop removed from A-class |

@@ -1,45 +1,56 @@
-## Description: <br>
-ShortPixel connector skill for reading, creating, updating, and deleting ShortPixel domain and CDN data through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ShortPixel (shortpixel.com) handles ShortPixel requests for reading, creating, updating, and deleting data through the OOMOL connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate a connected ShortPixel account from an agent, including domain association, CDN usage lookup, and cache or optimized-storage purge actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate an OOMOL-connected ShortPixel account and requires sensitive credentials managed outside the skill. <br>
-Mitigation: Install only when the agent should operate that account, and rely on the documented OOMOL connection flow rather than exposing raw tokens. <br>
-Risk: State-changing actions can add, set, or revoke domains, and destructive actions can purge CDN cache or stored optimized variants. <br>
-Mitigation: Review exact domains and payloads before approval, and require explicit confirmation for write or destructive actions. <br>
-Risk: First-time setup may ask the user to install or authenticate the oo CLI. <br>
-Mitigation: Use setup steps only after a relevant command failure and verify the oo CLI installer source before running installation commands. <br>
+## Use Case:
 
+External users and developers use this skill to operate ShortPixel through an OOMOL-connected account, including domain association, CDN usage lookup, and cache or storage purge actions.
 
-## Reference(s): <br>
-- [ClawHub ShortPixel Skill](https://clawhub.ai/oomol/oo-shortpixel) <br>
-- [ShortPixel Homepage](https://shortpixel.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands operate through the OOMOL oo CLI and return JSON responses from the connector.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Fallback setup may ask users to execute a remote installer script before the installer is verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified, versioned oo CLI release or package-manager source; inspect or verify the installer before using pipe-to-shell setup commands.
+
+Risk: Write and destructive ShortPixel domain actions can change account state or purge cached or stored optimized assets.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [ShortPixel Homepage](https://shortpixel.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-shortpixel)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live ShortPixel action schemas before payload execution; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

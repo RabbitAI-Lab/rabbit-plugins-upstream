@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Wolfram|Alpha"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["wolfram_alpha_api"]
   icon: "https://static.oomol.com/logo/third-party/wolfram_alpha_api.svg"
 ---

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "DocuSeal"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.4"
   services: ["docuseal"]
   icon: "https://static.oomol.com/logo/third-party/docuseal.svg"
 ---

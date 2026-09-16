@@ -1,45 +1,55 @@
-## Description: <br>
-Fairing connector skill for searching and reading Fairing survey response data through the OOMOL oo CLI instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fairing (fairing.co). Use this skill for ANY Fairing request - searching and reading data. Whenever a task involves Fairing, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect the live Fairing connector schema and retrieve paginated Fairing survey responses through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on OOMOL and the oo CLI setup path for connector execution and credential handling. <br>
-Mitigation: Install and use it only when you trust OOMOL, the oo CLI, and the connected Fairing account. <br>
-Risk: Future connector actions tagged write or destructive could change or remove Fairing data. <br>
-Mitigation: Confirm the exact payload and effect with the user before write actions, and require explicit approval for destructive actions. <br>
-Risk: A stale assumed payload can fail or request the wrong Fairing data. <br>
-Mitigation: Inspect the live action schema with `oo connector schema` before constructing each `oo connector run` payload. <br>
+## Use Case:
 
+Developers and external users use this skill to operate Fairing through an OOMOL-connected account, inspect live action schemas, and list paginated Fairing survey responses with optional filters.
 
-## Reference(s): <br>
-- [ClawHub Fairing skill page](https://clawhub.ai/oomol/skills/oo-fairing) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Fairing homepage](https://fairing.co) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON response guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before running actions; Fairing credentials are handled by OOMOL server-side.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: Setup guidance includes direct execution of remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after trusting OOMOL's installer source; prefer a verified, version-pinned package or inspect and verify the installer first.
+
+Risk: Incorrect Fairing request payloads can occur if the agent relies on stale action details.
+
+Mitigation: Fetch the live action schema with the oo CLI before constructing a payload.
+
+## Reference(s):
+
+- [Fairing homepage](https://fairing.co)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload conventions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Directs the agent to inspect the live Fairing action schema before constructing requests; connector responses are JSON.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,55 @@
-## Description: <br>
-Needle helps an agent operate Needle collections through the OOMOL oo CLI, including listing, inspecting, creating, adding URL-backed files, checking stats, and searching retrieved content. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Needle helps agents read, create, update, and search Needle collections through an OOMOL-connected oo CLI account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to work with Needle collections from an OOMOL-connected account. It supports read workflows such as listing, inspecting, statistics lookup, and search, plus write workflows for creating collections and adding URL-backed files for indexing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create Needle collections or add URL-backed files for indexing, which changes content available in the connected Needle account. <br>
-Mitigation: Confirm the exact write payload and expected account effect before approving create or add-file actions. <br>
-Risk: The skill requires access to a connected OOMOL/Needle account. <br>
-Mitigation: Install and use it only when the agent is expected to operate that connected account. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Needle collections through OOMOL, including listing collections, inspecting files and statistics, searching content, creating collections, and importing URL-backed files for indexing.
 
-## Reference(s): <br>
-- [Needle homepage](https://needle.app) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-needle) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce commands that inspect live connector schemas and run Needle actions through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: evidence metadata and artifact frontmatter) <br>
+Risk: Setup instructions include piping remote installer scripts directly into a shell or elevated PowerShell session.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI from a verified, versioned source and review installation steps before execution.
+
+Risk: Write actions can create collections or import URL-backed files into Needle for indexing.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [Needle homepage](https://needle.app)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce oo CLI connector commands and summarize JSON action responses.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

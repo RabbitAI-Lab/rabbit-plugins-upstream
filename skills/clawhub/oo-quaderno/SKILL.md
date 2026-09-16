@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Quaderno"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["quaderno"]
   icon: "https://static.oomol.com/logo/third-party/quaderno.svg"
 ---

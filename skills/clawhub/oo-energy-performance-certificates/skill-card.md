@@ -1,41 +1,56 @@
-## Description: <br>
-Search and read UK Energy Performance Certificate data through OOMOL's energy_performance_certificates connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Energy Performance Certificates (get-energy-performance-data.communities.gov.uk). Use this skill for ANY Energy Performance Certificates request - searching and reading data. Whenever a task involves Energy Performance Certificates, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to retrieve full certificate details by certificate number and search domestic, non-domestic, or display Energy Performance Certificates through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queries may include property-related identifiers or filters sent to the OOMOL connector. <br>
-Mitigation: Use the skill only for intended certificate lookups and searches, and confirm sensitive query details with the user before execution. <br>
-Risk: First-time setup may require installing or authenticating the oo CLI. <br>
-Mitigation: Verify the oo CLI install source and run setup or authentication only after a command fails for that reason. <br>
+## Use Case:
 
+External users and agents use this skill to search domestic, non-domestic, and display Energy Performance Certificates and fetch certificate details through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Energy Performance Certificates homepage](https://get-energy-performance-data.communities.gov.uk) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only certificate lookup and search actions; connector responses include data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup guidance includes remote installer commands such as curl piped to bash and PowerShell irm piped to iex.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified, versioned installer or inspect and validate the installer script before execution.
+
+Risk: The skill depends on the OOMOL oo CLI and server-side connector credentials.
+
+Mitigation: Install only if you trust OOMOL, use the documented schema inspection workflow, and avoid re-running setup or auth commands unless an action fails with a matching error.
+
+## Reference(s):
+
+- [Energy Performance Certificates homepage](https://get-energy-performance-data.communities.gov.uk)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-energy-performance-certificates)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

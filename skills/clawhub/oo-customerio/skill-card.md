@@ -1,43 +1,59 @@
-## Description: <br>
-Operate Customer.io through an OOMOL-connected account for reading, creating, updating, deleting, and tracking customer data with the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Customer.io helps agents read, create, update, and delete Customer.io data through an OOMOL-connected account instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Customer.io action schemas and run customer profile and event operations through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Some Customer.io state-changing actions are not consistently tagged as write or destructive in the skill text. <br>
-Mitigation: Treat identify, suppress, unsuppress, merge, delete, and event-tracking actions as write operations; confirm the exact target, payload, and effect before execution. <br>
-Risk: Commands can affect live Customer.io workspace data. <br>
-Mitigation: Fetch the live action schema before building payloads and review the JSON payload with the user before running connector commands. <br>
+## Use Case:
 
+External users and operators use this skill to manage Customer.io profiles and events through an OOMOL-connected Customer.io account. It supports customer identification and updates, event tracking, suppression and unsuppression, customer merges, and customer deletion.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-customerio) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Customer.io homepage](https://customer.io/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash, PowerShell, text, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo CLI schema and run commands; command responses are JSON with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and SKILL.md metadata) <br>
+Risk: The skill can create, update, suppress, unsuppress, merge, or delete Customer.io customer data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval for every state-changing action and confirm the exact payload and expected effect before execution.
+
+Risk: The security review reports that the confirmation boundary for customer data changes may be insufficient.
+
+Mitigation: Review before installing and use a sandbox or least-privileged Customer.io connection for testing and routine operation.
+
+Risk: The setup instructions include pipe-to-shell installer commands.
+
+Mitigation: Avoid the pipe-to-shell installer path unless the OOMOL CLI installer source and integrity have been independently verified.
+
+## Reference(s):
+
+- [Customer.io homepage](https://customer.io/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-customerio)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, json, guidance, configuration]
+
+**Output Format:** [Markdown guidance with shell commands and JSON command results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands operate through the OOMOL-connected Customer.io connector and may require user confirmation for state-changing actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

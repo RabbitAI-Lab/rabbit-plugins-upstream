@@ -1,48 +1,66 @@
-## Description: <br>
-Operational guide for managing Hostinger VPS, hosting, domains, DNS, Reach, and billing through the official Hostinger MCP server across one or more Hostinger accounts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operational guide for managing Hostinger infrastructure across VPS, websites and hosting, domains, DNS, Reach email marketing, and billing via the official Hostinger MCP server.
 
-## Publisher: <br>
-[benkalsky](https://clawhub.ai/user/benkalsky) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[benkalsky](https://clawhub.ai/user/benkalsky)
 
-## Use Case: <br>
-External developers, operators, and site owners use this skill to configure and operate Hostinger MCP tools for infrastructure, DNS, domain, hosting, email marketing, and billing tasks. It is especially useful when an agent needs account-aware, confirmation-gated guidance before read, write, destructive, or money-spending Hostinger actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The connected MCP server can exercise full Hostinger account authority through the configured account token. <br>
-Mitigation: Use separate tokens per account, load only the needed category binary, keep user-level MCP persistence in mind, and require explicit confirmation before any write, destructive, or billing-related action. <br>
-Risk: Money-spending and destructive Hostinger operations can create charges, change subscriptions, delete resources, or wipe VPS data. <br>
-Mitigation: Confirm the account, target resource, intended action, expected impact, and cost before spending actions; double-confirm destructive actions and verify recovery points when data could be lost. <br>
-Risk: Multiple Hostinger accounts can expose similar resource names or IDs that are not interchangeable across MCP connections. <br>
-Mitigation: Identify the account before every operation, tag cross-account read results by account, and stop to ask the user when ownership or target account is unclear. <br>
-Risk: API tokens and stored OAuth credentials can expose broad account access if printed, reused, or persisted unexpectedly. <br>
-Mitigation: Never print tokens in responses, prefer per-account API tokens for multi-account use, and direct users to hPanel for credential management. <br>
+## Use Case:
 
+Developers and operators use this skill to configure and operate Hostinger MCP access, select the smallest relevant tool category, and manage Hostinger account resources with explicit confirmation for account-changing actions.
 
-## Reference(s): <br>
-- [Installation - Hostinger MCP Server](references/installation.md) <br>
-- [Tools Catalog - Hostinger MCP](references/tools-catalog.md) <br>
-- [Workflows - VPS](references/workflows-vps.md) <br>
-- [Official Hostinger MCP server](https://github.com/hostinger/api-mcp-server) <br>
-- [Hostinger API documentation](https://developers.hostinger.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and confirmation blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Operational guidance emphasizes read-only defaults, smallest-needed MCP tool loading, account verification, and explicit confirmation for write, destructive, and billing-related actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: A connected Hostinger API token grants full account authority through the MCP server.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep tokens in environment variables or a keychain, never print token values, and install only when comfortable granting full Hostinger account access.
+
+Risk: Write, destructive, billing, and purchase tools can change infrastructure, erase data, or spend money.
+
+Mitigation: Require explicit confirmation for writes, double confirmation for destructive actions, and cost confirmation for money-spending actions before tool execution.
+
+Risk: Loading every Hostinger MCP tool can increase context size and make tool selection less precise.
+
+Mitigation: Load only the category-specific binary needed for the task, using the all-in-one server only for genuinely cross-category work.
+
+Risk: Using npx fetches and executes the npm package without a separate pre-install verification step.
+
+Mitigation: Prefer the documented pinned local install path with digest verification when supply-chain assurance matters.
+
+## Reference(s):
+
+- [Hostinger MCP Skill](https://clawhub.ai/benkalsky/skills/hostinger-mcp)
+- [Hostinger MCP server repository](https://github.com/hostinger/api-mcp-server)
+- [Hostinger hPanel](https://hpanel.hostinger.com)
+- [Installation - Hostinger MCP Server](references/installation.md)
+- [Tools Catalog - Hostinger MCP](references/tools-catalog.md)
+- [Workflows - VPS](references/workflows-vps.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions, API calls]
+
+**Output Format:** [Markdown with inline shell commands, configuration snippets, and MCP tool names]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Prompts the agent to prefer read-only operations, identify the active Hostinger account, and require confirmation before write, destructive, billing, or purchase actions.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

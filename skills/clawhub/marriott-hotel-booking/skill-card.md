@@ -1,43 +1,49 @@
-## Description: <br>
-Searches Marriott-family hotels by destination, brand keyword, and price, returning hotel prices, ratings, addresses, detail links, and package offers through travel-platform APIs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+万豪集团旗下品牌酒店查询服务已调整，原品牌酒店数据专区数据源暂停，现引导使用全球酒店搜索、酒店比价等通用酒店技能查询万豪、喜来登、威斯汀、丽思卡尔顿、JW万豪和W酒店等品牌酒店。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-Travelers and booking assistants use this skill to search Marriott-brand hotels, review hotel details, and find package offers before completing booking on external travel links. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Hotel search terms, locations, dates, and hotel identifiers are sent to the skill's cloud proxy and travel API providers. <br>
-Mitigation: Install only when that data sharing is acceptable, and avoid entering sensitive travel details unless the publisher documents the proxy and provider handling clearly. <br>
-Risk: The artifact includes transparency and credential-handling caveats, including a hardcoded default proxy token noted by security evidence. <br>
-Mitigation: Publisher should document the exact proxy endpoint and replace the hardcoded default token with a deployment-specific secret. <br>
-Risk: Returned prices and booking availability depend on external travel-platform data and may change. <br>
-Mitigation: Confirm final price, policies, and availability on the linked booking page before making travel decisions. <br>
+## Use Case:
 
+External users use this skill when they ask about Marriott-family hotel search, details, packages, or booking and need guidance toward currently available general hotel-search and hotel-price-comparison skills. The skill preserves legacy tool entry points while returning a service-adjustment notice instead of performing live Marriott search or booking.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/marriott-hotel-booking) <br>
-- [Publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown-formatted text with hotel listings, prices, addresses, hotel identifiers, and booking links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Results depend on external travel-platform data and live pricing availability.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.4 (source: server release evidence; artifact frontmatter lists 1.1.2) <br>
+Risk: Users may expect live Marriott hotel search, hotel details, package results, or booking support from this skill.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat this release as a placeholder guidance skill and use the recommended general hotel-search or hotel-price-comparison skills for live availability, pricing, and booking links.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/marriott-hotel-booking)
+
+## Skill Output:
+
+**Output Type(s):** [text, guidance]
+
+**Output Format:** [Plain text guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns the same service-adjustment notice for search, detail, package, and unknown tool calls.]
+
+## Skill Version(s):
+
+1.1.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

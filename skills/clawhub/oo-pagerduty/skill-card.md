@@ -1,45 +1,57 @@
-## Description: <br>
-PagerDuty skill for reading incident and on-call data and updating incident state through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PagerDuty (pagerduty.com). Use this skill for ANY PagerDuty request - reading, creating, and updating data. Whenever a task involves PagerDuty, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, incident responders, and operations teams use this skill to inspect PagerDuty schemas, retrieve incidents and on-call assignments, and perform confirmed incident state changes through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change PagerDuty incident state through acknowledge, resolve, and update actions. <br>
-Mitigation: Confirm the exact incident, action, and payload with the user before running write actions. <br>
-Risk: PagerDuty operations are routed through the OOMOL oo CLI and server-side credential handling. <br>
-Mitigation: Install and use the skill only when the user trusts OOMOL and intends to operate through an OOMOL-connected PagerDuty account. <br>
-Risk: Connector schemas may define required fields or effects that are not visible from the skill summary alone. <br>
-Mitigation: Inspect the live connector schema before constructing command payloads. <br>
+## Use Case:
 
+Developers, operators, and incident responders use this skill to inspect PagerDuty incidents, on-call assignments, and current-user context, and to perform confirmed incident updates through an OOMOL-connected PagerDuty account.
 
-## Reference(s): <br>
-- [ClawHub PagerDuty skill page](https://clawhub.ai/oomol/skills/oo-pagerduty) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [PagerDuty homepage](https://www.pagerduty.com) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Guidance, Configuration instructions] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include PagerDuty connector JSON responses when commands are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md metadata) <br>
+Risk: Incident state-changing actions may acknowledge, resolve, or update PagerDuty incidents without sufficient confirmation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit confirmation of the exact incident ID, acting user, payload, and intended new state before executing any acknowledge, resolve, or update action.
+
+Risk: The setup guidance includes remote installer commands that pipe downloaded scripts directly into a shell or PowerShell.
+
+Mitigation: Avoid direct remote-script execution unless the installer source is independently trusted and verified; prefer a reviewed manual installation path where available.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-pagerduty)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [PagerDuty Homepage](https://www.pagerduty.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May invoke OOMOL oo CLI connector actions that return JSON responses from PagerDuty]
+
+## Skill Version(s):
+
+1.0.2 (source: artifact frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

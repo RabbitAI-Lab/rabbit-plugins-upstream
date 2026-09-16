@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "7shifts"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["7_shifts"]
   icon: "https://static.oomol.com/logo/third-party/7_shifts.png"
 ---

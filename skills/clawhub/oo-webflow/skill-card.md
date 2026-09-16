@@ -1,44 +1,60 @@
-## Description: <br>
-Webflow (webflow.com). Use this skill for Webflow requests involving reading, creating, updating, and deleting data through the OOMOL Webflow connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Webflow (webflow.com). Use this skill for Webflow requests involving reading, creating, updating, publishing, and deleting site or CMS data through the OOMOL connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect and manage Webflow sites, CMS collections, and CMS items through an OOMOL-connected Webflow account. It supports read operations plus confirmed create, update, publish, and delete workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and publish actions can change Webflow CMS items or site state. <br>
-Mitigation: Confirm the exact action, target site, collection or item, and payload with the user before running write or publish actions. <br>
-Risk: The delete action can remove a draft CMS item. <br>
-Mitigation: Require explicit approval for the specific item before destructive actions and verify the target with a read operation first when practical. <br>
-Risk: The skill operates through a connected Webflow account. <br>
-Mitigation: Install and use it only for intended Webflow accounts, and resolve authentication, scope, or billing errors through the documented first-time setup flow. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Webflow schemas and run Webflow site and CMS actions through an OOMOL-connected account. It supports reads, creates, updates, publishes, and deletes, with confirmation expected before state-changing or destructive actions.
 
-## Reference(s): <br>
-- [Webflow homepage](https://webflow.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-webflow) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, API calls] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo CLI connector responses in JSON format when actions are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md metadata) <br>
+Risk: Setup instructions include remote installer scripts that execute shell or PowerShell code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a versioned, verifiable oo CLI installation method when available, and review installer contents before running remote scripts.
+
+Risk: Write, publish, and delete actions can change Webflow site or CMS state.
+
+Mitigation: Inspect the live action schema, use least-privilege Webflow access, and confirm the exact target, payload, and expected effect before approving state-changing actions.
+
+Risk: Connector use depends on an OOMOL-connected account and server-side Webflow credentials.
+
+Mitigation: Confirm the connected account, scopes, and billing state before use, and avoid handling raw Webflow tokens directly.
+
+## Reference(s):
+
+- [ClawHub Webflow skill page](https://clawhub.ai/oomol/skills/oo-webflow)
+- [Webflow homepage](https://webflow.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with bash commands and JSON command results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action payloads; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

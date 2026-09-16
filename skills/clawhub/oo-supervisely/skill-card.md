@@ -1,45 +1,52 @@
-## Description: <br>
-Supervisely (supervisely.com). Use this skill for ANY Supervisely request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Supervisely through an OOMOL-connected account to read user, team, workspace, project, and dataset data with the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect live Supervisely connector schemas and run read-oriented Supervisely actions through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose Supervisely data available to the connected OOMOL account. <br>
-Mitigation: Review the OOMOL connection and Supervisely API-key scopes before installation and use. <br>
-Risk: The first-time setup path includes remote installer and account sign-in commands. <br>
-Mitigation: Run setup only when the CLI, authentication, or connection is missing, and treat those steps as sensitive account setup. <br>
-Risk: Incorrect action payloads can cause failed or unintended connector calls. <br>
-Mitigation: Inspect the live connector schema for each action before constructing the JSON payload. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Supervisely account resources through OOMOL's connected oo CLI workflow without handling raw Supervisely credentials directly.
 
-## Reference(s): <br>
-- [Supervisely homepage](https://supervisely.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-supervisely) <br>
-- [OOMOL ClawHub profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: First-time setup instructs users to pipe remote installer scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from a trusted source; prefer a verified or package-managed install path and review installer contents before execution.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-supervisely)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Supervisely](https://supervisely.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON data]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supervisely connector results are returned as JSON by the oo CLI.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

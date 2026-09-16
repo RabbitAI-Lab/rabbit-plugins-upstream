@@ -1,45 +1,56 @@
-## Description: <br>
-Certifier (certifier.io) supports Certifier requests involving reading, creating, and updating data through the OOMOL CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Certifier (certifier.io) helps agents read, create, update, issue, and send Certifier data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent list, search, create, issue, and send Certifier credentials through an OOMOL-connected Certifier account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access Certifier through an OOMOL-connected account and may use sensitive account credentials handled by OOMOL. <br>
-Mitigation: Install and use it only when the agent should access that Certifier account through OOMOL, and confirm the connected account before use. <br>
-Risk: The create_issue_send_credential action creates, issues, and sends a credential. <br>
-Mitigation: Review the exact payload, recipient, group, and custom attributes with the user before approving the write action. <br>
-Risk: First-time setup may require installing the OOMOL CLI or connecting a Certifier account. <br>
-Mitigation: Run installer or account-connection steps only after an auth or connection failure and only when the user trusts OOMOL and understands the connected account. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Certifier connector schemas, list or search Certifier records, and create, issue, or send credentials through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Certifier homepage](https://certifier.io) <br>
-- [OOMOL CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-certifier) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI to retrieve schemas and run Certifier connector actions; write actions require user confirmation before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: First-time setup instructs users to run remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup commands before installation and prefer a pinned official release or package manager with signature or checksum verification.
+
+Risk: The create_issue_send_credential action creates, issues, and sends Certifier credentials.
+
+Mitigation: Confirm the exact recipient, group, credential details, and send effect with the user before running the write action.
+
+## Reference(s):
+
+- [ClawHub Certifier skill page](https://clawhub.ai/oomol/skills/oo-certifier)
+- [Certifier homepage](https://certifier.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before payload construction; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

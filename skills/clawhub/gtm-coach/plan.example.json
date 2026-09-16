@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "skill": {
+    "installed_version": "1.4.1",
+    "last_checked_at": null,
+    "last_update_notice_version": null,
+    "deferred_until": null
+  },
+  "current_week": "2026-W38",
+  "intake": "idea",
+  "product": {
+    "name": "",
+    "project_type": "MICRO_SAAS",
+    "one_liner": "",
+    "icp": "",
+    "url": null,
+    "repo_confirmed": false
+  },
+  "strategy": {
+    "confirmed": false,
+    "period": "validate",
+    "build": "in_progress",
+    "evidence": "none",
+    "primary_channel": "undecided",
+    "channels_this_quarter": [],
+    "launch_optional": {
+      "producthunt": false,
+      "show_hn": false
+    },
+    "share_loop": "none yet",
+    "paid_promotion": "blocked",
+    "seo_status": "not_applicable",
+    "note": ""
+  },
+  "modules": {
+    "stage": "stages/validate.md",
+    "project_type": "project-types/micro-saas.md",
+    "primary_channel": null,
+    "optional_campaign": null
+  },
+  "connection": {
+    "status": "unbound",
+    "offered_week": null,
+    "last_cta_id": null,
+    "project_id": null,
+    "project_name": null
+  },
+  "focus": "Confirm period, product readiness, and primary channel before pulling pains or leads",
+  "this_week": {
+    "theme": "",
+    "active_experiment": {
+      "action": "",
+      "channel": "undecided",
+      "hypothesis": "",
+      "baseline": "unknown",
+      "success_metric": "",
+      "target": "",
+      "artifact_url": null,
+      "review_on": null,
+      "result": "",
+      "decision": "pending"
+    },
+    "micro_tasks": []
+  },
+  "open_decisions": [],
+  "filters": {
+    "ignore_pain_tags": [],
+    "prefer_subreddits": [],
+    "skip_subreddits": []
+  },
+  "last_outcomes": {
+    "qualified_conversations": 0,
+    "activations": 0,
+    "payments": 0,
+    "replies_posted_7d": 0,
+    "pains_shipped": [],
+    "manual_note": ""
+  },
+  "partners": "waiting"
+}

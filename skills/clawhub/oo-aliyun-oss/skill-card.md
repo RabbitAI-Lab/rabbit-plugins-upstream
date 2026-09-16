@@ -1,44 +1,60 @@
-## Description: <br>
-Operates Alibaba Cloud OSS through an OOMOL-connected account using the oo CLI to list buckets and objects, fetch metadata, generate pre-signed URLs, upload objects, and delete objects. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to operate Alibaba Cloud OSS through the OOMOL-connected oo CLI for reading, creating, updating, and deleting storage data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Alibaba Cloud OSS resources and perform controlled object operations through a connected OOMOL account. It supports object listing, metadata checks, pre-signed URL generation, uploads, and deletions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploads and deletes can change or remove Alibaba Cloud OSS objects. <br>
-Mitigation: Confirm the exact bucket, object key, payload, and expected effect before approving upload or delete actions. <br>
-Risk: Pre-signed URLs can grant read, upload, or delete access to a specific object. <br>
-Mitigation: Generate pre-signed URLs only for the intended object and operation, and review the requested access before sharing or using them. <br>
-Risk: The skill depends on the oo CLI and an OOMOL-connected Alibaba Cloud OSS credential. <br>
-Mitigation: Install and authenticate the oo CLI only when needed, and use the connected account intended for the target bucket. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Alibaba Cloud OSS connector schemas and run bucket or object actions through the oo CLI, including listing, metadata lookup, downloads, uploads, presigned URL generation, and deletion. The skill is intended for users with an OOMOL account and connected Alibaba Cloud OSS credentials.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-aliyun-oss) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Alibaba Cloud OSS](https://www.alibabacloud.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return structured JSON from oo connector executions when the agent runs Alibaba Cloud OSS actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: First-time setup includes remote installer commands that can execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid running the documented curl|bash or irm|iex installer unless the oo CLI installer source has been independently trusted and verified.
+
+Risk: Alibaba Cloud OSS uploads, deletes, and presigned URLs can modify storage data or expose object access.
+
+Mitigation: Require explicit confirmation of the exact bucket, object, payload, URL operation, and expected effect before running write, destructive, or presigned URL actions.
+
+Risk: Connector actions operate with OOMOL-connected Alibaba Cloud OSS permissions.
+
+Mitigation: Use only an OOMOL account and Alibaba Cloud OSS credentials scoped to resources and actions the user is comfortable exposing to connector execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-aliyun-oss)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Alibaba Cloud OSS homepage](https://www.alibabacloud.com)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector command responses are JSON objects containing data and meta.executionId when actions are run.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

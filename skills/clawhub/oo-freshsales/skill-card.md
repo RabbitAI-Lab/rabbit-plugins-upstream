@@ -1,44 +1,60 @@
-## Description: <br>
-Freshsales helps agents operate Freshsales CRM contacts through the OOMOL connector and oo CLI, including reading, creating, updating, and deleting contact records. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Freshsales helps agents read, create, update, and delete Freshsales CRM contact data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, operators, and agents working with Freshsales use this skill to inspect connector schemas and run Freshsales contact workflows through an OOMOL-connected account. It supports contact lookup, listing, creation, updates, deletion, and contact filter discovery. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Approved write or delete actions can modify or remove Freshsales CRM contact data. <br>
-Mitigation: Confirm the exact payload, target contact, and expected effect with the user before running write or destructive actions. <br>
-Risk: Requests built from stale assumptions can fail or affect unintended fields. <br>
-Mitigation: Inspect the live Freshsales action schema immediately before constructing each connector payload. <br>
+## Use Case:
 
+External users and CRM operators use this skill to operate Freshsales contacts from an agent session, including listing saved-view contacts and creating, updating, retrieving, or deleting contact records after appropriate confirmation.
 
-## Reference(s): <br>
-- [Freshsales ClawHub Listing](https://clawhub.ai/oomol/skills/oo-freshsales) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Freshsales Homepage](https://www.freshworks.com/crm/sales/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live Freshsales connector schemas to shape command payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions include remote installer commands that may be unsafe if run without review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use official, versioned, signed, or checksum-verified installation steps before installing the oo CLI.
+
+Risk: Write and destructive Freshsales actions can create, modify, or delete CRM contact records.
+
+Mitigation: Require explicit user confirmation of the target record, payload, and expected effect before running write or destructive actions.
+
+Risk: Freshsales operations route through OOMOL's connector.
+
+Mitigation: Install only when the user trusts OOMOL and is comfortable using its connector for Freshsales CRM operations.
+
+## Reference(s):
+
+- [Freshsales skill page](https://clawhub.ai/oomol/skills/oo-freshsales)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Freshsales homepage](https://www.freshworks.com/crm/sales/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Freshsales action responses are returned as JSON by the oo CLI when actions are executed.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

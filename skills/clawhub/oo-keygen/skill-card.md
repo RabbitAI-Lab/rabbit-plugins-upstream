@@ -1,42 +1,60 @@
-## Description: <br>
-Keygen (keygen.sh). Use this skill for ANY Keygen request: reading, creating, updating, and deleting data through the OOMOL connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Keygen (keygen.sh) supports Keygen requests that read, create, update, or delete account data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Keygen products, policies, licenses, users, groups, entitlements, machines, components, and processes from an agent. It supports read operations as well as state-changing account workflows when the user has connected Keygen through OOMOL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can route broad read, write, and destructive actions into a connected Keygen account. <br>
-Mitigation: Require clear user intent before account-impacting actions and explicit confirmation for actions tagged write or destructive. <br>
-Risk: The skill requires sensitive account credentials through the connector. <br>
-Mitigation: Install only when the user intends to let the agent access Keygen through OOMOL, and rely on the connector's server-side credential handling rather than exposing raw API tokens. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Keygen products, policies, licenses, users, groups, entitlements, machines, components, processes, validations, usage, and heartbeats through OOMOL's Keygen connector.
 
-## Reference(s): <br>
-- [ClawHub Keygen skill listing](https://clawhub.ai/oomol/oo-keygen) <br>
-- [Keygen homepage](https://keygen.sh) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The agent should inspect the live connector schema before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: The security review reports unsafe installer instructions for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid pipe-to-shell installation unless the oo CLI source is independently trusted and verified; prefer the documented install guide or an approved package source.
+
+Risk: The skill can change or delete important Keygen account data.
+
+Mitigation: Require explicit user confirmation for operations that create, update, delete, revoke, suspend, renew, reset, attach, detach, or otherwise change licenses, users, products, policies, machines, usage, or relationships.
+
+Risk: The security review says some state-changing actions are under-disclosed as safe reads.
+
+Mitigation: Inspect each live action schema and action name before execution, and treat untagged relationship, heartbeat, usage, renewal, suspension, revocation, and ownership changes as requiring confirmation.
+
+## Reference(s):
+
+- [Keygen homepage](https://keygen.sh)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-keygen)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill uses live action schemas before constructing Keygen connector payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

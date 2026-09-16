@@ -1,43 +1,56 @@
-## Description: <br>
-LiveSession connector skill for listing session replay data through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+LiveSession helps agents search and read LiveSession session replay data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to let an agent inspect LiveSession connector schemas and list session replay data through an authenticated OOMOL connection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Session replay metadata can expose customer or visitor activity. <br>
-Mitigation: Install and use the skill only in workspaces where access to LiveSession replay listings is appropriate. <br>
-Risk: Connector commands run through the user's OOMOL-connected account. <br>
-Mitigation: Inspect the live connector schema before constructing payloads and keep execution to the documented read-only list_sessions action unless future write or destructive actions are explicitly confirmed. <br>
+## Use Case:
 
+External users, developers, and support teams use this skill to inspect the LiveSession action schema and list session replays with pagination and common filters from a connected LiveSession account.
 
-## Reference(s): <br>
-- [ClawHub LiveSession Skill](https://clawhub.ai/oomol/skills/oo-livesession) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [LiveSession Homepage](https://livesession.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action execution; current documented action is read-only list_sessions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: First-time setup includes remote installer commands that could execute arbitrary code if followed automatically.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before installing, do not let an agent run the remote installer automatically, and install the oo CLI through a verified, user-controlled method where possible.
+
+Risk: Authentication, connection, and billing recovery steps can change local authentication state or account configuration.
+
+Mitigation: Run setup and recovery steps only after the matching command failure, and keep sign-in, connection, and billing actions user-directed.
+
+## Reference(s):
+
+- [ClawHub LiveSession Skill](https://clawhub.ai/oomol/skills/oo-livesession)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [LiveSession Homepage](https://livesession.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Fetches the live action schema before constructing request payloads; normal listed use is read-only.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

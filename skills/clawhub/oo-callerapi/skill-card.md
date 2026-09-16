@@ -1,45 +1,52 @@
-## Description: <br>
-CallerAPI (callerapi.com) enables agents to search and read CallerAPI data through an OOMOL-connected account instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CallerAPI (callerapi.com). Use this skill for ANY CallerAPI request - searching and reading data. Whenever a task involves CallerAPI, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to look up phone-number intelligence, spam reputation, business details, complaints, optional HLR carrier data, and CallerAPI account information through the OOMOL CallerAPI connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The OOMOL CLI installer is a shell or PowerShell command that can execute with the user's account permissions. <br>
-Mitigation: Confirm cli.oomol.com is the official OOMOL distribution source and prefer a package-manager or signed release path if available. <br>
-Risk: The skill requires a CallerAPI connection and sensitive credentials. <br>
-Mitigation: Use the OOMOL connection flow so credentials are injected server-side, and avoid exposing raw API tokens in prompts, files, or shell history. <br>
-Risk: Phone-number intelligence queries may involve sensitive personal or business contact data. <br>
-Mitigation: Run lookups only for user-authorized purposes and review returned CallerAPI data before using it in downstream decisions. <br>
+## Use Case:
 
+External users and developers use this skill to query CallerAPI through an OOMOL-connected account for phone-number reputation, business details, complaints, HLR carrier data, account email, and credit balance.
 
-## Reference(s): <br>
-- [CallerAPI homepage](https://callerapi.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-callerapi) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text, json] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before sending JSON payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: Setup guidance includes remote shell installer commands for the OOMOL CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installation path and trust the OOMOL CLI distribution channel before running curl|bash or irm|iex installer commands with local user privileges.
+
+## Reference(s):
+
+- [CallerAPI homepage](https://callerapi.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-callerapi)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces read-only CallerAPI query guidance and oo CLI command usage; action responses are JSON from the connector.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

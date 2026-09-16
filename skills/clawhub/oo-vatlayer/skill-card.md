@@ -1,43 +1,56 @@
-## Description: <br>
-VATlayer helps agents validate VAT numbers, retrieve EU VAT rates, list reduced-rate types, and calculate VAT-inclusive or VAT-exclusive prices through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+VATlayer enables agents to calculate VAT-inclusive and VAT-exclusive prices, retrieve VAT rates, list VAT rate types, and validate VAT numbers through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to ask an agent for VAT validation, EU rate lookup, reduced-rate type lists, and VAT price calculations through their connected VATlayer account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected VATlayer API key brokered through OOMOL. <br>
-Mitigation: Confirm trust in OOMOL as the credential broker and connect only the intended VATlayer account before use. <br>
-Risk: One-time CLI install, login, or connection steps may be needed when authentication or connection errors occur. <br>
-Mitigation: Run setup commands only when the corresponding command failure occurs, and avoid repeating authentication or connection steps unnecessarily. <br>
+## Use Case:
 
+Developers and external users use this skill to operate VATlayer through the oo CLI for VAT rate lookup, VAT price calculation, reduced-rate type discovery, and VAT number validation.
 
-## Reference(s): <br>
-- [ClawHub VATlayer Skill](https://clawhub.ai/oomol/oo-vatlayer) <br>
-- [VATlayer Homepage](https://vatlayer.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an installed and authenticated oo CLI plus an OOMOL-connected VATlayer API key.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: First-time setup instructions include direct execution of remotely downloaded installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified official release, package manager, checksum, or signature process before running VATlayer actions.
+
+Risk: VATlayer use depends on user-controlled account connection and billing setup.
+
+Mitigation: Only start account connection, authentication, or billing steps after a matching command failure, and keep those setup actions under user control.
+
+## Reference(s):
+
+- [VATlayer homepage](https://vatlayer.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub VATlayer skill page](https://clawhub.ai/oomol/skills/oo-vatlayer)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses from VATlayer actions are returned as JSON data with execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence release.version and SKILL.md metadata.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

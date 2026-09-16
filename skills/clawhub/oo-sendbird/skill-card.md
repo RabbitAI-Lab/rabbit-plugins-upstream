@@ -1,46 +1,59 @@
-## Description: <br>
-Operate Sendbird through an OOMOL-connected account for reading, creating, updating, and deleting Sendbird data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Sendbird lets an agent manage Sendbird users, group channels, messages, moderation, unread counts, and session tokens through the OOMOL `oo` connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Sendbird group channels, users, messages, members, bans, mutes, and session tokens through the oo CLI. It is intended for authenticated Sendbird administration where reads can be run directly and state-changing actions require confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run authenticated Sendbird write and destructive actions that affect channels, users, messages, membership, bans, mutes, and session tokens. <br>
-Mitigation: Confirm the exact target, payload, and expected effect before any write action, and require explicit approval before destructive actions. <br>
-Risk: Incorrect payloads or stale assumptions about a Sendbird action can change the wrong resource or fail unexpectedly. <br>
-Mitigation: Fetch the live action schema with `oo connector schema` before constructing a payload. <br>
-Risk: The skill requires an authenticated OOMOL connection to Sendbird and may expose operational access through the connected account. <br>
-Mitigation: Use only authorized accounts, avoid handling raw credentials directly, and reconnect or adjust scopes only when an auth or connection error requires it. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Sendbird connector schemas and run Sendbird actions for user, channel, message, moderation, unread-count, and session-token workflows.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-sendbird) <br>
-- [Sendbird Homepage](https://sendbird.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [OOMOL Sendbird Connection](https://console.oomol.com/app-connections?provider=sendbird) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include oo CLI commands, Sendbird action names, schema inspection steps, and confirmation prompts for write or destructive actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Remote installer commands may execute code from OOMOL's CLI distribution path.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a trusted installation path or independently verify the installer before running it.
+
+Risk: Sendbird write, destructive, moderation, and token actions can change or remove users, channels, messages, bans, and session tokens.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running state-changing actions.
+
+Risk: Incorrect payloads can cause failed or unintended connector actions.
+
+Mitigation: Inspect the live action schema before constructing each payload.
+
+## Reference(s):
+
+- [ClawHub Sendbird skill page](https://clawhub.ai/oomol/skills/oo-sendbird)
+- [Sendbird homepage](https://sendbird.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector actions can return JSON responses that include data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

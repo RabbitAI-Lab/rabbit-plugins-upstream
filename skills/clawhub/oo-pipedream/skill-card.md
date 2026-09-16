@@ -1,43 +1,61 @@
-## Description: <br>
-Routes Pipedream requests through the OOMOL oo CLI to search and read Pipedream user, workspace, workflow, event, and app-catalog data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pipedream connector for searching and reading Pipedream data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Pipedream account, workspace, workflow, event, and app-catalog data through an OOMOL-connected Pipedream account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read sensitive Pipedream account, workspace, workflow, and emitted-event data through connected credentials. <br>
-Mitigation: Confirm the target Pipedream account, workspace, connected app, and action before allowing reads involving sensitive workflows. <br>
-Risk: Authentication, connection, scope, or billing failures can block connector execution. <br>
-Mitigation: Use the first-time setup and troubleshooting guidance only after a matching command failure. <br>
+## Use Case:
 
+Developers and external users use this skill to inspect Pipedream schemas and retrieve app, user, workflow, event, and workspace data through the OOMOL Pipedream connector.
 
-## Reference(s): <br>
-- [Pipedream homepage](https://pipedream.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-pipedream) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The setup instructions include one-line remote installer commands that execute downloaded shell or PowerShell content without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use official, versioned installation instructions and verify checksums or signatures before installing the oo CLI.
+
+Risk: The connector can read account-scoped Pipedream data through an OOMOL-connected account.
+
+Mitigation: Install and use it only with accounts and workspaces where that access is acceptable, and review connector scopes before connecting Pipedream.
+
+Risk: Future write or destructive connector actions could change or remove Pipedream state.
+
+Mitigation: Confirm the exact action, target, payload, and expected effect with the user before executing any action tagged write or destructive.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-pipedream)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Pipedream homepage](https://pipedream.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce JSON connector responses when the agent runs Pipedream read actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

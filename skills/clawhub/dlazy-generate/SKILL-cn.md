@@ -1,13 +1,15 @@
 ---
 name: dlazy-generate
 version: 1.3.4
-description: 综合生成技能。能够根据用户意图自动选择合适的 dlazy CLI 模型来生成图片、视频或音频。
-metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，请自动选择对应的 dlazy 子命令执行。"}}
+description: "综合生成技能。能够根据用户意图自动选择合适的 dlazy CLI 模型来生成图片、视频或音频。"
+metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazy-ai/cli","source":"https://github.com/dlazy-ai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，请自动选择对应的 dlazy 子命令执行。"}}
 ---
 
-# dlazy-generate
+# 全能生成 Generate
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
+
+
 
 
 
@@ -56,7 +58,7 @@ CLI 会把 key 保存在你的用户配置目录（macOS/Linux 上为 `~/.dlazy/
 
 ## 关于与来源 (Provenance)
 
-- **CLI 源代码**: [github.com/dlazyai/cli](https://github.com/dlazyai/cli)
+- **CLI 源代码**: [github.com/dlazy-ai/cli](https://github.com/dlazy-ai/cli)
 - **维护者**: dlazyai
 - **npm 包名**: `@dlazy/cli`（本技能 install 字段固定到 `1.2.3` 版本）
 - **官网**: [dlazy.com](https://dlazy.com)
@@ -101,7 +103,7 @@ dlazy seedream-4.5 --prompt "雪地里的红狐" \
 
 # 文生图 + TTS 配音（拿第一个 output 的 url 作为画面）
 dlazy seedream-4.5 --prompt "黎明的灯塔" \
-  | dlazy keling-tts --text "欢迎来到海岸。" --image @0.url
+  | dlazy qwen-tts --text "欢迎来到海岸。" --image @0.url
 
 # 批量分发：把上游所有 output 的 url 一次性传给批处理步骤
 dlazy seedream-4.5 --prompt "城市天际线" --n 4 \
@@ -132,7 +134,9 @@ dlazy seedream-4.5 --prompt "城市天际线" --n 4 \
 - `dlazy recraft-v4-pro-vector`: 高保真文本到矢量模型，4MP 级品质。适合生产级 SVG 素材与精细插画。
 - `dlazy recraft-v4-vector`: 文本到矢量图模型，输出 SVG 结果。适合 Logo、图标与可无损缩放的设计素材。
 - `dlazy seedream-4.5`: 高质量文生图/参考图生图模型，适合海报、写实与创意场景。支持 prompt + 多张参考图，输出单张高分辨率图片（2K/4K）。
+- `dlazy seedream-5.0`: 豆包图像创作模型完整版，支持 2K/3K/4K 高分辨率出图与参考图重绘，适合主视觉、海报以及需要放大印刷的场景。
 - `dlazy seedream-5.0-lite`: 轻量高速图像生成模型，适合批量出图、草图探索与低成本迭代。支持 prompt + 参考图，输出 2K/3K 图片。
+- `dlazy seedream-5.0-pro`: Seedream 5.0 专业版，在画面细节、文字排版与复杂构图上更稳，适合商业级主视觉与高要求的品牌物料。
 - `dlazy superres`: 图像超分工具：提升图片清晰度与细节并返回增强后 URL，适合低清素材修复与二次放大输出。
 - `dlazy vectorize`: 图像转 SVG 工具：将位图（PNG/JPG）转换为彩色矢量 SVG 并返回 URL，适合 logo、图标、扁平插画的无损放大与矢量化。
 - `dlazy viduq2-t2i`: Vidu 图像生成模型，支持文本+参考图、比例与分辨率控制。适合角色图、封面图和高分辨率图像生成。
@@ -145,11 +149,13 @@ dlazy seedream-4.5 --prompt "城市天际线" --n 4 \
 - `dlazy jimeng-i2v-first`: 即梦首帧生视频模型，使用首帧图+文本生成视频。适合让静态图片自然动起来的单镜头场景。
 - `dlazy jimeng-i2v-first-tail`: 即梦首尾帧视频模型，支持首帧与尾帧约束以控制镜头起止状态，适合转场与动作收束明确的片段。
 - `dlazy jimeng-omnihuman-1.5`: 即梦同源数字人模型，支持任意画幅包含人物/主体的图片结合音频生成高质量数字人视频。
-- `dlazy kling-v3`: Kling V3 通用视频模型，支持文本+最多 4 张参考图，适合稳定产出短视频片段与日常创作流程。
+- `dlazy kling-v3`: Kling V3 通用视频模型，支持文生视频、首帧生视频与首尾帧生视频，适合稳定的短视频片段与日常创作流程。
 - `dlazy kling-v3-omni`: Kling Omni 视频模型，支持多参考图、时长、模式（std/pro）与可选音频。适合高控制度的视频合成任务。
+- `dlazy minimax-h3`: MiniMax 海螺全模态视频模型，原生立体声音频，5–15 秒 2K 出片。支持文生视频、首尾帧过渡与多素材参考（保持人物与场景一致）。
 - `dlazy pixverse-c1`: 爱诗 PixVerse C1 视频生成模型（擅长打斗、法术特效、高速运动等高动态场景），一站式覆盖文生视频、图生视频、首尾帧生视频与参考图生视频：未提供图时走文生视频，仅首帧时走图生视频，首+尾帧时走首尾帧生视频，提供参考图时走参考图生视频。
 - `dlazy seedance-2.0`: 字节最新视频生成模型，支持多模态参考生视频（图片+视频+音频）、首尾帧及文生视频，适合高质量多样化视频创作。
 - `dlazy seedance-2.0-fast`: 字节最新视频生成模型 Fast 版，生成速度更快，支持多模态参考生视频、首尾帧及文生视频。
+- `dlazy seedance-2.5`: 字节跳动新一代视频生成模型，单条最长 30 秒、支持原生 4K，指令跟随与长叙事能力大幅提升。支持多模态参考（图片+视频+音频）与首尾帧，适合成片级叙事与广告创意。
 - `dlazy sync-lipsync-3`: fal.ai sync-lipsync v3 唇形对齐模型，输入一段视频和一段音频，输出说话人嘴型与音频对齐的新视频。适合配音、外语本地化、虚拟人重新对口型。
 - `dlazy veo-3.1`: 高质量视频生成模型，支持文本生视频与单图驱动视频。适合广告短片、镜头感强的成片生成（速度较慢、质量更高）。
 - `dlazy veo-3.1-fast`: 快速版视频生成模型，支持文本生视频与单图/多图/首尾帧驱动。适合时间敏感的预览与快速迭代场景。
@@ -167,15 +173,8 @@ dlazy seedream-4.5 --prompt "城市天际线" --n 4 \
 - `dlazy elevenlabs-search`: 搜索 ElevenLabs 人声库：按关键词、来源、分类筛选可用音色，返回每个音色的试听样本，便于挑选后用于 TTS 配音。只给一个英文描述词检索（如 deep / young / narrative）；多给词只会收窄结果，整句通常一个都搜不到。
 - `dlazy elevenlabs-sfx`: ElevenLabs 文本生音效模型，根据描述生成 1–22 秒短音效。适合拟音、环境声、提示音与游戏音效。
 - `dlazy elevenlabs-tts`: ElevenLabs eleven_v3 文本转语音，提供 12 种精选英文/多语种音色，支持稳定性、相似度、风格控制。适合配音、有声内容与角色对话。选择音色前，可以从 elevenlabs-search 检索合适的音色。
-- `dlazy elevenlabs-voice-clone`: ElevenLabs 即时音色克隆（IVC），上传一段干净人声样本即可复刻自定义音色，可用于 ElevenLabs TTS 配音。
-- `dlazy gemini-2.5-tts`: 基于 Gemini 的高质量文本转语音。支持双语（中/英）和多种情感音色。
-- `dlazy keling-sfx`: 音效生成模型：可文本生音效，也可对参考视频生成配套音效/配乐。适合拟音、环境声与短视频声音补全。
-- `dlazy keling-tts`: 文本转语音模型（TTS），可设置语言、音色、语速与输出格式。适合配音旁白、有声内容和语音播报。
-- `dlazy kling-audio-clone`: 自定义音色（可灵），复刻音色用于生成配音或与主体绑定
-- `dlazy qwen-audio-clone`: 阿里云百炼 qwen3-tts 声音复刻，上传一段干净人声样本即可复刻自定义音色，可在后续 TTS 中使用。
 - `dlazy qwen-tts`: 阿里云百炼 qwen3-tts 文本转语音，支持系统音色（含方言）或通过自然语言描述自定义新音色（声音设计）。
 - `dlazy suno-music`: Suno V5.5 音乐生成模型。支持灵感模式（自动作词）和自定义模式（手动填曲风/标题/歌词），可生成包含人声或纯器乐的音乐，并通过风格权重、怪异度、音频权重细调输出。
-- `dlazy vidu-audio-clone`: 复刻真人音色，并使用该音色朗读指定文本。
 
 > **智能体关键指令**:
 >

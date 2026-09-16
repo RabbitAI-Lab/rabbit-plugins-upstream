@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Tencent Maps"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["tencent_maps"]
   icon: "https://static.oomol.com/logo/third-party/tencent_maps.png"
 ---

@@ -1,46 +1,56 @@
-## Description: <br>
-Operate WebinarJam through an OOMOL-connected account to read webinar data and register users with the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+WebinarJam helps agents use an OOMOL-connected WebinarJam account to list webinars, inspect webinar or registrant details, and register users through the oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Agents and operators use this skill to list WebinarJam webinars, inspect webinar details, list registrants or attendees, and register users through an authenticated OOMOL connection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read WebinarJam account data and register users through a connected OOMOL account. <br>
-Mitigation: Use only the intended authenticated account and confirm registration payloads before running write actions. <br>
-Risk: First-time CLI install or login steps establish trust in OOMOL tooling and account access. <br>
-Mitigation: Run setup steps only after an auth, connection, or missing-CLI error and only when the user trusts OOMOL for the task. <br>
-Risk: Connector action contracts can change, making stale payloads incorrect. <br>
-Mitigation: Inspect the live connector schema before constructing each action payload. <br>
+## Use Case:
 
+External users and operators with WebinarJam accounts use this skill to retrieve webinar, registrant, and attendee information through an OOMOL-connected account. The skill can also register a user for a webinar after the agent confirms the exact write payload with the user.
 
-## Reference(s): <br>
-- [WebinarJam homepage](https://webinarjam.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub WebinarJam skill page](https://clawhub.ai/oomol/skills/oo-webinarjam) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON when commands are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The setup guidance includes direct execution of remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path, prefer official signed or checksum-verified installers, and avoid blindly running curl | bash or irm | iex.
+
+Risk: The register_user action can change WebinarJam data.
+
+Mitigation: Confirm the exact registration payload and intended effect with the user before running the write action.
+
+## Reference(s):
+
+- [ClawHub WebinarJam Skill Page](https://clawhub.ai/oomol/skills/oo-webinarjam)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [WebinarJam Homepage](https://webinarjam.com)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with oo CLI commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and meta.executionId; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

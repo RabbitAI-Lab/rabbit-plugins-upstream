@@ -1,44 +1,56 @@
-## Description: <br>
-Serply enables an agent to search Google web, news, video, and Scholar results through the OOMOL oo CLI and a connected Serply account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Serply lets agents run Serply-backed Google web, News, Scholar, and Video searches through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to run Serply-backed search actions from an agent after connecting their OOMOL account. It is suited for web, news, video, and academic search workflows that need JSON results and execution metadata. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries and connector activity may be processed through OOMOL and Serply. <br>
-Mitigation: Confirm the user trusts OOMOL and Serply with the submitted queries before installing or using the connector. <br>
-Risk: Installer, login, or connection flows can change local setup or account state if run unnecessarily. <br>
-Mitigation: Run setup commands only after a command fails with a matching CLI, authentication, connection, scope, credential, or billing error. <br>
-Risk: Connector action payloads may become invalid if the live contract changes. <br>
-Mitigation: Inspect the live action schema before constructing each action payload. <br>
+## Use Case:
 
+Developers and agents use this skill to search Google web, News, Scholar, and Video through Serply while relying on OOMOL-managed credentials and live connector schemas.
 
-## Reference(s): <br>
-- [Serply homepage](https://serply.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Serply on ClawHub](https://clawhub.ai/oomol/oo-serply) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and execution metadata when actions are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: Setup instructions include unverified remote installer commands that can execute changing internet-hosted code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified, pinned installer or package-manager installation with checksum or signature validation before installing the OOMOL CLI.
+
+Risk: Connector calls depend on a signed-in OOMOL account, an active Serply connection, and sufficient billing credit.
+
+Mitigation: Only run setup, connection, or billing steps after a matching command failure, and keep those actions separate from normal search execution.
+
+## Reference(s):
+
+- [Serply Homepage](https://serply.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub Serply Skill](https://clawhub.ai/oomol/skills/oo-serply)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON result descriptions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are returned as JSON data with execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

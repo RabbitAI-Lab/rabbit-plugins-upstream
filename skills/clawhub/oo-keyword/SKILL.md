@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Keyword.com"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.4"
   services: ["keyword"]
   icon: "https://static.oomol.com/logo/third-party/keyword.svg"
 ---

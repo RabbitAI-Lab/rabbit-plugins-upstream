@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "AeroLeads"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["aeroleads"]
   icon: "https://static.oomol.com/logo/third-party/aeroleads.png"
 ---

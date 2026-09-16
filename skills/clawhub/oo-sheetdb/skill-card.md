@@ -1,45 +1,60 @@
-## Description: <br>
-SheetDB helps agents read, search, create, update, and delete SheetDB spreadsheet rows through an OOMOL-connected SheetDB account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SheetDB lets an agent inspect schemas and read, create, update, search, and delete rows in a connected SheetDB spreadsheet through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to let an agent inspect SheetDB schemas and safely read, search, create, update, or delete spreadsheet rows through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, and delete spreadsheet rows in the connected SheetDB account. <br>
-Mitigation: Confirm the exact payload, matching criteria, and expected effect with the user before any write or destructive action. <br>
-Risk: The skill depends on the oo CLI and an OOMOL-connected SheetDB account. <br>
-Mitigation: Install and use it only when SheetDB access through the connected account is intended, and review the oo CLI installation source before running installer commands. <br>
-Risk: Incorrect action payloads or stale schema assumptions could affect the wrong data. <br>
-Mitigation: Fetch the live action schema with `oo connector schema` before constructing each action payload. <br>
+## Use Case:
 
+External users and developers use this skill to operate SheetDB-backed spreadsheets from an agent, including reading metadata and rows, searching records, and performing confirmed write or delete actions.
 
-## Reference(s): <br>
-- [SheetDB homepage](https://sheetdb.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub SheetDB skill page](https://clawhub.ai/oomol/skills/oo-sheetdb) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live schema inspection before action payloads and explicit user confirmation for write or destructive actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and frontmatter metadata) <br>
+Risk: First-time setup includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run installer commands automatically; install the oo CLI through a verified, version-pinned, or vendor-documented method before using the skill.
+
+Risk: Write and destructive actions can change or remove SheetDB rows.
+
+Mitigation: Confirm the exact action, payload, target column, matching value, and expected effect with the user before running write or delete commands.
+
+Risk: Action inputs and outputs depend on the live SheetDB connector schema.
+
+Mitigation: Inspect the live action schema with `oo connector schema` before constructing payloads.
+
+## Reference(s):
+
+- [ClawHub SheetDB Skill Page](https://clawhub.ai/oomol/skills/oo-sheetdb)
+- [SheetDB Homepage](https://sheetdb.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should use live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: evidence release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

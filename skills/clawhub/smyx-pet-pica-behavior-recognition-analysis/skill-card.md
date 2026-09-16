@@ -1,45 +1,63 @@
-## Description: <br>
-Analyzes indoor pet camera video from local files or URLs to detect sustained mouth contact with hazardous non-food items such as electric wires, plastic bags, socks, tissues, and toy fragments, then returns warning-oriented safety results without diagnosing disease. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill analyzes indoor pet camera videos or video URLs through server-side APIs to identify pica-related mouth contact with hazardous non-food items and return warnings, risk levels, recommendations, and report links without offering medical diagnosis.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to analyze indoor pet monitoring video for possible pica behavior and receive structured safety warnings, risk levels, intervention suggestions, and report links. It also supports querying historical reports associated with the skill-managed identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Indoor camera media or video URLs are sent to the publisher's cloud service for analysis. <br>
-Mitigation: Use only with appropriate authorization, avoid submitting sensitive footage when possible, and confirm cloud data-handling expectations before deployment. <br>
-Risk: The skill may silently create or reuse a persistent local identity and query historical reports linked to that identity. <br>
-Mitigation: Run it in controlled workspaces, restrict access to local identity and token storage, and review report access against the deployment's privacy policy. <br>
-Risk: The security evidence flags the release as suspicious because it sends media and report data to external APIs while managing persistent identities and tokens. <br>
-Mitigation: Review before installing, validate the publisher and endpoints, and deploy only where these data flows are acceptable. <br>
+## Use Case:
 
+External users and developers use this skill for pet safety monitoring workflows that analyze indoor video, detect sustained contact between a pet's mouth and risky non-food objects, and produce alert-oriented reports for smart-home or camera review.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-pica-behavior-recognition-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](artifact/references/api_doc.md) <br>
-- [Analysis API Documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured analysis or report-list output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include warning signals, risk levels, intervention suggestions, historical report tables, and report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter and changelog list 1.0.6) <br>
+Risk: Indoor camera files or URLs may be sent to a cloud service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only authorized pet-monitoring media, disclose cloud processing to users, and avoid submitting videos that include unnecessary private spaces or bystanders.
+
+Risk: The skill may create or reuse a persistent identity without prompting the user.
+
+Mitigation: Require clear consent for identity linkage, document how report history is associated with the user, and provide a way to reset or revoke the linkage.
+
+Risk: Cloud tokens may be stored locally in plaintext and the release includes cleartext development endpoint defaults.
+
+Mitigation: Store tokens with an appropriate secrets mechanism, use HTTPS-only production endpoints by default, and remove or gate development endpoint configurations before broad deployment.
+
+Risk: The security guidance identifies a dependency issue involving the yaml package.
+
+Mitigation: Use a maintained YAML dependency such as PyYAML with an explicit, valid version and verify dependency installation during release testing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-pica-behavior-recognition-analysis)
+- [Pet pica behavior recognition API documentation](artifact/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, guidance]
+
+**Output Format:** [Structured analysis reports, warning summaries, risk levels, recommendations, report links, and optional JSON output.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local video paths, video URLs, pet type selection, history listing, and optional file output.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release evidence; artifact frontmatter says 1.0.16)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

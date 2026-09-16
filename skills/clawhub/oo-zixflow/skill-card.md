@@ -1,42 +1,60 @@
-## Description: <br>
-Zixflow (zixflow.com). Use this skill for ANY Zixflow request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zixflow (zixflow.com). Use this skill for ANY Zixflow request: reading, creating, updating, and deleting data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent read, create, update, query, and delete Zixflow workspace records, lists, and members through the OOMOL oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, and delete Zixflow data. <br>
-Mitigation: Use a least-privilege Zixflow token where possible, and explicitly review prompts and payloads before allowing write or destructive actions. <br>
-Risk: Incorrect query or record payloads could affect the wrong workspace data. <br>
-Mitigation: Inspect the live connector schema before building each payload and confirm the intended target for write or destructive operations. <br>
+## Use Case:
 
+External users and developers use this skill to operate Zixflow workspaces from an agent, including listing, querying, creating, updating, and deleting collections, lists, records, entries, and workspace members.
 
-## Reference(s): <br>
-- [Zixflow homepage](https://zixflow.com) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-zixflow) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live Zixflow connector schemas before constructing payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup instructions include remote installer commands that could execute arbitrary code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official signed or package-manager install path where available, or review the installer before running it.
+
+Risk: The skill can create, update, and delete Zixflow data.
+
+Mitigation: Confirm the exact payload and target before write actions, and require explicit approval before destructive actions.
+
+Risk: Zixflow access is mediated through OOMOL rather than direct API calls.
+
+Mitigation: Install only when the user accepts OOMOL as the intermediary for Zixflow access.
+
+## Reference(s):
+
+- [ClawHub Zixflow Skill](https://clawhub.ai/oomol/skills/oo-zixflow)
+- [Zixflow Homepage](https://zixflow.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

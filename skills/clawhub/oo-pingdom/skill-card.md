@@ -1,43 +1,56 @@
-## Description: <br>
-Pingdom (pingdom.com). Use this skill for ANY Pingdom request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pingdom skill for searching and reading uptime checks, account credits, and probe data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to inspect Pingdom uptime monitoring data through an OOMOL-connected account. It supports listing checks and probes, retrieving check details, and checking account credit status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Pingdom account and uses OOMOL as an intermediary for access. <br>
-Mitigation: Connect only the minimum Pingdom access needed for read-only monitoring tasks and review the OOMOL connection before use. <br>
-Risk: The first-time setup documentation includes remote installer commands for the oo CLI. <br>
-Mitigation: Review OOMOL's official install instructions before running installer scripts, and avoid executing remote scripts blindly. <br>
+## Use Case:
 
+Developers and operations teams use this skill to inspect Pingdom uptime checks, account credits, and probe locations through the OOMOL oo CLI without handling raw Pingdom tokens.
 
-## Reference(s): <br>
-- [Pingdom homepage](https://www.pingdom.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Pingdom skill on ClawHub](https://clawhub.ai/oomol/oo-pingdom) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before running Pingdom read actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: Setup instructions include remote installer commands that can execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source and prefer an official package manager or an installer with a published checksum or signature before running it.
+
+Risk: Connecting Pingdom gives OOMOL-mediated access to Pingdom account data.
+
+Mitigation: Connect only the intended Pingdom account, verify the live connector schema before each action, and limit use to the disclosed read operations unless the user explicitly authorizes a change.
+
+## Reference(s):
+
+- [ClawHub Pingdom skill page](https://clawhub.ai/oomol/skills/oo-pingdom)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Pingdom homepage](https://www.pingdom.com)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands call the OOMOL oo CLI and may return JSON data from Pingdom connector actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

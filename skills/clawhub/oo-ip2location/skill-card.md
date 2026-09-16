@@ -1,44 +1,59 @@
-## Description: <br>
-IP2Location.io helps agents retrieve IP geolocation, network metadata, hosted domains, and domain WHOIS data through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents use IP2Location.io through an OOMOL-connected account to retrieve IP geolocation, domain WHOIS, and hosted-domain data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill when an agent needs read-only IP2Location.io lookups for IP geolocation, hosted-domain discovery, or domain WHOIS registration details. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected IP2Location.io API key through OOMOL. <br>
-Mitigation: Confirm the account connection and credential-sharing posture before installation or use. <br>
-Risk: Connector payloads can drift if IP2Location.io action schemas change. <br>
-Mitigation: Fetch the live connector schema before each action and build payloads from that schema. <br>
+## Use Case:
 
+Developers and external users use this skill to run IP2Location.io lookups from an agent workflow, including IP geolocation, domain WHOIS, and hosted-domain discovery.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-ip2location) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [IP2Location.io homepage](https://www.ip2location.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution so payloads match the current IP2Location.io action contract.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The skill requests broad access to run any oo CLI command, which is wider than its read-oriented IP2Location.io lookup purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only in environments where broad oo CLI access to the connected OOMOL session is acceptable, and review commands before execution.
+
+Risk: The setup guidance includes direct remote installer commands that execute immediately.
+
+Mitigation: Prefer a verified or package-manager installation path for the oo CLI, or inspect installer scripts before running them.
+
+Risk: Lookup actions send queried IP addresses or domains through the connected OOMOL and IP2Location.io services.
+
+Mitigation: Avoid submitting sensitive IP addresses or domains unless the user has approved the lookup and the connected account policies allow it.
+
+## Reference(s):
+
+- [IP2Location.io homepage](https://www.ip2location.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before execution; requires an OOMOL account connected to IP2Location.io.]
+
+## Skill Version(s):
+
+1.0.3 (source: artifact frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

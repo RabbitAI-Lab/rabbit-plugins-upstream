@@ -1,46 +1,56 @@
-## Description: <br>
-Connects an agent to Fixer exchange-rate data through the OOMOL oo CLI for latest rates, historical rates, and supported currency symbols. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fixer (fixer.io) connector skill for retrieving latest rates, historical rates, and supported currency symbols through OOMOL's oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to retrieve Fixer currency exchange-rate data, including latest rates, historical rates for a date, and supported currency symbols. It is intended for ClawHub users who have an OOMOL-connected Fixer account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected Fixer account and may route Fixer-related requests through OOMOL. <br>
-Mitigation: Install and use it only when that routing and account connection are acceptable for the user's exchange-rate workflow. <br>
-Risk: Installer, login, or connection repair commands could change the local CLI setup or account state. <br>
-Mitigation: Run one-time setup steps only after an action fails with the matching CLI, authentication, connection, or billing error. <br>
-Risk: Fixer action payloads may be invalid if built from stale assumptions. <br>
-Mitigation: Fetch the live action schema with oo connector schema before constructing a payload. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Fixer exchange-rate data through an OOMOL-connected account, including latest rates, historical rates, and supported currency symbols.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-fixer) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Fixer homepage](https://fixer.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return Fixer connector responses as JSON data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Remote installer commands pipe downloaded scripts directly into a shell during first-time setup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run those installer commands automatically; install the oo CLI through a trusted process with version pinning and integrity verification where possible.
+
+Risk: Connector actions depend on live Fixer connection, authentication, and billing state.
+
+Mitigation: Run setup or account-recovery commands only after an action fails with the matching authentication, connection, scope, credential, app, or billing error.
+
+## Reference(s):
+
+- [Fixer homepage](https://fixer.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-fixer)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before action execution; action responses are JSON with data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

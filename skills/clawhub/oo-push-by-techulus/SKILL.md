@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Push by Techulus"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["push_by_techulus"]
   icon: "https://static.oomol.com/logo/third-party/push_by_techulus.png"
 ---

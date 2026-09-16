@@ -1,44 +1,62 @@
-## Description: <br>
-Manages VMware NSX networking resources, including segments, Tier-0 and Tier-1 gateways, NAT rules, routing, IP pools, health checks, and connectivity troubleshooting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+vmware-nsx helps agents inspect and manage VMware NSX networking through NSX Manager, including segments, Tier-0 and Tier-1 gateways, NAT, static routes, BGP, IP pools, inventory, health, and troubleshooting workflows.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers and infrastructure engineers use this skill to inspect, configure, and troubleshoot VMware NSX networking across segments, gateways, NAT, static routes, IP pools, fabric inventory, and health endpoints. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can directly change live VMware NSX network infrastructure, and MCP write tools execute without the CLI double-confirmation safeguards. <br>
-Mitigation: Use least-privilege NSX service accounts, approve the exact operation and target before MCP writes, and prefer CLI dry-run plus confirmation for changes. <br>
-Risk: Local NSX credentials and generated MCP configuration can expose access to network infrastructure if mishandled. <br>
-Mitigation: Review MCP configuration before applying it, keep ~/.vmware-nsx/.env locked down, and use a secret manager for production credentials where possible. <br>
+## Use Case:
 
+Developers, infrastructure engineers, and NSX operators use this skill to inspect NSX state, troubleshoot connectivity, and perform explicitly requested network changes with audit and policy controls.
 
-## Reference(s): <br>
-- [VMware NSX GitHub repository](https://github.com/zw008/VMware-NSX) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
-- [Capabilities](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Setup Guide](references/setup-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API calls] <br>
-**Output Format:** [Markdown with inline shell commands and structured tool guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include dry-run recommendations, target selection, and MCP tool-use guidance for NSX operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.8 (source: server release metadata) <br>
+Risk: The MCP server can use NSX credentials that may permit high-impact network changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use read-only or least-privilege NSX service accounts, inject production secrets through a secret manager when possible, and verify the package source before installation.
+
+Risk: MCP write tools execute directly after an agent calls them and do not provide their own confirmation step.
+
+Mitigation: Require explicit human approval before any write, prefer CLI dry-runs for change previews, and use production deny rules in ~/.vmware/rules.yaml.
+
+Risk: Disabling TLS verification can expose NSX Manager credentials or allow connection to the wrong endpoint.
+
+Mitigation: Keep verify_ssl enabled for real environments and trust private CAs through SSL_CERT_FILE; use verify_ssl false only for isolated labs.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/vmware-nsx)
+- [VMware NSX Source Homepage](https://github.com/vmware-skills/VMware-NSX)
+- [Capabilities](references/capabilities.md)
+- [Setup Guide](references/setup-guide.md)
+- [CLI Reference](references/cli-reference.md)
+- [Agent Guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include CLI or MCP-oriented operational steps; state-changing actions require explicit user approval and should use dry-run, policy, and audit controls where available.]
+
+## Skill Version(s):
+
+1.9.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

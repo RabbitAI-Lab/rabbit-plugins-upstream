@@ -1,43 +1,57 @@
-## Description: <br>
-美团+飞猪+途牛三平台景点门票实时比价，展示价差、可省金额和预订链接，帮你买到最低价门票。支持全国景点搜索含实景图片，含多票型引导提示。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Compares attraction ticket prices from Meituan and Tuniu, showing price differences, potential savings, booking links, attraction images, and ticket-type guidance.
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-Travel shoppers and agents use this skill to search attractions, compare live ticket prices across Meituan, Fliggy, and Tuniu, and receive ticket-buying guidance for a named attraction and city. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Attraction names, cities, and ticket-search parameters are sent to proxy services and downstream travel platforms. <br>
-Mitigation: Use the skill only when sharing those travel search details with the publisher's services and travel platforms is acceptable. <br>
-Risk: The security evidence reports a hardcoded fallback proxy token in the release. <br>
-Mitigation: Publisher should remove and rotate the fallback token; users should provide credentials through the PROXY_TOKEN environment variable where supported. <br>
-Risk: Live ticket data and platform matching can be incomplete or mismatched. <br>
-Mitigation: Review platform warnings, unavailable-platform notices, and booking details before purchase. <br>
+## Use Case:
 
+Travel users and agents use this skill to search attractions, compare ticket prices across supported travel platforms, and receive purchase guidance before booking.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/attraction-smart-buy) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, guidance] <br>
-**Output Format:** [JSON objects containing attraction search results, ticket price comparisons, booking links, savings calculations, and buying advice] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include live platform prices, attraction images, available ticket types, match warnings, and unavailable-platform notices.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.3.0 (source: server release evidence; artifact frontmatter reports 2.0.4 and _meta.json reports 3.2.0) <br>
+Risk: The skill forwards travel search queries to external proxy services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the data flow before deployment and disclose external query forwarding to users or operators.
+
+Risk: The artifact includes and uses a hard-coded proxy credential.
+
+Mitigation: Remove the embedded token, rotate the exposed credential, and load credentials from a managed secret or environment variable.
+
+Risk: The skill description and implementation make inconsistent claims about the number of supported price sources.
+
+Mitigation: Confirm the supported platforms before release and align user-facing documentation with implemented behavior.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/attraction-smart-buy)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Guidance]
+
+**Output Format:** [Structured JSON with attraction search results, ticket price comparisons, booking URLs, and advisory signals.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include external booking links, image URLs, platform price differences, savings estimates, unmatched-platform notices, and ticket-type recommendations.]
+
+## Skill Version(s):
+
+3.3.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,52 @@
-## Description: <br>
-MailboxValidator helps agents validate email deliverability and check disposable or free email status through an OOMOL-connected MailboxValidator account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MailboxValidator validates email addresses and checks whether addresses use disposable or free email providers through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to validate a single email address and check whether it belongs to a disposable or free provider through MailboxValidator. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Email addresses are personal data sent through OOMOL to MailboxValidator for validation. <br>
-Mitigation: Submit only email addresses the user is authorized to process, and follow applicable privacy and data-handling requirements. <br>
-Risk: The skill requires an OOMOL-connected MailboxValidator account and may require first-time CLI installation or account connection. <br>
-Mitigation: Review first-time installation, sign-in, and connection steps before allowing them, and do not expose raw credentials or API tokens. <br>
+## Use Case:
 
+External users and developers use this skill to validate a single email address and check whether an address is disposable or free, using their connected MailboxValidator account through OOMOL.
 
-## Reference(s): <br>
-- [MailboxValidator homepage](https://www.mailboxvalidator.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include MailboxValidator connector output in JSON when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: evidence metadata and release) <br>
+Risk: Setup guidance includes internet installer commands that pipe directly to a shell or use Invoke-Expression.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path before use, prefer a verified release or package manager when available, inspect the installer first, and avoid elevated privileges.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-mailbox-validator)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [MailboxValidator Homepage](https://www.mailboxvalidator.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before running actions and returns JSON response data from the oo connector.]
+
+## Skill Version(s):
+
+1.0.4 (source: SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "noCRM.io"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["nocrm_io"]
   icon: "https://static.oomol.com/logo/third-party/NoCRM.io.svg"
 ---

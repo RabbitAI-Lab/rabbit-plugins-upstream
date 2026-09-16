@@ -1,44 +1,56 @@
-## Description: <br>
-Outline helps agents search and read Outline workspace content through an OOMOL-connected account instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Outline (getoutline.com). Use this skill for Outline requests that involve searching and reading data through the OOMOL-connected oo CLI workflow.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and other agent users use this skill to retrieve, list, and search Outline collections and documents available through their OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected account with access to Outline content. <br>
-Mitigation: Install only when the agent should search and read Outline content available through that connected account. <br>
-Risk: First-time setup may require installing the oo CLI. <br>
-Mitigation: Review the oo CLI installer before setup and only run setup steps after an authentication, connection, or missing-command error. <br>
-Risk: Future connector actions tagged write or destructive could alter Outline data. <br>
-Mitigation: Require explicit user approval for the exact payload and effect before allowing any write or delete action. <br>
+## Use Case:
 
+Developers and external users use this skill to let an agent retrieve and search Outline collections and documents through an OOMOL-connected Outline account.
 
-## Reference(s): <br>
-- [Outline homepage](https://www.getoutline.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI to return Outline connector responses as JSON when actions are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The setup flow includes remote shell installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install the oo CLI through a trusted method yourself before allowing an agent to use the skill.
+
+Risk: Using the skill routes Outline workspace access through OOMOL-mediated connector execution.
+
+Mitigation: Use the skill only when that access model is acceptable for the workspace, and confirm authentication or connection setup steps manually.
+
+## Reference(s):
+
+- [ClawHub Outline skill page](https://clawhub.ai/oomol/skills/oo-outline)
+- [Outline homepage](https://www.getoutline.com)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only Outline connector actions return JSON data with execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,56 @@
-## Description: <br>
-Generate high-quality images with Vidu Q2, including text-to-image and image-to-image workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate high-quality images with Vidu Q2, supporting text-to-image and image-to-image workflows.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to invoke dLazy's hosted Vidu Q2 image generation service for prompt-based image creation and image-conditioned edits. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected local image inputs may be uploaded to dLazy's hosted service. <br>
-Mitigation: Avoid submitting sensitive prompts or files unless the deployment's data-handling requirements allow use of dLazy's hosted API. <br>
-Risk: The dLazy CLI can store an API key in the local user configuration. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable for per-invocation credentials when persistent local storage is not desired, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: Broad image-generation requests could trigger the skill unintentionally. <br>
-Mitigation: Invoke it explicitly with Vidu Q2 or dLazy terms, matching the security guidance's overbroad-trigger caution. <br>
+## Use Case:
 
+Developers, creators, and external users use this skill to invoke the dLazy Vidu Q2 CLI for generating image assets from prompts or prompt-plus-image inputs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-viduq2-t2i) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated image outputs are returned as hosted URLs; asynchronous requests may return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill depends on the dLazy CLI package and hosted service, and prompts or selected local media may be uploaded to dLazy endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if comfortable trusting the dLazy CLI and service, and pass only prompts or local media files intended for upload.
+
+Risk: The dLazy CLI uses local credential configuration for API access.
+
+Mitigation: Prefer npx or a non-privileged local install, protect the local config, and rotate or revoke the API key if access should change.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-viduq2-t2i)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Image files, Shell commands, Guidance]
+
+**Output Format:** [JSON CLI response containing generated image URLs, with optional downloaded image files when --save is used]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports asynchronous task IDs when --no-wait is used.]
+
+## Skill Version(s):
+
+1.3.16 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

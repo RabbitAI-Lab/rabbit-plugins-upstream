@@ -1,43 +1,61 @@
-## Description: <br>
-Torii (toriihq.com). Use this skill for Torii search and read requests through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Torii helps agents search and read Torii data through an OOMOL-connected oo CLI account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to retrieve Torii app, contract, organization, user, workflow, and transaction data through OOMOL's Torii connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Torii responses can include sensitive business data such as users, transactions, contracts, and app inventory. <br>
-Mitigation: Install and use the skill only for accounts where the agent is permitted to read Torii data, and treat returned records as sensitive business information. <br>
-Risk: Future connector actions may write or delete Torii data even though this release only documents read and list actions. <br>
-Mitigation: Review any connector action tagged as write or destructive, confirm the exact payload and effect, and require explicit user approval before execution. <br>
+## Use Case:
 
+External users, developers, and operations teams use this skill to retrieve Torii apps, contracts, users, organization details, transactions, and workflows through an OOMOL-connected Torii account.
 
-## Reference(s): <br>
-- [Torii homepage](https://www.toriihq.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-torii) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Torii connector actions return JSON data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill frontmatter) <br>
+Risk: Setup instructions include remote installer commands that pipe downloaded scripts directly to a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified, version-pinned installation path and avoid pipe-to-shell installers as written.
+
+Risk: The generic connector action runner is broader than the read-only description.
+
+Mitigation: Treat the skill as suitable for read-only Torii lookups unless a reviewer explicitly approves any state-changing connector action and payload.
+
+Risk: The skill can access organization Torii data through OOMOL-managed credentials.
+
+Mitigation: Install only when the user trusts OOMOL and the Torii connector with the organization's Torii data.
+
+## Reference(s):
+
+- [ClawHub Torii Skill](https://clawhub.ai/oomol/skills/oo-torii)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Torii Homepage](https://www.toriihq.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Fetches live connector schemas before action execution; command responses may include JSON data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.2 (source: skill metadata and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

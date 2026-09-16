@@ -1,43 +1,55 @@
-## Description: <br>
-RAWG provides agent access to RAWG video game database search and lookup actions through OOMOL's oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+RAWG lets agents search and read RAWG video game database records through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to search RAWG and retrieve game, developer, platform, publisher, store, tag, media, and related-game data through an OOMOL-connected RAWG account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a RAWG API key connected through OOMOL, and RAWG queries and results pass through the OOMOL connector service. <br>
-Mitigation: Use it only with an approved OOMOL-connected RAWG account and avoid exposing raw credentials to the agent. <br>
-Risk: First-time use may require installing and signing in to the oo CLI. <br>
-Mitigation: Follow OOMOL setup documentation and run authentication or connection steps only after an auth or connection error. <br>
+## Use Case:
 
+External users and developers use this skill to search, inspect, and retrieve RAWG video game catalog data, including games, platforms, stores, genres, tags, developers, publishers, screenshots, movies, Reddit posts, and related series.
 
-## Reference(s): <br>
-- [ClawHub RAWG skill page](https://clawhub.ai/oomol/oo-rawg) <br>
-- [RAWG homepage](https://rawg.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration instructions, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [RAWG results are returned through the OOMOL connector with execution metadata when commands are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence release version and skill metadata) <br>
+Risk: The first-time setup path recommends piping a remote installer directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a trusted installation path such as manually downloading and verifying the installer or installing the oo CLI from a signed package-manager source before enabling the skill.
+
+Risk: The skill depends on an authenticated OOMOL-connected RAWG account and can fail when credentials, scopes, app readiness, or billing are not in good standing.
+
+Mitigation: Run setup only after an auth or connection failure, then resolve the specific account, connection, scope, expiration, app, or billing condition before retrying.
+
+## Reference(s):
+
+- [RAWG homepage](https://rawg.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [RAWG skill on ClawHub](https://clawhub.ai/oomol/skills/oo-rawg)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill uses read-only RAWG connector actions and returns connector responses containing data plus execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

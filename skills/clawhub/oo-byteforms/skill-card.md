@@ -1,42 +1,57 @@
-## Description: <br>
-ByteForms (forms.bytesuite.io). Use this skill for ANY ByteForms request - searching and reading data. Whenever a task involves ByteForms, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ByteForms (forms.bytesuite.io) helps agents search and read ByteForms data through OOMOL's oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Agents use this skill to read ByteForms forms and form responses through an OOMOL-connected account. It is intended for users who want searchable access to ByteForms data without handling raw API tokens directly in the agent session. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose ByteForms form data and responses from the connected account into the agent session. <br>
-Mitigation: Install and use it only for ByteForms accounts and forms whose data is appropriate to share with the agent. <br>
-Risk: The skill depends on the OOMOL oo CLI and server-side managed credentials. <br>
-Mitigation: Confirm that the OOMOL publisher and oo CLI setup are trusted before connecting the ByteForms account. <br>
+## Use Case:
 
+Developers, employees, and external users with an OOMOL-connected ByteForms account use this skill to inspect schemas, list available forms, retrieve a specific form, and list form responses through the oo CLI.
 
-## Reference(s): <br>
-- [ClawHub ByteForms skill page](https://clawhub.ai/oomol/oo-byteforms) <br>
-- [ByteForms homepage](https://forms.bytesuite.io/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses OOMOL oo CLI actions for get_form, list_forms, and list_form_responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: Setup instructions include remote installer scripts that are executed directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path before use and prefer an official package manager or a version-pinned installer with checksum or signature verification.
+
+Risk: The skill depends on an OOMOL-connected ByteForms account and the account's available scopes.
+
+Mitigation: Use the authenticated account intentionally, inspect the live action schema before building payloads, and reconnect ByteForms only when an auth or connection error requires it.
+
+## Reference(s):
+
+- [ClawHub ByteForms skill page](https://clawhub.ai/oomol/skills/oo-byteforms)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ByteForms homepage](https://forms.bytesuite.io/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON response details]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live ByteForms action schemas through the oo CLI; normal documented actions are read-only.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

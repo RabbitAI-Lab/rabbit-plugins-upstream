@@ -1,42 +1,59 @@
-## Description: <br>
-Provides agent access to the public OpenFootball World Cup JSON dataset through OOMOL's oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OpenFootball World Cup lets agents query World Cup groups, matches, qualification playoffs, squads, stadiums, and teams from the public OpenFootball JSON dataset through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect connector schemas and query World Cup groups, teams, matches, stadiums, squads, and qualification playoff data from the public OpenFootball dataset. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan reports that fallback setup can install and authenticate the oo CLI, which is broader than the read-only dataset use case requires. <br>
-Mitigation: Use an already installed and signed-in oo CLI when possible; require explicit user review before running installer or login commands. <br>
-Risk: World Cup match data comes from a community dataset and is not an official real-time results source. <br>
-Mitigation: Treat returned match data as community-maintained reference data and verify time-sensitive or official results against authoritative sources. <br>
+## Use Case:
 
+Developers and external users use this skill to inspect action schemas and retrieve public OpenFootball World Cup data through the OOMOL connector. It supports read-oriented lookup workflows for World Cup groups, matches, qualification playoffs, squads, stadiums, and teams.
 
-## Reference(s): <br>
-- [OpenFootball World Cup dataset](https://github.com/openfootball/worldcup.json) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-openfootball-worldcup) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only dataset queries; connector responses include data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a version-pinned, signed, or checksum-verified installation path from the publisher before installing the oo CLI.
+
+Risk: The World Cup data comes from a public community dataset and is not a real-time or official results source.
+
+Mitigation: Use the connector for lookup and analysis, and verify time-sensitive match results against an official source before relying on them.
+
+Risk: Future connector schemas could expose actions beyond the listed read-only operations.
+
+Mitigation: Inspect the live action schema before execution and get explicit user approval before running any write or destructive action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-openfootball-worldcup)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OpenFootball World Cup dataset](https://github.com/openfootball/worldcup.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include a data payload and meta.executionId when run with --json.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

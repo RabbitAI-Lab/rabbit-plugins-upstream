@@ -1,45 +1,58 @@
-## Description: <br>
-Bank Compliance Review helps banking compliance, legal, KYC/AML, and product teams screen marketing materials, due diligence inputs, AML alerts, and NFRA/CBIRC regulatory compliance tasks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered bank compliance and regulatory review assistant for screening marketing materials, KYC documents, AML alerts, and NFRA/CBIRC compliance checks.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Bank compliance officers, legal counsel, KYC/AML analysts, and product managers use this skill to structure compliance screening, risk ratings, regulatory checklists, and report drafts for banking workflows. It supports review of marketing claims, customer due diligence, AML red flags, consumer protection issues, data handling, and China banking regulatory requirements. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, with content focused on China banking compliance. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may paste more customer, transaction, shareholder, or counterparty information than needed for a compliance screening task. <br>
-Mitigation: Use anonymized or minimum-necessary banking data unless the organization has approved sharing exact data with the agent environment. <br>
-Risk: AI-generated compliance opinions can be incorrect, incomplete, or unsuitable as final legal or regulatory decisions. <br>
-Mitigation: Have qualified compliance officers review outputs and route decisions through the organization's required approval levels. <br>
-Risk: Regulatory summaries and dated policy updates may become stale after the release date. <br>
-Mitigation: Verify current official regulatory guidance before relying on the skill for final compliance conclusions. <br>
-Risk: Server-resolved source provenance is unavailable for this release. <br>
-Mitigation: Review the ClawHub release page, publisher profile, and bundled artifact contents before installation or operational use. <br>
+## Use Case:
 
+Bank compliance officers, legal counsel, KYC/AML analysts, and product teams use this skill to review banking materials, customer due-diligence inputs, AML alerts, AI banking scenarios, and regulatory reporting drafts before qualified compliance staff make final decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/bank-compliance-review) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style compliance checklists, risk ratings, issue summaries, suggested revisions, and report drafts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only conversational screening support; no scripts are needed, and outputs require human compliance review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.1.1 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Users may enter sensitive customer identifiers or complete account details during compliance review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Minimize and de-identify inputs before use, including names, ID numbers, phone numbers, account numbers, and full transaction details.
+
+Risk: Draft KYC, AML, reporting, or customer-impacting conclusions may be incomplete or incorrect.
+
+Mitigation: Require qualified compliance staff to verify outputs and follow internal approval procedures before taking action.
+
+Risk: A suspected list match could be mistaken for a final sanctions or AML determination.
+
+Mitigation: Treat list-match outputs as suspected matches only and complete manual review through the institution's established process.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/gechengling/skills/bank-compliance-review)
+- [Publisher Profile](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown-style compliance review reports, checklists, risk ratings, and suggested revised wording]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Draft compliance support only; outputs require review by qualified compliance staff before reporting, customer-impacting action, or external use.]
+
+## Skill Version(s):
+
+4.1.2 (source: server release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

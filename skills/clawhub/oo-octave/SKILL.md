@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Octave"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["octave"]
   icon: "https://static.oomol.com/logo/third-party/octave.png"
 ---

@@ -1,43 +1,52 @@
-## Description: <br>
-Namely (namely.com). Use this skill for ANY Namely request: searching and reading data through an OOMOL-connected Namely account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Namely (namely.com). Use this skill for ANY Namely request, including searching and reading data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees and operators use this skill to read Namely employee profiles and company profile-field metadata visible to their connected account. It helps agents inspect the live connector schema before making Namely read requests through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The connected Namely account may expose employee profile information visible to that account. <br>
-Mitigation: Use the least-privileged Namely account or scopes that still support the intended read-only profile tasks, and review retrieved employee data before sharing it. <br>
-Risk: First-time setup can require installing or authenticating the oo CLI and connecting Namely credentials through OOMOL. <br>
-Mitigation: Run setup only after an auth, connection, or missing-CLI error, and review installation and authentication steps before executing them. <br>
+## Use Case:
 
+Employees, HR operators, and agents use this skill to read Namely employee profile data, profile fields, and the current connected profile through an OOMOL-connected Namely account.
 
-## Reference(s): <br>
-- [Namely homepage](https://www.namely.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-namely) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo CLI connector schema and run commands; action responses are JSON objects with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: artifact frontmatter and server release evidence) <br>
+Risk: The setup instructions include remote installer commands and the skill can read sensitive HR profile data through Namely/OOMOL scopes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing, use a verified or pinned oo CLI installation method, and confirm the connected Namely/OOMOL scopes expose only the employee data the agent is intended to read.
+
+## Reference(s):
+
+- [Namely homepage](https://www.namely.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-namely)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill guides agents to inspect live connector schemas and run read-only Namely connector actions that return JSON data.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,61 @@
-## Description: <br>
-TextIt lets an agent use OOMOL's oo CLI connector to read, create, update, delete, and send data in a connected TextIt workspace. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TextIt enables an agent to read, create, update, delete, and send TextIt workspace, contact, group, message, and broadcast data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage TextIt workspaces from an agent through the OOMOL oo connector, including listing workspace data, managing contacts and groups, and sending messages or broadcasts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change contacts, groups, messages, or broadcasts in the connected TextIt workspace. <br>
-Mitigation: Confirm the exact payload, recipients, and expected effect with the user before running write actions. <br>
-Risk: Destructive actions can delete TextIt contacts or groups. <br>
-Mitigation: Require explicit approval for the target UUID or URN before running destructive actions. <br>
+## Use Case:
 
+External users, developers, and agents use this skill to operate TextIt through an OOMOL-connected account. It supports TextIt workspace inspection, contact and group management, message and broadcast listing, and sending individual messages or broadcasts.
 
-## Reference(s): <br>
-- [TextIt skill page](https://clawhub.ai/oomol/skills/oo-textit) <br>
-- [TextIt homepage](https://textit.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo connector schema and run commands; write and destructive actions should include explicit recipient, payload, and target confirmation before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill metadata) <br>
+Risk: Setup guidance includes installer commands downloaded from the internet.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the OOMOL CLI installer source independently before running pasted installer commands.
+
+Risk: Write and destructive actions can send messages or change TextIt contacts, groups, and broadcasts.
+
+Mitigation: Require clear user approval for each send, update, or delete action, including the exact target and payload.
+
+Risk: TextIt access depends on the OOMOL CLI and the user's connected TextIt account.
+
+Mitigation: Confirm that the user trusts the OOMOL CLI and TextIt connection path before installation or account connection.
+
+## Reference(s):
+
+- [TextIt Skill on ClawHub](https://clawhub.ai/oomol/skills/oo-textit)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [TextIt Homepage](https://textit.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown guidance with inline oo CLI shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands may read or modify TextIt resources; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

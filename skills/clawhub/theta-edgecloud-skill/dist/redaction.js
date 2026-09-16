@@ -1,14 +1,14 @@
-const SECRET_KEYS = ['api-key', 'api_key', 'authorization', 'secret', 'password', 'token', 'credential'];
+const SECRET_KEYS = ['apikey', 'authorization', 'secret', 'password', 'token', 'credential', 'privatekey', 'mnemonic'];
 function isSecretKey(key) {
-    const normalized = key.toLowerCase();
+    const normalized = key.toLowerCase().replace(/[^a-z]/g, '');
+    if (['maxtokens', 'maxcompletiontokens', 'prompttokens', 'completiontokens', 'totaltokens', 'inputtokens', 'outputtokens'].includes(normalized))
+        return false;
     return SECRET_KEYS.some((needle) => normalized.includes(needle));
 }
 export function redact(value) {
     if (!value)
         return '';
-    if (value.length <= 8)
-        return '********';
-    return `${value.slice(0, 3)}***${value.slice(-3)}`;
+    return '[redacted]';
 }
 function redactAny(value, parentKey, seen = new WeakSet()) {
     if (value === null || value === undefined)
@@ -25,8 +25,11 @@ function redactAny(value, parentKey, seen = new WeakSet()) {
         return value.map((entry) => redactAny(entry, parentKey, seen));
     }
     const out = {};
+    const namedSecret = Object.entries(value).some(([k, v]) => ['name', 'key'].includes(k) && typeof v === 'string' && isSecretKey(v));
     for (const [k, v] of Object.entries(value)) {
-        if (isSecretKey(k)) {
+        if (['__proto__', 'constructor', 'prototype'].includes(k))
+            continue;
+        if (isSecretKey(k) || (namedSecret && k === 'value')) {
             out[k] = typeof v === 'string' ? redact(v) : '[redacted]';
             continue;
         }

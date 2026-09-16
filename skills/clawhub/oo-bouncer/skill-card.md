@@ -1,47 +1,60 @@
-## Description: <br>
-Bouncer helps agents verify emails and domains, manage Bouncer batch verification and toxicity-list jobs, and check Bouncer credits through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Bouncer (usebouncer.com). Use this skill for Bouncer requests that read, create, update, or delete data through the OOMOL-connected oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to run Bouncer email verification, domain verification, batch verification, toxicity-list, and credit-check workflows through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: First-time setup may require installing the oo CLI with a remote shell or PowerShell installer. <br>
-Mitigation: Review the official OOMOL CLI installer or install guide before running it, and only install from the documented OOMOL URLs. <br>
-Risk: The skill connects to a Bouncer API-key-backed OOMOL account. <br>
-Mitigation: Install only when the user trusts OOMOL and has intentionally connected Bouncer with the required account permissions. <br>
-Risk: Batch creation, toxicity-list creation, and batch-sync verification can change Bouncer state or consume account credits. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: Delete actions can remove stored Bouncer batch or toxicity-list results. <br>
-Mitigation: Confirm the target identifier and get explicit approval before running destructive actions. <br>
+## Use Case:
 
+Developers and operators use this skill to verify email addresses and domains, manage Bouncer batch and toxicity-list jobs, and check Bouncer credit balances through an authenticated OOMOL connector.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/oomol/oo-bouncer) <br>
-- [Bouncer homepage](https://www.usebouncer.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns oo CLI command guidance, connector schemas, JSON responses, setup steps, and confirmation prompts for write or destructive actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server metadata and SKILL.md frontmatter) <br>
+Risk: The setup path includes pipe-to-shell installer examples that can create local execution risk.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified package or inspect and verify the installer before running it.
+
+Risk: Inline shell JSON payloads can be malformed or expose sensitive values in command history.
+
+Mitigation: Prefer passing JSON payloads through a file and validate the action schema before execution.
+
+Risk: Write and destructive Bouncer actions can create, finish, or delete service-side jobs and stored results.
+
+Mitigation: Confirm the exact payload, target, and effect with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Bouncer Skill](https://clawhub.ai/oomol/skills/oo-bouncer)
+- [Bouncer Homepage](https://www.usebouncer.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Prompts the agent to inspect live action schemas before building payloads and to request confirmation for write or destructive actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

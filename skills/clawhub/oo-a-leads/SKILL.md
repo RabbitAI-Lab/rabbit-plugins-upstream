@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "A-Leads"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["a_leads"]
   icon: "https://static.oomol.com/logo/third-party/a_leads.svg"
 ---

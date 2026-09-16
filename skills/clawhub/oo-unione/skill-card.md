@@ -1,45 +1,56 @@
-## Description: <br>
-UniOne (unione.io). Use this skill for ANY UniOne request — reading, creating, and updating data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+UniOne helps agents read, create, and update UniOne data through the OOMOL-connected unione connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect UniOne account data, list suppressions, tags, and templates, and send transactional email through an OOMOL-connected UniOne account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: UniOne access is mediated through an OOMOL-connected account and the oo CLI. <br>
-Mitigation: Install and use the skill only when the user trusts OOMOL, the oo CLI, and the connected account configuration. <br>
-Risk: The send_email action can send transactional email from the user's UniOne account. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running write actions. <br>
-Risk: Authentication, connection, or billing recovery steps may change account state or require external setup. <br>
-Mitigation: Run setup or recovery commands only after a matching command failure and user consent. <br>
+## Use Case:
 
+Developers and external agents use this skill to operate UniOne account, suppression, tag, template, and transactional email workflows through the oo CLI while relying on live connector schemas for payloads.
 
-## Reference(s): <br>
-- [UniOne homepage](https://unione.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-unione) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include oo CLI command output in JSON when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Setup guidance includes remote installer commands that download and execute code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source before running it, or prefer a verified, pinned, package-manager installation path.
+
+Risk: The send_email action changes state by sending transactional email through UniOne.
+
+Mitigation: Inspect the live connector schema and confirm the exact payload, recipient, and effect with the user before running the write action.
+
+## Reference(s):
+
+- [ClawHub UniOne skill page](https://clawhub.ai/oomol/skills/oo-unione)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [UniOne homepage](https://unione.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash and JSON snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live connector schema inspection before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

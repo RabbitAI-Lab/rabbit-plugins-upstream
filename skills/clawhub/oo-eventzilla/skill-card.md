@@ -1,43 +1,57 @@
-## Description: <br>
-Eventzilla (eventzilla.net). Use this skill for Eventzilla requests involving searching and reading data through the OOMOL connector rather than calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Eventzilla (eventzilla.net). Use this skill for ANY Eventzilla request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to search and read Eventzilla events, attendees, tickets, transactions, organizers, and sub-organizers through an OOMOL-connected Eventzilla account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to an OOMOL-connected Eventzilla account and can read event, attendee, ticket, transaction, and user data visible to that account. <br>
-Mitigation: Install and connect it only for intended Eventzilla accounts, and review the requested action and query before execution. <br>
-Risk: First-time setup may require CLI installation, OOMOL sign-in, or Eventzilla account connection steps. <br>
-Mitigation: Approve setup steps only when an action fails because authentication or connection is missing, and only if granting that access is intended. <br>
+## Use Case:
 
+Developers and agents use this skill to search and read Eventzilla organizer account data, including events, attendees, transactions, users, and ticket categories through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Eventzilla skill listing](https://clawhub.ai/oomol/oo-eventzilla) <br>
-- [Eventzilla homepage](https://www.eventzilla.net) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions include unverified remote installer commands that could run mutable code locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a trusted OOMOL installation path with version pinning or checksum/signature verification where available, inspect installer contents before execution, and run setup with ordinary user privileges.
+
+Risk: Eventzilla attendee, transaction, ticket, organizer, and user data is routed through OOMOL for read operations.
+
+Mitigation: Confirm that this data-routing path is acceptable before connecting the Eventzilla account and running read actions.
+
+## Reference(s):
+
+- [Eventzilla homepage](https://www.eventzilla.net)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Eventzilla skill page](https://clawhub.ai/oomol/skills/oo-eventzilla)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas to validate action payloads before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: skill frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

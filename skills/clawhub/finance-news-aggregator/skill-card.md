@@ -1,43 +1,62 @@
-## Description: <br>
-Aggregates AI, technology, and finance news into source-aware summaries, ranking frameworks, translations, and risk-monitoring guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI and technology news aggregation guidance for collecting, scoring, deduplicating, verifying, and reporting news from 100+ RSS-style sources.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers and analysts use this skill as a reference workflow for collecting AI, technology, and finance news, summarizing important items, translating selected English-language stories, and flagging items that need source verification. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Market-impact summaries, sentiment labels, and risk ratings may be incomplete, stale, or misleading if sources are not checked. <br>
-Mitigation: Verify original sources before acting and treat all market-impact and risk sections as informational rather than financial, legal, or insurance advice. <br>
-Risk: Separate user-deployed Python scripts may contact RSS feeds or third-party APIs and expose query terms, IP address, timestamps, or similar request metadata. <br>
-Mitigation: Review any separate script before deployment, confirm third-party terms and robots.txt expectations, and limit data sent to external feeds or APIs. <br>
-Risk: The release is documentation-only and describes aggregation frameworks and code examples without included executable code. <br>
-Mitigation: Treat commands and configuration as examples that require local review, testing, and security scanning before operational use. <br>
+## Use Case:
 
+External users and developers use this skill to structure AI, technology, research, GitHub trend, and finance news summaries with source labels, recency windows, deduplication, and verification checks. Outputs should be reviewed by a human before real-world use, especially for finance-related analysis.
 
-## Reference(s): <br>
-- [ClawHub package page](https://clawhub.ai/gechengling/finance-news-aggregator) <br>
-- [OpenAI Blog RSS feed](https://openai.com/blog/rss.xml) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with example shell commands, configuration snippets, scoring tables, and summary templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only skill; any separate scripts or external feed access are user-deployed and should be reviewed before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.0.3 (source: server-resolved release metadata) <br>
+Risk: Separately obtained scripts may behave differently from the markdown-only artifact.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and scan any Python scripts before running them, and execute only code from trusted sources.
+
+Risk: Finance-related summaries or sentiment analysis may be mistaken for investment, legal, or insurance advice.
+
+Mitigation: Label finance outputs as informational, avoid recommendations, and require human review before any real-world decision.
+
+Risk: News summaries can amplify stale, incorrect, single-source, or unverified claims.
+
+Mitigation: Require source labels, timestamps, recency windows, and cross-verification before treating items as reliable.
+
+Risk: User-deployed RSS or API collection can send queries, IP addresses, and timestamps to third-party services.
+
+Mitigation: Use public sources only, avoid collecting login-gated or authorized content, and follow applicable terms of service and robots.txt rules.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/finance-news-aggregator)
+- [Declared project homepage](https://github.com/lanyasheng/ai-news-aggregator)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with optional command examples and structured report templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reference-only guidance; artifact contains no executable scripts and requires human review for outputs.]
+
+## Skill Version(s):
+
+5.0.4 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

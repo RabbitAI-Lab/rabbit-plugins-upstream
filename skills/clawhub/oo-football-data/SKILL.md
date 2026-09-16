@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "football-data.org"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["football_data"]
   icon: "https://static.oomol.com/logo/third-party/football_data.png"
 ---

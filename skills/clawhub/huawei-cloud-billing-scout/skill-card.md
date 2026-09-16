@@ -1,50 +1,63 @@
-## Description: <br>
-Huawei Cloud Billing Scout helps agents answer read-only Huawei Cloud BSS balance, spend, charge attribution, reconciliation, coupon, stored-value card, enterprise, and partner billing questions through hcloud. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Read-only Huawei Cloud BSS billing analysis for balances, spend, attribution, reconciliation, coupons, stored-value cards, and enterprise or partner billing when Huawei Cloud or BSS billing is explicit.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[agenticweb4](https://clawhub.ai/user/agenticweb4)
 
-## Use Case: <br>
-Developers, FinOps teams, and Huawei Cloud account operators use this skill to investigate billing balances, monthly spend, charge attribution, reconciliation gaps, resource packages, coupons, stored-value cards, and enterprise or partner account billing with read-only BSS evidence. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles sensitive Huawei Cloud billing data through the user's current hcloud profile. <br>
-Mitigation: Use a read-only BSS IAM profile, keep account and business identifiers desensitized, and avoid exposing credentials, profile names, or regions in responses. <br>
-Risk: The support documentation includes remote installer commands and uninstall steps that can remove local hcloud configuration. <br>
-Mitigation: Manually verify KooCLI installers before execution, avoid non-interactive remote script execution unless the source is trusted and verified, and back up profiles before removing ~/.hcloud. <br>
-Risk: The workflow requires a persistent hcloud CLI language configuration change for BSS operations. <br>
-Mitigation: Confirm the current profile and configuration before running billing queries, and make the configuration change only when it is needed for the read-only evidence-gathering phase. <br>
+## Use Case:
 
+Cloud finance, operations, and engineering users use this skill to inspect Huawei Cloud BSS billing evidence, explain spend and charge attribution, reconcile billing figures, and identify missing evidence without modifying accounts.
 
-## Reference(s): <br>
-- [Huawei Cloud Billing Scout Skill Page](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-billing-scout) <br>
-- [Huawei Cloud KooCLI Installation Guide](references/cli-installation-guide.md) <br>
-- [IAM Minimum Permissions](references/iam-policies.md) <br>
-- [Command Contract Appendix](references/related-commands.md) <br>
-- [HuaweiCloudBillingSemanticCatalog](references/semantic/catalog.yml) <br>
-- [BillingOntology](references/semantic/billing-ontology.yml) <br>
-- [Huawei Cloud KooCLI Latest Version](https://support.huaweicloud.com/wtsnew-hcli/index.html) <br>
-- [Huawei Cloud IAM Permission Best Practices](https://support.huaweicloud.com/bestpractice-iam/iam_0426.html) <br>
-- [Huawei Cloud API Explorer](https://console.huaweicloud.com/apiexplorer/#/openapi/overview) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown briefing with concise conclusions, fact points, and inline hcloud command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only BSS evidence only; sensitive identifiers, credentials, profile, and region are not included in final responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Command templates and CLI installation guidance may lead to unsafe local execution if reviewed casually.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review command templates and downloaded CLI artifacts before use; the agent should only run allowed read-only checks or BSS queries.
+
+Risk: Huawei Cloud AK/SK credentials, account IDs, resource IDs, coupon IDs, or region text could be exposed or interpolated into shell commands.
+
+Mitigation: Use least-privilege read-only BSS IAM credentials, avoid pasting AK/SK into chat, mask sensitive identifiers, and validate and safely quote user-supplied values.
+
+Risk: Partial billing windows, pagination, missing permissions, or unsupported account relationships can produce incomplete billing conclusions.
+
+Mitigation: State scope, billing period, money basis, pagination, and permission gaps explicitly; do not present partial or zero results as proof of the whole account state.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/agenticweb4/skills/huawei-cloud-billing-scout)
+- [Skill homepage](https://github.com/concept-git/cloud-concept-skills/tree/main/skills/en/huawei-cloud-billing-scout)
+- [KooCLI installation guide](references/cli-installation.md)
+- [IAM minimum permissions](references/iam-policies.md)
+- [Command contract appendix](references/related-commands.md)
+- [Billing semantic catalog](references/semantic/catalog.yml)
+- [Billing ontology](references/semantic/billing-ontology.yml)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Concise Markdown briefing with read-only command guidance when needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses Huawei Cloud BSS evidence boundaries and avoids exposing raw responses, credentials, full IDs, profiles, or regions.]
+
+## Skill Version(s):
+
+2.3.10 (source: server release evidence; artifact frontmatter says 2.3.9)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

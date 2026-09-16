@@ -1,42 +1,57 @@
-## Description: <br>
-Compares direct flight prices across Fliggy, Tuniu, Tongcheng, Meituan, and RollingGo, matching the same flight by flight number and returning booking links with the results. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+途牛+同程+美团+RollingGo五平台直飞航班实时比价，按航班号自动匹配同一航班跨平台报价，一次出结果含预订链接。暑期机票比价、出行省钱。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-Travelers and travel-planning agents use this skill to compare real-time direct domestic flight prices for a route and date, identify the lowest available platform price, and review flight timing, airline, airport, and booking-link details. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Flight route and date queries are sent through the publisher's Tencent Cloud proxy and onward to travel platforms. <br>
-Mitigation: Use the skill only when that data flow is acceptable; avoid sensitive travel queries in environments that prohibit third-party proxying. <br>
-Risk: The artifact includes a proxy token in source code. <br>
-Mitigation: Review credential exposure before deployment and rotate, scope, or replace the token for managed or enterprise use. <br>
-Risk: Flight prices and booking links are time-sensitive and may omit taxes, fees, or platform-specific fare conditions. <br>
-Mitigation: Confirm final price and terms on the booking platform before purchase. <br>
+## Use Case:
 
+External travelers and travel assistants use this skill to compare direct mainland China flight prices across Tuniu, Tongcheng, Meituan, and RollingGo for a specified city pair and date. It returns matched flight options with platform-specific prices, timing details, caveats, and booking links.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/china-flight-price-compare) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown flight comparison results with platform prices, source labels, booking links, warnings, and plain text status messages when no results are available.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Results are limited to direct flights and may include warnings about missing platforms, price differences, or platform-specific price caveats.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.3 (source: server release evidence) <br>
+Risk: Flight search details are sent to the publisher's Tencent Cloud proxy.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when this data flow is acceptable, and avoid submitting sensitive itinerary details.
+
+Risk: The artifact embeds a shared proxy token in source code.
+
+Mitigation: Move the token to managed secret storage or environment configuration before production use and rotate the exposed token.
+
+Risk: Prices and booking links from external travel platforms are unverified and may change or omit fees.
+
+Mitigation: Verify fares, taxes, and booking domains on the destination platform before purchase.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/china-flight-price-compare)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown text with flight-price comparisons, caveats, and booking links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires fromCity, toCity, and date; optional time preference and sort mode affect displayed results.]
+
+## Skill Version(s):
+
+4.2.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

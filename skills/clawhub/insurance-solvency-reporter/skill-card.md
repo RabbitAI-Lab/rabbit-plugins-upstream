@@ -1,41 +1,56 @@
-## Description: <br>
-Generates China C-ROSS Phase II solvency reports, capital adequacy calculations, stress tests, and SARM/IRR risk rating documentation for insurance finance, actuarial, and compliance teams. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a China C-ROSS Phase II insurance solvency reporting aid for drafting quarterly and annual reports, capital adequacy analysis, stress testing narratives, and SARM/IRR risk rating documentation.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[gechengling](https://clawhub.ai/user/gechengling)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+External insurance finance, actuarial, and compliance teams use this skill to draft and review China solvency reports, capital adequacy calculations, stress test writeups, disclosure materials, and related regulatory checklists.
+
+### Deployment Geography for Use:
+
+China
+
+## Known Risks and Mitigations:
+
+Risk: Users may rely on generated solvency calculations, regulatory summaries, or filing language without checking current official NFRA requirements.
+
+Mitigation: Verify regulatory references and calculations against current official materials and require qualified actuarial, finance, or compliance review before approval or disclosure.
+
+Risk: Users may paste policyholder lists, full ledgers, or other sensitive business data into the skill.
+
+Mitigation: Use summarized solvency inputs where possible and avoid entering policyholder lists, full ledgers, or unnecessary counterparty details.
+
+Risk: Generated materials could be mistaken for completed regulatory submissions.
+
+Mitigation: Treat outputs as drafts and checklists only; preview and approve them through the organization's normal controls before any reporting workflow.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Insurance CFOs, actuaries, and compliance teams use this skill to draft quarterly and annual China C-ROSS solvency reports, calculate capital adequacy, prepare stress testing analysis, and document risk ratings. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global, for China insurance solvency reporting contexts. <br>
+**Output Type(s):** [text, markdown, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may require confidential company financial, capital, risk, or regulatory inputs. <br>
-Mitigation: Redact unnecessary details, avoid personal data and secrets, and confirm authorization before sharing internal reporting materials. <br>
-Risk: Generated solvency reports or regulatory interpretations may become outdated or require professional review. <br>
-Mitigation: Verify outputs against current official NFRA requirements and have qualified finance, actuarial, and compliance reviewers approve materials before filing or disclosure. <br>
+**Output Format:** [Markdown report drafts, tables, checklists, calculation narratives, and review guidance]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [C-ROSS Rules II Summary](references/cross_rules_ii_summary.md) <br>
-- [Solvency Capital Calculation Template](references/solvency_calculation.md) <br>
+**Other Properties Related to Output:** [Outputs should be previewed and reviewed by qualified actuarial, finance, or compliance staff before internal approval or external disclosure.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown reports, tables, checklists, and calculation snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include capital adequacy calculations, stress-test scenarios, regulatory report outlines, and compliance review guidance.] <br>
+4.1.2 (source: frontmatter and server release evidence)
 
-## Skill Version(s): <br>
-4.1.1 (source: frontmatter and server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

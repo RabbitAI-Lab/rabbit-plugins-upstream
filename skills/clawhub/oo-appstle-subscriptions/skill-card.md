@@ -1,45 +1,55 @@
-## Description: <br>
-Appstle Subscriptions (appstle.com). Use this skill for Appstle Subscriptions requests that search or read customer and subscription data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Appstle Subscriptions helps agents read customer, subscription, and contract data through an OOMOL-connected Appstle Subscriptions account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Appstle Subscriptions customer and subscription records through the OOMOL oo CLI. It supports read-only lookup workflows such as retrieving customer subscription details, valid subscription contract IDs, and paginated customer subscription lists. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Appstle customer and subscription data through the user's OOMOL account. <br>
-Mitigation: Install and use it only for accounts where that read access is intended, and review returned customer or subscription data before sharing it further. <br>
-Risk: Connector action schemas may change over time. <br>
-Mitigation: Inspect the live action schema with `oo connector schema` before constructing payloads. <br>
-Risk: First-time CLI login and Appstle connection steps affect account-level access. <br>
-Mitigation: Perform install, login, billing, and Appstle connection recovery steps deliberately, only after a command fails for the matching setup reason. <br>
+## Use Case:
 
+External users and developers use this skill to search and read Appstle Subscriptions customer, subscription contract, and Shopify customer contract ID data through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Appstle Subscriptions homepage](https://appstle.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-appstle-subscriptions) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Code, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the live connector schema before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: First-time setup points users to remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing and prefer a verified package or signed, versioned release.
+
+Risk: The connected OOMOL account can access Appstle customer and subscription data.
+
+Mitigation: Confirm the connected OOMOL account is authorized for the target Appstle data before running connector actions.
+
+## Reference(s):
+
+- [ClawHub Appstle Subscriptions Skill](https://clawhub.ai/oomol/skills/oo-appstle-subscriptions)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Appstle Subscriptions Homepage](https://appstle.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses include Appstle data returned by the connector and execution metadata; no raw credential output is expected.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

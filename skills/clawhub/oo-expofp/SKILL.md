@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "ExpoFP"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["expofp"]
   icon: "https://static.oomol.com/logo/third-party/expofp.svg"
 ---

@@ -1,44 +1,60 @@
-## Description: <br>
-Greenhouse lets agents retrieve recruiting records and add candidate notes through an OOMOL-connected Greenhouse account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Greenhouse (greenhouse.com) lets an agent read, create, and update Greenhouse data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Recruiting and operations teams use this skill to query Greenhouse candidates, applications, and jobs. They can also add candidate activity notes after reviewing the exact payload and intended effect. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Greenhouse candidate and application data can contain sensitive recruiting information. <br>
-Mitigation: Treat candidate and application data as sensitive and review outputs before sharing or storing them. <br>
-Risk: The add_candidate_note action changes Greenhouse state. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running write actions. <br>
-Risk: First-time setup may require installing the oo CLI from a remote script. <br>
-Mitigation: Only run the CLI install script from a trusted source and after the command fails because the CLI is missing. <br>
+## Use Case:
 
+Employees, recruiters, and operations teams use this skill to retrieve Greenhouse candidates, applications, and jobs, list records with filters, and add candidate notes through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Greenhouse skill page](https://clawhub.ai/oomol/skills/oo-greenhouse) <br>
-- [Greenhouse homepage](https://www.greenhouse.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce Greenhouse connector calls and JSON command output when the agent runs the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server evidence) <br>
+Risk: First-time setup includes an unverified internet installer.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified package or inspect the downloaded installer before running it.
+
+Risk: The skill can access sensitive Greenhouse candidate, job, and application data.
+
+Mitigation: Install only for trusted OOMOL-connected accounts and limit use to authorized recruiting workflows.
+
+Risk: The add_candidate_note action changes Greenhouse state.
+
+Mitigation: Confirm the exact payload and effect with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub Greenhouse Skill](https://clawhub.ai/oomol/skills/oo-greenhouse)
+- [Greenhouse Homepage](https://www.greenhouse.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects with data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.2 (source: evidence release version and skill frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

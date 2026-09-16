@@ -1,42 +1,57 @@
-## Description: <br>
-Operates Get 笔记 (biji.com) through the OOMOL getnote connector for reading, creating, updating, sharing, and deleting notes and related knowledge-base data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Get Biji (biji.com). Use this skill for ANY Get Biji request: reading, creating, updating, and deleting data through the OOMOL getnote connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage Get 笔记 notes, tags, sharing, and knowledge bases from an agent through the OOMOL oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write or destructive actions can change or delete Get 笔记 data. <br>
-Mitigation: Confirm the target note, knowledge base, tags, payload, and expected effect before approving write or destructive actions. <br>
-Risk: Installing or authenticating the OOMOL oo CLI affects access to the user's connected account. <br>
-Mitigation: Install or authenticate the OOMOL oo CLI only from the documented source and only when an auth or connection error requires it. <br>
+## Use Case:
 
+External users and developers use this skill to manage Get Biji notes, tags, knowledge bases, bloggers, and live-session content through an authenticated OOMOL-connected account. It supports read, search, create, update, sharing, and deletion workflows while requiring confirmation for writes and destructive actions.
 
-## Reference(s): <br>
-- [Get 笔记 homepage](https://www.biji.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-getnote) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call the OOMOL oo CLI and return connector JSON responses when actions are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill's fallback setup includes remote installer commands for the oo CLI, and the security summary flags those installer commands as unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installing, and prefer installing the oo CLI through a verified, pinned, or inspectable method before allowing an agent to run connector actions.
+
+Risk: Write and destructive actions can change or remove Get Biji data.
+
+Mitigation: Require confirmation of the exact payload, target, and expected effect before running write actions, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-getnote)
+- [Get Biji Homepage](https://www.biji.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Get Biji Service Icon](https://static.oomol.com/logo/third-party/getnote.png)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the OOMOL oo CLI and should inspect the live connector schema before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

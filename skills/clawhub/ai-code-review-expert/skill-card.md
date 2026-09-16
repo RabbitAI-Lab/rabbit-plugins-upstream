@@ -1,40 +1,53 @@
-## Description: <br>
-AI-powered code review assistant that performs static analysis, identifies security vulnerabilities, enforces coding standards, suggests refactoring patterns, and generates PR review comments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI Code Review Expert reviews code snippets and diffs for bugs, security vulnerabilities, performance issues, style problems, and produces actionable PR review comments and fixes.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers, tech leads, security engineers, and open source maintainers use this skill to review code snippets, files, diffs, and pull requests for bugs, security issues, performance problems, style violations, and concrete remediation guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on broad code-review phrases and receive sensitive or proprietary code in the agent context. <br>
-Mitigation: Use clear prompts for intended reviews and avoid sharing proprietary code, secrets, or sensitive data unless that exposure is acceptable. <br>
-Risk: Generated review findings and suggested fixes may be incomplete or incorrect. <br>
-Mitigation: Treat the output as review assistance; require human review, tests, and security validation before applying changes. <br>
+## Use Case:
 
+Developers, tech leads, security engineers, junior developers, and open source maintainers use this skill to review code before pull requests, explain findings, suggest fixes, score code quality, and generate review comments.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/ai-code-review-expert) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown review findings with severity labels, code blocks, quality scoring tables, PR summary text, and optional CI/CD guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include proposed fixes, review comments, checklists, and implementation notes; submitted code should be treated as sensitive.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.2 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Users may submit secrets, customer data, or more source code than needed for review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only the specific snippet or diff needed, and redact secrets, customer data, production samples, and identifying details before use.
+
+Risk: Generated review comments or pull request text may be incorrect, incomplete, or unsuitable to post directly.
+
+Mitigation: Review all generated comments, fixes, scores, and PR summaries before sharing them in a repository, issue, or ticket system.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/ai-code-review-expert)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Guidance]
+
+**Output Format:** [Markdown with structured review findings, code blocks, and ready-to-paste PR summary text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces in-chat review advice only; it does not connect to code hosts, execute code, or write repository files.]
+
+## Skill Version(s):
+
+3.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

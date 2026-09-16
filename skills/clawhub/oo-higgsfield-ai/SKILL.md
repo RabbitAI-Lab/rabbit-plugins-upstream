@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Higgsfield AI"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["higgsfield_ai"]
   icon: "https://static.oomol.com/logo/third-party/higgsfield_ai.png"
 ---

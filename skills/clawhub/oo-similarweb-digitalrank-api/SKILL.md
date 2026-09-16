@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Similarweb"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["similarweb_digitalrank_api"]
   icon: "https://static.oomol.com/logo/third-party/SimilarWeb%20Digital%20Rank%20API.svg"
 ---

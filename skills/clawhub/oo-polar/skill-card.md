@@ -1,42 +1,59 @@
-## Description: <br>
-Polar (polar.sh). Use this skill for ANY Polar request - reading, creating, and updating data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Polar (polar.sh) lets an agent retrieve Polar customers, customer state, orders, organizations, products, and subscriptions through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent inspect Polar schemas and operate Polar customer, order, organization, product, and subscription workflows through the OOMOL oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Read actions may expose Polar customer, order, subscription, and organization information to the agent. <br>
-Mitigation: Install only when agent access to Polar account data is intended, and review OOMOL connection scopes when narrower access is required. <br>
-Risk: State-changing Polar actions can affect account data if run with an incorrect payload. <br>
-Mitigation: Inspect the live connector schema before constructing payloads and confirm the exact payload and effect with the user before write or destructive actions. <br>
+## Use Case:
 
+Developers, operators, and support teams use this skill to inspect Polar commerce data and run supported Polar connector actions without calling the Polar API directly.
 
-## Reference(s): <br>
-- [Polar homepage](https://polar.sh) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include live schema inspection steps and user confirmation guidance for state-changing Polar actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and skill frontmatter) <br>
+Risk: First-time setup directs users to execute remote installer scripts in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before installation and prefer a trusted, pinned, or otherwise verifiable oo CLI release path.
+
+Risk: The connected Polar account can expose customer, order, organization, product, and subscription data.
+
+Mitigation: Confirm the intended Polar account and permissions before use, and inspect the live connector schema before constructing action payloads.
+
+Risk: Some actions are documented as write or destructive operations.
+
+Mitigation: Confirm the exact payload, target, and expected effect with the user before running state-changing actions, and require explicit approval for destructive actions.
+
+## Reference(s):
+
+- [Polar homepage](https://polar.sh)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-polar)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands run through the oo CLI and may return JSON data from Polar connector actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

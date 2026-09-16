@@ -1,40 +1,56 @@
-## Description: <br>
-what3words (what3words.com). Use this skill for what3words requests that search, read, convert, or inspect location data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides what3words lookup actions through the OOMOL-connected oo CLI for converting coordinates and three-word addresses, autosuggesting addresses, listing languages, and retrieving grid sections.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate what3words through an OOMOL-connected account, including address suggestions, coordinate conversion, supported-language lookup, and grid-section retrieval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation language could route casual what3words mentions or sensitive location details to an external connector. <br>
-Mitigation: Invoke the skill only for intentional what3words conversions or lookups, and avoid sensitive location details unless the user accepts external connector processing. <br>
+## Use Case:
 
+Developers and external users use this skill to run what3words connector actions through OOMOL without handling raw API credentials. It supports address suggestions, coordinate-to-address conversion, address-to-coordinate conversion, supported-language lookup, and grid-section retrieval.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-what3words) <br>
-- [what3words homepage](https://what3words.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and execution metadata when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: Fallback setup includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not allow an agent to run installer commands automatically; install the oo CLI only from a trusted, verified source and review commands before execution.
+
+Risk: what3words query data is routed through OOMOL and the what3words integration.
+
+Mitigation: Use the skill only when the user is comfortable sending the specific lookup data through OOMOL and what3words, and avoid sensitive location queries unless approved.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-what3words)
+- [what3words homepage](https://what3words.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the oo CLI to inspect action schemas before constructing JSON payloads; normal actions are read-oriented lookup operations.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

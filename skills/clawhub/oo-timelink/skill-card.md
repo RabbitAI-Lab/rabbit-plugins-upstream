@@ -1,45 +1,55 @@
-## Description: <br>
-This skill helps agents search and read Timelink data through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+timelink (timelink.io). Use this skill for ANY timelink request: searching and reading Timelink data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill when an agent needs read-only access to Timelink clients, projects, services, users, time entries, company details, or token metadata through an existing OOMOL connection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Timelink business data available through the connected OOMOL account. <br>
-Mitigation: Install and use it only when the user trusts OOMOL's oo CLI and is comfortable granting the agent read access through that connected account. <br>
-Risk: Action schemas may change or differ from assumptions in a prompt. <br>
-Mitigation: Inspect the live action schema with the oo CLI before constructing command payloads. <br>
-Risk: Setup commands can alter local CLI authentication or connection state. <br>
-Mitigation: Run authentication, connection, installer, or billing-recovery steps only after an actual setup-related failure. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Timelink clients, companies, projects, services, users, tokens, active time entries, and time entries from an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-timelink) <br>
-- [Timelink homepage](https://timelink.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include oo CLI commands, action names, JSON payloads, and setup guidance for authentication, connection, or billing errors.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The setup path includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installer snippets before use and prefer a trusted, verified release channel for installing the oo CLI.
+
+Risk: The skill operates against Timelink data through an authenticated OOMOL-connected account.
+
+Mitigation: Confirm authentication, connection status, billing state, and any state-changing action before execution.
+
+## Reference(s):
+
+- [timelink homepage](https://timelink.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-timelink)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

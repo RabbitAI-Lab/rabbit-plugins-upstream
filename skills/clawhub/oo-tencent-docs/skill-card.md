@@ -1,43 +1,59 @@
-## Description: <br>
-Tencent Docs helps agents read, create, and update Tencent Docs content through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tencent Docs (docs.qq.com) lets an agent read, create, search, export, and update Tencent Docs files through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and knowledge workers use this skill to operate Tencent Docs from an agent workflow, including reading documents and spreadsheets, creating files, exporting files, renaming files, and updating forms or sheets after user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create, rename, export, or update Tencent Docs content through the connected account. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running actions tagged as write or destructive. <br>
-Risk: The skill depends on the user's OOMOL account, oo CLI installation, and Tencent Docs connection being available. <br>
-Mitigation: Run setup steps only after a matching command failure and follow the documented connection, authentication, and billing guidance. <br>
+## Use Case:
 
+External users and developers use this skill to operate Tencent Docs from an agent: read documents and spreadsheets, discover files, export content, and run confirmed create or update actions.
 
-## Reference(s): <br>
-- [ClawHub Tencent Docs Skill](https://clawhub.ai/oomol/skills/oo-tencent-docs) <br>
-- [Tencent Docs](https://docs.qq.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: The skill uses broad oo CLI authority and includes actions that can change Tencent Docs state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the live connector schema, exact target document, payload, and expected effect with the user before running write actions.
+
+Risk: First-time setup includes remote installer commands that should be reviewed before execution.
+
+Mitigation: Use a verified installation method where possible and avoid running pipe-to-shell installer commands without inspection.
+
+Risk: Tencent Docs data is routed through OOMOL's connector.
+
+Mitigation: Install and use the skill only when the user trusts OOMOL and the connector is appropriate for the documents being accessed.
+
+## Reference(s):
+
+- [Tencent Docs homepage](https://docs.qq.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

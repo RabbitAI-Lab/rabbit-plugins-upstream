@@ -1,43 +1,56 @@
-## Description: <br>
-Databox (databox.com). Use this skill for ANY Databox request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Databox helps an agent operate Databox through OOMOL's oo CLI to manage accounts, data sources, datasets, and dataset ingestion.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Databox through an OOMOL-connected account, including listing accounts, checking dataset ingestion status, creating data sources and datasets, pushing dataset records, and deleting Databox resources. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The `push_dataset_data` action changes Databox data but is not marked for confirmation in the artifact's action list. <br>
-Mitigation: Require explicit user confirmation of the target dataset and payload before running `push_dataset_data`. <br>
-Risk: The skill requires sensitive Databox credentials through an OOMOL-connected account. <br>
-Mitigation: Use the server-side credential flow and avoid exposing raw Databox tokens in prompts, files, or command arguments. <br>
+## Use Case:
 
+External users and developers use this skill to operate Databox from an OOMOL-connected account: list accounts, create or delete data sources and datasets, push JSON records, and check ingestion status.
 
-## Reference(s): <br>
-- [Databox homepage](https://databox.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-databox) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions can read Databox data, write datasets and data sources, or delete Databox resources through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: First-time setup recommends remote installer scripts for the oo CLI, which may be unsafe if run without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path, prefer verified packages or releases with checksum or signature validation, and avoid running remote installers from an elevated shell.
+
+Risk: Write and destructive Databox actions can create or delete data sources and datasets or push records into a dataset.
+
+Mitigation: Confirm the exact account, target dataset or data source, payload, and expected effect before allowing write or destructive commands.
+
+## Reference(s):
+
+- [ClawHub Databox skill page](https://clawhub.ai/oomol/skills/oo-databox)
+- [Databox homepage](https://databox.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes confirmation guidance for write and destructive Databox actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

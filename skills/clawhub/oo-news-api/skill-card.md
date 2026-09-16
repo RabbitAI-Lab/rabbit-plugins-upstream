@@ -1,44 +1,55 @@
-## Description: <br>
-News API connector skill for searching articles, retrieving top headlines, listing sources, and reading News API data through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+News API (newsapi.org) connector for searching and reading News API data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to query News API through an OOMOL-connected account for article search, top headlines, source discovery, and legacy v1 article compatibility. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected OOMOL account and News API credentials handled by the connector. <br>
-Mitigation: Install and use it only where OOMOL is an approved connector provider for News API access. <br>
-Risk: First-time setup may use remote installer commands for the oo CLI. <br>
-Mitigation: On sensitive machines, prefer official manual installation or checksum/signature-verified packages before running the CLI. <br>
+## Use Case:
 
+Developers and external users use this skill to query News API through an OOMOL-connected account for article search, top headlines, breaking headlines, and source metadata.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-news-api) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [News API homepage](https://newsapi.org) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads or results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI to inspect connector schemas and run News API actions; connector responses include data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill metadata) <br>
+Risk: The first-time setup instructions include remote installer commands that execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installation steps before use and prefer an official package manager or a pinned, signed release with checksum or signature verification.
+
+Risk: The skill depends on an authenticated OOMOL connection for News API access.
+
+Mitigation: Run normal News API actions only after the oo CLI is installed, authenticated, and connected to the expected News API account.
+
+## Reference(s):
+
+- [News API homepage](https://newsapi.org)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-news-api)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Normal actions return JSON from the OOMOL connector under a data object with execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

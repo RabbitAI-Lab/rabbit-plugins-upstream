@@ -1,49 +1,62 @@
-## Description: <br>
-TrueNAS AIops helps an agent inspect, diagnose, and perform governed operations on a TrueNAS SCALE appliance through CLI and MCP tools. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Governed TrueNAS SCALE storage operations for health checks, diagnostics, ZFS pool and dataset inspection, snapshots, disks, alerts, services, replication, cloud-sync tasks, and audited write actions.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, operators, and storage administrators use this skill to triage TrueNAS SCALE health, inspect pools, datasets, snapshots, disks, alerts, services, replication, and run guarded write actions when appropriate. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can give an agent operational access to a TrueNAS appliance, including write-capable actions. <br>
-Mitigation: Use a limited-permission TrueNAS API key and grant write permissions only when the operating context requires them. <br>
-Risk: MCP write tools include high-impact actions such as snapshot deletion and service restart without a built-in approval gate. <br>
-Mitigation: Treat snapshot_delete and service_restart as high-impact, use dry-run where available, and require external operator approval before invoking destructive actions. <br>
-Risk: The artifact states that endpoint behavior is mock-validated only and not yet verified against a live appliance. <br>
-Mitigation: Run truenas-aiops doctor and verify behavior in a non-production or limited-permission environment before relying on it for production operations. <br>
-Risk: The master password environment variable can be exposed through shells, CI logs, or process handling. <br>
-Mitigation: Handle TRUENAS_AIOPS_MASTER_PASSWORD as a secret, avoid echoing it, and prefer secret-management facilities for non-interactive use. <br>
+## Use Case:
 
+Developers, storage operators, and agents use this skill to triage and operate a TrueNAS SCALE appliance through guided CLI or MCP workflows. It is intended for TrueNAS-specific pool health, capacity, dataset, snapshot, disk, alert, service, replication, and cloud-sync tasks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/truenas-aiops) <br>
-- [Project homepage](https://github.com/AIops-tools/TrueNAS-AIops) <br>
-- [Capabilities](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup and security guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, configuration notes, and operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide calls to CLI or MCP tools that return structured operational data from the configured TrueNAS appliance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: server release evidence) <br>
+Risk: The skill can perform high-impact TrueNAS storage writes, including irreversible snapshot deletion and service restarts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated least-privilege or read-only TrueNAS API key where possible, confirm identifiers from list tools before writes, and use dry-run and CLI double confirmation for destructive operations.
+
+Risk: The security review notes reliance on external package code and account or prompt controls rather than an enforced in-tool approval gate.
+
+Mitigation: Review package provenance before deployment, restrict the connected account's permissions, and keep write authorization policy in the agent or operating workflow.
+
+Risk: API keys and the master password can be exposed if pasted into shell history or long-lived environments.
+
+Mitigation: Prefer the interactive secret prompt, avoid placing secrets directly in commands, and use the encrypted local secret store described by the setup guide.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/truenas-aiops)
+- [Project Homepage](https://github.com/AIops-tools/TrueNAS-AIops)
+- [Capabilities](references/capabilities.md)
+- [CLI Reference](references/cli-reference.md)
+- [Setup and Security Guide](references/setup-guide.md)
+- [Agent Guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include MCP tool-use guidance, dry-run recommendations, and risk-aware operational steps.]
+
+## Skill Version(s):
+
+0.11.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

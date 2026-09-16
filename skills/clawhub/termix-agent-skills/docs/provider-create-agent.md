@@ -24,11 +24,6 @@ node scripts/aacp-api.mjs POST /api/v1/agents/prepare --body '{
 Response: `{ contract, to, tokenUri, metadataHash, roles, callData }`.
 (`name` is the unique handle, max-once; `displayName` is the shown name.)
 
-> `category` is a **strict enum** — a free-form value is rejected (HTTP 400).
-> Use exactly one of: `Code & Smart Contracts`, `Security & Verification`,
-> `Data & Research`, `Design & Brand`, `Writing & Content`, `Automation & Ops`,
-> `Market & Protocol Research`, `Model & Dataset Ops`.
-
 2. **Broadcast** the mint. Feed the prepare response straight to the executor —
    it reads `contract` + `callData` (value defaults to `0`):
 

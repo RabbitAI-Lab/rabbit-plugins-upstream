@@ -1,44 +1,60 @@
-## Description: <br>
-ChatPDF lets agents import PDF URLs, ask stateless questions about imported PDFs, and delete ChatPDF sources through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ChatPDF (chatpdf.com). Use this skill for ANY ChatPDF request: reading, creating, updating, and deleting data through the OOMOL-connected ChatPDF connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to operate ChatPDF through an OOMOL-connected account: importing publicly reachable PDF URLs, asking questions against imported PDFs, and deleting sources when explicitly approved. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can add ChatPDF sources through a connected OOMOL account. <br>
-Mitigation: Confirm the exact PDF URL payload and expected effect with the user before running write actions. <br>
-Risk: The skill can delete one or more ChatPDF sources. <br>
-Mitigation: Confirm the target source IDs and obtain explicit user approval before running destructive actions. <br>
-Risk: First-time setup, connection, or billing errors may require account actions. <br>
-Mitigation: Run setup steps only after a matching command failure and use the documented OOMOL setup, connection, or billing paths. <br>
+## Use Case:
 
+Developers and external users use this skill to operate ChatPDF from an agent through the OOMOL `oo` CLI, including importing public PDF URLs, asking stateless questions about imported sources, and deleting sources after confirmation.
 
-## Reference(s): <br>
-- [ChatPDF homepage](https://www.chatpdf.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands inspect live connector schemas before action execution; write and destructive actions require explicit approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: Fallback setup includes remote shell and PowerShell installer commands for the OOMOL CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the official install documentation, download installers for inspection, and verify provenance before running installer commands.
+
+Risk: The `delete_sources` action can remove ChatPDF sources.
+
+Mitigation: Confirm the exact target source IDs and obtain explicit user approval before running destructive actions.
+
+Risk: Write actions such as `add_source_url` can change ChatPDF state.
+
+Mitigation: Inspect the live action schema and confirm the payload and expected effect before executing write actions.
+
+## Reference(s):
+
+- [ChatPDF homepage](https://www.chatpdf.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-chatpdf)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live action schema inspection before constructing connector requests.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

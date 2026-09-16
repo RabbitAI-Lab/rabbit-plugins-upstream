@@ -1,43 +1,56 @@
-## Description: <br>
-StoreCensus helps agents search and read StoreCensus ecommerce intelligence through the OOMOL connector instead of calling the StoreCensus API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+StoreCensus (storecensus.com). Use this skill for ANY StoreCensus request — searching and reading data. Whenever a task involves StoreCensus, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and analysts use this skill to retrieve website intelligence, search ecommerce stores, and browse Shopify app data from StoreCensus through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on the oo CLI and an OOMOL-connected StoreCensus account, so setup, authentication, connection, or billing failures can block use. <br>
-Mitigation: Run setup or connection steps only after the matching command failure, and verify the OOMOL account connection before retrying. <br>
-Risk: Future StoreCensus connector actions labeled write or destructive could change or remove data. <br>
-Mitigation: Confirm the exact payload, target, and expected effect with the user before running any action labeled write or destructive. <br>
+## Use Case:
 
+External users and developers use this skill to query StoreCensus ecommerce intelligence, including website details, Shopify app listings, app categories, and filtered ecommerce store search results through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub StoreCensus skill page](https://clawhub.ai/oomol/skills/oo-storecensus) <br>
-- [StoreCensus homepage](https://www.storecensus.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON with data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: The setup guidance includes remote installer commands for the OOMOL CLI, and the security scan flags this as suspicious.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the CLI only after independently verifying and trusting the installation source; prefer an already installed, signed-in CLI when available.
+
+Risk: StoreCensus access depends on an OOMOL-connected account with server-side managed credentials, so failed commands may reveal missing, expired, or insufficient connection state.
+
+Mitigation: Follow setup fallback steps only after a command fails with the matching authentication, connection, or billing error.
+
+## Reference(s):
+
+- [StoreCensus homepage](https://www.storecensus.com)
+- [StoreCensus skill page on ClawHub](https://clawhub.ai/oomol/skills/oo-storecensus)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [OOMOL CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses are mediated through StoreCensus connector schemas and may include execution metadata from the OOMOL CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

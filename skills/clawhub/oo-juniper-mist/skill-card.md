@@ -1,43 +1,59 @@
-## Description: <br>
-Juniper Mist helps agents search and read Juniper Mist account, organization, site, and device information through OOMOL-connected credentials. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill supports Juniper Mist requests involving searching and reading data through the OOMOL-connected Juniper Mist connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, network administrators, and support agents use this skill to inspect Juniper Mist profile, organization, site, and device data from an OOMOL-connected account without calling the Juniper Mist API directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: An agent using this skill can read Juniper Mist profile, organization, site, and device information through the connected OOMOL account. <br>
-Mitigation: Install and enable it only for agents and users permitted to view that Juniper Mist data, and review OOMOL connection permissions before use. <br>
-Risk: Connector commands depend on the live OOMOL action schema and account connection state. <br>
-Mitigation: Inspect the connector schema before building payloads and use first-time setup steps only after an authentication, connection, or missing CLI error. <br>
+## Use Case:
 
+Developers and network operators use this skill to inspect Juniper Mist administrator, organization, site, and device information through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-juniper-mist) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Juniper Mist Homepage](https://www.juniper.net/us/en/products/networking/mist-ai.html) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return JSON responses from OOMOL connector actions when commands are executed with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md metadata) <br>
+Risk: Juniper Mist profile, organization, site, and device data is routed through OOMOL.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use the skill only when that third-party routing is acceptable for the connected Juniper Mist account and data classification.
+
+Risk: The first-time setup section includes one-line installer commands that execute remote scripts.
+
+Mitigation: Prefer a verified, signed, or package-manager installation path for the oo CLI before using the connector.
+
+Risk: The connector may expose broader actions than the listed read operations.
+
+Mitigation: Use only the listed read actions by default, and require explicit user approval before any broader, write, or destructive connector action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-juniper-mist)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Juniper Mist homepage](https://www.juniper.net/us/en/products/networking/mist-ai.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing JSON payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

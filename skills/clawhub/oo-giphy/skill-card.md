@@ -1,43 +1,56 @@
-## Description: <br>
-GIPHY (giphy.com). Use this skill for ANY GIPHY request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+GIPHY lets agents use an OOMOL-connected GIPHY account to search and retrieve GIFs, stickers, tags, trending content, categories, random items, and phrase translations.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to search, fetch, translate, and inspect GIFs, stickers, categories, and tags through a connected GIPHY account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected GIPHY account and uses OOMOL as an intermediary for GIPHY operations. <br>
-Mitigation: Install only when that intermediary model is acceptable and connect the GIPHY API key or account through OOMOL intentionally. <br>
-Risk: Optional first-time setup commands install or authenticate the oo CLI. <br>
-Mitigation: Review the oo CLI installer separately and run setup commands only when the CLI, authentication, or connection is missing. <br>
-Risk: Billing or credential issues can stop connector execution. <br>
-Mitigation: Follow the documented recovery paths for expired credentials, missing scopes, missing app connections, or OOMOL billing errors before retrying. <br>
+## Use Case:
 
+External users and developers use this skill to ask an agent to search GIPHY, fetch GIF or sticker data, retrieve trending categories and tags, and translate phrases into matching GIFs or stickers through an OOMOL-connected GIPHY account.
 
-## Reference(s): <br>
-- [GIPHY homepage](https://giphy.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The setup instructions include remote installer commands that run shell or PowerShell scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installer instructions before use and prefer independently verified, signed, or package-manager-based installation steps when available.
+
+Risk: The skill operates through an OOMOL-connected GIPHY account.
+
+Mitigation: Connect the account only if the user trusts OOMOL with that integration and understands the account access involved.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-giphy)
+- [GIPHY homepage](https://giphy.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,332 @@
+{
+  "description": "inference-expert-agents \u2014 stdlib-only Python CLIs (JSON in/out) for inference-time compute: triage, deliberate, verify, certify.",
+  "loading_plan": {
+    "core": [
+      "triage",
+      "deliberate",
+      "inference_scorecard",
+      "conformal"
+    ],
+    "ops": [
+      "cascade",
+      "cache_kit",
+      "ladder_trace",
+      "deep_research",
+      "memory_kit",
+      "tool_guards",
+      "mcp_server",
+      "eval_regression",
+      "sandbox_drill",
+      "compress",
+      "portability",
+      "speed",
+      "selfimprove",
+      "_compact",
+      "brevity",
+      "jsonfix"
+    ],
+    "verify": [
+      "selfcheck",
+      "grounding_gate",
+      "judge_panel",
+      "debate",
+      "answer_certificate",
+      "cove",
+      "retrieval",
+      "citecheck",
+      "theatre"
+    ]
+  },
+  "name": "inference-expert-agents",
+  "tools": [
+    {
+      "file": "tools/_common.py",
+      "internal": true,
+      "name": "_common",
+      "purpose": "Shared clean-error contract: never traceback, emit {error} + exit 2 (internal)",
+      "state": false,
+      "subcommands": []
+    },
+    {
+      "file": "tools/_compact.py",
+      "name": "_compact",
+      "purpose": "Strip JSON whitespace for machine consumers (~15-25% fewer tokens)",
+      "state": false,
+      "subcommands": []
+    },
+    {
+      "file": "tools/answer_certificate.py",
+      "name": "answer_certificate",
+      "purpose": "Machine-checkable answer certificates (assemble/validate)",
+      "state": false,
+      "subcommands": [
+        "assemble",
+        "validate"
+      ]
+    },
+    {
+      "file": "tools/brevity.py",
+      "name": "brevity",
+      "purpose": "Rule-based output condenser: drops boilerplate, protects content, reports saved%",
+      "state": false,
+      "subcommands": []
+    },
+    {
+      "file": "tools/cache_kit.py",
+      "name": "cache_kit",
+      "purpose": "Exact+semantic answer cache (TTL + LRU); state strictly opt-in via --db (0600)",
+      "state": true,
+      "subcommands": [
+        "put",
+        "get",
+        "stats"
+      ]
+    },
+    {
+      "file": "tools/cascade.py",
+      "name": "cascade",
+      "purpose": "Cheapest-first model cascade + speculative draft-verify pair",
+      "state": false,
+      "subcommands": []
+    },
+    {
+      "file": "tools/citecheck.py",
+      "name": "citecheck",
+      "purpose": "Verify a citation against arXiv/OpenAlex before repeating it (id resolves AND attribution correct)",
+      "state": false,
+      "subcommands": [
+        "scan",
+        "resolve",
+        "doi",
+        "title",
+        "check"
+      ]
+    },
+    {
+      "file": "tools/compress.py",
+      "name": "compress",
+      "purpose": "Input-token compression + Chain-of-Draft output contract",
+      "state": false,
+      "subcommands": [
+        "compress",
+        "stats",
+        "draft"
+      ]
+    },
+    {
+      "file": "tools/conformal.py",
+      "name": "conformal",
+      "purpose": "Calibrated abstention thresholds, coverage-risk curve, escalation gate",
+      "state": false,
+      "subcommands": [
+        "calibrate",
+        "curve",
+        "gate"
+      ]
+    },
+    {
+      "file": "tools/cove.py",
+      "name": "cove",
+      "purpose": "Chain-of-Verification: factored per-claim checks (plan/crosscheck/revise)",
+      "state": false,
+      "subcommands": [
+        "plan",
+        "crosscheck",
+        "revise"
+      ]
+    },
+    {
+      "file": "tools/debate.py",
+      "name": "debate",
+      "purpose": "Multiagent debate schedule + consensus stability",
+      "state": false,
+      "subcommands": [
+        "schedule",
+        "consensus"
+      ]
+    },
+    {
+      "file": "tools/deep_research.py",
+      "name": "deep_research",
+      "purpose": "Deep-research loop planner + source tiering",
+      "state": false,
+      "subcommands": [
+        "plan",
+        "tier"
+      ]
+    },
+    {
+      "file": "tools/deliberate.py",
+      "name": "deliberate",
+      "purpose": "Rung planner: adaptive budgets, early-exit/abort, budget forcing",
+      "state": false,
+      "subcommands": []
+    },
+    {
+      "file": "tools/eval_regression.py",
+      "name": "eval_regression",
+      "purpose": "Golden-set gates, baseline compare, runs ledger, annotation queue; state strictly opt-in via --db (0600)",
+      "state": true,
+      "subcommands": [
+        "run",
+        "compare",
+        "ledger",
+        "queue",
+        "schedule"
+      ]
+    },
+    {
+      "file": "tools/grounding_gate.py",
+      "name": "grounding_gate",
+      "purpose": "Per-sentence citation validation -> accept/regenerate/refuse (multi-citation)",
+      "state": false,
+      "subcommands": []
+    },
+    {
+      "file": "tools/inference_scorecard.py",
+      "name": "inference_scorecard",
+      "purpose": "Rubric scorer incl. FActScore-style atomic_claim_support",
+      "state": false,
+      "subcommands": []
+    },
+    {
+      "file": "tools/jsonfix.py",
+      "name": "jsonfix",
+      "purpose": "Staged near-JSON repair (fences/trim/commas/literals/brackets) with repair log",
+      "state": false,
+      "subcommands": []
+    },
+    {
+      "file": "tools/judge_panel.py",
+      "name": "judge_panel",
+      "purpose": "Judge ensembles (majority/minority-veto/weighted) + bias checklist",
+      "state": false,
+      "subcommands": [
+        "aggregate",
+        "bias-checklist"
+      ]
+    },
+    {
+      "file": "tools/ladder_trace.py",
+      "name": "ladder_trace",
+      "purpose": "Per-rung cost telemetry + failure taxonomy; state strictly opt-in via --db (0600)",
+      "state": true,
+      "subcommands": [
+        "start",
+        "step",
+        "show",
+        "summary"
+      ]
+    },
+    {
+      "file": "tools/mcp_server.py",
+      "name": "mcp_server",
+      "purpose": "Expose 5 core tools over MCP (stdio JSON-RPC 2.0) with F38 structural + approval gate",
+      "state": false,
+      "subcommands": []
+    },
+    {
+      "file": "tools/memory_kit.py",
+      "name": "memory_kit",
+      "purpose": "Reflections/rules/skills (stable ids) + deliberate forgetting; state strictly opt-in via --db (0600)",
+      "state": true,
+      "subcommands": [
+        "add",
+        "search",
+        "forget",
+        "stats"
+      ]
+    },
+    {
+      "file": "tools/portability.py",
+      "name": "portability",
+      "purpose": "Model-tier classification + adapted inference settings",
+      "state": false,
+      "subcommands": []
+    },
+    {
+      "file": "tools/retrieval.py",
+      "name": "retrieval",
+      "purpose": "Local BM25 retrieval over sqlite FTS5 (build/query/stats); state strictly opt-in via --db (0600)",
+      "state": true,
+      "subcommands": [
+        "build",
+        "query",
+        "stats"
+      ]
+    },
+    {
+      "file": "tools/sandbox_drill.py",
+      "name": "sandbox_drill",
+      "purpose": "Planted-error recovery drills + transcript hygiene verdicts",
+      "state": false,
+      "subcommands": [
+        "drill",
+        "verdict"
+      ]
+    },
+    {
+      "file": "tools/selfcheck.py",
+      "name": "selfcheck",
+      "purpose": "SelfCheckGPT-style sampling check + cluster entropy",
+      "state": false,
+      "subcommands": []
+    },
+    {
+      "file": "tools/selfimprove.py",
+      "name": "selfimprove",
+      "purpose": "Bandit rule ranking, pruning, gated TextGrad-style amendments; state via --db (0600)",
+      "state": true,
+      "subcommands": [
+        "record",
+        "rank",
+        "prune",
+        "propose",
+        "adopt",
+        "status"
+      ]
+    },
+    {
+      "file": "tools/speed.py",
+      "name": "speed",
+      "purpose": "tok/s measurement + serving-lever plans + parallel sampling",
+      "state": false,
+      "subcommands": [
+        "measure",
+        "plan",
+        "parallelize"
+      ]
+    },
+    {
+      "file": "tools/theatre.py",
+      "name": "theatre",
+      "purpose": "Detect verification theatre: flag any verification result whose check could not have failed",
+      "state": false,
+      "subcommands": []
+    },
+    {
+      "file": "tools/tool_guards.py",
+      "name": "tool_guards",
+      "purpose": "Tool-call validation, strict structured outputs, Assert/Suggest retries",
+      "state": false,
+      "subcommands": [
+        "validate",
+        "retry-semantics",
+        "schema"
+      ]
+    },
+    {
+      "file": "tools/triage.py",
+      "name": "triage",
+      "purpose": "Classify query difficulty (trivial/standard/hard) + deliberation preset",
+      "state": false,
+      "subcommands": []
+    }
+  ],
+  "version": "3.0.2",
+  "references": {
+    "release_notes": "references/release-notes-v3.md",
+    "grounding": "references/verified-grounding.md",
+    "note": "load references on demand; SKILL.md + manifest.json are the only always-read files"
+  }
+}

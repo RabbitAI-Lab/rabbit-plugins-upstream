@@ -1,43 +1,57 @@
-## Description: <br>
-Elevio connector skill for searching and reading knowledge base articles and categories through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Elevio lets agents search and read Elevio knowledge base articles and categories through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and support teams use this skill to search, list, and retrieve Elevio knowledge base articles and categories through the OOMOL oo CLI without handling raw Elevio credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill relies on OOMOL as the broker for the user's Elevio connection. <br>
-Mitigation: Install and use it only when that brokered account connection is acceptable for the deployment. <br>
-Risk: First-time setup may require installing the oo CLI and connecting an Elevio account. <br>
-Mitigation: Run setup steps only after an auth, missing CLI, connection, or billing error, and follow the documented OOMOL setup flow. <br>
+## Use Case:
 
+External users and developers use this skill to inspect Elevio action schemas, search knowledge base articles, list articles or categories, and retrieve individual articles or categories from an OOMOL-connected Elevio account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-elevio) <br>
-- [Elevio Homepage](https://elev.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON with data and meta.executionId when actions are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Fallback setup asks users to execute mutable remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an independently verified, pinned, or package-manager installation path when available, and only run remote installer commands after trusting the OOMOL installer source.
+
+Risk: Connector actions depend on the live Elevio action schema and the connected OOMOL account state.
+
+Mitigation: Inspect the live action schema before constructing payloads and fall back to setup only after an authentication, connection, scope, expiration, app, or billing error.
+
+## Reference(s):
+
+- [Elevio Skill on ClawHub](https://clawhub.ai/oomol/skills/oo-elevio)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Elevio Homepage](https://elev.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Elevio connector responses are returned as JSON from the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

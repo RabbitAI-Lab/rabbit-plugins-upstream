@@ -1,42 +1,55 @@
-## Description: <br>
-Use this skill for PostHog requests involving reading, creating, updating, and deleting data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill lets agents use PostHog for reading, creating, updating, and deleting data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and analytics teams use this skill to inspect and manage PostHog projects, dashboards, insights, feature flags, cohorts, annotations, definitions, collaborators, and query results through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change or delete PostHog dashboards, cohorts, feature flags, definitions, insights, collaborators, and related data. <br>
-Mitigation: Require explicit user confirmation for actions marked write or destructive, including the exact target and payload. <br>
-Risk: The skill operates through a connected PostHog account and may require sensitive credentials managed outside the skill. <br>
-Mitigation: Install only when the publisher is trusted and use OOMOL-managed credentials rather than exposing raw tokens to the agent. <br>
+## Use Case:
 
+External users and developers use this skill to operate PostHog through an OOMOL-connected account, including reading, creating, updating, and deleting PostHog projects, dashboards, insights, cohorts, annotations, feature flags, event definitions, and property definitions.
 
-## Reference(s): <br>
-- [PostHog homepage](https://posthog.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-posthog) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return JSON data from PostHog connector actions when commands are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: The skill can read, modify, and delete PostHog resources through an OOMOL-connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when OOMOL is trusted, confirm write payloads before execution, and require explicit approval before destructive actions.
+
+Risk: Fallback setup instructions include remote installer pipelines for the oo CLI.
+
+Mitigation: Prefer a verified, pinned, or package-manager installation path before using the skill.
+
+## Reference(s):
+
+- [PostHog homepage](https://posthog.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-posthog)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill directs agents to inspect live connector schemas before sending JSON payloads through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

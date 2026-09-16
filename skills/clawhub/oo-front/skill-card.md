@@ -1,44 +1,56 @@
-## Description: <br>
-Front (front.com). Use this skill for Front requests that read, create, and update data through the OOMOL-connected front connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Front (front.com). Use this skill for ANY Front request - reading, creating, and updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate Front contact and teammate workflows through an OOMOL-connected Front workspace, including listing, fetching, creating, and updating company contacts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create or update Front contact data through an OOMOL connector. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before any write action. <br>
-Risk: Connector use gives the agent access to a Front workspace through OOMOL-managed credentials. <br>
-Mitigation: Install only when the user trusts OOMOL as the connector provider and intends to allow this workspace access. <br>
-Risk: One-time setup commands may install or authenticate the oo CLI. <br>
-Mitigation: Run install, login, or connection steps only after a matching command failure shows they are needed. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Front through an OOMOL-connected account, including inspecting live connector schemas and running read or write actions for contacts and teammates.
 
-## Reference(s): <br>
-- [Front homepage](https://front.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-front) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action execution; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Setup instructions include unverified remote installer commands that can execute arbitrary code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installation and prefer an official package manager, pinned release, checksum, or signed installer for the oo CLI.
+
+Risk: Front write actions can change contact data.
+
+Mitigation: Confirm the exact JSON payload and intended effect with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub Front skill page](https://clawhub.ai/oomol/skills/oo-front)
+- [Front homepage](https://front.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash, PowerShell, text URL, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill instructs the agent to inspect live action schemas before constructing payloads and to confirm write or destructive actions before execution.]
+
+## Skill Version(s):
+
+1.0.2 (source: artifact frontmatter, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

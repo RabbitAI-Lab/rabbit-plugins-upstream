@@ -1,40 +1,52 @@
-## Description: <br>
-Iaiops Process helps agents inspect process-industry plant telemetry across HART-IP, OPC-UA, Modbus, and optional Sparkplug/MQTT contexts for instrumentation health, downtime root cause, data quality, OEE, alarm, asset, and loop-health analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Process-industry edition of iaiops for process plants that supports read-first HART-IP, OPC-UA, Modbus TCP/RTU, optional MQTT/Sparkplug B UNS, and cross-protocol diagnostics for downtime root cause, data quality, and OEE.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[zw008](https://clawhub.ai/user/zw008)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers and process or plant engineers use this skill to configure agents for read-first diagnostics across HART-IP, OPC-UA, Modbus, and optional Sparkplug/UNS data in chemical, pharma, food and beverage, and oil and gas plants. It helps triage downtime, data quality, alarm behavior, asset inventory, compliance evidence, and change baselines while keeping production writes behind MOC approval.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Write, export, publish, and historian-write capabilities may be enabled in high-impact industrial or plant-connected environments.
+
+Mitigation: Review before production installation, run under a restricted account, and disable or protect export, publish, and historian-write tools with explicit approval gates unless the site intends to use them.
+
+Risk: Unpinned dependencies or uncontrolled package sources can increase supply-chain risk for plant-connected deployments.
+
+Mitigation: Require pinned packages or an internal artifact repository before installing in production or plant-connected environments.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers, reliability engineers, and process-plant operators use this skill to guide read-first diagnostics and analysis for plant telemetry, instrumentation health, downtime root cause, OEE, alarms, and data quality across HART-IP, OPC-UA, and Modbus environments. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Industrial-control use may involve unclear write, export, or stream-publish authority despite read-first guidance. <br>
-Mitigation: Require documented read-only enforcement, operator approval, dry runs, and management-of-change controls before use in production or safety-relevant systems. <br>
-Risk: Historian, export, and stream-publish workflows may move sensitive plant telemetry outside expected boundaries. <br>
-Mitigation: Review destinations, credentials, and data scope before enabling export or publish workflows, and restrict access to approved operators and systems. <br>
+**Output Format:** [Markdown guidance with inline commands, configuration snippets, and structured diagnostic summaries.]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/iaiops-process) <br>
+**Other Properties Related to Output:** [May reference plant process data, protocol reads, and approval-gated publish or export actions depending on enabled tools.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Analysis, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with tool names, environment variables, and inline shell commands.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-first guidance for industrial telemetry; may include approval-gated write precautions when Sparkplug/MQTT publishing is in scope.] <br>
+0.28.0 (source: server release evidence)
 
-## Skill Version(s): <br>
-0.19.0 (source: server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

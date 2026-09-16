@@ -1,40 +1,56 @@
-## Description: <br>
-ProxiedMail lets an agent read ProxiedMail data and create or update proxy email bindings through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ProxiedMail helps agents read, create, and update ProxiedMail data through an OOMOL-connected account instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate ProxiedMail from an agent session, including listing proxy bindings, retrieving received email, and creating or updating forwarding bindings after reviewing the payload. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Creating or updating proxy bindings can change where forwarded email goes. <br>
-Mitigation: Review write-action payloads and confirm their effects before approving execution. <br>
+## Use Case:
 
+External users and developers use this skill to operate a connected ProxiedMail account through OOMOL, including listing and updating proxy bindings and reading received-email data.
 
-## Reference(s): <br>
-- [ProxiedMail homepage](https://proxiedmail.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, Text] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution and returns connector JSON responses when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill metadata) <br>
+Risk: The first-time setup path tells users to execute remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path before installing, and prefer an official, versioned, signed, or checksum-verified installer.
+
+Risk: Once connected, the skill can read ProxiedMail email data and create or update proxy email bindings.
+
+Mitigation: Use the skill only with an account where that access is intended, and confirm exact payloads before running write actions.
+
+## Reference(s):
+
+- [ProxiedMail homepage](https://proxiedmail.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub ProxiedMail skill page](https://clawhub.ai/oomol/skills/oo-proxiedmail)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration instructions, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

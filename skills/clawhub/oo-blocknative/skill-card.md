@@ -1,44 +1,57 @@
-## Description: <br>
-Blocknative helps agents query Blocknative gas and chain data through the OOMOL connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Blocknative (blocknative.com). Use this skill for ANY Blocknative request: searching and reading gas-price and gas-oracle data through an OOMOL-connected Blocknative account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill when they want an agent to retrieve Blocknative Ethereum gas-price estimates, gas-price distributions, gas-oracle metadata, and supported chain information through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Connecting Blocknative through OOMOL grants OOMOL access to an API-key-backed service. <br>
-Mitigation: Connect Blocknative only from an authorized OOMOL account and only when that service access is acceptable for the deployment. <br>
-Risk: The optional oo CLI installation path can execute a remote installer command. <br>
-Mitigation: Review the install command or use the documented install guide before running it in the target environment. <br>
-Risk: The skill depends on live OOMOL authentication, connection state, and billing status. <br>
-Mitigation: Run setup, reconnection, or billing steps only when the oo CLI reports the matching authentication, connection, or credit error. <br>
+## Use Case:
 
+Developers and agents use this skill to retrieve Blocknative gas-price estimates, Ethereum mainnet gas-price distributions, supported chains, and gas-oracle metadata through the OOMOL oo CLI.
 
-## Reference(s): <br>
-- [Blocknative Homepage](https://www.blocknative.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May run oo CLI connector schema and read-only connector actions that return JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: skill metadata and release evidence) <br>
+Risk: First-time setup recommends remote installer commands that can execute local code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from a pinned, verifiable release or trusted package manager; avoid curl-to-bash or irm-to-iex unless the installer path is trusted.
+
+Risk: Connector actions depend on the user's OOMOL account connection and live Blocknative access.
+
+Mitigation: Run setup and connection steps only after an auth or connection failure, then use the live connector schema before sending any payload.
+
+## Reference(s):
+
+- [Blocknative homepage](https://www.blocknative.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-blocknative)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API calls, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live oo CLI connector schemas before running Blocknative read actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

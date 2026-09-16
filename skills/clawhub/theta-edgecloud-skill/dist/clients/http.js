@@ -20,13 +20,15 @@ function backoffDelayMs(attempt, baseMs) {
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 async function request(url, method, body, opts) {
     const timeoutMs = toPositiveInt(opts?.timeoutMs, 20000, { min: 1000, max: 300000 });
-    const maxRetries = toPositiveInt(opts?.maxRetries, 2, { min: 0, max: 6 });
+    // No idempotency contract exists for mutations/inference: never replay them.
+    const maxRetries = method === 'GET' ? toPositiveInt(opts?.maxRetries, 2, { min: 0, max: 6 }) : 0;
     const retryBackoffMs = toPositiveInt(opts?.retryBackoffMs, 250, { min: 25, max: 10000 });
     for (let attempt = 0; attempt <= maxRetries; attempt += 1) {
         const canRetry = attempt < maxRetries;
         try {
             const signal = AbortSignal.timeout(timeoutMs);
             const res = await fetch(url, {
+                redirect: 'error',
                 method,
                 headers: withAuth(opts?.headers, opts?.auth),
                 body,

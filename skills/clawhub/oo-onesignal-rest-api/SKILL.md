@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "OneSignal"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["onesignal_rest_api"]
   icon: "https://static.oomol.com/logo/third-party/onesignal_rest_api.svg"
 ---

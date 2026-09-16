@@ -1,46 +1,56 @@
-## Description: <br>
-Perigon (perigon.io) lets an agent search, read, and summarize Perigon data through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Perigon helps agents search and read Perigon news, entity, topic, story, journalist, source, and Wikipedia data through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to query Perigon news, entities, sources, stories, topics, and Wikipedia-backed data through an OOMOL-connected Perigon account. It also supports AI summaries and semantic search over Perigon news and Wikipedia content. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may require installing the OOMOL oo CLI with shell or PowerShell installer commands. <br>
-Mitigation: Review the installer source and install only from trusted OOMOL CLI sources before running connector actions. <br>
-Risk: Connector actions use the user's OOMOL-connected Perigon account and may fail or expose account-scoped data if the wrong connection or payload is used. <br>
-Mitigation: Confirm the Perigon connection and inspect the live action schema before sending JSON payloads. <br>
-Risk: Generated news summaries and search results may be incomplete or dependent on Perigon coverage and filters. <br>
-Mitigation: Review returned articles, filters, and source metadata before using summaries for decisions. <br>
+## Use Case:
 
+External users and developers use this skill to search Perigon news and knowledge data, inspect live connector schemas, and run read-focused Perigon actions through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Perigon skill](https://clawhub.ai/oomol/skills/oo-perigon) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Perigon homepage](https://perigon.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL Perigon connection](https://console.oomol.com/app-connections?provider=perigon) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill instructs the agent to inspect the live connector schema before building an oo CLI JSON payload.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: Setup guidance includes directly running remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OOMOL's official install documentation, inspect downloaded installers, and verify integrity where possible before running them.
+
+Risk: Perigon access is mediated through OOMOL as the access layer.
+
+Mitigation: Install only if that access model is acceptable for the intended account and data workflow.
+
+## Reference(s):
+
+- [Perigon homepage](https://perigon.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub Perigon skill page](https://clawhub.ai/oomol/skills/oo-perigon)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector command responses use JSON with data and meta.executionId when actions are executed.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

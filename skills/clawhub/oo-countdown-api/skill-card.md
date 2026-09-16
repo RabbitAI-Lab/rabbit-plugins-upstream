@@ -1,42 +1,53 @@
-## Description: <br>
-Enables agents to search eBay products, retrieve product details, get autocomplete suggestions, and check Countdown API account status through the OOMOL `countdown_api` connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides OOMOL-connected access to Countdown API for searching eBay products, reading product details, retrieving autocomplete suggestions, and checking account usage or platform status.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to access Countdown API data through an installed and connected OOMOL account. It supports product search, product detail retrieval, autocomplete, and account usage checks while instructing agents to inspect live action schemas before connector calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected OOMOL account with Countdown API credentials. <br>
-Mitigation: Install only for users who intend to use the Countdown API connector, and resolve authentication or connection errors through the documented first-time setup steps. <br>
-Risk: Connector action inputs can change with the live Countdown API contract. <br>
-Mitigation: Inspect the action schema before constructing each payload and confirm any write or destructive action with the user before execution. <br>
+## Use Case:
 
+Developers and external users use this skill to run read-oriented Countdown API actions through an OOMOL-connected account without handling raw API tokens directly.
 
-## Reference(s): <br>
-- [Countdown API homepage](https://countdownapi.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill listing](https://clawhub.ai/oomol/oo-countdown-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include a data object and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill frontmatter) <br>
+Risk: Setup instructions include one-line remote installer commands that can execute arbitrary code if the installer delivery path is not trusted.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installing, avoid running remote installer commands unless OOMOL's installer source is trusted, and prefer a verified, versioned, or package-manager installation method when available.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-countdown-api)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Countdown API homepage](https://countdownapi.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-oriented Countdown API actions through the OOMOL oo CLI; setup guidance is used only after authentication or connection failures.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

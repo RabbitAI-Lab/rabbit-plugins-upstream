@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Webvizio"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["webvizio"]
   icon: "https://static.oomol.com/logo/third-party/webvizio.png"
 ---

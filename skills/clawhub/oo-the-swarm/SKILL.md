@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "The Swarm"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["the_swarm"]
   icon: "https://static.oomol.com/logo/third-party/the_swarm.svg"
 ---

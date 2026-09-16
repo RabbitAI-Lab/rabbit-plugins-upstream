@@ -1,40 +1,60 @@
-## Description: <br>
-Operate Flagsmith through an OOMOL-connected account to inspect feature flags, evaluate identity flags and traits, and identify users through connector actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Flagsmith skill for reading feature flags, evaluating identity flags, and operating selected Flagsmith actions through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External developers and operators use this skill to access a connected Flagsmith environment from an agent, including listing flags, retrieving flag values, and evaluating or identifying identities. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review says the identity action can change Flagsmith traits even though it is not tagged as a write action. <br>
-Mitigation: Require explicit user confirmation before running identify_identity with trait-setting data. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Flagsmith feature flags and evaluated identity flags through an OOMOL-connected Flagsmith account. It can also identify a Flagsmith identity and optionally update traits when the user explicitly intends that state change.
 
-## Reference(s): <br>
-- [Flagsmith homepage](https://www.flagsmith.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub Flagsmith skill](https://clawhub.ai/oomol/skills/oo-flagsmith) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides agents to inspect live connector schemas before running Flagsmith actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and frontmatter) <br>
+Risk: Remote installer one-liners can execute installer code before the user has reviewed the source.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the oo CLI source and installation path independently before running installer commands.
+
+Risk: The identify_identity action can update Flagsmith identity traits.
+
+Mitigation: Confirm the exact payload and intended state change with the user before invoking identify_identity with traits.
+
+Risk: Flagsmith data is routed through an OOMOL-connected account.
+
+Mitigation: Confirm that OOMOL handling is acceptable for the account's data-handling requirements.
+
+## Reference(s):
+
+- [ClawHub Flagsmith Skill Page](https://clawhub.ai/oomol/skills/oo-flagsmith)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Flagsmith Homepage](https://www.flagsmith.com)
+- [OOMOL oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

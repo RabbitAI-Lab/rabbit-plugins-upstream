@@ -1,44 +1,56 @@
-## Description: <br>
-Gumloop (gumloop.com). Use this skill for Gumloop requests that read, create, update, or run Gumloop resources through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gumloop lets an agent inspect schemas and operate Gumloop workbooks, saved flows, run history, and flow runs through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Gumloop through the oo CLI with their OOMOL-connected account. It supports discovering connector schemas, listing saved flows and workbooks, reviewing run history and details, starting saved flow runs, and killing active runs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can start saved Gumloop flow runs, which may change Gumloop state or trigger downstream automation. <br>
-Mitigation: Confirm the exact saved flow and JSON payload with the user before running start_flow_run. <br>
-Risk: The skill can kill Gumloop flow runs and subflow runs, interrupting active work. <br>
-Mitigation: Confirm the exact run target and expected effect before allowing kill_flow_run. <br>
+## Use Case:
 
+External users and developers use this skill to list Gumloop assets, inspect saved flow schemas, start flow runs, and monitor or stop active runs from an agent session.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-gumloop) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Gumloop homepage](https://www.gumloop.com) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector actions return JSON responses with data and execution metadata when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions include remote installer commands for the OOMOL CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the CLI through a verified official package or inspect a versioned installer before running setup commands.
+
+Risk: Starting or killing Gumloop flow runs can affect live Gumloop work.
+
+Mitigation: Require explicit user confirmation for start_flow_run and kill_flow_run, including the target flow or run and payload.
+
+## Reference(s):
+
+- [Gumloop homepage](https://www.gumloop.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-gumloop)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live Gumloop action schemas before constructing command payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

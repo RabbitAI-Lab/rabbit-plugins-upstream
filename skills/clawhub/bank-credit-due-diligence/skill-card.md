@@ -1,40 +1,57 @@
-## Description: <br>
-AI assistant for bank credit due diligence covering borrower analysis, financial review, industry risk, ESG factors, and investigation report drafting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assists bank credit staff with structured borrower due diligence, financial review, risk assessment, and credit investigation report drafting.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Bank credit officers, loan analysts, and risk managers use this skill as an internal analytical framework for borrower due diligence, financial health review, industry and ESG risk assessment, and report drafting. It supports analysis and templates but does not make final credit approval or rejection decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Credit due diligence is a high-stakes banking workflow, and generated ratings, facility amounts, pricing guidance, collateral suggestions, or report text could be mistaken for final lending decisions. <br>
-Mitigation: Use the skill only as an advisory aid for trained credit staff, and require formal policy review plus authorized approval before relying on outputs for lending action. <br>
-Risk: Borrower analysis may involve customer PII, confidential financial data, or other sensitive banking information. <br>
-Mitigation: Do not enter real customer PII or confidential borrower data unless the institution permits it and appropriate data protection controls are in place. <br>
+## Use Case:
 
+Bank credit officers, loan analysts, and risk managers use this skill to structure corporate borrower due diligence, review financial health and risk factors, and draft investigation reports and monitoring indicators for human approval.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/bank-credit-due-diligence) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Conversational guidance and Markdown-style report templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code, shell commands, persistent storage, network calls, or credential collection are included in the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.1.1 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Users may paste personal identifiers, unrestricted customer records, or confidential borrower data into prompts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use anonymized or aggregated data unless institutional policy and platform controls permit sensitive data use.
+
+Risk: Regulatory references or credit conclusions may be outdated, incomplete, or inaccurate if used without official verification.
+
+Mitigation: Verify regulatory content and borrower facts against current official sources and require qualified bank staff to review, approve, and sign any conclusions.
+
+Risk: AI-assisted credit ratings or facility recommendations could be mistaken for final credit approval.
+
+Mitigation: Treat outputs as advisory templates only; independently recalculate key ratios and route final decisions through authorized credit processes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/bank-credit-due-diligence)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown reports, tables, checklists, and prompt templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory-only outputs requiring human review; no tool execution.]
+
+## Skill Version(s):
+
+4.1.2 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

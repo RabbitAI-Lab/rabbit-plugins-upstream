@@ -1,46 +1,56 @@
-## Description: <br>
-Gamma (gamma.app). Use this skill for ANY Gamma request: reading, creating, and updating data through the OOMOL Gamma connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gamma (gamma.app) helps agents read, create, and update Gamma data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate Gamma through an OOMOL-connected account, including creating generations, checking generation status, and listing available folders or themes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected Gamma account and may use sensitive account credentials handled through the OOMOL flow. <br>
-Mitigation: Install and use it only if you trust the OOMOL oo CLI and connect Gamma through the expected OOMOL connection page. <br>
-Risk: Generation actions can create or update Gamma state based on user-provided payloads. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running any write action. <br>
-Risk: Setup commands include remote installer URLs for the oo CLI. <br>
-Mitigation: Review the installer before execution and prefer the documented platform-specific install path. <br>
+## Use Case:
 
+Agents use this skill to operate Gamma through an OOMOL-connected account, including creating and polling generation jobs, checking status, retrieving result URLs, and listing folders or themes. It is intended for users who have the oo CLI installed and a connected Gamma account.
 
-## Reference(s): <br>
-- [ClawHub Gamma Skill](https://clawhub.ai/oomol/oo-gamma) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Gamma](https://gamma.app) <br>
-- [Gamma Connector Setup](https://console.oomol.com/app-connections?provider=gamma) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON payloads and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return Gamma generation status, result URLs, folder lists, theme lists, or setup guidance depending on the selected connector action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup documents remote installer commands that pipe downloaded scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify OOMOL installer sources before execution, or prefer a signed, pinned, or package-manager installation path for the oo CLI.
+
+Risk: Write actions can create Gamma generations or otherwise change Gamma workspace state.
+
+Mitigation: Confirm the exact action payload and expected effect with the user before running actions tagged as write.
+
+## Reference(s):
+
+- [ClawHub Gamma skill page](https://clawhub.ai/oomol/skills/oo-gamma)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Gamma homepage](https://gamma.app)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live oo connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

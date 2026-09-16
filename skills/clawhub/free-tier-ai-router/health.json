@@ -1,0 +1,108 @@
+{
+ "_comment": "Measured 2026-07-30 by probe.py. Routes here are skipped with ZERO API calls.",
+ "measured_at": "2026-07-30",
+ "dead_providers": [
+  {
+   "provider": "cerebras",
+   "reason": "account unfunded \u2014 every inference returns 402 (auth is fine, /v1/models returns 200)"
+  }
+ ],
+ "dead_routes": [
+  {
+   "provider": "gemini",
+   "model": "gemini-2.5-flash",
+   "http": "404",
+   "reason": "This model models/gemini-2.5-flash is no longer available to new users. Please u"
+  },
+  {
+   "provider": "gemini",
+   "model": "gemini-2.5-flash-preview-tts",
+   "http": "400",
+   "reason": "The requested combination of response modalities (TEXT) is not supported by the "
+  },
+  {
+   "provider": "gemini",
+   "model": "gemini-2.5-flash-lite",
+   "http": "404",
+   "reason": "This model models/gemini-2.5-flash-lite is no longer available to new users. Ple"
+  },
+  {
+   "provider": "gemini",
+   "model": "gemini-3.1-flash-tts-preview",
+   "http": "400",
+   "reason": "Request contains an invalid argument."
+  },
+  {
+   "provider": "gemini",
+   "model": "gemini-robotics-er-1.5-preview",
+   "http": "404",
+   "reason": "This model models/gemini-robotics-er-1.5-preview is no longer available. Please "
+  },
+  {
+   "provider": "gemini",
+   "model": "antigravity-preview-05-2026",
+   "http": "400",
+   "reason": "This model only supports Interactions API."
+  },
+  {
+   "provider": "gemini",
+   "model": "deep-research-max-preview-04-2026",
+   "http": "400",
+   "reason": "This model only supports Interactions API."
+  },
+  {
+   "provider": "gemini",
+   "model": "deep-research-preview-04-2026",
+   "http": "400",
+   "reason": "This model only supports Interactions API."
+  },
+  {
+   "provider": "gemini",
+   "model": "deep-research-pro-preview-12-2025",
+   "http": "400",
+   "reason": "This model only supports Interactions API."
+  },
+  {
+   "provider": "mistral",
+   "model": "labs-leanstral-1-5",
+   "http": "403",
+   "reason": "Model labs-leanstral-1-5 is a Labs model. To use Labs models, an admin must enab"
+  },
+  {
+   "provider": "mistral",
+   "model": "labs-leanstral-1-5-1",
+   "http": "403",
+   "reason": "Model labs-leanstral-1-5-1 is a Labs model. To use Labs models, an admin must en"
+  },
+  {
+   "provider": "kilo",
+   "model": "google/lyria-3-pro-preview",
+   "http": "402",
+   "reason": "Add credits to continue, or switch to a free model"
+  },
+  {
+   "provider": "kilo",
+   "model": "google/lyria-3-clip-preview",
+   "http": "402",
+   "reason": "Add credits to continue, or switch to a free model"
+  },
+  {
+   "provider": "cerebras",
+   "model": "gemma-4-31b",
+   "http": "402",
+   "reason": "Payment required to access this resource. Visit your billing tab."
+  },
+  {
+   "provider": "cerebras",
+   "model": "zai-glm-4.7",
+   "http": "402",
+   "reason": "Payment required to access this resource. Visit your billing tab."
+  },
+  {
+   "provider": "cerebras",
+   "model": "gpt-oss-120b",
+   "http": "402",
+   "reason": "Payment required to access this resource. Visit your billing tab."
+  }
+ ]
+}

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "ShipStation"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["ship_station"]
   icon: "https://static.oomol.com/logo/third-party/ship_station.svg"
 ---

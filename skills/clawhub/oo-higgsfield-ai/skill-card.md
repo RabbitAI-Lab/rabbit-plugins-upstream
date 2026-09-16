@@ -1,44 +1,56 @@
-## Description: <br>
-Higgsfield AI connects an agent to Higgsfield AI through OOMOL's oo CLI for request status checks, text-to-image generation, image-to-video generation, and queued request cancellation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Higgsfield AI (higgsfield.ai). Use this skill for ANY Higgsfield AI request: reading, creating, and updating data through the OOMOL-connected oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate a connected Higgsfield AI account through OOMOL for generation workflows, progress checks, output retrieval, and queued job cancellation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can submit Higgsfield AI generation requests through the user's connected OOMOL account. <br>
-Mitigation: Confirm generation prompts and payloads with the user before running write actions. <br>
-Risk: The skill can cancel queued Higgsfield AI generation requests. <br>
-Mitigation: Confirm the exact request ID and cancellation target before running the cancellation action. <br>
-Risk: First-time setup commands can install the oo CLI or initiate account connection steps. <br>
-Mitigation: Run installer, login, or connection commands only when an action fails because setup is missing or expired. <br>
+## Use Case:
 
+Developers and external users use this skill to operate Higgsfield AI from an agent session, including submitting image or video generation requests, checking request status, and cancelling queued requests.
 
-## Reference(s): <br>
-- [Higgsfield AI homepage](https://higgsfield.ai/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-higgsfield-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the live connector schema before submitting action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: First-time setup includes remote shell installer commands that execute code from OOMOL-controlled endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup source before installation, prefer a documented and verifiable oo CLI install path, and only run installer commands when the user trusts the endpoint.
+
+Risk: Generation submission and cancellation actions can change Higgsfield AI account state or consume credits.
+
+Mitigation: Confirm the exact action, payload, and expected effect with the user before running write or cancellation commands.
+
+## Reference(s):
+
+- [Higgsfield AI homepage](https://higgsfield.ai/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-higgsfield-ai)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses oo connector schemas before actions and returns connector responses that may include request data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

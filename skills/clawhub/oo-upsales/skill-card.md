@@ -1,43 +1,55 @@
-## Description: <br>
-Upsales (upsales.com). Use this skill for ANY Upsales request - reading, creating, updating, and deleting data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables an agent to read, create, update, and delete Upsales companies, contacts, and users through an OOMOL-connected Upsales account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and business users use this skill to read, create, update, and delete Upsales companies, contacts, and users through the oo CLI without handling raw Upsales API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, and delete Upsales records through the connected account. <br>
-Mitigation: Confirm the exact payload, target record, and intended effect with the user before running write or destructive actions. <br>
-Risk: The connected Upsales account may have broader permissions than the user intends for an agent workflow. <br>
-Mitigation: Use an Upsales account with appropriate permissions and review the oo CLI installer before first-time setup. <br>
+## Use Case:
 
+External users and operators use this skill to manage Upsales account data through an agent, including listing, retrieving, creating, updating, and deleting companies, contacts, and users.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-upsales) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Upsales homepage](https://www.upsales.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo connector schema checks before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and artifact metadata) <br>
+Risk: Installer commands for the oo CLI could execute changing remote code on a user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after trusting OOMOL and verifying the installer through an official signed package or checksum when available.
+
+Risk: Write and destructive actions can create, update, or delete Upsales data.
+
+Mitigation: Require explicit user confirmation of the target, payload, and intended effect before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Upsales Skill Page](https://clawhub.ai/oomol/skills/oo-upsales)
+- [Upsales Homepage](https://www.upsales.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing payloads; changing Upsales actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

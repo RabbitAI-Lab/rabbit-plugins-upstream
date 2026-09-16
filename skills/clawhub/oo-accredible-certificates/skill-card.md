@@ -1,44 +1,57 @@
-## Description: <br>
-Enables an agent to operate Accredible Certificates through an OOMOL-connected account for reading, creating, searching, listing, and deleting credentials and groups. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Accredible Certificates through an OOMOL-connected account using the oo CLI for reading, creating, searching, listing, and deleting certificate data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Accredible certificate credentials and credential groups from an agent workflow through the OOMOL connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create Accredible credentials and delete certificate data. <br>
-Mitigation: Review the exact payload and expected effect before approving creation, and require explicit approval for deletion targets. <br>
-Risk: The skill depends on OOMOL-mediated access to the user's Accredible account. <br>
-Mitigation: Install only when OOMOL should mediate account access, and confirm the account connection and scopes before use. <br>
-Risk: Installing the oo CLI from a remote installer may introduce supply-chain risk. <br>
-Mitigation: Verify the oo CLI installer source before installation, or use an already installed trusted CLI. <br>
+## Use Case:
 
+External users and developers use this skill to operate an Accredible Certificates connector from an agent, including credential and group discovery plus confirmed create and delete actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-accredible-certificates) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Accredible Certificates homepage](https://www.accredible.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live connector schema inspection before payload construction; write and destructive actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup instructions include remote installer commands that can execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source or install the oo CLI through a trusted package or signed release path before running setup.
+
+Risk: Create and delete actions can change or remove Accredible credential data.
+
+Mitigation: Confirm the exact payload, target, and expected effect with the user before write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/oomol/skills/oo-accredible-certificates)
+- [ClawHub publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Accredible Certificates homepage](https://www.accredible.com/)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live connector schema inspection before action payloads; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

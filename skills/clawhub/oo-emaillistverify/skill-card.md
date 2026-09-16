@@ -1,45 +1,55 @@
-## Description: <br>
-EmailListVerify helps agents verify email addresses, check disposable domains, manage batch email-list verification, and retrieve verification credits through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+EmailListVerify helps agents operate EmailListVerify through an OOMOL-connected account for email verification, disposable-domain checks, credit lookup, and batch email-list workflows.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and operations teams use this skill to verify individual email addresses, assess disposable domains, and manage EmailListVerify batch list checks from an agent session. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected EmailListVerify account and sensitive credentials managed through OOMOL. <br>
-Mitigation: Grant access only to the intended OOMOL and EmailListVerify connection, and review requested account scopes before use. <br>
-Risk: Batch upload and list deletion actions can change or remove EmailListVerify data. <br>
-Mitigation: Confirm exact payloads, list identifiers, and intended effects with the user before running write or destructive actions. <br>
-Risk: The security conclusion is based on clean scanner telemetry and the visible artifact evidence. <br>
-Mitigation: Review the installed skill text and connector behavior before deployment, especially for credential, external service, or write-action changes. <br>
+## Use Case:
 
+Developers and operators use this skill to verify individual email addresses, inspect disposable domains, manage EmailListVerify batch list jobs, and check account credits through the oo CLI connector.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-emaillistverify) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [EmailListVerify Homepage](https://emaillistverify.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return EmailListVerify connector responses as JSON when actions are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: First-time setup instructions include internet installer scripts that could execute unverified code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer official installation documentation, inspect downloaded scripts, verify publisher or checksum information where available, and avoid elevated privileges unless required.
+
+Risk: Write and destructive EmailListVerify actions can modify or delete account data.
+
+Mitigation: Fetch the live action schema before building payloads and obtain explicit user confirmation for write or destructive actions.
+
+## Reference(s):
+
+- [EmailListVerify homepage](https://emaillistverify.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-emaillistverify)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are returned as JSON with data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

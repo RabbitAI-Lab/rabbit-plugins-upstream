@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "OpenAI"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["openai"]
   icon: "https://static.oomol.com/logo/third-party/OpenAI.svg"
 ---

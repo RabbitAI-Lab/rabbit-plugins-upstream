@@ -1,44 +1,55 @@
-## Description: <br>
-Anrok (anrok.com). Use this skill for ANY Anrok request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Anrok (anrok.com). Use this skill for ANY Anrok request - searching and reading data. Whenever a task involves Anrok, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to search and read Anrok customer, product, filing, transaction, product mapping, and tax category data through an OOMOL-connected Anrok account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Returned Anrok customer, transaction, filing, and tax data may contain sensitive business or customer information. <br>
-Mitigation: Limit responses to the user's requested data and treat connector results as sensitive. <br>
-Risk: Future versions could add write or destructive Anrok actions. <br>
-Mitigation: Review updated security evidence before upgrade and require explicit user confirmation before any write or destructive action. <br>
-Risk: Using an incorrect payload schema can cause failed or unintended connector requests. <br>
-Mitigation: Inspect the live `oo connector schema` for the selected action before constructing each payload. <br>
+## Use Case:
 
+External users and developers use this skill to inspect Anrok action schemas and run OOMOL-connected Anrok lookups for customers, products, filings, product mappings, tax categories, and transactions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-anrok) <br>
-- [Anrok homepage](https://www.anrok.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only connector actions return Anrok data and an execution ID in response metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and ClawHub release evidence) <br>
+Risk: The setup path includes remote installer commands that can execute changing network code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use official, versioned oo CLI installation instructions and prefer checksum or signature verification before running the installer.
+
+Risk: The connector can read Anrok business and tax records from the connected account.
+
+Mitigation: Connect only the Anrok account whose data the user intends the agent to read, and inspect the action schema before each connector run.
+
+## Reference(s):
+
+- [Anrok homepage](https://www.anrok.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-anrok)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live Anrok connector schemas before constructing action payloads; connector responses are JSON when run with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: skill frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "OneDesk"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["onedesk"]
   icon: "https://static.oomol.com/logo/third-party/onedesk.svg"
 ---

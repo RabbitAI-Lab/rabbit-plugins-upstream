@@ -1,42 +1,61 @@
-## Description: <br>
-Encharge (encharge.io). Use this skill for Encharge requests that read, create, or update data through the OOMOL `oo` CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Encharge helps agents read, create, and update Encharge data through an OOMOL-connected account using the oo CLI instead of direct API calls.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect the Encharge connector schema and run Encharge actions through an OOMOL-connected account, including sending transactional email after user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send transactional email through the connected Encharge account. <br>
-Mitigation: Review the recipient, subject, body, and complete payload before approving any write action. <br>
-Risk: Broad Encharge routing language could be mistaken for permission to perform automatic writes. <br>
-Mitigation: Treat the routing language as tool-selection guidance and require explicit user confirmation before actions that change Encharge state. <br>
+## Use Case:
 
+External users and developers use this skill to inspect live Encharge action schemas and run Encharge connector actions, including sending transactional email, through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-encharge) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Encharge](https://encharge.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Setup instructions include unverified remote installer commands that can execute changing code on a user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installing; prefer a signed, versioned, or package-manager source, or download and verify the installer before execution.
+
+Risk: The send_email action changes Encharge account state by sending transactional email.
+
+Mitigation: Confirm the exact email payload and intended effect with the user before running write actions.
+
+Risk: Connector requests built without the current action schema can use incorrect input fields.
+
+Mitigation: Inspect the live action schema with the oo CLI before constructing each request payload.
+
+## Reference(s):
+
+- [ClawHub Encharge Skill](https://clawhub.ai/oomol/skills/oo-encharge)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Encharge](https://encharge.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agents should inspect live connector schemas before constructing JSON payloads and confirm write or destructive actions before execution.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

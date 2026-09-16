@@ -1,41 +1,58 @@
-## Description: <br>
-Pangolin-SafeYield is a defensive-offensive investment AI agent that runs a five-dimensional resonance scan across macro, fundamental, technical, capital-flow, and risk signals for stocks and ETFs, then produces buy, hold, or sell-oriented investment decision reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pangolin SafeYield is an investment decision-support checklist that helps users analyze ETFs and individual stocks with a defensive-offensive framework, five-dimensional market review, risk red-line screening, and review discipline.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users use this skill to structure public-market stock and ETF analysis, compare macro and market signals, and produce investment decision reports with position sizing, execution levels, and risk notes. Outputs require human review before any financial decision. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can generate specific allocation and trade-plan suggestions for stocks and ETFs. <br>
-Mitigation: Treat reports as analytical guidance only and require human review before making financial decisions. <br>
-Risk: Broad trigger phrases can activate the workflow in general investment discussions. <br>
-Mitigation: Install it only where structured stock and ETF analysis is desired, and review generated outputs before use. <br>
+## Use Case:
 
+External users use this skill to structure high-stakes investment research, pre-trade checklists, ETF and stock screening, risk red-line reviews, and post-decision retrospectives. Outputs are decision drafts that require independent verification and human review before any real-world financial action.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/pangolin-safe-yield) <br>
-- [Skill definition](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown investment analysis report with scoring tables, posture labels, allocation guidance, execution levels, and risk notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only workflow; uses public web searches; no executable code, privileged system access, persistent storage, or credential handling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: frontmatter and server release evidence) <br>
+Risk: Financial analysis outputs may be incorrect, incomplete, stale, or unsuitable for a user's legal, employer, or financial obligations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat buy, sell, position-size, stop-loss, and target-price outputs as drafts; independently verify current data and applicable obligations before acting.
+
+Risk: The skill may influence high-stakes investment decisions even though it has no broker access or order-placement capability.
+
+Mitigation: Keep final decisions under user control and require human review before any real-world application.
+
+Risk: Market-data lookups are performed by the host agent or user environment, not by the skill itself.
+
+Mitigation: Use only permitted data sources and review any retrieved evidence for freshness, reliability, and compliance.
+
+## Reference(s):
+
+- [ClawHub skill page: Pangolin SafeYield](https://clawhub.ai/gechengling/skills/pangolin-safe-yield)
+- [ClawHub publisher profile: gechengling](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown investment analysis report with checklists, scoring tables, risk notes, and decision-draft fields]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No executable code, broker connectivity, persistence, or autonomous order placement; financial outputs require human review.]
+
+## Skill Version(s):
+
+3.2.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

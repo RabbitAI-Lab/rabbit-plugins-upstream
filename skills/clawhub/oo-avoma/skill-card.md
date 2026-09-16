@@ -1,42 +1,57 @@
-## Description: <br>
-Use this skill to search and read Avoma meeting, recording, transcription, user, and insight data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Avoma (avoma.com). Use this skill for ANY Avoma request - searching and reading data. Whenever a task involves Avoma, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to query Avoma meeting, recording, transcription, user, and meeting-insight data through their connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Avoma meeting transcripts, recordings, and related meeting data can contain sensitive information. <br>
-Mitigation: Limit requests to the specific meeting IDs, date ranges, users, and filters needed for the task. <br>
-Risk: The skill runs Avoma queries through a connected OOMOL account. <br>
-Mitigation: Install and use it only when the account owner is comfortable allowing the agent to query Avoma data through that connection. <br>
+## Use Case:
 
+External users and developers use this skill to search and read Avoma meetings, recordings, transcriptions, meeting insights, and visible users through an OOMOL-connected Avoma account.
 
-## Reference(s): <br>
-- [Avoma homepage](https://www.avoma.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub Avoma skill page](https://clawhub.ai/oomol/skills/oo-avoma) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs guide an agent to inspect the live connector schema before running Avoma read actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: Setup instructions include unverified remote installer commands that could execute changing code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run installer one-liners automatically; install the oo CLI through a reviewed, version-pinned, verified method.
+
+Risk: The skill mediates access to Avoma data through OOMOL-connected credentials.
+
+Mitigation: Connect Avoma deliberately with an account limited to the data the agent is intended to read.
+
+## Reference(s):
+
+- [ClawHub Avoma Skill](https://clawhub.ai/oomol/skills/oo-avoma)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Avoma Homepage](https://www.avoma.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only Avoma connector workflows; live action schemas are inspected before payloads are built.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

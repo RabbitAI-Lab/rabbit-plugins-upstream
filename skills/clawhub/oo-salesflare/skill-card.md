@@ -1,45 +1,60 @@
-## Description: <br>
-Salesflare helps agents read, create, and update Salesflare CRM data through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for Salesflare CRM requests that read, create, or update data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Sales teams and CRM operators use this skill to have an agent query Salesflare records and prepare confirmed create or update actions through OOMOL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create or update Salesflare CRM records through OOMOL. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running any write action. <br>
-Risk: CRM access is mediated through the user's OOMOL account connection. <br>
-Mitigation: Install and use the skill only when Salesflare access through OOMOL is intended, and review the OOMOL CLI and Salesflare connection setup before relying on it. <br>
-Risk: Read actions can return Salesflare account, contact, opportunity, task, and user data. <br>
-Mitigation: Use the skill only with an authorized Salesflare connection and handle returned CRM data according to the user's access and data-handling requirements. <br>
+## Use Case:
 
+Sales and operations users can ask an agent to inspect Salesflare schemas and run Salesflare account, contact, opportunity, task, and current-user actions. The skill supports read workflows and user-confirmed write workflows through an OOMOL-connected Salesflare account.
 
-## Reference(s): <br>
-- [ClawHub Salesflare skill](https://clawhub.ai/oomol/skills/oo-salesflare) <br>
-- [Salesflare homepage](https://salesflare.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with oo CLI commands and JSON payload or response details] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read actions can run directly; create and update actions require confirmation of the exact payload and effect.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: The setup path includes a one-line remote installer executed directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified or package-manager installation method for the oo CLI, or review the installer source before running it.
+
+Risk: The skill uses OOMOL as an intermediary for Salesflare actions and server-side credentials.
+
+Mitigation: Install only when the user is comfortable with OOMOL brokering Salesflare actions for the connected account.
+
+Risk: Several actions create or update Salesflare CRM records.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub Salesflare skill page](https://clawhub.ai/oomol/skills/oo-salesflare)
+- [Salesflare homepage](https://salesflare.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing Salesflare action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

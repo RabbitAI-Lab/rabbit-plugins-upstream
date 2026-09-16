@@ -1,0 +1,6 @@
+interface:
+  display_name: "MOA Service Client"
+  short_description: "Run and verify repository-pinned MOA design workflows"
+  default_prompt: "Use $moa-service-client. In Multica, submit with the Issue UUID and end after MOA accepts the task; when a callback wakes a new run, query MOA and finalize the result. Use polling only for explicit operator-led runs."
+policy:
+  allow_implicit_invocation: true

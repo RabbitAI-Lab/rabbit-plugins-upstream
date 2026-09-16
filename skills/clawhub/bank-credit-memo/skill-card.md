@@ -1,42 +1,58 @@
-## Description: <br>
-AI-powered bank credit memo and credit analysis report writer that generates structured credit analysis reports, credit ratings, and facility recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered bank credit memo and credit analysis report writer for structured credit analysis reports, credit ratings, and facility recommendations.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Bank credit officers, credit committee members, and relationship managers use this skill to draft internal commercial credit memos for new applications, renewals, rating changes, group credit assessments, and green credit facilities. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Credit memo drafting may involve borrower, customer, UBO, or other confidential banking data. <br>
-Mitigation: Use redacted or synthetic inputs unless the environment is approved for regulated financial information, and avoid pasting real confidential data into unapproved systems. <br>
-Risk: AI-generated credit analysis can be incomplete, outdated, or unsuitable for final lending decisions. <br>
-Mitigation: Have qualified credit staff review all outputs and route final decisions through authorized bank approval processes. <br>
+## Use Case:
 
+Bank credit officers, relationship managers, and credit committee reviewers use this skill to draft internal credit memos, credit rating rationales, facility recommendations, and focused variants such as green-credit, collateral-focused, short-form, and watch-list memos.
 
-## Reference(s): <br>
-- [Bank Credit Memo README](README.md) <br>
-- [Bank Credit Memo Skill Definition](SKILL.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/gechengling/skills/bank-credit-memo) <br>
+### Deployment Geography for Use:
 
+China banking contexts
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown credit memo drafts with structured tables and narrative analysis] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs require review by qualified credit staff before use in lending decisions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.1.1 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Generated credit memos, ratings, ratios, or facility recommendations may be inaccurate or unsuitable for approval decisions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat outputs as drafts and require qualified credit and risk personnel to verify facts, recalculate ratios, validate policy references, and approve decisions.
+
+Risk: Borrower, guarantor, or counterparty information may include sensitive personal or commercial data.
+
+Mitigation: Provide minimized or anonymized aggregate data where possible and avoid raw bank statements, full report originals, customer or supplier lists, and identity documents.
+
+Risk: Regulatory references, Basel III assumptions, green-credit criteria, or bank policy interpretations may become stale or differ from local requirements.
+
+Mitigation: Check regulatory and policy statements against qualified bank personnel and official policy sources before relying on the draft.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/gechengling/skills/bank-credit-memo)
+- [ClawHub Publisher Profile](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown report drafts, memo sections, tables, rating rationales, and review guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are drafts for human review; the skill has no bundled tools, scripts, network access, persistence, or automatic submission behavior.]
+
+## Skill Version(s):
+
+4.1.2 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

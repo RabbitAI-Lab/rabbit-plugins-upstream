@@ -1,44 +1,56 @@
-## Description: <br>
-Heyzine helps agents manage Heyzine flipbooks and bookshelves through the OOMOL oo CLI for reading, updating, assigning, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses the OOMOL oo CLI to let agents read, create, update, and delete Heyzine flipbooks and bookshelves through a connected Heyzine account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and operators use this skill to list and retrieve Heyzine flipbooks and bookshelves, then perform confirmed write or destructive maintenance through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive Heyzine credentials through an OOMOL-connected account. <br>
-Mitigation: Use the OOMOL connector flow so raw credentials are not handled by the agent, and reconnect only after an authentication or connection error. <br>
-Risk: Write actions can change bookshelf assignments or social sharing metadata. <br>
-Mitigation: Fetch the live action schema first, build an exact JSON payload, and confirm the payload and intended effect with the user before running the command. <br>
-Risk: Destructive actions can delete flipbooks or remove bookshelf assignments. <br>
-Mitigation: Require explicit user approval for the target resource and action before executing destructive commands. <br>
+## Use Case:
 
+External users and developers with OOMOL-connected Heyzine accounts use this skill to inspect live connector schemas and manage flipbooks and bookshelves, including reads, writes, and explicit-approval destructive actions.
 
-## Reference(s): <br>
-- [ClawHub Heyzine Skill](https://clawhub.ai/oomol/oo-heyzine) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Heyzine](https://heyzine.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before building action payloads; command responses are JSON from the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: Remote installer commands in first-time setup could execute changing code on a user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installer steps before installing, prefer verified official documentation or pinned signed packages, and avoid running curl|bash or irm|iex from an elevated shell.
+
+Risk: Write and destructive Heyzine actions can change or remove flipbooks, bookshelf assignments, or social sharing metadata.
+
+Mitigation: Confirm the exact target, payload, and intended effect with the user before running write actions, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [ClawHub Heyzine skill page](https://clawhub.ai/oomol/skills/oo-heyzine)
+- [Heyzine homepage](https://heyzine.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, json, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, JSON payloads, and JSON command output.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live schema inspection before constructing action payloads; write and destructive operations require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

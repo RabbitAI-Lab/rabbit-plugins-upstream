@@ -1,44 +1,56 @@
-## Description: <br>
-Live flight tracking and aviation data via FlightAware AeroAPI through MCP, including flight status, airport activity, schedules, aircraft ownership, and FlightAware alert management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides live flight tracking, airport, aircraft, schedule, route, weather, and FlightAware alert access through a FlightAware AeroAPI MCP server.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Developers and operators use this skill to configure and use a FlightAware MCP server for live flight, airport, operator, aircraft, schedule, and alert workflows. It is useful when an agent needs to answer aviation status questions or manage FlightAware flight alerts through a user's AeroAPI account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a FlightAware AeroAPI key and queries may count against quota or billing. <br>
-Mitigation: Confirm the key belongs to the intended account, avoid exposing it in logs or prompts, and use the documented cache settings to reduce repeated live-data calls. <br>
-Risk: FlightAware alert create, update, and delete tools can change account alert settings. <br>
-Mitigation: Use mutating alert tools only when the user explicitly intends the change and rely on the disclosed confirmation behavior before network-changing actions. <br>
-Risk: Installation depends on an external npm package. <br>
-Mitigation: Confirm the package and publisher are trusted before installation, consistent with the security guidance in the release evidence. <br>
+## Use Case:
 
+External users and developers use this skill to configure an agent for FlightAware AeroAPI-backed flight tracking, airport lookups, operator and aircraft information, schedules, and alert management.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/chrischall/skills/flightaware-mcp) <br>
-- [npm package @chrischall/flightaware-mcp](https://www.npmjs.com/package/@chrischall/flightaware-mcp) <br>
-- [FlightAware AeroAPI Portal](https://www.flightaware.com/aeroapi/portal/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON configuration examples and MCP tool results returned as text, structured data, or generated flight-map files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the user's FlightAware AeroAPI key; supports optional cache TTL and output directory environment variables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.2 (source: server release evidence) <br>
+Risk: The setup uses mutable third-party MCP code installed through npx while handling a FlightAware AeroAPI key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the npm package or declared source before use, pin a specific package version or commit, and keep the AeroAPI key out of shared project configuration.
+
+Risk: The MCP server can make network requests and may return live aviation data or account alert receipts based on the user's AeroAPI subscription.
+
+Mitigation: Run the server with only the local and network access it needs, confirm alert-changing operations before execution, and monitor AeroAPI usage against the account quota.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/chrischall/skills/flightaware-mcp)
+- [npm Package](https://www.npmjs.com/package/@chrischall/flightaware-mcp)
+- [Declared Source Link](https://github.com/chrischall/flightaware-mcp)
+- [FlightAware AeroAPI Portal](https://www.flightaware.com/aeroapi/portal/)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown with JSON and bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May describe MCP tool calls that return text, JSON-like AeroAPI responses, receipts, or flight-map PNG output depending on the selected server tool.]
+
+## Skill Version(s):
+
+0.5.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

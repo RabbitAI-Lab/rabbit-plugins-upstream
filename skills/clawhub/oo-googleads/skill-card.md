@@ -1,44 +1,60 @@
-## Description: <br>
-Operates Google Ads through the OOMOL googleads connector for reading, creating, updating, and deleting advertising account data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Ads helps agents read, create, update, and delete Google Ads data through the OOMOL googleads connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage Google Ads accounts through OOMOL, including customer discovery, campaign and ad group mutations, GAQL search, and Customer Match list workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change Google Ads campaigns, ad groups, and customer lists. <br>
-Mitigation: Review the exact target, payload, and expected account impact before approving write or destructive actions. <br>
-Risk: The skill requires OAuth access and sensitive connector credentials managed through OOMOL. <br>
-Mitigation: Install only when OOMOL is trusted for the connected Google Ads account and verify the connection scope before use. <br>
+## Use Case:
 
+External users and developers use this skill to operate Google Ads accounts from an agent, including campaign lookup, customer and customer-list listing, GAQL search, and approved write workflows for campaigns, ad groups, and Customer Match lists.
 
-## Reference(s): <br>
-- [ClawHub Google Ads skill page](https://clawhub.ai/oomol/oo-googleads) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Google Ads homepage](https://ads.google.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL Google Ads connection](https://console.oomol.com/app-connections?provider=googleads) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses may include JSON data and an execution id under meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: First-time setup directs users or agents to run remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a pinned installer or package-manager install with checksum or signature verification before installing the oo CLI.
+
+Risk: Write and destructive Google Ads actions can change campaigns, ad groups, customer lists, or Customer Match membership.
+
+Mitigation: Review the live action schema, exact payload, target account, and expected effect, then require explicit user approval before execution.
+
+Risk: Google Ads operations and credentials are handled through OOMOL server-side services.
+
+Mitigation: Install only when the user accepts OOMOL handling Google Ads operations and credentials, and verify account connection and scope before use.
+
+## Reference(s):
+
+- [ClawHub Google Ads Skill](https://clawhub.ai/oomol/skills/oo-googleads)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Google Ads](https://ads.google.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May run OOMOL googleads connector actions that return JSON data and an execution ID.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

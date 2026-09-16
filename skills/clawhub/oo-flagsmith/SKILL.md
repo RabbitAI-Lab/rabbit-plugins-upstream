@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Flagsmith"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["flagsmith"]
   icon: "https://static.oomol.com/logo/third-party/flagsmith.svg"
 ---

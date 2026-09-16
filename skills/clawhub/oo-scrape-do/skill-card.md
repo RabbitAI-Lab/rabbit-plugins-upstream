@@ -1,45 +1,56 @@
-## Description: <br>
-Scrape.do helps agents fetch public web pages as HTML or JSON, capture rendered screenshots, and inspect Scrape.do account usage through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scrape.do enables agents to fetch public URLs as HTML or JSON, retrieve account usage, and render screenshots through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to run Scrape.do read-oriented scraping actions through an OOMOL-connected account for public page retrieval, JSON scrape output, screenshots, and account usage checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected Scrape.do account and may rely on sensitive credentials managed by OOMOL. <br>
-Mitigation: Use it only with an approved OOMOL account, avoid exposing raw tokens, and follow the setup flow only when authentication or connection errors occur. <br>
-Risk: First-time setup can install the OOMOL oo CLI from a remote installer. <br>
-Mitigation: Review the installer source and organization policy before running the install command. <br>
-Risk: Scraping public pages can still be subject to website terms, legal restrictions, access controls, and billing limits. <br>
-Mitigation: Confirm authorization and site terms before scraping, and monitor Scrape.do account usage or billing errors. <br>
+## Use Case:
 
+Developers and external users use this skill when an agent needs to retrieve data from public web pages through Scrape.do, inspect account usage, or capture page screenshots via the OOMOL-connected oo CLI.
 
-## Reference(s): <br>
-- [Scrape.do homepage](https://scrape.do) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-scrape-do) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Markdown, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return raw HTML, parsed JSON-friendly scrape results, base64 screenshots, account usage details, or setup guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: First-time setup instructions include remote installer scripts that could be risky if run without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup commands before installation, prefer official version-pinned and checksum- or signature-verified oo CLI instructions, and avoid running remote installers from an elevated shell.
+
+Risk: Scrape.do connector actions can retrieve public URLs or account information through connected credentials.
+
+Mitigation: Run actions only for user-requested public URLs or account information, and inspect the live action schema before constructing each payload.
+
+## Reference(s):
+
+- [Scrape.do homepage](https://scrape.do)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-scrape-do)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses may include HTML, parsed JSON, account usage metadata, or base64 screenshots.]
+
+## Skill Version(s):
+
+1.0.4 (source: evidence release and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

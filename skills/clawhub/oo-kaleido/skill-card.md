@@ -1,42 +1,56 @@
-## Description: <br>
-Kaleido helps agents search and read Kaleido account data through the OOMOL oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Kaleido helps agents inspect and read Kaleido consortia, memberships, environments, nodes, and services through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Kaleido consortia, memberships, environments, nodes, and services from an OOMOL-connected Kaleido account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The oo CLI can access data in the user's connected Kaleido account. <br>
-Mitigation: Install and use the skill only for an intended OOMOL-connected Kaleido account. <br>
-Risk: Future write or destructive connector actions could modify or remove Kaleido resources. <br>
-Mitigation: Review the action target and payload explicitly before approving any write or destructive action. <br>
+## Use Case:
 
+Developers and operators use this skill to retrieve Kaleido account, consortium, environment, node, service, and status information from an OOMOL-connected Kaleido account. It also guides agents to inspect live action schemas before constructing connector payloads.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-kaleido) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Kaleido homepage](https://www.kaleido.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance, API calls] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill instructs agents to inspect the live connector schema before running Kaleido actions and to return JSON responses from the oo CLI when actions are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup guidance includes remote installer commands that execute shell or PowerShell scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent automatically run curl-to-shell or irm-to-iex setup commands; install the oo CLI through reviewed official instructions or a verified package.
+
+Risk: Future or schema-discovered Kaleido actions could change state if they are tagged as write or destructive.
+
+Mitigation: Require user confirmation for any state-changing action and inspect the live action schema before constructing a payload.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-kaleido)
+- [Kaleido Homepage](https://www.kaleido.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.2 (source: SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

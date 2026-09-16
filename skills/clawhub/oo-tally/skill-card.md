@@ -1,44 +1,55 @@
-## Description: <br>
-Tally (tally.so). Use this skill for Tally requests that search, list, and read forms or submissions through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lets agents read Tally forms and submissions through an OOMOL-connected Tally account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to inspect Tally schemas and run read-only connector actions for forms and submissions through the OOMOL oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Returned Tally submissions may contain personal or business-sensitive data. <br>
-Mitigation: Treat connector responses as sensitive and limit sharing, logging, and storage to the user's intended workflow. <br>
-Risk: First-time setup may install or authenticate the OOMOL oo CLI and connect a Tally account. <br>
-Mitigation: Run setup commands only after an auth or connection failure and only when the user trusts OOMOL's installer and account connection flow. <br>
+## Use Case:
 
+Employees, external users, and developers use this skill to retrieve Tally forms and submissions through the OOMOL oo CLI connector without handling raw API tokens.
 
-## Reference(s): <br>
-- [ClawHub Tally Skill](https://clawhub.ai/oomol/oo-tally) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Tally Homepage](https://tally.so) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; returned form submissions may contain sensitive personal or business data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and artifact frontmatter) <br>
+Risk: Fallback setup documents remote shell installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path and prefer a package manager, signed release, checksum-verified download, or locally inspected installer before installation.
+
+Risk: Tally form submissions may include sensitive personal or business information.
+
+Mitigation: Use the skill only for intended Tally data access and handle returned form and submission data according to the user's privacy and retention requirements.
+
+## Reference(s):
+
+- [Tally homepage](https://tally.so)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-focused Tally connector actions return form and submission data with execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

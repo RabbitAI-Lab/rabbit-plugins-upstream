@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Featurebase"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["featurebase"]
   icon: "https://static.oomol.com/logo/third-party/featurebase.svg"
 ---

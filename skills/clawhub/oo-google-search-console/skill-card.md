@@ -1,43 +1,59 @@
-## Description: <br>
-Google Search Console connector skill for reading, creating, updating, and deleting Google Search Console data through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Google Search Console through OOMOL's google_search_console connector for reading, creating, updating, and deleting Search Console data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, site owners, and SEO operators use this skill to manage Search Console properties and sitemaps, inspect URL indexing status, and query search analytics through an OOMOL-connected Google account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and destructive actions can change or remove Google Search Console properties or submitted sitemaps. <br>
-Mitigation: Confirm the exact action, target property or sitemap, payload, and expected effect with the user before running tagged write or destructive commands. <br>
-Risk: The skill depends on an OOMOL account, the oo CLI, and a connected Google Search Console credential. <br>
-Mitigation: Use first-time setup only after an authentication or connection failure, and do not ask the user to provide raw Google tokens. <br>
+## Use Case:
 
+Developers, site owners, and SEO operators use this skill to list and manage Google Search Console properties and sitemaps, inspect indexed URLs, and query search analytics through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-google-search-console) <br>
-- [Google Search Console](https://search.google.com/search-console) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL Google Search Console connection](https://console.oomol.com/app-connections?provider=google_search_console) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON command responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Fetches the live connector schema before building payloads; write and destructive actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata, SKILL.md metadata) <br>
+Risk: First-time setup includes mutable remote installer commands that pipe downloaded scripts directly to a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a pinned, signed, or package-manager installation path, and review installer contents before execution.
+
+Risk: Write and destructive actions can change or remove Google Search Console properties and sitemaps.
+
+Mitigation: Confirm the exact payload, target, and expected effect before running any write or destructive action.
+
+Risk: Google Search Console actions depend on OOMOL as an intermediary for account-connected operations.
+
+Mitigation: Install only when the user accepts OOMOL's role in brokering Google Search Console actions and credential handling.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-google-search-console)
+- [Google Search Console](https://search.google.com/search-console)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses OOMOL-connected credentials server-side and returns connector responses as JSON when actions run successfully.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

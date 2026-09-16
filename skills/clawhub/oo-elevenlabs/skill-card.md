@@ -1,45 +1,60 @@
-## Description: <br>
-Use this skill for ElevenLabs requests that read, create, update, or delete data through the OOMOL-connected ElevenLabs connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ElevenLabs (elevenlabs.io). Use this skill for ANY ElevenLabs request: reading, creating, updating, and deleting data through an OOMOL-connected account instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate ElevenLabs through the oo CLI with an OOMOL-connected account. It supports voice and model discovery, user and subscription lookups, history workflows, text-to-speech generation, sound effect generation, and deletion of selected history items. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to a connected ElevenLabs account and sensitive credentials are handled by OOMOL server-side. <br>
-Mitigation: Use only an intended OOMOL account connection, avoid handling raw tokens directly, and reconnect only when an auth or connection error requires it. <br>
-Risk: Write actions can generate audio or sound effects and may consume account credits or change service state. <br>
-Mitigation: Inspect the live action schema first and confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: The delete_history_item action permanently removes an ElevenLabs history item. <br>
-Mitigation: Confirm the specific history item ID and get explicit user approval before running the destructive action. <br>
+## Use Case:
 
+Developers and agents use this skill to operate ElevenLabs through the OOMOL oo CLI, including voice/model inspection, text-to-speech generation, sound-effect generation, account details, subscriptions, and generation history management. It supports read actions as well as confirmed write and destructive actions.
 
-## Reference(s): <br>
-- [ClawHub ElevenLabs skill page](https://clawhub.ai/oomol/oo-elevenlabs) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ElevenLabs homepage](https://elevenlabs.io) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON request or response payloads.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce connector transit storage references for generated or downloaded binary audio.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill metadata) <br>
+Risk: Fallback setup directs users to run internet-hosted installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified, pinned, or package-manager method when possible, and review installer commands before execution.
+
+Risk: The skill operates ElevenLabs through OOMOL as an intermediary for the user's account.
+
+Mitigation: Install only when use of OOMOL with the ElevenLabs account is acceptable for the user's security and compliance posture.
+
+Risk: Some actions can write data or delete ElevenLabs history items.
+
+Mitigation: Confirm exact payloads and effects before write actions, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [ElevenLabs Homepage](https://elevenlabs.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-elevenlabs)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses oo CLI action schemas before execution and returns connector JSON responses with data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

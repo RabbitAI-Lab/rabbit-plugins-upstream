@@ -1,43 +1,55 @@
-## Description: <br>
-Uniswap API (uniswap.org). Use this skill for ANY Uniswap API request - reading, creating, and updating data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to inspect schemas and run Uniswap API actions through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect Uniswap connector schemas, request quotes, check ERC-20 approval requirements, and create swap transaction calldata through the OOMOL oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can prepare crypto swap transaction calldata after receiving wallet, token pair, amount, and quote inputs. <br>
-Mitigation: Confirm the exact swap payload and expected effect with the user before running the write action. <br>
-Risk: The skill depends on the OOMOL oo CLI and server-side credentials for access to the Uniswap connector. <br>
-Mitigation: Install and use it only when the user trusts OOMOL and has intentionally connected Uniswap API credentials. <br>
+## Use Case:
 
+Developers and agents use this skill to request Uniswap quotes, check ERC-20 approval requirements, and prepare swap calldata through the OOMOL connector while confirming write actions before execution.
 
-## Reference(s): <br>
-- [ClawHub listing](https://clawhub.ai/oomol/oo-uniswap-api) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Uniswap API homepage](https://uniswap.org) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text, json] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before building action payloads; swap creation is a write action requiring user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and artifact frontmatter) <br>
+Risk: Fallback setup can direct an agent to run an unverified remote installer in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review OOMOL's official install guide, prefer a pinned or verifiable installer where available, and require explicit confirmation before any setup, authentication, connection, or write action.
+
+Risk: The create_swap action prepares transaction calldata for a Uniswap swap and is tagged as a write action.
+
+Mitigation: Inspect the live action schema and confirm the exact payload and expected effect with the user before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-uniswap-api)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Uniswap API homepage](https://uniswap.org)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an installed oo CLI, OOMOL authentication, and a connected Uniswap API account; write actions require explicit payload and effect confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

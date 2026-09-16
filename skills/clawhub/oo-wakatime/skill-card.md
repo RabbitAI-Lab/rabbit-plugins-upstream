@@ -1,43 +1,58 @@
-## Description: <br>
-WakaTime (wakatime.com). Use this skill for WakaTime requests that search and read coding activity through the OOMOL `oo` CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Retrieves WakaTime coding time, stats, summaries, projects, status bar data, and current user details through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and engineers use this skill to query their connected WakaTime account for coding stats, summaries, status-bar data, all-time coding time, project lists, and current-user details. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read WakaTime activity through an OOMOL-connected account. <br>
-Mitigation: Install it only when that access is intended, and connect only the intended WakaTime API key. <br>
-Risk: First-time setup may require downloading and running an `oo` CLI installer. <br>
-Mitigation: Review or verify the installer before running the pipe-to-shell command. <br>
+## Use Case:
 
+Developers and engineers use this skill to query WakaTime account data from an agent, including coding stats, daily summaries, projects, status bar information, and account details.
 
-## Reference(s): <br>
-- [ClawHub WakaTime skill page](https://clawhub.ai/oomol/oo-wakatime) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [WakaTime homepage](https://wakatime.com) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: Fallback setup suggests piping mutable remote installer scripts into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer official package-manager or verified installer instructions, inspect downloaded scripts before execution, and avoid elevated privileges.
+
+Risk: Live WakaTime calls depend on a correctly installed oo CLI, OOMOL sign-in, and connected WakaTime account.
+
+Mitigation: Run setup steps only after an auth, connection, CLI, or billing error, and keep WakaTime credentials in server-side connection handling.
+
+## Reference(s):
+
+- [ClawHub WakaTime Skill Page](https://clawhub.ai/oomol/skills/oo-wakatime)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [WakaTime Homepage](https://wakatime.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [WakaTime Icon Asset](https://static.oomol.com/logo/third-party/WakaTime.svg)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or plain text responses with optional shell commands and JSON connector results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an installed oo CLI, OOMOL sign-in, and a connected WakaTime account for live connector calls.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

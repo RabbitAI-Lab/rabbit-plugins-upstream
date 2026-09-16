@@ -1,45 +1,61 @@
-## Description: <br>
-Operates Paddle through an OOMOL-connected account so an agent can list, fetch, create, and update customers, products, and prices. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paddle (paddle.com). Use this skill for ANY Paddle request: reading, creating, and updating data through the OOMOL Paddle connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and support teams use this skill to let an agent manage Paddle catalog and customer workflows through OOMOL, including reading records and preparing confirmed create or update actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change Paddle customers, products, prices, archive state, or reactivation state. <br>
-Mitigation: Confirm the exact JSON payload and expected effect with the user before running create or update actions. <br>
-Risk: Connector commands depend on a working OOMOL sign-in, Paddle connection, permissions, credential freshness, and account billing state. <br>
-Mitigation: Use the documented first-time setup or connection remediation steps only when a command fails with the matching authentication, scope, credential, app, or billing error. <br>
-Risk: Paddle connector schemas may change over time. <br>
-Mitigation: Inspect the live action schema with oo connector schema before constructing a payload. <br>
+## Use Case:
 
+External users and developers use this skill to manage Paddle products, prices, and customers through an OOMOL-connected account. It supports read actions and user-confirmed write actions for catalog and customer workflows.
 
-## Reference(s): <br>
-- [ClawHub Paddle Skill](https://clawhub.ai/oomol/skills/oo-paddle) <br>
-- [Paddle Homepage](https://www.paddle.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before payload execution; write actions require confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release, metadata, and frontmatter) <br>
+Risk: The first-time setup path recommends running a remote installer directly in the shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source and prefer a signed or package-manager installation path before using the skill.
+
+Risk: Write actions can create or update Paddle customers, products, and prices.
+
+Mitigation: Confirm the exact payload and intended effect with the user before running any write action.
+
+Risk: Connector action schemas may change over time.
+
+Mitigation: Inspect the live action schema before constructing a payload.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-paddle)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Paddle Homepage](https://www.paddle.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May run oo CLI connector actions that return JSON responses from Paddle.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

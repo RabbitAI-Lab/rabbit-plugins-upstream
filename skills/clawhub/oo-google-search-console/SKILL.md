@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Google Search Console"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["google_search_console"]
   icon: "https://static.oomol.com/logo/third-party/google_search_console.svg"
 ---

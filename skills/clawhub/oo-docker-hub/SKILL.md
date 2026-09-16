@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Docker Hub"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["docker_hub"]
   icon: "https://static.oomol.com/logo/third-party/Docker%20Hub.svg"
 ---
