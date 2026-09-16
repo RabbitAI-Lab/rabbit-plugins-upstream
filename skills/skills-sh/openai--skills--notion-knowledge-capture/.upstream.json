@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/notion-knowledge-capture",
+  "repo": "openai/skills",
+  "skillId": "notion-knowledge-capture",
+  "branch": "main",
+  "pushedAt": "2026-09-08T20:35:26Z",
+  "contentHash": "5b42b80d6e1db004512e530121563d14a2834e72ec66695bf6893839dfe4bb28",
+  "fetchedAt": "2026-09-16T12:41:29.012Z"
+}
