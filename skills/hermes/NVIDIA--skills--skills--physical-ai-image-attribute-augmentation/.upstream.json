@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/physical-ai-image-attribute-augmentation",
+  "identifier": "NVIDIA/skills/skills/physical-ai-image-attribute-augmentation",
+  "repo": "NVIDIA/skills",
+  "path": "skills/physical-ai-image-attribute-augmentation",
+  "branch": "main",
+  "pushedAt": "2026-09-16T07:15:28Z",
+  "contentHash": "7cefe27323080dc14c70a834e024cde77d922d10dcda439f08f78d99846d0a05",
+  "fetchedAt": "2026-09-16T12:40:07.099Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/autonomous-ai-agents/dynamic-workflow",
+  "identifier": "official/autonomous-ai-agents/dynamic-workflow",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/autonomous-ai-agents/dynamic-workflow",
+  "branch": "main",
+  "pushedAt": "2026-09-16T12:01:33Z",
+  "contentHash": "abd70986fb216a9560119152372f386954c47d737c15195ca786769d7aa20ae0",
+  "fetchedAt": "2026-09-16T12:40:16.006Z"
+}

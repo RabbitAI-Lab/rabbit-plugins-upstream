@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/bioservices",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/bioservices",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/bioservices",
+  "branch": "main",
+  "pushedAt": "2026-09-14T09:27:38Z",
+  "contentHash": "19e0185d17a0436abd0801a643bbef3e7c4c9e2a5f0d52f5a24d981d48e21c40",
+  "fetchedAt": "2026-09-16T12:40:22.562Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/cloud-compute/givemeanode",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/cloud-compute/givemeanode",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/cloud-compute/givemeanode",
+  "branch": "main",
+  "pushedAt": "2026-09-16T11:31:46Z",
+  "contentHash": "d64293cd28ebb7a79ccacc1c5951450a9f30370dd7a8752d56b5d28f6a96332d",
+  "fetchedAt": "2026-09-16T12:40:07.926Z"
+}

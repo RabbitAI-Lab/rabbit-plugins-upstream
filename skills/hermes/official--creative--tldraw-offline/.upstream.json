@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/tldraw-offline",
+  "identifier": "official/creative/tldraw-offline",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/tldraw-offline",
+  "branch": "main",
+  "pushedAt": "2026-09-16T12:01:33Z",
+  "contentHash": "645409f7c987c10640b79bba2255e157fee0abfaf7086cc2865421056facab1d",
+  "fetchedAt": "2026-09-16T12:40:16.056Z"
+}

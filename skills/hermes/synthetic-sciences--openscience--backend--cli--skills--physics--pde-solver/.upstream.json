@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/pde-solver",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/pde-solver",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/pde-solver",
+  "branch": "main",
+  "pushedAt": "2026-09-16T11:31:46Z",
+  "contentHash": "8dcfab6ce0464c3e3b5093f4c779e0e59c8ce10ec28a394445f66fd82ca9eb1e",
+  "fetchedAt": "2026-09-16T12:40:07.961Z"
+}
