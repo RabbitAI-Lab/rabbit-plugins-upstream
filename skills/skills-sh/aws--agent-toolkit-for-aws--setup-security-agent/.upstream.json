@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/setup-security-agent",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "setup-security-agent",
+  "branch": "main",
+  "pushedAt": "2026-09-17T04:05:36Z",
+  "contentHash": "dcd2d569b42caa8af6f7b337fa2e663ab2abb68f6cf86f449b67b6c70ba9a965",
+  "fetchedAt": "2026-09-17T12:40:31.796Z"
+}

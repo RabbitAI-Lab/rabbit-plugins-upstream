@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/cloud-run-alert-configuration",
+  "repo": "google/skills",
+  "skillId": "cloud-run-alert-configuration",
+  "branch": "main",
+  "pushedAt": "2026-09-16T19:26:32Z",
+  "contentHash": "ffb9b39c09e9a7837a9a4c70d7703a9a31da4e4b7925a58e40246ec04ae61f90",
+  "fetchedAt": "2026-09-17T12:39:51.075Z"
+}
