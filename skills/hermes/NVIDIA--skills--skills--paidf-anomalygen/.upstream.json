@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/paidf-anomalygen",
+  "identifier": "NVIDIA/skills/skills/paidf-anomalygen",
+  "repo": "NVIDIA/skills",
+  "path": "skills/paidf-anomalygen",
+  "branch": "main",
+  "pushedAt": "2026-09-16T22:26:51Z",
+  "contentHash": "0122b3fd2065817ec876fda78524f0ffc7023dd06c0d016c0a1e17c97f4390b3",
+  "fetchedAt": "2026-09-17T12:39:03.714Z"
+}

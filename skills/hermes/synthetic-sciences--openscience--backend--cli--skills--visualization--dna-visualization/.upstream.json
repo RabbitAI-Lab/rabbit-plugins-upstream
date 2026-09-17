@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/visualization/dna-visualization",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/visualization/dna-visualization",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/visualization/dna-visualization",
+  "branch": "main",
+  "pushedAt": "2026-09-17T12:21:53Z",
+  "contentHash": "b9db1756414d6157b9a38089d3589a4f358e84cb7fcb838b7349979b21c756a1",
+  "fetchedAt": "2026-09-17T12:39:04.939Z"
+}

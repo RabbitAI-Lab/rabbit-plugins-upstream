@@ -5,7 +5,7 @@
   "repo": "huggingface/skills",
   "path": "skills/hf-cloud-serving-image-selection",
   "branch": "main",
-  "pushedAt": "2026-07-25T04:31:32Z",
-  "contentHash": "a4400b71c5fd6c8fb415edbafa1698eb97919b7f701b73995efb4c18ecfc5dbf",
-  "fetchedAt": "2026-07-26T17:03:50.910Z"
+  "pushedAt": "2026-09-17T10:27:22Z",
+  "contentHash": "031795e616f0a191e7b411723249c9d725640e169383b0139afe810852564729",
+  "fetchedAt": "2026-09-17T12:39:02.713Z"
 }

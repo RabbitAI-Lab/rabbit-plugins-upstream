@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/molecule-visualization",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/molecule-visualization",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/molecule-visualization",
+  "branch": "main",
+  "pushedAt": "2026-09-17T12:21:53Z",
+  "contentHash": "0ef7dd9a7b409fdec27f72e0d82969a73eb8bd2e5d72388c905dd3f095086ad5",
+  "fetchedAt": "2026-09-17T12:39:05.015Z"
+}

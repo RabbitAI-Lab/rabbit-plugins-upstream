@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-inference/tensorrt-llm",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-inference/tensorrt-llm",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-inference/tensorrt-llm",
+  "branch": "main",
+  "pushedAt": "2026-09-17T12:21:53Z",
+  "contentHash": "701b211d7a054568bf3cc2a1b08dae41688293a3f101a7aa0702b592701de025",
+  "fetchedAt": "2026-09-17T12:39:05.106Z"
+}
