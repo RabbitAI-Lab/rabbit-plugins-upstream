@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/stable-diffusion",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/stable-diffusion",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/stable-diffusion",
+  "branch": "main",
+  "pushedAt": "2026-09-17T12:21:53Z",
+  "contentHash": "d7a6da61649b01bedca5bf88c59a411cf8eee0737a91de5cfffaddfc64d9caa2",
+  "fetchedAt": "2026-09-17T12:39:05.098Z"
+}

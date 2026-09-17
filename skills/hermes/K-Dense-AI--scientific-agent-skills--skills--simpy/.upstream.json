@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/simpy",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/simpy",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/simpy",
+  "branch": "main",
+  "pushedAt": "2026-09-14T09:27:38Z",
+  "contentHash": "bd55e3fbe3a419b1b3df9bb30bc3e98d5aa1b8ba0cf365306d65be191716abda",
+  "fetchedAt": "2026-09-17T12:39:18.475Z"
+}

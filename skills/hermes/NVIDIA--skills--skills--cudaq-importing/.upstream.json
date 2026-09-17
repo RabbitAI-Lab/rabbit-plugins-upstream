@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cudaq-importing",
+  "identifier": "NVIDIA/skills/skills/cudaq-importing",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cudaq-importing",
+  "branch": "main",
+  "pushedAt": "2026-09-16T22:26:51Z",
+  "contentHash": "98017f18dab2194cde3ac49dbc13a0b8f77da979183c7d56b704dc9704a268b0",
+  "fetchedAt": "2026-09-17T12:39:03.403Z"
+}

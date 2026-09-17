@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/wave-propagation",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/wave-propagation",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/wave-propagation",
+  "branch": "main",
+  "pushedAt": "2026-09-17T12:21:53Z",
+  "contentHash": "aa6c653cd938c629c90dd2f162d1874cc07d6c0b59bb5d569d607b5428f32bb9",
+  "fetchedAt": "2026-09-17T12:39:05.130Z"
+}

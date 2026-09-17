@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/dnanexus-integration",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/dnanexus-integration",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/dnanexus-integration",
+  "branch": "main",
+  "pushedAt": "2026-09-14T09:27:38Z",
+  "contentHash": "66f84919013a42157b705b3c2d8eb3aaf8a516f9d3c78b06c00459cb31bb1a49",
+  "fetchedAt": "2026-09-17T12:39:18.338Z"
+}

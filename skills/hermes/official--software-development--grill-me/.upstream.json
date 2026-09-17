@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/software-development/grill-me",
+  "identifier": "official/software-development/grill-me",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/software-development/grill-me",
+  "branch": "main",
+  "pushedAt": "2026-09-17T11:40:59Z",
+  "contentHash": "0961def01a18a0d18fdf32feac7e7a3e05dc01f25dddebfcb29ca1a84e69ae6f",
+  "fetchedAt": "2026-09-17T12:39:41.124Z"
+}
