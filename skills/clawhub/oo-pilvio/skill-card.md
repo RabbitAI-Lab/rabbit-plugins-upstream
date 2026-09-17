@@ -1,42 +1,56 @@
-## Description: <br>
-Pilvio helps an agent read Pilvio account, billing, location, and virtual machine data through an OOMOL-connected account using the oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pilvio (pilvio.com). Use this skill for searching and reading Pilvio account data through the OOMOL `oo` CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers with OOMOL-connected Pilvio accounts use this skill to inspect Pilvio user profile, billing account, data center location, and virtual machine information. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Setup guidance may ask the user to run remote installer scripts for the oo CLI. <br>
-Mitigation: Run installer commands only after intentional user approval and only from the documented OOMOL CLI install locations. <br>
-Risk: The skill reads Pilvio account data through the user's connected OOMOL account. <br>
-Mitigation: Use it only for intended read-only Pilvio profile, billing, location, and virtual machine queries, and handle returned account data as sensitive. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Pilvio user, billing, location, and virtual machine data from an OOMOL-connected account. It guides the agent to inspect each live connector schema before running read actions.
 
-## Reference(s): <br>
-- [Pilvio homepage](https://pilvio.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-pilvio) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector runs return JSON data with execution metadata when commands are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release and artifact metadata) <br>
+Risk: Setup instructions include internet-hosted installer commands that execute directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing and prefer a verified or package-manager installation of the `oo` CLI.
+
+Risk: The skill operates through OOMOL-mediated access to Pilvio account data.
+
+Mitigation: Install and use it only when OOMOL-mediated read access to the relevant Pilvio account is acceptable.
+
+## Reference(s):
+
+- [ClawHub Pilvio Skill](https://clawhub.ai/oomol/skills/oo-pilvio)
+- [Pilvio Homepage](https://pilvio.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces connector schema and run command guidance; read actions return JSON data from Pilvio through OOMOL.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

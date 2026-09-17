@@ -1,43 +1,59 @@
-## Description: <br>
-Together AI helps agents work with Together AI through an OOMOL-connected account for chat completions, embeddings, and model discovery. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Together AI (together.ai). Use this skill for ANY Together AI request - reading, creating, and updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate Together AI from an agent session through an OOMOL-connected account. It supports non-streaming chat completions, embedding generation, and model discovery. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and requested inputs may be sent to Together AI and may incur Together AI or OOMOL costs. <br>
-Mitigation: Review the intended payload and cost impact before approving write-tagged actions. <br>
-Risk: Chat completion and embedding actions are write-tagged and can create provider-side activity. <br>
-Mitigation: Confirm the exact action, schema-derived payload, and expected effect before execution. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Together AI through an OOMOL-connected account, including non-streaming chat completions, embeddings, and model listing.
 
-## Reference(s): <br>
-- [Together AI homepage](https://www.together.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-together-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions may return JSON data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: The setup path recommends running a remote installer through a shell or PowerShell expression.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a pinned, verifiable installer or review the installer before running it.
+
+Risk: Prompts, documents submitted for embeddings, and model request metadata pass through OOMOL as well as Together AI.
+
+Mitigation: Install and use the skill only when that routing is acceptable for the data being submitted.
+
+Risk: The skill can create chat completions and embeddings through a connected Together AI account.
+
+Mitigation: Confirm write-action payloads and expected effects before executing connector calls.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-together-ai)
+- [Together AI homepage](https://www.together.ai)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON command responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses schema-first connector calls and returns JSON data with execution metadata.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

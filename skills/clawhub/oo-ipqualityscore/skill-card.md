@@ -1,42 +1,54 @@
-## Description: <br>
-IPQualityScore (ipqualityscore.com) helps an agent inspect and run IPQualityScore connector actions for IP reputation checks, URL or domain scans, email validation, and phone validation through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to access IPQualityScore (ipqualityscore.com) for IP, URL, email, and phone risk or validation checks through the OOMOL connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, analysts, and external users use this skill to run IPQualityScore lookups from an OOMOL-connected account without handling raw service credentials. It supports reputation, abuse-risk, deliverability, and threat-signal checks for IP addresses, URLs or domains, email addresses, and phone numbers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive credentials through an OOMOL-connected IPQualityScore account. <br>
-Mitigation: Install only when the publisher is trusted and use the documented OOMOL connection flow so raw service tokens are not handled by the agent. <br>
-Risk: Connector actions can send IP addresses, URLs, domains, email addresses, or phone numbers to IPQualityScore for analysis. <br>
-Mitigation: Confirm that submitted data is appropriate for the user's account, policy, and jurisdiction before running lookups. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect IPQualityScore connector schemas and run IP, URL, email, and phone reputation or validation checks through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub IPQualityScore Skill Page](https://clawhub.ai/oomol/oo-ipqualityscore) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [IPQualityScore Homepage](https://www.ipqualityscore.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses OOMOL server-side credential injection and returns connector data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence and skill metadata) <br>
+Risk: First-time setup includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not allow an agent to run those installer commands automatically; install the CLI from a trusted, verified source and review setup commands before execution.
+
+Risk: IPQualityScore requests are brokered through OOMOL using server-side credentials.
+
+Mitigation: Use this skill only when the user is comfortable with OOMOL brokering IPQualityScore requests through the connected account.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [IPQualityScore homepage](https://www.ipqualityscore.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

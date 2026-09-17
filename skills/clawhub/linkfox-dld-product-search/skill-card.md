@@ -1,50 +1,63 @@
-## Description: <br>
-Searches and analyzes 1688 wholesale product listings through DianLeiDa, including prices, sales metrics, supplier details, fulfillment filters, and product links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches and analyzes product listings on China's 1688 wholesale marketplace using DianLeiDa data to help agents compare suppliers, prices, sales metrics, and fulfillment options.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External e-commerce sellers, sourcing agents, and procurement teams use this skill to find 1688 products and suppliers, compare wholesale and dropship pricing, filter by sales and supplier attributes, and review product opportunities. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a LinkFox API key and can make paid external 1688 product-search requests. <br>
-Mitigation: Use a scoped API key where possible, control the relevant environment variables, and confirm cost-sensitive searches before repeated or high-volume calls. <br>
-Risk: Product queries and runtime context may be sent over the network to a third-party gateway. <br>
-Mitigation: Pin or validate the gateway host, avoid sensitive search terms unless required, and review any API keys or session identifiers exposed to the runtime. <br>
-Risk: Full API responses are retained locally and may include product, supplier, shop, URL, or query details from the user's task. <br>
-Mitigation: Run the skill only in workspaces where local output paths are acceptable, review saved files, and remove retained responses when they are no longer needed. <br>
-Risk: Feedback behavior can send user sentiment or issue details to a separate LinkFox feedback endpoint. <br>
-Mitigation: Avoid sending sensitive feedback content and review feedback-related use in sensitive workspaces. <br>
-Risk: Onboarding instructions may prompt installation of a related LinkFox onboarding skill when authentication or credits fail. <br>
-Mitigation: Review any additional skill before installation and require explicit user approval before downloading or installing related materials. <br>
+## Use Case:
 
+External e-commerce sellers, sourcing professionals, and agent users use this skill to research 1688 wholesale products, discover suppliers, compare pricing, and filter listings by sales, factory status, fulfillment speed, and product tags.
 
-## Reference(s): <br>
-- [1688 Product Search API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-dld-product-search) <br>
-- [LinkFox Skills](https://skill.linkfox.com/) <br>
-- [LinkFox API Key Guide](https://skill.linkfox.com/linkfoxskills/guide.htm) <br>
-- [LinkFox Account and Credits Portal](https://os.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown summaries and tables, shell commands, and JSON API results saved to local files or printed to stdout] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are retained locally; large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill can send search terms, account identifiers, phone-login data, payment actions, and feedback summaries to LinkFox services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when that data sharing is acceptable, avoid including sensitive information in search or feedback content, and review LinkFox account actions before proceeding.
+
+Risk: Authentication and onboarding flows can involve OTPs, API keys, and shell-profile credential persistence.
+
+Mitigation: Do not paste OTPs or API keys unless the workflow is trusted, prefer a dedicated secret store, and avoid persisting keys in shell profiles when stronger credential management is available.
+
+Risk: The skill supports purchase-plan and payment flows for additional LinkFox capacity.
+
+Mitigation: Confirm the selected plan, payment method, and expected cost with the user before creating an order or displaying payment QR codes.
+
+Risk: Custom endpoint environment variables could redirect requests away from expected LinkFox services.
+
+Mitigation: Avoid custom endpoint environment variables unless the destination is trusted and intentionally configured.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-dld-product-search)
+- [API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON request examples, shell command examples, and structured product-search results or summaries.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full API responses may be written as JSON data files while concise summaries are returned for larger result sets.]
+
+## Skill Version(s):
+
+1.0.8 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

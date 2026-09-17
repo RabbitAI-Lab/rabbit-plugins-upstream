@@ -1,45 +1,56 @@
-## Description: <br>
-PagerDuty skill for reading incident and on-call data and updating incident state through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates PagerDuty through an OOMOL-connected account to list and retrieve incidents, list on-call assignments, acknowledge or resolve incidents, and update incident fields.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, incident responders, and operations teams use this skill to inspect PagerDuty schemas, retrieve incidents and on-call assignments, and perform confirmed incident state changes through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change PagerDuty incident state through acknowledge, resolve, and update actions. <br>
-Mitigation: Confirm the exact incident, action, and payload with the user before running write actions. <br>
-Risk: PagerDuty operations are routed through the OOMOL oo CLI and server-side credential handling. <br>
-Mitigation: Install and use the skill only when the user trusts OOMOL and intends to operate through an OOMOL-connected PagerDuty account. <br>
-Risk: Connector schemas may define required fields or effects that are not visible from the skill summary alone. <br>
-Mitigation: Inspect the live connector schema before constructing command payloads. <br>
+## Use Case:
 
+External users and developers use this skill to manage PagerDuty incident workflows from an agent through the oo CLI, including incident lookup, on-call lookup, acknowledgement, resolution, and updates.
 
-## Reference(s): <br>
-- [ClawHub PagerDuty skill page](https://clawhub.ai/oomol/skills/oo-pagerduty) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [PagerDuty homepage](https://www.pagerduty.com) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Guidance, Configuration instructions] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include PagerDuty connector JSON responses when commands are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md metadata) <br>
+Risk: Installer commands pipe remote scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source and verify integrity before running curl|bash or irm|iex setup commands.
+
+Risk: PagerDuty actions can change incident state by acknowledging, resolving, or updating incidents.
+
+Mitigation: Use an account with appropriate PagerDuty permissions and confirm the exact target, payload, and effect with the user before state-changing actions.
+
+## Reference(s):
+
+- [ClawHub PagerDuty skill](https://clawhub.ai/oomol/skills/oo-pagerduty)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [PagerDuty homepage](https://www.pagerduty.com)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, guidance, configuration]
+
+**Output Format:** [Markdown with inline bash and PowerShell command blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before constructing JSON payloads; state-changing incident actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

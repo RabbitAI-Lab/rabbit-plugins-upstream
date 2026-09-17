@@ -2,7 +2,7 @@
 name: Bank Compliance Review Assistant
 slug: bank-compliance
 description: AI-powered bank compliance and regulatory review assistant - screen marketing materials, KYC documents, AML alerts, and NFRA/CBIRC compliance checks. Updated for 2025-2026 regulations including 商业银行资本管理办法 (Basel III China 2024), 消费者权益保护规定升级, FATF mutual evaluation 2025, and 反洗钱法修订. Keywords: bank compliance, KYC, AML, regulatory review, NFRA, Basel III, China banking, 合规审查, 合规审核, 监管合规, 反洗钱, KYC尽调, 客户身份识别, 受益人识别, 制裁筛查, 交易监控.
-version: "4.1.1"
+version: "4.1.2"
 triggers:
   - 合规审查
   - 合规审核
@@ -18,6 +18,16 @@ triggers:
 
 # Bank Compliance Review Assistant
 # 银行合规审查助手
+
+## 数据最小化与保密前置声明（每次审查开始前默认生效）
+
+合规审查天然涉及客户身份、账户流水、名单命中等高敏感信息。使用本 Skill 时：
+
+- **最小化录入**：只粘贴作出判断所必需的字段。做宣传材料审查时不必附带客户名单；做 KYC 筛查时不必粘贴完整账户流水，用"月均交易量约 X 万元"这类聚合描述即可。
+- **强制脱敏**：自然人姓名用"张三/李四"或编号替代，身份证号、手机号、账号、统一社会信用代码一律用占位符（如 `110***********1234`）。**不得录入未脱敏的完整证件号。**
+- **名单命中的处置**：本 Skill 只输出"疑似命中/需人工复核"的提示，**不构成对客户是否为洗钱或制裁对象的认定**；最终结论必须由合规人员按内部流程复核。
+- **产物确认后外发**：生成的审查报告、报送口径文本先在对话中完整展示，经用户确认后再用于正式报送、留档或转发。
+- **本 Skill 不连接任何监管报送系统、核心业务系统或外部数据库**，不写入文件、不发起报送。文中模板与清单为**供用户在本机构环境内参考使用的材料**。
 
 
 ### 银行监管最新动态 [2026-06-15更新]
@@ -44,18 +54,32 @@ triggers:
 > **数据截止**: 2026-06-28 | 来源：国家金融监督管理总局、行业公开信息
 > **声明**: 以上动态供参考，具体以官方最新发布为准
 
+### 银行监管最新动态 [2026-09-16更新]
+
+| 动态类型 | 内容摘要 | 发布时间 | 影响范围 | 本 Skill 对应动作 |
+|---------|---------|---------|---------|-----------------|
+| 规章推进 | 《银行业保险业网络安全管理办法》按 2026 年规章制定计划推进，网络与数据安全要求由"指导意见"升格为部门规章 | 2026-Q3 | 银行网络安全、数据安全、外包与供应链 | Phase 3 检查表新增"网络安全与外包管理"自查行 |
+| AI 治理 | 银行业保险业人工智能安全开发应用相关要求进入落地期，机构需建立 AI 应用场景分级与高风险场景清单 | 2026-Q3 | 信贷审批、资金交易、智能营销等 AI 场景 | 新增 AI 应用场景合规审查清单（见 Phase 3 附表） |
+| 消保执法 | 消费者权益保护仍是现场检查与处罚高发领域，销售适当性与信息披露为主要案由 | 2026-H1 | 理财/代销/信贷宣传与销售流程 | Phase 1 宣传材料审查按 P0 从严判定 |
+| 反洗钱 | 反洗钱义务机构持续强化受益所有人信息核实与可疑交易报送质量 | 2026-H1 | KYC/CDD、名单筛查、交易监控 | Phase 2 风险矩阵新增"受益所有人可核实性"维度 |
+
+> **数据截止**: 2026-09-16 | 来源：国家金融监督管理总局、中国人民银行及行业公开信息整理
+> **声明**: 以上动态供参考，具体条款、施行时间与处罚口径**以官方最新发布为准**
+
 ## Skill Overview
 
 ### 0. 2024-2026 银行合规最新监管动态
 
-| 时间 | 法规/事项 | 合规影响 |
-|------|---------|---------|
-| **2024年1月1日** | 《商业银行资本管理办法》正式实施（中国版巴三） | 三档差异化资本监管，信用/市场/操作风险全面升级 |
-| **2024年** | 《商业银行消费者权益保护管理办法》修订 | 适当性管理、信息披露、投诉处理更严格 |
-| **2025年** | FATF对中国反洗钱互评估完成 | AML体系建设压力加大，KYC/CDD标准提升 |
-| **2025年11月** | 《个人信息保护法》实施细则 | 银行客户数据处理合规要求更细化 |
-| **2025年** | 《反洗钱法》修订草案审议 | 可疑交易报告、客户尽职调查标准拟提升 |
-| **2026年** | 《金融消费者投诉处理管理办法》修订征求意见 | 投诉处理时效、赔偿标准更新 |
+| 时间 | 法规/事项 | 合规影响 | 典型落地动作 |
+|------|---------|---------|------------|
+| **2024年1月1日** | 《商业银行资本管理办法》正式实施（中国版巴三） | 三档差异化资本监管，信用/市场/操作风险全面升级 | 按档位重算风险加权资产，校准内部评级 |
+| **2024年** | 《商业银行消费者权益保护管理办法》修订 | 适当性管理、信息披露、投诉处理更严格 | 梳理销售话术与双录留痕 |
+| **2025年** | FATF对中国反洗钱互评估完成 | AML体系建设压力加大，KYC/CDD标准提升 | 补强受益所有人与 PEP 管理 |
+| **2025年11月** | 《个人信息保护法》实施细则 | 银行客户数据处理合规要求更细化 | 完善告知同意与最小必要采集 |
+| **2025年** | 《反洗钱法》修订草案审议 | 可疑交易报告、客户尽职调查标准拟提升 | 修订可疑交易监测模型与阈值 |
+| **2026年** | 《金融消费者投诉处理管理办法》修订征求意见 | 投诉处理时效、赔偿标准更新 | 调整投诉工单时限与台账 |
+| **2026年6月** | 《关于银行业保险业人工智能安全开发应用的指导意见》 | 划定 AI 高风险应用场景 | 建立 AI 场景分级清单与人工复核机制 |
+| **2026年** | 《银行业保险业网络安全管理办法》（规章制定计划） | 网络与数据安全要求升格 | 补齐外包、供应链与灾备制度 |
 
 | Attribute | Value |
 |-----------|-------|
@@ -76,6 +100,8 @@ Simply describe your compliance review task. No scripts needed.
 - "检查这份理财产品说明书是否合规"
 - "帮我做一次反洗钱名单筛查"
 - "审查这份银保合作协议的合规风险"
+- "这段理财直播话术有没有违规表述"（新增）
+- "客户命中制裁名单疑似预警，帮我走一遍复核流程"（新增）
 
 ---
 
@@ -84,27 +110,32 @@ Simply describe your compliance review task. No scripts needed.
 ### Screening Dimensions:
 
 **P0 - Absolute Violations (Must Fix):**
-| Violation Type | Examples | Risk Level |
-|----------------|----------|------------|
-| False/Misleading Claims | 承诺固定收益、保本、100%赔付 | HIGH |
-| Absolute Language | 最优、第一、唯一、绝对安全 | HIGH |
-| Regulatory Prohibited Terms | 银行存款、储蓄性质等误导性表述（理财/保险产品） | HIGH |
-| Unlicensed Recommendations | 暗示银行信用背书未经授权产品 | HIGH |
-| Personal Data Exposure | 泄露客户隐私信息 | CRITICAL |
+| Violation Type | Examples | Risk Level | 高发渠道 | 常见变体话术 |
+|----------------|----------|------------|---------|------------|
+| False/Misleading Claims | 承诺固定收益、保本、100%赔付 | HIGH | 朋友圈、短视频口播 | "稳赚不赔""到期必达""收益写进合同" |
+| Absolute Language | 最优、第一、唯一、绝对安全 | HIGH | 海报主标题、易拉宝 | "业内最强""独家""零风险" |
+| Regulatory Prohibited Terms | 银行存款、储蓄性质等误导性表述（理财/保险产品） | HIGH | 代销理财宣传单 | "比存款划算""类存款""保本储蓄" |
+| Unlicensed Recommendations | 暗示银行信用背书未经授权产品 | HIGH | 第三方驻点、联合营销 | "本行推荐""银行兜底" |
+| Personal Data Exposure | 泄露客户隐私信息 | CRITICAL | 案例分享、晒单截图 | 未打码的身份证、流水、持仓截图 |
 
 **P1 - Significant Issues (Should Fix):**
-| Issue Type | Examples | Risk Level |
-|------------|----------|------------|
-| Missing Risk Disclosures | 未披露产品风险、净值波动 | MEDIUM |
-| Incomplete Fee Disclosures | 手续费、管理费披露不完整 | MEDIUM |
-| Regulatory Sensitive Terms | CBIRC/CBDRC regulated terms without approval | MEDIUM |
-| Competitive Disparagement | 贬低其他银行/金融机构产品 | MEDIUM |
-| Missing Legal Disclaimer | 缺少法定免责声明 | HIGH |
+| Issue Type | Examples | Risk Level | 高发渠道 | 常见变体话术 |
+|------------|----------|------------|---------|------------|
+| Missing Risk Disclosures | 未披露产品风险、净值波动 | MEDIUM | 首屏海报、朋友圈九宫格 | 只展示业绩比较基准不展示回撤 |
+| Incomplete Fee Disclosures | 手续费、管理费披露不完整 | MEDIUM | 产品说明书尾部小字 | 只写"费率详见合同" |
+| Regulatory Sensitive Terms | CBIRC/CBDRC regulated terms without approval | MEDIUM | 对外新闻稿、公众号 | 未经核准使用"存款""保险"界定词 |
+| Competitive Disparagement | 贬低其他银行/金融机构产品 | MEDIUM | 客户经理对比话术 | "他家收益低、不灵活" |
+| Missing Legal Disclaimer | 缺少法定免责声明 | HIGH | 短视频结尾、H5 页面 | 无"理财有风险，投资需谨慎" |
 
 **P2 - Best Practice (Consider Improving):**
 - Font size too small for key disclosures
 - Complex language not accessible to retail customers
 - Call-to-action (CTA) unclear or too aggressive
+
+**新增 P2 示例（逐条给出改法）：**
+- 风险揭示字体小于产品名主标题的 1/2 → 建议风险揭示字号不小于主标题，且同屏可见。
+- "本产品采用动态对冲策略控制回撤"面向老年客群 → 建议改为"本产品可能亏损，最大回撤不设上限，请确认您能承受本金损失"。
+- CTA 使用"今日最后一天，抢完即止" → 建议改为"额度有限，售罄为止"，去掉制造紧迫感的绝对表述。
 
 ### Review Output Format:
 
@@ -130,6 +161,22 @@ Simply describe your compliance review task. No scripts needed.
 [逐条提供修改后文案]
 ```
 
+**输出示例 2 — 通过件（短模板）**
+```
+✅ 合规通过
+
+✅ 合格项（5处）：
+- 业绩比较基准标注为"非保证收益"
+- 风险等级 R3 与客群风险承受能力匹配
+- 管理费、赎回费在首页显著披露
+- 含"理财有风险，投资需谨慎"标准声明
+- 无绝对化用语与贬低同业表述
+
+💡 可选优化（P2）：
+- 风险揭示字体建议放大至与主标题同级，老年客群可读性更好
+- 建议补充"过往业绩不代表未来表现"提示
+```
+
 ---
 
 ## Phase 2: KYC/AML Screening
@@ -144,15 +191,21 @@ Simply describe your compliance review task. No scripts needed.
 
 **2. Risk Scoring Matrix:**
 
-| Risk Factor | Low Risk | Medium Risk | High Risk |
-|-------------|----------|-------------|-----------|
-| Customer Type | Listed company, SOE | Private enterprise | Individual, offshore entity |
-| Business Nature | Traditional, regulated | Mixed, domestic | Crypto, trading, cash-heavy |
-| Geography | Domestic, G7 | Emerging markets | High-risk countries (FATF list) |
-| Transaction Pattern | Regular, predictable | Variable | Large, irregular, round-tripping |
-| PEP Status | No PEP connection | Indirect connection | Direct PEP involvement |
+| Risk Factor | Low Risk | Medium Risk | High Risk | 核验材料建议 |
+|-------------|----------|-------------|-----------|------------|
+| Customer Type | Listed company, SOE | Private enterprise | Individual, offshore entity | 营业执照、章程、股东名册 |
+| Business Nature | Traditional, regulated | Mixed, domestic | Crypto, trading, cash-heavy | 主营业务说明、上下游合同 |
+| Geography | Domestic, G7 | Emerging markets | High-risk countries (FATF list) | 注册地证明、实际经营地水电单 |
+| Transaction Pattern | Regular, predictable | Variable | Large, irregular, round-tripping | 近 12 个月流水摘要、合同发票 |
+| PEP Status | No PEP connection | Indirect connection | Direct PEP involvement | 公开检索记录、PEP 库比对 |
+| **UBO 可核实性**（新增） | 股权清晰、可直接穿透至自然人 | 存在多层嵌套但可穿透 | 代持、离岸信托、无法穿透至自然人 | 股权穿透图、代持声明、信托契约 |
 
 **Overall Risk Rating:** Low / Medium / High / Restricted
+
+**评级落定示例（新增）：**
+- 客户类型=民营企业、业务=传统制造、地域=境内、交易=稳定、PEP=无、UBO=自然人直接持股 → 综合 **低风险**，可建立业务关系，年度复核。
+- 客户类型=离岸实体、业务=大宗贸易、地域=FATF 灰名单、交易=大额不规则、PEP=无、UBO=两层 BVI 嵌套 → 综合 **高风险**，需加强尽调（EDD），报合规负责人审批，季度复核。
+- UBO 存在代持且无法取得穿透材料 → 直接判 **Restricted（限制类）**，不予建立业务关系或维持存量观察，理由留痕。
 
 ### AML Alert Review:
 
@@ -164,6 +217,14 @@ Simply describe your compliance review task. No scripts needed.
 - [ ] Shell company transactions (空壳公司往来)
 - [ ] Unusual cash patterns (异常现金模式)
 - [ ] Mismatched business activity (交易与业务不符)
+
+**红旗指标补充（新增，附判读示例）：**
+- [ ] 交易对手与客户主营明显无关（如建材公司频繁收付软件服务费）
+- [ ] 账户开立后短期沉寂，随即发生大额过账（"睡眠激活"模式）
+- [ ] 同一 IP/设备关联多个对公账户操作
+- [ ] 频繁修改受益所有人或法定代表人信息
+
+**判读示例：** 客户为注册资本 100 万元的小型贸易公司，近 3 个月累计收付 8,600 万元，且 70% 对手方为异地新设企业、资金到账后 2 小时内转出 → 同时命中"快进快出""交易与业务不符""空壳公司往来"三项红旗 → 建议按可疑交易流程上报，先不通知客户。
 
 ### Review Output:
 
@@ -198,22 +259,54 @@ Simply describe your compliance review task. No scripts needed.
 3. [设置交易限额并定期复核]
 ```
 
+**输出示例 2 — 疑似命中名单的复核路径（新增）**
+```
+【名单疑似命中复核意见】
+
+命中对象：[X公司]  比对名单：[海关/税务黑名单]
+相似度：名称 92% / 统一社会信用代码 不一致
+
+一、判定
+⚠️ 无法排除同名，判定为"疑似命中"，不构成最终认定
+
+二、建议补充的区分要素
+- 统一社会信用代码是否一致
+- 注册地址与法定代表人是否一致
+- 成立日期与经营范围是否吻合
+
+三、处置
+1. 暂缓开户/暂缓放款，不对客户透露命中信息
+2. 由合规岗 2 人复核并在系统留痕
+3. 若确认为误命中，记录排除理由后放行；若确认命中，按制裁与反洗钱流程上报
+```
+
 ---
 
 ## Phase 3: CBIRC Regulatory Compliance Check
 
 ### Key CBIRC/NFRA Regulations Checklist (2024-2026 Updated):
 
-| Regulation | Requirement | Check |
-|-----------|-------------|-------|
-| 资管新规 (2018) | 打破刚兑，禁止资金池，禁止期限错配 | [ ] |
-| 理财销售管理办法 | 风险评级匹配，"双录"要求 | [ ] |
-| **商业银行资本管理办法（2024新规）** | 三档差异化资本监管，风险权重重新校准 | [ ] |
-| **消费者权益保护管理办法（2024版）** | 适当性销售，信息披露标准升级，7天冷静期 | [ ] |
-| 数据安全法/个人信息保护法 | 客户信息保密，不得违规泄露 | [ ] |
-| 反洗钱规定（2025修订中） | 大额/可疑交易报告，KYC/CDD加强 | [ ] |
-| **FATF合规标准（2025互评估后）** | 受益权人识别，政治敏感人物（PEP）管理 | [ ] |
-| 关联交易管理办法 | 关联方授信须经审批并披露 | [ ] |
+| Regulation | Requirement | Check | 常见不符合情形 |
+|-----------|-------------|-------|--------------|
+| 资管新规 (2018) | 打破刚兑，禁止资金池，禁止期限错配 | [ ] | 宣传中出现"保本""预期收益" |
+| 理财销售管理办法 | 风险评级匹配，"双录"要求 | [ ] | 风险测评过期、双录缺失或补录 |
+| **商业银行资本管理办法（2024新规）** | 三档差异化资本监管，风险权重重新校准 | [ ] | 档位归属判断错误、权重套用旧表 |
+| **消费者权益保护管理办法（2024版）** | 适当性销售，信息披露标准升级，7天冷静期 | [ ] | 超风险等级销售、冷静期告知缺失 |
+| 数据安全法/个人信息保护法 | 客户信息保密，不得违规泄露 | [ ] | 超范围采集、未获同意对外共享 |
+| 反洗钱规定（2025修订中） | 大额/可疑交易报告，KYC/CDD加强 | [ ] | 受益所有人未穿透、可疑交易迟报 |
+| **FATF合规标准（2025互评估后）** | 受益权人识别，政治敏感人物（PEP）管理 | [ ] | PEP 未标识、高风险国家未加强尽调 |
+| 关联交易管理办法 | 关联方授信须经审批并披露 | [ ] | 关联方识别不全、未走关联交易审批 |
+| **网络与数据安全管理**（新增） | 网络安全等级保护、外包与供应链风险管理 | [ ] | 外包商未评估、应急预案未演练 |
+| **人工智能应用安全**（新增） | 高风险 AI 场景分级、人工复核与可追溯 | [ ] | 信贷审批模型无人工复核环节 |
+
+### 附表：AI 应用场景合规审查清单（新增）
+
+| 场景 | 风险分级 | 必需控制 | 审查要点 |
+|------|---------|---------|---------|
+| 信贷审批/额度核定 | 高风险 | 人工复核、拒绝理由可解释、模型留痕 | 是否存在完全自动化决策、拒绝理由能否向客户说明 |
+| 资金交易/反洗钱监测 | 高风险 | 双人复核、误报率监控、模型变更审批 | 阈值调整是否有审批记录、误报是否定期回检 |
+| 智能客服/智能营销 | 中风险 | 话术库合规预审、生成内容留痕 | 生成话术是否经过合规审核、是否超范围承诺 |
+| 内部办公辅助（摘要/检索） | 低风险 | 数据不出域、权限最小化 | 是否接入客户敏感数据、是否留存到外部服务 |
 
 ---
 
@@ -221,13 +314,18 @@ Simply describe your compliance review task. No scripts needed.
 
 ### Common Regulatory Reports:
 
-| Report Type | Frequency | Key Content |
-|------------|----------|-------------|
-| 监管统计数据报送 (1104) | 定期 | 资本充足率、资产质量、流动性指标 |
-| 反洗钱大额交易报告 | 实时 | 单笔50万/累计200万以上现金交易 |
-| 可疑交易报告 | 实时 | 可疑行为识别与上报 |
-| 重大事项报告 | 事件驱动 | 重大风险事件、高管变动 |
-| 消保投诉统计 | 季度 | 投诉数量、类型、处理结果 |
+| Report Type | Frequency | Key Content | 常见差错（新增） |
+|------------|----------|-------------|---------------|
+| 监管统计数据报送 (1104) | 定期 | 资本充足率、资产质量、流动性指标 | 口径与会计科目不一致、跨期调整未说明 |
+| 反洗钱大额交易报告 | 实时 | 单笔50万/累计200万以上现金交易 | 起算口径理解错误导致漏报 |
+| 可疑交易报告 | 实时 | 可疑行为识别与上报 | 报送理由模板化、缺少具体异常描述 |
+| 重大事项报告 | 事件驱动 | 重大风险事件、高管变动 | 超期报送、事件定级偏低 |
+| 消保投诉统计 | 季度 | 投诉数量、类型、处理结果 | 投诉分类口径与监管分类不一致 |
+
+**报送自查三步法（新增）：**
+1. **对口径**：确认本次报送口径与上期一致，若变更需在说明中写明变更原因与影响。
+2. **对勾稽**：关键指标与同期财务报表、业务系统台账交叉验证，差异需可解释。
+3. **对时限**：留足内部审核与退回修改时间，不要卡在截止日当天提交。
 
 ---
 
@@ -239,6 +337,7 @@ Simply describe your compliance review task. No scripts needed.
 [粘贴文案/材料内容]
 产品类型：[理财/贷款/保险/基金]
 目标客群：[个人/企业/高净值]
+发布渠道：[朋友圈/公众号/短视频/网点物料]
 ```
 
 **KYC Screening:**
@@ -249,6 +348,7 @@ Simply describe your compliance review task. No scripts needed.
 - 预期年交易量：[X万元]
 - 是否有跨境业务：[是/否]
 - 是否有涉外股东：[是/否]
+- 股权结构：[层级数，是否已穿透至自然人]
 ```
 
 **AML Alert Investigation:**
@@ -258,6 +358,7 @@ Simply describe your compliance review task. No scripts needed.
 - 预警类型：[描述]
 - 涉及金额：[X万元]
 - 交易特征：[描述]
+- 观察期：[起止月份]
 ```
 
 **Agreement Compliance Review:**
@@ -267,8 +368,19 @@ Simply describe your compliance review task. No scripts needed.
 合作类型：[银保合作/银证合作/银信合作/其他]
 ```
 
+**AI 场景合规审查（新增）：**
+```
+审查以下 AI 应用场景的合规风险：
+- 场景名称与业务环节：[描述]
+- 自动化程度：[辅助人工 / 全自动决策]
+- 是否涉及客户敏感数据：[是/否]
+- 是否有人工复核与留痕：[是/否]
+```
+
 ---
 
 ## Disclaimer
 
 This skill provides compliance screening support for bank officers. AI-generated compliance opinions do not replace formal legal advice or regulatory guidance. All compliance decisions must be reviewed by qualified compliance officers and approved by appropriate authority levels per internal policies. Report generation is for workflow assistance only.
+
+本 Skill 不连接监管报送系统或外部数据库，也不代为提交任何报送；输出内容须经本机构合规人员复核确认后方可对外使用。

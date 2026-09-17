@@ -1,46 +1,56 @@
-## Description: <br>
-Provides read-oriented Laravel Cloud operations through the OOMOL laravel_cloud connector and oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Laravel Cloud (cloud.laravel.com). Use this skill for ANY Laravel Cloud request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Laravel Cloud applications, environments, deployments, regions, and organization details from an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads Laravel Cloud data through an OOMOL-connected account. <br>
-Mitigation: Install it only when the agent should read Laravel Cloud data, and review the OOMOL connection and API key scopes before use. <br>
-Risk: Future connector actions labeled write or destructive could change or remove Laravel Cloud data. <br>
-Mitigation: Require explicit user confirmation of the exact payload and expected effect before running any write or destructive action. <br>
-Risk: Initial setup may require installing the oo CLI and connecting Laravel Cloud credentials. <br>
-Mitigation: Run setup only after an authentication or connection failure, and keep credentials managed through OOMOL rather than exposing raw tokens to the agent. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Laravel Cloud organizations, applications, environments, deployments, and available regions through an OOMOL-connected Laravel Cloud account.
 
-## Reference(s): <br>
-- [ClawHub Laravel Cloud skill page](https://clawhub.ai/oomol/skills/oo-laravel-cloud) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Laravel Cloud homepage](https://cloud.laravel.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: Fallback setup can run a remote oo CLI installer directly in a shell without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review OOMOL's official install instructions first, download installers without immediate execution, and verify signatures or checksums before running them.
+
+Risk: Connector calls depend on OOMOL as an intermediary for Laravel Cloud account access.
+
+Mitigation: Install only when that intermediary model is acceptable for the deployment, and keep Laravel Cloud credentials managed through the connected account.
+
+## Reference(s):
+
+- [Laravel Cloud Skill Page](https://clawhub.ai/oomol/skills/oo-laravel-cloud)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Laravel Cloud](https://cloud.laravel.com)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

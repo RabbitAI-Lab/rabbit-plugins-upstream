@@ -1,45 +1,60 @@
-## Description: <br>
-Hunter enables agents to read, create, update, and delete Hunter data through an OOMOL-connected account instead of calling the Hunter API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Hunter (hunter.io) enables an agent to read, create, update, and delete Hunter account data through the OOMOL-connected oo CLI instead of calling the Hunter API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to work with Hunter account data from an agent, including domain search, email finding and verification, enrichment, and lead/list management. It supports both read workflows and confirmed state-changing lead operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run Hunter write and destructive actions that create, update, upsert, or delete lead records. <br>
-Mitigation: Confirm the exact payload, target, and effect with the user before write actions, and require explicit approval before destructive actions. <br>
-Risk: The skill depends on sensitive account credentials and a connected Hunter provider account. <br>
-Mitigation: Install and use it only for authorized accounts, rely on the connected-account flow, and avoid exposing raw credentials in prompts or command payloads. <br>
-Risk: Connector action schemas may change over time. <br>
-Mitigation: Inspect the live action schema before constructing each payload so commands match the authoritative input and output contract. <br>
+## Use Case:
 
+Developers and operators use this skill to let an agent perform Hunter account, enrichment, domain search, email finding, verification, discovery, and lead-management workflows through an OOMOL-connected Hunter account. The skill is intended for both read operations and user-confirmed write or destructive lead-management actions.
 
-## Reference(s): <br>
-- [ClawHub Hunter Skill](https://clawhub.ai/oomol/oo-hunter) <br>
-- [Hunter Homepage](https://hunter.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Guidance, Configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an installed oo CLI, an authenticated OOMOL account, and a connected Hunter provider account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: The security review flags fallback setup guidance that tells an agent to run unverified remote installer scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only through a verified, user-controlled process; do not allow an agent to automatically run remote installer commands.
+
+Risk: The skill can create, update, upsert, or delete Hunter lead data.
+
+Mitigation: Require explicit user confirmation of the target payload and expected effect before any write or destructive Hunter action runs.
+
+Risk: Hunter account data flows through the OOMOL connector.
+
+Mitigation: Use the skill only when the operator trusts OOMOL and the connected Hunter account data path.
+
+## Reference(s):
+
+- [ClawHub Hunter skill page](https://clawhub.ai/oomol/skills/oo-hunter)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Hunter homepage](https://hunter.io)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include oo CLI connector schema and run commands; state-changing Hunter actions require user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

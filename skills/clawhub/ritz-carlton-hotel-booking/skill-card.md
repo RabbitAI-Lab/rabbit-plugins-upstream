@@ -1,43 +1,53 @@
-## Description: <br>
-搜索万豪集团旗下丽思卡尔顿酒店，返回实时价格与预订链接，支持酒店详情查询和套餐优惠搜索。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+丽思卡尔顿酒店查询服务已调整，原原品牌酒店数据专区数据源暂停，现引导使用全球酒店搜索、酒店比价等通用酒店技能查询丽思卡尔顿/Ritz-Carlton等品牌酒店
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External users use this skill to search Ritz-Carlton hotels, inspect hotel details, compare package offers, and follow booking links returned by travel-platform results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Hotel-search details are sent to an unspecified proxy and downstream travel APIs. <br>
-Mitigation: Use the skill only when the publisher and proxy configuration are trusted, and avoid entering sensitive itinerary details. <br>
-Risk: Prices, availability, package terms, and booking links come from third-party travel results. <br>
-Mitigation: Verify all prices, availability, and booking terms on the destination booking page before relying on them. <br>
-Risk: The security verdict is suspicious because the skill uses an embedded proxy token and may overstate data-source transparency. <br>
-Mitigation: Review the proxy configuration and token handling before deployment, and document the actual data sources exposed to users. <br>
+## Use Case:
 
+External hotel-search users use this compatibility skill to receive guidance for Ritz-Carlton hotel queries after the previous brand-specific search, detail, and package lookup source was paused. It directs users toward general hotel search and price-comparison skills instead of performing direct Ritz-Carlton booking queries.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/ritz-carlton-hotel-booking) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown-formatted text with hotel details, prices, package summaries, and booking links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Results depend on proxy and downstream travel API responses; booking links and availability should be verified on the destination booking page.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.4 (source: server release evidence; artifact frontmatter lists 1.1.2 and _meta.json lists 1.1.3) <br>
+Risk: Users may expect direct Ritz-Carlton search, details, package lookup, or booking results from this skill.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Describe the adjusted service behavior clearly before use and rely on the returned guidance to route hotel queries to general search or price-comparison skills.
+
+Risk: The skill output is Chinese-language guidance, which may not be suitable for all users or locales.
+
+Mitigation: Confirm the target user can understand the guidance or provide translation in the surrounding agent experience.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/ritz-carlton-hotel-booking)
+
+## Skill Output:
+
+**Output Type(s):** [text, guidance]
+
+**Output Format:** [Plain text service notice]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese-language response that consistently redirects users to general hotel search and comparison skills.]
+
+## Skill Version(s):
+
+1.1.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

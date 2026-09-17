@@ -1,43 +1,59 @@
-## Description: <br>
-Genderize (genderize.io) helps an agent query Genderize through an OOMOL-connected account for gender prediction requests instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Genderize (genderize.io). Use this skill for ANY Genderize request — searching and reading data. Whenever a task involves Genderize, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect the live OOMOL Genderize connector schema and run read-only single-name or batch gender prediction actions through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL account connection for Genderize and uses credentials injected by OOMOL server-side. <br>
-Mitigation: Only run the OOMOL login, connection, or CLI installation flow when the user trusts the integration and an action fails because setup is missing. <br>
-Risk: Genderize requests through OOMOL may consume account credits. <br>
-Mitigation: Treat billing or insufficient-credit errors as a stop condition and ask the user to resolve billing before retrying. <br>
+## Use Case:
 
+Developers and agents use this skill to call OOMOL's Genderize connector for name-gender prediction, including single-name predictions and batches of up to 10 names with optional country localization.
 
-## Reference(s): <br>
-- [Genderize ClawHub Skill](https://clawhub.ai/oomol/oo-genderize) <br>
-- [Genderize Homepage](https://genderize.io/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, Text] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill directs agents to inspect the live connector schema before constructing payloads and returns Genderize connector responses as JSON from the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The first-time setup includes remote installer commands that execute fetched scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verifiable method and do not allow an agent to run the curl-to-bash or PowerShell iex installer automatically.
+
+Risk: Names and optional country hints are sent through OOMOL's Genderize connector.
+
+Mitigation: Use the skill only when sharing those inputs with OOMOL and Genderize is acceptable for the user or organization.
+
+Risk: Authentication and connector setup can involve account login, API-key connection, or billing recovery steps.
+
+Mitigation: Let the user review and perform login, connection, billing, and recovery actions instead of running them proactively.
+
+## Reference(s):
+
+- [Genderize homepage](https://genderize.io/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Genderize ClawHub skill page](https://clawhub.ai/oomol/skills/oo-genderize)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses oo CLI connector schemas and returns Genderize connector responses as JSON.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,61 @@
-## Description: <br>
-Linkhut (ln.ht) helps an agent read, create, update, and delete Linkhut bookmarks through the OOMOL oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Linkhut (ln.ht) enables an agent to read, create, update, and delete Linkhut bookmarks through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent manage Linkhut bookmarks through an OOMOL-connected account. It supports reading bookmarks and tags, plus confirmed create, update, and delete actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, or delete Linkhut bookmarks through the connected OOMOL account. <br>
-Mitigation: Require explicit user approval for write and destructive actions, including the exact payload and target bookmark. <br>
-Risk: First-time setup may require installing and authenticating the OOMOL oo CLI before the connector can access Linkhut. <br>
-Mitigation: Review the oo CLI installer before setup and connect only the intended Linkhut account. <br>
+## Use Case:
 
+Developers and external users use this skill to manage Linkhut bookmarks from an agent session through OOMOL's oo CLI. It supports listing bookmarks and tags, creating or updating bookmarks, and deleting bookmarks after explicit confirmation.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-linkhut) <br>
-- [Linkhut Homepage](https://ln.ht) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the live connector schema before each action and requires explicit confirmation for write or destructive bookmark changes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server evidence) <br>
+Risk: Setup instructions include remote installer scripts executed directly by the shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official package or downloaded installer that can be inspected and verified before execution.
+
+Risk: Create, update, and delete actions can change or remove Linkhut account data.
+
+Mitigation: Confirm the exact payload, target URL, and intended effect with the user before running write or destructive actions.
+
+Risk: The skill depends on OOMOL's oo CLI and an OOMOL-connected Linkhut account.
+
+Mitigation: Install and use the skill only when the user is comfortable connecting Linkhut through OOMOL and using the oo CLI in the active environment.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-linkhut)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Linkhut Homepage](https://ln.ht)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands call the oo CLI and may return JSON connector responses.]
+
+## Skill Version(s):
+
+1.0.3 (source: evidence release version and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,56 @@
-## Description: <br>
-Builder.io lets an agent read, create, update, and delete Builder.io content through the OOMOL builder_io connector and oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill guides agents to operate Builder.io through the OOMOL oo CLI, including reading, creating, updating, and deleting Builder.io content.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Builder.io content from an agent session, including listing and fetching entries and creating, updating, or deleting content after reviewing the live action schema. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change live Builder.io content through create and update actions. <br>
-Mitigation: Review the live action schema and confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: The skill can remove Builder.io content through a destructive delete action. <br>
-Mitigation: Confirm the target model, content ID, and explicit user approval before deleting content. <br>
-Risk: The skill operates the user's Builder.io account through the oo CLI. <br>
-Mitigation: Install and use the skill only when OOMOL operation of the connected Builder.io account is intended. <br>
+## Use Case:
 
+Developers and operators use this skill to let an agent manage Builder.io content through an OOMOL-connected account. It supports content reads, listings, creation, updates, and deletion while requiring confirmation for write and destructive actions.
 
-## Reference(s): <br>
-- [Builder.io homepage](https://www.builder.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-builder-io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands use live connector schemas and return data with meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md metadata) <br>
+Risk: Setup instructions include remote installer commands that can execute mutable code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installer commands before use and prefer a verified package, pinned release, checksum, or inspected installer.
+
+Risk: The skill can create, update, or delete Builder.io content.
+
+Mitigation: Confirm the exact target, payload, and expected effect before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-builder-io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Builder.io Homepage](https://www.builder.io)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live action schemas before constructing Builder.io request payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

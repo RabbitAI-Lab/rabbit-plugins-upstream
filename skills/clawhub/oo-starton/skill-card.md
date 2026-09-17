@@ -1,43 +1,56 @@
-## Description: <br>
-Starton connector skill for reading, creating, updating, and deleting Starton data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Starton enables agents to operate Starton IPFS pin workflows through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Starton IPFS pins from an agent through the OOMOL oo CLI, including listing pins, reading pin details, creating JSON pins, pinning existing CIDs, and deleting pins. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill operates through an OOMOL-brokered Starton connection and may use sensitive account credentials without exposing raw tokens to the agent. <br>
-Mitigation: Install only when the user trusts OOMOL to broker the Starton connection and is comfortable allowing the agent to manage Starton IPFS pins through the oo CLI. <br>
-Risk: Pin deletion can remove Starton data. <br>
-Mitigation: Confirm the exact pin target and obtain explicit user approval before running destructive deletion actions. <br>
-Risk: The pin_existing_file action creates a pin even though the artifact does not tag it as a write action. <br>
-Mitigation: Ask for confirmation before running pin_existing_file, matching the security guidance for state-changing actions. <br>
+## Use Case:
 
+Developers and operators use this skill to list, inspect, create, pin, and delete Starton IPFS pins while checking each action's live schema before execution.
 
-## Reference(s): <br>
-- [Starton homepage](https://starton.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action payload construction and may return oo CLI JSON responses when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup guidance includes remote oo CLI installer commands that may execute installation scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path before installing, and prefer a pinned package or verified release.
+
+Risk: The skill can create or delete Starton IPFS pins.
+
+Mitigation: Confirm exact payloads for write actions and require explicit approval before destructive deletes.
+
+## Reference(s):
+
+- [ClawHub Starton Skill](https://clawhub.ai/oomol/skills/oo-starton)
+- [Starton Homepage](https://starton.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON payloads or results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live action schemas; write and destructive actions require confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 """
-AI Writing Detector — paper-polisher v1.1.0
+AI Writing Detector — paper-polisher v1.0.0
 Quantitative AI trace detection for academic text (Chinese + English).
-
-v1.1.0 (2026-05-02): Added Perplexity proxy (bigram/trigram diversity) + upgraded Burstiness
 
 Usage:
     python3 ai_detector.py <input_file>
@@ -23,13 +21,6 @@ from dataclasses import dataclass, field, asdict
 from pathlib import Path
 from typing import Optional
 
-# v1.1: Perplexity proxy module
-try:
-    from perplexity import compute_perplexity_metrics, score_perplexity as _score_ppl
-    _PPL_AVAILABLE = True
-except ImportError:
-    _PPL_AVAILABLE = False
-
 # ---------------------------------------------------------------------------
 # Data classes
 # ---------------------------------------------------------------------------
@@ -45,12 +36,6 @@ class ParagraphResult:
     avg_sentence_len: float = 0.0
     sentence_len_variance: float = 0.0
     paragraph_len: int = 0
-    # v1.1: Perplexity proxy metrics
-    bigram_diversity: float = 0.0
-    trigram_diversity: float = 0.0
-    ppl_burstiness: float = 0.0
-    perplexity_score: float = 0.0
-    burstiness_score: float = 0.0  # sentence-level burstiness (upgraded uniformity)
 
 @dataclass
 class DetectionReport:
@@ -189,48 +174,6 @@ def match_patterns(text: str, categories: dict) -> list:
 # Scoring
 # ---------------------------------------------------------------------------
 
-def match_sentence_patterns(text: str, lang: str) -> list:
-    """Match text against known AI sentence templates. Returns list of matched pattern IDs."""
-    if lang != "zh":
-        return []  # ZH patterns only for now
-    
-    ref_dir = Path(__file__).parent.parent / "references"
-    fpath = ref_dir / "sentence_patterns_zh.json"
-    if not fpath.exists():
-        return []
-    
-    try:
-        with open(fpath, "r", encoding="utf-8") as f:
-            data = json.load(f)
-    except (json.JSONDecodeError, OSError):
-        return []
-    
-    matched = []
-    text_clean = text.replace(" ", "").replace("\n", "")
-    
-    for pat in data.get("patterns", []):
-        # Convert template pattern to regex
-        # Replace {placeholder} with wildcard
-        template = pat["pattern"].replace(" ", "")
-        # Escape special regex chars except {}
-        import re as _re
-        regex_str = _re.escape(template)
-        # Replace escaped {xxx} with wildcard
-        regex_str = _re.sub(r'\\{[^}]+\\}', '.{1,20}', regex_str)
-        try:
-            if _re.search(regex_str, text_clean):
-                matched.append({
-                    "id": pat["id"],
-                    "category": pat["category"],
-                    "pattern": pat["pattern"],
-                    "ai_frequency": pat.get("ai_frequency", "medium"),
-                })
-        except _re.error:
-            continue
-    
-    return matched
-
-
 def score_paragraph(text: str, lang: str, categories: dict) -> ParagraphResult:
     matches = match_patterns(text, categories)
     tokens = tokenize(text, lang)
@@ -241,24 +184,8 @@ def score_paragraph(text: str, lang: str, categories: dict) -> ParagraphResult:
     para_len = len(text)
 
     # --- Pattern match score (proportional, no hard cap) ---
-    matches = match_patterns(text, categories)
-    sentence_pat_matches = match_sentence_patterns(text, lang)
     match_score = sum(m["weight"] for m in matches)
     pattern_points = min(match_score / 15.0, 1.0) * 50
-    
-    # --- Sentence template match score (v1.1) ---
-    # Each matched template adds points based on ai_frequency
-    sent_tmpl_score = 0.0
-    for sp in sentence_pat_matches:
-        freq = sp.get("ai_frequency", "medium")
-        if freq == "very_high":
-            sent_tmpl_score += 3.0
-        elif freq == "high":
-            sent_tmpl_score += 2.0
-        else:
-            sent_tmpl_score += 1.0
-    # Cap at 10 points
-    sent_tmpl_score = min(sent_tmpl_score, 10.0)
 
     # --- TTR penalty: very uniform vocabulary → AI-like ---
     if lang == "zh":
@@ -266,65 +193,14 @@ def score_paragraph(text: str, lang: str, categories: dict) -> ParagraphResult:
     else:
         ttr_score = max(0, (0.6 - ttr) / 0.3) * 15
 
-    # --- Burstiness score (v1.1: upgraded from simple uniformity) ---
-    # Combines: (1) sentence length CV, (2) adjacent sentence jumps,
-    # (3) sentence length range ratio
-    sentences_list = split_sentences(text, lang)
-    if lang == "zh":
-        slens = [len(s) for s in sentences_list]
+    # --- Sentence length uniformity penalty ---
+    # Low variance relative to mean → AI-like; boost for very uniform text
+    if avg_slen > 0:
+        cv = math.sqrt(slen_var) / avg_slen  # coefficient of variation
+        # cv < 0.15 is very uniform (strong AI signal), cv > 0.5 is natural
+        uniformity_score = max(0, (0.5 - cv) / 0.35) * 20
     else:
-        slens = [len(s.split()) for s in sentences_list]
-
-    if len(slens) >= 3 and avg_slen > 0:
-        # Component A: CV of sentence lengths (original metric, refined)
-        cv = math.sqrt(slen_var) / avg_slen
-        cv_score = max(0, (0.45 - cv) / 0.30) * 6  # 0-6 pts (v1.1.1: lowered from 8 to reduce FP)
-
-        # Component B: Adjacent sentence jump consistency
-        # AI: jumps are large but regular (systematic); Human: jumps vary more
-        # Key insight: AI sentences tend to be uniformly LONG (avg 28-38 chars ZH)
-        # Human sentences are shorter with more variation (avg 15-22 chars ZH)
-        diffs = [abs(slens[i] - slens[i+1]) for i in range(len(slens)-1)]
-        avg_diff = sum(diffs) / len(diffs)
-        max_diff = max(diffs)
-        # The key signal is: high avg sentence length + low range ratio = AI
-        # Jump score only matters when sentences are uniformly long
-        if lang == "zh":
-            if avg_slen > 30:  # AI tends to have avg sentence length > 30
-                jump_score = max(0, (12 - avg_diff) / 12) * 6
-            else:
-                jump_score = max(0, (8 - avg_diff) / 8) * 3  # Lower weight for shorter text
-        else:
-            if avg_slen > 15:  # EN AI tends to have longer sentences
-                jump_score = max(0, (5 - avg_diff) / 5) * 6
-            else:
-                jump_score = max(0, (3 - avg_diff) / 3) * 3
-
-        # Component C: Sentence length range ratio (max/min)
-        min_slen = min(slens)
-        if min_slen > 0:
-            range_ratio = max(slens) / min_slen
-            # AI: ratio 1.0-1.3 (uniform), Human: ratio 1.5-5.0+ (varied)
-            # v1.1.1 fix: lowered threshold from 1.5→1.3 to reduce false positives
-            # on formal academic text with moderately uniform sentences
-            if range_ratio < 1.2:
-                range_score = 6.0
-            elif range_ratio < 1.3:
-                range_score = 4.0
-            elif range_ratio < 1.8:
-                range_score = 1.0
-            else:
-                range_score = 0.0
-        else:
-            range_score = 3.0
-
-        burstiness_score = cv_score + jump_score + range_score  # 0-20 pts total
-    elif len(slens) == 2 and avg_slen > 0:
-        # Two sentences: only CV available
-        cv = math.sqrt(slen_var) / avg_slen
-        burstiness_score = max(0, (0.45 - cv) / 0.30) * 20
-    else:
-        burstiness_score = 10  # single sentence = can't assess = moderate default
+        uniformity_score = 10  # single sentence = uniform
 
     # --- Paragraph length bonus (AI likes medium-long paragraphs) ---
     if lang == "zh":
@@ -381,16 +257,7 @@ def score_paragraph(text: str, lang: str, categories: dict) -> ParagraphResult:
         opener_score = 0
 
     # --- Short text: scale down but don't zero out (B1/B2 fix) ---
-    raw_score = pattern_points + sent_tmpl_score + ttr_score + burstiness_score + length_score + density_score + opener_score
-
-    # --- v1.1: Perplexity proxy (n-gram diversity + burstiness) ---
-    ppl_score = 0.0
-    ppl_metrics = {}
-    if _PPL_AVAILABLE:
-        ppl_metrics = compute_perplexity_metrics(text, lang)
-        ppl_score = _score_ppl(text, lang, para_len)
-    raw_score += ppl_score
-
+    raw_score = pattern_points + ttr_score + uniformity_score + length_score + density_score + opener_score
     if para_len < 30:
         # Scale proportionally instead of zeroing
         scale = max(para_len / 30.0, 0.2)
@@ -408,11 +275,6 @@ def score_paragraph(text: str, lang: str, categories: dict) -> ParagraphResult:
         avg_sentence_len=avg_slen,
         sentence_len_variance=slen_var,
         paragraph_len=para_len,
-        bigram_diversity=ppl_metrics.get("bigram_diversity", 0.0),
-        trigram_diversity=ppl_metrics.get("trigram_diversity", 0.0),
-        ppl_burstiness=ppl_metrics.get("burstiness", 0.0),
-        perplexity_score=ppl_score,
-        burstiness_score=burstiness_score,
     )
 
 

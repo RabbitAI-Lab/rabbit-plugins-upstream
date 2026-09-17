@@ -1,13 +1,13 @@
 ---
 name: linkfox-tiktok-video-products
-description: TikTok 视频号可带货商品查询技能，经 /tiktokVideo/developerProxy 调用达人店铺商品搜索与橱窗/直播袋商品列表（Get Shop Products、Get Showcase Products）。依赖 linkfox-tiktok-video-auth 取得 ttsAccessToken。当用户提到 TikTok 达人店铺商品、搜索店铺商品、Get Shop Products、达人橱窗商品、showcase 商品、Get Showcase Products、可带货商品、视频挂车选品、可购物视频选品、查询达人可推广商品、TikTok 视频号商品列表 时触发。返回的 product_id 供 linkfox-tiktok-video 预检/发布可购物视频使用。**不含授权**（授权用 linkfox-tiktok-video-auth）；**不含视频上传/发布**（用 linkfox-tiktok-video）。
+description: TikTok 视频号可带货商品查询技能，经 /tiktokVideo/developerProxy 调用达人店铺商品搜索与橱窗/直播袋商品列表（Get Shop Products、Get Showcase Products）。依赖 linkfox-tiktok-video-auth 选号（openId）。当用户提到 TikTok 达人店铺商品、搜索店铺商品、Get Shop Products、达人橱窗商品、showcase 商品、Get Showcase Products、可带货商品、视频挂车选品、可购物视频选品、查询达人可推广商品、TikTok 视频号商品列表 时触发。返回的 product_id 供 linkfox-tiktok-video 预检/发布可购物视频使用。**不含授权**（授权用 linkfox-tiktok-video-auth）；**不含视频上传/发布**（用 linkfox-tiktok-video）。
 ---
 
 # TikTok 视频号可带货商品查询
 
 本 skill 负责 TikTok **视频上传模块**下的**商品选品**能力：搜索达人绑定店铺商品、查询达人橱窗/直播袋商品，取得 `product_id` 供后续可购物视频挂车使用。
 
-> 📌 **前置依赖**：`linkfox-tiktok-video-auth` — 达人授权与 `accessToken`（作为 `ttsAccessToken`）。
+> 📌 **前置依赖**：`linkfox-tiktok-video-auth` — 达人授权与选号（**`openId`**）。经 `developerProxy` 传 `openId`，**勿传** `ttsAccessToken`。
 
 > 📌 **下游用途**：返回商品中的 **`product_id`** 用于 **`linkfox-tiktok-video`** 的 `precheck_shoppable_video`（预检）与 `post_shoppable_video`（发布）接口中的 `product_link_info.product_id`。
 
@@ -18,7 +18,7 @@ description: TikTok 视频号可带货商品查询技能，经 /tiktokVideo/deve
 
 ## Core Concepts
 
-- **调用链路**：`accountTokens`（或用户传入 `ttsAccessToken`）→ `developerProxy` → 紫鸟 `tiktok-proxy/creator` → TikTok Open API
+- **调用链路**：`openId` → `developerProxy`（服务端解析 token）→ 紫鸟 `tiktok-proxy/creator` → TikTok Open API
 - **两类商品来源**：
   - **店铺商品**（`get_shop_products`）：搜索达人绑定店铺中的商品，支持关键词与排序
   - **橱窗/直播袋**（`get_showcase_products`）：列出达人橱窗或直播间带货袋中的商品
@@ -39,11 +39,11 @@ description: TikTok 视频号可带货商品查询技能，经 /tiktokVideo/deve
 
 共享模块：`_tiktok_video_products_common.py`、`_products_endpoints.py`、`_products_api_runner.py`。
 
-## 标准前置流程（选号 → 取令牌 → 查商品）
+## 标准前置流程（选号 → 查商品）
 
 1. **`linkfox-tiktok-video-auth`**：`authorized_accounts.py` 列出已授权视频号 → 用户选定 `openId`
-2. 取令牌：传 `openId`（runner 自动调 `/tiktokVideo/accountTokens`）
-3. 查商品：`get_shop_products.py` 或 `get_showcase_products.py`
+2. 查商品：`get_shop_products.py` 或 `get_showcase_products.py`（参数含 `openId`）
+3. **不要**先调 `account_tokens.py` 取 token
 4. 从返回结果中提取 **`product_id`**，供 `linkfox-tiktok-video` 预检/发布使用
 
 ## Usage Scenarios
@@ -81,7 +81,7 @@ python scripts/get_showcase_products.py '{"openId": "...", "page_size": 20, "ori
 ## Display Rules
 
 1. **只呈现数据**：展示接口返回字段，不做主观选品建议。
-2. **令牌安全**：不输出完整 `ttsAccessToken`。
+2. **令牌安全**：不向用户索要或展示 raw token。
 3. **明确 product_id**：用户需要挂车发布时，从商品列表中提取并展示 `product_id`。
 4. **无授权时**：引导用户先走 `linkfox-tiktok-video-auth`。
 
@@ -97,22 +97,16 @@ python scripts/get_showcase_products.py '{"openId": "...", "page_size": 20, "ori
 |------|----------------|
 | 达人/视频号 **授权**、刷新令牌 | `linkfox-tiktok-video-auth` |
 | 视频 **上传 / 预检 / 发布 / 查状态** | `linkfox-tiktok-video` |
-| TikTok Shop **小店** ERP 商品 | `linkfox-tiktok-auth` + 对应业务 skill |
+| TikTok Shop **小店** ERP 商品 | `linkfox-tiktok-shop-auth` + 对应业务 skill |
 | TikTok 选品 / 数据分析（非达人自有商品） | EchoTik 等 |
 
 ## 解决认证和积分问题
-发生以下异常情况时，采用以下措施来处理：
+发生以下异常情况时，采用 references/onboarding.md 引导解决问题：
 
 ### 异常情况
 - **未配置API Key**：环境变量未配置 `LINKFOX_AGENT_API_KEY`，也未配置 `LINKFOXAGENT_API_KEY`。
 - **响应401或402状态码**
 - **响应提示积分或余额不足**：消息含"积分余额不足/计费不足/余额不足/quota exceeded/insufficient balance/套餐到期/需充值/请充值"，或类似含义的内容。
-
-### 措施
-- 优先采用skill内的 onboarding.md 引导解决问题。
-- 如找不到 onboarding.md 文件，则加载 /linkfox-onboarding 这个skill并根据它的引导来处理。如未安装请先安装：
-    - 下载 https://agent-files.linkfox.com/skills/linkfox-onboarding/release.zip，解压后安装这个skill。如需用户授权才可下载，要询问用户获得授权，你不能自己放弃下载。
-- 兜底措施：仅当前面两个措施经过所有努力都走不通时，才提示用户依据 https://skill.linkfox.com/linkfoxskills/guide.htm 指引获取API Key，或去 https://os.linkfox.com/ 补充积分。
 
 ## 积分消耗规则
 

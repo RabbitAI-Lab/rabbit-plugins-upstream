@@ -1,45 +1,55 @@
-## Description: <br>
-Operates Whop through an OOMOL-connected account by inspecting connector schemas and running read-only Whop actions with the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Whop connector skill for searching and reading users, companies, memberships, and products through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and operators use this skill to read Whop authorized users, companies, memberships, and products from an OOMOL-connected Whop account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read data available through the user's connected Whop account, including broad list queries. <br>
-Mitigation: Confirm the company, product, membership, or user scope before list queries and request only the data needed for the task. <br>
-Risk: First-time recovery may install the oo CLI or require OOMOL sign-in and a Whop connection. <br>
-Mitigation: Run setup steps only after the matching command failure and let the user authorize installation, sign-in, or account connection. <br>
-Risk: Connector input schemas can change over time, which can make guessed payloads fail or query the wrong fields. <br>
-Mitigation: Fetch the live action schema with `oo connector schema` before building each action payload. <br>
+## Use Case:
 
+Developers and external agents use this skill to retrieve Whop authorized users, companies, memberships, and products through the OOMOL oo CLI without handling raw API tokens.
 
-## Reference(s): <br>
-- [Whop homepage](https://whop.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-whop) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release and skill metadata) <br>
+Risk: First-time setup may run an unverified remote installer in the user's shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Download and inspect the installer before execution, and verify a published checksum or signature when available.
+
+Risk: The connector can retrieve Whop account data such as users, companies, memberships, and products from the connected account.
+
+Mitigation: Use only the listed read actions, confirm the intended account and scope, and avoid requesting data beyond the user's task.
+
+## Reference(s):
+
+- [Whop homepage](https://whop.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON connector responses.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and meta.executionId; live action schemas should be inspected before payload construction.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Memberstack"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["memberstack"]
   icon: "https://static.oomol.com/logo/third-party/memberstack.svg"
 ---

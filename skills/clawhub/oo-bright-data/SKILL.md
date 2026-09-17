@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Bright Data"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["bright_data"]
   icon: "https://static.oomol.com/logo/third-party/bright_data.png"
 ---

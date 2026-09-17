@@ -1,48 +1,63 @@
-## Description: <br>
-Helps agents use LinkFox gateway scripts and documentation for Temu Global returns, refunds, and after-sales APIs, including after-sales order lookup, return logistics, return addresses, return labels, signatures, and carrier queries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides LinkFox gateway scripts and references for Temu Global returns, refunds, and after-sales APIs.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External developers and Temu sellers use this skill to call and document Temu Global return, refund, and after-sales workflows through LinkFox, including querying after-sales records, return shipping, labels, signatures, carriers, and related token setup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use Temu seller API access through LinkFox. <br>
-Mitigation: Use the narrowest Temu token possible for order and after-sales workflows, avoid unrelated permissions, and rotate or revoke tokens when access is no longer needed. <br>
-Risk: The included generic Temu proxy can be used beyond the documented return and refund APIs. <br>
-Mitigation: Limit use of the generic proxy to the return, refund, and after-sales API types documented by this skill. <br>
-Risk: The skill stores Temu access tokens and API response data locally, and saved responses may contain order, refund, customer, or account data. <br>
-Mitigation: Protect or relocate the token store, restrict filesystem access, and periodically delete saved response files that are no longer needed. <br>
+## Use Case:
 
+External sellers, operations teams, and developers use this skill to query and handle Temu Global returns, refunds, after-sales records, return logistics, addresses, labels, signatures, and carriers through LinkFox-managed API calls.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-returns-refunds-global) <br>
-- [API reference](references/api.md) <br>
-- [Temu accessToken authorization and retrieval](references/access-token.md) <br>
-- [Partner Global Returns & Refunds catalog](references/partner-global-catalog.md) <br>
-- [Returns & Refunds API document index](references/apis/README.md) <br>
-- [Temu Partner Global documentation](https://partner-global.temu.com/documentation?menu_code=7289390cfd724be4a196f11ebe45a896) <br>
-- [Temu Global OpenAPI router](https://openapi-b-global.temu.com/openapi/router) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, API calls, files, guidance] <br>
-**Output Format:** [Markdown guidance, shell commands, Python script invocations, and JSON API responses saved to local files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Small responses may be printed to stdout; larger responses are summarized after saving the full JSON response.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill requires commerce API credentials and may ask users to grant broad or sensitive Temu permissions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated least-privilege Temu token where possible and grant only the permissions needed for the specific returns or refunds task.
+
+Risk: The skill can store Temu access tokens and full API responses locally, including return addresses, labels, refund identifiers, and order identifiers.
+
+Mitigation: Avoid shared machines, protect the token store and working directory, and remove retained response files when they are no longer needed.
+
+Risk: Generic proxy and file-download scripts can perform actions beyond a narrow returns lookup.
+
+Mitigation: Review the requested API type, parameters, and download URL before execution, especially for label upload, file download, and refund-related workflows.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-returns-refunds-global)
+- [API reference](references/api.md)
+- [Temu accessToken authorization and retrieval](references/access-token.md)
+- [Partner Global returns and refunds catalog](references/partner-global-catalog.md)
+- [Returns and refunds API document index](references/apis/README.md)
+- [Temu Partner Global documentation](https://partner-global.temu.com/documentation?menu_code=7289390cfd724be4a196f11ebe45a896)
+- [Temu Global OpenAPI router](https://openapi-b-global.temu.com/openapi/router)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files]
+
+**Output Format:** [Markdown guidance with bash examples, JSON request payloads, and saved JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts save complete API responses under ./linkfox/... and summarize large responses unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

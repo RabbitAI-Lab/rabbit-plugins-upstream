@@ -1,43 +1,55 @@
-## Description: <br>
-ChatBotKit helps an agent operate ChatBotKit resources through an OOMOL-connected account using the `oo` CLI for reading, creating, and updating data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ChatBotKit (chatbotkit.com) lets an agent read, create, and update ChatBotKit data through the OOMOL-connected oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect and manage ChatBotKit bots, conversations, messages, datasets, files, and account usage through an OOMOL-connected ChatBotKit account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and change ChatBotKit resources through an OOMOL-connected account. <br>
-Mitigation: Install it only for agents that should access that account, and require confirmation for write actions that create or update bots, conversations, datasets, records, files, syncs, or uploads. <br>
-Risk: Connector actions depend on sensitive credentials managed by the OOMOL connection. <br>
-Mitigation: Keep ChatBotKit connected only in the intended OOMOL account and treat authentication or scope errors as setup issues rather than bypassing the connector flow. <br>
+## Use Case:
 
+Developers and operators use this skill to manage ChatBotKit bots, conversations, messages, datasets, records, files, and usage through a connected OOMOL account. It is intended for ChatBotKit workflows that need schema inspection, validated JSON action payloads, and confirmation before state-changing actions.
 
-## Reference(s): <br>
-- [ChatBotKit ClawHub listing](https://clawhub.ai/oomol/oo-chatbotkit) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [ChatBotKit homepage](https://chatbotkit.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads; connector responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an installed and authenticated OOMOL `oo` CLI with ChatBotKit connected.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: First-time setup uses remote installer commands that execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Inspect or verify installer artifacts before execution and use a safer oo CLI installation path when available.
+
+Risk: Some ChatBotKit actions can change account state without being clearly tagged as write actions.
+
+Mitigation: Require explicit user confirmation for every state-changing action, including dataset attach and detach operations.
+
+## Reference(s):
+
+- [ChatBotKit homepage](https://chatbotkit.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution and returns ChatBotKit action results as JSON when commands are run with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

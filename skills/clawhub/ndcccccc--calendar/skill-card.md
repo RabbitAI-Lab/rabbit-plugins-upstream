@@ -1,39 +1,48 @@
-## Description: <br>
-Calendar management and scheduling for creating events, managing meetings, and syncing across calendar providers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Calendar management and scheduling. Create events, manage meetings, and sync across calendar providers.
 
-## Publisher: <br>
-[NDCCCCCC](https://clawhub.ai/user/NDCCCCCC) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ndcccccc](https://clawhub.ai/user/ndcccccc)
 
-## Use Case: <br>
-Employees, external users, and developers can use Calendar to create events, schedule meetings, set reminders, view availability, manage recurring events, and coordinate Google Calendar, Apple Calendar, or Outlook workflows. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Calendar access and syncing can expose sensitive schedule details. <br>
-Mitigation: Confirm the publisher is trusted and review provider authorization prompts before granting access. <br>
-Risk: Creating events, sending invites, showing availability, or changing recurring events can affect other people or future schedules. <br>
-Mitigation: Require explicit user approval before the agent performs calendar changes or shares availability. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/NDCCCCCC/calendar) <br>
+## Use Case:
 
+External users and agents use this skill to create events, schedule meetings, set reminders, view availability, handle recurring events, and coordinate calendar sync across supported providers.
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands] <br>
-**Output Format:** [Markdown or plain text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide calendar actions that require explicit provider authorization and user approval.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: release metadata and _meta.json) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill may help an agent read or change calendar information when connected to calendar providers.
+
+Mitigation: Use it only with accounts intended for management and confirm event creation, edits, deletion, or cross-provider sync before allowing the agent to act.
+
+## Reference(s):
+
+- [Calendar skill page](https://clawhub.ai/ndcccccc/skills/calendar)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Natural-language responses with possible inline commands or configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May require curl and jq when interacting with calendar provider workflows.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata and artifact _meta.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

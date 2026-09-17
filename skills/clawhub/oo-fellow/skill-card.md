@@ -1,42 +1,60 @@
-## Description: <br>
-Fellow (fellow.app) lets an agent read, list, and update data in a connected Fellow workspace through OOMOL's oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fellow enables agents to read and update Fellow users, meeting notes, and action items through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and end users use this skill to operate a connected Fellow workspace from an agent session. It supports reading meeting notes and action items, checking the current user and workspace, and updating action-item archive or completion state after confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access meeting notes, action items, and workspace details from the connected Fellow account. <br>
-Mitigation: Install only when Fellow workspace access is intended, and treat returned meeting notes and action items as sensitive. <br>
-Risk: Write actions can archive action items or change their completion state. <br>
-Mitigation: Review the exact target, payload, and expected effect with the user before approving any write action. <br>
+## Use Case:
 
+Agents and operators use this skill to retrieve Fellow users, meeting notes, and action items, and to carry out confirmed action-item updates such as completion or archiving.
 
-## Reference(s): <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Fellow homepage](https://fellow.app) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions run through the oo CLI; write actions require user confirmation before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and SKILL.md metadata) <br>
+Risk: Setup instructions include unverified remote installer commands that could execute changing code on a user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official, versioned installation method with checksum or signature verification, and review installer content before running it.
+
+Risk: The skill uses OOMOL-mediated access to the user's Fellow account.
+
+Mitigation: Install only when that access model is acceptable, and keep the connected Fellow account scoped to the intended workspace and use.
+
+Risk: Write actions can modify Fellow action items.
+
+Mitigation: Fetch the live connector schema, review the exact payload and expected effect, and obtain user confirmation before executing write actions.
+
+## Reference(s):
+
+- [ClawHub Fellow skill page](https://clawhub.ai/oomol/skills/oo-fellow)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Fellow homepage](https://fellow.app)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May emit oo CLI commands and JSON connector payloads; write actions require user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

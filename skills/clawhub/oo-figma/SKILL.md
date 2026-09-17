@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Figma"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.4"
   services: ["figma"]
   icon: "https://static.oomol.com/logo/third-party/figma.svg"
 ---

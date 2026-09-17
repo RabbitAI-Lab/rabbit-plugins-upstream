@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Mem0"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["mem0"]
   icon: "https://static.oomol.com/logo/third-party/Mem0.svg"
 ---

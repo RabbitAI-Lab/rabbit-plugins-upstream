@@ -1,43 +1,56 @@
-## Description: <br>
-SupportBee helps agents operate a connected SupportBee account through OOMOL to read, create, update, and delete support-desk data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SupportBee (supportbee.com). Use this skill for SupportBee requests such as reading, creating, updating, and deleting data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Support teams and developers use this skill to inspect SupportBee connector schemas and run OOMOL connector actions for tickets, labels, teams, users, and customer groups. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and destructive SupportBee actions can change support-desk records, including tickets, replies, comments, users, and labels. <br>
-Mitigation: Confirm the exact action, target, payload, and expected effect with the user before running write or destructive actions. <br>
-Risk: The skill operates a connected SupportBee account through OOMOL, so actions may affect real customer-support data. <br>
-Mitigation: Install and use it only for accounts where agent operation through OOMOL is intended, and prefer read-only actions unless a change is explicitly requested. <br>
+## Use Case:
 
+External users and support operations teams use this skill to operate SupportBee tickets, replies, comments, users, teams, and labels through the OOMOL oo CLI. It supports read workflows and guarded write or destructive actions that require confirming the target payload and effect.
 
-## Reference(s): <br>
-- [SupportBee Skill Page](https://clawhub.ai/oomol/skills/oo-supportbee) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [SupportBee Homepage](https://supportbee.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector action responses are JSON objects with data and meta.executionId when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and artifact metadata) <br>
+Risk: The setup guidance includes remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installation path before installing and prefer a verified, pinned, or package-manager flow when available.
+
+Risk: Write and destructive SupportBee actions can change or remove account data.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-supportbee)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [SupportBee Homepage](https://supportbee.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Code, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands should inspect the live connector schema before constructing payloads and should return JSON responses from the oo CLI when actions run.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

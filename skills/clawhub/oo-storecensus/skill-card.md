@@ -1,43 +1,52 @@
-## Description: <br>
-StoreCensus helps agents search and read StoreCensus ecommerce intelligence through the OOMOL connector instead of calling the StoreCensus API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+StoreCensus helps agents search and read ecommerce intelligence, Shopify app data, and ecommerce store records through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and analysts use this skill to retrieve website intelligence, search ecommerce stores, and browse Shopify app data from StoreCensus through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on the oo CLI and an OOMOL-connected StoreCensus account, so setup, authentication, connection, or billing failures can block use. <br>
-Mitigation: Run setup or connection steps only after the matching command failure, and verify the OOMOL account connection before retrying. <br>
-Risk: Future StoreCensus connector actions labeled write or destructive could change or remove data. <br>
-Mitigation: Confirm the exact payload, target, and expected effect with the user before running any action labeled write or destructive. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve StoreCensus ecommerce intelligence for website domains or lead IDs, list and search Shopify apps, and search ecommerce stores through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub StoreCensus skill page](https://clawhub.ai/oomol/skills/oo-storecensus) <br>
-- [StoreCensus homepage](https://www.storecensus.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON with data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: Setup guidance includes direct execution of remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source before use, prefer a trusted package manager or manually downloaded installer, and do not let an agent run the remote installer automatically.
+
+## Reference(s):
+
+- [StoreCensus ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-storecensus)
+- [StoreCensus Homepage](https://www.storecensus.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include StoreCensus connector responses returned as JSON data with execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

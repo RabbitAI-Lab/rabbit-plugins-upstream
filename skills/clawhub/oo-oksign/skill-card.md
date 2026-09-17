@@ -1,45 +1,57 @@
-## Description: <br>
-OKSign connector support for reading OKSign account, user, document, and signed-document metadata through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OKSign (oksign.be). Use this skill for ANY OKSign request: searching and reading data through the OOMOL-connected OKSign connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent inspect OKSign account credits, users, active documents, linked document IDs, and signed-document metadata through OOMOL's OKSign connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected OKSign account, and the agent can read account, user, and document metadata visible to that account. <br>
-Mitigation: Install only when the publisher is trusted, connect the minimum appropriate OKSign account, and review requested actions before allowing access to sensitive document metadata. <br>
-Risk: Authentication, connection, or billing recovery flows can redirect the user into account setup or recharge steps. <br>
-Mitigation: Run setup or recovery commands only after an oo CLI command fails with the matching authentication, connection, scope, credential, app, or billing error. <br>
-Risk: Future connector actions or schemas may include write or destructive operations even though the listed actions are read-only. <br>
-Mitigation: Fetch the live action schema before building a payload and require explicit user confirmation for any action tagged write or destructive. <br>
+## Use Case:
 
+External users, operators, and developers use this skill to inspect OKSign account credits, document metadata, linked document identifiers, active documents, and configured users through OOMOL's OKSign connector.
 
-## Reference(s): <br>
-- [ClawHub OKSign skill page](https://clawhub.ai/oomol/oo-oksign) <br>
-- [OKSign homepage](https://www.oksign.be/en/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector actions return JSON data with a meta.executionId when executed through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release metadata and SKILL.md frontmatter) <br>
+Risk: Setup instructions include remote installer commands that can execute local code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing; prefer a verified, signed, or package-manager installation path for the oo CLI when available.
+
+Risk: OKSign actions depend on account authentication, connector availability, and sufficient OOMOL credits.
+
+Mitigation: Run setup or billing steps only after a matching command failure and retry after the account connection or credit issue is resolved.
+
+## Reference(s):
+
+- [OKSign ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-oksign)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [OKSign Homepage](https://www.oksign.be/en/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing OKSign requests.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

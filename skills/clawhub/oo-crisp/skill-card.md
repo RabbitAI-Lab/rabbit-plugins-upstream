@@ -1,44 +1,60 @@
-## Description: <br>
-Crisp enables agents to inspect Crisp websites and conversations through an OOMOL-connected account and send operator text replies when confirmed by the user. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Crisp lets an agent operate a connected Crisp account through the OOMOL oo CLI to retrieve website and conversation data and send confirmed operator messages.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Support teams, operators, and their agents use this skill to retrieve Crisp website and conversation data, list messages, and send confirmed operator replies through OOMOL-mediated Crisp access. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Read actions can expose Crisp customer conversations and messages. <br>
-Mitigation: Install only when OOMOL-mediated Crisp access is intended and limit use to authorized connected accounts. <br>
-Risk: The send_text_message action can post operator replies to live conversations. <br>
-Mitigation: Confirm the target conversation, message payload, and expected effect with the user before running write actions. <br>
+## Use Case:
 
+Developers, support operators, and agents use this skill to inspect Crisp website and conversation data and send operator text messages from a connected OOMOL/Crisp account after confirming write payloads.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-crisp) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Crisp Homepage](https://crisp.chat/) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill metadata) <br>
+Risk: First-time setup asks the agent to execute remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source or install the oo CLI from a trusted, versioned, or package-managed source before enabling the skill.
+
+Risk: The skill can send operator text messages to Crisp conversations through the connected account.
+
+Mitigation: Confirm the exact conversation target, message payload, and expected effect before allowing send_text_message.
+
+Risk: The skill depends on an OOMOL-connected Crisp account and OOMOL-hosted setup flow.
+
+Mitigation: Install only if OOMOL's hosting and connected-account handling are acceptable for the deployment, and revoke access when the connection is no longer needed.
+
+## Reference(s):
+
+- [ClawHub Crisp Skill](https://clawhub.ai/oomol/skills/oo-crisp)
+- [Crisp Homepage](https://crisp.chat/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live schema inspection before JSON action payloads; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

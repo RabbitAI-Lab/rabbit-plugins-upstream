@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Refiner"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["refiner"]
   icon: "https://static.oomol.com/logo/third-party/Refiner.svg"
 ---

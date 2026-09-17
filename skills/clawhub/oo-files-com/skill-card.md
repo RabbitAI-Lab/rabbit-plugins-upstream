@@ -1,42 +1,56 @@
-## Description: <br>
-Files.com helps an agent read, create, update, and delete Files.com data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Files.com helps agents read, create, update, delete, download, list, and manage metadata in Files.com through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent manage Files.com folders, listings, file metadata, and deletions through the OOMOL files_com connector after account connection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and destructive connector actions can change or delete Files.com data. <br>
-Mitigation: Confirm exact paths, payloads, and intended effects with the user before creating folders, updating metadata, or deleting files. <br>
-Risk: Connector access depends on the user's OOMOL and Files.com connection scopes and credential state. <br>
-Mitigation: Review the connected account scopes and resolve authentication, connection, or billing errors before retrying actions. <br>
+## Use Case:
 
+Developers and external users use this skill to operate Files.com from an agent session, including folder creation, file deletion, downloads, metadata lookup, folder listing, and custom metadata updates.
 
-## Reference(s): <br>
-- [ClawHub Files.com Skill](https://clawhub.ai/oomol/skills/oo-files-com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Files.com Homepage](https://www.files.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Agent commands use the oo CLI and live action schema inspection before connector calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The first-time setup path includes a remote installer command that pipes downloaded code directly to a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a documented, versioned, verifiable oo CLI installation method or inspect the installer before execution.
+
+Risk: The skill can run write and destructive Files.com actions.
+
+Mitigation: Confirm exact targets and payloads with the user before creating folders, updating metadata, or deleting files and folders.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-files-com)
+- [Files.com homepage](https://www.files.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill directs agents to inspect live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

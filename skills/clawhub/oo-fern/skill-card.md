@@ -1,45 +1,56 @@
-## Description: <br>
-Fern lets agents search and read Fern customer, payment-account, transaction, and exchange-rate data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fern helps agents inspect live Fern connector schemas and retrieve customer, payment-account, transaction, and exchange-rate data through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill when an agent needs to retrieve Fern customers, payment accounts, transactions, or exchange-rate details without calling the Fern API directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Fern customer, payment account, transaction, and exchange-rate data through an OOMOL-connected account. <br>
-Mitigation: Install only when the user trusts OOMOL and intends the agent to access those Fern data categories. <br>
-Risk: First-time setup may require installing the oo CLI with a remote installer. <br>
-Mitigation: Review the oo CLI installer before running it and follow the user's approved installation process. <br>
-Risk: Future Fern connector actions could add write or destructive behavior. <br>
-Mitigation: Require explicit user confirmation of the target, payload, and expected effect before running any write or destructive action. <br>
+## Use Case:
 
+Developers, support staff, and operations users can use this skill to answer explicit Fern data requests from a connected OOMOL account, including customer, payment account, transaction, and exchange-rate lookups. The skill is suited to read-only investigation and reporting workflows where the agent should inspect the connector schema before running a request.
 
-## Reference(s): <br>
-- [ClawHub Fern skill page](https://clawhub.ai/oomol/skills/oo-fern) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Fern homepage](https://fernhq.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-oriented Fern connector actions run through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: The setup path includes direct remote shell installers for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer verified package-manager installation or checksum-validated installer steps before using the CLI.
+
+Risk: Read-only Fern lookups can expose sensitive customer, payment account, transaction, and business data from the connected account.
+
+Mitigation: Run the skill only for explicit Fern data requests and limit outputs to the information needed for the user task.
+
+## Reference(s):
+
+- [ClawHub Fern skill page](https://clawhub.ai/oomol/skills/oo-fern)
+- [Fern homepage](https://fernhq.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing Fern requests; responses include connector data and an execution ID when actions run successfully.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

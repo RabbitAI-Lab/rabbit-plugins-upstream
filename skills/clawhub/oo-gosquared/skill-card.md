@@ -1,43 +1,55 @@
-## Description: <br>
-GoSquared (gosquared.com) skill for searching and reading analytics data through the OOMOL oo CLI instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+GoSquared (gosquared.com). Use this skill for ANY GoSquared request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect GoSquared project analytics, authorization metadata, realtime visitor activity, and Trends aggregates through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill relies on OOMOL as an intermediary for the connected GoSquared account. <br>
-Mitigation: Install only when the user trusts OOMOL for this connection and understands that analytics and authorization metadata may be read from the connected project. <br>
-Risk: A future version could add write or destructive GoSquared actions. <br>
-Mitigation: Review future releases before deployment and require explicit user confirmation before running any action marked write or destructive. <br>
+## Use Case:
 
+External users and developers use this skill to operate GoSquared through an OOMOL-connected account, including realtime Now overviews, visitor time series, token authorization checks, and Trends aggregate metrics.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-gosquared) <br>
-- [GoSquared Homepage](https://www.gosquared.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses OOMOL server-side credentials and returns connector data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: Setup instructions include one-line remote installer commands that execute downloaded scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source before use, prefer a pinned, signed, or checksum-verified installation path, and avoid running setup from an elevated shell.
+
+Risk: The skill relies on an OOMOL-connected GoSquared account, so incorrect account or scope configuration can affect what project data the agent can read.
+
+Mitigation: Inspect token authorization with get_token_info and confirm the intended GoSquared connection before using project data for decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-gosquared)
+- [GoSquared homepage](https://www.gosquared.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return JSON responses from GoSquared connector actions when commands are executed.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

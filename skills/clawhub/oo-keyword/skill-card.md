@@ -1,44 +1,52 @@
-## Description: <br>
-Keyword.com lets agents read Keyword.com projects, groups, keywords, rankings, regions, and current-user data through the OOMOL keyword connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agents with Keyword.com read access through OOMOL's oo CLI for user profiles, projects, regions, keywords, and ranking data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and agents use this skill to retrieve Keyword.com account, project, region, keyword, and ranking data from a connected OOMOL account without direct API token handling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Keyword.com/OOMOL account and may access account-specific keyword and ranking data. <br>
-Mitigation: Grant only the expected Keyword.com permissions and keep credentials managed through OOMOL; do not expose raw tokens to the agent. <br>
-Risk: Connector schemas and account access can change or expire, causing failed commands or incorrect payload assumptions. <br>
-Mitigation: Fetch the live connector schema before each action and retry setup only after authentication, scope, credential, or billing errors. <br>
-Risk: CLI installation or authentication setup changes the local environment. <br>
-Mitigation: Run setup steps only when the CLI or connection is missing and review install or auth commands before execution. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Keyword.com account, project, region, keyword, and ranking data from an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-keyword) <br>
-- [Keyword.com homepage](https://keyword.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON response guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May run read-only Keyword.com connector actions that return JSON data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and SKILL.md metadata) <br>
+Risk: The setup path may ask users to run an unverified internet installer directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing the oo CLI, prefer a verified or pinned installation source, and connect only a Keyword.com account whose accessible projects and keywords are appropriate to expose through OOMOL connector calls.
+
+## Reference(s):
+
+- [Keyword.com homepage](https://keyword.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-keyword)
+- [ClawHub publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, json]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions should fetch the live connector schema before constructing request payloads.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

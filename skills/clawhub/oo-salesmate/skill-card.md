@@ -1,43 +1,57 @@
-## Description: <br>
-Salesmate (salesmate.io) enables an agent to read, create, update, and delete Salesmate CRM data through the OOMOL Salesmate connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Salesmate (salesmate.io). Use this skill for Salesmate requests to read, create, update, and delete CRM data through the OOMOL oo CLI connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to operate Salesmate CRM through an OOMOL-connected account, including listing modules and active users, fetching companies, and creating or deleting supported CRM records. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad Salesmate trigger wording may cause an agent to access CRM data when a request only vaguely mentions Salesmate. <br>
-Mitigation: Install only when the agent is intended to access Salesmate, and avoid invoking the skill for vague mentions unless CRM data access is intended. <br>
-Risk: Write and destructive actions can create CRM records or delete Salesmate products. <br>
-Mitigation: Use least-privilege API credentials where possible, review proposed payloads, and require explicit approval for create, update, or delete actions before execution. <br>
+## Use Case:
 
+External users and agents use this skill to operate Salesmate CRM through an OOMOL-connected account, including company, product, user, and module workflows. It guides the agent to inspect live action schemas before running commands and to confirm write or destructive changes.
 
-## Reference(s): <br>
-- [Salesmate Skill on ClawHub](https://clawhub.ai/oomol/skills/oo-salesmate) <br>
-- [Salesmate Homepage](https://www.salesmate.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution; write and destructive actions require confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Setup instructions include direct remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing, use a verified release or package manager, and do not let an agent run curl-to-bash or irm-to-iex automatically.
+
+Risk: The skill can create or delete Salesmate CRM records.
+
+Mitigation: Require explicit confirmation of the payload, target record, and expected effect before running write or destructive actions.
+
+## Reference(s):
+
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Salesmate homepage](https://www.salesmate.io)
+- [ClawHub Salesmate skill page](https://clawhub.ai/oomol/skills/oo-salesmate)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload expectations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live oo connector schemas before action execution; CRM write and destructive actions require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: evidence release and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

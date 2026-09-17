@@ -1,42 +1,56 @@
-## Description: <br>
-ClassMarker helps agents read ClassMarker groups, links, tests, and recent results through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ClassMarker connector for searching and reading ClassMarker data through an OOMOL-connected account instead of direct API calls.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect ClassMarker groups, links, assigned tests, and recent assessment results through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: ClassMarker groups, links, tests, and recent results may include sensitive assessment information. <br>
-Mitigation: Install and use the skill only when the agent is intended to read ClassMarker data through the connected OOMOL account, and review outputs before sharing them. <br>
-Risk: First-time setup may require installing the OOMOL CLI from a remote install command. <br>
-Mitigation: Review the OOMOL CLI install command before running it, and use setup steps only after an auth, connection, or missing-CLI failure. <br>
+## Use Case:
 
+External users and agents use this skill to inspect ClassMarker connector schemas and retrieve accessible ClassMarker groups, links, assigned tests, and recent results through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClassMarker homepage](https://www.classmarker.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClassMarker skill on ClawHub](https://clawhub.ai/oomol/oo-classmarker) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses read-only ClassMarker connector actions and live action schemas before constructing requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server evidence) <br>
+Risk: The fallback setup documents remote shell installers for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI from a trusted, verified source instead of allowing an agent to execute curl-to-bash or PowerShell installer commands automatically.
+
+Risk: ClassMarker requests and returned results are processed through OOMOL.
+
+Mitigation: Review the skill before installing and use it only when comfortable routing ClassMarker data through an OOMOL-connected account.
+
+## Reference(s):
+
+- [ClassMarker homepage](https://www.classmarker.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClassMarker skill page](https://clawhub.ai/oomol/skills/oo-classmarker)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Markdown, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agent output may include ClassMarker result data returned by the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence, metadata, and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

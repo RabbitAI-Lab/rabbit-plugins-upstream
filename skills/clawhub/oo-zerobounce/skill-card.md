@@ -1,42 +1,59 @@
-## Description: <br>
-ZeroBounce (zerobounce.net) lets agents read, create, and update ZeroBounce data through the OOMOL oo CLI connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ZeroBounce (zerobounce.net). Use this skill for ANY ZeroBounce request - reading, creating, and updating data. Whenever a task involves ZeroBounce, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to validate email addresses, inspect ZeroBounce account activity and usage, check credit balance, and manage ZeroBounce filter rules through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The setup guidance includes a network-fetched shell installer for the oo CLI. <br>
-Mitigation: Install the oo CLI only from a trusted, verified OOMOL source and review the installer before execution. <br>
-Risk: The skill can create or update ZeroBounce custom allow/block filter rules. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
+## Use Case:
 
+External users and developers use this skill to operate ZeroBounce through an OOMOL-connected account for single-email validation, usage and credit lookups, activity checks, and custom filter rule management.
 
-## Reference(s): <br>
-- [ZeroBounce homepage](https://www.zerobounce.net) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub ZeroBounce skill page](https://clawhub.ai/oomol/oo-zerobounce) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schemas before running actions; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill frontmatter) <br>
+Risk: The first-time setup path presents remote installer commands that execute shell or PowerShell scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation method before use and prefer a signed or checksum-verified installer from the vendor.
+
+Risk: Email validation and account lookups may send sensitive or bulk email data through the connector.
+
+Mitigation: Use the connector only when OOMOL's data handling terms meet the user's privacy and compliance requirements.
+
+Risk: The create_filter_rule action can change ZeroBounce account state.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [ZeroBounce homepage](https://www.zerobounce.net)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub ZeroBounce skill](https://clawhub.ai/oomol/skills/oo-zerobounce)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can produce oo CLI connector commands and summarize JSON responses returned by ZeroBounce actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

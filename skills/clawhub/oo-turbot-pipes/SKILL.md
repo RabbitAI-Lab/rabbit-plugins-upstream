@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Turbot Pipes"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["turbot_pipes"]
   icon: "https://static.oomol.com/logo/third-party/turbot_pipes.svg"
 ---

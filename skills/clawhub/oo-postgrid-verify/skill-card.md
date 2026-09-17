@@ -1,45 +1,57 @@
-## Description: <br>
-PostGrid Verify (postgrid.com). Use this skill for any PostGrid Verify request involving address search, parsing, verification, and lookup through the OOMOL connector rather than calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PostGrid Verify helps agents autocomplete, parse, look up, verify, and standardize US and Canadian addresses through an OOMOL-connected PostGrid Verify account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to run PostGrid Verify address autocomplete, parsing, standardization, and postal-code lookup actions through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Address information is routed through OOMOL and PostGrid Verify. <br>
-Mitigation: Use the skill only when the user is comfortable sending the relevant address data through those services. <br>
-Risk: The skill may require installing or authenticating the OOMOL CLI and connecting a PostGrid Verify account. <br>
-Mitigation: Run installation, login, or connection steps only when needed for the requested action or after an authentication or connection failure. <br>
-Risk: Connector schemas can change over time. <br>
-Mitigation: Inspect the live connector schema before constructing payloads for PostGrid Verify actions. <br>
+## Use Case:
 
+External users, developers, and operations teams use this skill to run PostGrid Verify address autocomplete, city/state lookup, freeform parsing, and US or Canadian address verification from an agent through the OOMOL connector.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-postgrid-verify) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [PostGrid Verify homepage](https://www.postgrid.com/address-verification/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands use the OOMOL oo CLI and should inspect the live connector schema before running an action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill frontmatter) <br>
+Risk: Fallback setup documents remote installer commands that execute downloaded shell or PowerShell scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verifiable official release or package manager; do not let an agent run the documented remote installer commands directly.
+
+Risk: The skill depends on OOMOL as the PostGrid Verify connector and may send address payloads through that connected account.
+
+Mitigation: Install only if OOMOL is an acceptable connector for the deployment, and confirm account connection and payload details before use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-postgrid-verify)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [PostGrid Verify homepage](https://www.postgrid.com/address-verification/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before building action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

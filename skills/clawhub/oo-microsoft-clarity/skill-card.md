@@ -1,44 +1,62 @@
-## Description: <br>
-Provides Microsoft Clarity analytics access through the OOMOL oo CLI connector for reading and exporting live insights. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Microsoft Clarity (clarity.microsoft.com). Use this skill for ANY Microsoft Clarity request - searching and reading data. Whenever a task involves Microsoft Clarity, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, analysts, and site operators use this skill to export recent Microsoft Clarity live insights from an OOMOL-connected account without handling raw API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: First-time setup may ask the user to install the oo CLI through shell or PowerShell installer commands. <br>
-Mitigation: Inspect or verify the installer before running it, and install only if the user trusts OOMOL. <br>
-Risk: The skill requires a connected Microsoft Clarity account through OOMOL. <br>
-Mitigation: Use an OOMOL account and Microsoft Clarity connection that the user trusts, and avoid exposing raw credentials in prompts or local files. <br>
-Risk: Future connector actions could include write or destructive operations even though the current action is read-only. <br>
-Mitigation: Confirm the exact payload and effect with the user before executing any action tagged write or destructive. <br>
+## Use Case:
 
+Developers and external users use this skill to inspect Microsoft Clarity connector schemas and export recent live insights through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Microsoft Clarity homepage](https://clarity.microsoft.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-microsoft-clarity) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution and returns connector responses as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: Setup instructions include one-line remote installer commands that can execute code from external URLs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a pinned, signed, or manually reviewed installation path and avoid running remote installers until the source and contents have been independently verified.
+
+Risk: The skill accesses Microsoft Clarity through OOMOL as an intermediary.
+
+Mitigation: Install only if the user is comfortable routing Microsoft Clarity data through OOMOL-connected services.
+
+Risk: Shell-interpolated JSON payloads can be malformed or unsafe when values contain quotes or shell metacharacters.
+
+Mitigation: For dynamic payloads, write JSON to a file and pass it with --data @path.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-microsoft-clarity)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Microsoft Clarity homepage](https://clarity.microsoft.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Microsoft Clarity icon](https://static.oomol.com/logo/third-party/microsoft_clarity.png)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses oo CLI connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

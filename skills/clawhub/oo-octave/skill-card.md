@@ -1,45 +1,59 @@
-## Description: <br>
-Octave connector skill for searching and reading Octave data and running supported Octave agent workflows through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill enables an agent to operate Octave through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Octave connector schemas, list and read Octave workspace data, validate connectivity, and run supported Octave agents for call prep, context, enrichment, and qualification workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Setup may require installing OOMOL's oo CLI and creating a persistent OOMOL connection to Octave. <br>
-Mitigation: Install only if you trust OOMOL, review the CLI setup steps, and connect only the intended Octave account. <br>
-Risk: Octave agent runs and connector actions may send user or workspace task data to the connected Octave service. <br>
-Mitigation: Send only data appropriate for Octave and the connected workspace. <br>
-Risk: Actions tagged as write or destructive could change, remove, or overwrite Octave data if added or exposed by the connector. <br>
-Mitigation: Confirm the exact payload, target, and expected effect with the user before running any write or destructive action. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect Octave connector schemas, list workspace Octave agents and supported languages, validate workspace metadata, and run synchronous Octave enrichment, qualification, context, and call preparation agents.
 
-## Reference(s): <br>
-- [Octave Skill on ClawHub](https://clawhub.ai/oomol/skills/oo-octave) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Octave Homepage](https://www.octavehq.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schemas before constructing JSON payloads; connector responses are JSON with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence.release.version and artifact metadata.version) <br>
+Risk: Remote installer commands may execute downloaded scripts without independent package verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified or package-manager installation of the oo CLI, and review installer source before executing downloaded scripts.
+
+Risk: Octave agent actions may send sensitive workspace data or incur account costs.
+
+Mitigation: Require explicit user approval before running Octave agent actions, especially enrichment, qualification, context, and call preparation runs.
+
+Risk: Incorrect action payloads could cause failed or unintended Octave requests.
+
+Mitigation: Fetch the live connector schema before constructing each payload and confirm the action target and data before execution.
+
+## Reference(s):
+
+- [ClawHub Octave skill page](https://clawhub.ai/oomol/skills/oo-octave)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Octave homepage](https://www.octavehq.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with oo CLI commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; requires an installed oo CLI and an OOMOL-connected Octave account.]
+
+## Skill Version(s):
+
+1.0.2 (source: SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

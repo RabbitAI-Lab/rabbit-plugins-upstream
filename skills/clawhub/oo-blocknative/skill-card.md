@@ -1,44 +1,59 @@
-## Description: <br>
-Blocknative helps agents query Blocknative gas and chain data through the OOMOL connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Blocknative helps agents retrieve Blocknative gas-price estimates, Ethereum mainnet gas-price distributions, supported chains, and gas-oracle metadata through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill when they want an agent to retrieve Blocknative Ethereum gas-price estimates, gas-price distributions, gas-oracle metadata, and supported chain information through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Connecting Blocknative through OOMOL grants OOMOL access to an API-key-backed service. <br>
-Mitigation: Connect Blocknative only from an authorized OOMOL account and only when that service access is acceptable for the deployment. <br>
-Risk: The optional oo CLI installation path can execute a remote installer command. <br>
-Mitigation: Review the install command or use the documented install guide before running it in the target environment. <br>
-Risk: The skill depends on live OOMOL authentication, connection state, and billing status. <br>
-Mitigation: Run setup, reconnection, or billing steps only when the oo CLI reports the matching authentication, connection, or credit error. <br>
+## Use Case:
 
+Developers and agents use this skill to query current Blocknative gas intelligence for Ethereum and supported chains without calling the Blocknative API directly. It is suited for read-only gas estimation, gas distribution lookup, chain discovery, and oracle metadata inspection.
 
-## Reference(s): <br>
-- [Blocknative Homepage](https://www.blocknative.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May run oo CLI connector schema and read-only connector actions that return JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: skill metadata and release evidence) <br>
+Risk: The setup flow documents remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a trusted, user-controlled process and review the installer before execution.
+
+Risk: Blocknative access is mediated through an OOMOL-connected account.
+
+Mitigation: Use the skill only when OOMOL handling the Blocknative connection is acceptable for the user's account and data policies.
+
+Risk: Gas-price data is live network data and may change quickly.
+
+Mitigation: Fetch the live action schema and current data at execution time, and avoid treating old responses as current estimates.
+
+## Reference(s):
+
+- [Blocknative homepage](https://www.blocknative.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-blocknative)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live action schemas before execution; actions documented in the artifact are read-only.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

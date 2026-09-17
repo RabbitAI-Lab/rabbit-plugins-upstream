@@ -1,45 +1,59 @@
-## Description: <br>
-Vapi (vapi.ai). Use this skill for ANY Vapi request: reading, creating, updating, and deleting data through the OOMOL oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Vapi (vapi.ai) skill for reading, creating, updating, and deleting Vapi data through the OOMOL oo CLI connector instead of direct API calls.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Vapi assistants, calls, chats, phone numbers, sessions, evals, scorecards, monitoring policies, analytics, provider resources, tools, and files through an OOMOL-connected Vapi account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Vapi account through OOMOL and can operate on sensitive account data. <br>
-Mitigation: Install only when OOMOL is an acceptable connector for the Vapi account and keep account connection scopes under review. <br>
-Risk: Optional first-time setup includes a pipe-to-shell installer pattern. <br>
-Mitigation: Prefer the official install guide or verify the installer source before running setup commands. <br>
-Risk: Write and destructive actions can change or delete Vapi resources. <br>
-Mitigation: Fetch the live action schema, review the exact payload and target, and obtain explicit approval before write or destructive actions. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Vapi assistants, calls, chats, sessions, phone numbers, tools, files, analytics, evaluations, monitoring policies, scorecards, insights, and provider resources through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Vapi homepage](https://vapi.ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-vapi) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before executing actions and returns OOMOL connector responses as JSON when commands are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Remote installer commands are included for first-time setup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the installer independently and use it only when the oo CLI is missing.
+
+Risk: The skill can create, update, or delete Vapi resources.
+
+Mitigation: Confirm the exact payload, target resource, and expected effect before running write or destructive actions.
+
+Risk: The skill can execute TypeScript through Vapi's code tool sandbox.
+
+Mitigation: Require explicit user approval before code execution and review the code and expected output first.
+
+## Reference(s):
+
+- [Vapi homepage](https://vapi.ai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Vapi skill page](https://clawhub.ai/oomol/skills/oo-vapi)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, API calls, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON request or response payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [State-changing and destructive Vapi actions require explicit user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

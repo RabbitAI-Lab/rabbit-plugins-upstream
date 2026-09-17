@@ -1,45 +1,56 @@
-## Description: <br>
-Beeminder helps agents read, create, update, and delete Beeminder data through an OOMOL-connected connector instead of calling the Beeminder API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to read, create, update, and delete Beeminder data through an OOMOL-connected Beeminder account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Beeminder from an agent session, including reading users, goals, and datapoints and performing confirmed write or delete actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create or update Beeminder datapoints, changing user goal data. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write-tagged actions. <br>
-Risk: The skill can delete Beeminder datapoints. <br>
-Mitigation: Get explicit approval for the target datapoint before running destructive actions. <br>
-Risk: The skill requires a connected external account and sensitive credentials managed outside the artifact. <br>
-Mitigation: Only grant Beeminder/OOMOL access when it matches the user's requested task and rely on the connector rather than exposing raw tokens. <br>
+## Use Case:
 
+Developers and agent users use this skill to operate Beeminder goals and datapoints through the OOMOL oo CLI, including reading user and goal data and performing confirmed write or delete actions.
 
-## Reference(s): <br>
-- [ClawHub Beeminder skill page](https://clawhub.ai/oomol/oo-beeminder) <br>
-- [Beeminder homepage](https://www.beeminder.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions can return JSON data and execution metadata from the OOMOL connector.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: The first-time setup path recommends remote installer commands that execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the installer source before use; prefer a pinned, verified, or package-manager installation path for the oo CLI.
+
+Risk: Beeminder write actions can create or update datapoints, and the delete action removes datapoints.
+
+Mitigation: Confirm the exact action, target goal or datapoint, payload, and expected effect with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-beeminder)
+- [Beeminder Homepage](https://www.beeminder.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live oo connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

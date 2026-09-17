@@ -1,45 +1,61 @@
-## Description: <br>
-Helps agents search and read YNAB budget data through OOMOL's oo connector instead of calling the YNAB API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agent guidance for reading YNAB data through an OOMOL-connected account with the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and agents use this skill to retrieve YNAB user, plan, account, category, month, payee, and transaction information from an OOMOL-connected YNAB account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: YNAB budgets and transactions can contain sensitive financial data. <br>
-Mitigation: Install only when OOMOL connector access to YNAB data is acceptable, and treat connector outputs as sensitive. <br>
-Risk: Generated oo commands may access or expose more YNAB data than intended if the action or payload is wrong. <br>
-Mitigation: Review generated oo commands and fetch the live connector schema before constructing each payload. <br>
-Risk: Future connector actions could change or delete YNAB data. <br>
-Mitigation: Require explicit user confirmation before any write or destructive action if such actions become available. <br>
+## Use Case:
 
+External users and developers use this skill to query YNAB account, budget, category, payee, plan, transaction, settings, and user data through an authenticated OOMOL connector.
 
-## Reference(s): <br>
-- [ClawHub YNAB Skill](https://clawhub.ai/oomol/oo-ynab) <br>
-- [YNAB](https://www.ynab.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI, OOMOL sign-in, and an OOMOL-connected YNAB account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill metadata) <br>
+Risk: Unverified remote installer commands can execute downloaded code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path before installing, and prefer an official package manager or downloaded installer with published checksum or signature verification.
+
+Risk: The skill routes read access to YNAB financial data through OOMOL's connector and account system.
+
+Mitigation: Use the skill only when the user accepts OOMOL-mediated access to YNAB data and has connected the account intentionally.
+
+Risk: Incorrect connector payloads could query unintended YNAB records.
+
+Mitigation: Inspect the live connector schema with `oo connector schema` before constructing each payload.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [YNAB homepage](https://www.ynab.com)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-ynab)
+- [Skill icon](https://static.oomol.com/logo/third-party/ynab.svg)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands call the oo CLI and may return JSON connector responses.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

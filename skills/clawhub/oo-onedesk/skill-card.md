@@ -1,44 +1,60 @@
-## Description: <br>
-OneDesk helps agents search and read OneDesk work items, projects, and organization profile data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OneDesk helps agents search and read OneDesk work items, projects, and organization profile data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill when they need an agent to search OneDesk and retrieve item, project, or organization details without handling raw API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and search OneDesk data through the user's connected OOMOL account. <br>
-Mitigation: Install it only for users who intend that access, scope requests narrowly, and review broad or sensitive searches before running them. <br>
-Risk: First-time CLI installation, login, and OneDesk connection setup require local or account-level changes. <br>
-Mitigation: Run setup only after an auth or connection failure, and approve install, login, and connection steps separately. <br>
-Risk: Connector input schemas may change over time. <br>
-Mitigation: Fetch the live action schema before constructing each JSON payload. <br>
+## Use Case:
 
+External users and developers with connected OneDesk accounts use this skill to inspect live connector schemas, filter OneDesk items and projects, and retrieve work item, project, and organization records.
 
-## Reference(s): <br>
-- [OneDesk homepage](https://www.onedesk.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing JSON payloads; read actions return OneDesk data with meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Setup instructions include remote installer scripts that can execute local code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when OOMOL is trusted, verify installer source and integrity before execution, and avoid piping remote scripts directly into a shell unless verified.
+
+Risk: The connected OneDesk account is mediated by OOMOL.
+
+Mitigation: Use this skill only when OOMOL is trusted with the connected OneDesk account and review account connection, scope, and billing errors before retrying.
+
+Risk: Future write or destructive connector actions could change or remove OneDesk data.
+
+Mitigation: Inspect live schemas and confirm the exact target, payload, and expected effect with the user before running any write or destructive action.
+
+## Reference(s):
+
+- [OneDesk homepage](https://www.onedesk.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub OneDesk skill page](https://clawhub.ai/oomol/skills/oo-onedesk)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read actions return JSON data from the OneDesk connector; the skill instructs agents to inspect live schemas before constructing requests.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

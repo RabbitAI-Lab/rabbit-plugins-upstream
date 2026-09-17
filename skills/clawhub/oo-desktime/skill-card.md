@@ -1,46 +1,57 @@
-## Description: <br>
-Operate DeskTime through an OOMOL-connected account for reading, creating, and updating DeskTime data instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+DeskTime lets agents operate DeskTime through an OOMOL-connected account to read company, employee, and project data and create projects via the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, developers, and operations teams use this skill to operate DeskTime through an OOMOL-connected account. It supports reading company, employee, project, task, and tracking information, and creating DeskTime projects with optional tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger wording could cause DeskTime actions to run when the user's intent is unclear. <br>
-Mitigation: Require clear user intent before allowing DeskTime actions, especially operations that create or change records. <br>
-Risk: DeskTime write actions can create or change records. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running actions tagged as write or destructive. <br>
-Risk: The integration requires DeskTime-related credentials and account access through OOMOL. <br>
-Mitigation: Before installation, confirm the user is comfortable granting the DeskTime access needed for the integration. <br>
+## Use Case:
 
+Teams and agents using DeskTime can inspect live action schemas, retrieve company settings, employee time-tracking data, employee lists, and active projects, and create DeskTime projects after confirming write payloads.
 
-## Reference(s): <br>
-- [ClawHub DeskTime Skill](https://clawhub.ai/oomol/skills/oo-desktime) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [DeskTime Homepage](https://desktime.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing DeskTime action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill metadata) <br>
+Risk: First-time setup may lead users to execute mutable remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the OOMOL CLI installation source first and prefer a signed, version-pinned, checksum-verified installer or trusted package-manager method.
+
+Risk: The skill can create DeskTime projects and optionally associated tasks.
+
+Mitigation: Confirm the exact action payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [DeskTime homepage](https://desktime.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-desktime)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill instructs agents to fetch live connector schemas before building action payloads and to confirm state-changing DeskTime operations before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

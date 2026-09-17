@@ -1,42 +1,56 @@
-## Description: <br>
-Hyperbrowser lets agents use an OOMOL-connected Hyperbrowser account to fetch pages, search the web, and manage asynchronous web crawls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Hyperbrowser lets an agent fetch web pages, search the web, start crawls, and retrieve crawl results through a connected Hyperbrowser account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to browse, search, and retrieve structured Hyperbrowser results through an OOMOL-connected account. It supports read actions and user-confirmed crawl-start workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can start Hyperbrowser crawl jobs through the user's connected account. <br>
-Mitigation: Confirm the exact crawl payload and expected effect before running state-changing actions such as start_web_crawl. <br>
-Risk: The skill requires an OOMOL-connected Hyperbrowser account and may use account credentials or billing credits. <br>
-Mitigation: Connect only accounts and billing sources the user is comfortable letting the agent use, and stop for user action on authentication, connection, or billing errors. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Hyperbrowser for web page fetching, web search, and crawl workflows while checking live action schemas before execution.
 
-## Reference(s): <br>
-- [ClawHub Hyperbrowser Skill](https://clawhub.ai/oomol/oo-hyperbrowser) <br>
-- [Hyperbrowser Homepage](https://www.hyperbrowser.ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before building action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Remote installer commands can execute local code if an agent runs them automatically or from unverified sources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only through a verified, user-initiated process with trusted release provenance.
+
+Risk: Starting a web crawl changes Hyperbrowser state and may consume account resources.
+
+Mitigation: Confirm the exact crawl payload and intended effect with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-hyperbrowser)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Hyperbrowser Homepage](https://www.hyperbrowser.ai)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Schema-driven connector calls may return structured data with execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

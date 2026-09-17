@@ -1,44 +1,60 @@
-## Description: <br>
-Operate Ashby through an OOMOL-connected account to read and search candidates, jobs, and API key information with the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Ashby lets an agent search and read Ashby recruiting data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and recruiting operations users use this skill to let an agent inspect live Ashby connector schemas and run read/search actions against Ashby data through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent can query Ashby through the user's OOMOL account. <br>
-Mitigation: Install and use the skill only when the user is comfortable with agent-mediated Ashby queries, and review the oo CLI setup and Ashby connection before use. <br>
-Risk: Future write, delete, or overwrite actions could change Ashby data if enabled. <br>
-Mitigation: Require explicit user confirmation before enabling or running any future action that writes, deletes, or overwrites Ashby data. <br>
+## Use Case:
 
+Recruiting teams and agents supporting recruiting workflows use this skill to inspect Ashby connector schemas, list candidates and jobs, search candidates, and check API key information without handling raw Ashby API tokens.
 
-## Reference(s): <br>
-- [ClawHub Ashby skill page](https://clawhub.ai/oomol/skills/oo-ashby) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Ashby homepage](https://www.ashbyhq.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution and returns oo CLI execution metadata when available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Setup instructions include remote installer commands that download and execute scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer first or use a verified package, pinned release, or manually inspected installer before installation.
+
+Risk: The connected OOMOL account can read Ashby candidate and job information.
+
+Mitigation: Install and run the skill only for authorized users and accounts with appropriate Ashby access.
+
+Risk: Connector responses may contain sensitive recruiting data.
+
+Mitigation: Limit sharing of command output and handle candidate and job data according to the organization's data handling requirements.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-ashby)
+- [Ashby homepage](https://www.ashbyhq.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector action results are returned as JSON when commands are run with the documented JSON flag.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,55 @@
-## Description: <br>
-Operates Trello through the OOMOL oo CLI for reading, creating, updating, and deleting Trello data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Trello (trello.com). Use this skill for ANY Trello request: reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent operate their Trello boards, lists, cards, labels, members, comments, and checklists through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform write and destructive Trello actions through an authenticated OOMOL connection. <br>
-Mitigation: Confirm the exact target, payload, and expected effect with the user before changing or removing Trello data. <br>
-Risk: First-time use may fail if the oo CLI is not installed, the user is not signed in, or Trello is not connected. <br>
-Mitigation: Run setup steps only after an auth, connection, or missing-command failure and direct the user to complete the matching OOMOL setup. <br>
+## Use Case:
 
+Developers and external users use this skill to operate Trello through an OOMOL-connected account, including reading boards and cards and performing confirmed write or destructive actions.
 
-## Reference(s): <br>
-- [ClawHub Trello skill listing](https://clawhub.ai/oomol/oo-trello) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Trello homepage](https://trello.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces agent guidance for Trello connector actions and confirmation handling; connector responses are JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: First-time setup includes remote installer commands that pipe downloaded scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installation and prefer a trusted, versioned release or package manager with checksum or signature verification.
+
+Risk: Write and destructive Trello actions can change or remove board data.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-trello)
+- [Trello homepage](https://trello.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Text, Markdown, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses from connector actions are JSON objects containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

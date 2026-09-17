@@ -1,45 +1,57 @@
-## Description: <br>
-Use this skill to search and read Amplitude analytics data through an OOMOL-connected Amplitude account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to search and read Amplitude data through the OOMOL-connected Amplitude connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and analysts use this skill to query Amplitude event segmentation, user activity, visible events, and user search through the oo CLI after connecting an Amplitude account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill operates against an external Amplitude account and can return account analytics data in command output. <br>
-Mitigation: Review the external service access before use and grant only the Amplitude permissions needed for the task. <br>
-Risk: Payloads built without the current connector schema can fail or query unintended data. <br>
-Mitigation: Inspect the live action schema with `oo connector schema` before constructing each `oo connector run` payload. <br>
-Risk: Future write or destructive connector actions could change or remove Amplitude data. <br>
-Mitigation: Confirm the exact target, payload, and effect with the user before running any action tagged `[write]` or `[destructive]`. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Amplitude event metrics, user activity summaries, visible event lists, and user search results through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Amplitude Skill](https://clawhub.ai/oomol/skills/oo-amplitude) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Amplitude](https://amplitude.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include JSON results from the oo CLI with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Fallback setup can lead users to execute remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only through a verified, pinned, or package-manager method before running Amplitude actions.
+
+Risk: The skill operates through an OOMOL-connected Amplitude account and may expose account-scoped analytics data.
+
+Mitigation: Run only Amplitude actions the user understands, and rely on live schema inspection before submitting requests.
+
+## Reference(s):
+
+- [Amplitude homepage](https://amplitude.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-amplitude)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance, JSON data]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Runs read-oriented Amplitude connector actions through the oo CLI after inspecting live schemas.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

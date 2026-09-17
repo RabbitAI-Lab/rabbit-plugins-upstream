@@ -1,44 +1,56 @@
-## Description: <br>
-WebScraping.AI helps agents use an OOMOL-connected WebScraping.AI account to extract visible text, fetch rendered HTML, select page areas, and inspect account details through the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides WebScraping.AI access through an OOMOL-connected oo CLI workflow for extracting text, fetching rendered HTML, selecting page areas, and checking account details.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate WebScraping.AI through an OOMOL-connected account for page text extraction, rendered HTML retrieval, selected-area HTML retrieval, and account quota checks. It is intended for workflows that need scraping results without exposing raw WebScraping.AI API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated scraping payloads could target the wrong URL or selector. <br>
-Mitigation: Review target URLs, selectors, and JSON payloads before running connector actions. <br>
-Risk: Setup commands can initiate authentication, account connection, installation, or billing flows. <br>
-Mitigation: Run setup only after an action fails for the matching missing CLI, authentication, connection, or billing condition. <br>
-Risk: The skill depends on OOMOL's CLI and the user's connected WebScraping.AI account. <br>
-Mitigation: Install and use the skill only when the user is comfortable with that CLI and account connection. <br>
+## Use Case:
 
+Developers and agents use this skill to read web page text or HTML through WebScraping.AI, inspect live connector schemas, and run read-oriented scraping or account actions without handling raw API tokens.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-webscraping-ai) <br>
-- [WebScraping.AI homepage](https://webscraping.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, HTML, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands; connector responses are JSON containing extracted text, rendered HTML, selected HTML, or account data.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI, an OOMOL sign-in, and a connected WebScraping.AI account; setup commands are used only when an action fails due to missing authentication or connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: Fallback setup may execute unverified remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified release or package manager, inspect installer contents first, and avoid elevated shells.
+
+Risk: Connecting WebScraping.AI requires selecting an account and API-key scope.
+
+Mitigation: Confirm the intended account and API-key scope before connecting WebScraping.AI.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-webscraping-ai)
+- [WebScraping.AI homepage](https://webscraping.ai)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON when commands run with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

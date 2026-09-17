@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "PartnerStack Partner"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["partner_stack_partner"]
   icon: "https://static.oomol.com/logo/third-party/partner_stack_partner.svg"
 ---

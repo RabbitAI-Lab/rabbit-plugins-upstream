@@ -113,7 +113,7 @@ async function main() {
       value: it.value,
       data: it.data,
     });
-    const txHash = await sendRawTransaction(signed.raw, signed.hash);
+    const txHash = await sendRawTransaction(signed.raw);
     process.stderr.write(`[aacp-tx] sent ${it.action} nonce=${nonce} tx=${txHash}\n`);
     let status = "submitted";
     let blockNumber = null;

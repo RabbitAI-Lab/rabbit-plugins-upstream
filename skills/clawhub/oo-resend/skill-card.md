@@ -1,45 +1,60 @@
-## Description: <br>
-Enables an agent to operate Resend through an OOMOL-connected account using the oo CLI instead of calling the Resend API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Resend enables agents to read, send, batch-send, and manage scheduled email through an OOMOL-connected Resend account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to send email through Resend from an OOMOL-connected account after inspecting the live connector schema and confirming write payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send email through Resend, which can contact external recipients or send incorrect content if the payload is wrong. <br>
-Mitigation: Approve the exact recipient, content, and payload before running the write action. <br>
-Risk: The skill depends on an OOMOL-connected Resend account and sensitive credential handling. <br>
-Mitigation: Confirm the user is comfortable connecting Resend through OOMOL and rely on OOMOL server-side credential injection rather than exposing raw tokens. <br>
-Risk: First-time setup commands install or authenticate the oo CLI and should not be run automatically during normal use. <br>
-Mitigation: Treat install, login, connection, and billing commands as one-time setup steps used only after matching command failures. <br>
+## Use Case:
 
+External developers and operators use this skill to automate Resend email workflows, including listing and retrieving sent or received email, fetching attachment metadata and download URLs, sending individual or batch messages, and updating or canceling scheduled sends.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-resend) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Resend Homepage](https://resend.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The setup instructions include internet installer commands that could execute unreviewed code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Download the installer separately, verify its source or checksum when available, and review it before execution.
+
+Risk: Resend account and email data are accessed through OOMOL as an intermediary.
+
+Mitigation: Install only when use of OOMOL for the connected Resend account and related email data is acceptable.
+
+Risk: Send, batch-send, cancel, and scheduled-email update actions can change email state or deliver messages.
+
+Mitigation: Confirm exact recipients, payloads, scheduled times, targets, and expected effects before allowing write actions.
+
+## Reference(s):
+
+- [ClawHub Resend Skill](https://clawhub.ai/oomol/skills/oo-resend)
+- [Resend Homepage](https://resend.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance, Configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the oo CLI and may return JSON objects containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.4 (source: evidence release, metadata, and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

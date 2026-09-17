@@ -1,42 +1,56 @@
-## Description: <br>
-Reducto helps agents parse documents, extract structured JSON, and split documents into named page sections through an OOMOL-connected Reducto account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reducto lets agents use an OOMOL-connected Reducto connector to extract structured data, parse documents, and split documents into sections.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to route Reducto document-processing requests through an OOMOL-connected account for parsing, schema-based extraction, and document sectioning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Document-processing requests are routed through an OOMOL-connected Reducto account, which may be inappropriate for sensitive documents unless the user's policies allow that processing. <br>
-Mitigation: Use the skill only with documents approved for Reducto and OOMOL processing under the user's account, data-handling, and compliance policies. <br>
-Risk: First-time setup may require installing the OOMOL oo CLI from a remote installer. <br>
-Mitigation: Review the remote installer and install the oo CLI only from trusted OOMOL sources before using the skill. <br>
+## Use Case:
 
+Developers and agents use this skill to run Reducto document-processing actions through an OOMOL-connected account, including extracting structured JSON, parsing documents into chunks and metadata, and splitting documents into named sections.
 
-## Reference(s): <br>
-- [ClawHub Reducto Skill](https://clawhub.ai/oomol/skills/oo-reducto) <br>
-- [Reducto](https://reducto.ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration guidance, JSON, Text] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution so action payloads match Reducto's current contract.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: The setup guidance includes one-line remote installer commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installer contents before execution, prefer official package-manager installation when available, and avoid elevated shells.
+
+Risk: Document-processing requests may send user-selected files or URLs to Reducto through the connected account.
+
+Mitigation: Confirm that documents are appropriate for the connected Reducto account and inspect the live action schema before submitting payloads.
+
+## Reference(s):
+
+- [ClawHub Reducto skill page](https://clawhub.ai/oomol/skills/oo-reducto)
+- [Reducto homepage](https://reducto.ai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

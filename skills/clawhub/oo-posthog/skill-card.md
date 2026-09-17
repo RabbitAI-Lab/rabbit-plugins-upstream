@@ -1,42 +1,61 @@
-## Description: <br>
-Use this skill for PostHog requests involving reading, creating, updating, and deleting data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PostHog lets an agent read, create, update, and delete PostHog resources through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and analytics teams use this skill to inspect and manage PostHog projects, dashboards, insights, feature flags, cohorts, annotations, definitions, collaborators, and query results through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change or delete PostHog dashboards, cohorts, feature flags, definitions, insights, collaborators, and related data. <br>
-Mitigation: Require explicit user confirmation for actions marked write or destructive, including the exact target and payload. <br>
-Risk: The skill operates through a connected PostHog account and may require sensitive credentials managed outside the skill. <br>
-Mitigation: Install only when the publisher is trusted and use OOMOL-managed credentials rather than exposing raw tokens to the agent. <br>
+## Use Case:
 
+Developers, operators, and analytics teams use this skill to manage PostHog projects, dashboards, insights, cohorts, annotations, feature flags, event definitions, and property definitions through the OOMOL PostHog connector.
 
-## Reference(s): <br>
-- [PostHog homepage](https://posthog.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-posthog) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return JSON data from PostHog connector actions when commands are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: The skill can read and modify PostHog resources, including destructive operations such as deletes and collaborator removal.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Grant access only when the user is comfortable with that authority, and require explicit confirmation of targets and payloads before write or destructive actions.
+
+Risk: Security evidence reports that setup instructions can run an unverified remote installer.
+
+Mitigation: Avoid pipe-to-shell installation unless the installer source, checksum, signature, and expected behavior are verified through a trusted channel.
+
+Risk: Security evidence reports that dashboard reordering is a dashboard-changing action mislabeled as safe.
+
+Mitigation: Manually confirm dashboard reordering requests before running them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-posthog)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+- [PostHog homepage](https://posthog.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL PostHog connection](https://console.oomol.com/app-connections?provider=posthog)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands may return JSON responses from the OOMOL PostHog connector.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

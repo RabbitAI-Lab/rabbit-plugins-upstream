@@ -1,44 +1,61 @@
-## Description: <br>
-Greenhouse lets agents retrieve recruiting records and add candidate notes through an OOMOL-connected Greenhouse account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Greenhouse (greenhouse.com). Use this skill for ANY Greenhouse request: reading, creating, and updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Recruiting and operations teams use this skill to query Greenhouse candidates, applications, and jobs. They can also add candidate activity notes after reviewing the exact payload and intended effect. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Greenhouse candidate and application data can contain sensitive recruiting information. <br>
-Mitigation: Treat candidate and application data as sensitive and review outputs before sharing or storing them. <br>
-Risk: The add_candidate_note action changes Greenhouse state. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running write actions. <br>
-Risk: First-time setup may require installing the oo CLI from a remote script. <br>
-Mitigation: Only run the CLI install script from a trusted source and after the command fails because the CLI is missing. <br>
+## Use Case:
 
+Employees and developers use this skill to operate Greenhouse through an OOMOL-connected account, including retrieving candidates, applications, and jobs and adding candidate activity feed notes. The skill is intended for Greenhouse workflows that need schema-checked connector actions rather than direct API calls.
 
-## Reference(s): <br>
-- [ClawHub Greenhouse skill page](https://clawhub.ai/oomol/skills/oo-greenhouse) <br>
-- [Greenhouse homepage](https://www.greenhouse.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce Greenhouse connector calls and JSON command output when the agent runs the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server evidence) <br>
+Risk: The setup instructions include remote installer commands that may be unsafe if run without review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify OOMOL's installer source before use, or prefer an official package manager, signed release, checksum-verified download, or manual installer review.
+
+Risk: Greenhouse read actions can expose sensitive HR data.
+
+Mitigation: Confirm that the user has appropriate access before retrieving candidate, application, job, or activity feed data.
+
+Risk: Adding candidate notes changes Greenhouse state and records an On-Behalf-Of audit user.
+
+Mitigation: Confirm the exact note payload, target candidate, and audit user with the user before running the write action.
+
+## Reference(s):
+
+- [ClawHub Greenhouse skill page](https://clawhub.ai/oomol/skills/oo-greenhouse)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Greenhouse homepage](https://www.greenhouse.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce Greenhouse connector commands that return JSON responses.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

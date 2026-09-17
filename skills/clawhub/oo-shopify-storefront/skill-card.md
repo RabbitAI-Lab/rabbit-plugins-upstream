@@ -1,43 +1,56 @@
-## Description: <br>
-Operates Shopify Storefront through an OOMOL-connected account for reading storefront data and creating or modifying carts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Shopify Storefront through an OOMOL-connected account for storefront data lookup and cart workflows.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External developers, commerce operators, and their agents use this skill to inspect Shopify Storefront products, collections, shop metadata, and carts, and to create carts or add cart lines after confirming write actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create or modify Shopify Storefront carts through the connected OOMOL integration. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running cart-changing actions. <br>
-Risk: The skill depends on an OOMOL account connection and may require one-time CLI installation or account connection steps. <br>
-Mitigation: Run setup steps only when needed, and proceed only when the user trusts OOMOL and needs this connector. <br>
+## Use Case:
 
+Developers and external agents use this skill to operate Shopify Storefront through an OOMOL-connected account, including cart workflows and storefront catalog lookups. It supports reads directly and requires user confirmation before write actions such as creating carts or adding cart lines.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-shopify-storefront) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Shopify homepage](https://www.shopify.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payloads or results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md metadata) <br>
+Risk: Setup instructions include remote installer commands that execute downloaded code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval and verify the installer path, package source, checksum, or signature before running any downloaded installer.
+
+Risk: Write actions can change Shopify Storefront cart state.
+
+Mitigation: Confirm the exact action, payload, and expected effect with the user before running write-tagged actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-shopify-storefront)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Shopify Storefront](https://www.shopify.com)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the oo CLI and can return JSON responses from Shopify Storefront connector actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

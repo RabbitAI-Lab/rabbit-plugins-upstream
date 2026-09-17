@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "CoinMarketCap"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["coinmarketcap"]
   icon: "https://static.oomol.com/logo/third-party/coinmarketcap.svg"
 ---

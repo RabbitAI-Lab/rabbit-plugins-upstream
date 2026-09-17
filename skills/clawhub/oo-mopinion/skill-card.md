@@ -1,46 +1,55 @@
-## Description: <br>
-Mopinion (mopinion.com). Use this skill for ANY Mopinion request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mopinion (mopinion.com). Use this skill for Mopinion requests that search and read account, deployment, dataset, report, field, and feedback data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to query Mopinion account, deployment, dataset, feedback form, feedback item, and report data through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may require installing or updating the oo CLI with a remote installer before connector actions can run. <br>
-Mitigation: Review the oo CLI installer source and install it only from the documented OOMOL URL. <br>
-Risk: The agent can read connected Mopinion account, dataset, feedback, deployment, and report information once the user is authenticated. <br>
-Mitigation: Use the skill only with trusted agents and confirm the target account, dataset, report, or deployment before running connector actions. <br>
-Risk: Connector schemas may change over time, causing invalid or incomplete payloads if actions are called from memory. <br>
-Mitigation: Inspect the live action schema with oo connector schema before constructing each action payload. <br>
+## Use Case:
 
+Developers and external users use this skill to inspect Mopinion account information, deployments, datasets, reports, fields, and feedback through the oo CLI without directly handling Mopinion API credentials.
 
-## Reference(s): <br>
-- [Mopinion ClawHub listing](https://clawhub.ai/oomol/oo-mopinion) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Mopinion homepage](https://www.mopinion.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup includes remote installer scripts that are run directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installation, prefer a versioned package or installer with checksum or signature verification.
+
+Risk: The skill can read Mopinion feedback and account data available through the connected OOMOL account.
+
+Mitigation: Use a least-privileged Mopinion/OOMOL connection where possible and review retrieved data handling.
+
+## Reference(s):
+
+- [Mopinion homepage](https://www.mopinion.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-mopinion)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands return JSON responses from the oo CLI when run with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

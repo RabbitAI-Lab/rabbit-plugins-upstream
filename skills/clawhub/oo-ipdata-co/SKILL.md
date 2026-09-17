@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "ipdata.co"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["ipdata_co"]
   icon: "https://static.oomol.com/logo/third-party/ipdata_co.svg"
 ---

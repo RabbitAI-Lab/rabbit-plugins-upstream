@@ -1,44 +1,57 @@
-## Description: <br>
-The Swarm connector helps agents search and read The Swarm company and profile data through the OOMOL `oo` CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+The Swarm connector lets an agent search and fetch company and profile records and check authenticated team API credit usage through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill when they need an agent to fetch The Swarm company or profile records, search for matching IDs, or report authenticated team API credit usage through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill operates through an authenticated OOMOL connection and can return The Swarm company, profile, search, and credit-usage data. <br>
-Mitigation: Use it only for requested The Swarm tasks, inspect the live connector schema before building payloads, and avoid sending secrets, API keys, customer data, or unrelated personal information. <br>
-Risk: Credentialed connector access could be mistaken for approval to perform sensitive exports or actions in other systems. <br>
-Mitigation: Treat OOMOL credentials and grant tokens as connector access only; require separate human or platform approval for payments, databases, exports, or other sensitive operations. <br>
+## Use Case:
 
+External users and developers use this skill to query The Swarm data from an OOMOL-connected account, including company search, profile search, record retrieval, and team credit usage checks.
 
-## Reference(s): <br>
-- [The Swarm homepage](https://www.theswarm.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-the-swarm) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill instructs the agent to inspect live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: First-time setup can execute a remotely downloaded installer without version or integrity checks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the official OOMOL CLI installation documentation, prefer a signed or versioned package where available, inspect and verify installers before running them, and do not let an agent execute curl | bash or irm | iex automatically.
+
+Risk: The connector sends search payloads and account usage requests through OOMOL and The Swarm.
+
+Mitigation: Only connect The Swarm when the user trusts OOMOL and The Swarm with the search payloads and account usage involved.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-the-swarm)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [The Swarm homepage](https://www.theswarm.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON when actions are run with the documented --json flag.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

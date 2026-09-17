@@ -1,43 +1,57 @@
-## Description: <br>
-HelloLeads (helloleads.io). Use this skill for ANY HelloLeads request - reading, creating, and updating data. Whenever a task involves HelloLeads, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HelloLeads helps agents read, create, and update HelloLeads data through an OOMOL-connected HelloLeads account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect HelloLeads connector schemas, fetch visible web form definitions, and submit confirmed web form leads through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run credentialed HelloLeads connector actions, including submitting a web form lead. <br>
-Mitigation: Use it only in a trusted ClawHub and OOMOL account context, inspect the live action schema, and confirm the exact write payload and effect before submission. <br>
-Risk: Credentialed connector access can act through the currently connected OOMOL account and HelloLeads connection. <br>
-Mitigation: Confirm the active account, connector target, and reason for the action before running commands that access or change HelloLeads data. <br>
+## Use Case:
 
+External users and developers use this skill to inspect HelloLeads web form definitions and submit supported lead data through a connected HelloLeads account. It is useful when an agent needs to work with HelloLeads through the OOMOL oo CLI instead of direct API calls.
 
-## Reference(s): <br>
-- [ClawHub HelloLeads release page](https://clawhub.ai/oomol/oo-helloleads) <br>
-- [HelloLeads homepage](https://www.helloleads.io/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before request construction; command responses are JSON when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence and skill frontmatter) <br>
+Risk: The setup instructions include remote installer commands that run downloaded scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer instructions first, prefer an official versioned, signed, or checksum-verified oo CLI installation method, and avoid elevated privileges unless OOMOL documents why they are required.
+
+Risk: The submit_web_form action can create a lead in HelloLeads.
+
+Mitigation: Confirm the exact submission payload and expected effect with the user before allowing the write action.
+
+## Reference(s):
+
+- [HelloLeads ClawHub skill page](https://clawhub.ai/oomol/skills/oo-helloleads)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [HelloLeads homepage](https://www.helloleads.io/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON connector payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May run oo CLI connector schema and connector run commands; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

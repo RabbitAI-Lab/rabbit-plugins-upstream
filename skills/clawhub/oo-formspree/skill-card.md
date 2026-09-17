@@ -1,43 +1,56 @@
-## Description: <br>
-Formspree (formspree.io) support for searching and reading Formspree data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Formspree lets an agent search and read Formspree submissions through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect the live Formspree connector schema and list submissions for a Formspree form through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Formspree submissions can contain personal or business-sensitive information. <br>
-Mitigation: Use the skill only with an intended OOMOL-connected Formspree account and review returned submission data before sharing it outside the authorized workflow. <br>
-Risk: The connector depends on local oo CLI installation, sign-in, Formspree connection state, scopes, credentials, and billing status. <br>
-Mitigation: Run the requested read action first, then follow the documented setup or recovery step only when the matching command failure occurs. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect the Formspree connector schema and list submissions for a connected Formspree form through the oo CLI.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-formspree) <br>
-- [Formspree homepage](https://formspree.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Formspree submission access through the oo CLI connector.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and frontmatter) <br>
+Risk: First-time setup includes remote shell and PowerShell installer commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified, trusted method and do not allow an agent to automatically execute curl-to-bash or PowerShell iex installers.
+
+Risk: Formspree data is accessed through an OOMOL-connected account with credentials injected server-side.
+
+Mitigation: Review what Formspree data and scopes the OOMOL connection exposes before using the skill.
+
+## Reference(s):
+
+- [ClawHub Formspree Skill Page](https://clawhub.ai/oomol/skills/oo-formspree)
+- [Formspree Homepage](https://formspree.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before running actions; available action output is JSON from the oo CLI.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

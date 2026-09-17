@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Grafana Cloud"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["grafana_cloud"]
   icon: "https://static.oomol.com/logo/third-party/grafana_cloud.svg"
 ---

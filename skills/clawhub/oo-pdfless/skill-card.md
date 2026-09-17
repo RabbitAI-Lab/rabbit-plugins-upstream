@@ -1,45 +1,52 @@
-## Description: <br>
-Pdfless (pdfless.com). Use this skill for ANY Pdfless request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pdfless helps agents inspect live Pdfless connector schemas and read workspace or document-template data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to inspect a connected Pdfless workspace and list document templates through OOMOL-managed Pdfless connector actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill relies on OOMOL-managed credentials for Pdfless access. <br>
-Mitigation: Install and use it only when OOMOL is an acceptable credential broker for the target Pdfless workspace. <br>
-Risk: First-time setup may involve running shell installer commands for the oo CLI. <br>
-Mitigation: Verify the oo CLI install source before running curl or PowerShell installer commands. <br>
-Risk: Future connector actions may add write-capable behavior. <br>
-Mitigation: Review connector schemas and confirm any write or destructive payload with the user before execution. <br>
+## Use Case:
 
+External users and developers use this skill when an agent needs to retrieve Pdfless workspace details or list document templates through the OOMOL `oo` CLI. The skill guides schema inspection before requests and provides recovery steps for authentication, connection, CLI setup, and billing errors.
 
-## Reference(s): <br>
-- [Pdfless skill page](https://clawhub.ai/oomol/oo-pdfless) <br>
-- [Pdfless homepage](https://pdfless.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects with data and meta.executionId when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: First-time setup directs users to execute mutable remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the install step before use and prefer a pinned, signed, or checksum-verified `oo` CLI release; connect only the Pdfless account the agent should read from.
+
+## Reference(s):
+
+- [ClawHub Pdfless Skill Page](https://clawhub.ai/oomol/skills/oo-pdfless)
+- [Pdfless Homepage](https://pdfless.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill instructs agents to fetch live connector action schemas before constructing `oo connector run` requests.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

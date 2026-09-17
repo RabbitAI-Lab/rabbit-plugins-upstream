@@ -1,13 +1,15 @@
 ---
 name: skill-design-guide
+slug: skill-design-guide
+displayName: Skill Design Guide
 display_name: "Skill Design Guide"
 description: >
   Design better AI skills with proven architecture patterns. Helps you decide
   Workflow vs Agent, pick the right pattern (Prompt Chaining, Routing,
   Parallelization, Orchestrator-Workers, Evaluator-Optimizer), write clean
-  SKILL.md files, and catch common mistakes with a 25-point quality checklist.
+  SKILL.md files, and catch common mistakes with a governance-aware quality checklist.
   Based on design principles from Anthropic, OpenAI, and LangChain.
-version: "1.4.3"
+version: "1.7.0"
 agent_created: true
 category: "Architecture / Design Patterns"
 license: "MIT"
@@ -19,6 +21,18 @@ read_when:
   - "design skill architecture, workflow or agent, choose workflow pattern"
   - "review skill design, skill quality checklist, brain hands session"
   - "skill anti-patterns, prompt chaining vs routing, when to use agent"
+metadata:
+  openclaw:
+    tags:
+      - skill-design
+      - agent-architecture
+      - prompt-engineering
+      - workflow-patterns
+      - best-practices
+      - developer-tools
+      - ai-agents
+      - openclaw
+      - llm-engineering
 ---
 
 # Skill Design Guide
@@ -76,6 +90,42 @@ Practical checklist:
 | **Session** | Knowledge base, config, templates | `references/`, `assets/` |
 
 **Your skills already follow this:** `data-ai-daily-brief` (scripts fetch data), `benjie-model` (Session layer for other skills).
+
+---
+
+## Principle Two: Design for Agent Consumption
+
+> **The primary reader of a skill is an agent runtime, not a human browsing a marketplace.**
+
+Verified evidence (SkillHub TRACE evaluation, 2026-08): trigger scores describe skills being **"唤醒" (awakened)** by user phrases and evaluated on **parameter passing** — both agent-runtime behaviors. The entire evaluation pipeline (including security scans) is automated. Agent-initiated install and invocation is the dominant consumption path.
+
+Design consequences:
+
+| Field | Human-search priority (old) | Agent-consumption priority (now) |
+|---|---|---|
+| `description` | Catchy summary, keyword stuffing | **Precise capability statement**: what it does, what it does not do, inputs/outputs — this is the agent's routing decision |
+| `not_for` | Optional | **Core routing field** — the agent's exclusion logic; a false trigger costs context and wrong execution, worse than a missed trigger |
+| `read_when` triggers | Keyword hit rate | Semantic completeness; embedding retrieval matches meaning, not exact keywords |
+| Hard Rules / Failure Handling / Output Format | Human readability | **Execution contract** — the agent follows these at runtime after loading |
+| README | Important | Marginal — agents never read it |
+| Language | Chinese SEO for human search | Still useful: agent search queries **inherit the user's language**, so bilingual descriptions widen embedding match in both languages — but write for meaning, not keyword density |
+
+Practical rules:
+
+1. Write `not_for` as carefully as `read_when` — every excluded scenario prevents a misrouted task.
+2. Don't stuff trigger keywords; one precise capability sentence (plus a bilingual summary) outperforms a keyword list under embedding retrieval.
+3. Invest in the body's executable sections (Hard Rules, Failure Handling, Output Format) — that is where agent execution quality is decided.
+
+### GEO Checklist (from live publish rounds, 2026-08/09)
+
+Field-tested generative-engine optimization rules for skill descriptions. Apply these before any publish; they complement, not replace, the table above.
+
+1. **First sentence = What + Use when.** The opening sentence is the model's primary routing surface — lead with the capability and the trigger condition ("Use when any X fails…"), not with background.
+2. **Bilingual triggers live inside `description` itself.** Some platform search indexes (SkillHub) index only `description`, not `description_zh` — Chinese keywords must appear in the description text, not only in the dedicated Chinese field.
+3. **Triggers must match the user's actual phrasing**: error message text (`no_token`, "样式丢失"), colloquial phrasing ("修改丢失", "被截断"), and platform nouns — not just your own vocabulary.
+4. **Description–content consistency**: every capability the description promises must exist as a section in the body. A stale promise poisons routing — the agent loads the skill, finds nothing, and trust in the description degrades. (Empirical: a description advertised a tool quick-reference the body never had.)
+5. **Slug discipline**: a slug change is a platform identity rebuild (links, installs, stats break; old slug becomes orphaned). Never rename casually. Before publishing a NEW slug, probe availability via API and validate the probe method itself against known-existing slugs — a naive probe can silently miss or mislead.
+6. **Boundary declarations reduce misrouting**: keep `not_for` in sync with the description — when the description gains a new trigger phrase, check whether any not_for exclusion now conflicts with it.
 
 ---
 
@@ -180,7 +230,7 @@ Overview paragraph.
 
 ## Step 4: Quality Checklist
 
-After completing a skill, run the full 25-point checklist. Load `references/quality-checklist.md` for details.
+After completing a skill, run the full governance-aware checklist. Load `references/quality-checklist.md` for details.
 
 Structure ✓ | Principles ✓ | Tools ✓ | Guardrails ✓ | Observability ✓
 
@@ -230,9 +280,12 @@ When the skill is ready to share on ClawHub/GitHub, use **`skill-publish`** to a
 
 ---
 
-*v1.4.3 | Based on Anthropic/OpenAI/LangChain design principles | 2026-06-23*
+*v1.4.6 | Based on Anthropic/OpenAI/LangChain design principles | 2026-08-02*
 
 **Changelog:**
+- v1.4.6: Published merged content to the correct slug `skill-design-guide-skill` — restores 9 `metadata.openclaw.tags` (discoverability) + 1.4.4 governance-aware checklist / Governance & Continuity checks. (Prior 1.4.5/1.4.6 attempts landed on a stray `skill-design-guide` slug by mistake; that duplicate should be deleted.)
+- v1.4.5: Restored `metadata.openclaw.tags` (9 discoverability tags) dropped in the 1.4.4 sync; no content change beyond 1.4.4 governance additions
+- v1.4.4: Added governance checks for single source of truth, private-data separation, secret scanning, retry/re-run, external-action gates, and persistent task continuity
 - v1.4.3: Restored display name "Skill Design Guide"
 - v1.4.2: Consolidated `reference/` + `references/` into a single `references/` dir; fixed all reference paths
 - v1.4.1: Fixed display name

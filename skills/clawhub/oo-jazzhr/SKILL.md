@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "JazzHR"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["jazzhr"]
   icon: "https://static.oomol.com/logo/third-party/jazzhr.png"
 ---

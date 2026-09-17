@@ -1,48 +1,66 @@
-## Description: <br>
-Queries TikTok creator shop and showcase or live-bag products through LinkFox /tiktokVideo/developerProxy, returning product data and product_id values for shoppable-video precheck and publishing workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents query TikTok creator shop, showcase, and live-bag product lists through LinkFox and return product IDs for shoppable video workflows.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External commerce operators and agents use this skill to search TikTok creator-bound shop products or list showcase and live-bag products, then carry product_id values into LinkFox TikTok video precheck and publishing flows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires trust in LinkFox with the configured API key and TikTok creator product data. <br>
-Mitigation: Install only if LinkFox is trusted for this data; keep API keys in environment variables and do not expose full tokens or private account details. <br>
-Risk: The skill may direct installation of a separate onboarding or authorization-related skill when setup or dependencies are missing. <br>
-Mitigation: Review and explicitly approve any additional skill installation before allowing the agent to install or run it. <br>
-Risk: Saved response files may contain TikTok creator product data or gateway responses. <br>
-Mitigation: Store response files only in appropriate locations and delete them when they are no longer needed. <br>
-Risk: The skill can submit feedback based on agent judgment. <br>
-Mitigation: Review feedback content and avoid including tokens, private account data, or sensitive business details. <br>
+## Use Case:
 
+External commerce operators and agents use this skill to search a creator's linked shop products or list showcase and live-bag products. It returns product IDs and pagination data needed by downstream shoppable video precheck and publishing workflows.
 
-## Reference(s): <br>
-- [TikTok Video Products API Reference](references/api.md) <br>
-- [ClawHub release page](https://clawhub.ai/linkfox-ai/skills/linkfox-tiktok-video-products) <br>
-- [TikTok Shop Get Shop Products 202509](https://partner.tiktokshop.com/docv2/page/get-shop-products-202509) <br>
-- [TikTok Shop Get Showcase Products 202405](https://partner.tiktokshop.com/docv2/page/get-showcase-products-202405) <br>
-- [Shoppable Video Integration Solutions V2025.Q4.01](https://bytedance.sg.larkoffice.com/docx/Os8tdPkaVo2QFBxhSRIlQwBAg9f) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May persist large API responses to local JSON files for later field extraction.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The skill handles TikTok creator product data, account onboarding data, API keys, and billing interactions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if you trust linkfox-ai; prefer a dedicated authentication or billing skill, or the first-party LinkFox site, for login and payments.
+
+Risk: Endpoint override environment variables can redirect requests away from the documented LinkFox services.
+
+Mitigation: Avoid endpoint override environment variables unless testing intentionally in a controlled environment.
+
+Risk: Plaintext shell-profile API key setup can expose credentials.
+
+Mitigation: Use temporary environment variables or a secrets manager where possible, and avoid storing API keys in shell startup files.
+
+Risk: Automatic feedback reporting can send user-provided context outside the current agent session.
+
+Mitigation: Review feedback payloads before allowing them to be submitted.
+
+## Reference(s):
+
+- [API Reference](references/api.md)
+- [Onboarding Guide](references/onboarding.md)
+- [TikTok Shop Get Shop Products API](https://partner.tiktokshop.com/docv2/page/get-shop-products-202509)
+- [TikTok Shop Get Showcase Products API](https://partner.tiktokshop.com/docv2/page/get-showcase-products-202405)
+- [Shoppable Video Integration Solutions V2025.Q4.01](https://bytedance.sg.larkoffice.com/docx/Os8tdPkaVo2QFBxhSRIlQwBAg9f)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-tiktok-video-products)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON API responses and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes product IDs, source product data, pagination fields, authentication guidance, and optional local file output for large responses.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

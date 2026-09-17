@@ -1,44 +1,55 @@
-## Description: <br>
-Clearout verifies email addresses and checks Clearout account credits through an OOMOL-connected Clearout account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Clearout helps an agent use the OOMOL oo CLI to inspect Clearout connector schemas and run Clearout email verification and account-classification lookups.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, employees, and developers use this skill to run Clearout email verification and account-credit checks without calling the Clearout API directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Email verification actions may send email addresses to the OOMOL-connected Clearout service. <br>
-Mitigation: Use the skill only for explicit Clearout tasks where the user intends to verify the provided email data. <br>
-Risk: Clearout verification requests may consume account credits or encounter account limits. <br>
-Mitigation: Check available credits and daily verification limits before large or repeated verification workflows. <br>
-Risk: The connector contract can change over time. <br>
-Mitigation: Inspect the live connector schema before building each action payload. <br>
+## Use Case:
 
+Developers and operators use this skill to query Clearout account credits and verify email addresses through an OOMOL-connected Clearout account without directly handling Clearout API tokens.
 
-## Reference(s): <br>
-- [Clearout homepage](https://clearout.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub Clearout release page](https://clawhub.ai/oomol/oo-clearout) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector actions may return execution metadata and consume Clearout account credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill frontmatter) <br>
+Risk: Setup instructions include remote installer commands that execute downloaded code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official package manager or separately download and verify the installer before executing it.
+
+Risk: Clearout actions run through OOMOL as an intermediary for the connected Clearout account.
+
+Mitigation: Install only when that intermediary is acceptable, connect only the intended Clearout account, and review action schemas and payloads before use.
+
+## Reference(s):
+
+- [Clearout homepage](https://clearout.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Clearout skill page](https://clawhub.ai/oomol/skills/oo-clearout)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires the oo CLI and an OOMOL-connected Clearout account.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

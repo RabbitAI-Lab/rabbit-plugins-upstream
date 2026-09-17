@@ -1,45 +1,60 @@
-## Description: <br>
-AfterShip lets an agent operate shipment tracking and courier workflows through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AfterShip (aftership.com). Use this skill for AfterShip requests involving reading, creating, updating, and deleting data through the OOMOL connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and support teams use this skill to inspect and manage AfterShip tracking records and courier data through the oo CLI while relying on live connector schemas. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, complete, retrack, or delete AfterShip tracking records. <br>
-Mitigation: Confirm the exact action, target tracking record, payload, and expected effect with the user before running write or destructive commands. <br>
-Risk: The skill depends on the oo CLI and an OOMOL-connected AfterShip account. <br>
-Mitigation: Run installer, login, or connection setup steps only when needed and only when the user trusts OOMOL for the connector setup. <br>
-Risk: Connector input and output schemas may change. <br>
-Mitigation: Inspect the live connector schema before building each payload. <br>
+## Use Case:
 
+External users and developers use this skill to operate an OOMOL-connected AfterShip account for shipment tracking workflows, including reading, creating, updating, retracking, completing, and deleting tracking records.
 
-## Reference(s): <br>
-- [AfterShip homepage](https://www.aftership.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-aftership) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands inspect connector schemas and may execute read, write, or destructive AfterShip actions with user confirmation for state changes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: Setup examples include pipe-to-shell installation commands for the oo CLI, which create local execution risk if run automatically.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install the oo CLI through a verified method; do not allow an agent to run the installer automatically.
+
+Risk: The skill can create, update, complete, retrack, and delete AfterShip tracking records.
+
+Mitigation: Confirm write and destructive actions with the user, including the exact payload and target record, before execution.
+
+Risk: Embedding raw JSON directly in shell commands can lead to quoting mistakes or unintended payload changes.
+
+Mitigation: Prefer passing JSON through a safely created file and inspect the live action schema before running connector commands.
+
+## Reference(s):
+
+- [AfterShip homepage](https://www.aftership.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-aftership)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

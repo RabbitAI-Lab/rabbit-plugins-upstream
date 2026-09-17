@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "GoSquared"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["gosquared"]
   icon: "https://static.oomol.com/logo/third-party/gosquared.png"
 ---

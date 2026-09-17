@@ -1,43 +1,56 @@
-## Description: <br>
-Use this skill for CompanyCam requests, including reading, creating, updating, and deleting data through the OOMOL connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for CompanyCam requests involving reading, creating, updating, and deleting CompanyCam data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and agents use this skill to operate a connected CompanyCam account through OOMOL, including reading company, user, project, and tag data and managing projects or tags when explicitly requested. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, archive, restore, or delete CompanyCam data. <br>
-Mitigation: Require explicit confirmation of the exact target and payload before running write or destructive actions. <br>
-Risk: Authentication, connection scope, credential expiry, or billing errors can block CompanyCam actions. <br>
-Mitigation: Use the documented setup or billing fallback only after a command fails with the matching error. <br>
+## Use Case:
 
+Employees, external agents, and developers use this skill to operate CompanyCam projects, tags, company records, and user lookups through an OOMOL-connected CompanyCam account.
 
-## Reference(s): <br>
-- [CompanyCam Skill on ClawHub](https://clawhub.ai/oomol/skills/oo-companycam) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [CompanyCam Homepage](https://companycam.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions run through the OOMOL oo CLI and may return connector data with an execution id.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: The first-time setup includes remote installer commands that run directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only through a verified, pinned, or inspectable method, and do not let an agent run remote installer commands blindly.
+
+Risk: Write and destructive CompanyCam actions can change, archive, restore, or delete account data.
+
+Mitigation: Confirm the exact action, target, and payload with the user before any write action, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [CompanyCam Skill on ClawHub](https://clawhub.ai/oomol/skills/oo-companycam)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [CompanyCam Homepage](https://companycam.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return JSON data from CompanyCam connector actions when commands are executed.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

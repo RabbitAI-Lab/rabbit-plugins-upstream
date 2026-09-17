@@ -1,43 +1,55 @@
-## Description: <br>
-Operates Close through the OOMOL-connected close connector for reading, creating, and updating CRM records. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to inspect Close connector schemas and run read, create, and update actions for Close CRM through the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and teams use this skill to let an agent inspect schemas and then read or update Close CRM leads, contacts, opportunities, and tasks through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and update Close CRM data through an OOMOL-connected account. <br>
-Mitigation: Install it only when that access is intended, and review write payloads and expected effects before approving state-changing actions. <br>
-Risk: Setup commands may be needed if the oo CLI or account connection is missing. <br>
-Mitigation: Use setup commands only from OOMOL's documented source and only after an auth, connection, or missing CLI error occurs. <br>
+## Use Case:
 
+External users and agents use this skill to operate Close CRM records through an OOMOL-connected account, including listing and fetching leads, contacts, opportunities, and tasks. With user confirmation, the skill can also create or update those CRM objects.
 
-## Reference(s): <br>
-- [Close homepage](https://www.close.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-close) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return Close connector JSON responses that include data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill frontmatter) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded shell or PowerShell scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation source before use and prefer a verified, pinned, or signed installer path.
+
+Risk: Create and update actions can modify Close CRM records.
+
+Mitigation: Confirm the exact payload and expected effect with the user before allowing any write action to run.
+
+## Reference(s):
+
+- [Close homepage](https://www.close.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-close)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces oo CLI connector commands and interprets JSON responses; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

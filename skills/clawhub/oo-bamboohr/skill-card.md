@@ -1,45 +1,56 @@
-## Description: <br>
-BambooHR helps an agent search and read BambooHR company and employee data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BambooHR helps agents search and read company and employee data from a connected BambooHR account through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees and business operations agents use this skill to retrieve BambooHR company information, employee records, employee lists, and available employee field metadata for a connected tenant. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: BambooHR employee records can contain sensitive HR data. <br>
-Mitigation: Confirm the user needs the requested data and use the narrowest employee action, field set, and paging scope that satisfies the request. <br>
-Risk: A broad employee-list request can expose more tenant data than necessary. <br>
-Mitigation: Prefer targeted record retrieval when possible and avoid broad list actions unless the user request clearly requires them. <br>
-Risk: Connection scopes or expired credentials can affect what BambooHR data is accessible. <br>
-Mitigation: Confirm OOMOL connection scopes when access fails or appears broader than expected, and resolve auth or connection errors through the documented setup flow. <br>
+## Use Case:
 
+Employees and business operators use this skill to retrieve BambooHR company profile details, employee records, employee lists, and available employee fields from an already connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-bamboohr) <br>
-- [BambooHR homepage](https://www.bamboohr.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only BambooHR connector actions; returned employee data may contain sensitive HR information.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The setup guidance includes remote installer scripts that can be piped directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a pinned, signed, or checksum-verified oo CLI installation path before using the skill.
+
+Risk: BambooHR reads are mediated through OOMOL as the connected account provider.
+
+Mitigation: Use the skill only where OOMOL is approved as an intermediary for BambooHR data access and limit use to BambooHR account data tasks.
+
+## Reference(s):
+
+- [ClawHub BambooHR skill](https://clawhub.ai/oomol/skills/oo-bamboohr)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [BambooHR homepage](https://www.bamboohr.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON action results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution; responses may include BambooHR account data returned as JSON.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

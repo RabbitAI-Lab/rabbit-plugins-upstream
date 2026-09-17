@@ -1,44 +1,57 @@
-## Description: <br>
-McDonald's China helps agents search and read McDonald's China city, store, menu, and product information through the OOMOL mcdonalds_cn connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+McDonald's China lets agents search and read supported city, store, business, menu, product, and product detail data through OOMOL.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect McDonald's China locations, store business data, menus, and product details through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on OOMOL's oo CLI and an OOMOL-connected McDonald's China provider account. <br>
-Mitigation: Install or authenticate the oo CLI only when needed, and connect the provider through the OOMOL account flow if an auth or connection error occurs. <br>
-Risk: Using the connector can consume paid OOMOL credits. <br>
-Mitigation: Review commands before running them and resolve HTTP 402 or insufficient-credit errors through OOMOL billing before retrying. <br>
-Risk: Connector schemas and service behavior may change over time. <br>
-Mitigation: Fetch the live action schema before constructing a payload and keep action use to the documented read-oriented lookups unless a future write action is explicitly confirmed. <br>
+## Use Case:
 
+External users and developers use this skill to query McDonald's China locations, menus, product details, and store business information from an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill release](https://clawhub.ai/oomol/skills/oo-mcdonalds-cn) <br>
-- [McDonald's China homepage](https://open.mcd.cn) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence release and skill metadata) <br>
+Risk: The fallback setup path tells users to execute an unpinned remote installer directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an independently verified oo CLI installation method, review the installer source before execution, and avoid running installer commands unless the CLI is actually missing.
+
+Risk: The skill depends on an OOMOL-connected account and server-side credentials for McDonald's China queries.
+
+Mitigation: Review account connection, billing, and credential-scope steps before use, and run connection or authentication setup only after a command reports a matching failure.
+
+## Reference(s):
+
+- [McDonald's China homepage](https://open.mcd.cn)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-mcdonalds-cn)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON command output summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before actions and returns read-only McDonald's China data when the user's OOMOL account is connected.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

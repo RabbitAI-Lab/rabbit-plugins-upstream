@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "HTML to Image"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["html_to_image"]
   icon: "https://static.oomol.com/logo/third-party/html_to_image.svg"
 ---

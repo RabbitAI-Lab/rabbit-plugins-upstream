@@ -1,46 +1,51 @@
-## Description: <br>
-Alchemy (alchemy.com). Use this skill for ANY Alchemy request - searching and reading data. Whenever a task involves Alchemy, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Alchemy helps agents query Alchemy blockchain data through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to query Alchemy data through an OOMOL-connected account and the oo CLI. It supports read-only Ethereum mainnet requests for asset transfers, NFT ownership, NFT metadata, token balances, and token metadata. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires trust in OOMOL and uses an OOMOL-connected Alchemy account through the oo CLI. <br>
-Mitigation: Install it only when OOMOL is trusted, review OOMOL sign-in and Alchemy connection setup before use, and rely on the server-side credential flow rather than handling raw API tokens. <br>
-Risk: Wallet or contract addresses may be sensitive or unnecessary for some requests. <br>
-Mitigation: Provide wallet or contract addresses only when they are relevant to the user's query. <br>
-Risk: Alchemy connection, authentication, or billing state can prevent connector actions from completing. <br>
-Mitigation: Use the documented setup fallbacks only after a command fails with the matching auth, connection, scope, credential, or billing error. <br>
+## Use Case:
 
+Developers and agents use this skill to retrieve Ethereum mainnet data from Alchemy, including asset transfers, NFT metadata, NFTs owned by an address, ERC-20 balances, and token metadata.
 
-## Reference(s): <br>
-- [Alchemy skill page](https://clawhub.ai/oomol/oo-alchemy) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Alchemy homepage](https://www.alchemy.com) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup guidance includes remote installer commands that would run with the user's privileges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing, prefer an official pinned and verifiable oo CLI installation method, and require explicit approval before any software installation.
+
+## Reference(s):
+
+- [Alchemy homepage](https://www.alchemy.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-alchemy)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector action results are returned as JSON by the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

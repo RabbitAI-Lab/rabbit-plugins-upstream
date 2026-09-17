@@ -1,45 +1,60 @@
-## Description: <br>
-This skill lets an agent read, list, and merge Ortto people records through the OOMOL oo connector after checking each action schema. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Ortto (ortto.com). Use this skill for Ortto requests involving reading, creating, and updating data through the OOMOL oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Agents and operators use this skill to retrieve Ortto contacts, list customer data, and create or update people through an OOMOL-connected Ortto account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Read operations may expose Ortto customer or contact data. <br>
-Mitigation: Install and use the skill only for authorized Ortto work, and request only the fields and records needed for the task. <br>
-Risk: The merge_people action can create or update Ortto contacts. <br>
-Mitigation: Inspect the live action schema and confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: First-time CLI installation and account connection steps affect the local environment and account access. <br>
-Mitigation: Run setup steps only after a matching command failure, and use the documented OOMOL CLI and connection URLs. <br>
+## Use Case:
 
+Developers, operators, and agents use this skill to retrieve Ortto contacts, list people, and create or update Ortto people through an OOMOL-connected Ortto account. The skill is intended for Ortto customer data workflows where the agent should inspect live connector schemas before running actions.
 
-## Reference(s): <br>
-- [ClawHub Ortto skill page](https://clawhub.ai/oomol/skills/oo-ortto) <br>
-- [Ortto homepage](https://ortto.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL app connections](https://console.oomol.com/app-connections?provider=ortto) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call Ortto read and write actions through oo connector; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill frontmatter) <br>
+Risk: First-time setup includes unpinned remote installer scripts executed directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified installer or package with checksum or signature validation, and run the installer only after trusting the OOMOL source.
+
+Risk: The merge_people action can create or update Ortto people.
+
+Mitigation: Inspect the live action schema, confirm the exact payload and expected effect with the user, then run the write action only after approval.
+
+Risk: The skill operates through an OOMOL-connected Ortto account.
+
+Mitigation: Confirm the intended OOMOL account and Ortto connection are active before use, and resolve authentication or connection errors through the documented setup flow.
+
+## Reference(s):
+
+- [Ortto ClawHub Skill](https://clawhub.ai/oomol/skills/oo-ortto)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Ortto](https://ortto.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces oo CLI commands and payload guidance; write actions require user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.2 (source: skill metadata and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

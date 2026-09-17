@@ -1,45 +1,60 @@
-## Description: <br>
-Operate Docker Hub through an OOMOL-connected account for repository, image, organization, team, and access-token workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Docker Hub operates Docker Hub through an OOMOL-connected account for reading repositories, creating repositories, and managing organization and team data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and platform operators use this skill to inspect Docker Hub repositories and tags, manage organization members and teams, and create repositories through a connected Docker Hub account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Docker Hub account and can administer Docker Hub resources. <br>
-Mitigation: Use a least-privileged Docker Hub connection and install only when agent access to that account is intended. <br>
-Risk: The skill can list organization access tokens and perform high-impact organization changes. <br>
-Mitigation: Review the requested scope and confirm exact write or destructive targets before running those actions. <br>
-Risk: First-time setup may require running the oo CLI installer. <br>
-Mitigation: Review the oo CLI installer before using the one-line installation command. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Docker Hub repository, tag, image, organization, team, member, invitation, and access-token metadata, and to perform confirmed repository and organization administration through an OOMOL-connected Docker Hub account.
 
-## Reference(s): <br>
-- [Docker Hub homepage](https://hub.docker.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-docker-hub) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return Docker Hub data as JSON from oo CLI connector actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The skill can perform Docker Hub write and destructive organization or repository actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact target, payload, and effect with the user before running actions marked [write] or [destructive].
+
+Risk: The skill can list organization access tokens and other sensitive account metadata.
+
+Mitigation: Use it only with Docker Hub accounts where the OOMOL connector should have the requested organization permissions, and avoid exposing token details unnecessarily.
+
+Risk: First-time setup includes curl-to-bash and irm-to-iex installer commands.
+
+Mitigation: Run installer commands only after independently trusting and verifying the OOMOL CLI installer source.
+
+## Reference(s):
+
+- [ClawHub Docker Hub Skill](https://clawhub.ai/oomol/skills/oo-docker-hub)
+- [Docker Hub](https://hub.docker.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before building action payloads; state-changing actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

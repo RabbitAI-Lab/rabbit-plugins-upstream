@@ -1,46 +1,60 @@
-## Description: <br>
-Seqera (seqera.io). Use this skill for ANY Seqera request - searching and reading data. Whenever a task involves Seqera, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Seqera (seqera.io). Use this skill for ANY Seqera request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to work with Seqera through an OOMOL-connected account, including reading users, workspaces, pipelines, and workflow runs, and launching workflows when explicitly intended. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can launch Seqera workflows, which may change state or incur cost even though the action is not labeled as a write action in the skill text. <br>
-Mitigation: Confirm the exact payload, workspace, pipeline, and cost impact with the user before running launch_workflow. <br>
-Risk: The first-time setup instructions include remote installer commands. <br>
-Mitigation: Review the CLI installer source or use OOMOL's documented installation path before running pipe-to-shell commands. <br>
-Risk: The skill requires an OOMOL-connected Seqera account and therefore depends on sensitive credentials managed outside the skill. <br>
-Mitigation: Install only when the publisher is trusted and the user intends to operate Seqera through the OOMOL oo CLI. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Seqera schemas, read user, workspace, pipeline, and workflow-run information, and launch Seqera workflows through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Seqera homepage](https://seqera.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL Seqera connection](https://console.oomol.com/app-connections?provider=seqera) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-seqera) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses may include JSON data and an execution ID.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: The setup guidance can install the oo CLI through a remote shell command.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installer provenance manually and install the CLI only through a trusted OOMOL path before allowing the skill to run connector actions.
+
+Risk: The skill can launch Seqera workflows, which may change state or have cost impact.
+
+Mitigation: Require explicit user confirmation of the workflow, workspace, parameters, and expected cost impact before running launch_workflow.
+
+Risk: Connected account permissions determine what Seqera data and actions the agent can access.
+
+Mitigation: Use the least-privileged Seqera account or workspace access appropriate for the task.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-seqera)
+- [Seqera homepage](https://seqera.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Seqera icon](https://static.oomol.com/logo/third-party/Seqera.svg)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return JSON responses from Seqera connector actions when commands are executed.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

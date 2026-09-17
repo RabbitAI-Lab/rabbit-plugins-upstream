@@ -1,45 +1,57 @@
-## Description: <br>
-Streak (streak.com). Use this skill for Streak requests that involve searching and reading data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Streak helps agents read Streak CRM data through an OOMOL-connected Streak connector and the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and business users use this skill to read Streak boxes, pipelines, and current-user information through an OOMOL-connected Streak account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent can read Streak data visible to the connected OOMOL account. <br>
-Mitigation: Connect only the intended Streak account and review requested read operations before use. <br>
-Risk: The first-time setup path installs and uses the third-party oo CLI. <br>
-Mitigation: Run the remote install step only when the CLI is needed and OOMOL is trusted in the deployment environment. <br>
-Risk: Connector input contracts may change over time. <br>
-Mitigation: Inspect the live connector schema before each action and build payloads from that schema. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect schemas and read Streak boxes, pipelines, and the authenticated current user from a connected Streak account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-streak) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Streak homepage](https://www.streak.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing Streak action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: Setup instructions include running an unverified internet installer directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation process first, prefer official versioned instructions with checksum or signature verification, and avoid running the installer from an elevated shell.
+
+Risk: The connected Streak account may expose more CRM data than intended.
+
+Mitigation: Connect only the intended Streak account and scopes before using the skill.
+
+## Reference(s):
+
+- [ClawHub Streak Skill](https://clawhub.ai/oomol/skills/oo-streak)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Streak Homepage](https://www.streak.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Streak Icon](https://static.oomol.com/logo/third-party/streak.png)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

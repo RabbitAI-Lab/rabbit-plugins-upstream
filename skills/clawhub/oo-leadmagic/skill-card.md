@@ -1,45 +1,56 @@
-## Description: <br>
-LeadMagic lets an agent search and read LeadMagic data through the OOMOL oo CLI connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+LeadMagic (leadmagic.io) helps agents search and read lead intelligence data through OOMOL's oo CLI instead of calling the LeadMagic API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Sales, growth, and revenue operations users can ask an agent to enrich company and professional profiles, find work emails or mobile numbers, validate email deliverability, and check LeadMagic credits through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can request business and personal lead data, including work emails and mobile phone numbers. <br>
-Mitigation: Use it only for authorized LeadMagic workflows, minimize submitted identifiers, and review returned contact data before use or sharing. <br>
-Risk: First-time use may require installing the oo CLI and connecting an OOMOL account to LeadMagic. <br>
-Mitigation: Review the oo CLI install command and confirm the intended OOMOL account connection before running setup. <br>
-Risk: Connector actions depend on live LeadMagic schemas and account scopes. <br>
-Mitigation: Fetch the action schema with oo before constructing each payload and resolve missing scopes or expired credentials through the OOMOL connection page. <br>
+## Use Case:
 
+External users, sales operations teams, and developers use this skill to run LeadMagic connector actions for company enrichment, professional profile enrichment, mobile lookup, work email lookup, credit checks, and email validation through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [LeadMagic homepage](https://leadmagic.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub LeadMagic skill page](https://clawhub.ai/oomol/skills/oo-leadmagic) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schemas before action execution and relies on server-side OOMOL credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Setup instructions include direct execution of remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before use and prefer an official, version-pinned, signed, or checksum-verified installer.
+
+Risk: Lead enrichment requests may submit personal or business identifiers to OOMOL and LeadMagic and may consume LeadMagic credits.
+
+Mitigation: Confirm that submitted identifiers are appropriate to share with those services and check credit impact before running lookups at scale.
+
+## Reference(s):
+
+- [LeadMagic homepage](https://leadmagic.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [LeadMagic skill page](https://clawhub.ai/oomol/skills/oo-leadmagic)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Runs LeadMagic connector actions through the oo CLI and returns action data with execution metadata when JSON output is requested.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

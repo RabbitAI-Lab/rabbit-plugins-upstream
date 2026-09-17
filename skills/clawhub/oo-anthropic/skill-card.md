@@ -1,45 +1,55 @@
-## Description: <br>
-Operate Anthropic through an OOMOL-connected account using the oo CLI connector for message creation, token counting, and model metadata actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Anthropic through an OOMOL-connected account using the oo CLI to count message tokens, create non-streaming messages, and retrieve model information.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect Anthropic connector schemas, run supported Anthropic actions through OOMOL, count message tokens, create non-streaming messages, and retrieve model information. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Anthropic prompts and payloads may be sent through OOMOL and Anthropic when connector actions run. <br>
-Mitigation: Install and use the skill only when that intermediary flow is acceptable, and review payload content before approving actions. <br>
-Risk: The create_message action can consume account credits and send user-provided prompt content. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running create_message. <br>
-Risk: Broad Anthropic-related wording could cause general discussion or documentation requests to be treated as connector actions. <br>
-Mitigation: Use the connector only for explicit Anthropic account actions and answer general Anthropic questions without running oo commands. <br>
+## Use Case:
 
+Developers and agent operators use this skill to route Anthropic work through an OOMOL-connected account instead of handling raw API tokens directly. It supports token counting, non-streaming message creation, model lookup, and model listing.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-anthropic) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Anthropic homepage](https://www.anthropic.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Text, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId fields when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: release evidence and skill metadata) <br>
+Risk: First-time setup directs users to run remote installer scripts, which the security evidence flags as suspicious when unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installation, prefer pinned, signed, or checksum-verified oo CLI releases, and avoid running remote installer commands from an elevated shell.
+
+Risk: The create_message action is state-changing and may consume account resources or send unintended Anthropic requests.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions, and inspect the live action schema before constructing the request.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-anthropic)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Anthropic homepage](https://www.anthropic.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before request construction and returns connector responses as JSON when actions are executed.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

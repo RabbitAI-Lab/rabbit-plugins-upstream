@@ -1,0 +1,562 @@
+{
+  "id": "MAAS",
+  "name": "正念注意觉知量表（MAAS）",
+  "short_name": "MAAS 正念自评",
+  "category": "正念",
+  "target_population": "成年人",
+  "estimated_time": "约 3 分钟",
+  "item_count": 15,
+  "description": "测量个体在日常生活中注意与觉知当下经验的特质水平。题目为1(总是)至6(从不)自评，均分越高代表正念水平越高（题目本身为负向表述，计分方向已内置正确，无需额外反向）。",
+  "source": "Brown & Ryan, 2003",
+  "license": "学术免费使用",
+  "scoring_type": "average",
+  "items": [
+    {
+      "id": "q1",
+      "text": "我发现很难让注意力停留在当下的事情上。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "总是",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "很少",
+          "score": 4
+        },
+        {
+          "label": "几乎不",
+          "score": 5
+        },
+        {
+          "label": "从不",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "我容易走神。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "总是",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "很少",
+          "score": 4
+        },
+        {
+          "label": "几乎不",
+          "score": 5
+        },
+        {
+          "label": "从不",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "我做事时不够专注。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "总是",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "很少",
+          "score": 4
+        },
+        {
+          "label": "几乎不",
+          "score": 5
+        },
+        {
+          "label": "从不",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "我容易分心。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "总是",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "很少",
+          "score": 4
+        },
+        {
+          "label": "几乎不",
+          "score": 5
+        },
+        {
+          "label": "从不",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q5",
+      "text": "我不太能觉察到身体感受的细微变化。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "总是",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "很少",
+          "score": 4
+        },
+        {
+          "label": "几乎不",
+          "score": 5
+        },
+        {
+          "label": "从不",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q6",
+      "text": "我容易陷入对过去的回忆或对未来的担忧。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "总是",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "很少",
+          "score": 4
+        },
+        {
+          "label": "几乎不",
+          "score": 5
+        },
+        {
+          "label": "从不",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q7",
+      "text": "我做事时像在自动驾驶，没有真正在体验。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "总是",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "很少",
+          "score": 4
+        },
+        {
+          "label": "几乎不",
+          "score": 5
+        },
+        {
+          "label": "从不",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q8",
+      "text": "我匆匆忙忙，却想不起自己刚才在做什么。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "总是",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "很少",
+          "score": 4
+        },
+        {
+          "label": "几乎不",
+          "score": 5
+        },
+        {
+          "label": "从不",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q9",
+      "text": "我过于关注目标结果，而忽略做事的过程。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "总是",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "很少",
+          "score": 4
+        },
+        {
+          "label": "几乎不",
+          "score": 5
+        },
+        {
+          "label": "从不",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "text": "我发现自己忙着做事，却不知道自己在做什么。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "总是",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "很少",
+          "score": 4
+        },
+        {
+          "label": "几乎不",
+          "score": 5
+        },
+        {
+          "label": "从不",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "text": "我容易对事情做出自动化的反应。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "总是",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "很少",
+          "score": 4
+        },
+        {
+          "label": "几乎不",
+          "score": 5
+        },
+        {
+          "label": "从不",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "text": "我沉浸在自己的想法里，忽略了外界发生的事。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "总是",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "很少",
+          "score": 4
+        },
+        {
+          "label": "几乎不",
+          "score": 5
+        },
+        {
+          "label": "从不",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "text": "我容易对一件事感到厌烦。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "总是",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "很少",
+          "score": 4
+        },
+        {
+          "label": "几乎不",
+          "score": 5
+        },
+        {
+          "label": "从不",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "text": "我发现自己很难慢下来。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "总是",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "很少",
+          "score": 4
+        },
+        {
+          "label": "几乎不",
+          "score": 5
+        },
+        {
+          "label": "从不",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "text": "我不太留意日常生活中事物的变化。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "总是",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "很少",
+          "score": 4
+        },
+        {
+          "label": "几乎不",
+          "score": 5
+        },
+        {
+          "label": "从不",
+          "score": 6
+        }
+      ]
+    }
+  ],
+  "dimensions": [
+    {
+      "name": "正念均分",
+      "items": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7",
+        "q8",
+        "q9",
+        "q10",
+        "q11",
+        "q12",
+        "q13",
+        "q14",
+        "q15"
+      ],
+      "method": "average",
+      "max": 6,
+      "min": 1
+    }
+  ],
+  "standard_score": null,
+  "interpretation": {
+    "bands": [
+      {
+        "dimension": "正念均分",
+        "min": 1,
+        "max": 2.99,
+        "level": "偏低",
+        "summary": "注意觉知水平偏低，日常较多处于自动 pilot 状态。",
+        "advice": "可从每天 5 分钟呼吸觉察、正念行走等基础练习开始。"
+      },
+      {
+        "dimension": "正念均分",
+        "min": 3,
+        "max": 3.99,
+        "level": "中等",
+        "summary": "具备一定觉知力，但仍有提升空间。",
+        "advice": "保持规律练习，尝试身体扫描或正念饮食。"
+      },
+      {
+        "dimension": "正念均分",
+        "min": 4,
+        "max": 4.99,
+        "level": "较高",
+        "summary": "正念水平较高，能较好保持对当下的觉察。",
+        "advice": "可尝试将正念融入更多生活场景，巩固习惯。"
+      },
+      {
+        "dimension": "正念均分",
+        "min": 5,
+        "max": 6,
+        "level": "高",
+        "summary": "正念水平很高，对当下经验有稳定而清晰的觉知。",
+        "advice": "可探索更深入的冥想或教导他人。"
+      }
+    ]
+  },
+  "safety": {
+    "crisis_items": [],
+    "crisis_rule": "",
+    "high_risk_rule": ""
+  }
+}

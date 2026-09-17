@@ -1,43 +1,56 @@
-## Description: <br>
-Detect Language (detectlanguage.com). Use this skill for Detect Language requests involving language detection, supported-language lookup, and account-status retrieval through the OOMOL connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detect Language (detectlanguage.com) lets an agent detect the language of one or more text strings, list supported languages, and inspect account usage through an OOMOL-connected Detect Language account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to route Detect Language tasks through an OOMOL-connected account, including detecting text language, checking supported languages, and reviewing account status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Text submitted for language detection may contain sensitive content and is routed through OOMOL as an intermediary to Detect Language. <br>
-Mitigation: Avoid sending sensitive text unless the user's privacy requirements permit that routing. <br>
-Risk: First-time setup may require installing the oo CLI from a remote installer. <br>
-Mitigation: Review the installer before running it when the CLI is missing. <br>
+## Use Case:
 
+Developers and external agent users use this skill when they need an agent to detect text language, batch-detect languages, list supported languages, or check Detect Language account status through the OOMOL connector.
 
-## Reference(s): <br>
-- [Detect Language homepage](https://detectlanguage.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-detect-language) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON command output from the connector] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill can return language detection results, supported-language lists, account status, or setup guidance depending on the requested action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Setup instructions include remote installer commands that may execute code from OOMOL-controlled endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer first or use a verified package or source before running setup commands, especially in sensitive environments.
+
+Risk: The skill depends on an authenticated OOMOL-connected Detect Language account and may fail when authentication, connection scope, billing, or credentials are unavailable.
+
+Mitigation: Run account setup only after a relevant command failure and resolve authentication, connection, or billing errors before retrying actions.
+
+## Reference(s):
+
+- [Detect Language homepage](https://detectlanguage.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Detect Language skill page](https://clawhub.ai/oomol/skills/oo-detect-language)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance, text]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before building action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

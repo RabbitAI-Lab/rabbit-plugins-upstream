@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "PostGrid Verify"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["postgrid_verify"]
   icon: "https://static.oomol.com/logo/third-party/postgrid_verify.svg"
 ---

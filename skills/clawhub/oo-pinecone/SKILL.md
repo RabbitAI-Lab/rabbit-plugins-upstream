@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Pinecone"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.4"
   services: ["pinecone"]
   icon: "https://static.oomol.com/logo/third-party/pinecone.svg"
 ---

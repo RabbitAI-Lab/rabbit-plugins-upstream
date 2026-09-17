@@ -1,46 +1,56 @@
-## Description: <br>
-Operates Wappalyzer through an OOMOL-connected account to discover subdomains, look up website technologies, verify email deliverability, and check account credits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Wappalyzer helps agents run OOMOL-connected Wappalyzer actions for website technology lookup, subdomain discovery, credit balance checks, and email verification.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to route Wappalyzer tasks through the OOMOL oo CLI, including technology lookup, subdomain discovery, email verification, and account credit checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill runs connector commands against a connected Wappalyzer account and can consume account credits. <br>
-Mitigation: Inspect the live action schema before building each payload and review the exact command before execution. <br>
-Risk: The skill depends on account connection and credential handling through OOMOL. <br>
-Mitigation: Use the OOMOL connection flow for credentials and only run setup steps after an authentication or connection error. <br>
-Risk: The security evidence advises trusting the publisher and limiting configured service access. <br>
-Mitigation: Install only after confirming the OOMOL publisher handle and configure only Wappalyzer access the agent should be allowed to use. <br>
+## Use Case:
 
+Developers and operators use this skill to ask an agent for Wappalyzer-backed website intelligence, subdomain discovery, account credit checks, and email verification through an already connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub Wappalyzer skill page](https://clawhub.ai/oomol/skills/oo-wappalyzer) <br>
-- [Wappalyzer homepage](https://www.wappalyzer.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [OOMOL Wappalyzer connection](https://console.oomol.com/app-connections?provider=wappalyzer) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON CLI payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md metadata) <br>
+Risk: Setup instructions include remote installer scripts executed directly in a shell without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installation; prefer a signed, pinned, or separately verified oo CLI release path and avoid running setup commands from an elevated shell.
+
+Risk: Normal use depends on account connection and billing state outside the skill.
+
+Mitigation: Run Wappalyzer actions only after the user has installed the CLI, signed in, connected Wappalyzer, and resolved any billing or credential errors.
+
+## Reference(s):
+
+- [Wappalyzer homepage](https://www.wappalyzer.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-wappalyzer)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Normal operation relies on an installed, signed-in oo CLI and a connected Wappalyzer account; live action schemas should be inspected before constructing payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

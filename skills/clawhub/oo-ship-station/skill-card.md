@@ -1,44 +1,56 @@
-## Description: <br>
-ShipStation helps agents read, create, and update ShipStation data through OOMOL's ship_station connector and oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate ShipStation through an OOMOL-connected account to retrieve purchase orders and list inventory, warehouses, and purchase orders via the oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to run authenticated ShipStation connector actions for purchase-order retrieval and inventory or warehouse lookup through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected ShipStation account and relies on OOMOL to inject credentials server-side. <br>
-Mitigation: Install only if you trust OOMOL and are comfortable connecting ShipStation through the oo CLI. <br>
-Risk: Connector actions or payloads may affect ShipStation data, and the description is broader than the listed read-oriented actions. <br>
-Mitigation: Review the proposed oo connector action, inspect the live schema, and confirm the exact payload before approving write or destructive operations. <br>
-Risk: First-time setup may require installing the oo CLI from OOMOL-hosted install scripts. <br>
-Mitigation: Use the documented OOMOL install sources and avoid repeating setup steps unless a command fails with the matching installation or authentication error. <br>
+## Use Case:
 
+External users and developers use this skill to operate ShipStation through an OOMOL-connected account, inspect live action schemas, retrieve purchase orders, and list inventory and warehouse data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-ship-station) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ShipStation homepage](https://www.shipstation.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill instructs agents to inspect live connector schemas before executing actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and frontmatter) <br>
+Risk: First-time setup includes remote installer snippets that could execute unverified code if run automatically.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run the remote installer snippets automatically; install the oo CLI only through a verified official method, preferably with a pinned release and checksum or signature verification.
+
+Risk: Some ShipStation actions may change account state when invoked with an incorrect payload.
+
+Mitigation: Inspect the live action schema and confirm the exact payload and expected effect with the user before running any action tagged as write or destructive.
+
+## Reference(s):
+
+- [ShipStation skill page](https://clawhub.ai/oomol/skills/oo-ship-station)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ShipStation homepage](https://www.shipstation.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance, JSON data]
+
+**Output Format:** [Markdown guidance with bash and PowerShell command examples plus JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; first-time setup is only used after authentication or connection failures.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

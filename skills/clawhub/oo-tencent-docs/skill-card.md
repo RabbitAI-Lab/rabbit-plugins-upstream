@@ -1,43 +1,56 @@
-## Description: <br>
-Tencent Docs helps agents read, create, and update Tencent Docs content through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tencent Docs enables agents to read, create, update, export, and discover Tencent Docs files through OOMOL's oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and knowledge workers use this skill to operate Tencent Docs from an agent workflow, including reading documents and spreadsheets, creating files, exporting files, renaming files, and updating forms or sheets after user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create, rename, export, or update Tencent Docs content through the connected account. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running actions tagged as write or destructive. <br>
-Risk: The skill depends on the user's OOMOL account, oo CLI installation, and Tencent Docs connection being available. <br>
-Mitigation: Run setup steps only after a matching command failure and follow the documented connection, authentication, and billing guidance. <br>
+## Use Case:
 
+External users, developers, and workplace operators use this skill to operate Tencent Docs from an agent through their OOMOL-connected account, including document and sheet reads, file discovery, exports, and confirmed write actions.
 
-## Reference(s): <br>
-- [ClawHub Tencent Docs Skill](https://clawhub.ai/oomol/skills/oo-tencent-docs) <br>
-- [Tencent Docs](https://docs.qq.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: The setup instructions include remote installer commands that could run arbitrary code if followed without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path and verify OOMOL's installer through safer means before installing or running setup commands.
+
+Risk: Several Tencent Docs actions can create, rename, export, update, or otherwise change files and form state.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [Tencent Docs Skill on ClawHub](https://clawhub.ai/oomol/skills/oo-tencent-docs)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Tencent Docs](https://docs.qq.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and meta.executionId when actions run successfully.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

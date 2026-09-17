@@ -1,44 +1,56 @@
-## Description: <br>
-Cronitor (cronitor.io). Use this skill for ANY Cronitor request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cronitor (cronitor.io). Use this skill for ANY Cronitor request - reading, creating, updating, and deleting data. Whenever a task involves Cronitor, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Cronitor monitors through an OOMOL-connected account, including listing, fetching, creating, updating, and deleting monitors. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Create and update actions can change Cronitor monitor state. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running actions tagged as write operations. <br>
-Risk: Delete actions can remove Cronitor monitor data. <br>
-Mitigation: Confirm the target monitor and obtain explicit approval before running destructive actions. <br>
-Risk: Connector payloads can drift if schemas change. <br>
-Mitigation: Inspect the live connector schema before constructing each action payload. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect, list, retrieve, create, update, and delete Cronitor monitors through an OOMOL-connected account without handling raw Cronitor API tokens.
 
-## Reference(s): <br>
-- [Cronitor homepage](https://cronitor.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub Cronitor skill](https://clawhub.ai/oomol/skills/oo-cronitor) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and metadata with an execution ID.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions include remote installer commands that can execute downloaded code if followed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installer sources before running them and prefer verified package-manager or trusted installation instructions for the oo CLI.
+
+Risk: The skill can create, update, or delete Cronitor monitors.
+
+Mitigation: Confirm exact payloads and effects before write actions, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [Cronitor homepage](https://cronitor.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Cronitor Skill on ClawHub](https://clawhub.ai/oomol/skills/oo-cronitor)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Fetches live connector schemas before requests and returns oo CLI JSON responses for connector runs.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

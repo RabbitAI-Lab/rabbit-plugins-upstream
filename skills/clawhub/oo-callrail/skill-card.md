@@ -1,42 +1,60 @@
-## Description: <br>
-CallRail (callrail.com). Use this skill for CallRail searching and reading data through the OOMOL oo connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents read CallRail account, call, company, and form submission data through an OOMOL-connected CallRail account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to retrieve CallRail accounts, companies, calls, and form submissions through an authenticated OOMOL-connected CallRail account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: CallRail data access is routed through the OOMOL oo connector. <br>
-Mitigation: Review the OOMOL CLI install and account connection flow before use, and run it only for intentional CallRail retrieval tasks. <br>
-Risk: Connector commands may fail when authentication, connection scopes, credentials, or billing are not ready. <br>
-Mitigation: Use the documented first-time setup and troubleshooting steps only after a matching command failure. <br>
+## Use Case:
 
+External users and agents use this skill to discover CallRail accounts and retrieve CallRail calls, companies, and form submissions through OOMOL's connected-account workflow.
 
-## Reference(s): <br>
-- [CallRail homepage](https://www.callrail.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Guidance, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the live connector schema before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: The setup path includes an unverified remote installer for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from a trusted, verified, and versioned source before using the skill.
+
+Risk: The action scope is broader than a strictly read-only skill should be.
+
+Mitigation: Use the skill for the listed get and list actions, inspect the live connector schema first, and avoid unrestricted CallRail changes.
+
+Risk: CallRail data is accessed through an OOMOL-connected account.
+
+Mitigation: Use only when the user trusts OOMOL with the connected CallRail data path and has authorized the relevant account connection.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-callrail)
+- [OOMOL CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [CallRail homepage](https://www.callrail.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

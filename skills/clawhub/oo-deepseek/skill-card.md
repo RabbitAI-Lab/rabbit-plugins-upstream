@@ -1,43 +1,56 @@
-## Description: <br>
-DeepSeek lets an agent use OOMOL's oo CLI to call DeepSeek chat and message APIs, inspect models, and check account balance through a connected OOMOL account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+DeepSeek lets agents operate DeepSeek through an OOMOL-connected account with the oo CLI for chat and message creation, model listing, and balance checks.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill when an agent needs to invoke DeepSeek chat completions or messages, list models, or check balance through an OOMOL-connected DeepSeek account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Setup may rely on remote shell installer commands for the oo CLI. <br>
-Mitigation: Review the installer first or manually install the oo CLI from official documentation before running setup commands. <br>
-Risk: DeepSeek requests and credentials are mediated by OOMOL. <br>
-Mitigation: Install only when that intermediary model is acceptable, and confirm prompts or payloads before sending them. <br>
-Risk: The oo CLI authority can be broader than the listed DeepSeek actions. <br>
-Mitigation: Inspect the live action schema before each payload and require explicit confirmation for write or destructive actions. <br>
+## Use Case:
 
+Developers and agents use this skill to run DeepSeek connector actions through OOMOL, including creating chat completions or Anthropic-compatible messages, checking account balance, and listing available models.
 
-## Reference(s): <br>
-- [DeepSeek Platform](https://platform.deepseek.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo CLI connector actions; write actions require user confirmation before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup directs users to execute remote installer scripts in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI from a verified, version-pinned, checksum- or signature-validated source, and do not allow an agent to run remote install scripts automatically.
+
+Risk: The skill can create DeepSeek messages and chat completions through write actions.
+
+Mitigation: Inspect the live action schema and confirm the exact JSON payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub DeepSeek Skill](https://clawhub.ai/oomol/skills/oo-deepseek)
+- [DeepSeek Platform](https://platform.deepseek.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, API Calls, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agents should inspect the live connector schema before submitting JSON payloads and confirm write actions before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "API-SPORTS"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["api_sports"]
   icon: "https://static.oomol.com/logo/third-party/API-Sports.svg"
 ---

@@ -1,46 +1,55 @@
-## Description: <br>
-Dub (dub.co). Use this skill for ANY Dub request, including reading, creating, updating, and deleting data through the OOMOL Dub connector instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to operate Dub through OOMOL-connected credentials for reading, creating, updating, deleting, and analyzing Dub workspace resources.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to manage Dub workspaces through an installed OOMOL CLI connection, including listing links, folders, tags, analytics, and making confirmed changes when requested. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create or update Dub links, folders, and tags in the authenticated workspace. <br>
-Mitigation: Confirm the exact target and JSON payload with the user before running actions tagged as write operations. <br>
-Risk: The skill can delete Dub links, folders, and tags. <br>
-Mitigation: Require explicit approval for destructive actions and verify the target identifier before execution. <br>
-Risk: The skill relies on an authenticated OOMOL connection and sensitive credentials injected outside the agent session. <br>
-Mitigation: Use it only in environments where the agent is expected to operate the connected Dub account, and avoid unnecessary authentication or connection setup steps. <br>
+## Use Case:
 
+External agents and developers use this skill to manage Dub short links, folders, tags, and analytics through OOMOL-connected credentials while checking live action schemas before writes.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-dub) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Dub Homepage](https://dub.co) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May trigger OOMOL CLI connector calls that return JSON responses from the authenticated Dub workspace.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: The fallback setup includes pipe-to-shell installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified package or download-and-inspect workflow before installing the CLI.
+
+Risk: The skill can create, update, and delete Dub workspace resources through connected credentials.
+
+Mitigation: Confirm exact payloads and targets before write or destructive actions, and inspect the live connector schema before execution.
+
+## Reference(s):
+
+- [Dub homepage](https://dub.co)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses OOMOL-connected Dub credentials; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: server evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

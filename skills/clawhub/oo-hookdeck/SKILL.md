@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Hookdeck"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["hookdeck"]
   icon: "https://static.oomol.com/logo/third-party/hookdeck.svg"
 ---

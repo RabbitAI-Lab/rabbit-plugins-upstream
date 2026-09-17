@@ -1,44 +1,59 @@
-## Description: <br>
-Kintone connector skill for searching and reading Kintone account data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Kintone (kintone.com) supports Kintone requests for searching and reading data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Kintone connector schemas and read user, department, group, and service assignments from an OOMOL-connected Kintone account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Connecting Kintone through this skill allows OOMOL-mediated read access to Kintone user and organization metadata. <br>
-Mitigation: Use the skill only when that connection is acceptable, and keep routine execution to the listed read actions. <br>
-Risk: First-time setup may require installing the oo CLI from an external installer. <br>
-Mitigation: Verify the oo CLI installer before setup and run auth or connection steps only after the matching command failure. <br>
-Risk: Future connector schemas could expose write or destructive Kintone actions. <br>
-Mitigation: Inspect the live action schema and require explicit user confirmation before any write or destructive action. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect live Kintone connector schemas and run read-focused Kintone user, department, group, and service lookup actions through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Kintone skill page](https://clawhub.ai/oomol/skills/oo-kintone) <br>
-- [Kintone homepage](https://www.kintone.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown text with oo CLI shell commands and JSON connector payloads or results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses read-oriented Kintone connector actions; live schemas should be inspected before payload construction.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: evidence metadata and SKILL.md frontmatter) <br>
+Risk: The skill uses OOMOL as the connector layer for Kintone and can read Kintone user, group, department, and service data through the connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only when that connector layer and read access are acceptable for the workspace.
+
+Risk: First-time setup includes pipe-to-shell installer commands.
+
+Mitigation: Use an official verified install path or inspect the installer before running it.
+
+Risk: The skill description is broad even though this release exposes read-focused actions.
+
+Mitigation: Treat the release as read-focused and require explicit approval before any future state-changing Kintone action.
+
+## Reference(s):
+
+- [ClawHub Kintone Skill](https://clawhub.ai/oomol/skills/oo-kintone)
+- [Kintone homepage](https://www.kintone.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return JSON connector responses from Kintone actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

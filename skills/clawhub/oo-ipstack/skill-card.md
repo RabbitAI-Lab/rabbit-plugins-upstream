@@ -1,43 +1,56 @@
-## Description: <br>
-ipstack (ipstack.com). Use this skill for ANY ipstack request - searching and reading data. Whenever a task involves ipstack, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ipstack lets agents use OOMOL's oo CLI connector to look up IPv4 or IPv6 geolocation data through an OOMOL-connected ipstack account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to perform read-only ipstack IP geolocation lookups through an OOMOL-connected account, including single-IP, requester-IP, and batch lookup workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queried IP addresses are sent to the OOMOL/ipstack connector for geolocation. <br>
-Mitigation: Use the skill only when sharing those IP addresses with the connected service is intended. <br>
-Risk: The skill may require CLI login or connector setup for an OOMOL-connected account. <br>
-Mitigation: Only follow install, login, or connection steps when intentionally enabling the ipstack integration. <br>
+## Use Case:
 
+Developers and external users use this skill to run ipstack geolocation lookups for a single IP address, the requester IP address, or multiple IP addresses without handling raw API credentials directly.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-ipstack) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [ipstack homepage](https://ipstack.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON responses from connector actions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only geolocation lookup results are returned by the OOMOL ipstack connector.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The fallback setup path asks users or agents to run remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installation, prefer independently verified OOMOL documentation or a signed/version-pinned package, and do not let an agent automatically run curl-to-bash or irm-to-iex commands.
+
+Risk: Authentication, connection, or billing failures may require account setup outside the normal read-only lookup flow.
+
+Mitigation: Use setup actions only after a matching command failure, keep credentials in OOMOL's connection flow, and avoid retrying billing-blocked requests until the account issue is resolved.
+
+## Reference(s):
+
+- [ClawHub ipstack Skill](https://clawhub.ai/oomol/skills/oo-ipstack)
+- [ipstack Homepage](https://ipstack.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only lookup workflow; connector responses include data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

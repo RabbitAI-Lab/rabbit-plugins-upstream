@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Hugging Face"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["huggingface"]
   icon: "https://static.oomol.com/logo/third-party/Hugging%20Face.svg"
 ---

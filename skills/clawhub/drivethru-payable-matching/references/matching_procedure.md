@@ -84,8 +84,51 @@ don't waste calls discovering them).
 - `ap_update_po_lines {po_id, lines:[{line_id, price_unit}], freight_cost?,
   fees_cost?}` → `{po_name, lines_updated:[{line_id, old_price, new_price}],
   new_amount_total}`. The PO must be `state: "purchase"` (confirmed).
-- `ap_create_vendor_bill {...}` → draft `account.move`. Out of this skill's
-  default scope; see the AP operator doc / `drivethru-odoo`.
+- `ap_create_vendor_bill {po_id, vendor_bill_number?, invoice_date?, line_ids?,
+  expected_total?, tolerance?, reviewer_user_id?, review_note?}` → **draft**
+  `account.move`. The payables tail (`paymatch.py bill`). Bills the PO's
+  remaining `qty_to_invoice`; errors "No billable lines" when the PO has none
+  left.
+- `ap_create_draft_bill {po_id|vendor_id, vendor_bill_number?, invoice_date?,
+  lines?:[{product_id|product_name, quantity, price_unit, tax_ids?, …}],
+  reviewer_user_id?, review_note?}` → an **off-PO draft** bill, independent of
+  `qty_to_invoice`, that **never posts**. For the over-invoice case (SI billed
+  items the PO can't cover — e.g. replacements for units never received): seed
+  the lines from the payload with the PO's own product ids, and pass
+  `reviewer_user_id` + `review_note` to land it with a review activity. `po_id`
+  links `invoice_origin` (traceability + re-run idempotency).
+- `ap_post_vendor_bill {bill_id, post?, expected_total, tolerance?,
+  vendor_bill_number?, invoice_date?, note?}` → **posts** a draft vendor bill,
+  the **match & post** step (`paymatch.py post`). Guarded: `in_invoice` + draft
+  only, previews unless `post:true`, and **refuses to post** when the bill total
+  misses `expected_total` beyond `tolerance` (an absolute currency amount) —
+  returns `{posted, total_check{expected,actual,difference,within_tolerance},
+  already_posted?}`. A refused/mismatched bill stays in draft → escalate to
+  Questions, never post it.
+
+### Vendor-bill line CRUD (multi-shipment split — one PO, several SI invoices)
+
+Only for the multi-invoice case (see `sportsinc_payables.md` →
+*Multiple invoices for one PO*). All three edit **draft `in_invoice`** moves only
+and never touch the auto-computed tax/payable journal items. `ap_get_vendor_bill`
+returns each editable line with `purchase_line_id`, `product_sku`, `quantity`,
+`price_unit`, `tax_ids`, `account_id`, and `cost_center_id` — the handles below.
+
+- `ap_create_bill_line {bill_id, lines:[{product_id|product_name,
+  account_id|account_name, name?, quantity?, price_unit?, tax_ids?,
+  cost_center_id|cost_center_name?, display_type?}]}` → adds line(s); resolves
+  product/account by id **or** name. Use for a shipment's freight
+  (`Vendor Shipping Charge` / `Inbound Freight`, `tax_ids: []`).
+- `ap_update_bill_lines {bill_id, lines:[{line_id, quantity?, price_unit?,
+  name?, tax_ids?, …}]}` → patches line(s); absent keys unchanged, `tax_ids`
+  REPLACES (`[]` clears). Restate a split line's `quantity`, or the Sports Inc.
+  Fee line's `price_unit` to the document's `si_upcharge`.
+- `ap_delete_bill_lines {bill_id, line_ids:[…]}` → removes line(s); dropping a
+  merch line frees its PO line to bill on the next shipment's bill.
+
+Also on `ap_search_purchase_orders`: `min_tracking_count` / `max_tracking_count`
+filter on the count of `vendor.tracking` rows — `min:2` is the likely
+multi-invoice slice, `max:1` the single-shipment slice.
 
 ### PO chatter
 

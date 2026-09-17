@@ -1,45 +1,57 @@
-## Description: <br>
-Use this skill to inspect ngrok endpoints, reserved domains, tunnel sessions, and online tunnels through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate ngrok through an OOMOL-connected account by inspecting connector schemas and running read-oriented ngrok actions through the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to retrieve ngrok account data such as active endpoints, reserved domains, online tunnel sessions, and online tunnels without calling the ngrok API directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected ngrok account and can query account data. <br>
-Mitigation: Install and use it only when the user is comfortable allowing the oo CLI to query the connected ngrok account. <br>
-Risk: Setup, billing, write, or destructive actions could have account-level effects if introduced or requested. <br>
-Mitigation: Confirm those actions and their expected effects with the user before running them. <br>
-Risk: Using the skill for general ngrok discussion may unnecessarily involve account-connected tooling. <br>
-Mitigation: Use the skill only for ngrok tasks that require account data or connector actions. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect ngrok endpoint, reserved domain, tunnel session, and tunnel data through an OOMOL-managed connector without handling raw ngrok credentials.
 
-## Reference(s): <br>
-- [ClawHub ngrok Skill](https://clawhub.ai/oomol/oo-ngrok) <br>
-- [ngrok Homepage](https://ngrok.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return read-oriented ngrok account data when connector actions are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: Setup instructions include running a remote installer directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified or package-manager installation of the oo CLI, and avoid running the remote installer from an elevated shell.
+
+Risk: The skill depends on OOMOL as an intermediary for access to the user's ngrok account.
+
+Mitigation: Install only if the user trusts OOMOL for this account connection, and use the skill for intended ngrok account resource reads.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-ngrok)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ngrok homepage](https://ngrok.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are expected as JSON from the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

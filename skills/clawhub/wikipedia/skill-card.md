@@ -1,42 +1,60 @@
-## Description: <br>
-Access Wikipedia through MCP to search articles, retrieve summaries, random facts, dinosaur facts, featured articles, and multi-language results across 10 wikis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Wikipedia MCP lets agents search Wikipedia and Wikimedia, retrieve article summaries, media, page views, news, events, categories, links, revisions, translations, and structured infobox facts across supported languages.
 
-## Publisher: <br>
-[evanfoglia](https://clawhub.ai/user/evanfoglia) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[evanfoglia](https://clawhub.ai/user/evanfoglia)
 
-## Use Case: <br>
-External users, developers, and content teams use this skill to query Wikipedia from an MCP-compatible agent for research, quick article summaries, trivia, and daily content prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User queries are sent to Wikipedia through the local MCP server. <br>
-Mitigation: Install only if this network behavior is acceptable for the intended use case. <br>
-Risk: The Python dependency is lower-bounded but not pinned or tightly bounded. <br>
-Mitigation: For stronger supply-chain hygiene, prefer a release that pins or tightly bounds the dependency. <br>
+## Use Case:
 
+Developers and end users install this MCP server to let agents perform Wikipedia and Wikimedia research, collect article facts and media, inspect article structure and links, and surface current or historical content without an API key.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/evanfoglia/skills/wikipedia) <br>
-- [Wikipedia REST API v1 endpoint](https://en.wikipedia.org/api/rest_v1) <br>
-- [MediaWiki Action API endpoint](https://en.wikipedia.org/w/api.php) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown] <br>
-**Output Format:** [Markdown text returned through MCP tool responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include source article links and summary images; supported languages are en, de, es, fr, ja, zh, pt, it, ru, and nl.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: server release evidence and target metadata; artifact frontmatter reports 1.1.0) <br>
+Risk: Searches, article titles, dates, coordinates, and other lookup terms may be sent to public Wikipedia or Wikimedia services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid secrets, confidential internal names, and sensitive private research terms when using the skill.
+
+Risk: The skill depends on the Python requests package and outbound HTTP access to Wikimedia services.
+
+Mitigation: Pin the dependency in managed environments and restrict outbound access to Wikipedia and Wikimedia domains where appropriate.
+
+Risk: Returned content reflects public Wikipedia and Wikimedia data, which may be incomplete, inaccurate, or changed after retrieval.
+
+Mitigation: Verify important facts against the returned source links before relying on them in high-impact contexts.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/evanfoglia/skills/wikipedia)
+- [Wikipedia REST API v1](https://en.wikipedia.org/api/rest_v1)
+- [MediaWiki Action API](https://en.wikipedia.org/w/api.php)
+- [Wikimedia Pageviews API](https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Links, Media metadata]
+
+**Output Format:** [Markdown-style text with article links, summaries, lists, tables, media URLs, and counts.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only MCP tool responses; supported inputs vary by tool and include titles, queries, language codes, dates, limits, coordinates, radius, and media type filters.]
+
+## Skill Version(s):
+
+1.6.4 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

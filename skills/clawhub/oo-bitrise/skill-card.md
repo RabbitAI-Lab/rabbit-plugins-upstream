@@ -1,42 +1,56 @@
-## Description: <br>
-Bitrise (bitrise.io) helps agents read Bitrise apps and builds, inspect live connector schemas, and trigger Bitrise builds or pipelines through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Bitrise lets agents read Bitrise data and trigger builds through an OOMOL-connected oo CLI connector instead of calling the Bitrise API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and CI operators use this skill to list Bitrise apps, browse or retrieve builds, and trigger builds or pipelines from an authenticated OOMOL-connected Bitrise account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Read operations may expose Bitrise app and build data to OOMOL as the intermediary connector. <br>
-Mitigation: Install and use the skill only when the account owner accepts OOMOL-mediated access to Bitrise data. <br>
-Risk: Triggering Bitrise builds or pipelines can change CI state or consume CI resources. <br>
-Mitigation: Confirm the exact write payload and intended effect with the user before running build-trigger actions. <br>
+## Use Case:
 
+Developers and engineers use this skill to inspect Bitrise apps and builds, retrieve build details, and trigger Bitrise builds or pipelines through an authenticated OOMOL connection.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-bitrise) <br>
-- [Bitrise Homepage](https://bitrise.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI connector schema before action execution and returns connector responses as JSON when commands are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence.release.version and skill metadata) <br>
+Risk: The setup path can execute a remote oo CLI installer on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer URL and prefer a verified, signed, or package-managed installation path before running installer commands.
+
+Risk: Triggering a Bitrise build or pipeline changes external CI state.
+
+Mitigation: Inspect the live action schema, construct an exact payload, and get explicit user confirmation before running write actions.
+
+## Reference(s):
+
+- [ClawHub Bitrise Skill Page](https://clawhub.ai/oomol/skills/oo-bitrise)
+- [Bitrise Homepage](https://bitrise.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [State-changing Bitrise actions require explicit user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

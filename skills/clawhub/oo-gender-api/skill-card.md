@@ -1,45 +1,56 @@
-## Description: <br>
-Gender-API.com connects an agent to Gender-API.com through OOMOL's gender_api connector for gender, country-of-origin, ethnicity, and account-usage lookups. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gender-API.com (gender-api.com). Use this skill for ANY Gender-API.com request - searching and reading data. Whenever a task involves Gender-API.com, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to run Gender-API.com lookups from an OOMOL-connected account, including likely gender from names or email addresses, likely country-of-origin and ethnicity metadata, and remaining-credit statistics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Requests may send names, email addresses, IP addresses, locale, country, and caller ID hints to Gender-API.com through OOMOL. <br>
-Mitigation: Use the skill only when this intermediary flow is acceptable, and avoid sending optional context hints unless they are needed for the lookup. <br>
-Risk: Setup may require installing the oo CLI or connecting a Gender-API.com account. <br>
-Mitigation: Review CLI installation commands before running them and perform authentication or connection steps only after a command fails for that reason. <br>
-Risk: Account credits can be consumed when running Gender-API.com lookups. <br>
-Mitigation: Use the statistics action to check remaining credits and stop when billing or insufficient-credit errors appear. <br>
+## Use Case:
 
+Developers and agents use this skill to query Gender-API.com through an OOMOL-connected account for gender prediction by name or email, country-of-origin and ethnicity metadata lookup, and account usage statistics.
 
-## Reference(s): <br>
-- [Gender-API.com homepage](https://gender-api.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-gender-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses from the connector are JSON objects containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: First-time setup shows pipe-to-shell installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installation path and prefer an official package manager, signed release, or installer with checksum or signature verification before installation.
+
+Risk: Gender-API.com access depends on an OOMOL-connected account and valid service credentials.
+
+Mitigation: Run connector actions only after the user has installed the oo CLI, signed in, and connected Gender-API.com; use setup steps only when an auth or connection error requires them.
+
+## Reference(s):
+
+- [Gender-API.com homepage](https://gender-api.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-gender-api)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are returned as JSON with data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

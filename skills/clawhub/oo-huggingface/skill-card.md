@@ -1,42 +1,59 @@
-## Description: <br>
-Provides agent access to Hugging Face search, repository metadata, dataset previews, user information, inference endpoints, chat completions, and embeddings through an OOMOL-connected oo CLI workflow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to handle Hugging Face requests such as searching, reading data, and running supported Hugging Face actions through OOMOL instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to search and inspect Hugging Face models, datasets, Spaces, files, endpoints, and account metadata. It also supports generation and embedding workflows when the user intends to call Hugging Face inference services. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generation and embedding actions can send prompts or input text to external Hugging Face inference services and may affect account usage or billing. <br>
-Mitigation: Confirm the prompt or input text, target model or provider, and possible account or billing impact before running generation or embedding actions. <br>
-Risk: The security summary reports that the skill under-discloses generation actions and treats untagged actions as safe reads even though some can send data to inference services. <br>
-Mitigation: Treat generation and embedding actions as external inference operations, not simple reads, and review payloads before execution. <br>
+## Use Case:
 
+Developers and external users use this skill to search, inspect, and operate Hugging Face models, datasets, Spaces, inference endpoints, embeddings, and chat completions through an OOMOL-connected Hugging Face account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-huggingface) <br>
-- [Hugging Face homepage](https://huggingface.co) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill frontmatter) <br>
+Risk: Broad Hugging Face requests are routed through OOMOL's connector data path.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sending secrets, regulated data, or sensitive prompts unless that connector data path is acceptable for the intended use.
+
+Risk: First-time setup recommends executing remote installer scripts from the shell.
+
+Mitigation: Prefer a verified or package-manager install for the oo CLI, or inspect the installer before execution.
+
+Risk: The security verdict is suspicious because the skill combines a broad third-party connector with remote installer guidance.
+
+Mitigation: Review the skill, connector permissions, and installation path before deployment.
+
+## Reference(s):
+
+- [Hugging Face](https://huggingface.co)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-huggingface)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires the oo CLI, OOMOL sign-in, and an OOMOL-connected Hugging Face account; connector responses include data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

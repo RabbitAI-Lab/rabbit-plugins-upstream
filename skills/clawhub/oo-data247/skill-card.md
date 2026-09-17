@@ -1,44 +1,61 @@
-## Description: <br>
-Data247 lets agents perform Data247 lookup and account actions through an OOMOL-connected oo CLI workflow without handling raw API tokens. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Data247 enables agents to run Data247 phone intelligence, account balance, and name-based gender inference actions through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to run Data247 phone intelligence, Do-Not-Call, account balance, and first-name gender inference actions through their connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Phone numbers and names used with this skill may be sensitive data sent through the OOMOL oo connector for Data247 lookups. <br>
-Mitigation: Confirm the user intends to use OOMOL as an intermediary, treat lookup inputs as sensitive, and run actions only through the connected account. <br>
-Risk: First-time setup can involve installing the oo CLI or opening account connection and billing flows. <br>
-Mitigation: Review the oo CLI installer and OOMOL connection flow before first use, and run setup steps only after a matching command failure. <br>
-Risk: Using an outdated or assumed action payload can produce incorrect requests. <br>
-Mitigation: Inspect the live connector schema for the selected Data247 action before constructing the JSON payload. <br>
+## Use Case:
 
+External users and developers can use this skill to query Data247 for phone verification, DNC checks, carrier type detection, account balance checks, and probable gender inference without handling raw Data247 API credentials directly.
 
-## Reference(s): <br>
-- [ClawHub Data247 Skill](https://clawhub.ai/oomol/skills/oo-data247) <br>
-- [Data247 Homepage](https://www.data247.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, json] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: evidence release and frontmatter metadata) <br>
+Risk: The setup instructions include remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run the installer automatically; install the CLI from an official, versioned source after reviewing integrity details.
+
+Risk: Data247 requests are routed through OOMOL as an intermediary with server-side credentials.
+
+Mitigation: Use the skill only when the user is comfortable with OOMOL brokering Data247 queries and has deliberately signed in and connected Data247.
+
+Risk: Connector payloads may be malformed or target an unintended Data247 action.
+
+Mitigation: Fetch the live action schema with oo connector schema before constructing payloads, and confirm exact payloads before any write or destructive action if such actions are added later.
+
+## Reference(s):
+
+- [Data247 homepage](https://www.data247.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-data247)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects containing data and metadata when actions are run.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,56 @@
-## Description: <br>
-Metabase (metabase.com). Use this skill for ANY Metabase request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Metabase (metabase.com). Use this skill for ANY Metabase request — reading, creating, and updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to search and read Metabase cards, collections, dashboards, databases, and current-user details through their connected OOMOL Metabase account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Metabase content visible to the connected OOMOL account. <br>
-Mitigation: Install and use it only with an account whose Metabase access is appropriate for the agent's task. <br>
-Risk: A future version could add write or destructive actions. <br>
-Mitigation: Review future releases before installation, especially if new actions are tagged as write or destructive. <br>
+## Use Case:
 
+Developers, analysts, and operators use this skill to let an agent inspect, query, search, create, and update Metabase content through an OOMOL-connected account. It is suited for managing databases, collections, dashboards, cards, questions, metrics, MBQL queries, and native SQL where the connected Metabase instance permits those actions.
 
-## Reference(s): <br>
-- [ClawHub Metabase skill page](https://clawhub.ai/oomol/skills/oo-metabase) <br>
-- [Metabase homepage](https://www.metabase.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution and returns connector responses as JSON when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Remote installer commands in setup instructions could execute unverified code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review official OOMOL installation documentation first, prefer a pinned or package-manager installation when available, and run the remote installer only when the oo CLI is actually missing.
+
+Risk: Write-capable Metabase actions can create or update collections, dashboards, questions, metrics, and related content.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running actions tagged as write-capable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-metabase)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Metabase homepage](https://www.metabase.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill directs the agent to inspect live connector schemas before constructing JSON payloads and to handle connector responses containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

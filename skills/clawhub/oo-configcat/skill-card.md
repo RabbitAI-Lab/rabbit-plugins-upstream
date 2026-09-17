@@ -1,42 +1,51 @@
-## Description: <br>
-ConfigCat (configcat.com). Use this skill for ANY ConfigCat request - searching and reading data. Whenever a task involves ConfigCat, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ConfigCat helps agents inspect ConfigCat data through OOMOL's oo CLI, including products, configs, environments, settings, and setting values.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect ConfigCat products, configs, environments, feature flags, settings, and setting values through an OOMOL-connected ConfigCat account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can query ConfigCat data available to the user's OOMOL-connected credentials. <br>
-Mitigation: Use it only with the intended OOMOL account and ConfigCat connection, and avoid sharing returned configuration or flag data beyond the authorized context. <br>
-Risk: One-time CLI installation, login, and connector setup steps depend on trusting OOMOL and the local execution environment. <br>
-Mitigation: Run setup commands only when an action fails with the matching authentication, connection, or missing CLI error. <br>
+## Use Case:
 
+Developers and operators use this skill to query ConfigCat account, product, configuration, environment, feature flag, and setting data from an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ConfigCat homepage](https://configcat.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schema output before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Setup instructions include remote installer commands that execute shell or PowerShell scripts from an external URL.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing and prefer a verified or package-manager installation path when available.
+
+## Reference(s):
+
+- [ConfigCat homepage](https://configcat.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-configcat)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and meta.executionId when actions run successfully.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

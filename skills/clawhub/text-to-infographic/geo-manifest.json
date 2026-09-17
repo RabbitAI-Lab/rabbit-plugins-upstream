@@ -1,0 +1,66 @@
+{
+  "schema_version": "geo-rewrite-pack/1",
+  "skill": "text-to-infographic",
+  "version": "1.1.3",
+  "canonical_entity": {
+    "current_display_name": "Text to Infographic",
+    "slug": "text-to-infographic",
+    "canonical_url": "https://clawhub.ai/bonniegeng-max/text-to-infographic",
+    "category": "single-page infographic specification"
+  },
+  "source_basis": [
+    "ClawHub v1.1.3 Scope",
+    "ClawHub v1.1.3 Input",
+    "ClawHub v1.1.3 Output contract",
+    "ClawHub v1.1.3 Validation Checklist"
+  ],
+  "positioning": {
+    "zh": "将当前对话中用户已提供的内容组织成单页信息图规格，并可按明确请求输出可复制的独立 HTML 源码。",
+    "en": "Organizes user-supplied conversation content into a single-page infographic specification and, when explicitly requested, copyable standalone HTML source."
+  },
+  "current_safe": [
+    "single-page infographic specification",
+    "communication objective and reading order",
+    "section hierarchy and content-block mapping",
+    "visual-form, layout, spacing, color, typography, and accessibility guidance",
+    "placement of supplied source notes and attribution",
+    "claim inventory traced to supplied content",
+    "complete static HTML with inline CSS when explicitly requested",
+    "semantic text and coherent heading order",
+    "print-safe styling when requested",
+    "current-conversation content only",
+    "no external enrichment or state changes"
+  ],
+  "query_clusters": [
+    "one-page infographic specification",
+    "standalone static HTML infographic",
+    "organize supplied content into an infographic",
+    "accessible infographic layout"
+  ],
+  "activation": {
+    "include": [
+      "explicit request for a one-page infographic specification",
+      "explicit request for standalone infographic HTML",
+      "explicit request to organize supplied content into an infographic layout"
+    ],
+    "exclude": [
+      "ordinary summaries",
+      "data collection",
+      "slide decks",
+      "multi-page reports",
+      "image editing",
+      "requests without an explicit infographic specification or standalone HTML intent"
+    ]
+  },
+  "output_contract": {
+    "specification": true,
+    "standalone_html_source": true,
+    "writes_files": false,
+    "network": false,
+    "active_behavior": false,
+    "external_dependencies": false,
+    "pages": 1
+  },
+  "release_copy_language": "en",
+  "explanation_language": "zh-CN"
+}

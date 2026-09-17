@@ -1,43 +1,59 @@
-## Description: <br>
-Expands a single Amazon seed keyword into related keywords with search volume, trend, PPC bid, ranking difficulty, and competition metrics across 10 marketplaces. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Expands a single Amazon seed keyword into related keyword ideas with search volume, trend, PPC bid, and ranking-difficulty metrics across 10 supported marketplaces.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, marketplace operators, and developers use this skill to research Amazon keyword expansion, long-tail opportunities, PPC bid signals, and keyword competition from a seed keyword. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Amazon keyword queries and a LinkFox API key are sent to LinkFox endpoints. <br>
-Mitigation: Confirm the target marketplace and keyword before running the API call, and avoid sensitive or confidential search terms. <br>
-Risk: The skill can consume paid LinkFox credits during API use. <br>
-Mitigation: Tell the user when a query may incur credit costs and avoid automatic retries, paging, or parameter changes without user confirmation. <br>
-Risk: Full API responses may be saved in local linkfox output and cache directories. <br>
-Mitigation: Review or clean the generated linkfox output and cache directories after use, especially on shared workspaces. <br>
+## Use Case:
 
+External sellers, ecommerce operators, and agents use this skill to expand one Amazon seed keyword into related keywords and compare search volume, trend, PPC bid, relevance, and ranking difficulty metrics. It is suited to Amazon listing research, long-tail keyword discovery, PPC planning, and marketplace-specific keyword analysis.
 
-## Reference(s): <br>
-- [Jungle Scout keyword expansion API reference](artifact/references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-junglescout-keyword-by-keyword) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown summaries and tables, with full API responses persisted as JSON files when the helper script is used.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call LinkFox endpoints, consume paid credits, and cache full responses locally for reuse.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: Keyword research, account identifiers, and related ecommerce context may be sent to LinkFox services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when that data sharing is acceptable, avoid sensitive customer or account secrets in prompts, and review the request before execution.
+
+Risk: Authentication and onboarding flows may involve API keys, phone/SMS verification, and account setup.
+
+Mitigation: Prefer official self-service account pages, do not expose API keys or verification details in chat or logs, and rotate credentials if they are disclosed.
+
+Risk: Billing, payment, feedback, or endpoint override behavior could create unintended external actions or route data to unexpected services.
+
+Mitigation: Require explicit user consent before payment or feedback actions and verify LINKFOX_* endpoint variables are not overridden before use.
+
+## Reference(s):
+
+- [Jungle Scout Keyword API Reference](references/api.md)
+- [LinkFox Authentication and Billing Onboarding](references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-junglescout-keyword-by-keyword)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown tables and summaries, JSON API responses or saved JSON data files, and inline shell commands when setup is needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full API responses may be written to local linkfox data/cache directories; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

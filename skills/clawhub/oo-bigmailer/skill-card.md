@@ -1,44 +1,56 @@
-## Description: <br>
-BigMailer lets an agent read, create, update, and delete data in a connected BigMailer account through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BigMailer (bigmailer.io). Use this skill for ANY BigMailer request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate a connected BigMailer account from an agent, including brand, contact, and contact-list lookup and management. Write and destructive actions require user confirmation before execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create or modify BigMailer contacts and contact lists. <br>
-Mitigation: Confirm the exact payload and expected account effect with the user before running create, update, or upsert actions. <br>
-Risk: Destructive actions can delete BigMailer contacts or contact lists. <br>
-Mitigation: Confirm the specific target and obtain explicit approval before running delete actions. <br>
-Risk: The skill operates a connected BigMailer account through OOMOL. <br>
-Mitigation: Install and use it only when the user intends the agent to act on that connected BigMailer account. <br>
+## Use Case:
 
+External users and developers use this skill to operate BigMailer through an OOMOL-connected account, including reading, creating, updating, upserting, and deleting brands, contacts, and contact lists.
 
-## Reference(s): <br>
-- [BigMailer homepage](https://www.bigmailer.io/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands inspect live connector schemas and return JSON responses from the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup can run remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installing; prefer manually downloading the oo CLI from a trusted release source, verifying integrity, and approving setup commands yourself.
+
+Risk: Write and destructive BigMailer actions can modify or remove contacts and contact lists.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running write or delete actions.
+
+## Reference(s):
+
+- [BigMailer Homepage](https://www.bigmailer.io/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-bigmailer)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance, text]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands call the oo CLI BigMailer connector and may return JSON responses with execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

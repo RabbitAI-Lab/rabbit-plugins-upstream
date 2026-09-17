@@ -1,45 +1,56 @@
-## Description: <br>
-Mailchimp (mailchimp.com). Use this skill for ANY Mailchimp request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to operate Mailchimp through an OOMOL-connected account for reading, creating, updating, and deleting Mailchimp data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Mailchimp schemas and run Mailchimp audience, member, tag, and merge-field actions through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access subscriber, member, and audience data from the connected Mailchimp account. <br>
-Mitigation: Install it only for agents that should access that Mailchimp account, and review read results as potentially sensitive data. <br>
-Risk: Write and destructive actions can update, archive, tag, upsert, or permanently delete Mailchimp members. <br>
-Mitigation: Require the agent to show the exact target, payload, and expected effect, and require explicit approval before those actions run. <br>
-Risk: Incorrect payloads can affect the wrong Mailchimp object or fail against the current connector contract. <br>
-Mitigation: Inspect the live action schema with `oo connector schema` before constructing each payload. <br>
+## Use Case:
 
+External users and developers use this skill to manage Mailchimp audiences, members, tags, and merge fields via the OOMOL Mailchimp connector.
 
-## Reference(s): <br>
-- [ClawHub Mailchimp skill page](https://clawhub.ai/oomol/oo-mailchimp) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Mailchimp homepage](https://mailchimp.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill frontmatter) <br>
+Risk: The setup guidance uses remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup instructions before installation and prefer a verified or package-manager installation path when available.
+
+Risk: Write and destructive Mailchimp actions can change or permanently delete audience data.
+
+Mitigation: Confirm the exact payload, target audience or member, and expected effect with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-mailchimp)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Mailchimp homepage](https://mailchimp.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

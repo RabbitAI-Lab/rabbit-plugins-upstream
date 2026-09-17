@@ -1,46 +1,57 @@
-## Description: <br>
-MoonClerk (moonclerk.com). Use this skill for MoonClerk requests involving searching and reading customer, payment form, and payment data through the OOMOL-connected oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MoonClerk (moonclerk.com). Use this skill for MoonClerk searching and read-only data retrieval through the OOMOL connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to retrieve and list MoonClerk customers, payment forms, and payments through an OOMOL-connected account. It is intended for read-oriented MoonClerk workflows where the agent should inspect the live action schema before invoking connector commands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected MoonClerk account and can use stored service credentials through the oo CLI. <br>
-Mitigation: Use it only in an authorized maintainer or developer context, and rely on OOMOL connection controls rather than exposing raw MoonClerk credentials to the agent. <br>
-Risk: Connector inputs may vary by action or service version. <br>
-Mitigation: Inspect the live action schema with `oo connector schema` before constructing each payload. <br>
-Risk: Authentication, connection scope, credential expiry, app readiness, or billing failures can stop connector execution. <br>
-Mitigation: Run setup, reconnection, or billing steps only after the matching command failure is observed. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve MoonClerk customers, payment forms, and payments from an OOMOL-connected account after inspecting the live connector schema.
 
-## Reference(s): <br>
-- [MoonClerk homepage](https://moonclerk.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-moonclerk) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON when commands are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server evidence) <br>
+Risk: First-time setup can run remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before installation and prefer a verifiable package manager or downloaded, inspected, signed release.
+
+Risk: Connector use can read MoonClerk customer and payment data from the connected account.
+
+Mitigation: Use an account and connection scope appropriate for the task, and run read actions only when the user has requested that data.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-moonclerk)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [MoonClerk Homepage](https://moonclerk.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are returned as JSON with data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

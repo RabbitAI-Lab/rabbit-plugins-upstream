@@ -1,45 +1,56 @@
-## Description: <br>
-Recruitee helps agents operate Recruitee through an OOMOL-connected account for reading offers, searching candidates, and creating candidates with confirmation for write actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Recruitee skill for reading, creating, and updating Recruitee data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Recruiting teams and agents use this skill to retrieve Recruitee offers, search candidate records, and create candidates through an OOMOL-connected Recruitee account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Read actions may expose Recruitee offer and candidate information in the conversation. <br>
-Mitigation: Use the skill only for intended Recruitee work and avoid requesting unnecessary candidate or offer details. <br>
-Risk: The create_candidate action changes Recruitee state. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running the write action. <br>
-Risk: First-time setup, authentication, connection, or billing steps may be needed before the connector can run. <br>
-Mitigation: Run setup or connection steps only after the matching command failure and follow the documented OOMOL connection guidance. <br>
+## Use Case:
 
+Recruiting teams and agents use this skill to operate Recruitee through a connected OOMOL account. It supports candidate creation, offer lookup, offer listing, and candidate search after inspecting the live connector schema.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-recruitee) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Recruitee homepage](https://recruitee.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read actions can return Recruitee offer and candidate data; write actions require user confirmation of the exact payload and effect.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: The setup fallback recommends running remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installation and prefer a trusted, versioned, checksum-verified oo CLI source.
+
+Risk: The create_candidate action changes Recruitee state.
+
+Mitigation: Inspect the live action schema and confirm the exact JSON payload and expected effect with the user before execution.
+
+## Reference(s):
+
+- [ClawHub Recruitee skill](https://clawhub.ai/oomol/skills/oo-recruitee)
+- [Recruitee homepage](https://recruitee.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, JSON, Configuration guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,56 @@
-## Description: <br>
-Wise (wise.com). Use this skill for searching and reading Wise data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Wise (wise.com). Use this skill for ANY Wise request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to retrieve Wise exchange rates, supported currencies, and available personal or business profiles from a connected Wise account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Commands run against the connected Wise account and can return account profile or currency data. <br>
-Mitigation: Use the intended OOMOL account and Wise connection, keep credentials least-privilege, and avoid sharing sensitive returned data. <br>
-Risk: Future connector actions tagged as write or destructive could change Wise state. <br>
-Mitigation: Confirm the exact action, target, and JSON payload with the user before running actions tagged write or destructive. <br>
-Risk: First-time setup may require installing the oo CLI before the skill can run actions. <br>
-Mitigation: Run setup only after a matching command failure and use the referenced OOMOL install guide. <br>
+## Use Case:
 
+External users and developers use this skill to query Wise account information through an OOMOL-connected account, including exchange rates, supported transfer currencies, and available personal or business profiles.
 
-## Reference(s): <br>
-- [Wise homepage](https://wise.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Fetches the live connector schema before constructing action payloads; documented actions are read-only.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and SKILL.md metadata) <br>
+Risk: First-time setup documents remote installer commands that run directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run those installer commands automatically; install the oo CLI only through a trusted, verified method.
+
+Risk: The skill operates through an account-connected Wise integration.
+
+Mitigation: Confirm account connection steps yourself and review connector payloads before allowing any action that could affect account data.
+
+## Reference(s):
+
+- [Wise homepage](https://wise.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-wise)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, API Calls, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before execution and returns Wise connector results as JSON.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,57 @@
-## Description: <br>
-Provides agent access to Zeplin data through the OOMOL oo CLI for reading user, project, design-token, and screen-version information. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents to search and read Zeplin data through an OOMOL-connected account instead of calling the Zeplin API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers with a connected OOMOL and Zeplin account use this skill to inspect Zeplin user, project, design-token, and screen-version data from an agent workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Setup documentation includes remote installer commands that can execute shell code. <br>
-Mitigation: Do not let an agent run the curl or PowerShell installer automatically; use the official install guide and inspect or verify the installer before execution. <br>
-Risk: Commands operate through a connected OOMOL account and may access Zeplin workspace data. <br>
-Mitigation: Run only the requested read action, inspect the live connector schema before building payloads, and confirm any future account-changing action with the user before execution. <br>
+## Use Case:
 
+Developers, designers, and agents working with Zeplin use this skill to read authenticated Zeplin user, project, color, text style, and screen version data through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-zeplin) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Zeplin homepage](https://zeplin.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo connector schema and run commands; connector responses are JSON objects containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: First-time setup may execute mutable remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review OOMOL's official installation documentation, inspect downloaded installers, and verify versions or hashes before execution.
+
+Risk: Connector commands can access authenticated Zeplin data through an OOMOL-connected account.
+
+Mitigation: Limit use to the specific read actions requested and confirm any future write or destructive actions before running them.
+
+## Reference(s):
+
+- [Zeplin homepage](https://zeplin.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-zeplin)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include authenticated Zeplin data returned by the oo CLI under a data object with execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,56 @@
-## Description: <br>
-Supadata helps agents search YouTube data, retrieve transcripts and metadata, map website links, and scrape web pages through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Supadata helps agents search and read Supadata-backed YouTube and web data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to perform read-oriented Supadata account, YouTube, transcript, link-mapping, and web-scraping tasks without directly handling Supadata API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected Supadata account and sends Supadata requests through OOMOL as an intermediary. <br>
-Mitigation: Install only when comfortable with OOMOL-mediated access, and review the OOMOL account connection and credential scope before use. <br>
-Risk: Connector actions run through shell commands and depend on the live connector schema for valid payloads. <br>
-Mitigation: Inspect the target action schema before building a payload, and approve any future write or destructive connector action only after checking the exact target and effect. <br>
+## Use Case:
 
+Developers and agents use this skill to retrieve Supadata account details, YouTube channel, playlist, video, and transcript data, and web links or Markdown content without handling raw API tokens.
 
-## Reference(s): <br>
-- [ClawHub Supadata Skill](https://clawhub.ai/oomol/oo-supadata) <br>
-- [Supadata Homepage](https://supadata.ai/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects with data and meta.executionId when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill metadata) <br>
+Risk: Setup instructions include remote installer commands that fetch and execute scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only through a trusted, pinned, signed, or otherwise verified release channel, and require review before running curl-to-bash or irm-to-iex setup commands.
+
+Risk: The skill depends on an authenticated OOMOL-connected Supadata account and may fail when credentials, scopes, app connection, or billing are unavailable.
+
+Mitigation: Run setup or connection steps only after an action fails for the matching reason, and verify account connection and billing status before retrying.
+
+## Reference(s):
+
+- [ClawHub Supadata skill page](https://clawhub.ai/oomol/skills/oo-supadata)
+- [Supadata homepage](https://supadata.ai/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supadata connector responses include data and meta.executionId fields when actions run successfully.]
+
+## Skill Version(s):
+
+1.0.4 (source: skill metadata and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

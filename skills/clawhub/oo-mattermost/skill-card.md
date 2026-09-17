@@ -1,44 +1,62 @@
-## Description: <br>
-Mattermost skill for reading Mattermost teams, channels, posts, and user data, and creating posts through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mattermost enables agents to read Mattermost users, teams, channels, and posts, and to create channel posts through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to let an agent retrieve Mattermost team, channel, post, and current-user information, and to draft or create Mattermost posts after confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Mattermost content visible to the connected account. <br>
-Mitigation: Install only for Mattermost accounts whose accessible teams, channels, and posts are appropriate for agent-assisted retrieval. <br>
-Risk: The create_post action can publish content to Mattermost. <br>
-Mitigation: Require exact user confirmation of the target channel and post payload before running create_post. <br>
-Risk: First-time setup may require installing the oo CLI from a remote installer. <br>
-Mitigation: Review the oo CLI installer before running first-time setup. <br>
+## Use Case:
 
+Developers and external users use this skill to let an agent operate Mattermost through an OOMOL-connected account, including retrieving user, team, channel, and post data and creating channel posts after explicit confirmation.
 
-## Reference(s): <br>
-- [Mattermost homepage](https://mattermost.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-mattermost) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash and JSON command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reads Mattermost data and can create posts through the OOMOL mattermost connector.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup documents remote installer commands that pipe downloaded scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified installation path, inspect the installer before execution, and do not allow an agent to run the installer automatically.
+
+Risk: Mattermost write actions can create posts in channels through the connected account.
+
+Mitigation: Confirm the exact channel, payload, and expected effect with the user before running any action tagged as write.
+
+Risk: Actions are brokered through OOMOL and depend on the oo CLI and an OOMOL-connected Mattermost account.
+
+Mitigation: Install only when that trust model and prerequisite are acceptable for the deployment environment.
+
+## Reference(s):
+
+- [ClawHub Mattermost skill page](https://clawhub.ai/oomol/skills/oo-mattermost)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [OOMOL Mattermost connection page](https://console.oomol.com/app-connections?provider=mattermost)
+- [Mattermost homepage](https://mattermost.com)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Mattermost write actions require explicit payload confirmation; oo CLI command responses include data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

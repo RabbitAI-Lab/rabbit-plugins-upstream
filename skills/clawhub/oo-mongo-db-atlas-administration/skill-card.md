@@ -1,42 +1,56 @@
-## Description: <br>
-Helps agents inspect MongoDB Atlas projects and clusters through the OOMOL MongoDB Atlas Administration connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MongoDB Atlas Administration helps agents inspect MongoDB Atlas projects and clusters through the OOMOL connector and oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to discover MongoDB Atlas projects and inspect clusters visible to their connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad MongoDB Atlas prompts may route to this skill even when the user intended a narrower task. <br>
-Mitigation: Use specific requests and review any proposed command before allowing the agent to run it. <br>
-Risk: The skill operates through connected MongoDB Atlas credentials and can read project and cluster information available to that connection. <br>
-Mitigation: Use least-privilege Atlas credentials and review requested project IDs, cluster names, and returned information before relying on the output. <br>
+## Use Case:
 
+Developers, database operators, and support agents use this skill to list MongoDB Atlas projects and clusters and retrieve details for specific projects or clusters through a connected Atlas account.
 
-## Reference(s): <br>
-- [MongoDB Atlas Administration on ClawHub](https://clawhub.ai/oomol/skills/oo-mongo-db-atlas-administration) <br>
-- [MongoDB Atlas homepage](https://www.mongodb.com/products/platform/atlas-database) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include connector schema checks, read-only Atlas query commands, command output interpretation, and setup guidance after authentication or connection failures.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release and skill metadata) <br>
+Risk: Setup instructions include remote installer one-liners that execute immediately.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installation, review the installer source or use a verified, pinned, or manually reviewed oo CLI installation method.
+
+Risk: The skill depends on the connected MongoDB Atlas account and OOMOL connector permissions.
+
+Mitigation: Use a least-privilege Atlas API key and confirm account, project, and cluster targets before sharing or acting on returned data.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-mongo-db-atlas-administration)
+- [MongoDB Atlas](https://www.mongodb.com/products/platform/atlas-database)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are returned as JSON data with execution metadata when actions are run.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

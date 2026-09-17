@@ -1,42 +1,60 @@
-## Description: <br>
-Persona helps agents inspect schemas and run Persona inquiry actions through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Persona through an OOMOL-connected account to read, create, list, and update Persona inquiries via the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Persona inquiries from an agent, including creating inquiries from templates, retrieving and listing inquiries, and updating supported inquiry metadata after reviewing write payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persona workflows can involve sensitive identity and inquiry data. <br>
-Mitigation: Use a narrowly scoped Persona connection, review requested actions, and avoid exposing returned identity data beyond the user's task. <br>
-Risk: Write actions can create or update Persona inquiries. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
+## Use Case:
 
+Developers and operators use this skill to work with Persona inquiries from an OOMOL-connected account, including creating inquiries from templates, retrieving or listing inquiries, and updating supported inquiry fields.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/oomol/skills/oo-persona) <br>
-- [Persona homepage](https://withpersona.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands execute through the oo CLI and may return JSON from Persona connector actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: Remote installer commands can create local execution risk during setup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer official, verifiable installation steps and review install commands before running them.
+
+Risk: Dynamic Persona fields interpolated directly into shell commands can produce malformed or unsafe command payloads.
+
+Mitigation: Use a JSON file payload with @path/to/file.json for dynamic fields.
+
+Risk: Persona create and update actions change account data.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub Persona skill page](https://clawhub.ai/oomol/skills/oo-persona)
+- [Persona homepage](https://withpersona.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON]
+
+**Output Format:** [Markdown with inline bash commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live schema inspection before action payloads and user confirmation before Persona write actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,60 @@
-## Description: <br>
-Enables an agent to operate Simple Analytics through an OOMOL-connected account using the oo CLI for reading analytics data and sending confirmed events. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Simple Analytics helps an agent use an OOMOL-connected account to inspect action schemas, list websites, retrieve stats, export datapoints, and send confirmed events.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect Simple Analytics websites, retrieve aggregated stats, export raw data points, and send confirmed server-side events through their connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to a connected Simple Analytics account through OOMOL-managed credentials. <br>
-Mitigation: Before installing, confirm that the requested Simple Analytics access and OOMOL connection match the intended account and use. <br>
-Risk: The send_event action can create server-side events or pageviews in Simple Analytics. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running write actions. <br>
-Risk: The security evidence reports clean scanner signals but notes limited confirmation of exact permissions or behavior. <br>
-Mitigation: Review the skill description and requested access before deployment, especially in environments with strict analytics or credential controls. <br>
+## Use Case:
 
+External users and developers use this skill to operate Simple Analytics through an OOMOL-connected account, including reading website analytics, exporting raw datapoints, and sending explicitly confirmed event or pageview data.
 
-## Reference(s): <br>
-- [ClawHub Simple Analytics Skill](https://clawhub.ai/oomol/oo-simple-analytics) <br>
-- [Simple Analytics Homepage](https://simpleanalytics.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [OOMOL Simple Analytics Connection](https://console.oomol.com/app-connections?provider=simple_analytics) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI to inspect live connector schemas before building action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: Remote installer commands can execute network-downloaded code during oo CLI setup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing and prefer a verified, versioned, or signed oo CLI installation method.
+
+Risk: Simple Analytics requests and responses route through OOMOL and may include sensitive exports, event payloads, or analytics data.
+
+Mitigation: Confirm the data handling path is acceptable before using exports or sending analytics payloads.
+
+Risk: The send_event action changes Simple Analytics state.
+
+Mitigation: Confirm the exact payload and effect with the user before running write actions.
+
+## Reference(s):
+
+- [Simple Analytics homepage](https://simpleanalytics.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-simple-analytics)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill guides live oo CLI schema inspection and connector execution; connector responses are JSON.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

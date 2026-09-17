@@ -1,45 +1,56 @@
-## Description: <br>
-Trent (trent.ai). Use this skill for any Trent request involving reading, creating, or updating data through the OOMOL `oo` CLI connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Trent through an OOMOL-connected account using the oo CLI, including sending chat messages through Trent.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent operators use this skill to operate Trent through an OOMOL-connected account, especially to send chat messages and return assembled response content with thread metadata. The skill guides schema-first connector execution and setup recovery when authentication, connection, or billing errors occur. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sending a Trent chat message changes external account state. <br>
-Mitigation: Confirm the exact message payload and intended effect with the user before running `send_chat`. <br>
-Risk: Connector execution depends on the user's OOMOL authentication, Trent connection, and billing status. <br>
-Mitigation: Run setup or billing recovery steps only after command errors indicate the matching auth, connection, or credit issue. <br>
-Risk: Raw Trent credentials could be mishandled if the connector flow is bypassed. <br>
-Mitigation: Use the OOMOL `oo` connector flow and do not request, expose, or directly handle raw Trent API tokens. <br>
+## Use Case:
 
+External users and developers use this skill to interact with Trent from an agent session through the OOMOL oo CLI. The skill guides the agent to inspect the live connector schema, construct valid JSON payloads, and run supported Trent actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-trent) <br>
-- [Trent homepage](https://trent.ai/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with bash, PowerShell, and JSON command examples; connector action responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The `send_chat` action returns assembled response content plus thread metadata, with execution metadata under `meta.executionId`.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: Setup instructions include direct execution of remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official, versioned oo CLI installer with checksum or signature verification before installing.
+
+Risk: The send_chat action changes Trent state by sending a message.
+
+Mitigation: Confirm the exact payload and intended effect with the user before running the write action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-trent)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+- [Trent homepage](https://trent.ai/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "RAWG"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["rawg"]
   icon: "https://static.oomol.com/logo/third-party/RAWG%20Video%20Games%20Database.svg"
 ---

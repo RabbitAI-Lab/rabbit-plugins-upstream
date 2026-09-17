@@ -1,42 +1,55 @@
-## Description: <br>
-Use the Baremetrics connector to read, create, and update Baremetrics data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Baremetrics (baremetrics.com). Use this skill for ANY Baremetrics request: reading, creating, and updating data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Baremetrics connector schemas and run Baremetrics actions through an OOMOL-connected account. It supports reading sources, customers, plans, subscriptions, and charges, and it can create, update, or cancel Baremetrics records after user confirmation for state-changing actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: State-changing Baremetrics actions can create, update, or cancel business records. <br>
-Mitigation: Confirm the exact action, target, payload, and expected effect with the user before running any action tagged write or destructive. <br>
-Risk: The skill depends on the external OOMOL oo CLI and OOMOL-connected account credentials. <br>
-Mitigation: Install and use it only when the OOMOL CLI source is trusted and the Baremetrics account connection is intended for agent operation. <br>
+## Use Case:
 
+Developers and operators use this skill to read and manage Baremetrics sources, customers, plans, subscriptions, and charges through an OOMOL-connected account. It supports schema-first command execution and requires confirmation before write or cancellation actions.
 
-## Reference(s): <br>
-- [ClawHub Baremetrics Skill](https://clawhub.ai/oomol/skills/oo-baremetrics) <br>
-- [Baremetrics Homepage](https://baremetrics.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup may encourage running remote installer scripts without reviewing the downloaded file.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official installer path that allows review and verification before execution.
+
+Risk: Write and cancellation actions can change Baremetrics customer, plan, subscription, or cancellation state.
+
+Mitigation: Confirm the exact action, target, payload, and expected effect with the user before running any write or cancellation command.
+
+## Reference(s):
+
+- [Baremetrics homepage](https://baremetrics.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the oo CLI and return JSON responses with data and meta.executionId when actions run successfully.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

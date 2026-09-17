@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Document360"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["document360"]
   icon: "https://static.oomol.com/logo/third-party/document360.png"
 ---

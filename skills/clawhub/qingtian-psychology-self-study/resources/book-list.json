@@ -1,0 +1,262 @@
+{
+  "version": "1.0",
+  "description": "分级阅读书单（精简版，供 Skill 推荐/讲解）。完整版含每本书推荐理由见主规划 HTML。",
+  "levels": {
+    "L1": {
+      "name": "启蒙级 · 点燃兴趣",
+      "difficulty": "★~★★",
+      "books": [
+        {
+          "title": "蛤蟆先生去看心理医生",
+          "author": "罗伯特·戴博德",
+          "priority": "必读",
+          "difficulty": "★",
+          "area": "咨询/治愈",
+          "why": "用童话讲清咨询关系与自我状态，零基础首选"
+        },
+        {
+          "title": "也许你该找个人聊聊",
+          "author": "洛莉·戈特利布",
+          "priority": "必读",
+          "difficulty": "★",
+          "area": "咨询/叙事",
+          "why": "双视角呈现真实咨询，打破对心理学的神秘感"
+        },
+        {
+          "title": "被讨厌的勇气",
+          "author": "岸见一郎/古贺史健",
+          "priority": "推荐",
+          "difficulty": "★★",
+          "area": "人本/阿德勒",
+          "why": "对话体讲阿德勒，易读但思想密度高"
+        },
+        {
+          "title": "心理学与生活",
+          "author": "津巴多",
+          "priority": "推荐",
+          "difficulty": "★★",
+          "area": "通论",
+          "why": "入门教材，但可读性强，可作启蒙跳板"
+        },
+        {
+          "title": "情绪急救",
+          "author": "盖伊·温奇",
+          "priority": "选读",
+          "difficulty": "★",
+          "area": "情绪",
+          "why": "用医学隐喻讲日常情绪创伤，好上手"
+        }
+      ]
+    },
+    "L2": {
+      "name": "入门级 · 搭建框架",
+      "difficulty": "★★~★★★",
+      "books": [
+        {
+          "title": "心理学与生活",
+          "author": "津巴多",
+          "priority": "必读",
+          "difficulty": "★★★",
+          "area": "通论",
+          "why": "体系最完整的入门教材"
+        },
+        {
+          "title": "社会性动物",
+          "author": "埃利奥特·阿伦森",
+          "priority": "必读",
+          "difficulty": "★★",
+          "area": "社会",
+          "why": "社会心理学圣经，故事化叙述"
+        },
+        {
+          "title": "思考，快与慢",
+          "author": "丹尼尔·卡尼曼",
+          "priority": "必读",
+          "difficulty": "★★★",
+          "area": "认知",
+          "why": "系统1/系统2，理解人类决策偏差"
+        },
+        {
+          "title": "自卑与超越",
+          "author": "阿德勒",
+          "priority": "推荐",
+          "difficulty": "★★",
+          "area": "人格",
+          "why": "个体心理学原典，相对好读"
+        },
+        {
+          "title": "改变心理学的40项研究",
+          "author": "罗杰·霍克",
+          "priority": "推荐",
+          "difficulty": "★★",
+          "area": "方法",
+          "why": "用经典实验建立科学心理学直觉"
+        },
+        {
+          "title": "绝非偶然",
+          "author": "阿伦森",
+          "priority": "选读",
+          "difficulty": "★★",
+          "area": "社会",
+          "why": "社会心理学家自传，理解学科脉络"
+        }
+      ]
+    },
+    "L3": {
+      "name": "进阶级 · 深度理解",
+      "difficulty": "★★★~★★★★",
+      "books": [
+        {
+          "title": "认知疗法：基础与应用",
+          "author": "贝克",
+          "priority": "必读",
+          "difficulty": "★★★★",
+          "area": "临床/CBT",
+          "why": "CBT 实操圣经，准咨询师必读"
+        },
+        {
+          "title": "存在主义心理治疗",
+          "author": "欧文·亚隆",
+          "priority": "必读",
+          "difficulty": "★★★★",
+          "area": "存在/人本",
+          "why": "死亡/自由/孤独/意义四大议题"
+        },
+        {
+          "title": "身体从未忘记",
+          "author": "巴塞尔·范德考克",
+          "priority": "必读",
+          "difficulty": "★★★",
+          "area": "创伤/神经",
+          "why": "创伤与身体的关系，连接脑科学"
+        },
+        {
+          "title": "依恋",
+          "author": "鲍尔比",
+          "priority": "推荐",
+          "difficulty": "★★★★",
+          "area": "发展",
+          "why": "依恋理论原典"
+        },
+        {
+          "title": "自我与本我",
+          "author": "弗洛伊德",
+          "priority": "推荐",
+          "difficulty": "★★★",
+          "area": "精神分析",
+          "why": "人格结构经典"
+        },
+        {
+          "title": "正念疗愈力",
+          "author": "卡巴金",
+          "priority": "选读",
+          "difficulty": "★★★",
+          "area": "正念",
+          "why": "MBSR 源头"
+        }
+      ]
+    },
+    "L4": {
+      "name": "学术级 · 专业深耕",
+      "difficulty": "★★★★~★★★★★",
+      "books": [
+        {
+          "title": "这才是心理学",
+          "author": "基思·斯坦诺维奇",
+          "priority": "必读",
+          "difficulty": "★★★",
+          "area": "方法/思维",
+          "why": "方法论思维，有积累后读才震撼"
+        },
+        {
+          "title": "变态心理学",
+          "author": "戴维·巴洛",
+          "priority": "必读",
+          "difficulty": "★★★★★",
+          "area": "变态",
+          "why": "症状维度框架，注意不做诊断"
+        },
+        {
+          "title": "心理治疗个案研究",
+          "author": "多种流派合著",
+          "priority": "推荐",
+          "difficulty": "★★★★",
+          "area": "临床",
+          "why": "多流派看同一案例"
+        },
+        {
+          "title": "实验心理学",
+          "author": "坎特威茨",
+          "priority": "推荐",
+          "difficulty": "★★★★★",
+          "area": "方法",
+          "why": "实验设计系统训练"
+        },
+        {
+          "title": "心理统计学",
+          "author": "阿伦（Aron）",
+          "priority": "选读",
+          "difficulty": "★★★★★",
+          "area": "统计",
+          "why": "考研学术方向必备"
+        }
+      ]
+    },
+    "L5": {
+      "name": "原著级 · 直面大师",
+      "difficulty": "★★~★★★★★",
+      "books": [
+        {
+          "title": "精神分析引论",
+          "author": "弗洛伊德",
+          "priority": "推荐",
+          "difficulty": "★★★",
+          "area": "精神分析",
+          "why": "为普通听众准备的讲座，语言清晰"
+        },
+        {
+          "title": "论人的成长",
+          "author": "罗杰斯",
+          "priority": "推荐",
+          "difficulty": "★★",
+          "area": "人本",
+          "why": "来访者中心疗法原典"
+        },
+        {
+          "title": "活出生命的意义",
+          "author": "弗兰克尔",
+          "priority": "必读",
+          "difficulty": "★★",
+          "area": "存在",
+          "why": "意义疗法，短小深刻"
+        },
+        {
+          "title": "荣格文集",
+          "author": "荣格",
+          "priority": "选读",
+          "difficulty": "★★★★★",
+          "area": "分析心理学",
+          "why": "原型/集体无意识，难但开眼界"
+        }
+      ]
+    }
+  },
+  "routes": {
+    "interest": [
+      "L1",
+      "L2",
+      "L3部分选读"
+    ],
+    "counselor": [
+      "L1",
+      "L2",
+      "L3（重点临床/CBT/存在）",
+      "L5（罗杰斯/弗兰克尔）"
+    ],
+    "academic": [
+      "L2（四教材）",
+      "L4（方法/统计/变态）",
+      "L5按需"
+    ]
+  }
+}

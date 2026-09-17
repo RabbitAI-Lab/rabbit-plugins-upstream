@@ -1,43 +1,57 @@
-## Description: <br>
-MOCO (mocoapp.com). Use this skill for MOCO searching and read-only data retrieval through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MOCO (mocoapp.com). Use this skill for searching and reading MOCO data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to retrieve MOCO profile, company, and contact information through the OOMOL CLI without handling raw MOCO API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: First-time setup may require installing the third-party oo CLI. <br>
-Mitigation: Review the oo CLI installer before running first-time setup, as recommended by the security guidance. <br>
-Risk: A future version could add write or destructive MOCO actions. <br>
-Mitigation: Require explicit user approval before executing any action tagged write or destructive. <br>
+## Use Case:
 
+Developers and external users use this skill to retrieve MOCO companies, contacts, and the current user's profile through the OOMOL oo CLI connector.
 
-## Reference(s): <br>
-- [MOCO homepage](https://www.mocoapp.com) <br>
-- [OOMOL oo CLI repository](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-moco) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution; current documented actions are read-only get and list operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: First-time setup documents remote installer commands that execute downloaded scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the oo CLI installer independently before running it; prefer an official pinned, checksum- or signature-verified installation method.
+
+Risk: The skill can access MOCO account data through an OOMOL-connected account.
+
+Mitigation: Use it only for the documented read-only MOCO actions unless additional actions are clearly documented and approved.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-moco)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [MOCO homepage](https://www.mocoapp.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before running read-oriented MOCO actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

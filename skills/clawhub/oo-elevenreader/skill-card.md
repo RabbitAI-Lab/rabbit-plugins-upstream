@@ -1,43 +1,56 @@
-## Description: <br>
-ElevenReader lets agents use an OOMOL-connected ElevenReader account to search voices, retrieve speech models and account information, and convert text to speech. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ElevenReader (elevenlabs.io). Use this skill for ANY ElevenReader request — searching and reading data. Whenever a task involves ElevenReader, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate ElevenReader through OOMOL from an agent, including voice search, model lookup, profile and subscription checks, and text-to-speech generation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected OOMOL account and may rely on ElevenReader credentials for connector actions. <br>
-Mitigation: Only approve setup or connection steps when the user is comfortable linking ElevenReader credentials to OOMOL, and do not repeat authentication setup unless a command fails for that reason. <br>
-Risk: Text submitted for speech generation may be sent to the connector service and converted audio is uploaded to connector transit storage. <br>
-Mitigation: Send only text that is appropriate for the connected service and review the payload before running text-to-speech actions. <br>
+## Use Case:
 
+Developers and agents use this skill to operate ElevenReader through an OOMOL-connected account, including listing text-to-speech models, searching voices, reading text aloud, and checking user or subscription information.
 
-## Reference(s): <br>
-- [ClawHub ElevenReader skill page](https://clawhub.ai/oomol/oo-elevenreader) <br>
-- [ElevenReader homepage](https://elevenlabs.io/text-reader) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payloads; connector responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; read_text returns generated audio through connector transit storage.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server evidence) <br>
+Risk: Setup instructions include running remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing the oo CLI, prefer an official package manager or downloaded installer with a pinned version and verified checksum or signature.
+
+Risk: ElevenReader access is mediated through OOMOL-connected credentials.
+
+Mitigation: Use the skill only when OOMOL-mediated access is acceptable for the account and data involved.
+
+## Reference(s):
+
+- [ElevenReader homepage](https://elevenlabs.io/text-reader)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-elevenreader)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline bash commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and meta.executionId fields when actions run successfully.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

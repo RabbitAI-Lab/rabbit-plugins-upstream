@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "AgentMail"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.4"
   services: ["agent_mail"]
   icon: "https://static.oomol.com/logo/third-party/agent_mail.svg"
 ---

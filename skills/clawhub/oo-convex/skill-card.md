@@ -1,45 +1,56 @@
-## Description: <br>
-Convex helps agents manage Convex projects, deployments, keys, domains, and functions through the OOMOL convex connector and oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Convex through an OOMOL-connected account using the oo CLI to inspect schemas and run Convex project, deployment, query, mutation, action, domain, and deploy-key operations.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect and administer Convex cloud resources, execute Convex functions, and manage projects, deployments, deploy keys, custom domains, regions, and deployment classes through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, or delete Convex projects, deployments, deploy keys, and custom domains, and can run Convex functions, actions, and mutations. <br>
-Mitigation: Require explicit user approval for write and destructive operations, and inspect the live action schema before constructing payloads. <br>
-Risk: The skill requires trusting OOMOL with Convex access and relies on the oo CLI for authenticated operations. <br>
-Mitigation: Use it only with trusted OOMOL-connected accounts, verify CLI installation paths, and avoid automatic pipe-to-shell installation. <br>
-Risk: Security evidence says some mutation or execution actions may be understated by the skill's safety labels. <br>
-Mitigation: Treat run_function, run_mutation, run_action, deploy-key operations, and deletion actions as sensitive even when labels are absent or incomplete. <br>
+## Use Case:
 
+Developers and engineers use this skill to manage Convex projects and deployments, inspect live action schemas, and run Convex queries, mutations, actions, functions, and batch operations through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Convex Skill](https://clawhub.ai/oomol/oo-convex) <br>
-- [Convex Homepage](https://www.convex.dev) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL Convex Connection](https://console.oomol.com/app-connections?provider=convex) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash and JSON command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands may produce JSON responses from the oo CLI; state-changing actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence release and skill frontmatter) <br>
+Risk: Fallback setup instructions execute remote installer scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source first and prefer a verified, version-pinned, or package-manager installation method when available.
+
+Risk: The skill can perform high-impact Convex mutations and deletions.
+
+Mitigation: Require explicit user confirmation for every write or destructive action, and verify the live schema, exact target, and payload before execution.
+
+## Reference(s):
+
+- [Convex homepage](https://www.convex.dev)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-convex)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return JSON data from oo CLI Convex connector actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Google Tasks"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["googletasks"]
   icon: "https://static.oomol.com/logo/third-party/Google%20Tasks.svg"
 ---

@@ -1,45 +1,56 @@
-## Description: <br>
-GenderAPI.io helps an agent use OOMOL's GenderAPI.io connector to infer likely gender from a first name, email address, username, or nickname. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for GenderAPI.io lookup requests, including searching and reading gender inference data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent operators use this skill to run read-only GenderAPI.io lookups through an OOMOL-connected account. It is intended for tasks that need likely gender inference from names, email addresses, usernames, or nicknames. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected GenderAPI.io API key through OOMOL. <br>
-Mitigation: Confirm the user trusts OOMOL as the connector provider before installing or using the skill. <br>
-Risk: Connector actions may change over time even though the current skill lists only read actions. <br>
-Mitigation: Inspect the live connector schema before building payloads and get separate approval for any future write or destructive action. <br>
-Risk: Gender inference can produce sensitive or inaccurate classifications. <br>
-Mitigation: Use results as probabilistic signals, avoid treating them as identity facts, and apply appropriate review for privacy-sensitive workflows. <br>
+## Use Case:
 
+Developers and external users use this skill to run GenderAPI.io lookup actions for likely gender inference from an email address, first name, or username without handling raw API credentials directly.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-genderapi-io) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [GenderAPI.io homepage](https://www.genderapi.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, JSON, configuration guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill directs the agent to inspect live connector schemas before execution and to use OOMOL-managed credentials rather than handling raw GenderAPI.io tokens.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: The first-time setup guidance includes remote installer commands that execute directly in a local shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI from a trusted, versioned source and verify checksums or signatures before executing installer content.
+
+Risk: Gender inference output may be probabilistic or incomplete because the skill queries GenderAPI.io lookup actions.
+
+Mitigation: Treat returned gender inference data as service-provided lookup results and review it before using it in downstream decisions.
+
+## Reference(s):
+
+- [GenderAPI.io homepage](https://www.genderapi.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-genderapi-io)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses include GenderAPI.io data and execution metadata when actions are run through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

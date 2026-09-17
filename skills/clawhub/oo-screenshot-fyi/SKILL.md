@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "screenshot.fyi"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["screenshot_fyi"]
   icon: "https://static.oomol.com/logo/third-party/Screenshot.fyi.svg"
 ---

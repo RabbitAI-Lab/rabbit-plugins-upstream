@@ -1,45 +1,56 @@
-## Description: <br>
-Gleap helps agents read, create, update, and delete Gleap tickets and contact sessions through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gleap (gleap.io) skill for reading, creating, updating, and deleting Gleap data through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Gleap support tickets and contact sessions from an agent using the OOMOL oo CLI connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change Gleap tickets or contact sessions. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running actions tagged as write. <br>
-Risk: The delete ticket action removes a Gleap ticket by ID. <br>
-Mitigation: Require explicit user approval for the exact ticket ID before running the destructive action. <br>
-Risk: Connector actions depend on the connected OOMOL account and Gleap API key context. <br>
-Mitigation: Use get_current_user or the live connector schema when needed to validate context before state-changing work. <br>
+## Use Case:
 
+External developers and support operators use this skill to inspect Gleap action schemas and manage contacts, tickets, and the current Gleap user through an OOMOL-connected Gleap account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-gleap) <br>
-- [Gleap Homepage](https://www.gleap.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before building action payloads and returns connector responses as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill frontmatter) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Inspect official installation documentation, prefer signed or checksum-verified releases, and do not allow an agent to run curl|bash or irm|iex installer commands automatically.
+
+Risk: Write and destructive Gleap actions can change or delete contacts and tickets.
+
+Mitigation: Fetch the live action schema first, confirm the exact payload and target with the user, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [ClawHub Gleap skill page](https://clawhub.ai/oomol/skills/oo-gleap)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Gleap homepage](https://www.gleap.io)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,56 @@
-## Description: <br>
-Upsales (upsales.com). Use this skill for ANY Upsales request - reading, creating, updating, and deleting data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Upsales enables agents to read, create, update, and delete Upsales companies, contacts, and users through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and business users use this skill to read, create, update, and delete Upsales companies, contacts, and users through the oo CLI without handling raw Upsales API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, and delete Upsales records through the connected account. <br>
-Mitigation: Confirm the exact payload, target record, and intended effect with the user before running write or destructive actions. <br>
-Risk: The connected Upsales account may have broader permissions than the user intends for an agent workflow. <br>
-Mitigation: Use an Upsales account with appropriate permissions and review the oo CLI installer before first-time setup. <br>
+## Use Case:
 
+Employees and external users with connected Upsales access can use this skill to manage CRM records, including companies, contacts, and users. It supports read operations directly and requires user confirmation before write or destructive actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-upsales) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Upsales homepage](https://www.upsales.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo connector schema checks before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and artifact metadata) <br>
+Risk: First-time setup includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before enabling the skill and prefer a version-pinned, verifiable oo CLI installation source.
+
+Risk: The skill can create, update, and delete Upsales CRM records.
+
+Mitigation: Require explicit user confirmation of the target, payload, and intended effect before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Upsales skill page](https://clawhub.ai/oomol/skills/oo-upsales)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Upsales homepage](https://www.upsales.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live action schemas before constructing Upsales connector payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

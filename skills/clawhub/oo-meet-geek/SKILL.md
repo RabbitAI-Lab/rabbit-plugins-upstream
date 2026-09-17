@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "MeetGeek"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["meet_geek"]
   icon: "https://static.oomol.com/logo/third-party/meet_geek.svg"
 ---

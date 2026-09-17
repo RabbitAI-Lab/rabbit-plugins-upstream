@@ -1,45 +1,60 @@
-## Description: <br>
-Benzinga helps agents search and read Benzinga market data through OOMOL's oo CLI connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Benzinga (benzinga.com). Use this skill for Benzinga requests involving searching and reading data through the OOMOL Benzinga connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and analysts use this skill to query Benzinga market data, analyst ratings, earnings events, news channels, and related read-only data through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Benzinga account or API key through OOMOL. <br>
-Mitigation: Install and use it only when the user is comfortable with OOMOL's oo CLI and OOMOL-managed Benzinga credentials. <br>
-Risk: First-time setup commands install or authenticate the oo CLI. <br>
-Mitigation: Review the oo CLI installer before running setup, and run authentication or connection steps only after an auth or connection failure. <br>
-Risk: Future connector versions could add write or destructive actions. <br>
-Mitigation: Keep using the skill for the listed read-only Benzinga actions unless a future version clearly adds write actions and the user confirms the exact payload and effect. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Benzinga market data through an OOMOL-connected account, including analyst ratings, earnings calendar entries, consensus ratings, price targets, and news channel lists.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-benzinga) <br>
-- [Benzinga homepage](https://www.benzinga.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects that include data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: Setup instructions include remote installer commands that can execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from reviewed official instructions, verify the installer source, and avoid running pasted installer commands blindly.
+
+Risk: The skill relies on OOMOL as the broker for Benzinga access.
+
+Mitigation: Use the skill only when comfortable with OOMOL-mediated credential handling and connect Benzinga intentionally through the OOMOL account.
+
+Risk: Live connector schemas and credentials may be unavailable, expired, or missing required scopes.
+
+Mitigation: Inspect the action schema before each payload and perform login or connection repair only after an auth or connection error.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-benzinga)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Benzinga Homepage](https://www.benzinga.com/)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill instructs the agent to inspect live connector schemas before execution and to return connector results from the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,12 +1,21 @@
 # npm Package
 
-Package name: `agent-loop-engineering`
-Version: `0.4.4`
+Package name: `taskforce-loop-engineering`
+Version: `0.9.0`
 
 Install from npm:
 
 ```bash
-npm install -g agent-loop-engineering
+npm install -g taskforce-loop-engineering
+```
+
+Hermes Agent integration commands:
+
+```bash
+loop-engineering-hermes-install --root /path/to/hermes/workspace --queue agent-tasks
+loop-engineering-hermes-install --root /path/to/hermes/workspace --queue agent-tasks --confirm-install
+loop-engineering-hermes-doctor --root /path/to/hermes/workspace --queue agent-tasks
+loop-engineering-hermes-smoke --root /path/to/hermes/workspace --queue agent-tasks
 ```
 
 Installed commands:
@@ -114,4 +123,4 @@ default exported patch, passing patch verification, and an existing review
 bundle.
 
 The package contains `bin/`, `lib/`, `scripts/`, `templates/`, and
-`skills/loop-engineering/`.
+`skills/taskforce-loop-engineering/`.

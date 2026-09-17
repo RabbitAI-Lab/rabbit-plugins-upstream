@@ -1,45 +1,57 @@
-## Description: <br>
-Formcarry (formcarry.com). Use this skill for ANY Formcarry request - reading, creating, updating, and deleting data. Whenever a task involves Formcarry, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Formcarry (formcarry.com). Use this skill for Formcarry requests that read, create, update, or delete Formcarry data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Formcarry forms and submissions through an OOMOL-connected account. It supports creating and deleting forms, listing submissions, and inspecting live action schemas before running connector actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected account and managed credentials to run connector actions. <br>
-Mitigation: Connect the account only when the user is comfortable with connector-mediated requests and related account metadata passing through the service. <br>
-Risk: The skill includes write and destructive actions for creating and deleting Formcarry forms. <br>
-Mitigation: Confirm the exact action, target, payload, and intended effect with the user before running write actions, and require explicit approval before deleting a form. <br>
-Risk: Connector action schemas can change over time. <br>
-Mitigation: Inspect the live action schema before constructing each payload. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Formcarry forms and submissions through the `oo` CLI, including schema inspection, form creation, submission listing, and confirmed deletion of forms.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-formcarry) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Formcarry homepage](https://formcarry.com) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses may include JSON data and an execution identifier.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: First-time setup includes remote installer commands that pipe downloaded content directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installer commands before use and prefer a verified, versioned, signed, or checksum-validated oo CLI installation source.
+
+Risk: Form creation and deletion can change or remove Formcarry resources.
+
+Mitigation: Inspect the live action schema, check payloads carefully, and require explicit user confirmation before create or delete actions.
+
+## Reference(s):
+
+- [Formcarry homepage](https://formcarry.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-formcarry)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the oo CLI and return JSON responses from connector actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

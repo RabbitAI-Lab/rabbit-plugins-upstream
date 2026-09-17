@@ -1,45 +1,59 @@
-## Description: <br>
-Paystack connector skill that guides an agent to inspect live schemas and run OOMOL oo CLI actions for Paystack customer and transaction workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paystack helps agents operate Paystack through an OOMOL-connected account for customer and transaction read, create, update, initialize, and verify workflows.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent work with Paystack customers and transactions through an OOMOL-connected account. It supports listing and fetching records, creating and updating customers, initializing transactions, and verifying transactions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate a connected Paystack account through OOMOL and may touch sensitive payment-account workflows. <br>
-Mitigation: Install only for users who are comfortable granting agent access to the connected Paystack account, and confirm the exact account context before running actions. <br>
-Risk: Customer changes and transaction initialization can have business or payment effects. <br>
-Mitigation: Confirm exact payloads and expected effects with the user before customer writes or transaction initialization. <br>
-Risk: The skill relies on live connector schemas and connected credentials. <br>
-Mitigation: Run oo connector schema for the selected action before constructing payloads, and stop for user setup only when auth, connection, scope, credential, app readiness, or billing errors occur. <br>
+## Use Case:
 
+Developers and operators use this skill to let an agent inspect Paystack action schemas and run customer or transaction workflows through the oo CLI with server-side credential injection.
 
-## Reference(s): <br>
-- [ClawHub Paystack skill page](https://clawhub.ai/oomol/oo-paystack) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Paystack homepage](https://paystack.com) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo connector schema before action execution and returns connector data with an execution ID when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md metadata) <br>
+Risk: The skill can access Paystack customer and transaction data through an OOMOL-connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat read results as sensitive and use the skill only when routing Paystack operations through OOMOL is acceptable.
+
+Risk: Customer creation, customer update, and transaction initialization can change Paystack state.
+
+Mitigation: Require explicit user confirmation of the exact payload and expected effect before running write actions.
+
+Risk: The setup guidance includes remote installer commands for the oo CLI.
+
+Mitigation: Prefer a verified, pinned installation path and avoid running pipe-to-shell installers blindly.
+
+## Reference(s):
+
+- [ClawHub Paystack Skill](https://clawhub.ai/oomol/skills/oo-paystack)
+- [Paystack Homepage](https://paystack.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live action schema inspection before constructing payloads; customer creation, customer update, and transaction initialization require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

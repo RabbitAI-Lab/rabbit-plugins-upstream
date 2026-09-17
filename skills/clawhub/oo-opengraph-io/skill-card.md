@@ -1,44 +1,55 @@
-## Description: <br>
-OpenGraph.io helps agents inspect OpenGraph.io connector schemas and run URL metadata, scrape, raw HTML, and screenshot actions through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OpenGraph.io helps agents extract webpage metadata, retrieve raw HTML, and capture configurable screenshots through an OOMOL-connected OpenGraph.io account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill when they want an agent to retrieve site metadata, fetch page HTML, or capture webpage screenshots through OpenGraph.io without handling raw API tokens directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires connected OpenGraph.io credentials through OOMOL. <br>
-Mitigation: Confirm the publisher and connected OpenGraph.io account before installation or use. <br>
-Risk: URL scrape and screenshot requests may send private or internal page URLs through the OOMOL/OpenGraph.io service. <br>
-Mitigation: Avoid using the skill on sensitive internal or private pages unless that routing is intended and approved. <br>
-Risk: Connector action parameters can affect caching, proxying, rendering, retries, viewport, delay, and element selection. <br>
-Mitigation: Inspect the live connector schema before constructing payloads and review unusual scrape or screenshot options before execution. <br>
+## Use Case:
 
+Developers, operators, and agents use this skill to run OpenGraph.io webpage metadata extraction, raw HTML retrieval, site scraping, and screenshot capture actions through the oo CLI.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-opengraph-io) <br>
-- [OpenGraph.io homepage](https://www.opengraph.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON from the oo CLI when actions are executed with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server metadata and skill frontmatter) <br>
+Risk: Fallback setup guidance may lead an agent to suggest remote installer execution for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install oo from a verified OOMOL source, check signatures or checksums where available, and avoid running setup commands from an elevated shell.
+
+Risk: Connector requests can fail or behave unexpectedly if action schemas, authentication, connection state, or billing state are stale.
+
+Mitigation: Inspect the live action schema before constructing payloads and use setup or billing steps only after a matching command failure.
+
+## Reference(s):
+
+- [ClawHub OpenGraph.io Skill](https://clawhub.ai/oomol/skills/oo-opengraph-io)
+- [OpenGraph.io Homepage](https://www.opengraph.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, JSON, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with bash command examples and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses include action data and an execution identifier when returned by the connector.]
+
+## Skill Version(s):
+
+1.0.3 (source: metadata frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "TikTok Business"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["tiktok_business"]
   icon: "https://static.oomol.com/logo/third-party/tiktok.svg"
 ---

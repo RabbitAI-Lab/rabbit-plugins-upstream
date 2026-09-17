@@ -1,44 +1,69 @@
-## Description: <br>
-This skill helps agents manage Shopee Bundle Deal promotions for authorized stores, including creating, listing, updating, ending, and deleting bundle campaigns and campaign items. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage Shopee store Bundle Deal promotions through LinkFox by using Shopee Open API Bundle Deal operations for creating, listing, updating, ending, and deleting bundle deals and bundle deal items.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Shopee store operators and commerce automation agents use this skill to manage authorized store Bundle Deal campaigns and participating items through the documented Shopee Bundle Deal API flow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, end, and delete live Shopee Bundle Deal promotions. <br>
-Mitigation: Confirm each write action with the user before execution and use only Shopee accounts where promotion-management authority is appropriate. <br>
-Risk: Full business API responses may be persisted in the working directory. <br>
-Mitigation: Run the skill in a private workspace, avoid shared repositories for sensitive shop data, and review or remove saved response files after use. <br>
-Risk: Authentication, dependency installation, and point-cost behavior may require user approval. <br>
-Mitigation: Have the user approve API key setup, dependency or onboarding skill installation, and any repeated or exploratory calls that may consume points. <br>
+## Use Case:
 
+External sellers, developers, and operations teams can use this skill to inspect and manage authorized Shopee store Bundle Deal campaigns. It supports common promotion workflows such as creating a bundle deal, adding or updating items, listing campaign status, ending a campaign early, and deleting bundle deal records.
 
-## Reference(s): <br>
-- [Bundle Deal API Reference](references/api.md) <br>
-- [Shopee Open Platform Bundle Deal API](https://open.shopee.com/documents/v2/v2.bundle_deal.add_bundle_deal?module=110&type=1) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-bundle-deal) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, JSON] <br>
-**Output Format:** [Markdown-style guidance with shell command examples and JSON API responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are saved under the current working directory; larger responses may be summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: ClawHub release evidence) <br>
+Risk: The skill can guide actions that create, update, end, or delete live Shopee Bundle Deal promotions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review all promotion parameters and destructive actions with the account owner before running create, update, end, or delete commands.
+
+Risk: The skill may guide LinkFox account setup, SMS-code login, API-key configuration, and paid plan purchase flows.
+
+Mitigation: Prefer pre-provisioned API keys, avoid agent-mediated SMS login when possible, and require explicit user confirmation before payment or plan-selection steps.
+
+Risk: Credential-bearing network calls are made through LinkFox endpoints and can be redirected by endpoint override environment variables.
+
+Mitigation: Use trusted network environments and do not set endpoint override variables unless the destination is controlled and trusted.
+
+Risk: Full API responses may be written to persistent local JSON files.
+
+Mitigation: Run the skill in an appropriate workspace, restrict access to saved response files, and avoid including unnecessary secrets in request payloads.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-bundle-deal)
+- [Shopee Bundle Deal API reference](https://open.shopee.com/documents/v2/v2.bundle_deal.add_bundle_deal?module=110&type=1)
+- [Bundle Deal API and field reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+- [Add bundle deal](references/apis/add-bundle-deal.md)
+- [Get bundle deal list](references/apis/get-bundle-deal-list.md)
+- [Update bundle deal](references/apis/update-bundle-deal.md)
+- [End bundle deal](references/apis/end-bundle-deal.md)
+- [Delete bundle deal](references/apis/delete-bundle-deal.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON response summaries; scripts may also save full API responses as JSON files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include live Shopee promotion data, LinkFox account setup guidance, and saved local JSON output paths.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

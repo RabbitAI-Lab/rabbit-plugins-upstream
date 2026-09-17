@@ -1,43 +1,57 @@
-## Description: <br>
-Sender lets an agent read and manage Sender campaigns, subscribers, groups, custom fields, and workflows through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Sender (sender.net). Use this skill for Sender requests that read, create, update, and delete data through the OOMOL-connected Sender connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use Sender to inspect live connector schemas and then read or modify Sender account data such as subscribers, groups, campaigns, fields, and workflows through approved oo CLI actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create or update subscribers, fields, or group memberships in the connected Sender account. <br>
-Mitigation: Require the agent to show the exact payload and expected effect before approving any write action. <br>
-Risk: The destructive group removal action can remove subscribers from Sender groups. <br>
-Mitigation: Confirm the target subscribers, selection criteria, and group before running destructive actions. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Sender marketing resources from an agent through the OOMOL `oo` CLI. It supports reading campaigns, groups, subscribers, fields, and workflows, and it can create or update subscriber-related resources when the user confirms the intended change.
 
-## Reference(s): <br>
-- [Sender homepage](https://www.sender.net) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-sender) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands use the oo CLI; connector responses are JSON with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The setup instructions include remote installer commands that could execute changing network content on a user machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path before installing, prefer verified official releases or a trusted package manager, and do not let an agent run the curl-to-bash or PowerShell iex commands automatically.
+
+Risk: Write actions can change Sender state, and the destructive group-removal action can remove subscribers from groups.
+
+Mitigation: Require confirmation of the exact payload and expected effect before write actions, and require explicit approval for destructive operations.
+
+## Reference(s):
+
+- [Sender homepage](https://www.sender.net)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-sender)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Fetches live action schemas before constructing payloads and returns connector responses as JSON.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

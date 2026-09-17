@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "channel": "differentiation",
+  "workflow": "page_compare",
+  "focus": "differentiation",
+  "outputTemplate": "ops_page_compare",
+  "requiredCapabilities": [
+    "product-detail",
+    "reviews",
+    "competitor-product-detail",
+    "competitor-reviews"
+  ],
+  "allowedCommands": [
+    "setup",
+    "configure",
+    "check",
+    "version",
+    "collect",
+    "status",
+    "operations"
+  ]
+}

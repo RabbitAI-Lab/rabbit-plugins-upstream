@@ -1,45 +1,61 @@
-## Description: <br>
-Heyy lets an agent read, create, and update Heyy data through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Heyy lets agents read, create, and update Heyy data through the OOMOL-connected oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate a connected Heyy account from an agent, including contact, label, channel, and custom attribute workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change Heyy contacts, labels, and contact attributes. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: The skill may require installing the oo CLI from a remote installer when the CLI is missing. <br>
-Mitigation: Use the remote CLI installer only from a trusted environment and only when setup is required. <br>
-Risk: The integration operates a connected Heyy account through OOMOL server-side credentials. <br>
-Mitigation: Install only when the user trusts OOMOL and wants agent access to the connected Heyy account. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Heyy contacts, labels, channels, and attributes from an OOMOL-connected account. It supports read actions and confirmed write actions for creating or updating Heyy CRM data.
 
-## Reference(s): <br>
-- [Heyy homepage](https://heyy.io) <br>
-- [oo CLI repository](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-heyy) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded shell or PowerShell scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path first, prefer official versioned downloads, check signatures or checksums when available, and avoid direct pipe-to-shell execution.
+
+Risk: Write actions can create or update Heyy contacts, labels, and attributes.
+
+Mitigation: Confirm the exact payload and intended effect with the user before running any action tagged write.
+
+Risk: Connector request shapes may change over time.
+
+Mitigation: Inspect the live action schema with oo connector schema before constructing each request payload.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-heyy)
+- [Heyy homepage](https://heyy.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [OOMOL Heyy connection settings](https://console.oomol.com/app-connections?provider=heyy)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: evidence.release.version and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

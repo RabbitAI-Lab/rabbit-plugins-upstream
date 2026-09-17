@@ -1,38 +1,56 @@
-## Description: <br>
-SwaggerHub access for searching and reading APIs, domains, templates, projects, and registry specifications through the oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SwaggerHub (swagger.io). Use this skill for ANY SwaggerHub request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and API teams use this skill to inspect SwaggerHub resources through an OOMOL-connected account, including API definitions, domains, templates, projects, versions, and registry search results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [SwaggerHub homepage](https://swagger.io/tools/swaggerhub/) <br>
-- [oo CLI repository](https://github.com/oomol-lab/oo-cli) <br>
+Developers and API teams use this skill to search SwaggerHub and retrieve API, domain, template, project, and version information through an OOMOL-connected SwaggerHub account.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with shell commands and JSON or YAML connector results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an OOMOL-connected SwaggerHub account. Inspect live action schemas before building payloads, and review any action before approving changes that create, update, or delete API assets.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md metadata) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: The skill relies on the oo CLI and an OOMOL-connected SwaggerHub account, which can carry local and account-level authority beyond simple read requests.
+
+Mitigation: Install or update the CLI only from a verifiable official package or reviewed installer, and use the skill only when you trust OOMOL and the connected account context.
+
+Risk: Broad command execution through the allowed oo CLI surface could be misused if an agent attempts actions beyond the listed read workflows.
+
+Mitigation: Confirm the agent runs only documented get, list, and search actions unless you explicitly approve a broader command or payload.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-swaggerhub)
+- [SwaggerHub homepage](https://swagger.io/tools/swaggerhub/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [Skill icon](https://static.oomol.com/logo/third-party/Swaggerhub.svg)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return SwaggerHub connector data wrapped in JSON with execution metadata when actions are run.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

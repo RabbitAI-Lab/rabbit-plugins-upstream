@@ -1,44 +1,56 @@
-## Description: <br>
-Use Rocketlane through OOMOL's oo CLI connector to read projects, tasks, and users from a connected Rocketlane account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Rocketlane helps agents search and read Rocketlane projects, tasks, and users through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and customer-facing teams use this skill to retrieve Rocketlane project, task, and user records through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive credentials through an OOMOL-connected Rocketlane account. <br>
-Mitigation: Use an account with appropriate Rocketlane permissions and reconnect only when the connector reports an authentication or scope error. <br>
-Risk: The skill executes oo CLI commands on behalf of the agent. <br>
-Mitigation: Review command payloads before execution and inspect the live connector schema before building JSON input. <br>
-Risk: The security guidance notes that some related workflows can modify accounts, project files, or run review tools with broad local access. <br>
-Mitigation: Approve only the Rocketlane read actions needed for the task and review any command that appears to perform deployment, moderation, package installation, or autoreview work. <br>
+## Use Case:
 
+Developers and operators use this skill to retrieve Rocketlane project, task, and user data without handling raw Rocketlane credentials directly.
 
-## Reference(s): <br>
-- [ClawHub Rocketlane skill page](https://clawhub.ai/oomol/oo-rocketlane) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Rocketlane homepage](https://www.rocketlane.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Rocketlane get and list actions; live action schemas should be inspected before connector payloads are built.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The setup instructions include remote installer commands that execute scripts from OOMOL-controlled URLs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer before use and prefer a verified, pinned, or package-manager installation method where available.
+
+Risk: The OOMOL connection may expose Rocketlane project, task, and user data according to the scopes granted to the connected account.
+
+Mitigation: Confirm the Rocketlane data scopes available to the OOMOL connection before using the skill.
+
+## Reference(s):
+
+- [Rocketlane ClawHub skill page](https://clawhub.ai/oomol/skills/oo-rocketlane)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Rocketlane homepage](https://www.rocketlane.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Runs read-only get and list actions after live schema inspection.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "urlscan.io"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["urlscan"]
   icon: "https://static.oomol.com/logo/third-party/urlscan.png"
 ---

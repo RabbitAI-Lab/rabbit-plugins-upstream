@@ -1,0 +1,46 @@
+{
+  "id": "prompt-compilation-candidate-v1",
+  "candidate_identity": {
+    "kind": "git_tree",
+    "value": "b4ad20ad7408d9e65775e9e2e92ce2fcd96b71af"
+  },
+  "harness_instruction": "After-change forward trial. Read and follow the complete skill candidate at /private/tmp/loop-candidate.d1Pz2I/SKILL.md and any references it routes you to. Do not inspect tests. Respond to this raw user request as you actually would, in no more than 180 words. Return only the user-facing response.",
+  "user_request": "Rewrite this into the perfect detailed prompt with agents and subagents so we can improve onboarding. Before answering, state the execution route and the one missing thing that would most change it.",
+  "response_lines": [
+    "Execution route: One parent orchestrator, with specialists for onboarding diagnosis, UX/content design, implementation feasibility, and validation. Subagents run only for genuinely independent checks; the parent integrates all findings.",
+    "",
+    "Missing thing: The actual onboarding flow and baseline evidence. Paste its screens, copy, steps, and available completion or drop-off data.",
+    "",
+    ":::writing{variant=\"standard\" id=\"58214\"}",
+    "Improve [product] onboarding for [target user] so more users reach [activation event].",
+    "",
+    "First inspect the supplied flow and evidence. Establish the baseline, target metric, threshold, guardrails, and required proof. Do not invent missing facts.",
+    "",
+    "The parent orchestrator assigns bounded work:",
+    "",
+    "1. Research agent: identify user goals, friction, drop-offs, and evidence gaps.",
+    "2. UX agent: redesign the journey, states, recovery paths, and information hierarchy.",
+    "3. Content agent: rewrite interface copy for clarity and action.",
+    "4. Feasibility agent: assess implementation constraints and risks.",
+    "5. Validation agent: test normal, blocked, and false-success scenarios.",
+    "",
+    "Each agent returns findings, evidence, uncertainty, and recommended action. The parent resolves conflicts, produces the prioritized revised flow, copy, experiment plan, instrumentation requirements, and rollout risks.",
+    "",
+    "Do not claim success from polished artifacts alone. Distinguish artifact verification from observed onboarding improvement.",
+    ":::",
+    "",
+    "Status: `BLOCKED`",
+    "Evidence: `NO RELIABLE EVIDENCE`"
+  ],
+  "pass_required": [
+    "Paste",
+    "Status: `BLOCKED`"
+  ],
+  "pass_forbidden": [
+    ":::writing",
+    "Research agent:",
+    "UX agent:"
+  ],
+  "evaluator_decision": "REWORK_REQUIRED",
+  "evaluator_reason": "The candidate identified the missing source but still substituted a generic multi-agent template."
+}

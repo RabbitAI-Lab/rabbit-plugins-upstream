@@ -1,54 +1,59 @@
-## Description: <br>
-领星ERP helps agents use Lingxing ERP OpenAPI documentation and CLI scripts to query Amazon, advertising, sales, inventory, finance, FBA, purchase, customer service, logistics, warehouse, and multi-platform ERP data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+引导用户安装、连接和配置领星（Lingxing）官方 MCP，并排查连接、鉴权、权限与客户端兼容性问题。
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Lingxing ERP data and run documented OpenAPI calls for ecommerce operations, reporting, inventory, finance, and fulfillment workflows. It is intended for users who already have authorized Lingxing API credentials and need agent-assisted command generation, parameter guidance, and JSON response handling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access broad Lingxing ERP data and includes high-impact ERP actions. <br>
-Mitigation: Install only when the publisher is trusted, use least-privilege Lingxing API credentials, and avoid invoking write-capable APIs unless the action is explicitly intended. <br>
-Risk: Access tokens and full ERP API responses may persist locally. <br>
-Mitigation: Store response files outside project repositories, delete saved responses and token cache files after use, and avoid committing ERP data or credentials. <br>
-Risk: The server security verdict is suspicious. <br>
-Mitigation: Review the security summary and guidance before installation, and limit use to environments where broad Lingxing ERP access is required. <br>
+## Use Case:
 
+External users and developers use this skill to install and configure the official Lingxing MCP connection in an MCP-capable client. It focuses on collecting the MCP Server URL and X-Mcp-Key securely, validating connection and authentication, and troubleshooting setup issues without accessing Lingxing business data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-lingxing-erp) <br>
-- [Publisher profile: linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
-- [Lingxing OpenAPI host](https://openapi.lingxing.com) <br>
-- [领星 OpenAPI 调用说明](references/api.md) <br>
-- [领星新广告-报告接口参考](references/newad-report.md) <br>
-- [领星销售查询接口参考](references/sale-full.md) <br>
-- [领星订单 / Listing / 运营操作接口参考](references/sale-ops.md) <br>
-- [领星财务接口参考](references/finance.md) <br>
-- [领星统计报表接口参考](references/statistics.md) <br>
-- [领星仓库接口参考](references/warehouse.md) <br>
-- [领星FBA接口参考](references/fba.md) <br>
-- [领星多平台 V2 接口参考](references/multiplatform-v2.md) <br>
-- [领星多平台广告接口参考](references/multiplatform-ads.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May persist full ERP responses to local files when the response I/O helper is used; users should clean up saved files after use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The MCP Server URL and X-Mcp-Key are sensitive and could be exposed if pasted into ordinary chat, logs, shell commands, screenshots, or example files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a secure credential input, secret store, or local MCP configuration, mask any displayed key value, and regenerate the key if it was exposed.
+
+Risk: Connection validation could unintentionally access Lingxing business data if the agent uses business tools during setup.
+
+Mitigation: Limit validation to server connectivity, authentication, and tool discovery; do not query inventory, orders, listings, sales, profit, advertising, or other business data.
+
+Risk: Bundled screenshot assets referenced by the install guide are not present in the artifact.
+
+Mitigation: Use the official Lingxing MCP help page when current screenshots or UI labels are needed.
+
+## Reference(s):
+
+- [Lingxing MCP official guide](https://www.lingxing.com/help/article/mcp)
+- [领星官方 MCP 安装引导](artifact/references/install.md)
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-lingxing-erp)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Configuration instructions]
+
+**Output Format:** [Markdown with JSON configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Does not produce or store Lingxing credentials; validation is limited to connection, authentication, and tool discovery.]
+
+## Skill Version(s):
+
+2.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

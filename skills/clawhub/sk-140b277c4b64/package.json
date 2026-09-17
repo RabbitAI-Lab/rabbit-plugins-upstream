@@ -1,0 +1,65 @@
+{
+  "name": "schedule-planner-cxf",
+  "version": "1.0.13",
+  "description": "Travel price queries, local itinerary HTML and optional public platform homepage QR pages. No booking or payment operations.",
+  "main": "scripts/generate-trip-page.js",
+  "bin": {
+    "schedule-planner": "scripts/generate-trip-page.js"
+  },
+  "scripts": {
+    "generate-trip": "node scripts/generate-trip-page.js",
+    "start": "node scripts/generate-trip-page.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "keywords": [
+    "travel",
+    "trip-planning",
+    "itinerary",
+    "flight",
+    "hotel",
+    "train",
+    "qrcode",
+    "travel-planner",
+    "business-trip",
+    "vacation",
+    "tuniu",
+    "amap",
+    "行程规划",
+    "出行管家"
+  ],
+  "author": "cryptocxf",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cryptocxf/Schedule-planner-cxf.git"
+  },
+  "homepage": "https://clawhub.ai/cryptocxf/schedule-planner-cxf",
+  "bugs": {
+    "url": "https://github.com/cryptocxf/schedule-planner-cxf/issues"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "os": [
+    "win32",
+    "darwin",
+    "linux"
+  ],
+  "files": [
+    "scripts/",
+    "references/",
+    "examples/",
+    "tests/",
+    "query_trip.js",
+    "SKILL.md",
+    "README.md",
+    "skill-card.md",
+    "skills.json",
+    "package-lock.json",
+    ".npmrc"
+  ],
+  "dependencies": {
+    "qrcode": "1.5.4",
+    "tuniu-cli": "1.0.7"
+  }
+}

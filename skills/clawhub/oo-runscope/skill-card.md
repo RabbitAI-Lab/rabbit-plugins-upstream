@@ -1,43 +1,56 @@
-## Description: <br>
-Runscope lets an agent inspect and read Runscope API Monitoring account, bucket, test, environment, and result data through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Runscope helps agents inspect live action schemas and retrieve Runscope account, bucket, test, environment, and test-result data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to query Runscope API Monitoring data from an OOMOL-connected Runscope account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Runscope account and monitoring data through an OOMOL-connected Runscope account. <br>
-Mitigation: Install and use it only where the agent is allowed to access that Runscope data, and keep actions scoped to the requested get and list operations. <br>
-Risk: First-time setup may require running a remote oo CLI installer if the oo CLI is not already installed. <br>
-Mitigation: Review the remote installer before running it, or install the oo CLI through an approved internal process. <br>
+## Use Case:
 
+Developers and operators use this skill to query Runscope API Monitoring resources through an OOMOL-connected account without handling raw Runscope tokens directly.
 
-## Reference(s): <br>
-- [ClawHub Runscope skill page](https://clawhub.ai/oomol/skills/oo-runscope) <br>
-- [Runscope API Monitoring](https://www.blazemeter.com/api-monitoring) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and artifact metadata) <br>
+Risk: The first-time setup fallback documents piping a remote installer directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run the installer automatically; install the oo CLI from a verified, versioned source after confirming files, permissions, and account connections.
+
+Risk: Runscope read actions can return account, bucket, test, environment, and result data from the connected account.
+
+Mitigation: Use the live action schema before each request and avoid exposing returned account or monitoring data beyond the user's intended task.
+
+## Reference(s):
+
+- [ClawHub Runscope skill page](https://clawhub.ai/oomol/skills/oo-runscope)
+- [Runscope API Monitoring](https://www.blazemeter.com/api-monitoring)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON connector responses.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses use a data object plus meta.executionId when actions run with --json.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

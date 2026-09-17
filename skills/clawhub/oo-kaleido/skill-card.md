@@ -1,42 +1,56 @@
-## Description: <br>
-Kaleido helps agents search and read Kaleido account data through the OOMOL oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Kaleido (kaleido.io) enables agents to search and read Kaleido data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Kaleido consortia, memberships, environments, nodes, and services from an OOMOL-connected Kaleido account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The oo CLI can access data in the user's connected Kaleido account. <br>
-Mitigation: Install and use the skill only for an intended OOMOL-connected Kaleido account. <br>
-Risk: Future write or destructive connector actions could modify or remove Kaleido resources. <br>
-Mitigation: Review the action target and payload explicitly before approving any write or destructive action. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Kaleido consortia, memberships, environments, nodes, and services from an OOMOL-connected account. It is intended for read-oriented status checks and data lookups through the oo CLI connector.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-kaleido) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Kaleido homepage](https://www.kaleido.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance, API calls] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill instructs agents to inspect the live connector schema before running Kaleido actions and to return JSON responses from the oo CLI when actions are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup instructions include direct execution of internet installer scripts in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path first and prefer an official verifiable installation method for the oo CLI before running installer commands.
+
+Risk: Kaleido access depends on an OOMOL-connected account and valid scoped credentials.
+
+Mitigation: Use the documented authentication and connection recovery steps only after a command fails with an auth, missing-scope, expired-credential, or app-connection error.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-kaleido)
+- [Kaleido Homepage](https://www.kaleido.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance, Configuration instructions]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

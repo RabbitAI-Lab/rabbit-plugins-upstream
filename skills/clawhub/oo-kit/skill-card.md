@@ -1,45 +1,56 @@
-## Description: <br>
-Kit (kit.com) skill for reading, creating, and updating data through the OOMOL Kit connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Kit (kit.com) requests for reading, creating, and updating data through OOMOL's oo CLI instead of direct Kit API calls.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Agents use this skill to operate Kit accounts through OOMOL-connected credentials, including listing forms, tags, and subscribers, reading account details, and creating or updating subscribers after confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create or update Kit subscriber records. <br>
-Mitigation: Confirm the exact write payload and expected effect with the user before running create_subscriber or update_subscriber. <br>
-Risk: The skill requires access to a connected Kit account through OOMOL. <br>
-Mitigation: Install only if the user trusts OOMOL with Kit account access and use the documented connection flow when authentication or connection errors occur. <br>
-Risk: First-time CLI setup includes remote install commands. <br>
-Mitigation: Verify the OOMOL CLI install URL before running setup commands. <br>
+## Use Case:
 
+External users and developers use this skill to operate Kit through OOMOL's connected oo CLI workflows. It supports Kit subscriber, form, landing page, tag, account, and authenticated-user operations, with confirmation expected before write actions.
 
-## Reference(s): <br>
-- [Kit homepage](https://kit.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-kit) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses OOMOL server-side credentials for Kit actions; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and frontmatter) <br>
+Risk: First-time setup includes installer commands that execute remote scripts directly on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing; prefer a verified, pinned, or package-manager installation path when available.
+
+Risk: Write actions can create or update Kit subscriber records.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running create_subscriber or update_subscriber.
+
+## Reference(s):
+
+- [ClawHub Kit Skill](https://clawhub.ai/oomol/skills/oo-kit)
+- [Kit Homepage](https://kit.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live Kit connector schema inspection before payload construction and asks for confirmation before write actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

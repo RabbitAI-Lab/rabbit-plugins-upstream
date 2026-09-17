@@ -1,45 +1,56 @@
-## Description: <br>
-Route4Me helps agents read, create, and delete Route4Me optimization data through an OOMOL-connected Route4Me account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Route4Me helps agents inspect schemas and run Route4Me optimization list, create, and delete actions through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill when they want an agent to operate a connected Route4Me account, including listing optimizations, creating route optimization problems, and deleting selected optimization problems. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate a connected Route4Me account, including actions that create or delete optimization data. <br>
-Mitigation: Review the proposed payload and effect before write actions, and require explicit user approval before destructive actions. <br>
-Risk: First-time setup may run oo CLI installer or authentication commands. <br>
-Mitigation: Run setup commands only when they are intentionally needed to resolve an authentication, connection, or missing-CLI failure. <br>
-Risk: The skill depends on OOMOL-managed Route4Me credentials. <br>
-Mitigation: Install it only when the user trusts OOMOL and wants the agent to access the connected Route4Me account. <br>
+## Use Case:
 
+External users and developers use this skill to manage Route4Me route optimization records from an agent, including reading optimizations, creating optimization problems, and deleting selected optimizations with confirmation.
 
-## Reference(s): <br>
-- [Route4Me homepage](https://route4me.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Route4Me ClawHub listing](https://clawhub.ai/oomol/oo-route4me) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI to inspect action schemas before running Route4Me connector actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill frontmatter) <br>
+Risk: Setup guidance includes remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer installing the oo CLI from a verified package or staged download with checksum or signature validation.
+
+Risk: The skill can create and delete Route4Me optimization problems.
+
+Mitigation: Confirm exact payloads and targets before write or destructive Route4Me actions.
+
+## Reference(s):
+
+- [ClawHub Route4Me skill page](https://clawhub.ai/oomol/skills/oo-route4me)
+- [Route4Me homepage](https://route4me.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May invoke Route4Me connector actions that return JSON data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

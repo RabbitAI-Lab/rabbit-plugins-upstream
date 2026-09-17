@@ -1,42 +1,56 @@
-## Description: <br>
-Aircall helps agents search and read Aircall calls, contacts, numbers, teams, and users through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Aircall (aircall.io) helps agents search and read Aircall data through an OOMOL-connected account instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and support operations teams use this skill to retrieve Aircall records from an OOMOL-connected Aircall account without calling the Aircall API directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Aircall call, contact, number, team, and user data is routed through OOMOL's connected workflow when read requests are made. <br>
-Mitigation: Use only authorized Aircall accounts and install the skill only when the organization accepts that OOMOL connector data path. <br>
-Risk: The current release is described as read-only and does not support write or admin Aircall tasks. <br>
-Mitigation: Do not rely on this skill for write or administrative changes unless a future release explicitly lists and scopes those actions. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Aircall calls, contacts, numbers, teams, and users through an OOMOL-connected Aircall account.
 
-## Reference(s): <br>
-- [ClawHub Aircall Skill](https://clawhub.ai/oomol/skills/oo-aircall) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Aircall](https://aircall.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return Aircall connector JSON containing data and meta.executionId when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and frontmatter) <br>
+Risk: First-time setup includes mutable remote installer commands executed directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified path and independently trust the installer source before running curl-to-bash or irm-to-iex commands.
+
+Risk: The skill queries Aircall data through a connected OOMOL account.
+
+Mitigation: Use an account and Aircall connection whose permissions match the intended task, and rely on server-side credential injection rather than handling raw Aircall tokens locally.
+
+## Reference(s):
+
+- [Aircall Homepage](https://aircall.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-aircall)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return JSON data from Aircall connector actions when commands are executed.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

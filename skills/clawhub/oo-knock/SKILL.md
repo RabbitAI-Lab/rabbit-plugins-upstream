@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Knock"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["knock"]
   icon: "https://static.oomol.com/logo/third-party/knock.svg"
 ---

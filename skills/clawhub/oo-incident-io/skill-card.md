@@ -1,44 +1,56 @@
-## Description: <br>
-Provides incident.io incident, action, status, and severity lookup through OOMOL's incident_io connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+incident.io enables an agent to read incident.io incidents, actions, severities, and statuses through an OOMOL-connected oo CLI account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Incident responders and operations teams use this skill to let an agent read incident.io incidents, actions, statuses, and severities from a connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: incident.io data may contain sensitive operational or business information. <br>
-Mitigation: Install only when the connected incident.io account is correct and treat returned incident data as sensitive. <br>
-Risk: Requests are routed through OOMOL's oo connector. <br>
-Mitigation: Use the skill only if that routing model is acceptable for the organization. <br>
-Risk: Future versions may add write or destructive actions that change incident.io state. <br>
-Mitigation: Review the version's listed actions and do not approve write or destructive payloads unless intentionally requested. <br>
+## Use Case:
 
+Developers and incident response teams use this skill to search and read incident.io operational data from an OOMOL-connected account. It supports read-only incident, action, severity, and status lookup workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-incident-io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [incident.io](https://incident.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-oriented connector actions; command responses include data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and frontmatter) <br>
+Risk: The skill grants broad oo CLI command authority through an OOMOL-connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Restrict use to the listed read-only incident.io actions and inspect the live connector schema before constructing each payload.
+
+Risk: The setup guidance includes remote installer commands.
+
+Mitigation: Prefer installing the oo CLI from a verified vendor source and avoid pipe-to-shell installer execution.
+
+## Reference(s):
+
+- [ClawHub incident.io skill page](https://clawhub.ai/oomol/skills/oo-incident-io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [incident.io homepage](https://incident.io)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON responses from the oo CLI]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill instructs the agent to inspect the live connector schema before running an incident.io action.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

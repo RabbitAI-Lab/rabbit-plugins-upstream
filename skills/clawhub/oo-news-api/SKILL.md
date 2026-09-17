@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "News API"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["news_api"]
   icon: "https://static.oomol.com/logo/third-party/NewsAPI.svg"
 ---

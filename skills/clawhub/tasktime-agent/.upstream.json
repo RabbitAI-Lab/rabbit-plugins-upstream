@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/tasktime-agent",
   "slug": "tasktime-agent",
   "ownerHandle": null,
-  "version": "1.2.1",
-  "updatedAt": 1784750788912,
-  "contentHash": "93c704c6fabb74857d30be6c211759b5e2d18d677e37d3dddfe1badfea8c90a5",
-  "fetchedAt": "2026-07-26T18:07:43.919Z"
+  "version": "1.3.0",
+  "updatedAt": 1789546785254,
+  "contentHash": "ad4b6b35a8d0dc8b93d7b8a07bca928900aeb6a7ed1aaddb1999815fe3d5de74",
+  "fetchedAt": "2026-09-17T12:54:41.393Z"
 }

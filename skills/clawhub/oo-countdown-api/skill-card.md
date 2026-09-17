@@ -1,42 +1,52 @@
-## Description: <br>
-Enables agents to search eBay products, retrieve product details, get autocomplete suggestions, and check Countdown API account status through the OOMOL `countdown_api` connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Countdown API connector for searching and reading eBay product and account data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to access Countdown API data through an installed and connected OOMOL account. It supports product search, product detail retrieval, autocomplete, and account usage checks while instructing agents to inspect live action schemas before connector calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected OOMOL account with Countdown API credentials. <br>
-Mitigation: Install only for users who intend to use the Countdown API connector, and resolve authentication or connection errors through the documented first-time setup steps. <br>
-Risk: Connector action inputs can change with the live Countdown API contract. <br>
-Mitigation: Inspect the action schema before constructing each payload and confirm any write or destructive action with the user before execution. <br>
+## Use Case:
 
+External users and developers use this skill to operate Countdown API through the OOMOL `oo` CLI, including eBay autocomplete, product search, product details, and Countdown API account status.
 
-## Reference(s): <br>
-- [Countdown API homepage](https://countdownapi.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill listing](https://clawhub.ai/oomol/oo-countdown-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include a data object and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill frontmatter) <br>
+Risk: Installing the OOMOL CLI by piping a remote script directly into a shell can execute installer code before review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official trusted OOMOL CLI source and inspect the installer or use a verified release path before installation.
+
+## Reference(s):
+
+- [Countdown API homepage](https://countdownapi.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-countdown-api)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses include Countdown API data and OOMOL connector execution metadata when actions are run.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

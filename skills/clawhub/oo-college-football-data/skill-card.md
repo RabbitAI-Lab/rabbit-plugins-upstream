@@ -1,42 +1,55 @@
-## Description: <br>
-CollegeFootballData helps agents query college football account, conference, game, team, and venue data through the OOMOL CollegeFootballData connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CollegeFootballData helps agents inspect schemas and read college football account, conference, game, team, and venue data through the OOMOL CollegeFootballData connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill when they want an agent to inspect CollegeFootballData connector schemas and run college football data lookups for account information, conferences, games and results, teams, and venues. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security evidence marks the release verdict as suspicious and notes full-access helper behavior that deserves manual review before installation. <br>
-Mitigation: Install only if you trust the publisher, verify command targets before execution, and avoid full-access autoreview mode unless that authority is explicitly intended. <br>
-Risk: The skill requires sensitive credentials through an OOMOL-connected CollegeFootballData account. <br>
-Mitigation: Use the server-side credential flow, avoid exposing raw API keys, and run auth or connection setup only after a command fails for that reason. <br>
+## Use Case:
 
+Developers and external users use this skill to query CollegeFootballData through an OOMOL-connected account without handling raw CollegeFootballData API tokens directly. It supports account lookup and read-only listing of conferences, games, teams, and venues with schema inspection before connector calls.
 
-## Reference(s): <br>
-- [CollegeFootballData ClawHub Skill Page](https://clawhub.ai/oomol/oo-college-football-data) <br>
-- [CollegeFootballData Homepage](https://collegefootballdata.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector action responses are JSON objects containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Setup instructions include running remote installer scripts through a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified, versioned installer or documented package source before installing the oo CLI.
+
+Risk: Use depends on an authenticated OOMOL account and connected CollegeFootballData credentials.
+
+Mitigation: Confirm the oo CLI is installed, authenticated, and connected only when connector commands fail with authentication, scope, or connection errors.
+
+## Reference(s):
+
+- [CollegeFootballData homepage](https://collegefootballdata.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector calls return JSON containing data and meta.executionId when run with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

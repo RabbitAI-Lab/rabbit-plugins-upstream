@@ -1,43 +1,56 @@
-## Description: <br>
-Telnyx lets an agent inspect Telnyx connector schemas and run Telnyx messaging actions through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for Telnyx requests that read, create, or update account data through an OOMOL-connected Telnyx account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to list and retrieve Telnyx messaging profiles and messages, and to send SMS or MMS messages from an OOMOL-connected Telnyx account after confirming write payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sending Telnyx messages can affect recipients or incur account costs. <br>
-Mitigation: Confirm the exact recipient, message content, media URLs, and payload with the user before running send_message. <br>
-Risk: Connector commands require an authenticated OOMOL account with an active Telnyx connection. <br>
-Mitigation: Run setup or reconnection steps only after a command fails with an authentication, missing scope, expired credential, app readiness, or billing error. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Telnyx connector schemas, read Telnyx messaging resources, and send SMS or MMS messages through an OOMOL-connected Telnyx account.
 
-## Reference(s): <br>
-- [ClawHub Telnyx Skill](https://clawhub.ai/oomol/skills/oo-telnyx) <br>
-- [Telnyx Homepage](https://telnyx.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands may return JSON from the oo CLI; write actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: evidence.release.version and SKILL.md metadata) <br>
+Risk: The setup instructions include commands that execute remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official, pinned, verifiable installer when available, or inspect and verify the downloaded script before execution.
+
+Risk: The send_message action can send real SMS or MMS messages through the connected Telnyx account.
+
+Mitigation: Confirm the exact send_message payload and intended effect with the user before running the write action.
+
+## Reference(s):
+
+- [ClawHub Telnyx skill](https://clawhub.ai/oomol/skills/oo-telnyx)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Telnyx homepage](https://telnyx.com/)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance, text]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are expected as JSON objects containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

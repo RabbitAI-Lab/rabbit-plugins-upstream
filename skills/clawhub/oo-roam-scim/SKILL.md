@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Roam SCIM"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["roam_scim"]
   icon: "https://static.oomol.com/logo/third-party/roam_scim.png"
 ---

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "CodeRabbit"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["coderabbit"]
   icon: "https://static.oomol.com/logo/third-party/coderabbit.png"
 ---

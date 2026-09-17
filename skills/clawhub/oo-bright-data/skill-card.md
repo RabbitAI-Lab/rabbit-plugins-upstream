@@ -1,45 +1,57 @@
-## Description: <br>
-Bright Data helps an agent search and read Bright Data account, marketplace dataset, dataset view, snapshot metadata, and snapshot delivery information through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables an agent to inspect Bright Data connector schemas and run Bright Data read actions through OOMOL's oo CLI using a connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Bright Data read actions from an agent without handling raw Bright Data tokens directly. It is suited for checking account capability, listing marketplace datasets and views, and retrieving dataset or snapshot metadata through the connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on an installed oo CLI, an authenticated OOMOL session, an active Bright Data connection, and available billing credit. <br>
-Mitigation: Run setup or recovery steps only after the matching CLI, authentication, connection, scope, credential, app, or billing error appears, then retry the requested read action. <br>
-Risk: Future connector actions tagged as write or destructive could change or remove Bright Data state if executed without checking the exact target and payload. <br>
-Mitigation: Inspect the live connector schema, explain the intended target and payload, and get explicit user approval before running any tagged write or destructive action. <br>
-Risk: Connector payloads can drift if the Bright Data action contract changes. <br>
-Mitigation: Fetch the action schema with the oo CLI before constructing each payload and match the current input fields exactly. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Bright Data account status and marketplace dataset, snapshot, and view metadata through an OOMOL-connected Bright Data account.
 
-## Reference(s): <br>
-- [Bright Data skill on ClawHub](https://clawhub.ai/oomol/skills/oo-bright-data) <br>
-- [Bright Data homepage](https://brightdata.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance, Configuration] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action payload construction.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: First-time setup tells users to run remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the official OOMOL CLI installation documentation first, prefer a signed or package-manager install when available, and avoid running remote installer scripts from an elevated shell.
+
+Risk: Connector actions depend on the connected account and live action schemas.
+
+Mitigation: Inspect the authoritative action schema before building payloads, and require explicit user confirmation before running any action marked write or destructive.
+
+## Reference(s):
+
+- [ClawHub Bright Data skill](https://clawhub.ai/oomol/skills/oo-bright-data)
+- [Bright Data homepage](https://brightdata.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [OOMOL Bright Data connection page](https://console.oomol.com/app-connections?provider=bright_data)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands should inspect live action schemas before running connector actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

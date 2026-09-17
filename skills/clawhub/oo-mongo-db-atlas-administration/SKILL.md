@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "MongoDB Atlas Administration"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["mongo_db_atlas_administration"]
   icon: "https://static.oomol.com/logo/third-party/mongo_db_atlas_administration.svg"
 ---

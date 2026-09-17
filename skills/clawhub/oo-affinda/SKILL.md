@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Affinda"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["affinda"]
   icon: "https://static.oomol.com/logo/third-party/affinda.svg"
 ---

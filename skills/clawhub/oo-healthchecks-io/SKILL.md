@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Healthchecks.io"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["healthchecks_io"]
   icon: "https://static.oomol.com/logo/third-party/healthchecks_io.svg"
 ---

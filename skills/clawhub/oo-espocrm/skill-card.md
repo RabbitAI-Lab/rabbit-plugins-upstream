@@ -1,43 +1,61 @@
-## Description: <br>
-EspoCRM (espocrm.com). Use this skill for ANY EspoCRM request: reading, creating, updating, and deleting data through an OOMOL-connected EspoCRM account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+EspoCRM (espocrm.com). Use this skill for ANY EspoCRM request: reading, creating, updating, and deleting data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to read EspoCRM users, metadata, records, and record lists, and to create, update, or delete CRM records through the OOMOL oo CLI connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive EspoCRM account data through the connected OOMOL account. <br>
-Mitigation: Install it only when OOMOL is trusted with EspoCRM access and run it under an account with appropriate CRM permissions. <br>
-Risk: Write and delete actions can change or remove real CRM records. <br>
-Mitigation: Review the exact payload and intended effect before approving create, update, or delete actions. <br>
+## Use Case:
 
+Developers, operators, and business users can use this skill to inspect EspoCRM action schemas and run record, metadata, and user actions through the OOMOL `oo` CLI. It supports reading records and metadata, plus confirmed create, update, and delete operations.
 
-## Reference(s): <br>
-- [EspoCRM homepage](https://www.espocrm.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-espocrm) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Agents inspect the live EspoCRM action schema before constructing connector payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: First-time setup includes remote installer commands for the `oo` CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official, version-pinned installation path with verification instead of running remote installer commands blindly.
+
+Risk: Create and update actions can change EspoCRM records.
+
+Mitigation: Inspect the live action schema, confirm the exact JSON payload and expected effect with the user, then run the write action.
+
+Risk: Delete actions can remove EspoCRM records.
+
+Mitigation: Confirm the target entity and record identifier and obtain explicit approval before running destructive actions.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/oomol/skills/oo-espocrm)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [EspoCRM homepage](https://www.espocrm.com/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, API Calls, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses `oo connector schema` before action payload construction and `oo connector run --json` for execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

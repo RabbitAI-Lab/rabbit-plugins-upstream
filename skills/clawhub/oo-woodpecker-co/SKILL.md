@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Woodpecker.co"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["woodpecker_co"]
   icon: "https://static.oomol.com/logo/third-party/woodpecker_co.svg"
 ---

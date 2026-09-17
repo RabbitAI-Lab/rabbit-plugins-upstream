@@ -1,43 +1,62 @@
-## Description: <br>
-Pipedrive lets an agent operate Pipedrive CRM through the OOMOL connector to read, create, update, and delete records such as deals, persons, organizations, activities, pipelines, and stages. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pipedrive helps agents read, create, update, and delete Pipedrive CRM records through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, and developers with connected OOMOL and Pipedrive accounts use this skill to retrieve, search, create, update, and delete CRM records from an agent workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive Pipedrive CRM data through OOMOL-connected credentials. <br>
-Mitigation: Install only when agent access to Pipedrive data is intended, and review requested data access before execution. <br>
-Risk: The skill can create, update, or delete CRM records. <br>
-Mitigation: Require explicit user approval for the exact payload and expected effect before write or destructive actions. <br>
+## Use Case:
 
+Employees, external users, and developers use this skill to operate Pipedrive CRM data from an agent workflow, including deals, persons, organizations, activities, pipelines, and stages. It supports read, search, create, update, and delete tasks through the OOMOL Pipedrive connector.
 
-## Reference(s): <br>
-- [ClawHub Pipedrive skill page](https://clawhub.ai/oomol/oo-pipedrive) <br>
-- [Pipedrive homepage](https://www.pipedrive.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration guidance] <br>
-**Output Format:** [Markdown instructions with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: First-time setup includes shell commands that execute remote installer scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified package or manual install path, inspect downloaded installer scripts before running them, and install only when the publisher and connector access are trusted.
+
+Risk: The skill can create, update, and delete Pipedrive CRM records.
+
+Mitigation: Confirm the exact target, payload, and expected effect before running write or destructive actions.
+
+Risk: Using the connector grants agent workflows access to Pipedrive business data through the user's connected account.
+
+Mitigation: Use only with an intended OOMOL-connected Pipedrive account and review connector scopes, expired credentials, and billing status before sensitive operations.
+
+## Reference(s):
+
+- [Pipedrive homepage](https://www.pipedrive.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-pipedrive)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+- [Pipedrive icon](https://static.oomol.com/logo/third-party/Pipedrive.svg)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce instructions for read, write, and destructive Pipedrive connector actions; write and delete operations require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

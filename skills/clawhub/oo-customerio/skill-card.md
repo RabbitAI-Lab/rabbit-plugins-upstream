@@ -1,43 +1,54 @@
-## Description: <br>
-Operate Customer.io through an OOMOL-connected account for reading, creating, updating, deleting, and tracking customer data with the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Customer.io through an OOMOL-connected account for reading, creating, updating, and deleting customer data, tracking events, and managing suppression or profile merges.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Customer.io action schemas and run customer profile and event operations through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Some Customer.io state-changing actions are not consistently tagged as write or destructive in the skill text. <br>
-Mitigation: Treat identify, suppress, unsuppress, merge, delete, and event-tracking actions as write operations; confirm the exact target, payload, and effect before execution. <br>
-Risk: Commands can affect live Customer.io workspace data. <br>
-Mitigation: Fetch the live action schema before building payloads and review the JSON payload with the user before running connector commands. <br>
+## Use Case:
 
+External users and developers use this skill to operate Customer.io from an agent through the OOMOL-connected Customer.io connector. It supports customer profile changes, event tracking, suppression management, profile merges, and customer deletion workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-customerio) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Customer.io homepage](https://customer.io/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash, PowerShell, text, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo CLI schema and run commands; command responses are JSON with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and SKILL.md metadata) <br>
+Risk: The skill can change or delete Customer.io customer data without consistently requiring the confirmation its safety text claims.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation for every create, update, event tracking, suppression, merge, or delete action, including actions that are not tagged as write or destructive.
+
+Risk: Installer and authentication steps rely on remote OOMOL commands and account permissions.
+
+Mitigation: Review installer commands before running them and use the skill only with trusted OOMOL and Customer.io account permissions.
+
+## Reference(s):
+
+- [Customer.io homepage](https://customer.io/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands may return JSON responses from Customer.io actions through the OOMOL connector.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

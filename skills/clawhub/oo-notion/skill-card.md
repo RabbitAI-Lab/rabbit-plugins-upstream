@@ -1,45 +1,56 @@
-## Description: <br>
-This skill lets agents read, create, update, move, archive, and delete Notion workspace content through the OOMOL-connected Notion connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Notion (notion.so). Use this skill for ANY Notion request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Notion from an agent after connecting a Notion account through OOMOL. It supports schema-first read workflows and confirmed write or destructive changes to pages, blocks, databases, data sources, users, and Markdown content. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use a connected Notion account for broad read and write operations. <br>
-Mitigation: Install only when agent access to that Notion account is intended, and give explicit instructions for create or update tasks. <br>
-Risk: Write and destructive actions can change, archive, trash, or delete Notion content. <br>
-Mitigation: Review the proposed target, payload, and expected effect before allowing write or destructive actions to run. <br>
-Risk: The skill requires OAuth or other sensitive connected-account credentials through OOMOL. <br>
-Mitigation: Keep credentials managed through the OOMOL connection flow and avoid exposing raw tokens in prompts, files, or shell output. <br>
+## Use Case:
 
+Developers and agents use this skill to read, search, create, update, move, and delete Notion pages, blocks, databases, data sources, users, and page content through an OOMOL-connected Notion account.
 
-## Reference(s): <br>
-- [ClawHub Notion skill page](https://clawhub.ai/oomol/oo-notion) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Notion homepage](https://www.notion.so) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API Calls, JSON, Markdown, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and execution metadata when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Remote installer commands could execute unverified code during first-time setup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a trusted process with source verification and version pinning instead of allowing an agent to run remote install commands automatically.
+
+Risk: Write and destructive Notion actions can modify, move, archive, or overwrite workspace content.
+
+Mitigation: Confirm the exact action, target identifiers, and JSON payload with the user before running any write or destructive command.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-notion)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Notion](https://www.notion.so)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce Notion connector command payloads and summarize JSON responses from the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,72 @@
-## Description: <br>
-Searches and filters Amazon products using Sorftime data across 14 marketplaces, including competitor, category, brand, seller, price, sales, and historical snapshot queries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents search and filter Sorftime Amazon product data across 14 marketplaces for product discovery, competitor research, brand or seller analysis, and historical snapshot comparisons.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Amazon sellers, ecommerce analysts, and agent users use this skill to discover and compare products across marketplaces, brands, sellers, categories, price ranges, sales ranges, and historical snapshots. It supports product-search workflows and returns data-oriented results rather than business advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can call LinkFox/Sorftime APIs and consume credits, with broad searches potentially incurring higher cost. <br>
-Mitigation: Verify the API gateway and request explicit user approval before paid queries, retries, broad searches, onboarding downloads, or additional pagination. <br>
-Risk: Full product-search responses are persisted locally and may include commercially sensitive research data. <br>
-Mitigation: Avoid sending confidential research unless needed, and review saved JSON files before sharing or committing workspace outputs. <br>
-Risk: The skill may submit feedback text externally to LinkFox. <br>
-Mitigation: Use feedback submission only when appropriate and avoid including confidential user content in feedback. <br>
+## Use Case:
 
+Amazon sellers, ecommerce analysts, and agent users use this skill to discover and compare products by category, brand, seller, ASIN similarity, price, sales, ratings, fulfillment, seasonality, and historical month snapshots.
 
-## Reference(s): <br>
-- [Sorftime API reference](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-sorftime-amazon-product-query) <br>
-- [LinkFox skill guide](https://skill.linkfox.com/linkfoxskills/guide.htm) <br>
-- [LinkFox account and credits](https://os.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API parameters, shell commands, saved JSON data files, and summarized product-search results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are saved locally; small responses can be printed inline, while large responses are summarized with key fields and sample records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: LinkFox/Sorftime receives product-search requests and may receive phone-authentication and payment-related data during onboarding.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Disclose the third-party data flow before use and obtain explicit user consent before authentication, payment, or account setup steps.
+
+Risk: API keys and authentication tokens can be exposed through logs, shell history, or shared output.
+
+Mitigation: Use environment variables for credentials, avoid pasting secrets into shared logs or transcripts, and rotate credentials if exposure is suspected.
+
+Risk: The onboarding flow can list plans and create payment orders.
+
+Mitigation: Require explicit user approval before creating any payment order, and show plan, method, and cost information before proceeding.
+
+Risk: The search script persists full API responses under LinkFox session directories.
+
+Mitigation: Review stored files before sharing the workspace and remove response files that contain sensitive commercial, account, or research data.
+
+Risk: Custom endpoint environment variables can redirect requests to non-default services.
+
+Mitigation: Use default endpoints unless the requester has verified and approved the custom endpoint.
+
+Risk: The skill can submit feedback about user experience or results to a LinkFox feedback endpoint.
+
+Mitigation: Get explicit consent before submitting feedback that includes user intent, comments, or result quality details.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-sorftime-amazon-product-query)
+- [Sorftime API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, JSON files]
+
+**Output Format:** [Markdown guidance with JSON API parameters, shell command examples, and saved JSON response files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The product-search script stores full responses in a LinkFox session data directory, uses a 24-hour cache for repeated parameter sets, and may print either full JSON or a compact summary depending on response size.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,61 @@
-## Description: <br>
-Clerk lets an agent manage Clerk users through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Clerk (clerk.com). Use this skill for ANY Clerk request: reading, creating, updating, and deleting data through the OOMOL-connected oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect, create, update, lock, ban, unban, or delete Clerk users through an OOMOL-connected Clerk account. It is suited for Clerk account administration workflows where the agent should fetch live action schemas before running commands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact Clerk account changes, including deletes, bans, locks, and metadata updates. <br>
-Mitigation: Confirm the exact target, payload, and intended effect with the user before write or destructive actions. <br>
-Risk: The skill depends on an OOMOL-connected Clerk account and first-time setup may require installing the oo CLI. <br>
-Mitigation: Use the existing signed-in OOMOL connection when available, avoid handling raw Clerk tokens, and verify the oo CLI installer source before setup. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Clerk action schemas and manage Clerk users through an OOMOL-connected account. It supports reading, listing, counting, creating, updating, locking, banning, unbanning, unlocking, and deleting Clerk users with confirmation requirements for write and destructive actions.
 
-## Reference(s): <br>
-- [Clerk skill on ClawHub](https://clawhub.ai/oomol/oo-clerk) <br>
-- [Clerk homepage](https://clerk.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands call the oo CLI and may return JSON data with an execution id.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server evidence release.version and skill metadata) <br>
+Risk: The skill can modify, lock, ban, or delete Clerk users.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit confirmation of the target, payload, and expected effect before any write, ban, lock, or delete action.
+
+Risk: The security summary flags an unsafe remote installer pattern.
+
+Mitigation: Inspect or verify the oo CLI installer before running it, and prefer an installation path trusted by the deployment environment.
+
+Risk: The skill connects OOMOL to Clerk with authority to modify account data.
+
+Mitigation: Install only when the publisher is trusted and the Clerk connection has scopes appropriate for the intended operations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-clerk)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Clerk homepage](https://clerk.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution; write and destructive actions require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: evidence release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

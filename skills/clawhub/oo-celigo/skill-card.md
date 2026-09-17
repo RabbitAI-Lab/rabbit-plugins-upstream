@@ -1,43 +1,57 @@
-## Description: <br>
-Celigo (celigo.com). Use this skill for ANY Celigo request: reading, creating, and updating data through an OOMOL-connected Celigo account instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agent guidance for operating Celigo through an OOMOL-connected oo CLI account, including schema inspection, read and list actions, and guarded state-changing requests.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and operations teams use this skill to inspect Celigo resources and run Celigo connector actions through an OOMOL-connected account. It supports connection, export, flow, import, and token metadata workflows while prompting schema checks before action payloads are built. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to an OOMOL-connected Celigo account and may expose account-scoped Celigo data through connector responses. <br>
-Mitigation: Install it only for users who need Celigo account access, and review requested Celigo actions and payloads before approval. <br>
-Risk: Actions tagged write or destructive can change, remove, or overwrite Celigo data if run with an incorrect payload. <br>
-Mitigation: Fetch the live action schema first, confirm the exact target and payload with the user, and require explicit approval before write or destructive actions. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Celigo through an OOMOL-connected account, inspect live connector schemas, list or retrieve Celigo resources, and confirm payloads for state-changing actions.
 
-## Reference(s): <br>
-- [Celigo skill page](https://clawhub.ai/oomol/oo-celigo) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Celigo homepage](https://www.celigo.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before building action payloads; command responses may include JSON data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: Installer instructions include remote pipe-to-shell commands that may run unverified code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before use, prefer verified release or package-manager installation, and avoid running remote installer commands from an elevated shell.
+
+Risk: Celigo actions can change state when tagged as write or destructive.
+
+Mitigation: Fetch the live action schema, confirm the exact payload and expected effect with the user, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [ClawHub Celigo skill page](https://clawhub.ai/oomol/skills/oo-celigo)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Celigo homepage](https://www.celigo.com)
+- [Celigo skill icon](https://static.oomol.com/logo/third-party/Celigo.svg)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live oo connector schema output before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

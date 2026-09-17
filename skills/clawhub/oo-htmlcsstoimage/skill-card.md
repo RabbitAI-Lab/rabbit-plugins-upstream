@@ -1,46 +1,55 @@
-## Description: <br>
-HTML/CSS to Image helps an agent create images from raw HTML/CSS or public webpages, delete generated images, and retrieve usage through the OOMOL `oo` CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates HTML/CSS to Image through OOMOL's oo CLI to create images from HTML/CSS or public webpage URLs, retrieve usage metrics, and delete generated images.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to turn HTML/CSS or webpage URLs into images through a connected HTML/CSS to Image account, manage generated images, and review usage. It is intended for agents that need guided CLI commands and payload construction rather than direct API access. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill operates a connected HTML/CSS to Image account through OOMOL and requires trusted credential handling. <br>
-Mitigation: Install and use it only when the OOMOL connection is intended, and review authentication or connection steps before running them. <br>
-Risk: Image creation actions can change account state and may affect usage or billing. <br>
-Mitigation: Review the exact action payload and expected effect with the user before approving write actions. <br>
-Risk: Delete actions can remove generated images and clear CDN cache. <br>
-Mitigation: Confirm the target image or batch explicitly before running destructive actions. <br>
-Risk: The optional `oo` CLI installer runs remote installation scripts. <br>
-Mitigation: Run the installer only if the CLI is needed and the user trusts OOMOL's installer source. <br>
+## Use Case:
 
+External users and developers use this skill to operate an HTML/CSS to Image account from an agent workflow. It supports generating images, checking usage, and deleting generated assets through the OOMOL-connected oo CLI.
 
-## Reference(s): <br>
-- [HTML/CSS to Image homepage](https://htmlcsstoimage.com) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [HTML/CSS to Image connection settings](https://console.oomol.com/app-connections?provider=htmlcsstoimage) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include `oo connector schema` and `oo connector run` commands; connector responses are JSON when executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: Setup instructions include direct execution of internet-downloaded installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI from a verified package source, or download and inspect or verify the installer before executing it.
+
+Risk: Create and delete actions can change or remove assets in the connected HTML/CSS to Image account.
+
+Mitigation: Confirm the exact action payload and target resources with the user before running write or destructive commands.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-htmlcsstoimage)
+- [HTML/CSS to Image homepage](https://htmlcsstoimage.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May run HTML/CSS to Image create/delete actions through the OOMOL-connected oo CLI after user confirmation for write or destructive actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

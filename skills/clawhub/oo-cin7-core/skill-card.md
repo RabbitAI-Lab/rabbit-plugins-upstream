@@ -1,42 +1,56 @@
-## Description: <br>
-Use this skill to search and read Cin7 Core data through the OOMOL cin7_core connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cin7 Core helps agents use the OOMOL-connected oo CLI to inspect Cin7 Core action schemas and retrieve account, customer, and product data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Cin7 Core account settings, customers, and products through an OOMOL-connected account. It supports read-only list and get workflows while relying on server-side credential handling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The routing language is broad and may cause an agent to use the connector for general Cin7 Core requests. <br>
-Mitigation: Give the agent explicit instructions to use this skill only when retrieving or inspecting Cin7 Core account, customer, or product data. <br>
-Risk: The skill can expose connected-account business data for customers, products, and account settings. <br>
-Mitigation: Install it only for agents and users that are permitted to read that Cin7 Core data through the configured OOMOL connection. <br>
+## Use Case:
 
+External users, developers, and business operators use this skill to query Cin7 Core through an authenticated OOMOL connector. It is focused on reading company settings, customers, and products after inspecting the live connector schema for each action.
 
-## Reference(s): <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Cin7 Core homepage](https://www.cin7.com/solutions/core/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; responses include data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: artifact frontmatter and release evidence) <br>
+Risk: Fallback setup guidance includes remote installer commands that could run unverified installation scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified, version-pinned method before using the skill, and avoid executing remote installer commands as written.
+
+Risk: Future connector actions tagged as write or destructive could modify Cin7 Core data.
+
+Mitigation: Confirm the exact payload, target records, and expected effect with the user before running any write action, and require explicit approval for destructive actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-cin7-core)
+- [Cin7 Core Homepage](https://www.cin7.com/solutions/core/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Credentials are handled through the OOMOL connector; the skill tells agents to inspect live action schemas before constructing payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

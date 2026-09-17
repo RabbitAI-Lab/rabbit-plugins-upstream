@@ -1,45 +1,60 @@
-## Description: <br>
-Cal.com (cal.com). Use this skill for ANY Cal.com request: reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cal.com (cal.com) lets an agent read, create, update, and delete Cal.com data through the OOMOL-connected oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate a connected Cal.com account through OOMOL, including booking, event type, schedule, attendee, calendar, and profile workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change Cal.com account data, including bookings, schedules, event types, calendars, and profile fields. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running write actions. <br>
-Risk: Destructive actions can delete schedules or event types or cancel bookings. <br>
-Mitigation: Require explicit approval of the target object and action before running destructive commands. <br>
-Risk: Connector schemas may change over time, causing stale payloads to fail or affect unintended fields. <br>
-Mitigation: Inspect the live action schema before each action and build payloads from that schema. <br>
+## Use Case:
 
+Developers, operators, and agents use this skill to manage Cal.com bookings, attendees, event types, schedules, availability, calendars, and user profile data through an authenticated OOMOL connector.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-cal) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Cal.com](https://cal.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server evidence and frontmatter) <br>
+Risk: The setup path includes internet installer scripts for the OOMOL CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI installation path before use and prefer a signed or package-manager install when available.
+
+Risk: Write and destructive actions can change or delete Cal.com bookings, event types, schedules, calendars, or profile data.
+
+Mitigation: Confirm the exact target, payload, and expected effect before any state-changing action, and require explicit approval for delete actions.
+
+Risk: The skill acts through the connected Cal.com account.
+
+Mitigation: Use it only with the intended Cal.com account and reconnect or reauthorize only when an authentication or scope error requires it.
+
+## Reference(s):
+
+- [Cal.com homepage](https://cal.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-cal)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

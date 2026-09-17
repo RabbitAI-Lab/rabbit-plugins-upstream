@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "TheirStack"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["theirstack"]
   icon: "https://static.oomol.com/logo/third-party/theirstack.svg"
 ---

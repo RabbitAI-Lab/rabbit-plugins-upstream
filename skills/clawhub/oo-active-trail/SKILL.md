@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "ActiveTrail"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["active_trail"]
   icon: "https://static.oomol.com/logo/third-party/active_trail.svg"
 ---

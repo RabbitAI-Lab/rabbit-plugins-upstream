@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Algolia"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["algolia"]
   icon: "https://static.oomol.com/logo/third-party/Algolia.svg"
 ---

@@ -1,45 +1,60 @@
-## Description: <br>
-Turso (turso.tech). Use this skill for ANY Turso request: reading, creating, updating, and deleting data through the OOMOL `oo` CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turso (turso.tech). Use this skill for ANY Turso request -- reading, creating, updating, and deleting data. Whenever a task involves Turso, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Turso organizations, groups, databases, and available locations through an OOMOL-connected account. It supports read, write, and explicitly approved destructive database operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create Turso databases and groups, which changes external service state. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: The skill can delete a Turso database. <br>
-Mitigation: Require explicit approval for the specific organization and database before running the destructive action. <br>
-Risk: The skill depends on authenticated OOMOL and Turso connections and may fail when credentials, scopes, or billing are unavailable. <br>
-Mitigation: Use the documented setup recovery steps only after an action fails with the matching auth, connection, scope, credential, app, or billing error. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Turso databases, groups, organizations, and locations through an OOMOL-connected account. It supports read operations plus confirmed create and delete actions for Turso resources.
 
-## Reference(s): <br>
-- [Turso homepage](https://turso.tech) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-turso) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands may return JSON responses from the OOMOL connector, including data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: First-time setup points to online shell and PowerShell installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installation, prefer a pinned and verifiable oo CLI install method when available, and do not let an agent run installer scripts automatically.
+
+Risk: The skill can create groups and databases and can delete databases.
+
+Mitigation: Require explicit user confirmation for write and destructive actions, including the exact organization, group, database, and payload before execution.
+
+Risk: Connector calls may expose sensitive database or organization information in prompts or logs.
+
+Mitigation: Send only the minimum Turso identifiers and payload fields needed for the requested action.
+
+## Reference(s):
+
+- [ClawHub Turso skill page](https://clawhub.ai/oomol/skills/oo-turso)
+- [Turso homepage](https://turso.tech)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live connector schema inspection before action payloads are constructed.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

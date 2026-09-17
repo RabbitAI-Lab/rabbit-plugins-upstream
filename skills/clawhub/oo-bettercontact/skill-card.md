@@ -1,45 +1,57 @@
-## Description: <br>
-BetterContact (bettercontact.rocks) lets an agent check account credit balance, submit leads for waterfall enrichment, and poll enrichment results through an OOMOL-connected BetterContact account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BetterContact (bettercontact.rocks). Use this skill for BetterContact requests such as reading account balances, retrieving enrichment results, and submitting leads through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate BetterContact enrichment from an agent without handling raw API tokens. It is suited for checking BetterContact credits, submitting lead enrichment requests, and retrieving enrichment status or results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires use of an OOMOL-connected BetterContact account. <br>
-Mitigation: Install only when the agent should be allowed to use that connected account. <br>
-Risk: Submitting enrichment requests can spend BetterContact credits and send lead data to BetterContact. <br>
-Mitigation: Review and approve the exact enrichment payload before write actions are run. <br>
-Risk: Connector contracts can change over time. <br>
-Mitigation: Inspect the live action schema before building each payload. <br>
+## Use Case:
 
+External users and developers use this skill to operate BetterContact through OOMOL, including checking credits, retrieving enrichment results, and submitting lead enrichment requests after confirming write payloads.
 
-## Reference(s): <br>
-- [ClawHub BetterContact Skill Page](https://clawhub.ai/oomol/oo-bettercontact) <br>
-- [BetterContact Homepage](https://bettercontact.rocks) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: First-time setup includes remote shell installer commands for the OOMOL CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Independently verify the OOMOL CLI installer and prefer reviewed installation steps before running curl-to-bash or PowerShell iex commands.
+
+Risk: submit_enrichment sends lead data to the BetterContact connector and may consume account credits.
+
+Mitigation: Confirm the exact payload and intended effect with the user before submitting enrichment requests.
+
+## Reference(s):
+
+- [BetterContact homepage](https://bettercontact.rocks)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [BetterContact skill page](https://clawhub.ai/oomol/skills/oo-bettercontact)
+- [BetterContact icon](https://static.oomol.com/logo/third-party/bettercontact.svg)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution and returns JSON connector responses when actions run.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

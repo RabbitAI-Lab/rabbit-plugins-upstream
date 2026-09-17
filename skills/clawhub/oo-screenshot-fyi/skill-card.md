@@ -1,42 +1,56 @@
-## Description: <br>
-This skill lets an agent capture website screenshots through screenshot.fyi using the user's connected OOMOL account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate screenshot.fyi through the OOMOL-connected oo CLI to capture website screenshots and return generated URLs.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to request website screenshots from an agent session and receive the generated screenshot URL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Credentialed or billable screenshot captures may run against private, internal, sensitive, or unintended URLs. <br>
-Mitigation: Confirm the exact target URL and expected screenshot action with the user before running the capture. <br>
-Risk: The artifact labels screenshot creation as read-only even though capture can create an external result or consume account credit. <br>
-Mitigation: Treat screenshot capture as a credentialed, potentially billable action and pause when the target or cost impact is unclear. <br>
+## Use Case:
 
+Developers and agents use this skill to operate screenshot.fyi via OOMOL's connected oo CLI, inspect the live connector schema, run screenshot actions, and return generated screenshot URLs without handling raw API tokens.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-screenshot-fyi) <br>
-- [screenshot.fyi homepage](https://www.screenshot.fyi) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses can include a generated screenshot URL and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and frontmatter) <br>
+Risk: Fallback setup includes remote installer commands that pipe downloaded scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path first, prefer official package-manager or verified installer steps, inspect downloaded scripts before execution, and avoid running installer commands automatically or from an elevated shell.
+
+Risk: Screenshot actions depend on an OOMOL account connection, valid screenshot.fyi credentials, and available billing credits.
+
+Mitigation: Run setup or account-repair steps only after matching authentication, connection, credential, app readiness, or billing errors appear.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-screenshot-fyi)
+- [screenshot.fyi Homepage](https://www.screenshot.fyi)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads; connector responses return JSON containing screenshot URLs.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the live screenshot_fyi connector schema before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,60 @@
-## Description: <br>
-Twenty CRM lets an agent read, create, update, and delete CRM data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill supports Twenty CRM (twenty.com) requests for reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent inspect, retrieve, create, update, and delete Twenty CRM records through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, and delete Twenty CRM records through OOMOL-brokered access. <br>
-Mitigation: Review write and delete payloads carefully and require explicit user approval before running state-changing actions. <br>
-Risk: The skill depends on trusting OOMOL to broker the connected Twenty CRM account. <br>
-Mitigation: Install only when OOMOL is an approved broker for the workspace and agent-managed CRM access is intended. <br>
+## Use Case:
 
+Employees, external users, and developers use this skill to manage Twenty CRM workspace records through OOMOL-connected actions, including listing metadata, reading records, and creating, updating, or deleting records with confirmation safeguards.
 
-## Reference(s): <br>
-- [Twenty CRM homepage](https://twenty.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-twenty-crm) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands call the OOMOL oo CLI and may return JSON responses from Twenty CRM actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: The setup instructions include remote installer commands that pipe downloaded scripts directly to a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official versioned release or package-manager installation path with integrity verification before installing the oo CLI.
+
+Risk: The skill can create, update, and delete CRM records through a connected OOMOL account.
+
+Mitigation: Confirm exact payloads, target records, and expected effects before allowing write or destructive actions.
+
+Risk: Twenty CRM actions are routed through OOMOL as an intermediary.
+
+Mitigation: Install only when use of OOMOL for CRM actions is acceptable for the workspace's data handling requirements.
+
+## Reference(s):
+
+- [Twenty CRM homepage](https://twenty.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-twenty-crm)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May trigger Twenty CRM connector actions through the oo CLI when the user has configured OOMOL credentials.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

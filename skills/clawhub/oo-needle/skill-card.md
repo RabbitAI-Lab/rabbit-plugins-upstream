@@ -1,43 +1,56 @@
-## Description: <br>
-Needle helps an agent operate Needle collections through the OOMOL oo CLI, including listing, inspecting, creating, adding URL-backed files, checking stats, and searching retrieved content. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Needle helps an agent operate Needle through the OOMOL-connected oo CLI for listing collections, retrieving details and stats, managing URL-backed files, creating collections, and searching indexed content.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to work with Needle collections from an OOMOL-connected account. It supports read workflows such as listing, inspecting, statistics lookup, and search, plus write workflows for creating collections and adding URL-backed files for indexing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create Needle collections or add URL-backed files for indexing, which changes content available in the connected Needle account. <br>
-Mitigation: Confirm the exact write payload and expected account effect before approving create or add-file actions. <br>
-Risk: The skill requires access to a connected OOMOL/Needle account. <br>
-Mitigation: Install and use it only when the agent is expected to operate that connected account. <br>
+## Use Case:
 
+Developers and agents use this skill to interact with Needle collections through an authenticated OOMOL connector, including read workflows for collection inspection and search plus confirmed write workflows for collection creation and file import.
 
-## Reference(s): <br>
-- [Needle homepage](https://needle.app) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-needle) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce commands that inspect live connector schemas and run Needle actions through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: evidence metadata and artifact frontmatter) <br>
+Risk: The first-time setup includes one-line remote installer commands that execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source before use and prefer a signed, pinned, or manually verified oo CLI installation path when available.
+
+Risk: Write actions can create collections or import URL-backed files into Needle.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running any action tagged as write.
+
+## Reference(s):
+
+- [Needle homepage](https://needle.app)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-needle)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before action payloads; read actions can run directly, while write actions require confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
