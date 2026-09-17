@@ -1,44 +1,56 @@
-## Description: <br>
-Interzoid (interzoid.com) supports requests that search, read, validate, enrich, or compare company, organization, name, email, IP, and license credit data through the OOMOL connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides OOMOL-connected access to Interzoid actions for searching, reading, validating, enriching, and standardizing Interzoid data through the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to run Interzoid lookup and matching actions through an OOMOL-connected account. It supports schema-first requests for email enrichment, IP profile and reputation checks, company and full-name similarity keys, full-name match scoring, organization name standardization, and remaining credit checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send names, emails, IP addresses, organization names, and account-related lookup requests to Interzoid through an OOMOL-connected account. <br>
-Mitigation: Use it only with an intended OOMOL-connected Interzoid account and avoid submitting data that should not be processed by that service. <br>
-Risk: First-time setup may require installing the oo CLI, including documented pipe-to-shell installation commands. <br>
-Mitigation: Review the installation method first, or use manual vendor installation steps before running setup commands. <br>
-Risk: Connected account credentials and scopes can expire or be missing, causing failed actions or requiring reconnection. <br>
-Mitigation: Run connection or authentication setup only after an auth or connection error and confirm the intended Interzoid connection before retrying. <br>
+## Use Case:
 
+Developers and agents use this skill to run Interzoid connector actions through an OOMOL-connected account, including match-key generation, email enrichment, IP profile lookup, credit checks, and organization-name standardization.
 
-## Reference(s): <br>
-- [ClawHub Interzoid skill page](https://clawhub.ai/oomol/oo-interzoid) <br>
-- [Interzoid homepage](https://www.interzoid.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill directs agents to inspect live action schemas before constructing JSON payloads and to read response data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and artifact frontmatter) <br>
+Risk: First-time setup instructions include running remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup steps before installation, prefer a trusted versioned oo CLI package or verified installer, and do not let an agent run the remote installer automatically.
+
+Risk: Connector actions depend on an authenticated OOMOL account and connected Interzoid credentials.
+
+Mitigation: Run setup or reconnection steps only after an auth or connection error, and avoid exposing raw API tokens to the agent.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-interzoid)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Interzoid homepage](https://www.interzoid.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector output is returned as JSON data with execution metadata when actions are run.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

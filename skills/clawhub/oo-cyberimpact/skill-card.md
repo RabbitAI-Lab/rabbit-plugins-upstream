@@ -1,43 +1,55 @@
-## Description: <br>
-Cyberimpact (cyberimpact.com). Use this skill for ANY Cyberimpact request -- reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cyberimpact helps agents read, create, update, replace, and delete Cyberimpact groups, members, and email templates through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and operators use this skill to let an agent inspect Cyberimpact connector schemas and run Cyberimpact actions for groups, members, and email templates through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, replace, and delete Cyberimpact groups, members, and email templates, which may affect business contact data. <br>
-Mitigation: Confirm the exact payload, target object, and expected effect with the user before approving write or destructive actions. <br>
-Risk: Incorrect payloads can change member lists, group visibility, or template content in unintended ways. <br>
-Mitigation: Fetch the live connector schema before building payloads and review the constructed JSON before execution. <br>
+## Use Case:
 
+External users and developers use this skill to operate Cyberimpact contact groups, members, and email templates from an agent workflow while relying on OOMOL-connected credentials.
 
-## Reference(s): <br>
-- [Cyberimpact homepage](https://www.cyberimpact.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-cyberimpact) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Directs the agent to inspect live connector schemas before constructing Cyberimpact action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Setup guidance includes remote installer commands for the required CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI installation path carefully and prefer an official package manager or version-pinned installer with checksum or signature verification.
+
+Risk: The skill can perform write and delete actions against Cyberimpact resources.
+
+Mitigation: Confirm the exact target and payload before state-changing actions, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [Cyberimpact homepage](https://www.cyberimpact.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Cyberimpact skill page](https://clawhub.ai/oomol/skills/oo-cyberimpact)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Fetches the live Cyberimpact action schema before constructing command payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

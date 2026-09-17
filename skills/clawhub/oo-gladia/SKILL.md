@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Gladia"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.4"
   services: ["gladia"]
   icon: "https://static.oomol.com/logo/third-party/gladia.svg"
 ---

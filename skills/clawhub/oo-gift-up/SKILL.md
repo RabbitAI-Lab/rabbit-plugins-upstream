@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Gift Up"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["gift_up"]
   icon: "https://static.oomol.com/logo/third-party/gift_up.png"
 ---

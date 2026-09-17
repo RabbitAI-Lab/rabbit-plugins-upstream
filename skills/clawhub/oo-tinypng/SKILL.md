@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "TinyPNG"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["tinypng"]
   icon: "https://static.oomol.com/logo/third-party/TinyPNG.svg"
 ---

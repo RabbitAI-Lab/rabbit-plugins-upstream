@@ -1,45 +1,55 @@
-## Description: <br>
-You.com connector helper for searching, fetching webpage content, producing cited research and finance answers, and checking account balance through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to use You.com through the OOMOL oo CLI for search, webpage content fetching, cited research, finance research, and account balance lookup.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to route You.com search, content fetching, research, finance research, and account balance requests through the OOMOL oo CLI after inspecting the live connector schema. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected You.com account and may involve sensitive account permissions. <br>
-Mitigation: Install and use it only when You.com access through an OOMOL-connected account is intended; review connected account permissions before use. <br>
-Risk: First-time setup may require installing the OOMOL oo CLI. <br>
-Mitigation: Review the installer path and install the CLI only after an auth, connection, CLI, or credit error requires setup. <br>
-Risk: Broad You.com-related requests may select this skill automatically. <br>
-Mitigation: Confirm that the requested task should use You.com through OOMOL before running connector actions. <br>
+## Use Case:
 
+Developers and external agents use this skill to perform You.com web and news search, fetch webpage content, and request cited research or finance answers through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-you) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [You.com](https://you.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence and skill metadata) <br>
+Risk: Setup instructions include remote installer commands that can execute changing code on a user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review or verify the installer before use, and prefer a pinned package or verified release artifact.
+
+Risk: Queries and URLs submitted through the connector may be sent to You.com and OOMOL-connected services.
+
+Mitigation: Avoid sending sensitive data unless that disclosure is acceptable for the user's account and environment.
+
+## Reference(s):
+
+- [You.com homepage](https://you.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL app connections](https://console.oomol.com/app-connections?provider=you)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands may return JSON responses from the oo CLI with data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

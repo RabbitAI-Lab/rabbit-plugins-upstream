@@ -1,43 +1,55 @@
-## Description: <br>
-Namely (namely.com). Use this skill for ANY Namely request: searching and reading data through an OOMOL-connected Namely account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Namely enables an agent to inspect Namely connector schemas and retrieve accessible employee profile data through an OOMOL-connected oo CLI account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees and operators use this skill to read Namely employee profiles and company profile-field metadata visible to their connected account. It helps agents inspect the live connector schema before making Namely read requests through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The connected Namely account may expose employee profile information visible to that account. <br>
-Mitigation: Use the least-privileged Namely account or scopes that still support the intended read-only profile tasks, and review retrieved employee data before sharing it. <br>
-Risk: First-time setup can require installing or authenticating the oo CLI and connecting Namely credentials through OOMOL. <br>
-Mitigation: Run setup only after an auth, connection, or missing-CLI error, and review installation and authentication steps before executing them. <br>
+## Use Case:
 
+Employees, HR operators, and developers use this skill to read Namely profile records, profile field definitions, and the current connected Namely profile when an OOMOL account connection is available.
 
-## Reference(s): <br>
-- [Namely homepage](https://www.namely.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-namely) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo CLI connector schema and run commands; action responses are JSON objects with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: artifact frontmatter and server release evidence) <br>
+Risk: The skill can access sensitive HR profile data from Namely.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for trusted OOMOL and Namely connections, use least-privilege access, and avoid broad employee-profile listing unless needed.
+
+Risk: The setup guidance includes remote installer commands.
+
+Mitigation: Independently verify installer source and integrity before running curl|bash or irm|iex commands.
+
+## Reference(s):
+
+- [ClawHub Namely skill page](https://clawhub.ai/oomol/skills/oo-namely)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Namely homepage](https://www.namely.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and a meta.executionId value.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

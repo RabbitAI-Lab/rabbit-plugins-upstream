@@ -1,43 +1,60 @@
-## Description: <br>
-PDFMonkey lets an agent read PDFMonkey account, document, and template data and create documents through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents operate PDFMonkey through the OOMOL-connected oo CLI for reading, creating, and updating PDFMonkey data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate PDFMonkey from an agent: inspect action schemas, read account, document, and template data, list document cards, and create documents after confirming write payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive credentials through the connected PDFMonkey/OOMOL account. <br>
-Mitigation: Use it only in workspaces where that account access is appropriate and review requested permissions before installation. <br>
-Risk: The create_document action changes PDFMonkey state. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running write actions. <br>
+## Use Case:
 
+External users and developers use this skill to operate PDFMonkey from an agent session through OOMOL's connector, including inspecting action schemas, creating documents, retrieving document details, polling document cards, listing templates, and checking the connected account.
 
-## Reference(s): <br>
-- [PDFMonkey homepage](https://pdfmonkey.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub PDFMonkey skill page](https://clawhub.ai/oomol/oo-pdfmonkey) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include connector execution results returned as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The first-time setup path includes remote installer commands that pipe downloaded scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not run those installer commands automatically; install the oo CLI from a trusted, versioned source and verify the installer or package before execution.
+
+Risk: Write actions can create PDFMonkey documents or queue PDF generation.
+
+Mitigation: Inspect the live action schema and confirm the exact payload and intended effect with the user before running write actions.
+
+Risk: PDFMonkey actions are mediated through OOMOL-connected credentials.
+
+Mitigation: Use the skill only when the user accepts OOMOL as the intermediary and has connected the appropriate PDFMonkey account.
+
+## Reference(s):
+
+- [PDFMonkey homepage](https://pdfmonkey.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-pdfmonkey)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill may produce oo CLI commands, PDFMonkey action payloads, status summaries, setup guidance, and follow-up instructions.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

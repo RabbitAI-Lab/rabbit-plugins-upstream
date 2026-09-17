@@ -1,43 +1,52 @@
-## Description: <br>
-NextDNS helps an agent read profiles, logs, and analytics through an OOMOL-connected NextDNS account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents search and read NextDNS profile settings, setup details, analytics, and logs through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect NextDNS profiles, query DNS logs, and summarize analytics for an authenticated account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: DNS logs and analytics can reveal browsing and device activity from the connected account. <br>
-Mitigation: Treat generated outputs as sensitive and avoid sharing log details beyond the intended audience. <br>
-Risk: The skill requires an OOMOL-connected NextDNS account and may prompt setup if the CLI or connection is missing. <br>
-Mitigation: Install or sign in to the OOMOL CLI only when needed, and connect NextDNS through the documented OOMOL connection flow. <br>
+## Use Case:
 
+External users and developers use this skill to inspect NextDNS profiles, analytics, blocking reasons, status, and DNS logs through the OOMOL oo CLI after their account is connected.
 
-## Reference(s): <br>
-- [ClawHub NextDNS Skill Page](https://clawhub.ai/oomol/oo-next-dns) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [NextDNS Homepage](https://nextdns.io/) <br>
-- [OOMOL NextDNS Connection](https://console.oomol.com/app-connections?provider=next_dns) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only connector actions; requires an authenticated OOMOL-connected NextDNS account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence and skill metadata) <br>
+Risk: Setup guidance includes mutable remote installer commands that execute downloaded shell or PowerShell scripts without a pinned version or integrity check.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source before execution, prefer a verified package or inspected release artifact when available, and run setup commands only after an auth or connection failure requires them.
+
+## Reference(s):
+
+- [NextDNS homepage](https://nextdns.io/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-next-dns)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution and returns read-only NextDNS data when commands are run.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

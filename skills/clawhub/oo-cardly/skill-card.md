@@ -1,41 +1,57 @@
-## Description: <br>
-Cardly (card.ly) helps agents search and read Cardly account data through the OOMOL Cardly connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cardly (card.ly). Use this skill for ANY Cardly request - searching and reading data. Whenever a task involves Cardly, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to retrieve Cardly balances, credit history, available media, fonts, and writing styles from an OOMOL-connected Cardly account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Setup, login, Cardly connection, billing, or echo-debugging steps can affect the user's account or environment. <br>
-Mitigation: Approve those steps explicitly, and avoid sending sensitive personal data in echo payloads unless intentionally testing the authenticated endpoint. <br>
+## Use Case:
 
+Developers and external users use this skill to access Cardly through an OOMOL-connected account, including balance lookup, credit history listing, and discovery of fonts, media, and writing styles. It also supports authenticated echo debugging through the Cardly connector.
 
-## Reference(s): <br>
-- [ClawHub Cardly skill page](https://clawhub.ai/oomol/skills/oo-cardly) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Cardly homepage](https://www.card.ly) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector action responses are JSON objects containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup recommends executing remote installer scripts directly in a shell, creating a supply-chain review risk.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installation and prefer verified official release or package-manager instructions for the oo CLI.
+
+Risk: Connector actions depend on the user's OOMOL account connection and Cardly authorization state.
+
+Mitigation: Run authentication or connection setup only after an action fails with a matching auth, scope, expiration, or app readiness error.
+
+## Reference(s):
+
+- [ClawHub Cardly skill page](https://clawhub.ai/oomol/skills/oo-cardly)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Cardly homepage](https://www.card.ly)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live oo CLI connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,60 @@
-## Description: <br>
-WorkOS (workos.com). Use this skill for ANY WorkOS request: reading, creating, updating, and deleting WorkOS data through the OOMOL oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for WorkOS requests to read, create, update, and delete data through the OOMOL-connected oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage WorkOS organizations, AuthKit users, and organization memberships from an agent session. It supports read actions for account data and confirmed write actions for creating, updating, reactivating, and deactivating WorkOS resources. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill connects WorkOS account data to OOMOL through the oo CLI. <br>
-Mitigation: Install only when OOMOL's oo CLI and credential handling are trusted, and treat read actions as account-data access. <br>
-Risk: Write and destructive actions can create, update, reactivate, or deactivate WorkOS organizations, users, and memberships. <br>
-Mitigation: Review the live action schema and exact JSON payload, then get explicit user confirmation before running state-changing or destructive actions. <br>
-Risk: A missing, expired, or under-scoped WorkOS connection can cause commands to fail or request reconnection. <br>
-Mitigation: Run setup or reconnection steps only after an auth, connection, scope, or credential error indicates they are needed. <br>
+## Use Case:
 
+Developers and operators use this skill to read and manage WorkOS users, organizations, and organization memberships from an agent session through OOMOL-brokered WorkOS access. It supports read actions plus confirmed write and destructive actions for WorkOS administration workflows.
 
-## Reference(s): <br>
-- [WorkOS homepage](https://workos.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub WorkOS skill page](https://clawhub.ai/oomol/skills/oo-workos) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance, Configuration] <br>
-**Output Format:** [Markdown with inline bash and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands return JSON responses from the oo CLI, including connector data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: The first-time setup path includes direct execution of a remote installer for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the oo CLI source and prefer a pinned or otherwise verified installation path before installing.
+
+Risk: The skill can create, update, deactivate, and reactivate WorkOS resources.
+
+Mitigation: Confirm exact targets, schemas, payloads, and intended effects with the user before write or destructive actions.
+
+Risk: WorkOS access is brokered through OOMOL rather than direct user-managed API credentials.
+
+Mitigation: Install and use the skill only when OOMOL is a trusted broker for the target WorkOS environment.
+
+## Reference(s):
+
+- [WorkOS homepage](https://workos.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-workos)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions return JSON data and execution metadata when run with the oo CLI.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

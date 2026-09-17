@@ -1,41 +1,56 @@
-## Description: <br>
-A-Leads helps an agent search and read A-Leads data for business email discovery, personal email discovery, phone lookup, and email verification. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A-Leads helps agents search and read A-Leads data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent query A-Leads through an OOMOL-connected account for lead enrichment, contact discovery, and email deliverability checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can look up business emails, personal emails, phone numbers, and email verification signals, which may involve sensitive contact data. <br>
-Mitigation: Use it for explicit user-requested contact lookups and review the requested target and payload before execution. <br>
-Risk: The skill depends on the local oo CLI and an OOMOL-connected A-Leads account. <br>
-Mitigation: Install and connect OOMOL only when needed, verify the account and provider connection, and resolve billing or credential errors before retrying. <br>
+## Use Case:
 
+External users, sales operations teams, and developers use this skill to find or verify lead contact data through an OOMOL-connected A-Leads account. It supports business email lookup, personal email lookup, phone lookup, and email verification.
 
-## Reference(s): <br>
-- [A-Leads homepage](https://a-leads.co) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, guidance, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runs live schema checks before constructing connector payloads and returns connector JSON responses when actions are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the OOMOL installer before running curl | bash or irm | iex; use an independently trusted installation method when required.
+
+Risk: Lead enrichment actions may retrieve personal email addresses or phone numbers.
+
+Mitigation: Run lookups only for user-approved tasks with an appropriate business purpose and handle returned contact data as sensitive.
+
+## Reference(s):
+
+- [ClawHub A-Leads skill page](https://clawhub.ai/oomol/skills/oo-a-leads)
+- [A-Leads homepage](https://a-leads.co)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires the oo CLI, an OOMOL sign-in, and a connected A-Leads account; action schemas are inspected live before connector calls.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,29 @@
+{
+  "title": "Omni Reader 服务配置",
+  "title_en": "Omni Reader Configuration",
+  "description": "连接您的 Cue 账号以调用 Omni 文档解析服务。凭证仅保存在本机 ~/.workbuddy 目录下。",
+  "description_en": "Connect your Cue account to use Omni document parsing. Credentials are stored locally only.",
+  "docUrl": "https://cuecue.cn/hub/api-key",
+  "docLabel": "如何获取 CUE API Key？",
+  "fields": [
+    {
+      "key": "CUE_API_KEY",
+      "label": "CUE API Key",
+      "label_en": "CUE API Key",
+      "type": "password",
+      "required": true,
+      "placeholder": "在 cuecue.cn/hub/api-key 生成",
+      "description": "用于访问 Omni 解析服务的 API Key。"
+    },
+    {
+      "key": "OMNI_ALLOWED_ROOTS",
+      "label": "本地文件根目录（可选）",
+      "label_en": "Local file roots (optional)",
+      "type": "text",
+      "required": false,
+      "defaultValue": "",
+      "placeholder": "/Users/you/Downloads:/Users/you/Desktop",
+      "description": "允许解析的本地目录白名单，多个用冒号分隔。留空则仅支持 URL 解析。"
+    }
+  ]
+}

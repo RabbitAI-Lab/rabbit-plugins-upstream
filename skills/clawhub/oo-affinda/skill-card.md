@@ -1,46 +1,55 @@
-## Description: <br>
-Affinda helps an agent read, create, and update Affinda data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Affinda lets an agent operate Affinda through an OOMOL-connected account using the oo CLI to upload documents, retrieve document data, and list Affinda resources.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Affinda connector schemas, list or retrieve Affinda resources, and upload documents from URLs through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create documents in the connected Affinda account. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running document creation actions. <br>
-Risk: The skill depends on OOMOL CLI installation, sign-in, and an Affinda account connection with server-side credential injection. <br>
-Mitigation: Install or connect accounts only when the user trusts OOMOL and intends to let an agent operate the Affinda account. <br>
-Risk: Connector input or output contracts may change over time. <br>
-Mitigation: Inspect the live connector schema before constructing payloads for each action. <br>
+## Use Case:
 
+Developers and external users use this skill to perform Affinda document-processing actions through an OOMOL-connected account, including uploads from URLs, document retrieval, and organization, workspace, document type, and document listing workflows.
 
-## Reference(s): <br>
-- [Affinda ClawHub listing](https://clawhub.ai/oomol/skills/oo-affinda) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Affinda homepage](https://www.affinda.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schemas before action execution; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill metadata) <br>
+Risk: The fallback setup recommends executing remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified official package, pinned release, or downloaded installer that can be inspected and validated before execution.
+
+Risk: Affinda actions and document-related payloads pass through OOMOL as an intermediary.
+
+Mitigation: Install and use the skill only when that intermediary role is acceptable for the intended documents, account, and data-handling requirements.
+
+## Reference(s):
+
+- [ClawHub Affinda skill page](https://clawhub.ai/oomol/skills/oo-affinda)
+- [Affinda homepage](https://www.affinda.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands can return JSON responses from Affinda actions through OOMOL, including data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Iru (Kandji)"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["kandji"]
   icon: "https://static.oomol.com/logo/third-party/kandji.png"
 ---

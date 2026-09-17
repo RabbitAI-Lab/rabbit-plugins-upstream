@@ -1,46 +1,56 @@
-## Description: <br>
-MetatextAI (metatext.ai) operates a connected MetatextAI account through the OOMOL oo CLI connector for reading, creating, and updating guardrail-related data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MetatextAI (metatext.ai). Use this skill for ANY MetatextAI request - reading, creating, and updating data. Whenever a task involves MetatextAI, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect MetatextAI connector schemas, manage guardrail policies, evaluate chat transcripts against configured guardrails, and run selected red-team test scans for a connected application. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to a connected MetatextAI account through OOMOL. <br>
-Mitigation: Install it only when you intend the agent to operate that account, and keep account connection and billing state under user control. <br>
-Risk: Policy creation changes MetatextAI guardrail configuration. <br>
-Mitigation: Review the exact policy payload and expected effect with the user before running write actions. <br>
-Risk: First-time setup may require installing the oo CLI from a shell command. <br>
-Mitigation: Verify the oo CLI installer source before running setup commands. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect MetatextAI action schemas, evaluate chat transcripts against configured guardrails, manage guardrail policies, and run red-team test scans through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [MetatextAI ClawHub page](https://clawhub.ai/oomol/oo-metatextai) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
-- [MetatextAI homepage](https://metatext.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; action responses are JSON from the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: evidence.release.version and SKILL.md frontmatter) <br>
+Risk: Setup instructions include remote installer commands that execute downloaded shell or PowerShell scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified package or pinned oo CLI release where possible, and review installer commands before execution.
+
+Risk: The skill can create MetatextAI guardrail policies and perform other state-changing actions.
+
+Mitigation: Confirm the exact action payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub MetatextAI Skill](https://clawhub.ai/oomol/skills/oo-metatextai)
+- [MetatextAI Homepage](https://metatext.ai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

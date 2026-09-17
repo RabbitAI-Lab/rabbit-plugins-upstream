@@ -1,40 +1,62 @@
-## Description: <br>
-Scan ClawHub skills for security vulnerabilities before installing them, using mcp-scan pre-flight checks to detect prompt injections, malware payloads, hardcoded secrets, and related threats. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Stage, scan, and install a ClawHub skill when the user requests a guarded ClawHub installation. Blocks installation on security findings or incomplete scans.
 
-## Publisher: <br>
-[jamesouttake](https://clawhub.ai/user/jamesouttake) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[jamesouttake](https://clawhub.ai/user/jamesouttake)
 
-## Use Case: <br>
-Developers and agent users can use this skill when installing ClawHub skills to stage the target skill, scan it before installation, and block or quarantine it when issues are detected. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan verdict is suspicious because the install script can stage, delete, move, and install skill directories. <br>
-Mitigation: Review the script before running it, use normal ClawHub skill slugs, and avoid --force unless overwriting an existing skill is intended. <br>
-Risk: The script exposes a --skip-scan option and depends on locally available command-line tools. <br>
-Mitigation: Do not use --skip-scan for untrusted skills, and install dependencies such as clawhub and uv through verified package-manager sources where possible. <br>
+## Use Case:
 
+Developers and operators use this skill to install requested ClawHub skills through a guarded workflow that stages downloads, requires complete clean Snyk Agent Scan results, and blocks installation when scans are incomplete or report findings.
 
-## Reference(s): <br>
-- [skill-guard on ClawHub](https://clawhub.ai/jamesouttake/skills/skill-guard) <br>
-- [mcp-scan](https://github.com/invariantlabs-ai/mcp-scan) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Guidance, Configuration] <br>
-**Output Format:** [Markdown instructions with shell commands and terminal status output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Installs clean staged skills, leaves flagged skills quarantined for review, and returns exit codes for clean, error, or threat-detected outcomes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The guarded installer downloads a requested skill, uploads staged text content to Snyk for analysis, and can modify the local OpenClaw workspace after a clean scan.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only where external Snyk analysis and workspace modification are acceptable, and provide SNYK_TOKEN through an environment variable or secret manager.
+
+Risk: A clean scanner result is not a guarantee that a downloaded skill is safe.
+
+Mitigation: Review retained quarantine and backup directories as data when a scan or replacement fails, and do not execute staged skill content.
+
+Risk: The scanner package is pinned, but its transitive dependencies are not fully locked and uvx may download dependencies on first use.
+
+Mitigation: Use trusted clawhub and uvx binaries from approved package sources and run the installer in an environment where first-use downloads are acceptable.
+
+Risk: Replacing an existing skill can require manual recovery if the machine crashes or the process is forcibly terminated.
+
+Mitigation: Use --force only for intentional replacement, preserve the printed run directory, and recover from the previous-skill backup if automatic rollback cannot complete.
+
+## Reference(s):
+
+- [Snyk Agent Scan](https://github.com/snyk/agent-scan)
+- [ClawHub skill page](https://clawhub.ai/jamesouttake/skills/skill-guard)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May print exit status, a private staging directory, and backup location information.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

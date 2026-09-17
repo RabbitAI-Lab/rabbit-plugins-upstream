@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Databar.ai"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["databar_ai"]
   icon: "https://static.oomol.com/logo/third-party/databar_ai.svg"
 ---

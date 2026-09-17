@@ -1,40 +1,52 @@
-## Description: <br>
-Zipcodebase helps agents search and read postal-code, location, radius, distance, and account-status data through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zipcodebase helps agents search postal-code data, list city and state postal codes, calculate distances, match postal-code pairs, and check account status through an OOMOL-connected Zipcodebase account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to query Zipcodebase through an OOMOL-connected account for postal-code lookup, city or state listings, radius searches, distance calculations, and account status checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Using the skill may require installing and authenticating the OOMOL CLI and connecting a Zipcodebase API key or account with OOMOL. <br>
-Mitigation: Confirm OOMOL is acceptable as the intermediary before setup, and only run the documented first-time setup steps after an auth or connection failure. <br>
+## Use Case:
 
+External users and developers use this skill to query Zipcodebase postal-code data through their connected OOMOL account for lookups, city and state postal-code lists, radius searches, distance calculations, account status, and credit checks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-zipcodebase) <br>
-- [Zipcodebase homepage](https://zipcodebase.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an authenticated oo CLI and a connected Zipcodebase account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release and frontmatter) <br>
+Risk: Setup instructions include remote installer commands that execute downloaded scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only through verified official release steps, verify checksums or signatures where available, and do not let an agent run the installer automatically.
+
+## Reference(s):
+
+- [Zipcodebase homepage](https://zipcodebase.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub Zipcodebase skill page](https://clawhub.ai/oomol/skills/oo-zipcodebase)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an installed oo CLI and an authenticated OOMOL-connected Zipcodebase account.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,60 @@
-## Description: <br>
-Process Street lets an agent read, create, and update Process Street workflows, workflow runs, tasks, and form fields through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Process Street through the OOMOL-connected oo CLI to read, create, and update workflows, workflow runs, tasks, and form fields.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, operators, and developers use this skill to inspect Process Street workflow data and, with confirmation, create workflow runs or update run fields and task status from an agent session. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use a connected OOMOL account to create Process Street workflow runs or update workflow run fields and task status. <br>
-Mitigation: Confirm the exact write payload and expected effect with the user before running write actions. <br>
-Risk: The skill requires access to a connected Process Street account through OOMOL. <br>
-Mitigation: Use only the intended OOMOL Process Street connection and resolve authentication or scope errors before retrying. <br>
+## Use Case:
 
+External users and developers use this skill to operate Process Street workflows from an agent, including listing workflows and runs, creating workflow runs, updating task status, and editing workflow run form fields.
 
-## Reference(s): <br>
-- [Process Street homepage](https://www.process.st/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the live connector schema before constructing action payloads; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: evidence release and SKILL.md frontmatter) <br>
+Risk: The setup path includes remote installer commands that can execute arbitrary code if followed without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from a verified release or trusted package manager, and use checksum or signature verification when available.
+
+Risk: Process Street workflow data and actions are routed through OOMOL's connector service.
+
+Mitigation: Connect Process Street only after confirming that this routing is acceptable for the user's data handling and service policies.
+
+Risk: Write actions can create workflow runs or modify tasks and form fields.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running any action tagged as write.
+
+## Reference(s):
+
+- [Process Street homepage](https://www.process.st/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-process-street)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API calls, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live action-schema inspection before constructing Process Street write payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

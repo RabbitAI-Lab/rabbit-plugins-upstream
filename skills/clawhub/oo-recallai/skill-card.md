@@ -1,41 +1,60 @@
-## Description: <br>
-Recall.ai (recall.ai). Use this skill for ANY Recall.ai request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Recall.ai enables agents to read, create, update, and delete Recall.ai bot and media data through OOMOL's oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Recall.ai meeting bots through an OOMOL-connected account, including bot creation, retrieval, listing, removal from active calls, and deletion of completed bot media. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate a user's Recall.ai account through OOMOL and may create bots, remove bots from calls, or delete bot media. <br>
-Mitigation: Install only when that account access is intended, review prompts carefully, and require explicit approval before write or destructive actions. <br>
-Risk: First-time setup may require installing the oo CLI. <br>
-Mitigation: Verify the oo CLI installer source before running setup commands. <br>
+## Use Case:
 
+External developers and operations teams use this skill to manage Recall.ai meeting bots through an OOMOL-connected account, including scheduling bots, retrieving and listing bot status, removing active bots, and deleting completed bot media.
 
-## Reference(s): <br>
-- [Recall.ai homepage](https://www.recall.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Setup guidance includes remote installer commands that can execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path first and prefer a signed, versioned, or package-managed oo CLI install source before running installer commands.
+
+Risk: Write or destructive Recall.ai actions can create bots, remove active bots from meetings, or delete completed bot media.
+
+Mitigation: Verify the exact bot, media, meeting target, payload, and intended effect with the user before approving state-changing actions.
+
+Risk: Connector action inputs may differ from assumptions in a prompt or previous run.
+
+Mitigation: Inspect the live Recall.ai action schema before constructing each payload.
+
+## Reference(s):
+
+- [ClawHub Recall.ai Skill Page](https://clawhub.ai/oomol/skills/oo-recallai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Recall.ai Homepage](https://www.recall.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live Recall.ai action schemas before payload construction and requires confirmation for write or destructive actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence, release metadata, and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

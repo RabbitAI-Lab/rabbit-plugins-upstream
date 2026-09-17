@@ -1,45 +1,53 @@
-## Description: <br>
-Use this skill for Similarweb requests that search and read data through the OOMOL Similarweb connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables an agent to search and read Similarweb ranking, rank-tracker, and subscription data through the OOMOL Similarweb connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to query Similarweb through an OOMOL-connected account, including rank-tracker campaign metadata, top-site rankings, and subscription usage allowance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Similarweb API key and uses account credentials injected by OOMOL. <br>
-Mitigation: Connect only the intended Similarweb account and avoid exposing raw credentials in prompts, files, or command output. <br>
-Risk: The skill includes fallback commands for installing and authenticating the oo CLI. <br>
-Mitigation: Run setup commands only after an auth, connection, or missing-CLI failure and review install steps before execution. <br>
-Risk: Future connector actions could change Similarweb state if write or destructive actions are added. <br>
-Mitigation: Confirm the exact payload and effect with the user before running any action tagged write or destructive. <br>
+## Use Case:
 
+External users and developers use this skill to let an agent inspect Similarweb connector schemas and retrieve ranking, campaign, and usage allowance data through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Similarweb homepage](https://www.similarweb.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-similarweb-digitalrank-api) <br>
-- [OOMOL Similarweb connection](https://console.oomol.com/app-connections?provider=similarweb_digitalrank_api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing payloads; connector responses include data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The setup instructions include remote installer commands that execute downloaded scripts locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval before installation, prefer official versioned documentation, inspect the installer, and verify checksums or signatures where available.
+
+## Reference(s):
+
+- [Similarweb homepage](https://www.similarweb.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-similarweb-digitalrank-api)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return connector JSON data when actions are run with the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

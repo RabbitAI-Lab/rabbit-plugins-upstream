@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Amplemarket"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["amplemarket"]
   icon: "https://static.oomol.com/logo/third-party/amplemarket.svg"
 ---

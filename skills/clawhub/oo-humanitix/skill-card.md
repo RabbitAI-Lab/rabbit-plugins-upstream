@@ -1,43 +1,51 @@
-## Description: <br>
-Humanitix lets an agent read Humanitix event data and account tags through an OOMOL-connected Humanitix account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Humanitix (humanitix.com). Use this skill for ANY Humanitix request - searching and reading data. Whenever a task involves Humanitix, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and operators use this skill to retrieve Humanitix event details, list accessible events, and list account tags from a connected Humanitix account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Humanitix account and sensitive credentials managed through OOMOL. <br>
-Mitigation: Review the requested account access in ClawHub and connect only the Humanitix account needed for the intended use. <br>
-Risk: Connector schemas and available account data can vary by connection state, scope, or credential expiry. <br>
-Mitigation: Inspect the live connector schema before running an action and reconnect or refresh credentials only when an authentication or scope error occurs. <br>
+## Use Case:
 
+External users and developers use this skill to search and read Humanitix event data through an OOMOL-connected account. It supports retrieving event metadata, listing accessible events with filters, and listing account tags.
 
-## Reference(s): <br>
-- [Humanitix ClawHub listing](https://clawhub.ai/oomol/oo-humanitix) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Humanitix homepage](https://humanitix.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include Humanitix connector command output returned as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: First-time setup includes installer commands fetched from the internet and executed locally, which could run arbitrary code if the installer channel is compromised.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an already installed trusted oo CLI, or download and verify the installer through an official, versioned, checksum- or signature-backed channel before execution.
+
+## Reference(s):
+
+- [Humanitix homepage](https://humanitix.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live Humanitix connector schemas before running actions; command responses are JSON when the skill invokes the oo CLI with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

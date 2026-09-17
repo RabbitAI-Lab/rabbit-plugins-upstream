@@ -1,44 +1,55 @@
-## Description: <br>
-Dida365 (dida365.com) skill for reading, creating, updating, and deleting Dida365 data through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for Dida365 requests that read, create, update, and delete task, project, and habit data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage Dida365 tasks, projects, and habits through an OOMOL-connected account, including read, write, and delete workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and destructive actions can change or remove Dida365 tasks, projects, or habit data. <br>
-Mitigation: Confirm the exact payload, target identifiers, and user approval before running actions tagged write or destructive. <br>
-Risk: Using the skill requires installing or signing into the OOMOL oo CLI and connecting a Dida365 account. <br>
-Mitigation: Approve setup only when the user trusts OOMOL and intends to let an agent manage Dida365 data through that connection. <br>
-Risk: Connector inputs may differ by action or change over time. <br>
-Mitigation: Fetch the live action schema with the oo CLI before constructing each payload. <br>
+## Use Case:
 
+External users and agents use this skill to manage Dida365 tasks, projects, and habits through an OOMOL-connected account. The skill supports read operations plus confirmed write and destructive actions for task-management workflows.
 
-## Reference(s): <br>
-- [Dida365 homepage](https://dida365.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-dida365) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing JSON payloads; connector responses are JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and server release evidence) <br>
+Risk: The first-time setup path includes a remote installer executed directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified installation path when available, or inspect and validate the installer before execution.
+
+Risk: Write and destructive connector actions can change or remove Dida365 tasks, projects, or habit data.
+
+Mitigation: Confirm the exact target, payload, and expected effect before running actions tagged as write or destructive.
+
+## Reference(s):
+
+- [Dida365 homepage](https://dida365.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-dida365)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands inspect live connector schemas before action execution; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,50 +1,62 @@
-## Description: <br>
-Helps agents create feed documents, upload feed content, submit Amazon SP-API Feeds, check processing status, retrieve feed documents, list feeds, and cancel feeds through LinkFox-provided scripts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage Amazon store Feed workflows for bulk inventory or listing data, including creating feed documents, uploading feed content to presigned URLs, submitting feeds, checking status, retrieving result documents, and cancelling feeds.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Developers and commerce operations agents use this skill to manage Amazon store feed submission workflows, including feed document creation, upload, submission, polling, cancellation, and result-document retrieval. It is intended for users who already have LinkFox API access and Amazon SP-API authorization. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Amazon feed data, feed document URLs, request bodies, and status responses may be saved locally. <br>
-Mitigation: Run the skill only in workspaces approved for this data, review saved linkfox session files, and remove sensitive local outputs when they are no longer needed. <br>
-Risk: The upload workflow sends a local file or inline content to a provided pre-signed upload URL. <br>
-Mitigation: Verify the file path, content type, and destination URL before running upload_feed_document. <br>
-Risk: The artifact contains conflicting cost guidance. <br>
-Mitigation: Confirm LinkFox credit or cost behavior with the publisher before repeated feed operations. <br>
+## Use Case:
 
+External users and developers use this skill to automate Amazon SP-API Feeds tasks for bulk store data updates, including feed document creation, upload, submission, polling, result retrieval, and cancellation. It is intended for workflows that already have LinkFox authorization and the required Amazon Feeds permissions.
 
-## Reference(s): <br>
-- [Skill API Reference](artifact/references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-store-feeds) <br>
-- [Amazon createFeedDocument Reference](https://developer-docs.amazon.com/sp-api/reference/createfeeddocument) <br>
-- [Amazon getFeedDocument Reference](https://developer-docs.amazon.com/sp-api/reference/getfeeddocument) <br>
-- [Amazon createFeed Reference](https://developer-docs.amazon.com/sp-api/reference/createfeed) <br>
-- [Amazon getFeed Reference](https://developer-docs.amazon.com/sp-api/reference/getfeed) <br>
-- [Amazon getFeeds Reference](https://developer-docs.amazon.com/sp-api/reference/getfeeds) <br>
-- [Amazon cancelFeed Reference](https://developer-docs.amazon.com/sp-api/reference/cancelfeed) <br>
-- [Amazon Feed Type Values](https://developer-docs.amazon.com/sp-api/docs/feed-type-values) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, JSON, files, API calls] <br>
-**Output Format:** [Markdown guidance with shell command examples; scripts emit JSON to stdout and save full JSON responses to local files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The scripts may summarize large responses on stdout while saving complete responses under a local linkfox session data directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill handles login, API keys, billing flows, feed uploads, and saved response files that may contain seller data or presigned URLs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a least-privilege LinkFox key, upload only explicit feed files to fresh Amazon presigned URLs, avoid endpoint override environment variables unless you control them, and clean up saved linkfox response files after use.
+
+Risk: Repeated bad requests, authorization failures, missing resources, or high-frequency polling can trigger Amazon SP-API store-protection cooldown behavior.
+
+Mitigation: Stop automatic retries, fix parameters or authorization before retrying, follow retryAfter or blockedUntil when present, and reduce polling or pagination frequency.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-store-feeds)
+- [API reference](references/api.md)
+- [Onboarding and authentication guidance](references/onboarding.md)
+- [Amazon SP-API createFeedDocument](https://developer-docs.amazon.com/sp-api/reference/createfeeddocument)
+- [Amazon SP-API getFeedDocument](https://developer-docs.amazon.com/sp-api/reference/getfeeddocument)
+- [Amazon SP-API createFeed](https://developer-docs.amazon.com/sp-api/reference/createfeed)
+- [Amazon SP-API getFeed](https://developer-docs.amazon.com/sp-api/reference/getfeed)
+- [Amazon SP-API getFeeds](https://developer-docs.amazon.com/sp-api/reference/getfeeds)
+- [Amazon SP-API cancelFeed](https://developer-docs.amazon.com/sp-api/reference/cancelfeed)
+- [Amazon Feed Type Values](https://developer-docs.amazon.com/sp-api/docs/feed-type-values)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with Python shell commands and JSON response summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts persist full JSON responses under a local linkfox session directory and print full or summarized JSON to stdout.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

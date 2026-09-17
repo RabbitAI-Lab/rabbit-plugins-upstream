@@ -1,45 +1,61 @@
-## Description: <br>
-ImgBB (imgbb.com). Use this skill for ANY ImgBB request, including reading, creating, and updating data through the OOMOL-connected ImgBB connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ImgBB enables agents to upload images to ImgBB through the OOMOL-connected oo CLI and return hosted image metadata.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to upload images to ImgBB through an OOMOL-connected account and receive hosted image metadata. It is suited for workflows that need connector-managed credentials and live action schema inspection before execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Image uploads send selected content to ImgBB through an OOMOL-managed connection. <br>
-Mitigation: Confirm the exact image payload and intended upload effect with the user before running the write action. <br>
-Risk: The skill depends on OOMOL account authentication, an ImgBB connection, and available OOMOL billing credits. <br>
-Mitigation: Run one-time login, connection, or billing recovery steps only after a matching command failure. <br>
-Risk: Installer or login commands can change the local environment or open account flows. <br>
-Mitigation: Use the documented setup steps only when the oo CLI or required connection is missing. <br>
+## Use Case:
 
+Developers and external agents use this skill to inspect the ImgBB connector schema, construct valid JSON payloads, and upload images from public URLs or Base64 content through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ImgBB homepage](https://imgbb.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-imgbb) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration guidance, JSON responses] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo connector schema output before constructing action payloads; upload_image returns hosted image metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill frontmatter) <br>
+Risk: First-time setup includes remote installer commands that can execute changing code from the internet.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official signed or version-pinned installation path and inspect downloaded installer scripts before execution.
+
+Risk: Image uploads create hosted ImgBB content and change remote service state.
+
+Mitigation: Confirm the exact upload payload and expected effect with the user before running the upload action.
+
+Risk: The skill depends on trust in OOMOL and the ImgBB connector.
+
+Mitigation: Use the skill only with a trusted OOMOL account and inspect the live connector schema before constructing requests.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-imgbb)
+- [ImgBB Homepage](https://imgbb.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [OOMOL ImgBB Connection Settings](https://console.oomol.com/app-connections?provider=imgbb)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce oo CLI commands that return JSON responses containing hosted image metadata and execution IDs.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

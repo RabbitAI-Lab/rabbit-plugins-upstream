@@ -1,45 +1,60 @@
-## Description: <br>
-FireHydrant (firehydrant.com). Use this skill for ANY FireHydrant request: reading, creating, and updating data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+FireHydrant helps agents use an OOMOL-connected FireHydrant account to list and retrieve incidents, services, and environments, and to create incidents through the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and incident responders use this skill to let an agent inspect FireHydrant incidents, services, and environments and create incidents through an OOMOL-connected FireHydrant account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create FireHydrant incidents through the connected account. <br>
-Mitigation: Confirm the exact write payload and expected effect with the user before running incident creation. <br>
-Risk: Using the skill grants the agent access to FireHydrant data available through the connected OOMOL account. <br>
-Mitigation: Install and use the skill only when that account access is intended for the task. <br>
-Risk: First-time setup may require running a remote oo CLI installer. <br>
-Mitigation: Run the installer only after verifying that the OOMOL install source is trusted. <br>
+## Use Case:
 
+External users, developers, and operations teams use this skill to inspect FireHydrant incidents, services, and environments and to create incidents after confirming the write payload.
 
-## Reference(s): <br>
-- [ClawHub FireHydrant Skill](https://clawhub.ai/oomol/skills/oo-firehydrant) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [FireHydrant Homepage](https://firehydrant.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Agent actions may return JSON data from FireHydrant connector calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release metadata and skill frontmatter) <br>
+Risk: Setup instructions include remote installer execution.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified package, pinned release, checksum, or official manual install path instead of running curl-to-bash or Invoke-Expression commands blindly.
+
+Risk: The skill can read FireHydrant data and create incidents through OOMOL.
+
+Mitigation: Use an authorized connected account, treat incident and service details as sensitive, and confirm exact payloads before any write action.
+
+Risk: Broad routing language may cause use beyond the documented connector actions.
+
+Mitigation: Limit operation to the listed actions and inspect the live action schema before constructing command payloads.
+
+## Reference(s):
+
+- [ClawHub FireHydrant Skill](https://clawhub.ai/oomol/skills/oo-firehydrant)
+- [FireHydrant Homepage](https://firehydrant.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands inspect live schemas before running connector actions; write actions require payload confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,60 @@
-## Description: <br>
-Checkly (checklyhq.com). Use this skill for ANY Checkly request - searching and reading data. Whenever a task involves Checkly, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Checkly through an OOMOL-connected account using the oo CLI to retrieve checks, check results, statuses, and account details.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Checkly checks, check results, check statuses, and the connected Checkly account through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill relies on OOMOL to broker the connected Checkly account. <br>
-Mitigation: Install only when OOMOL is trusted to broker the Checkly connection. <br>
-Risk: Future connector actions could write, delete, overwrite, or otherwise change Checkly state. <br>
-Mitigation: Require explicit user approval before running any future action that changes Checkly state. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Checkly account data, checks, statuses, and recent check results through an OOMOL-connected oo CLI workflow.
 
-## Reference(s): <br>
-- [Checkly homepage](https://www.checklyhq.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Checkly skill on ClawHub](https://clawhub.ai/oomol/skills/oo-checkly) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; connector responses are JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and frontmatter) <br>
+Risk: The skill relies on OOMOL as the credential broker for Checkly account access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only when the user accepts OOMOL-managed Checkly credentials, and treat sign-in plus connection setup as explicit account-changing steps.
+
+Risk: Fallback setup documents remote installer commands for the oo CLI.
+
+Mitigation: Prefer a verified or package-manager install path, or review the installer source before running remote install commands.
+
+Risk: Connector actions execute against a live Checkly account using server-side credentials.
+
+Mitigation: Fetch the live action schema before each payload and get explicit user approval before any future write or destructive action.
+
+## Reference(s):
+
+- [Checkly homepage](https://www.checklyhq.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-checkly)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance, text]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON output from the oo CLI]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; normal documented actions are read-oriented.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

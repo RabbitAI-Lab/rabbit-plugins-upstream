@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "WeatherAPI"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["weatherapi"]
   icon: "https://static.oomol.com/logo/third-party/weatherapi.png"
 ---

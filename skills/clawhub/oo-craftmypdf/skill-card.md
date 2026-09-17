@@ -1,45 +1,56 @@
-## Description: <br>
-CraftMyPDF helps an agent use the OOMOL `oo` CLI to inspect CraftMyPDF schemas, generate hosted PDFs from templates, and read account or template information through an OOMOL-connected CraftMyPDF account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CraftMyPDF helps agents read, create, and update CraftMyPDF data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and agents use this skill to create PDFs from CraftMyPDF templates and inspect CraftMyPDF account or template data without handling raw API tokens directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The one-time `oo` CLI installer uses shell or PowerShell commands that should be reviewed before execution. <br>
-Mitigation: Review the official install guide and installer script, or use a trusted package path, before running installation commands. <br>
-Risk: PDF generation is a write action that can create hosted output from user-provided template data. <br>
-Mitigation: Confirm the exact template ID, payload, and expected effect with the user before running `create_pdf`. <br>
-Risk: The skill depends on OOMOL as the credential broker for CraftMyPDF. <br>
-Mitigation: Install only when using OOMOL for credential mediation is acceptable, and reconnect CraftMyPDF only after authentication or connection failures. <br>
+## Use Case:
 
+Developers and operators use this skill to work with CraftMyPDF through an OOMOL-connected account, including listing templates, inspecting template details, checking account information, and generating PDFs from templates.
 
-## Reference(s): <br>
-- [CraftMyPDF homepage](https://craftmypdf.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [CraftMyPDF ClawHub listing](https://clawhub.ai/oomol/oo-craftmypdf) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Agent actions can return JSON responses from the `oo` CLI, including hosted PDF URLs and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: The setup path includes downloaded installer scripts that can execute code during installation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source before use and prefer signed packages, pinned releases, or checksum/signature verification.
+
+Risk: The create_pdf action generates hosted PDF outputs from user-supplied template payloads.
+
+Mitigation: Confirm the exact payload and intended effect with the user before running create_pdf, then review the generated output URL and transaction metadata.
+
+## Reference(s):
+
+- [ClawHub CraftMyPDF skill page](https://clawhub.ai/oomol/skills/oo-craftmypdf)
+- [CraftMyPDF homepage](https://craftmypdf.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the oo CLI to inspect live connector schemas and run CraftMyPDF actions; create_pdf returns hosted file URLs and transaction metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

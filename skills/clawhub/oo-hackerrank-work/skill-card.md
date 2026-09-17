@@ -1,43 +1,56 @@
-## Description: <br>
-HackerRank Work helps agents search and read HackerRank Work tests and candidates through the OOMOL hackerrank_work connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HackerRank Work helps agents search and read HackerRank Work tests and candidate data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Recruiting, talent, and engineering teams use this skill to list HackerRank Work tests and retrieve or search candidate records from a connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can retrieve HackerRank Work test and candidate data, which may include sensitive hiring information. <br>
-Mitigation: Install only for users intended to access HackerRank Work data and review returned content before sharing it. <br>
-Risk: First-time setup includes optional remote installer commands for the OOMOL CLI. <br>
-Mitigation: Prefer the official OOMOL installation guide or inspect the installer before running curl-to-bash or PowerShell commands. <br>
+## Use Case:
 
+Developers, hiring operations staff, and recruiting teams use this skill to retrieve HackerRank Work tests, list or search test candidates, and inspect candidate records from a connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-hackerrank-work) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI installation guide](https://cli.oomol.com/install-guide.md) <br>
-- [HackerRank Work homepage](https://www.hackerrank.com/work) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only connector actions; live connector schemas are checked before action payloads are built.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and frontmatter) <br>
+Risk: Setup instructions include installing the oo CLI through a remote shell script, which could expose users to unverified installer behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only from a trusted OOMOL distribution path and prefer a verified package or release process instead of piping a downloaded script directly into a shell.
+
+Risk: The connector processes HackerRank Work data through an OOMOL-connected account.
+
+Mitigation: Use the skill only with trusted OOMOL account connections and review organization data-handling expectations before running connector actions.
+
+## Reference(s):
+
+- [HackerRank Work homepage](https://www.hackerrank.com/work)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-hackerrank-work)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

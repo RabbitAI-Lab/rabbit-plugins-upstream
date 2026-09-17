@@ -1,45 +1,56 @@
-## Description: <br>
-Operates Baidu Qianfan through OOMOL's qianfan connector for reading, creating, updating, and deleting Qianfan resources. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents read, create, update, and delete Baidu Qianfan data through OOMOL's oo CLI instead of direct API calls.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent call Baidu Qianfan chat, completion, embedding, reranking, file, batch, OCR, image generation, and video generation workflows through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to an OOMOL-connected Baidu Qianfan account. <br>
-Mitigation: Install it only for agents that should use that account, and keep account connection and billing state under the user's control. <br>
-Risk: Write actions can create jobs, upload files, generate content, or otherwise change Qianfan resources. <br>
-Mitigation: Inspect the live action schema and confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: Destructive actions can delete stored Qianfan responses. <br>
-Mitigation: Require explicit user approval for the target resource before running destructive actions. <br>
+## Use Case:
 
+Developers and operators use this skill to invoke Baidu Qianfan actions through OOMOL, including chat and completion, embeddings, reranking, file and batch workflows, image and video generation tasks, and OCR or document processing.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-qianfan) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Baidu Qianfan homepage](https://qianfan.cloud.baidu.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions include direct execution of a remote installer script for the OOMOL CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installing, and prefer a pinned or package-manager install with checksum or signature verification.
+
+Risk: Some Baidu Qianfan actions can write data, upload files, start generation tasks, cancel jobs, or delete stored responses.
+
+Mitigation: Require explicit confirmation for the exact payload and target before write, upload, generation, cancellation, or deletion actions.
+
+## Reference(s):
+
+- [ClawHub Baidu Qianfan skill page](https://clawhub.ai/oomol/skills/oo-qianfan)
+- [Baidu Qianfan homepage](https://qianfan.cloud.baidu.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill uses live connector schemas before action execution and requires explicit confirmation for write, upload, generation, cancellation, or deletion actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: SKILL.md metadata and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

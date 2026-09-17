@@ -1,42 +1,56 @@
-## Description: <br>
-Use DeepL through an OOMOL-connected account to translate text, list supported languages, and fetch API usage. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+DeepL lets an agent operate DeepL through an OOMOL-connected account to inspect connector schemas, check usage, list supported languages, and translate text.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate DeepL through the OOMOL oo CLI for translation, supported-language lookup, and API usage checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Translation text and usage requests are sent through the connected DeepL/OOMOL integration. <br>
-Mitigation: Confirm the user is comfortable using the OOMOL oo CLI and DeepL connector before installation or first use. <br>
-Risk: First-time setup may install the oo CLI and create a persistent login session. <br>
-Mitigation: Run setup steps only after an auth, connection, or missing-command failure and follow the artifact's setup guidance. <br>
+## Use Case:
 
+External users and developers use this skill to run DeepL translation-related actions through an authenticated OOMOL connection, including checking quota, discovering supported languages, and translating text.
 
-## Reference(s): <br>
-- [DeepL homepage](https://www.deepl.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub DeepL skill page](https://clawhub.ai/oomol/oo-deepl) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return normalized DeepL connector JSON containing action data and an execution id.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: evidence release metadata and skill frontmatter) <br>
+Risk: The first-time setup instructions can run a remote installer directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the install step before use; prefer a signed or package-managed oo CLI install, or download and verify the installer before running it.
+
+Risk: Connector commands depend on an authenticated OOMOL account, a connected DeepL API key, valid scope, and available billing.
+
+Mitigation: Use the setup and recovery steps only after a matching command failure, then retry with the live connector schema before sending payloads.
+
+## Reference(s):
+
+- [ClawHub DeepL skill page](https://clawhub.ai/oomol/skills/oo-deepl)
+- [DeepL homepage](https://www.deepl.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector command responses are JSON objects containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

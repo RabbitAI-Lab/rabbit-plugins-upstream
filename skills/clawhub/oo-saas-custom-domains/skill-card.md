@@ -1,42 +1,57 @@
-## Description: <br>
-SaaS Custom Domains helps agents manage accounts, upstreams, custom domains, DNS verification, and HTTP cache purging through OOMOL's oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SaaS Custom Domains helps agents read, create, update, and delete SaaS Custom Domains data through the OOMOL connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect and administer SaaS Custom Domains resources through OOMOL, including listing accounts, managing upstreams and custom domains, verifying DNS records, and purging cache. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write or destructive connector actions can create, delete, or purge SaaS Custom Domains resources. <br>
-Mitigation: Confirm the exact target, payload, and expected effect with the user before running those actions. <br>
-Risk: First-time setup may require installing or authenticating the OOMOL CLI. <br>
-Mitigation: Verify the OOMOL CLI installer and account connection before setup, and run setup only after an auth or connection failure. <br>
+## Use Case:
 
+External developers and operators use this skill to manage SaaS Custom Domains accounts, upstreams, custom domains, DNS verification, and cache purges through OOMOL's `oo` CLI connector. It supports read workflows directly and requires confirmation before write or destructive actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-saas-custom-domains) <br>
-- [SaaS Custom Domains homepage](https://saascustomdomains.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write and destructive actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Setup instructions include remote installer commands that execute downloaded scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer installing the `oo` CLI through a verifiable release, package manager, checksum, or signature process before using the skill.
+
+Risk: Create, delete, and purge actions can change or remove SaaS Custom Domains resources.
+
+Mitigation: Confirm the exact payload, target resource, and expected effect with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-saas-custom-domains)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [SaaS Custom Domains Homepage](https://saascustomdomains.com)
+- [oo CLI Repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are expected as JSON objects containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.2 (source: evidence.release.version and skill metadata.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

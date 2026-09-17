@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Longbridge"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.4"
   services: ["longbridge"]
   icon: "https://static.oomol.com/logo/third-party/longbridge.png"
 ---

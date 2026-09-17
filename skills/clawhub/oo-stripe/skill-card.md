@@ -1,43 +1,60 @@
-## Description: <br>
-Operate Stripe through an OOMOL-connected account for reading, creating, updating, and deleting Stripe data instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables an agent to operate Stripe customers, products, and prices through the OOMOL oo CLI, including read, search, create, update, and delete actions.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to operate Stripe through an OOMOL-connected account, including customer, product, and price workflows for read, create, update, search, and delete tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Create, update, and delete actions can affect real Stripe customers, products, prices, and business records. <br>
-Mitigation: Review the exact payload, target, and intended effect before approving any write or destructive command. <br>
-Risk: The skill operates a connected Stripe account through OOMOL with sensitive credentials. <br>
-Mitigation: Install it only where agent operation of the connected Stripe account is acceptable, and inspect the live action schema before executing connector actions. <br>
+## Use Case:
 
+External developers and business operators use this skill to inspect and manage Stripe account data after connecting Stripe through OOMOL. It supports customer, product, and price workflows, including state-changing actions that require confirmation.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-stripe) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Stripe](https://stripe.com) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands call the OOMOL oo CLI and return connector responses with data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server evidence and SKILL.md metadata) <br>
+Risk: First-time setup includes remote installer commands that can execute downloaded code locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer verified OOMOL installation or package-manager steps before running setup commands.
+
+Risk: Write and destructive Stripe actions can modify or delete business data.
+
+Mitigation: Confirm the exact action, target identifiers, payload, and expected effect with the user before execution.
+
+Risk: The skill depends on OOMOL server-side credential handling for the connected Stripe account.
+
+Mitigation: Install only when the user is comfortable authorizing OOMOL to operate the Stripe account.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-stripe)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Stripe homepage](https://stripe.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

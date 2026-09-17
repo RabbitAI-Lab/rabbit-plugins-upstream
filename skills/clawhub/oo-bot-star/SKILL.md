@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "BotStar"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["bot_star"]
   icon: "https://static.oomol.com/logo/third-party/bot_star.svg"
 ---

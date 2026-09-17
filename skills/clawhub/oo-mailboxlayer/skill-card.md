@@ -1,47 +1,57 @@
-## Description: <br>
-Enables agents to validate email addresses with Mailboxlayer through OOMOL's oo CLI and connected-account credentials. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mailboxlayer guides an agent to validate email addresses through an OOMOL-connected Mailboxlayer account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Agents and developers use this skill to validate individual email addresses with Mailboxlayer via an OOMOL-connected account, returning deliverability and quality signals without exposing raw API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Validated email addresses are sent through the OOMOL/Mailboxlayer connector. <br>
-Mitigation: Use the skill only when the user intends to validate those addresses with a connected Mailboxlayer account. <br>
-Risk: The skill depends on an authenticated oo CLI session and connected Mailboxlayer credentials. <br>
-Mitigation: Run first-time setup or login commands only when the oo command, authentication, or connection is actually missing. <br>
-Risk: Connector payloads can become stale if the live action contract changes. <br>
-Mitigation: Inspect the live connector schema before constructing the action payload. <br>
+## Use Case:
 
+Developers and external users use this skill to run Mailboxlayer email validation through an already connected OOMOL account and receive quality signals for a single email address.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-mailboxlayer) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Mailboxlayer Connection Setup](https://console.oomol.com/app-connections?provider=mailboxlayer) <br>
-- [Mailboxlayer Icon](https://static.oomol.com/logo/third-party/Mailboxlayer.svg) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands; connector responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution and returns an execution id under meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: Setup guidance can execute internet-fetched installer scripts on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing, use a verified oo CLI package or documented release process, and do not let an agent run curl-to-bash or PowerShell iex installers automatically.
+
+Risk: The action payload must match the live Mailboxlayer connector schema.
+
+Mitigation: Inspect the connector schema immediately before constructing and running a JSON payload.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-mailboxlayer)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Mailboxlayer Connection Setup](https://console.oomol.com/app-connections?provider=mailboxlayer)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live action-schema inspection before constructing JSON payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

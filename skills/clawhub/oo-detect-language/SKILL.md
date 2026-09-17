@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Detect Language"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["detect_language"]
   icon: "https://static.oomol.com/logo/third-party/detect_language.png"
 ---

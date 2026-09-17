@@ -1,42 +1,55 @@
-## Description: <br>
-Runpod (runpod.io). Use this skill for ANY Runpod request - reading, creating, updating, and deleting data. Whenever a task involves Runpod, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Runpod (runpod.io). Use this skill for Runpod requests such as reading, creating, updating, and deleting Pods through the OOMOL-connected oo CLI rather than calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect and manage Runpod pods through an OOMOL-connected account, including reads, lifecycle operations, and explicitly approved destructive actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run powerful Runpod actions, including write and destructive pod operations. <br>
-Mitigation: Confirm the exact target, payload, and expected effect with the user before write actions, and require explicit approval before destructive actions. <br>
-Risk: The skill requires a connected OOMOL account and sensitive service credentials. <br>
-Mitigation: Use OOMOL server-side credential injection and avoid exposing raw Runpod tokens in prompts, logs, or command payloads. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Runpod action schemas, list or retrieve Pods, and perform confirmed Pod lifecycle operations through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Runpod homepage](https://www.runpod.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before Runpod action execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: First-time setup documents remote installer commands that execute downloaded scripts without checksum or signature verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and independently verify the oo CLI installer source before use; prefer a signed or checksum-verified installation path.
+
+Risk: Write and destructive Pod actions can change, reset, or delete Runpod resources.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running any write or destructive action.
+
+## Reference(s):
+
+- [Runpod homepage](https://www.runpod.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Runpod skill page](https://clawhub.ai/oomol/skills/oo-runpod)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [State-changing Runpod actions require user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

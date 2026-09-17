@@ -1,42 +1,56 @@
-## Description: <br>
-CoinMarketCap lets an agent retrieve cryptocurrency market data, pricing, listings, global metrics, and API key usage information through an OOMOL-connected CoinMarketCap account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CoinMarketCap (coinmarketcap.com). Use this skill for CoinMarketCap requests involving cryptocurrency search, pricing, listings, market metrics, conversion, and API key usage data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to query CoinMarketCap data for cryptocurrency discovery, quotes, listings, price conversion, global market metrics, and API key plan usage. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The server security verdict is suspicious, with scanner guidance warning about workflows that may use more authority than a review task needs. <br>
-Mitigation: Review the release before deployment, use least-privilege execution settings where available, and require explicit confirmation for moderation, publishing, or other high-impact actions. <br>
-Risk: The skill requires a connected CoinMarketCap account and API key, so requests depend on sensitive credentials and account limits. <br>
-Mitigation: Use OOMOL server-side credential handling, inspect the live connector schema before each action payload, and reconnect or recharge only when an authentication, scope, expiration, or billing error requires it. <br>
+## Use Case:
 
+External users, developers, and crypto analysts use this skill to retrieve CoinMarketCap data through an OOMOL-connected account. It supports asset discovery, latest quotes, ranked listings, global market metrics, price conversion, and API key usage checks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-coinmarketcap) <br>
-- [CoinMarketCap homepage](https://coinmarketcap.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI command examples and JSON payload instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Action responses are connector JSON with data and meta.executionId when commands are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: The setup instructions include remote installer scripts that can execute mutable code on a user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer official package-manager or verified installer steps, and review what the oo CLI installation persists before running installer commands.
+
+Risk: CoinMarketCap access is brokered through OOMOL, so account connection and credential handling depend on that service.
+
+Mitigation: Install only when comfortable using OOMOL as the broker, and confirm the CoinMarketCap connection scope before running connector actions.
+
+## Reference(s):
+
+- [CoinMarketCap Homepage](https://coinmarketcap.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-coinmarketcap)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands inspect the live connector schema before sending JSON payloads; connector responses include data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

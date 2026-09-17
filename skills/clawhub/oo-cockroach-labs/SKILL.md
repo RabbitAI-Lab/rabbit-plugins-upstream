@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Cockroach Labs"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["cockroach_labs"]
   icon: "https://static.oomol.com/logo/third-party/cockroach_labs.png"
 ---

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/task-orchestrator-cron-heartbeat-subagent",
   "slug": "task-orchestrator-cron-heartbeat-subagent",
   "ownerHandle": null,
-  "version": "1.0.2",
-  "updatedAt": 1778492403242,
-  "contentHash": "1f065e1210f3c86d1bf7393b218d1a3888a866596475cfeba4c3bdfdd5a71d6f",
-  "fetchedAt": "2026-07-26T19:36:37.036Z"
+  "version": "1.0.1",
+  "updatedAt": 1789535088364,
+  "contentHash": "aa71c2f8574b0d167a5b7d71f01d166c8fd81cdab31b6b13c7b811b23b900b8e",
+  "fetchedAt": "2026-09-17T12:56:13.424Z"
 }

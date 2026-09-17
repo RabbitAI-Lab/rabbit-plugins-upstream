@@ -1,43 +1,57 @@
-## Description: <br>
-Gigasheet (gigasheet.com). Use this skill for Gigasheet requests involving searching and reading data through the OOMOL connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gigasheet helps an agent search Gigasheet library metadata, inspect datasets, list exports and recent files, and check storage or enrichment-credit usage.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect Gigasheet datasets, library metadata, exports, account usage, and storage details through an OOMOL-connected Gigasheet account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Gigasheet account and OOMOL credential handling. <br>
-Mitigation: Install only for environments where the agent is allowed to access that connected account, and treat credentials and account sessions as sensitive. <br>
-Risk: Connector actions depend on live schemas and account state, so stale assumptions can produce incorrect payloads or failed commands. <br>
-Mitigation: Fetch the action schema with `oo connector schema` before constructing payloads and retry setup only when authentication or connection errors occur. <br>
+## Use Case:
 
+External users and developers use this skill to let an agent perform authenticated, primarily read-only Gigasheet account operations such as dataset description, library search, export listing, and usage lookup.
 
-## Reference(s): <br>
-- [Gigasheet Skill on ClawHub](https://clawhub.ai/oomol/oo-gigasheet) <br>
-- [Gigasheet Homepage](https://www.gigasheet.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; command results may include JSON data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: The setup path includes remote installer commands that can execute arbitrary code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing and prefer a trusted, versioned, verifiable oo CLI installation method.
+
+Risk: The skill can inspect data in the connected Gigasheet account.
+
+Mitigation: Use the skill only when account-data inspection is intended, and keep actions read-only unless the user explicitly approves a state-changing action.
+
+## Reference(s):
+
+- [ClawHub Gigasheet skill page](https://clawhub.ai/oomol/skills/oo-gigasheet)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Gigasheet homepage](https://www.gigasheet.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, JSON, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas to validate action payloads before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

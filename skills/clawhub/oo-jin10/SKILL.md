@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Jin10"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["jin10"]
   icon: "https://static.oomol.com/logo/third-party/jin10.png"
 ---

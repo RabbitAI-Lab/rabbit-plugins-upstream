@@ -1,44 +1,61 @@
-## Description: <br>
-Brex helps agents inspect connector schemas and run OOMOL-connected Brex read actions for company, user, budget, card account, expense, and transaction data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Brex enables an agent to search and read Brex company, user, budget, expense, card account, and transaction data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and business operators use this skill to retrieve Brex account, budget, expense, transaction, company, and user information through an OOMOL-connected Brex account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Brex account and expense data may include sensitive financial or employee information. <br>
-Mitigation: Ask for the specific Brex data or action needed, retrieve only task-relevant fields, and avoid exposing more account or expense detail than necessary. <br>
-Risk: Financial or account changes could have business impact if a future Brex action proposes a write or destructive operation. <br>
-Mitigation: Confirm the exact payload, target, and expected effect with the user before approving any write or destructive action. <br>
-Risk: The broad Brex trigger can route many Brex-related requests through this connector even when the user only needs general guidance. <br>
-Mitigation: Use connector actions only when the task requires Brex account data or an authenticated Brex operation. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Brex account records through an OOMOL-connected Brex account, including company, user, budget, expense, card account, and settled transaction data.
 
-## Reference(s): <br>
-- [ClawHub Brex skill](https://clawhub.ai/oomol/skills/oo-brex) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Brex homepage](https://www.brex.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill directs the agent to inspect live connector schemas before constructing Brex action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Sensitive Brex financial records are routed through OOMOL.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review organizational approval for OOMOL handling before installation and use the skill only for explicit, account-specific Brex read requests.
+
+Risk: Inline installer commands pipe remote scripts into a shell.
+
+Mitigation: Independently trust and verify the installer source before using those commands, or install the oo CLI through an approved internal process.
+
+Risk: Broad Brex requests can expose more account data than intended.
+
+Mitigation: Use the narrowest practical filters and inspect the live connector schema before running an action.
+
+## Reference(s):
+
+- [ClawHub Brex skill page](https://clawhub.ai/oomol/skills/oo-brex)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Brex homepage](https://www.brex.com/)
+- [Brex icon](https://static.oomol.com/logo/third-party/brex.svg)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides the agent to inspect live connector schemas before running read-only Brex actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,56 @@
-## Description: <br>
-ASIN Data API helps agents read, create, update, and delete ASIN Data API data through the OOMOL connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ASIN Data API enables agents to use the ASIN Data API through the OOMOL `oo` CLI for reading collection data and managing destinations or collection requests.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External developers and operators use this skill to inspect live ASIN Data API action schemas and run account actions for collections, collection requests, and destinations. It supports read operations, destination updates, and destructive cleanup actions with explicit confirmation for state-changing requests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and destructive actions can update destinations or delete collection request data in the connected ASIN Data API account. <br>
-Mitigation: Confirm the exact action, target identifiers, payload, and expected effect with the user before running actions marked write or destructive. <br>
-Risk: The skill requires a connected OOMOL account and ASIN Data API credentials, so expired scopes or missing connections can prevent successful execution. <br>
-Mitigation: Use the documented first-time setup only after an auth, scope, or connection error, and avoid handling raw API tokens directly. <br>
+## Use Case:
 
+External users and developers use this skill to inspect ASIN Data API action schemas, run read actions, and manage destinations or collection requests through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ASIN Data API homepage](https://www.asindataapi.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-asin-data-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before actions; write and destructive actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and SKILL.md metadata) <br>
+Risk: Setup instructions include remote shell installer commands that could be unsafe if used without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use verified OOMOL CLI installation documentation or a signed/package-manager release before installing.
+
+Risk: Write and destructive actions can update or delete ASIN Data API account data.
+
+Mitigation: Confirm the exact payload, target, and expected effect with the user before running update or delete actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-asin-data-api)
+- [ASIN Data API Homepage](https://www.asindataapi.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce `oo connector schema` and `oo connector run` commands; write and destructive actions require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Autotask"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["autotask"]
   icon: "https://static.oomol.com/logo/third-party/autotask.svg"
 ---

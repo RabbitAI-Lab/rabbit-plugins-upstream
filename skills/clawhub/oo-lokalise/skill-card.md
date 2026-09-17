@@ -1,44 +1,59 @@
-## Description: <br>
-Lokalise helps an agent read, create, update, and delete Lokalise projects, languages, keys, and translations through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lokalise helps agents read, create, update, and delete Lokalise data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and localization operators use this skill to inspect Lokalise projects, languages, keys, and translations, and to create, update, or delete localization records through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change Lokalise keys or translations in the connected account. <br>
-Mitigation: Review the project, target record, payload, and intended effect before approving create or update commands. <br>
-Risk: The destructive delete action can remove a Lokalise key. <br>
-Mitigation: Require explicit user approval for the exact key and project before running a destructive command. <br>
-Risk: Account connection or billing issues can prevent connector actions from completing. <br>
-Mitigation: Use the first-time setup and billing guidance only after a command fails with the matching error. <br>
+## Use Case:
 
+Developers and localization operators use this skill to inspect Lokalise projects, keys, languages, and translations, and to make authorized changes to localization content. Destructive key deletion is available only with explicit review and approval.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-lokalise) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Lokalise homepage](https://lokalise.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and execution metadata when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Setup instructions include remote installer commands that execute mutable code from OOMOL-hosted URLs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only after independently trusting and verifying the installer source, and prefer pinned or otherwise auditable installation methods where available.
+
+Risk: Lokalise write and destructive actions can change or delete translation data.
+
+Mitigation: Inspect the live action schema, review the exact JSON payload and target resource, and get explicit approval before write or delete actions.
+
+Risk: The skill uses OOMOL as the intermediary for Lokalise actions.
+
+Mitigation: Install and use the skill only when that intermediary access model is acceptable for the user's Lokalise workspace and data governance requirements.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-lokalise)
+- [Lokalise homepage](https://lokalise.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector actions can return JSON data and execution metadata when run through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

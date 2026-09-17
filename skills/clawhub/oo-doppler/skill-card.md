@@ -1,43 +1,55 @@
-## Description: <br>
-Doppler (doppler.com). Use this skill for ANY Doppler request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Doppler (doppler.com). Use this skill for ANY Doppler request: reading, creating, updating, and deleting data through the OOMOL-connected Doppler connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Doppler connector schemas and run Doppler project, environment, config, secret, service token, sync, and change request actions through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose Doppler secret values and perform major account changes when requested. <br>
-Mitigation: Use a least-privilege Doppler connection and review exact targets before approving write, token, sync, or delete operations. <br>
-Risk: Write and destructive actions can change or remove Doppler projects, configs, environments, secrets, service tokens, syncs, and dynamic secret leases. <br>
-Mitigation: Confirm the exact payload and target before running write actions, and require explicit approval before destructive actions. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Doppler projects, environments, configs, secrets, service tokens, syncs, integrations, and change requests from an agent workflow. It supports read-only inspection as well as confirmed write and destructive operations against a connected Doppler account.
 
-## Reference(s): <br>
-- [Doppler homepage](https://www.doppler.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Doppler connection settings](https://console.oomol.com/app-connections?provider=doppler) <br>
-- [Doppler skill on ClawHub](https://clawhub.ai/oomol/oo-doppler) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return Doppler connector JSON responses when actions are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The skill can retrieve, export, create, update, or delete Doppler secrets and tokens.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for trusted OOMOL-managed workflows and require explicit confirmation before secret, token, write, or destructive operations.
+
+Risk: First-time setup includes one-line remote installer commands.
+
+Mitigation: Avoid running remote installers unless the installer source has been verified.
+
+## Reference(s):
+
+- [Doppler homepage](https://www.doppler.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Doppler skill](https://clawhub.ai/oomol/skills/oo-doppler)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live action schemas before execution and returns connector responses as JSON.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

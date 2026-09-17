@@ -1,45 +1,55 @@
-## Description: <br>
-Ordinal (tryordinal.com) connector for reading, creating, and updating workspace data through OOMOL's oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Ordinal (tryordinal.com) support for reading, creating, and updating Ordinal data through the OOMOL-connected oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate an OOMOL-connected Ordinal workspace from an agent, including reading workspace records and preparing confirmed write actions through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: First-time setup includes pipe-to-shell installer commands that execute downloaded code on the user's machine. <br>
-Mitigation: Use installer commands only after oo is missing, and review OOMOL's official installation guidance before running them. <br>
-Risk: Connector actions can affect Ordinal workspace data when an action is marked write or destructive. <br>
-Mitigation: Fetch the live action schema first and confirm the exact payload and expected effect with the user before write or destructive actions. <br>
-Risk: The skill runs oo connector commands against a connected Ordinal workspace and may return workspace data. <br>
-Mitigation: Run commands only for the user's intended workspace task and rely on OOMOL-managed credentials rather than handling raw tokens. <br>
+## Use Case:
 
+External users, developers, and operators use this skill to inspect Ordinal action schemas and run OOMOL-authenticated Ordinal connector actions for workspace, idea, post, label, user, engagement, and scheduling data.
 
-## Reference(s): <br>
-- [Ordinal homepage](https://www.tryordinal.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI installation guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-ordinal) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON when actions are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: The setup instructions include shell and PowerShell installer pipelines that execute remote content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path before use; prefer a signed package, pinned release, or independently verified installer.
+
+Risk: Ordinal connector actions may affect the intended workspace when an action is marked write or destructive.
+
+Mitigation: Confirm the workspace, action schema, payload, and expected effect with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [Ordinal homepage](https://www.tryordinal.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON payload instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before submitting action payloads; write or destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: artifact metadata and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

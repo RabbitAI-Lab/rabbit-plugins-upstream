@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Stay AI"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["stay_ai"]
   icon: "https://static.oomol.com/logo/third-party/stay_ai.png"
 ---

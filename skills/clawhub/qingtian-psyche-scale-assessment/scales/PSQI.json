@@ -1,0 +1,233 @@
+{
+  "id": "PSQI",
+  "name": "匹兹堡睡眠质量指数（PSQI，自填简化版）",
+  "short_name": "PSQI 睡眠自评",
+  "category": "睡眠",
+  "target_population": "成年人",
+  "estimated_time": "约 3 分钟",
+  "item_count": 7,
+  "description": "基于 PSQI 七成分结构的自填简化版：将 19 道原始题归纳为 7 个成分维度，各 0–3 自评分，求和得总分 0–21，>7 提示睡眠质量差。正式临床使用请采用原版 19 题 + 临床计分。",
+  "source": "Buysse et al., 1989；中文版刘贤臣 1996",
+  "license": "学术使用，商业需授权",
+  "scoring_type": "sum",
+  "items": [
+    {
+      "id": "c1",
+      "text": "近一个月，你对自己主观睡眠质量的总体评价。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 0
+        },
+        {
+          "label": "轻度",
+          "score": 1
+        },
+        {
+          "label": "中度",
+          "score": 2
+        },
+        {
+          "label": "重度",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "c2",
+      "text": "近一个月，你通常需要多久才能入睡（入睡困难程度）。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 0
+        },
+        {
+          "label": "轻度",
+          "score": 1
+        },
+        {
+          "label": "中度",
+          "score": 2
+        },
+        {
+          "label": "重度",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "c3",
+      "text": "近一个月，你平均每天的实际睡眠时长大约是？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": ">7小时",
+          "score": 0
+        },
+        {
+          "label": "6–7小时",
+          "score": 1
+        },
+        {
+          "label": "5–6小时",
+          "score": 2
+        },
+        {
+          "label": "<5小时",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "c4",
+      "text": "近一个月，你的睡眠效率（睡着时间 ÷ 卧床时间）大约是？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": ">85%",
+          "score": 0
+        },
+        {
+          "label": "75–84%",
+          "score": 1
+        },
+        {
+          "label": "65–74%",
+          "score": 2
+        },
+        {
+          "label": "<65%",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "c5",
+      "text": "近一个月，你夜间醒来、憋气、咳嗽、怕冷等睡眠障碍的频率。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 0
+        },
+        {
+          "label": "轻度",
+          "score": 1
+        },
+        {
+          "label": "中度",
+          "score": 2
+        },
+        {
+          "label": "重度",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "c6",
+      "text": "近一个月，你使用催眠药物（如安眠药）帮助睡眠的频率是？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "未使用",
+          "score": 0
+        },
+        {
+          "label": "少于每周1次",
+          "score": 1
+        },
+        {
+          "label": "每周1–2次",
+          "score": 2
+        },
+        {
+          "label": "每周≥3次",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "c7",
+      "text": "近一个月，白天困倦、精力不足等日间功能障碍的程度。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 0
+        },
+        {
+          "label": "轻度",
+          "score": 1
+        },
+        {
+          "label": "中度",
+          "score": 2
+        },
+        {
+          "label": "重度",
+          "score": 3
+        }
+      ]
+    }
+  ],
+  "dimensions": [
+    {
+      "name": "睡眠总分",
+      "items": [
+        "c1",
+        "c2",
+        "c3",
+        "c4",
+        "c5",
+        "c6",
+        "c7"
+      ],
+      "max": 21,
+      "min": 0
+    }
+  ],
+  "standard_score": null,
+  "interpretation": {
+    "bands": [
+      {
+        "dimension": "睡眠总分",
+        "min": 0,
+        "max": 7,
+        "level": "睡眠质量良好",
+        "summary": "睡眠质量在健康范围内。",
+        "advice": "保持规律作息即可。"
+      },
+      {
+        "dimension": "睡眠总分",
+        "min": 8,
+        "max": 14,
+        "level": "睡眠质量一般/偏差",
+        "summary": "存在一定睡眠问题，可能影响日间状态。",
+        "advice": "建立固定作息、减少睡前屏幕与咖啡因；持续不佳建议就医。"
+      },
+      {
+        "dimension": "睡眠总分",
+        "min": 15,
+        "max": 21,
+        "level": "睡眠质量较差",
+        "summary": "睡眠问题较明显，显著影响功能。",
+        "advice": "建议到睡眠门诊或精神科评估，排查失眠障碍。"
+      }
+    ]
+  },
+  "safety": {
+    "crisis_items": [],
+    "crisis_rule": "",
+    "high_risk_rule": ""
+  }
+}

@@ -1,43 +1,60 @@
-## Description: <br>
-Riveter (riveterhq.com) connector for searching and reading Riveter data through the OOMOL oo CLI instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Riveter lets agents use an OOMOL-connected Riveter account to retrieve connected account details and scrape public webpages for extracted text.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to run read-oriented Riveter tasks through an OOMOL-connected account, including retrieving connected account and API-key details and scraping public webpages for extracted text. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The connector can retrieve Riveter account and API-key details for the connected account. <br>
-Mitigation: Install and use the skill only when the user trusts OOMOL and intends to use the oo CLI with their Riveter account. <br>
-Risk: The skill depends on live OOMOL authentication, a connected Riveter account, and available OOMOL billing credits. <br>
-Mitigation: Run setup or billing steps only after an auth, connection, scope, credential, app readiness, or billing error occurs. <br>
+## Use Case:
 
+External developers and agent users use this skill to run Riveter read actions through an OOMOL-connected account. Typical tasks are checking connected account details and scraping public webpages for text extraction.
 
-## Reference(s): <br>
-- [ClawHub Riveter Skill Page](https://clawhub.ai/oomol/skills/oo-riveter) <br>
-- [Riveter Homepage](https://riveterhq.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include JSON responses from oo CLI connector actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: The skill documentation includes shell installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source or use a verified package or downloaded installer before running installation commands.
+
+Risk: The get_account action can expose connected account and API-key details.
+
+Mitigation: Run credential or account inspection only when the user specifically needs it and understands the information that may be returned.
+
+Risk: The scrape action can send target URL information through Riveter or OOMOL.
+
+Mitigation: Avoid scraping private, internal, authenticated, localhost, or otherwise sensitive URLs unless the user explicitly accepts that exposure.
+
+## Reference(s):
+
+- [ClawHub Riveter Skill](https://clawhub.ai/oomol/skills/oo-riveter)
+- [Riveter Homepage](https://riveterhq.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before running actions; action responses may include extracted webpage text or connected account and API-key details.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

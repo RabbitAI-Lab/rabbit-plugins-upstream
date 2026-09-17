@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "1Password"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["one_password"]
   icon: "https://static.oomol.com/logo/third-party/one_password.svg"
 ---

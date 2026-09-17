@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Baremetrics"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["baremetrics"]
   icon: "https://static.oomol.com/logo/third-party/baremetrics.png"
 ---

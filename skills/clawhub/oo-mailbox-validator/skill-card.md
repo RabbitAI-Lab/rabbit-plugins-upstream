@@ -1,42 +1,55 @@
-## Description: <br>
-MailboxValidator helps agents validate email deliverability and check disposable or free email status through an OOMOL-connected MailboxValidator account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MailboxValidator lets agents validate email addresses and check disposable or free-mail provider status through the OOMOL MailboxValidator connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to validate a single email address and check whether it belongs to a disposable or free provider through MailboxValidator. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Email addresses are personal data sent through OOMOL to MailboxValidator for validation. <br>
-Mitigation: Submit only email addresses the user is authorized to process, and follow applicable privacy and data-handling requirements. <br>
-Risk: The skill requires an OOMOL-connected MailboxValidator account and may require first-time CLI installation or account connection. <br>
-Mitigation: Review first-time installation, sign-in, and connection steps before allowing them, and do not expose raw credentials or API tokens. <br>
+## Use Case:
 
+Agents supporting customer data quality and signup workflows use this skill to validate email addresses, identify disposable inboxes, and check whether an address belongs to a free email provider.
 
-## Reference(s): <br>
-- [MailboxValidator homepage](https://www.mailboxvalidator.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include MailboxValidator connector output in JSON when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: evidence metadata and release) <br>
+Risk: Remote installer commands can execute code from the network during first-time setup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified, versioned oo CLI installation method and review installer contents before running setup commands.
+
+Risk: MailboxValidator requests use OOMOL as an intermediary and depend on a connected MailboxValidator account.
+
+Mitigation: Install only when that intermediary model is acceptable and confirm authentication and account-connection steps yourself.
+
+## Reference(s):
+
+- [MailboxValidator homepage](https://www.mailboxvalidator.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-mailbox-validator)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash commands and JSON connector responses.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before execution and returns OOMOL connector JSON responses when actions run.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

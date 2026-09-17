@@ -42,7 +42,6 @@ LIST_QUERY_FIELDS: List[str] = []
 RESERVED_PARAM_KEYS = frozenset({
     "api",
     "openId",
-    "ttsAccessToken",
     "region",
     "contentType",
     "body",

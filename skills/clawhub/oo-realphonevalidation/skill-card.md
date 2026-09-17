@@ -1,43 +1,51 @@
-## Description: <br>
-RealPhoneValidation helps agents validate individual 10-digit phone numbers through OOMOL's connected RealPhoneValidation connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+RealPhoneValidation helps agents validate individual 10-digit phone numbers through OOMOL-connected RealPhoneValidation connector actions.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to validate phone numbers and retrieve available caller enrichment fields through a connected RealPhoneValidation account. It is suited for workflows that need schema-guided connector calls and JSON responses. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected RealPhoneValidation account and may depend on account credentials, scopes, and billing state. <br>
-Mitigation: Use the OOMOL-connected account flow described by the skill, avoid handling raw API tokens, and resolve authentication, scope, credential, or billing errors before retrying. <br>
-Risk: Incorrect action payloads can lead to failed validation calls or misleading results. <br>
-Mitigation: Inspect the live connector schema before constructing each action payload and pass only fields supported by that schema. <br>
+## Use Case:
 
+Developers and external users use this skill to validate phone numbers with RealPhoneValidation through an OOMOL-connected account, including Turbo Standard checks and Turbo v3 caller enrichment when available.
 
-## Reference(s): <br>
-- [RealPhoneValidation homepage](https://realphonevalidation.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-realphonevalidation) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, JSON] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action payloads and returns RealPhoneValidation data with execution metadata when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions include remote installer commands that may execute unverified scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installation, prefer trusted or pinned oo CLI releases, and avoid elevated privileges for remote installer commands.
+
+## Reference(s):
+
+- [RealPhoneValidation homepage](https://realphonevalidation.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, JSON, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command snippets and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and meta.executionId when commands are run.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

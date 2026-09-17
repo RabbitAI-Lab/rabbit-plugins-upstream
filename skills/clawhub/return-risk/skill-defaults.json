@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "channel": "return-risk",
+  "workflow": "product",
+  "focus": "risk",
+  "outputTemplate": "ops_product",
+  "requiredCapabilities": [
+    "product-detail",
+    "reviews"
+  ],
+  "allowedCommands": [
+    "setup",
+    "configure",
+    "check",
+    "version",
+    "collect",
+    "status",
+    "operations"
+  ]
+}

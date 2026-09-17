@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "IP2Proxy"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["ip2proxy"]
   icon: "https://static.oomol.com/logo/third-party/Ip2Proxy.svg"
 ---

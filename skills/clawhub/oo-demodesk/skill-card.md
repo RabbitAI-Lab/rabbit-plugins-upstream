@@ -1,42 +1,56 @@
-## Description: <br>
-Demodesk helps agents search and read Demodesk recordings, transcripts, summaries, scorecards, and users through an OOMOL-connected oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Demodesk (demodesk.com). Use this skill for ANY Demodesk request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to retrieve Demodesk account data such as recordings, transcripts, summaries, scorecards, and visible users through a connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger wording may cause an agent to query Demodesk when the user only intended to discuss Demodesk. <br>
-Mitigation: For vague Demodesk mentions, explicitly tell the agent whether to query Demodesk or only discuss it. <br>
-Risk: The skill can read data from the connected Demodesk account through OOMOL. <br>
-Mitigation: Install and enable it only when account data access through OOMOL is intended. <br>
+## Use Case:
 
+Agents use this skill to read Demodesk data through an OOMOL-connected account, including users, recordings, transcripts, scorecards, and AI-generated recording summaries.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-demodesk) <br>
-- [Demodesk homepage](https://demodesk.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Setup guidance includes remote installer commands piped directly to a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only after independently verifying the installer source, or use a signed or package-managed installation path where available.
+
+Risk: Demodesk recording and transcript data is accessed through OOMOL's connector.
+
+Mitigation: Install only when the user trusts OOMOL and is comfortable routing Demodesk data through that connector.
+
+## Reference(s):
+
+- [Demodesk homepage](https://demodesk.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-demodesk)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

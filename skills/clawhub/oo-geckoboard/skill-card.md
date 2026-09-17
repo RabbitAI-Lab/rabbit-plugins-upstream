@@ -1,45 +1,59 @@
-## Description: <br>
-Enables agents to operate Geckoboard datasets through the OOMOL oo CLI, including schema inspection and dataset create, append, replace, and delete actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill lets an agent operate Geckoboard through an OOMOL-connected account to inspect connector schemas and append, replace, find or create, and delete dataset data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to let an agent inspect the live Geckoboard connector contract and run dataset operations through an OOMOL-connected account. It is suited to maintaining operational dashboards where records may need to be appended, replaced, created, or deleted. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The append_dataset_data action changes Geckoboard data but is not tagged as a write action in the skill text. <br>
-Mitigation: Treat append_dataset_data as a write action and confirm the target dataset, records, and update behavior before execution. <br>
-Risk: Dataset operations can replace or delete important dashboard data. <br>
-Mitigation: Require explicit user confirmation for replace_dataset_data and delete_dataset, including the dataset identifier and expected effect. <br>
-Risk: Use depends on the external oo CLI, OOMOL account state, connected Geckoboard credentials, and available billing credit. <br>
-Mitigation: Review the oo CLI setup and OOMOL connection requirements before installing, and resolve authentication, scope, credential, or billing errors before retrying actions. <br>
+## Use Case:
 
+External users and developers use this skill to manage Geckoboard dataset workflows through the OOMOL connector, including schema inspection, appending or replacing records, finding or creating datasets, and deleting datasets with explicit confirmation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-geckoboard) <br>
-- [Geckoboard homepage](https://www.geckoboard.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands may return JSON from the oo CLI, including data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence, release metadata, and skill frontmatter) <br>
+Risk: Setup instructions include direct execution of remote installer scripts without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified, pinned installer or package manager instead of curl-to-bash or irm-to-iex installation.
+
+Risk: Write and destructive actions can replace or delete Geckoboard dataset data.
+
+Mitigation: Confirm the exact payload, target dataset, and expected effect with the user before running write or delete actions.
+
+Risk: Connector actions route through OOMOL's connected account and service connector.
+
+Mitigation: Use the skill only when the publisher and OOMOL connector are trusted for the target Geckoboard workspace.
+
+## Reference(s):
+
+- [ClawHub Geckoboard skill page](https://clawhub.ai/oomol/skills/oo-geckoboard)
+- [Geckoboard homepage](https://www.geckoboard.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill instructs the agent to inspect live connector schemas before running actions and to request confirmation for write or destructive dataset changes.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,56 @@
-## Description: <br>
-Signalbase (trysignalbase.com) lets agents search and read Signalbase company, investor, acquisition, funding, hiring, and job-change data through the OOMOL-connected Signalbase connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Signalbase skill for searching and reading company profiles, investors, and market signals through the OOMOL-connected oo CLI workflow.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to query Signalbase through an OOMOL-connected account for company profiles, investor data, acquisition signals, funding signals, hiring signals, and job-change signals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an OOMOL-connected Signalbase account and requires sensitive credential-backed access. <br>
-Mitigation: Review requested permissions at install time, use the existing OOMOL connection, and avoid exposing raw tokens in prompts, logs, or command arguments. <br>
-Risk: Connector payloads could be malformed or drift from the live Signalbase action contract. <br>
-Mitigation: Inspect the live action schema before each connector run and build JSON payloads from that schema. <br>
-Risk: Future connector actions may include write or destructive behavior even though the listed actions are read-oriented. <br>
-Mitigation: Confirm the exact payload and effect with the user before any action tagged write, and require explicit approval before any destructive action. <br>
+## Use Case:
 
+Developers and external users use this skill to query Signalbase company, investor, acquisition, funding, hiring, and job-change data through an authenticated OOMOL connector.
 
-## Reference(s): <br>
-- [Signalbase homepage](https://www.trysignalbase.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-signalbase) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and connector JSON response summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill instructs the agent to inspect live connector schemas before sending JSON payloads and to return read-oriented Signalbase results from the connector response.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: Fallback setup asks users to run remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only from trusted OOMOL distribution paths and prefer a verified package-manager or documented installation method before using the connector.
+
+Risk: Signalbase actions depend on authenticated OOMOL account state, connector permissions, and billing status.
+
+Mitigation: Run setup or connection steps only after an auth, scope, credential, app, or billing error, and verify account state before retrying.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-signalbase)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Signalbase Homepage](https://www.trysignalbase.com)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include oo CLI commands, connector schema checks, JSON payloads, and summarized Signalbase results.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

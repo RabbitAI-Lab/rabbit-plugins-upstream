@@ -1,43 +1,57 @@
-## Description: <br>
-OCR.space helps agents run OCR text extraction and conversion-stat lookups through the OOMOL oo CLI instead of calling the OCR.space API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OCR.space lets an agent extract text from images and retrieve OCR.space conversion statistics through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect OCR.space action schemas, extract normalized text from images or Base64 uploads, and check OCR.space conversion statistics through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses sensitive account credentials through an OOMOL-connected OCR.space integration. <br>
-Mitigation: Do not request or expose raw API keys; use the configured OOMOL connection and review payloads before running actions. <br>
-Risk: OCR runs can fail when the oo CLI is missing, the user is not signed in, the OCR.space connection is expired, or billing is stopped. <br>
-Mitigation: Inspect the live connector schema before each run and use the documented setup or recovery steps only after a matching command failure. <br>
+## Use Case:
 
+Developers and agents use this skill to run OCR.space OCR tasks, including extracting text from public image URLs or uploaded Base64 image files and checking monthly conversion statistics.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/oomol/oo-ocrspace) <br>
-- [OCR.space homepage](https://ocr.space) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing payloads; OCR results depend on OCR.space and the connected OOMOL account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md metadata) <br>
+Risk: The setup path includes an unverified internet installer for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installation before use, install the CLI from a trusted versioned source, verify checksums or signatures when available, and do not allow an agent to run the installer automatically.
+
+Risk: OCR actions depend on a local oo CLI session and a connected OCR.space account.
+
+Mitigation: Run first-time authentication or connection steps only after a matching command failure, and keep raw OCR.space credentials out of agent-visible prompts and files.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-ocrspace)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OCR.space homepage](https://ocr.space)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Fetches the live connector schema before constructing action payloads; returns normalized OCR page results and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

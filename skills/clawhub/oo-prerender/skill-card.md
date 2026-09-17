@@ -1,43 +1,62 @@
-## Description: <br>
-Prerender (prerender.io) manages reading, creating, updating, and deleting Prerender data through OOMOL instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Prerender helps an agent operate Prerender through an OOMOL-connected account for reading, creating, updating, and deleting Prerender data via the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Prerender account actions through OOMOL, including sitemap submission, cache clearing, cache status checks, and URL recaching. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can submit sitemaps, clear cache entries, and recache URLs in a connected Prerender account. <br>
-Mitigation: Confirm the exact payload, target URLs, wildcard patterns, and expected effect with the user before running write or destructive actions. <br>
-Risk: The skill depends on the local oo CLI and OOMOL-managed credentials. <br>
-Mitigation: Install or update the oo CLI only from the trusted OOMOL source and run first-time authentication or connection steps only after a command fails for that specific reason. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Prerender action schemas, submit sitemaps, queue URLs for caching or recaching, clear Prerender caches, and check cache-clear status through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Prerender Skill](https://clawhub.ai/oomol/oo-prerender) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Prerender Homepage](https://prerender.io) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce oo CLI connector commands and JSON payload guidance for Prerender actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: The setup path includes remote installer commands for the oo CLI, and the security evidence flags those installers as unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from a verified, versioned source with checksum or signature validation before using the skill.
+
+Risk: Prerender actions can change service state, including sitemap submission, URL recaching, and cache clearing.
+
+Mitigation: Confirm the exact payload and user intent before running write actions, and require explicit approval before cache-clearing or other destructive actions.
+
+Risk: The skill depends on OOMOL's CLI and Prerender connector to access a connected account.
+
+Mitigation: Use the skill only when the user accepts OOMOL as an intermediary and has connected the intended Prerender account.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-prerender)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Prerender Homepage](https://prerender.io)
+- [Prerender Icon](https://static.oomol.com/logo/third-party/prerender.svg)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command outputs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the oo CLI and live connector schemas; connector responses include data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: evidence release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

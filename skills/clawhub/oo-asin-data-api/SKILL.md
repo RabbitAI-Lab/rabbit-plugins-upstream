@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "ASIN Data API"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["asin_data_api"]
   icon: "https://static.oomol.com/logo/third-party/asin_data_api.png"
 ---

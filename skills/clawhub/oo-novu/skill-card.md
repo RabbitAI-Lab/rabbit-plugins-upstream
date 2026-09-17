@@ -1,45 +1,57 @@
-## Description: <br>
-Novu (novu.co) helps agents read, create, and update Novu data through the OOMOL connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Novu through an OOMOL-connected account for reading, creating, and updating subscribers and triggering workflow events.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate Novu through an OOMOL-connected account, including subscriber lookup, subscriber changes, and workflow event triggering through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Create, update, and trigger-event actions can change Novu subscribers or send workflow events. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running any write action. <br>
-Risk: Running setup commands unnecessarily can install software or start authentication flows the user did not need. <br>
-Mitigation: Run setup only after a matching command failure, such as a missing oo CLI, authentication error, expired credential, or missing Novu connection. <br>
-Risk: Payloads built without the live connector schema can be malformed or affect the wrong target. <br>
-Mitigation: Inspect the action schema with the oo CLI before constructing the JSON payload for an action. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Novu connector schemas, run Novu actions through the oo CLI, manage subscribers, and trigger workflow events with server-side credential handling.
 
-## Reference(s): <br>
-- [ClawHub Novu Skill](https://clawhub.ai/oomol/skills/oo-novu) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Novu Homepage](https://novu.co) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution; state-changing actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: Setup instructions include remote installer execution for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI from a pinned, verified release or an official package manager before using the skill.
+
+Risk: Novu write actions can create or update subscribers and trigger workflow events.
+
+Mitigation: Check the live action schema, exact JSON payload, and intended effect with the user before allowing write actions.
+
+## Reference(s):
+
+- [Novu Skill Page](https://clawhub.ai/oomol/skills/oo-novu)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Novu Homepage](https://novu.co)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [State-changing Novu actions require confirmation of the exact payload and intended effect before execution.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

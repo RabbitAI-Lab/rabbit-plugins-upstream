@@ -1,43 +1,55 @@
-## Description: <br>
-DataScope helps agents read, create, and update DataScope records through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+DataScope (mydatascope.com) supports reading, creating, and updating data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent inspect DataScope connector schemas, list locations, answers, and metadata list elements, and prepare confirmed create or update actions for DataScope records. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill operates a connected DataScope account and requires sensitive credentials. <br>
-Mitigation: Install it only if you trust OOMOL and intend to let the agent operate DataScope through the connected account. <br>
-Risk: Create and update actions can change DataScope records. <br>
-Mitigation: Review the exact payload and expected effect before approving any write action. <br>
+## Use Case:
 
+Developers and agents use this skill to operate DataScope through the oo CLI, including reading answers, list elements, and locations, and creating or updating DataScope records after confirming write payloads.
 
-## Reference(s): <br>
-- [ClawHub DataScope skill page](https://clawhub.ai/oomol/oo-datascope) <br>
-- [DataScope homepage](https://www.mydatascope.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May run oo CLI connector actions that return JSON data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: First-time setup includes remote installer commands that pipe downloaded scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installation steps before use, install the oo CLI through verified official documentation or a package manager, and do not allow an agent to run remote installer commands automatically.
+
+Risk: Write actions can create or update DataScope records.
+
+Mitigation: Confirm the exact target records, payload, and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [DataScope homepage](https://www.mydatascope.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub DataScope skill](https://clawhub.ai/oomol/skills/oo-datascope)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects that include data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

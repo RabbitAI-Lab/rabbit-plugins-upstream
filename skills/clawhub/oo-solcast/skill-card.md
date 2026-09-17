@@ -1,42 +1,52 @@
-## Description: <br>
-Solcast helps agents inspect connector schemas and retrieve Solcast irradiance and weather forecast, historic, and live estimated actuals data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Solcast helps agents search and read Solcast irradiance and weather data through the OOMOL oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and operations teams use this skill to query Solcast solar irradiance and weather data by location through OOMOL's Solcast connector without handling raw API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected Solcast account and may fail or expose workflow friction if the oo CLI is not installed, the user is not signed in, or the Solcast connection is missing or expired. <br>
-Mitigation: Install only when comfortable using OOMOL's oo CLI with a connected Solcast account, and follow the skill's first-time setup guidance only after an auth or connection error occurs. <br>
-Risk: The setup path includes remote installer commands for the oo CLI. <br>
-Mitigation: Review the oo CLI installer before running the remote install command, as recommended by the server security guidance. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Solcast irradiance and weather forecasts, historical estimated actuals, and recent live estimated actuals for latitude and longitude inputs through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Solcast homepage](https://solcast.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector calls return JSON data and execution metadata when run with the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: First-time setup includes remote installer commands that pipe downloaded scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup before installing and prefer a manually inspected, version-pinned, or signed installer.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-solcast)
+- [Solcast homepage](https://solcast.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector actions return JSON responses that include data and an execution ID.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

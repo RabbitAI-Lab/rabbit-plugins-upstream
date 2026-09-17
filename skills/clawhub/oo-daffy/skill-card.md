@@ -1,45 +1,57 @@
-## Description: <br>
-Daffy (daffy.org) connector for searching and reading Daffy account, user, nonprofit, donation, and contribution data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Daffy lets agents use the OOMOL-connected oo CLI to search and read Daffy account, user, nonprofit, donation, contribution, and cause data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect Daffy account information, look up nonprofits and users, and list donation or contribution records through the Daffy connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Daffy account information, including balance, contributions, and donations, through the user's OOMOL connection. <br>
-Mitigation: Install and use it only when that account-level access is acceptable, and limit outputs to the information needed for the user's request. <br>
-Risk: Future write-capable Daffy actions could change account state if added to the connector. <br>
-Mitigation: Require explicit user confirmation of the exact action, payload, and expected effect before running any action tagged write or destructive. <br>
-Risk: The first-time setup path depends on a trusted oo CLI installation and an active Daffy connection. <br>
-Mitigation: Treat CLI installation and account connection as trusted setup steps, and run setup only after an authentication or connection failure. <br>
+## Use Case:
 
+Developers and external users use this skill to inspect Daffy action schemas and run read-only account, nonprofit, donation, contribution, and user-cause queries through an OOMOL-connected Daffy account.
 
-## Reference(s): <br>
-- [ClawHub Daffy skill page](https://clawhub.ai/oomol/skills/oo-daffy) <br>
-- [Daffy homepage](https://www.daffy.org/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Daffy connector actions unless future actions are explicitly tagged as write or destructive.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup may direct users to run remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path and prefer an official package manager, pinned release, or installer with checksum or signature verification.
+
+Risk: Read-only Daffy actions can expose account balance, user, contribution, donation, and cause information through the connected Daffy account.
+
+Mitigation: Run actions only for authorized Daffy accounts and limit handling or sharing of returned account data.
+
+## Reference(s):
+
+- [Daffy homepage](https://www.daffy.org/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-daffy)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live oo connector schemas before payload construction; documented Daffy actions in this release are read-only.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

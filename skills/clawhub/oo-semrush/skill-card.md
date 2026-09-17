@@ -1,44 +1,61 @@
-## Description: <br>
-Semrush enables an agent to query domain overview, organic keyword, and organic competitor data through an OOMOL-connected Semrush account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Semrush through an OOMOL-connected account to search and read SEO data such as domain overview metrics, organic keywords, and organic competitors.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-SEO practitioners, marketing analysts, and agents use this skill to retrieve Semrush domain metrics, organic keywords, and organic competitor data. It is suited for read-only search intelligence workflows that inspect each action schema before running connector calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Semrush access is mediated through OOMOL and the oo CLI. <br>
-Mitigation: Use the skill only when the user is comfortable with that intermediary and has intentionally connected the relevant Semrush account. <br>
-Risk: First-time setup can involve shell installer, login, connection, or billing steps. <br>
-Mitigation: Run setup only after the matching CLI, authentication, connection, credential, or billing error occurs. <br>
-Risk: Future connector actions may be marked write or destructive even though this release lists only read actions. <br>
-Mitigation: Confirm the exact payload and effect before write actions, and get explicit approval before destructive actions. <br>
+## Use Case:
 
+Developers, SEO analysts, and other external users use this skill to retrieve Semrush domain overview, organic keyword, and organic competitor data through the OOMOL Semrush connector.
 
-## Reference(s): <br>
-- [Semrush homepage](https://www.semrush.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-semrush) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI, OOMOL sign-in, and a connected Semrush account; listed actions are read-only in this release.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Setup instructions include one-line remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer delivery path before execution; prefer a verified, versioned, package-manager, checksum, or manually inspected install method.
+
+Risk: Connector calls depend on live Semrush action schemas and an active OOMOL-connected Semrush account.
+
+Mitigation: Inspect the live action schema before constructing payloads and use first-time setup only after auth, connection, scope, expiration, or billing errors.
+
+Risk: Future connector actions tagged as write or destructive could alter Semrush state.
+
+Mitigation: Confirm the exact payload and effect with the user before write actions, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [ClawHub Semrush Skill](https://clawhub.ai/oomol/skills/oo-semrush)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Semrush Homepage](https://www.semrush.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include Semrush connector data and an execution id under meta.executionId.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

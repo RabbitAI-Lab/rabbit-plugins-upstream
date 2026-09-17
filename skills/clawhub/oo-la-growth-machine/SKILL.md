@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "La Growth Machine"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["la_growth_machine"]
   icon: "https://static.oomol.com/logo/third-party/la_growth_machine.svg"
 ---

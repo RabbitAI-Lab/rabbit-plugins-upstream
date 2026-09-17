@@ -1,43 +1,58 @@
-## Description: <br>
-Operate lemlist through an OOMOL-connected account for read-only campaign, campaign lead, and team information lookup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+lemlist (lemlist.com). Use this skill for ANY lemlist request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect lemlist campaigns, campaign leads, and team information through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The lemlist trigger wording may be broader than necessary for incidental mentions. <br>
-Mitigation: Confirm the user intends lemlist-related work before invoking the skill, and avoid using it for incidental references. <br>
-Risk: The skill operates through connected lemlist account permissions. <br>
-Mitigation: Use least-privilege lemlist credentials and review account/API permissions before installation or use. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect lemlist campaigns, campaign leads, and team information through an OOMOL-connected account using the oo CLI connector.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-lemlist) <br>
-- [lemlist homepage](https://www.lemlist.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI, an authenticated OOMOL account, and a connected lemlist account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter, server release metadata) <br>
+Risk: Fallback setup can lead an agent to run remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not allow automatic execution of installer commands; verify the source, prefer a pinned release or package manager, and approve installation manually.
+
+Risk: Authentication and connection setup may open account or credential flows.
+
+Mitigation: Run login and lemlist connection steps only after a command fails for that reason, and have the user confirm the account and connection state directly.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-lemlist)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [lemlist homepage](https://www.lemlist.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [lemlist icon](https://static.oomol.com/logo/third-party/lemlist.svg)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill guides schema inspection and read-only connector runs that return JSON data with execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

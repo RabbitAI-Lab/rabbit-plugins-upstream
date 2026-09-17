@@ -1,42 +1,56 @@
-## Description: <br>
-PRTG Classic (paessler.com). Use this skill for ANY PRTG Classic request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PRTG Classic supports searching and read-only data access through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and operators use this skill to read PRTG Classic device and sensor information through an OOMOL-connected account. It helps an agent inspect live connector schemas, run read-only PRTG Classic actions, and return device or sensor status details. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill runs shell commands through the oo CLI and depends on the user's installed CLI, sign-in state, and connected PRTG Classic account. <br>
-Mitigation: Use the skill only for users authorized to access the connected PRTG Classic account, and follow the documented setup and recovery steps only after an auth or connection error. <br>
-Risk: Future connector actions or user requests could involve write or destructive operations even though the listed PRTG Classic actions are read-only. <br>
-Mitigation: For any action tagged write or destructive, confirm the exact target, payload, and expected effect with the user before execution. <br>
+## Use Case:
 
+Developers, operators, and administrators use this skill to inspect PRTG Classic devices and sensors through OOMOL's connector-backed oo CLI workflow without directly handling raw PRTG tokens.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-prtg-classic) <br>
-- [PRTG Classic homepage](https://www.paessler.com/prtg) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill can guide an agent to return JSON data from read-only PRTG Classic connector actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: The first-time setup guidance includes running an unverified remote installer directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installation, prefer a pinned release, package manager, or installer with publisher signature or checksum verification.
+
+Risk: The skill reads PRTG Classic device and sensor data through an OOMOL-connected account.
+
+Mitigation: Use an account scoped to the minimum PRTG Classic data needed for the task and keep credentials managed server-side through OOMOL.
+
+## Reference(s):
+
+- [PRTG Classic ClawHub Release](https://clawhub.ai/oomol/skills/oo-prtg-classic)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [PRTG Classic Homepage](https://www.paessler.com/prtg)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill guides schema inspection and connector execution for read-only PRTG Classic device and sensor data.]
+
+## Skill Version(s):
+
+1.0.3 (source: artifact frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Firecrawl"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.4"
   services: ["firecrawl"]
   icon: "https://static.oomol.com/logo/third-party/Firecrawl.svg"
 ---

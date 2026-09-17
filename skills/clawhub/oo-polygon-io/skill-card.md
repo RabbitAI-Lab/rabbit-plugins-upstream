@@ -1,42 +1,61 @@
-## Description: <br>
-Massive (Polygon.io) (massive.com). Use this skill for ANY Massive (Polygon.io) request -- searching and reading data. Whenever a task involves Massive (Polygon.io), use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Massive (Polygon.io) provides agent-driven access to Polygon.io market data through OOMOL's oo CLI connector for searching and reading ticker, exchange, market status, and aggregate bar data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to query Polygon.io market data through an OOMOL-connected account, including ticker lookup, ticker details, exchange discovery, ticker type discovery, market status, aggregate bars, and previous-day OHLC bars. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an OOMOL-connected Polygon.io account and may consume account credits. <br>
-Mitigation: Run connector actions only for intentional market-data requests, and approve setup, connection repair, or billing steps only when the user explicitly wants that account access used. <br>
-Risk: Access can fail when the oo CLI is missing, authentication is expired, the Polygon.io connection is not ready, or account credits are insufficient. <br>
-Mitigation: Follow the documented first-time setup path only after a matching command failure, and avoid repeating login or connection steps proactively. <br>
+## Use Case:
 
+Developers and agents use this skill to retrieve Polygon.io market data through an OOMOL-connected account, including aggregate bars, previous-day bars, market status, ticker details, exchanges, ticker types, and filtered ticker searches.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-polygon-io) <br>
-- [Massive (Polygon.io) homepage](https://massive.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill guides schema-first connector calls and returns read-only market data responses through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: Fallback setup documents remote shell and PowerShell installer commands without integrity checks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a trusted, verified installation process for the oo CLI and do not let agents run the documented installer commands automatically.
+
+Risk: Future connector actions may include write or destructive operations even though the listed Polygon.io actions are read-oriented.
+
+Mitigation: Confirm any action not in the documented get/list action set, including the exact payload and expected effect, before execution.
+
+Risk: Market data lookups can be stale, incomplete, or shaped by account permissions and billing status.
+
+Mitigation: Use returned data as a source-specific lookup result, check execution errors and billing or credential failures, and avoid treating it as independently verified financial advice.
+
+## Reference(s):
+
+- [Massive (Polygon.io) Skill Page](https://clawhub.ai/oomol/skills/oo-polygon-io)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Massive (Polygon.io) Homepage](https://massive.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with oo CLI shell commands and JSON request payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before execution and returns connector responses as JSON data with execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

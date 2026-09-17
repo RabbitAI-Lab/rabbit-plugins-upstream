@@ -1,45 +1,56 @@
-## Description: <br>
-Buildium helps agents search and read Buildium rental owners, properties, units, and property notes through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Buildium helps agents inspect live OOMOL connector schemas and retrieve Buildium rental owners, properties, units, and property notes through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent retrieve read-only Buildium rental data through the OOMOL oo connector after the account is connected. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read data from the user's connected Buildium account through OOMOL. <br>
-Mitigation: Install it only for users who want agent access to that account, and keep Buildium/OOMOL permissions limited to data they are comfortable exposing. <br>
-Risk: Future versions could add write or destructive Buildium actions. <br>
-Mitigation: Review future releases before deployment and require explicit user confirmation for any tagged write or destructive action. <br>
-Risk: First-time setup may require installing the oo CLI or reconnecting Buildium. <br>
-Mitigation: Run setup steps only after a matching auth, connection, or missing-command failure, and use the published OOMOL installation and connection URLs. <br>
+## Use Case:
 
+External users and agents use this skill to look up Buildium rental owners, properties, units, and property notes through the OOMOL Buildium connector. It is suited for read-oriented property management data retrieval after the oo CLI is installed, signed in, and connected to Buildium.
 
-## Reference(s): <br>
-- [ClawHub Buildium Skill](https://clawhub.ai/oomol/skills/oo-buildium) <br>
-- [Buildium Homepage](https://www.buildium.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Buildium request details and returned records are routed through OOMOL.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that routing is acceptable for the data involved, and limit connected Buildium scopes to the intended read actions.
+
+Risk: The artifact documents remote installer commands that execute downloaded shell or PowerShell scripts.
+
+Mitigation: Prefer a signed or checksum-verified installation path before installing the oo CLI.
+
+## Reference(s):
+
+- [ClawHub Buildium skill page](https://clawhub.ai/oomol/skills/oo-buildium)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Buildium homepage](https://www.buildium.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an installed oo CLI, OOMOL sign-in, and a connected Buildium account; listed actions are read-only get and list operations.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

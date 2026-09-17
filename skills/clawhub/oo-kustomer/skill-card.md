@@ -1,43 +1,56 @@
-## Description: <br>
-Kustomer lets an agent read, create, search, and update Kustomer customer records through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Kustomer helps agents read, create, and update Kustomer customer data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, support teams, and agents use this skill to retrieve, search, create, and update Kustomer customer records through an OOMOL-connected Kustomer account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use a connected Kustomer account to read or update customer records. <br>
-Mitigation: Install it only when that access is intended, and review write payloads before approving state-changing actions. <br>
-Risk: First-time setup may require installing the OOMOL CLI or connecting a Kustomer account. <br>
-Mitigation: Verify the CLI installer and account connection before running setup steps. <br>
+## Use Case:
 
+External users and support operators use this skill to retrieve, list, search, create, and update Kustomer customer records through the oo CLI. The skill is intended for Kustomer account workflows where credentials are managed by OOMOL rather than handled directly by the agent.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-kustomer) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Kustomer homepage](https://www.kustomer.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before payload construction; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: The setup instructions tell users to execute a remote installer script without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installing; prefer a verified, pinned oo CLI release or a trusted package manager.
+
+Risk: Write actions can create or update Kustomer customer records.
+
+Mitigation: Confirm the exact payload and expected effect before allowing create_customer or update_customer actions.
+
+## Reference(s):
+
+- [ClawHub Kustomer skill page](https://clawhub.ai/oomol/skills/oo-kustomer)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Kustomer homepage](https://www.kustomer.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce oo CLI connector commands that return JSON responses containing Kustomer data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: skill frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

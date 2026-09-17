@@ -1,45 +1,56 @@
-## Description: <br>
-Uses OOMOL's oo CLI connector to search and read Worksnaps profiles, projects, tasks, assignments, and time-tracking data through a connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to search and read Worksnaps users, projects, tasks, assignments, time entries, and time reports through the OOMOL Worksnaps connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and business users use this skill to inspect Worksnaps account, project, task, assignment, and time-entry information through an already connected Worksnaps account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads Worksnaps business and time-tracking data through a connected account. <br>
-Mitigation: Install it only when the user trusts OOMOL and intends the agent to access Worksnaps data through that account. <br>
-Risk: First-time CLI installation, sign-in, or Worksnaps connection steps could expose sensitive account setup flows to an agent. <br>
-Mitigation: Have the user perform first-time install, login, and Worksnaps API-key connection steps directly. <br>
-Risk: Future connector actions labeled write or destructive could change or remove Worksnaps data. <br>
-Mitigation: Require explicit user approval of the exact payload and effect before running any write or destructive action. <br>
+## Use Case:
 
+External users and developers use this skill when they need an agent to retrieve Worksnaps account, project, task, assignment, time-entry, or time-report data from an OOMOL-connected Worksnaps account.
 
-## Reference(s): <br>
-- [ClawHub Skill Listing](https://clawhub.ai/oomol/oo-worksnaps) <br>
-- [Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Worksnaps Homepage](https://www.worksnaps.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses read-only Worksnaps connector actions unless a future action is explicitly labeled write or destructive.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Fallback setup recommends executing remote installer scripts without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified official installer, pinned release, or checksum/signature-verified installation before using the oo CLI.
+
+Risk: The skill accesses Worksnaps data through OOMOL as an intermediary.
+
+Mitigation: Install only when OOMOL-mediated access to Worksnaps data matches the user's data handling requirements.
+
+## Reference(s):
+
+- [ClawHub Worksnaps Skill](https://clawhub.ai/oomol/skills/oo-worksnaps)
+- [Worksnaps Homepage](https://www.worksnaps.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector action schemas before constructing request payloads; Worksnaps credentials are handled server-side by OOMOL.]
+
+## Skill Version(s):
+
+1.0.3 (source: artifact frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,60 @@
-## Description: <br>
-Operate Hookdeck through an OOMOL-connected account for reading, creating, updating, and deleting Hookdeck sources, destinations, and connections. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Hookdeck (hookdeck.com) helps an agent read, create, update, and delete Hookdeck resources through OOMOL connector actions instead of calling the Hookdeck API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Hookdeck connector schemas and run `oo` CLI actions for managing Hookdeck sources, destinations, and connections. It supports read workflows and confirmed write or destructive changes through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change Hookdeck resources through write actions. <br>
-Mitigation: Review the proposed payload and expected effect with the user before running write actions. <br>
-Risk: Destructive actions can delete Hookdeck sources, destinations, or connections. <br>
-Mitigation: Confirm the exact target and obtain explicit approval before running delete actions. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Hookdeck sources, destinations, and connections from an agent session. It supports read, list, create, update, and delete workflows while requiring live action schema inspection before connector actions are run.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/oomol/skills/oo-hookdeck) <br>
-- [Hookdeck homepage](https://hookdeck.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands can return JSON from the `oo` CLI; write and destructive actions require payload review and explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: First-time setup may ask users to pipe remote installer scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installing and prefer a signed or otherwise verifiable oo CLI release.
+
+Risk: Hookdeck actions are brokered through an OOMOL-connected account.
+
+Mitigation: Connect the OOMOL Hookdeck integration only when the user accepts OOMOL brokering Hookdeck actions for the account.
+
+Risk: Create, update, and delete actions can change or remove Hookdeck resources.
+
+Mitigation: Inspect the live action schema and confirm exact targets, payloads, and effects with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-hookdeck)
+- [Hookdeck Homepage](https://hookdeck.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId when actions are run.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

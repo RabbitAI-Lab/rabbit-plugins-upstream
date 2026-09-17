@@ -1,44 +1,60 @@
-## Description: <br>
-SuperSaaS lets agents read SuperSaaS scheduling data through the OOMOL oo CLI using a connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate SuperSaaS through an OOMOL-connected account to search and read scheduling data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and SuperSaaS users use this skill to let an agent inspect schedules, appointments, slots, recent booking changes, resources, services, groups, SuperForms, and available fields from a connected SuperSaaS account. It is intended for read-only scheduling and discovery workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Read operations can expose appointment, schedule, and account data from the connected SuperSaaS account. <br>
-Mitigation: Use the skill only when SuperSaaS access is intended, and review requested actions, payloads, and returned data before sharing results. <br>
-Risk: Future connector actions tagged as write or destructive could change or remove SuperSaaS data. <br>
-Mitigation: Confirm the exact payload, target, and expected effect with the user before running any write action, and require explicit approval for destructive actions. <br>
-Risk: Setup, connection, or billing fallback commands can initiate account or payment-related flows. <br>
-Mitigation: Run setup, login, connection, or billing steps only after a connector command fails for the matching reason. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect SuperSaaS connector schemas and run read/list actions for appointments, slots, schedules, resources, groups, forms, field names, and recent booking changes through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub SuperSaaS listing](https://clawhub.ai/oomol/oo-super-saas) <br>
-- [SuperSaaS homepage](https://www.supersaas.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands, JSON payloads, and JSON connector results.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only connector actions; fetch the live action schema before constructing payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: First-time setup includes pipe-to-shell installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official, versioned, integrity-checked installer source and independently verify it before running remote installation commands.
+
+Risk: The skill accesses SuperSaaS data through OOMOL-mediated credentials.
+
+Mitigation: Install only when OOMOL-mediated access is acceptable, and use the skill for explicit read/list tasks requested by the user.
+
+Risk: Future connector actions could change SuperSaaS state if write or destructive actions are added.
+
+Mitigation: Require user confirmation of the exact payload and expected effect before running any state-changing action.
+
+## Reference(s):
+
+- [SuperSaaS homepage](https://www.supersaas.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-super-saas)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON command responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill tells the agent to inspect live connector schemas before constructing JSON payloads and to run read-oriented SuperSaaS actions through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: skill frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

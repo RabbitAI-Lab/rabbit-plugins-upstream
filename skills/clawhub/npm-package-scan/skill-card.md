@@ -1,40 +1,60 @@
-## Description: <br>
-Scan npm packages used in a repository for risk, maintenance health, and upgrade concerns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Audit JavaScript and TypeScript repository dependencies for security, supply-chain, maintenance, version, lockfile, and cleanup risks.
 
-## Publisher: <br>
-[geoffrey-xiao](https://clawhub.ai/user/geoffrey-xiao) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[geoffrey-xiao](https://clawhub.ai/user/geoffrey-xiao)
 
-## Use Case: <br>
-Developers and engineers use this skill to review JavaScript and npm dependency risk in a repository, including direct and transitive dependencies, audit findings, stale packages, broad version ranges, and upgrade concerns. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may read package manifests and lockfiles and run package manager audit or listing commands. <br>
-Mitigation: Use it in repositories where dependency metadata can be reviewed, and inspect proposed commands before execution. <br>
-Risk: Upgrade and fix recommendations can have dependency compatibility or build impact. <br>
-Mitigation: Review proposed dependency changes for blast radius and run project tests before applying them. <br>
+## Use Case:
 
+Developers and engineers use this skill to review npm, pnpm, Yarn, or Bun dependency risk in JavaScript and TypeScript repositories. It helps produce evidence-based dependency findings, verification steps, and a sequenced remediation plan without changing the repository by default.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/geoffrey-xiao/npm-package-scan) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown review with severity sections and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Does not modify dependency versions or remove packages unless explicitly asked; may run package manager audit and listing commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence) <br>
+Risk: Registry-backed dependency checks may disclose package names and versions to a package registry.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Explain the disclosure before running registry-backed commands and skip them when network use is unavailable or inappropriate.
+
+Risk: Automatic audit fixes, upgrades, installs, or lockfile regeneration can change repository state and introduce unintended compatibility or supply-chain effects.
+
+Mitigation: Keep reviews read-only unless the user explicitly requests repository changes, and avoid mutating package-manager commands during review.
+
+Risk: Package lifecycle scripts and arbitrary package binaries can execute untrusted code.
+
+Mitigation: Prefer commands that ignore lifecycle scripts and do not execute package binaries merely to identify or inspect them.
+
+## Reference(s):
+
+- [Review checklist](references/checklist.md)
+- [Read-only command guide](references/commands.md)
+- [Dependency risk review template](references/report-template.md)
+- [ClawHub skill page](https://clawhub.ai/geoffrey-xiao/skills/npm-package-scan)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown report with optional inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only by default; registry-backed checks require disclosure and may be skipped when network use is unavailable or inappropriate.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Crustdata"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["crustdata"]
   icon: "https://static.oomol.com/logo/third-party/crustdata.png"
 ---

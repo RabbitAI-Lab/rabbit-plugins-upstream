@@ -1,45 +1,55 @@
-## Description: <br>
-This skill lets an agent retrieve and list Retell AI calls, phone numbers, voices, and voice agents through the OOMOL retell_ai connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Retell AI (retellai.com). Use this skill for searching and reading Retell AI data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and support teams use this skill to inspect Retell AI account data through an OOMOL-connected account. It supports read-only lookup and listing workflows for calls, phone numbers, voices, and voice agents. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Retell AI account through OOMOL, which gives the agent read access to Retell AI calls, phone numbers, voices, and voice agents on request. <br>
-Mitigation: Install and use the skill only for workspaces where that read access is acceptable, and keep Retell AI scopes aligned with the intended use. <br>
-Risk: First-time setup can involve installing the oo CLI from a remote installer. <br>
-Mitigation: Use the installer only when the oo CLI is needed and OOMOL is trusted for the environment. <br>
-Risk: Connector payloads that do not match the live action schema may produce failed or unintended requests. <br>
-Mitigation: Inspect the live connector schema with oo connector schema before running an action, then send a JSON payload that matches the returned contract. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Retell AI calls, phone numbers, voices, and voice agents through the OOMOL oo CLI without calling the Retell AI API directly.
 
-## Reference(s): <br>
-- [ClawHub Retell AI skill page](https://clawhub.ai/oomol/oo-retell-ai) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Retell AI homepage](https://www.retellai.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands return JSON data from the OOMOL connector when executed with a connected Retell AI account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and frontmatter) <br>
+Risk: OOMOL acts as an intermediary for Retell AI data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when OOMOL-mediated access is acceptable for the workspace data and account scopes involved.
+
+Risk: First-time setup includes remote installer commands for the oo CLI.
+
+Mitigation: Install the oo CLI through a verified, user-controlled process before allowing an agent to run Retell AI actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-retell-ai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Retell AI Homepage](https://www.retellai.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Action responses are returned as JSON data with execution metadata when run through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

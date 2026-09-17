@@ -1,43 +1,58 @@
-## Description: <br>
-Operates Formbricks through an OOMOL-connected account to read, create, update, and delete contacts and contact attribute keys. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Formbricks through the OOMOL-connected oo CLI to read, create, update, and delete Formbricks data without calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and operators use this skill to manage Formbricks contacts and contact attribute keys through the OOMOL connector from an agent workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires account-connected Formbricks access through OOMOL and may expose account data if used in the wrong workspace. <br>
-Mitigation: Confirm the active OOMOL/Formbricks connection and workspace context before running actions that access or change data. <br>
-Risk: Write and destructive actions can create, update, or delete Formbricks contact records or attribute keys. <br>
-Mitigation: Inspect the live connector schema, confirm the exact payload and target with the user, and require explicit approval before destructive actions. <br>
+## Use Case:
 
+External users, developers, and operators use this skill to manage Formbricks organization and workspace context, contacts, and contact attribute keys through the OOMOL-connected oo CLI.
 
-## Reference(s): <br>
-- [ClawHub Formbricks Skill](https://clawhub.ai/oomol/oo-formbricks) <br>
-- [Formbricks Homepage](https://formbricks.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline bash commands and JSON connector payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI, an authenticated OOMOL account, and a connected Formbricks account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: First-time setup can direct an agent to run remote oo CLI installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a trusted, version-pinned, verifiable method before using the skill.
+
+Risk: Write and destructive Formbricks actions can create, update, or delete workspace data.
+
+Mitigation: Confirm the exact payload, effect, and target resource before allowing write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Formbricks skill page](https://clawhub.ai/oomol/skills/oo-formbricks)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Formbricks homepage](https://formbricks.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Formbricks connection page](https://console.oomol.com/app-connections?provider=formbricks)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands call the oo CLI and may return JSON responses that include data and an execution identifier.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,57 @@
-## Description: <br>
-ActiveCampaign (activecampaign.com). Use this skill for ANY ActiveCampaign request - reading, creating, and updating data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate ActiveCampaign through the OOMOL oo CLI to read, create, and update contacts, user data, custom fields, and mailing lists.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to work with ActiveCampaign through an OOMOL-connected account, including reading users, contacts, fields, and mailing lists, and creating or updating contacts when confirmed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected account and can access ActiveCampaign CRM data. <br>
-Mitigation: Enable it only where ActiveCampaign access is intended and use the least-privilege account or connection available. <br>
-Risk: The upsert_contact action can create or update ActiveCampaign contacts. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: The authoritative security guidance says the disclosed commands should be used deliberately. <br>
-Mitigation: Review command targets and requested changes before execution, and keep credential scope limited. <br>
+## Use Case:
 
+Developers and agents use this skill to operate an ActiveCampaign account through an OOMOL-connected account, including contact lookup, contact listing, field and list discovery, current-user lookup, and confirmed contact upsert workflows.
 
-## Reference(s): <br>
-- [ActiveCampaign homepage](https://www.activecampaign.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL ActiveCampaign connection](https://console.oomol.com/app-connections?provider=activecampaign) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-activecampaign) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill directs the agent to inspect live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Setup instructions include remote installer commands that pipe downloaded scripts directly to a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the OOMOL CLI installation method before installing and prefer official package-manager or verified download steps.
+
+Risk: The upsert_contact action can change ActiveCampaign contact data.
+
+Mitigation: Confirm the exact payload and intended effect with the user before running write actions.
+
+## Reference(s):
+
+- [ActiveCampaign homepage](https://www.activecampaign.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-activecampaign)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses oo connector schema and run commands; read actions can run directly, while write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

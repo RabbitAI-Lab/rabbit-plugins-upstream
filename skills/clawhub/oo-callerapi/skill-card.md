@@ -1,45 +1,60 @@
-## Description: <br>
-CallerAPI (callerapi.com) enables agents to search and read CallerAPI data through an OOMOL-connected account instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CallerAPI lets agents use the OOMOL oo CLI connector to look up phone reputation, business details, complaints, HLR carrier data, and authenticated account information.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to look up phone-number intelligence, spam reputation, business details, complaints, optional HLR carrier data, and CallerAPI account information through the OOMOL CallerAPI connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The OOMOL CLI installer is a shell or PowerShell command that can execute with the user's account permissions. <br>
-Mitigation: Confirm cli.oomol.com is the official OOMOL distribution source and prefer a package-manager or signed release path if available. <br>
-Risk: The skill requires a CallerAPI connection and sensitive credentials. <br>
-Mitigation: Use the OOMOL connection flow so credentials are injected server-side, and avoid exposing raw API tokens in prompts, files, or shell history. <br>
-Risk: Phone-number intelligence queries may involve sensitive personal or business contact data. <br>
-Mitigation: Run lookups only for user-authorized purposes and review returned CallerAPI data before using it in downstream decisions. <br>
+## Use Case:
 
+Developers and external agent users use this skill to query CallerAPI through an OOMOL-connected account for phone-number intelligence and account status. The skill guides agents to inspect the live connector schema before constructing each action payload.
 
-## Reference(s): <br>
-- [CallerAPI homepage](https://callerapi.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-callerapi) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text, json] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before sending JSON payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: The setup path can execute remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the CLI only when it is missing, review the installation path first, and prefer a signed or checksum-verified installer when available.
+
+Risk: CallerAPI lookup inputs pass through the OOMOL connector, and account actions can retrieve the authenticated email and credit balance.
+
+Mitigation: Use the skill only with data authorized for CallerAPI lookup, and request account information only when it is needed for the user task.
+
+Risk: Billing, connection, or authentication failures can require account setup or recharge actions outside the lookup itself.
+
+Mitigation: Pause on those errors and follow the documented setup or billing steps only for the matching failure condition.
+
+## Reference(s):
+
+- [CallerAPI homepage](https://callerapi.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-callerapi)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with bash, PowerShell, text, and JSON command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live oo connector schema inspection before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,39 +1,52 @@
-## Description: <br>
-Klazify helps agents inspect Klazify connector schemas and run read-oriented domain enrichment actions through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Klazify through the OOMOL-connected oo CLI to inspect action schemas and retrieve domain enrichment, company profile, logo, IAB category, similar-domain, social media, and technology-stack data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill when they want an agent to categorize URLs, retrieve company and domain details, find similar domains, or inspect social and technology signals through Klazify. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-klazify) <br>
-- [Klazify homepage](https://www.klazify.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+Developers and external agents use this skill to run Klazify read actions through an OOMOL-connected account, including URL categorization, company data lookup, domain expiration lookup, logo retrieval, IAB classification, similar-domain discovery, social link lookup, and technology stack detection.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and frontmatter) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Setup instructions include unverified remote installer scripts that would run in a local shell.
+
+Mitigation: Use an already installed or organization-approved oo CLI where possible; do not let an agent run curl-to-bash or PowerShell iex installers automatically, and review installation, login, connection, and billing steps before proceeding.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-klazify)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Klazify homepage](https://www.klazify.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill instructs agents to inspect live action schemas before running connector actions and returns oo CLI JSON responses when actions are executed.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Bookingmood"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["bookingmood"]
   icon: "https://static.oomol.com/logo/third-party/bookingmood.svg"
 ---

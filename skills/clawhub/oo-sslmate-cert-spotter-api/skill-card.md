@@ -1,44 +1,56 @@
-## Description: <br>
-Cert Spotter (sslmate.com) supports reading, creating, updating, and deleting Cert Spotter data through the OOMOL Cert Spotter connector instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cert Spotter helps agents inspect OOMOL connector schemas and run Cert Spotter actions for monitored domains and certificate issuance records through the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Cert Spotter connector schemas, run Cert Spotter account actions, manage monitored domains, and look up certificate issuances through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Cert Spotter API key connected through OOMOL. <br>
-Mitigation: Install and use it only when the user trusts OOMOL and approves connecting Cert Spotter credentials through the OOMOL account connector. <br>
-Risk: Create, update, and delete actions can change monitored-domain configuration. <br>
-Mitigation: Require explicit user confirmation of the target, payload, and expected effect before running any write or destructive action. <br>
-Risk: The first-time setup path includes remote installer commands. <br>
-Mitigation: Run installer commands only after the oo CLI is missing and the user trusts the source. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Cert Spotter monitored domains and review certificate issuance records through an OOMOL-connected CLI workflow.
 
-## Reference(s): <br>
-- [Cert Spotter homepage](https://sslmate.com/certspotter/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-sslmate-cert-spotter-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an installed oo CLI, an authenticated OOMOL account, and a connected Cert Spotter API key.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The setup flow includes one-line remote script execution for installing the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified, version-pinned method with signatures or checksums before running connector commands.
+
+Risk: Write and destructive Cert Spotter actions can modify or delete monitored domain configuration.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before allowing write or delete actions.
+
+## Reference(s):
+
+- [Cert Spotter homepage](https://sslmate.com/certspotter/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-sslmate-cert-spotter-api)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Fetches live connector schemas before constructing payloads; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

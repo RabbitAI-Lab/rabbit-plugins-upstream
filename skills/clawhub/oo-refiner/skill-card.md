@@ -1,44 +1,61 @@
-## Description: <br>
-Refiner (refiner.io). Use this skill for ANY Refiner request - reading, creating, updating, and deleting data. Whenever a task involves Refiner, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Refiner (refiner.io) helps agents read, create, update, and delete Refiner data through the OOMOL oo connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent operate a connected Refiner workspace through OOMOL, including contact, form, segment, response, reporting, account, and event workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use sensitive Refiner credentials through an OOMOL-connected account. <br>
-Mitigation: Install only when the agent should operate that Refiner workspace, and use the OOMOL connection flow only if that provider is trusted. <br>
-Risk: Some connector actions can create, update, remove, or otherwise change Refiner data. <br>
-Mitigation: Review payloads and effects before approving write actions, and require explicit approval before destructive actions. <br>
-Risk: Connector schemas may change over time, which can make cached payload assumptions inaccurate. <br>
-Mitigation: Inspect the live connector schema before constructing each action payload. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Refiner contacts, forms, segments, survey responses, reporting, and account information from an OOMOL-connected Refiner account. The skill emphasizes schema-first action execution before building connector payloads.
 
-## Reference(s): <br>
-- [ClawHub Refiner skill](https://clawhub.ai/oomol/oo-refiner) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Refiner homepage](https://refiner.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill directs agents to inspect live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: First-time setup includes remote installer commands that pipe downloaded scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer channel before use; prefer a verified, pinned, or manually inspected oo CLI installation path.
+
+Risk: Write and destructive Refiner actions can change contact, segment, response, or event data.
+
+Mitigation: Confirm the exact payload and expected effect with the user before writes, and require explicit approval before destructive actions.
+
+Risk: Connector action schemas can change over time.
+
+Mitigation: Fetch the live schema with oo connector schema before building each connector payload.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-refiner)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Refiner homepage](https://refiner.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

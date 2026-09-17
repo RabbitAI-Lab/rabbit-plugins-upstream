@@ -1,43 +1,58 @@
-## Description: <br>
-A WeChat official-account publishing skill that helps agents prepare, upload, publish, inspect, and manage articles, media, statistics, and comments through the WeChat public API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents prepare, manage, publish, and review WeChat public account articles using the official WeChat publishing APIs.
 
-## Publisher: <br>
-[tobewin](https://clawhub.ai/user/tobewin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tobewin](https://clawhub.ai/user/tobewin)
 
-## Use Case: <br>
-Content operators and developers use this skill to automate WeChat official-account article workflows, including draft creation, media upload, publishing, published-article lookup, statistics retrieval, and comment management. It is intended for accounts with valid WeChat publishing API access and configured WECHAT_APP_ID and WECHAT_APP_SECRET credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Article content, media files, account identifiers, and API credentials may be sent to WeChat API servers during normal publishing workflows. <br>
-Mitigation: Use the skill only with content approved for WeChat publication, avoid sensitive or confidential material in automated runs, and keep WECHAT_APP_ID and WECHAT_APP_SECRET in the environment rather than in prompts or files. <br>
-Risk: Publish and delete operations for drafts, published articles, materials, comments, and replies can be irreversible. <br>
-Mitigation: Review generated commands and payloads before execution and require the documented --confirm flag for high-impact publish or delete actions. <br>
-Risk: Misconfigured accounts or accounts without current WeChat publishing API permissions may fail or produce incomplete workflows. <br>
-Mitigation: Run the connection test and confirm the account's WeChat API permissions before relying on the workflow for production publishing. <br>
+## Use Case:
 
+Developers and account operators use this skill to automate WeChat public account article workflows, including draft creation, media upload, publishing, statistics retrieval, and comment management.
 
-## Reference(s): <br>
-- [WeChat Publisher on ClawHub](https://clawhub.ai/tobewin/skills/wechat-publisher) <br>
-- [WeChat Official Account API Documentation](https://developers.weixin.qq.com/doc/subscription/api/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON payload examples, and generated HTML for WeChat articles] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May require outbound HTTPS requests to api.weixin.qq.com and datacube endpoints when commands are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: server release metadata, SKILL.md frontmatter) <br>
+Risk: WeChat AppID/AppSecret, article drafts, uploaded media, analytics, and comments are sensitive account data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for an authorized WeChat public account, keep credentials in environment variables, and avoid processing sensitive or confidential content in automated workflows.
+
+Risk: Article content, media files, and account identifiers are sent to official WeChat API servers.
+
+Mitigation: Review content before upload or publish and confirm that external transfer to WeChat is acceptable for the account and content type.
+
+Risk: Publishing and delete operations for drafts, published articles, materials, comments, and replies are irreversible.
+
+Mitigation: Review command targets carefully and use the required --confirm flag only after confirming the intended account change.
+
+## Reference(s):
+
+- [WeChat Publisher on ClawHub](https://clawhub.ai/tobewin/skills/wechat-publisher)
+- [WeChat Subscription Account API Documentation](https://developers.weixin.qq.com/doc/subscription/api/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON examples, and generated WeChat article HTML]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can issue authenticated API operations when the user provides WeChat account credentials and explicit commands.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

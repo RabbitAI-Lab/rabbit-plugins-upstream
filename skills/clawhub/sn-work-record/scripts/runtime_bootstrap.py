@@ -20,11 +20,14 @@ def _unique_existing(paths: Iterable[str | None]) -> list[str]:
     for path in paths:
         if not path:
             continue
-        real = os.path.realpath(os.path.expanduser(path))
-        if real in seen or not os.path.exists(real):
+        # Preserve virtual-environment interpreter paths. Resolving symlinks
+        # collapses venv/bin/python to the base interpreter and loses the
+        # venv's site-packages.
+        candidate = os.path.abspath(os.path.expanduser(path))
+        if candidate in seen or not os.path.exists(candidate):
             continue
-        seen.add(real)
-        result.append(real)
+        seen.add(candidate)
+        result.append(candidate)
     return result
 
 
@@ -61,14 +64,14 @@ def ensure_runtime(required_modules: list[str], preferred_python: str | None = N
     if os.environ.get(ENV_GUARD) == "1":
         return
 
-    current = os.path.realpath(sys.executable)
+    current = os.path.abspath(sys.executable)
     candidates = _build_candidates(preferred_python)
 
     if _has_modules(current, required_modules):
         return
 
     for candidate in candidates:
-        if os.path.realpath(candidate) == current:
+        if os.path.abspath(candidate) == current:
             continue
         if _has_modules(candidate, required_modules):
             new_env = os.environ.copy()

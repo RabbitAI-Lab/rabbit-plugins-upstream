@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "New Relic"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["new_relic"]
   icon: "https://static.oomol.com/logo/third-party/New%20Relic.svg"
 ---

@@ -1,46 +1,59 @@
-## Description: <br>
-Google Tasks (tasks.google.com). Use this skill for ANY Google Tasks request: reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Tasks (tasks.google.com). Use this skill for ANY Google Tasks request: reading, creating, updating, and deleting task data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent manage Google Tasks through an OOMOL-connected account, including listing, fetching, creating, updating, moving, clearing, and deleting tasks and task lists. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create, update, or move Google Tasks data. <br>
-Mitigation: Confirm the exact action payload and expected effect before approving write actions. <br>
-Risk: Destructive actions can clear completed tasks or delete tasks and task lists. <br>
-Mitigation: Require explicit approval for the target task list or task before running destructive actions. <br>
-Risk: Incorrect connector payloads can affect the wrong Google Tasks item. <br>
-Mitigation: Inspect the live connector schema before building each action payload. <br>
+## Use Case:
 
+Employees, external users, and developers use this skill to let an agent inspect Google Tasks lists and tasks, then create, update, move, clear, or delete Google Tasks items after required confirmation for write or destructive actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-googletasks) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Google Tasks](https://tasks.google.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions may return JSON data and an execution ID from the OOMOL connector.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: The setup instructions include remote installer commands that can execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source before use and prefer package-manager or verified-download installation paths when available.
+
+Risk: Write and destructive actions can modify, clear, or delete Google Tasks data.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running actions marked write or destructive.
+
+Risk: Connector schemas may change over time, causing stale payload assumptions.
+
+Mitigation: Fetch the live action schema with `oo connector schema` before constructing each connector payload.
+
+## Reference(s):
+
+- [Google Tasks homepage](https://tasks.google.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL Google Tasks connection](https://console.oomol.com/app-connections?provider=googletasks)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the oo CLI and return connector responses as JSON.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

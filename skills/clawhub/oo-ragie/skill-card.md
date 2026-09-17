@@ -1,44 +1,55 @@
-## Description: <br>
-Ragie lets an agent inspect schemas and run Ragie connector actions through the oo CLI for reading, creating, updating, retrieving, and deleting Ragie data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Ragie enables agents to read, create, update, delete, and retrieve Ragie data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to manage Ragie RAG resources from an OOMOL-connected account, including document ingestion, retrieval, metadata updates, partition management, and deletion workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected documents may be sent to Ragie for cloud indexing. <br>
-Mitigation: Only ingest data approved for Ragie, and avoid secrets, private files, regulated data, or confidential documents unless upload has been explicitly authorized. <br>
-Risk: Write and destructive actions can modify or delete Ragie documents, partitions, metadata, or limits. <br>
-Mitigation: Confirm the exact action, target IDs, payload, and expected effect before running write or destructive commands. <br>
-Risk: The skill requires an OAuth-backed connection and sensitive credentials managed through OOMOL. <br>
-Mitigation: Use only intended connected accounts, do not expose raw credentials, and reconnect or adjust scopes only when an auth or connection error requires it. <br>
+## Use Case:
 
+Developers and agent users use this skill to operate Ragie through an OOMOL-connected account, including document ingestion, inspection, retrieval, metadata updates, partition management, and connection discovery.
 
-## Reference(s): <br>
-- [ClawHub Ragie Skill](https://clawhub.ai/oomol/oo-ragie) <br>
-- [Ragie Homepage](https://www.ragie.ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses may include a data object and meta.executionId when actions run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: Fallback setup can run remote installer scripts through a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an already installed and authenticated oo CLI when possible; before running installer commands, independently verify the official source and understand the local changes.
+
+Risk: Write and destructive Ragie actions can create, change, or delete documents, partitions, metadata, and limits.
+
+Mitigation: Confirm the exact action, target, payload, and expected effect with the user before running write or destructive commands.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-ragie)
+- [Ragie Homepage](https://www.ragie.ai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, JSON, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the oo CLI and may return JSON responses containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

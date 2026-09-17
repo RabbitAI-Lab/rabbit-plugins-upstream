@@ -1,42 +1,61 @@
-## Description: <br>
-Use this skill for Tremendous requests that read, create, or update data through the OOMOL-connected Tremendous connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents manage Tremendous data through the OOMOL oo CLI, including reading records, creating orders, generating reward links, and listing campaigns, funding sources, products, and rewards.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Agents and operators use this skill to work with a connected Tremendous account: create reward orders, generate reward links, and read campaigns, funding sources, organizations, orders, products, and rewards. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Reward orders and redemption links can have financial or recipient-impacting effects. <br>
-Mitigation: Require explicit user approval of the exact payload and intended effect before creating orders or links. <br>
-Risk: Connected Tremendous account data may include sensitive order, reward, funding, or organization information. <br>
-Mitigation: Install and use the skill only for intended Tremendous account operations, and avoid exposing connector responses beyond the user-authorized task. <br>
+## Use Case:
 
+Developers and operators use this skill to let an agent perform Tremendous account workflows through an OOMOL-connected account, including reward orders, reward links, campaigns, funding sources, products, rewards, and organization lookups. The skill expects live action schemas to be fetched before requests and requires confirmation for state-changing actions.
 
-## Reference(s): <br>
-- [Tremendous homepage](https://www.tremendous.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-tremendous) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Write actions require explicit user confirmation before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: The fallback setup path can run a remote installer pipeline for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install or update the oo CLI only after independently verifying the installer source and integrity.
+
+Risk: The skill routes Tremendous connector credentials and reward/order data through a third-party OOMOL-connected account.
+
+Mitigation: Use the skill only when the publisher and connector are trusted for the relevant Tremendous credentials and business data.
+
+Risk: State-changing Tremendous actions can create orders or generate reward links.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [Tremendous homepage](https://www.tremendous.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-tremendous)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include oo CLI commands, action-schema guidance, JSON request payloads, and connector responses.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

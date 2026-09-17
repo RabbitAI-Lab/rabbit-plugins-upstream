@@ -1,46 +1,55 @@
-## Description: <br>
-Rootly (rootly.com). Use this skill for ANY Rootly request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Rootly (rootly.com) integration that lets agents search and read Rootly data through the OOMOL-connected oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and incident-response operators use this skill to search and read Rootly users, incidents, services, and teams through an OOMOL-connected Rootly account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Rootly incident and account data may be sensitive. <br>
-Mitigation: Use the skill only for explicit Rootly tasks and treat returned incident, user, service, and team data as sensitive. <br>
-Risk: Live connector schemas may differ from assumed payload shapes. <br>
-Mitigation: Inspect the action schema with the oo CLI before constructing payloads. <br>
-Risk: Authentication, connection, scope, credential, or billing errors can block Rootly access. <br>
-Mitigation: Use the documented setup and recovery steps only after a command fails for the matching reason. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Rootly schemas and retrieve the current user, incidents, services, and teams through an OOMOL-connected Rootly account.
 
-## Reference(s): <br>
-- [ClawHub Rootly skill page](https://clawhub.ai/oomol/skills/oo-rootly) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Rootly homepage](https://rootly.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Rootly connector responses are returned by the oo CLI as JSON when commands are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release version and skill metadata) <br>
+Risk: First-time setup instructs users to run remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source and prefer a pinned, verified oo CLI installation method before installing.
+
+Risk: Future Rootly connector actions could write, remove, or overwrite Rootly data if added later.
+
+Mitigation: Require the agent to inspect the live schema and confirm the exact payload and effect with the user before any write or destructive action.
+
+## Reference(s):
+
+- [Rootly homepage](https://rootly.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the oo CLI to fetch live action schemas before running Rootly connector actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

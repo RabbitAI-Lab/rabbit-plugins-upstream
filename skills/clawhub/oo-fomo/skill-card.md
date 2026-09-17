@@ -1,44 +1,55 @@
-## Description: <br>
-Fomo lets an agent read, create, update, and delete Fomo data through the OOMOL connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fomo helps agents read, create, update, and delete Fomo events through the OOMOL oo CLI instead of direct API calls.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent manage Fomo events through an OOMOL-connected account, including listing, retrieving, creating, updating, and deleting events. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, or delete Fomo event data through the user's connected account. <br>
-Mitigation: Require explicit user confirmation of the target, payload, and intended effect before running write or destructive actions. <br>
-Risk: First-time setup may ask the user to install or authenticate the oo CLI. <br>
-Mitigation: Review installation commands before execution and only run setup steps after a relevant command fails with an authentication, connection, or missing CLI error. <br>
+## Use Case:
 
+External users and developers use this skill to manage Fomo events from an OOMOL-connected account, including reading event data and performing confirmed create, update, or delete actions.
 
-## Reference(s): <br>
-- [Fomo homepage](https://fomo.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Fomo skill on ClawHub](https://clawhub.ai/oomol/skills/oo-fomo) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before building action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: Setup instructions include direct execution of remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing and prefer verified official CLI documentation with version or checksum validation.
+
+Risk: Create, update, and delete actions can change or remove Fomo account data.
+
+Mitigation: Require confirmation for create or update payloads and explicit approval before deletions.
+
+## Reference(s):
+
+- [Fomo homepage](https://fomo.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live schema inspection before connector payloads; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

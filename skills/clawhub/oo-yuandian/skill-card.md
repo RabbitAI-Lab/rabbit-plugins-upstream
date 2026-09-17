@@ -1,45 +1,52 @@
-## Description: <br>
-Yuan Dian lets agents search and read Yuan Dian legal and enterprise data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Yuan Dian (open.chineselaw.com). Use this skill for Yuan Dian legal research and data retrieval through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, legal researchers, and due-diligence analysts use this skill to search and retrieve Yuan Dian cases, regulations, statutory clauses, legal hallucination checks, and enterprise records through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Legal text, enterprise records, and due-diligence queries may be submitted to the Yuan Dian service through the OOMOL connector. <br>
-Mitigation: Use the skill only when those queries are appropriate for the connected account and external service. <br>
-Risk: Setup, installation, connection, or billing steps can affect the user's local environment or OOMOL account. <br>
-Mitigation: Run setup or billing steps only after the matching command failure, and review install or billing commands before running them. <br>
-Risk: Connector action schemas can change over time. <br>
-Mitigation: Inspect the live action schema with oo connector schema before constructing JSON payloads. <br>
+## Use Case:
 
+Developers and legal research users use this skill to search and retrieve Yuan Dian regulations, clauses, cases, enterprise due-diligence records, and legal-text hallucination checks through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-yuandian) <br>
-- [Yuan Dian Homepage](https://open.chineselaw.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON connector payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses from connector runs include data and meta.executionId when invoked with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The setup instructions include a mutable remote installer executed directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official package manager or download the installer first, inspect it, and verify an official checksum or signature before executing it.
+
+## Reference(s):
+
+- [Yuan Dian homepage](https://open.chineselaw.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-yuandian)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live Yuan Dian action schemas and returns oo CLI JSON responses when actions are executed.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

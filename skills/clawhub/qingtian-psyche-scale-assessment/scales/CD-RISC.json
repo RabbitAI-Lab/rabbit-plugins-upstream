@@ -1,0 +1,348 @@
+{
+  "id": "CD-RISC",
+  "name": "Connor-Davidson 心理韧性量表（10项）",
+  "short_name": "CD-RISC 心理韧性",
+  "category": "心理韧性",
+  "target_population": "成年人",
+  "estimated_time": "约 2 分钟",
+  "item_count": 10,
+  "description": "测量心理韧性（面对压力/逆境的适应能力），10 题 0–4 自评，总分越高韧性越强。",
+  "source": "Connor & Davidson, 2003",
+  "license": "学术使用",
+  "scoring_type": "sum",
+  "items": [
+    {
+      "id": "q1",
+      "text": "我能适应变化。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从来不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "我能在经历困难后恢复过来。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从来不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "我通常能从压力事件中恢复。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从来不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "我感到自己能掌控局面。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从来不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q5",
+      "text": "即使在压力下，我也能保持清晰思考。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从来不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q6",
+      "text": "在生病、困难、压力下我能处理好。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从来不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q7",
+      "text": "我能在紧张情境下保持冷静。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从来不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q8",
+      "text": "我能达到自己的目标。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从来不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q9",
+      "text": "我认为自己是个坚强的人。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从来不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "text": "我能处理不愉快的情绪。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从来不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    }
+  ],
+  "dimensions": [
+    {
+      "name": "韧性总分",
+      "items": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7",
+        "q8",
+        "q9",
+        "q10"
+      ],
+      "max": 40,
+      "min": 0
+    }
+  ],
+  "standard_score": null,
+  "interpretation": {
+    "bands": [
+      {
+        "dimension": "韧性总分",
+        "min": 0,
+        "max": 12,
+        "level": "偏低",
+        "summary": "心理韧性水平偏低，面对压力较易受挫。",
+        "advice": "从小步应对、建立支持系统开始训练韧性。"
+      },
+      {
+        "dimension": "韧性总分",
+        "min": 13,
+        "max": 25,
+        "level": "中等",
+        "summary": "韧性处于中等水平。",
+        "advice": "保持，并在压力情境中刻意练习应对。"
+      },
+      {
+        "dimension": "韧性总分",
+        "min": 26,
+        "max": 40,
+        "level": "较高",
+        "summary": "心理韧性较高，能较好地从逆境中恢复。",
+        "advice": "可把经验转化为帮助他人的力量。"
+      }
+    ]
+  },
+  "safety": {
+    "crisis_items": [],
+    "crisis_rule": "",
+    "high_risk_rule": ""
+  }
+}

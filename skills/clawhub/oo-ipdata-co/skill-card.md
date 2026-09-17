@@ -1,41 +1,55 @@
-## Description: <br>
-The ipdata.co skill lets an agent use the OOMOL oo CLI connector to look up IP geolocation, ASN, carrier, company, currency, language, time zone, and threat data from ipdata.co. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ipdata.co (ipdata.co). Use this skill for ANY ipdata.co request - searching and reading data. Whenever a task involves ipdata.co, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to let an agent inspect the live ipdata.co connector schema and run read-only IP intelligence lookups through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: IP addresses submitted for lookup, including current-IP requests, are processed through the OOMOL connector layer and ipdata.co. <br>
-Mitigation: Use the skill only for IP lookup data that is appropriate to share with the connected services, and avoid submitting sensitive addresses unless that processing is acceptable. <br>
-Risk: First-time setup may require installing the oo CLI before the connector can run. <br>
-Mitigation: Verify the oo CLI installer source before running setup commands. <br>
+## Use Case:
 
+Developers and agents use this skill to query ipdata.co through an OOMOL-connected account for IP geolocation, ASN, carrier, company, currency, language, time zone, flag, EU, caller-IP, threat intelligence, and bulk lookup tasks.
 
-## Reference(s): <br>
-- [ipdata.co homepage](https://ipdata.co) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Fallback setup includes remote installer commands that pipe downloaded scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not allow an agent to run curl|bash or irm|iex installer commands automatically; use a verified package or inspect and verify the installer before installation.
+
+Risk: IP addresses submitted for lookup are sent through OOMOL's connector to ipdata.co under the connected account.
+
+Mitigation: Only query IP addresses the user is allowed to share with OOMOL and ipdata.co, and review sensitive or bulk lookup payloads before execution.
+
+## Reference(s):
+
+- [ipdata.co homepage](https://ipdata.co)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-ipdata-co)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration guidance]
+
+**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payload or response descriptions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill directs agents to inspect the live connector schema before constructing payloads; connector run responses are JSON objects.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Alpha Vantage"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.4"
   services: ["alpha_vantage"]
   icon: "https://static.oomol.com/logo/third-party/Alpha%20Vantage.svg"
 ---

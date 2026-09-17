@@ -1,0 +1,346 @@
+{
+  "id": "SSRS",
+  "name": "社会支持评定量表（SSRS，简化自填版）",
+  "short_name": "SSRS 社会支持",
+  "category": "社会支持",
+  "target_population": "成年人",
+  "estimated_time": "约 2 分钟",
+  "item_count": 10,
+  "description": "肖水源社会支持评定量表的简化加和版，分客观支持、主观支持、支持利用度三个维度。题目为常用中文表述，正式使用请核对原版计分。",
+  "source": "肖水源, 1986",
+  "license": "学术使用",
+  "scoring_type": "sum",
+  "items": [
+    {
+      "id": "q1",
+      "text": "你有多少关系密切、可以得到支持和帮助的朋友？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "一个也没有",
+          "score": 1
+        },
+        {
+          "label": "1–2个",
+          "score": 2
+        },
+        {
+          "label": "3–5个",
+          "score": 3
+        },
+        {
+          "label": "6个或以上",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "近一年来，你住的地方离父母或其他家人有多近？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很远",
+          "score": 1
+        },
+        {
+          "label": "较远",
+          "score": 2
+        },
+        {
+          "label": "一般",
+          "score": 3
+        },
+        {
+          "label": "很近",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "你与邻居的关系如何？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "互不往来",
+          "score": 1
+        },
+        {
+          "label": "很少往来",
+          "score": 2
+        },
+        {
+          "label": "一般",
+          "score": 3
+        },
+        {
+          "label": "密切",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "你与同事的关系如何？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "互不往来",
+          "score": 1
+        },
+        {
+          "label": "很少往来",
+          "score": 2
+        },
+        {
+          "label": "一般",
+          "score": 3
+        },
+        {
+          "label": "密切",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q5",
+      "text": "你从家人那里得到的支持与照顾程度如何？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "较少",
+          "score": 2
+        },
+        {
+          "label": "一般",
+          "score": 3
+        },
+        {
+          "label": "很多",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q6",
+      "text": "你的住房条件如何？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很差",
+          "score": 1
+        },
+        {
+          "label": "较差",
+          "score": 2
+        },
+        {
+          "label": "一般",
+          "score": 3
+        },
+        {
+          "label": "很好",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q7",
+      "text": "你的经济状况如何？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很紧张",
+          "score": 1
+        },
+        {
+          "label": "较紧张",
+          "score": 2
+        },
+        {
+          "label": "一般",
+          "score": 3
+        },
+        {
+          "label": "宽裕",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q8",
+      "text": "当你遇到急难时，曾经得到的经济支持或解决实际问题的帮助来源多吗？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "无任何来源",
+          "score": 1
+        },
+        {
+          "label": "很少",
+          "score": 2
+        },
+        {
+          "label": "一般",
+          "score": 3
+        },
+        {
+          "label": "充足",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q9",
+      "text": "当你遇到烦心事时，曾经得到的安慰和关心多吗？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "无人安慰",
+          "score": 1
+        },
+        {
+          "label": "很少",
+          "score": 2
+        },
+        {
+          "label": "一般",
+          "score": 3
+        },
+        {
+          "label": "充分",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "text": "对于倾诉、求助或参加团体（如党团、工会、学生会等）活动，你参与的情况是？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不参加",
+          "score": 1
+        },
+        {
+          "label": "偶尔参加",
+          "score": 2
+        },
+        {
+          "label": "经常参加",
+          "score": 3
+        },
+        {
+          "label": "主动参加",
+          "score": 4
+        }
+      ]
+    }
+  ],
+  "dimensions": [
+    {
+      "name": "客观支持",
+      "items": [
+        "q2",
+        "q6",
+        "q7"
+      ],
+      "max": 12,
+      "min": 3
+    },
+    {
+      "name": "主观支持",
+      "items": [
+        "q1",
+        "q3",
+        "q4",
+        "q5"
+      ],
+      "max": 16,
+      "min": 4
+    },
+    {
+      "name": "支持利用度",
+      "items": [
+        "q8",
+        "q9",
+        "q10"
+      ],
+      "max": 12,
+      "min": 3
+    }
+  ],
+  "standard_score": null,
+  "interpretation": {
+    "bands": [
+      {
+        "dimension": "客观支持",
+        "min": 3,
+        "max": 7,
+        "level": "偏低",
+        "summary": "客观支持资源较少。",
+        "advice": "可主动拓展社会连接。"
+      },
+      {
+        "dimension": "客观支持",
+        "min": 8,
+        "max": 12,
+        "level": "较好",
+        "summary": "客观支持资源较好。",
+        "advice": "维持。"
+      },
+      {
+        "dimension": "主观支持",
+        "min": 4,
+        "max": 9,
+        "level": "偏低",
+        "summary": "主观感受到的支持较少。",
+        "advice": "练习表达需求与接纳帮助。"
+      },
+      {
+        "dimension": "主观支持",
+        "min": 10,
+        "max": 16,
+        "level": "较好",
+        "summary": "主观支持感受较好。",
+        "advice": "维持。"
+      },
+      {
+        "dimension": "支持利用度",
+        "min": 3,
+        "max": 7,
+        "level": "偏低",
+        "summary": "利用支持资源的意愿/能力偏低。",
+        "advice": "尝试在需要时主动求助。"
+      },
+      {
+        "dimension": "支持利用度",
+        "min": 8,
+        "max": 12,
+        "level": "较好",
+        "summary": "支持利用度较好。",
+        "advice": "维持。"
+      }
+    ]
+  },
+  "safety": {
+    "crisis_items": [],
+    "crisis_rule": "",
+    "high_risk_rule": ""
+  }
+}

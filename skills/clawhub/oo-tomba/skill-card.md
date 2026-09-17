@@ -1,43 +1,55 @@
-## Description: <br>
-Operates Tomba through an OOMOL-connected account for domain email discovery, email verification, enrichment, company search, LinkedIn contact lookup, and technology detection. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tomba (tomba.io). Use this skill for ANY Tomba request - searching and reading data. Whenever a task involves Tomba, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to run Tomba searches, verification, enrichment, account lookup, company search, and technology detection through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Tomba account and sensitive credentials managed through OOMOL. <br>
-Mitigation: Use a scoped OOMOL/Tomba connection and follow the setup guidance so raw tokens are not handled directly. <br>
-Risk: Tomba lookups can return personal or company contact data. <br>
-Mitigation: Run only the requested lookup actions and review results for privacy, policy, and contractual handling requirements before sharing. <br>
+## Use Case:
 
+External users and developers use this skill to query Tomba through an OOMOL-connected account for domain searches, professional email discovery, email verification, enrichment, company search, technology detection, and account lookup.
 
-## Reference(s): <br>
-- [ClawHub Tomba skill page](https://clawhub.ai/oomol/oo-tomba) <br>
-- [Tomba homepage](https://tomba.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can execute Tomba connector actions through the oo CLI and return JSON responses when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server evidence and frontmatter) <br>
+Risk: The documented fallback setup includes mutable remote installer pipe commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified, inspectable, versioned method instead of running installer pipe commands automatically.
+
+Risk: The skill can query Tomba account-connected data and external contact intelligence.
+
+Mitigation: Use only with a Tomba/OOMOL account the user intends to query and fetch each action's live schema before sending payloads.
+
+## Reference(s):
+
+- [Tomba homepage](https://tomba.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-tomba)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON command payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses oo CLI connector schema and run commands; responses may include JSON data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

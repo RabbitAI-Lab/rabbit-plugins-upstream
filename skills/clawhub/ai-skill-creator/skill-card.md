@@ -1,43 +1,57 @@
-## Description: <br>
-Guides agents through creating ClawHub/OpenClaw skills, including directory setup, SKILL.md authoring, references, scripts, security review, quality gates, packaging, and publishing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI Skill Creator (EN) guides agents through creating, reviewing, packaging, and publishing ClawHub skills using a staged workflow with security review and quality gates.
 
-## Publisher: <br>
-[johnsmithfan](https://clawhub.ai/user/johnsmithfan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[johnsmithfan](https://clawhub.ai/user/johnsmithfan)
 
-## Use Case: <br>
-Developers and agent builders use this skill to create, review, package, and publish new ClawHub/OpenClaw skills with explicit security and quality gates. It is most relevant when a user asks to create a new skill package or evaluate a skill design before release. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can propose commands for packaging, publishing, dependency checks, or local review workflows. <br>
-Mitigation: Review commands before running them and use accounts or credentials with the least privilege needed. <br>
-Risk: The skill may guide creation or modification of skill files and release artifacts. <br>
-Mitigation: Keep file writes scoped to the intended workspace or skills directory and scan the resulting skill before deployment. <br>
-Risk: The artifact includes security-review and quality-gate procedures that depend on correct human or agent interpretation. <br>
-Mitigation: Treat the procedures as guidance and confirm security decisions against the authoritative ClawScan summary and release policy. <br>
+## Use Case:
 
+Developers and agent operators use this skill to scaffold new ClawHub or OpenClaw skills, draft skill files, run security and quality review steps, and prepare publishable packages.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/johnsmithfan/ai-skill-creator) <br>
-- [Publisher profile](https://clawhub.ai/user/johnsmithfan) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline JSON, shell command, and checklist examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should be reviewed before execution, especially commands related to publishing, package installation, moderation, or broad local review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0-en2 (source: server release metadata; artifact frontmatter version 1.1.0) <br>
+Risk: The skill can guide agents to create files, package artifacts, publish releases, and perform rollback actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit confirmation for target paths, permissions, publish actions, and rollback actions before execution.
+
+Risk: The security workflow references a CISO-001 authorization string that may be mistaken for real authorization.
+
+Mitigation: Treat CISO-001 only as workflow text and require real human or organizational approval for security review decisions.
+
+Risk: The rollback guidance includes a broad Git restore pattern.
+
+Mitigation: Replace broad rollback commands with a scoped restore of only the intended skill directory.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/johnsmithfan/skills/ai-skill-creator)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline JSON, shell commands, and file templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May direct an agent to generate skill files, package artifacts, publish releases, and review rollback actions.]
+
+## Skill Version(s):
+
+1.1.0-en2 (source: server release metadata; artifact frontmatter reports 1.1.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

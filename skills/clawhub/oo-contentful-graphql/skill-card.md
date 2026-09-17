@@ -1,45 +1,56 @@
-## Description: <br>
-Contentful GraphQL helps agents search and read Contentful data through the OOMOL Contentful GraphQL connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents search and read Contentful GraphQL data through OOMOL's connected Contentful GraphQL connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, content operators, and agents use this skill to inspect the OOMOL connector schema and run Contentful GraphQL Content API queries against a connected Contentful space and environment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queries and results pass through the OOMOL connector and the connected Contentful account. <br>
-Mitigation: Install and use the skill only when the OOMOL integration is trusted, and review query payloads before execution. <br>
-Risk: First-time CLI, authentication, connection, or billing steps can affect the user's OOMOL account setup. <br>
-Mitigation: Run setup and connection commands only after a matching command failure, not proactively. <br>
-Risk: GraphQL queries may return sensitive Contentful content from a selected space or environment. <br>
-Mitigation: Request only the needed fields and review returned data before sharing or reusing it. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect the Contentful GraphQL connector schema and run read-oriented GraphQL queries against a specified Contentful space and environment through the oo CLI.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-contentful-graphql) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Contentful](https://www.contentful.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill checks the live connector schema before constructing JSON payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Setup guidance includes one-line remote installer commands that can execute changing code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review OOMOL's installer delivery path before installation; prefer an official package manager or a downloaded, version-pinned installer with checksum or signature verification.
+
+Risk: Connector use depends on a signed-in OOMOL account and a valid Contentful GraphQL connection.
+
+Mitigation: Run authentication, connection, or billing setup only after a command fails with the matching error, and avoid handling raw Contentful tokens locally.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-contentful-graphql)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Contentful](https://www.contentful.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the oo CLI to inspect connector schemas and run actions; command results may include JSON responses with execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

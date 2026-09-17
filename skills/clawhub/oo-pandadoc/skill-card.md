@@ -1,44 +1,60 @@
-## Description: <br>
-PandaDoc enables agents to operate a connected PandaDoc workspace through OOMOL's pandadoc connector, including document, template, folder, contact, and webhook actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PandaDoc helps an agent read, create, update, and delete PandaDoc data through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage PandaDoc workspace resources from an agent, including reading details, creating documents or templates, managing contacts and folders, and configuring document lifecycle webhooks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change PandaDoc state through write actions such as document creation, folder creation, contact updates, template creation, attachment uploads, and webhook creation. <br>
-Mitigation: Confirm the exact action, target workspace object, and JSON payload with the user before running write actions. <br>
-Risk: The skill can remove PandaDoc data through destructive actions such as deleting contacts or templates. <br>
-Mitigation: Require explicit user approval for the specific target before running destructive actions. <br>
-Risk: The skill requires access to a connected PandaDoc workspace through OOMOL-managed credentials. <br>
-Mitigation: Install only when the agent is intended to operate that PandaDoc workspace, and review the connected account and scopes before use. <br>
+## Use Case:
 
+Developers and operators use this skill to manage PandaDoc documents, templates, folders, contacts, attachments, and webhooks through an OOMOL-connected PandaDoc account. The skill supports both read workflows and state-changing workflows that require user confirmation before execution.
 
-## Reference(s): <br>
-- [PandaDoc homepage](https://www.pandadoc.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub PandaDoc skill](https://clawhub.ai/oomol/oo-pandadoc) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include PandaDoc action names, command invocations, JSON request payloads, and review guidance for write or destructive operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: The first-time setup documentation includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the CLI only from a trusted, signed, versioned, or checksum-verified source before using the skill.
+
+Risk: Write actions can create or modify PandaDoc documents, templates, folders, contacts, attachments, or webhook subscriptions.
+
+Mitigation: Inspect the live connector schema, review the exact payload and intended effect, and obtain user confirmation before running write actions.
+
+Risk: Destructive actions can delete PandaDoc contacts or templates from the connected workspace.
+
+Mitigation: Confirm the target resource and obtain explicit user approval before running destructive actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-pandadoc)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [PandaDoc Homepage](https://www.pandadoc.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill instructs the agent to inspect live connector schemas before constructing payloads and to return connector responses as JSON when actions are run.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

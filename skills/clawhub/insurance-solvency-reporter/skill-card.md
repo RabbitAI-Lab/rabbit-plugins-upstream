@@ -1,41 +1,58 @@
-## Description: <br>
-Generates China C-ROSS Phase II solvency reports, capital adequacy calculations, stress tests, and SARM/IRR risk rating documentation for insurance finance, actuarial, and compliance teams. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates China C-ROSS Phase II insurance solvency report drafts, capital adequacy calculations, stress testing analysis, and SARM/IRR risk rating documentation for finance, actuarial, and compliance teams.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Insurance CFOs, actuaries, and compliance teams use this skill to draft quarterly and annual China C-ROSS solvency reports, calculate capital adequacy, prepare stress testing analysis, and document risk ratings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, for China insurance solvency reporting contexts. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may require confidential company financial, capital, risk, or regulatory inputs. <br>
-Mitigation: Redact unnecessary details, avoid personal data and secrets, and confirm authorization before sharing internal reporting materials. <br>
-Risk: Generated solvency reports or regulatory interpretations may become outdated or require professional review. <br>
-Mitigation: Verify outputs against current official NFRA requirements and have qualified finance, actuarial, and compliance reviewers approve materials before filing or disclosure. <br>
+## Use Case:
 
+Chinese insurance company CFOs, actuaries, finance staff, and compliance teams use this skill to draft and review quarterly or annual solvency reports, capital adequacy narratives, stress testing interpretations, SARM/IRR improvement plans, and public disclosure text under C-ROSS Phase II.
 
-## Reference(s): <br>
-- [C-ROSS Rules II Summary](references/cross_rules_ii_summary.md) <br>
-- [Solvency Capital Calculation Template](references/solvency_calculation.md) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown reports, tables, checklists, and calculation snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include capital adequacy calculations, stress-test scenarios, regulatory report outlines, and compliance review guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.1.1 (source: frontmatter and server release evidence) <br>
+Risk: Users may provide unnecessary sensitive insurance or customer data while asking for solvency report support.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use aggregated solvency figures and anonymized counterparties; do not provide raw customer lists, full policy-level data, or unnecessary sensitive ledgers.
+
+Risk: Generated reports or calculations may be inaccurate, outdated, or unsuitable for regulatory filing without expert review.
+
+Mitigation: Have qualified actuarial, finance, or compliance staff verify figures, assumptions, jurisdiction, and current NFRA/C-ROSS requirements before approval, disclosure, or filing.
+
+Risk: The skill is scoped to Chinese insurance solvency work and may be misapplied to other jurisdictions or regulatory regimes.
+
+Mitigation: Use it only for Chinese insurance C-ROSS/NFRA solvency workflows and switch to jurisdiction-specific expertise for other regimes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/insurance-solvency-reporter)
+- [Publisher profile](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, analysis, guidance]
+
+**Output Format:** [Markdown report sections, tables, calculations, checklists, and narrative guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should be reviewed by qualified actuarial, finance, or compliance staff before internal approval, disclosure, or regulatory filing.]
+
+## Skill Version(s):
+
+4.1.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

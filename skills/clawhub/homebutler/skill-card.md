@@ -1,43 +1,55 @@
-## Description: <br>
-Homelab server operations via homebutler CLI/MCP, including system status, reports, inventory/topology, Docker management, app installation, backup drills, Wake-on-LAN, port scanning, alerts, backup/restore, and multi-server SSH. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tells an agent what changed on a server since it last looked - plus status, Docker, backups, Proxmox. 44 MCP tools, each classed read, write or destructive.
 
-## Publisher: <br>
-[higangssh](https://clawhub.ai/user/higangssh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[higangssh](https://clawhub.ai/user/higangssh)
 
-## Use Case: <br>
-Developers, homelab operators, and agent users use Homebutler to inspect and administer local or configured servers through the homebutler CLI or MCP server. It helps summarize health, inspect inventory, manage Docker workloads, deploy self-hosted apps, and verify backups. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents to run powerful server and data-changing operations, including purge, restore, deploy, upgrade, Docker stop/restart, and all-server commands. <br>
-Mitigation: Confirm the exact server, app, and scope before acting, and require separate explicit approval before destructive, remote, upgrade, restore, or --all operations. <br>
-Risk: Homelab commands may expose hostnames, IP addresses, service names, logs, or topology details. <br>
-Mitigation: Summarize sensitive infrastructure details for shared contexts and avoid exposing raw JSON, logs, or network scan results unless the user explicitly approves. <br>
-Risk: The skill depends on an external homebutler CLI that can administer local and configured remote systems. <br>
-Mitigation: Install and use the CLI only in trusted environments, prefer key-based SSH authentication, and keep configuration files restricted to the owner. <br>
+## Use Case:
 
+Developers, operators, and self-hosting administrators use this skill to let an agent inspect configured servers, summarize meaningful changes, and manage Docker, backups, Proxmox guests, alerts, and install workflows through classified MCP tools.
 
-## Reference(s): <br>
-- [Homebutler on ClawHub](https://clawhub.ai/higangssh/homebutler) <br>
-- [homebutler CLI repository](https://github.com/Higangssh/homebutler) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with shell commands, summaries, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands produce human-readable text by default and can use JSON output for automation when supported.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.3.2 (source: ClawHub release evidence) <br>
+Risk: The skill can inspect configured servers and return operational details such as hostnames, internal addresses, ports, processes, and logs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run reads only against requested targets and summarize relevant findings instead of exposing raw logs or broad inventory data.
+
+Risk: The skill can perform write or destructive operations including restore, purge, stop, shutdown, restart, install, and Proxmox guest actions.
+
+Mitigation: Require explicit operator approval for destructive actions and review configured tokens, SSH credentials, and dashboard exposure before use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/higangssh/skills/homebutler)
+- [Publisher profile](https://clawhub.ai/user/higangssh)
+- [Homebutler repository](https://github.com/Higangssh/homebutler)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline JSON and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include MCP tool calls or pinned install and configuration commands; destructive actions require explicit operator approval.]
+
+## Skill Version(s):
+
+2.3.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,38 @@
+{
+  "id": "prompt-compilation-candidate-v2",
+  "candidate_identity": {
+    "kind": "behavior_manifest_sha256",
+    "value": "bbfd13bb5a34a5f75ba85f8d044468b47dbe1bb95ae3c9e15b394fee78df42e2",
+    "files": [
+      "SKILL.md",
+      "agents/openai.yaml",
+      "references/adaptive-task-design.md",
+      "references/examples.md",
+      "references/orchestration.md",
+      "references/prompt-generation.md"
+    ]
+  },
+  "harness_instruction": "After-change forward re-trial. Read and follow the complete skill candidate at /private/tmp/loop-candidate.fZyDg3/SKILL.md and any references it routes you to. Do not inspect tests. Respond to this raw user request as you actually would, in no more than 180 words. Return only the user-facing response.",
+  "user_request": "Rewrite this into the perfect detailed prompt with agents and subagents so we can improve onboarding. Before answering, state the execution route and the one missing thing that would most change it.",
+  "response_lines": [
+    "Execution route: parent coordinator defines the onboarding outcome, delegates bounded research, UX, measurement, and risk checks to subagents, integrates their evidence, then runs an adversarial review.",
+    "",
+    "Missing thing: the text you want rewritten. Without it, I would be inventing requirements.",
+    "",
+    "Paste the original prompt, brief, or notes here. I will preserve every required ask, clarify agent handoffs and acceptance criteria, add failure handling, and return one self-contained prompt.",
+    "",
+    "Status: BLOCKED | Evidence: NO RELIABLE EVIDENCE"
+  ],
+  "pass_required": [
+    "Paste",
+    "text you want rewritten",
+    "Status: BLOCKED"
+  ],
+  "pass_forbidden": [
+    ":::writing",
+    "Research agent:",
+    "UX agent:"
+  ],
+  "evaluator_decision": "PASS",
+  "evaluator_reason": "The revised candidate requests the missing source and stops before drafting a generic template."
+}

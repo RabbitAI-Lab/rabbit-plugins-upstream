@@ -1,43 +1,55 @@
-## Description: <br>
-NewsData.io (newsdata.io). Use this skill for NewsData.io news retrieval, source listing, cryptocurrency news, and historical archive search through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+NewsData.io helps agents retrieve latest news, cryptocurrency news, source-domain listings, and archive search results through the OOMOL newsdata_io connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to query NewsData.io through the OOMOL oo CLI for latest news, breaking news, cryptocurrency news, source-domain discovery, and historical archive search. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected NewsData.io account and uses sensitive credentials brokered by OOMOL. <br>
-Mitigation: Install only when OOMOL and the oo CLI are acceptable for the user's NewsData.io account, and review first-time setup commands before running them. <br>
-Risk: A listed action is tagged write even though the connector is primarily news-retrieval oriented. <br>
-Mitigation: Confirm any write-tagged action's exact payload and intended effect with the user before execution. <br>
-Risk: Connector schemas may change over time. <br>
-Mitigation: Fetch the live action schema with `oo connector schema` before constructing a payload. <br>
+## Use Case:
 
+External users and developers use this skill to ask an agent to retrieve NewsData.io headlines, cryptocurrency news, source lists, and archive search results through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [NewsData.io homepage](https://newsdata.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands call the OOMOL oo CLI and return connector JSON responses when executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server evidence and skill metadata) <br>
+Risk: Setup instructions include pipe-to-shell installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified package or downloaded installer with checksum or signature validation before installing the CLI.
+
+Risk: The archive search action is labeled as write even though the release evidence describes search-style behavior.
+
+Mitigation: Inspect the live action schema and confirm the exact payload and expected effect with the user before running any write-labeled action.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-newsdata-io)
+- [NewsData.io Homepage](https://newsdata.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses JSON payloads for oo connector actions and expects connector responses containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

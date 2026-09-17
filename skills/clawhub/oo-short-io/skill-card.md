@@ -1,44 +1,57 @@
-## Description: <br>
-Short.io (short.io). Use this skill for ANY Short.io request - reading, creating, updating, and deleting data. Whenever a task involves Short.io, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Short.io enables agents to read, create, update, delete, and inspect Short.io links and domains through an OOMOL-connected Short.io account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage Short.io links, domains, and link statistics through an OOMOL-connected Short.io account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, or delete Short.io links in the connected account. <br>
-Mitigation: Confirm the exact payload and expected effect before write actions, and require explicit approval before destructive deletion. <br>
-Risk: The skill requires access to a connected Short.io account and credentials. <br>
-Mitigation: Review install prompts and account connection requests before granting access. <br>
+## Use Case:
 
+Developers and agent users use this skill to manage Short.io links and domains from an OOMOL-connected account, including listing, fetching, creating, updating, deleting links, and retrieving click statistics.
 
-## Reference(s): <br>
-- [Short.io skill listing](https://clawhub.ai/oomol/oo-short-io) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Short.io homepage](https://short.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include Short.io connector responses returned as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: Setup instructions ask users to run remote oo CLI installer scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source first and prefer a pinned, signed, or checksum-verified oo CLI installation path before installing.
+
+Risk: Short.io create, update, and delete actions can change account data.
+
+Mitigation: Check payloads carefully and confirm the exact target and effect before approving state-changing actions.
+
+## Reference(s):
+
+- [ClawHub Short.io skill page](https://clawhub.ai/oomol/skills/oo-short-io)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Short.io homepage](https://short.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [State-changing Short.io actions require user confirmation; remote oo CLI installer use should be reviewed before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "SearchApi"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["search_api"]
   icon: "https://static.oomol.com/logo/third-party/Search%20api.svg"
 ---

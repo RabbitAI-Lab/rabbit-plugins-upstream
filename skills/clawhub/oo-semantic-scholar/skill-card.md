@@ -1,44 +1,55 @@
-## Description: <br>
-Semantic Scholar helps agents search, retrieve, and recommend research papers, authors, citations, references, and snippets through the OOMOL Semantic Scholar connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Semantic Scholar helps agents search and retrieve paper, author, citation, reference, snippet, and recommendation data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, researchers, and research assistants use this skill to query Semantic Scholar from an agent workflow, including paper search, author lookup, citation and reference retrieval, title matching, snippets, and paper recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires connecting Semantic Scholar credentials through OOMOL and uses OOMOL as an intermediary for requests. <br>
-Mitigation: Install and use it only when that intermediary model is acceptable, and connect credentials only through the documented OOMOL setup path when needed. <br>
-Risk: First-time setup may require installing the oo CLI before connector actions can run. <br>
-Mitigation: Review the oo CLI installation step before running it, and perform login or connection setup only after an authentication or connection failure. <br>
+## Use Case:
 
+Researchers, developers, and agents use this skill to search Semantic Scholar and retrieve publication metadata, author records, citation and reference lists, snippets, and paper recommendations through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-semantic-scholar) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Semantic Scholar homepage](https://www.semanticscholar.org/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include a data payload and execution metadata when actions are run with JSON output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The security evidence flags unverified pipe-to-shell installer commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup steps before use and prefer official, pinned, verifiable installation steps for the oo CLI.
+
+Risk: The security evidence flags broad routing of Semantic Scholar searches through OOMOL.
+
+Mitigation: Use the connector only for intended Semantic Scholar tasks, inspect the live action schema before execution, and confirm setup or authentication actions yourself.
+
+## Reference(s):
+
+- [Semantic Scholar homepage](https://www.semanticscholar.org/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-semantic-scholar)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with oo CLI commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

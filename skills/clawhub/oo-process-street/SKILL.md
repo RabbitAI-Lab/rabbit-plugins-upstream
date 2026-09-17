@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Process Street"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["process_street"]
   icon: "https://static.oomol.com/logo/third-party/process_street.png"
 ---

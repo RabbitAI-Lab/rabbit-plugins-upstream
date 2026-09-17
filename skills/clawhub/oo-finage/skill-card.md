@@ -1,43 +1,56 @@
-## Description: <br>
-Guides agents to use OOMOL's oo CLI for Finage connector actions, including live schema inspection and U.S. stock market data retrieval through a connected Finage account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Finage lets agents use an OOMOL-connected Finage account to retrieve U.S. stock market data through the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to route Finage requests through an OOMOL-connected account, inspect action schemas, and retrieve U.S. stock aggregates, quotes, trades, previous close data, snapshots, and symbol listings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to a connected Finage account and may operate on sensitive credentials through OOMOL. <br>
-Mitigation: Install it only when the agent should use the connected Finage account, and keep raw credentials outside the agent workflow. <br>
-Risk: Broad Finage requests or actions tagged as write could lead to unintended state-changing operations. <br>
-Mitigation: Inspect the live action schema and confirm the exact payload and effect before allowing updates or other state-changing actions. <br>
+## Use Case:
 
+External developers and agents use this skill to inspect Finage connector schemas and run Finage market-data actions. It supports retrieving U.S. stock aggregates, latest quotes, latest trades, previous-close data, snapshots, and symbol lists through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Finage homepage](https://finage.co.uk) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-finage) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The setup instructions include mutable remote installer commands that execute directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a signed or checksummed oo CLI release, inspect installer contents before execution, and run setup with ordinary user privileges.
+
+Risk: One read-style action is marked as a write action, which may create noisy confirmation prompts.
+
+Mitigation: Confirm the action schema and user intent before running any action tagged as write or destructive.
+
+## Reference(s):
+
+- [Finage ClawHub Skill](https://clawhub.ai/oomol/skills/oo-finage)
+- [Finage Homepage](https://finage.co.uk)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Finage command responses are JSON objects containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: evidence release and frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

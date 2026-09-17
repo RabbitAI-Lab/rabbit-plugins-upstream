@@ -1,42 +1,56 @@
-## Description: <br>
-Firstbase connector skill for searching and reading Firstbase account data through OOMOL's oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Firstbase connector helper for searching and reading Firstbase data through the OOMOL-connected oo CLI instead of direct API calls.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators with an OOMOL-connected Firstbase account use this skill to inspect Firstbase catalog SKUs, inventory items, brands, categories, and organization inventory without handling raw Firstbase API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Firstbase account data through an OOMOL-connected account. <br>
-Mitigation: Install and use it only when the OOMOL and Firstbase connection is intentional and appropriate for the requested account data. <br>
-Risk: Future connector actions marked write or destructive could change or remove Firstbase data. <br>
-Mitigation: Require explicit user confirmation of the exact payload, target, and effect before running any write or destructive action. <br>
+## Use Case:
 
+Developers and external users with an OOMOL-connected Firstbase account use this skill to inspect live Firstbase action schemas and retrieve catalog SKUs, inventory items, brands, and categories through the oo CLI.
 
-## Reference(s): <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Firstbase homepage](https://www.firstbase.com) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline bash commands and JSON CLI output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before running Firstbase actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: The setup instructions include curl-to-bash and PowerShell installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the oo CLI installer through a trusted, documented channel and avoid running installer commands from an elevated shell unless the source has been reviewed and trusted.
+
+Risk: The skill depends on an authenticated OOMOL-connected Firstbase account and live connector schemas.
+
+Mitigation: Run schema inspection before building payloads and use setup or reconnection steps only after an auth, connection, scope, or billing error.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-firstbase)
+- [Firstbase homepage](https://www.firstbase.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, Markdown, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution and returns oo CLI JSON responses when actions are run.]
+
+## Skill Version(s):
+
+1.0.3 (source: evidence release.version and artifact metadata.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

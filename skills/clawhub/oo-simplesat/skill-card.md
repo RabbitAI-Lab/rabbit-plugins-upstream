@@ -1,45 +1,60 @@
-## Description: <br>
-Simplesat (simplesat.io). Use this skill for ANY Simplesat request - reading, creating, and updating data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lets an agent read, search, create, and update Simplesat customers, surveys, questions, and responses through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to read Simplesat customers, surveys, questions, and responses, and to create or update customers or send survey emails through an OOMOL-connected Simplesat account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Agents can access a connected Simplesat account through OOMOL. <br>
-Mitigation: Install only when this account access is intended, and use OOMOL-scoped connections. <br>
-Risk: Customer updates and survey email actions can change Simplesat state. <br>
-Mitigation: Review the proposed payload and effect before approving write actions. <br>
-Risk: CLI installation or login steps introduce trust and account setup decisions. <br>
-Mitigation: Run install or login steps only when setup is required and OOMOL is trusted. <br>
+## Use Case:
 
+Developers and business operations teams use this skill to let agents work with Simplesat account data, including customer records, survey responses, questions, surveys, and event-based survey emails.
 
-## Reference(s): <br>
-- [Simplesat Skill on ClawHub](https://clawhub.ai/oomol/skills/oo-simplesat) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Simplesat Homepage](https://www.simplesat.io/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: Remote installer one-liners in first-time setup can execute unverified scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified, versioned method and do not let agents run installer one-liners automatically.
+
+Risk: Write actions can change Simplesat state by creating or updating customers or scheduling survey emails.
+
+Mitigation: Confirm the exact payload and effect with the user before running actions tagged as write, and inspect the live schema first.
+
+Risk: Inline connector payloads can be malformed or unsafe when values come from users or external systems.
+
+Mitigation: Prefer @file JSON payloads for connector calls that include user-supplied or externally sourced values.
+
+## Reference(s):
+
+- [Simplesat homepage](https://www.simplesat.io/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-simplesat)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agents should inspect live action schemas before constructing payloads; state-changing actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: skill frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

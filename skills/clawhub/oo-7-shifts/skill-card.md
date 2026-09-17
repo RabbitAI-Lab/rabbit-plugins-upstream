@@ -1,39 +1,56 @@
-## Description: <br>
-This skill lets agents search and read 7shifts company, location, department, role, user, and identity data through the OOMOL 7_shifts connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+7shifts (7shifts.com). Use this skill for ANY 7shifts request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, operators, and developers use this skill to retrieve 7shifts account data through an already connected OOMOL account. It is intended for read-oriented workflows such as listing companies, locations, departments, roles, users, and the connected identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [7shifts homepage](https://www.7shifts.com/) <br>
+External users and operators use this skill to retrieve 7shifts company, department, location, role, user, and identity data through an OOMOL-connected account.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, json, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runs read-oriented connector actions after live schema inspection; credentials remain managed by the connected OOMOL account.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md metadata and server release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: First-time setup instructs users to execute remote installer scripts for the oo CLI.
+
+Mitigation: Review the installer path before installation and prefer a manually inspected, version-pinned, checksum- or signature-verified installer from the vendor.
+
+Risk: The skill operates through a connected 7shifts account, so excessive account scopes could expose more data than needed.
+
+Mitigation: Connect only the 7shifts scopes needed for read access and re-check authorization if scope or credential errors occur.
+
+## Reference(s):
+
+- [7shifts ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-7-shifts)
+- [7shifts Homepage](https://www.7shifts.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before running 7shifts actions and returns connector JSON responses when actions execute.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

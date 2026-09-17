@@ -64,6 +64,7 @@ def call_api(params):
         "Content-Type": "application/json",
         "User-Agent": "LinkFox-Skill/2.0",
         "SESSION_ID": os.environ.get("SESSION_ID", ""),
+        "MESSAGE_ID": os.environ.get("MESSAGE_ID", ""),
         "MODE_ID": os.environ.get("MODE_ID", ""),
         "APP_NAME": os.environ.get("APP_NAME", ""),
     }
@@ -74,7 +75,7 @@ def call_api(params):
         method="POST",
     )
     try:
-        with urlopen(req, timeout=120) as response:
+        with urlopen(req, timeout=150) as response:
             return json.loads(response.read().decode("utf-8"))
     except HTTPError as e:
         body = e.read().decode("utf-8") if e.fp else ""

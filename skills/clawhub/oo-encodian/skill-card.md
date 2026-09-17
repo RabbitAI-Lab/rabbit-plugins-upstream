@@ -1,44 +1,56 @@
-## Description: <br>
-Encodian operates PDF document actions through an OOMOL-connected Encodian account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Encodian (encodian.com). Use this skill for ANY Encodian request: reading, creating, and updating data through the OOMOL-connected oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to compress PDFs, extract pages or text layers, secure PDF documents, and unlock password-protected PDFs through Encodian. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill includes a one-line CLI installer that can execute remote shell content during setup. <br>
-Mitigation: Review or manually install the OOMOL CLI instead of blindly running the pipe-to-shell command. <br>
-Risk: Encodian actions may require connected account credentials and can change document state for write-tagged actions. <br>
-Mitigation: Keep credentials server-side through OOMOL and require explicit confirmation before running create, update, or other write actions. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Encodian PDF actions through an OOMOL-connected account, including PDF compression, page extraction, text-layer extraction, encryption, and unlocking. It guides schema inspection, JSON payload construction, and confirmation for write actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-encodian) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Encodian homepage](https://www.encodian.com) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return base64-encoded PDF file content from Encodian connector actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: Setup instructions include direct execution of remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified package, pinned release, checksum, or official installation path with integrity checks before installing the oo CLI.
+
+Risk: The skill can run Encodian connector actions that alter document protection state.
+
+Mitigation: Inspect the live action schema and confirm the exact payload and effect with the user before running actions tagged as write or destructive.
+
+## Reference(s):
+
+- [ClawHub Encodian Skill](https://clawhub.ai/oomol/skills/oo-encodian)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Encodian Homepage](https://www.encodian.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce base64-encoded PDF results through Encodian connector responses.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

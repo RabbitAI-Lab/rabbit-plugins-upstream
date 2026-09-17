@@ -1,45 +1,61 @@
-## Description: <br>
-IQAir AirVisual helps an agent retrieve current air-quality and weather data, nearest supported city data, and supported location lists through an OOMOL-connected IQAir AirVisual account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects an agent to IQAir AirVisual through OOMOL for current air quality, weather, and supported-location lookup requests.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to answer IQAir AirVisual requests without calling the API directly, including current city conditions, nearest-city conditions by IP or coordinates, and supported country, state, and city discovery. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: IQAir AirVisual queries run through OOMOL as an intermediary and require an IQAir API key connected to the user's OOMOL account. <br>
-Mitigation: Install and use the skill only when that account connection and intermediary access are acceptable for the deployment. <br>
-Risk: Nearest-city lookups can involve location or IP-derived context. <br>
-Mitigation: Use city-specific lookups when possible, and avoid nearest-city requests when location disclosure is not appropriate. <br>
-Risk: First-time setup may require installing the oo CLI with a remote installer. <br>
-Mitigation: Review the oo CLI installer before running it if the CLI is not already installed. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve current IQAir AirVisual air quality and weather data, find nearest supported city data, and list supported countries, states, and cities through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-iqair-airvisual) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [IQAir AirVisual homepage](https://www.iqair.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action payloads; actions in this release are read-only air-quality, weather, and supported-location lookups.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence release.version and metadata.version) <br>
+Risk: The skill requests broad oo CLI execution authority rather than a narrow allowlist for IQAir AirVisual actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review intended commands before installation and restrict use to the documented IQAir AirVisual schema and run commands where the host environment supports command-level controls.
+
+Risk: The first-time setup section includes pipe-to-shell installer commands.
+
+Mitigation: Independently verify the OOMOL CLI installer source and installation instructions before running those commands.
+
+Risk: Connector action schemas may change over time.
+
+Mitigation: Fetch the live connector schema before constructing each payload, as the skill instructs.
+
+## Reference(s):
+
+- [IQAir AirVisual homepage](https://www.iqair.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-iqair-airvisual)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs guide an agent to inspect live connector schemas before running read-only IQAir AirVisual actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

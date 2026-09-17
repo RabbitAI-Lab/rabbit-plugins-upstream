@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Felt"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["felt"]
   icon: "https://static.oomol.com/logo/third-party/felt.png"
 ---

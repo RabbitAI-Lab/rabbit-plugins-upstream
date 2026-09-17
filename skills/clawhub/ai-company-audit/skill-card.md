@@ -1,41 +1,55 @@
-## Description: <br>
-Defines an audit logging standard for AI company agents, including seven log types, compliance checkpoints, and audit trail guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI Company Audit defines a bilingual audit logging and compliance reference for AI-company agents, covering seven log categories, compliance checkpoints, traceable audit trails, and storage policies.
 
-## Publisher: <br>
-[johnsmithfan](https://clawhub.ai/user/johnsmithfan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[johnsmithfan](https://clawhub.ai/user/johnsmithfan)
 
-## Use Case: <br>
-Employees, operators, and developers use this skill to structure audit logs, review compliance checkpoints, and describe audit trails for AI company agent workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad compliance trigger wording may route generic compliance requests to this skill. <br>
-Mitigation: Narrow activation triggers to audit-log, audit-trail, or P0-SLA compliance phrasing when precise routing matters. <br>
-Risk: Real audit logs can contain PII, security records, or sensitive operational data. <br>
-Mitigation: Apply organizational access-control, retention, encryption, and redaction policies before using the guidance with real logs. <br>
+## Use Case:
 
+Developers and governance reviewers use this skill to standardize audit logs, compliance checks, incident audit requirements, and retention policies for multi-agent AI-company workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/johnsmithfan/ai-company-audit) <br>
-- [ClawHub skill homepage metadata](https://clawhub.com/skills/ai-company-audit) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown with structured audit schema examples and compliance tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Instruction-only skill; no file, network, command, or MCP permissions are declared.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0-en2 (source: server release metadata) <br>
+Risk: Broad compliance and logging trigger phrases may cause the skill to activate for prompts where its audit standard is not the intended frame.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm that the task is about audit logging, compliance checkpoints, or audit trail review before applying the guidance.
+
+Risk: The skill depends conceptually on related AI-company governance skills, so standalone use may miss organization-specific registry, conflict, or headquarters context.
+
+Mitigation: Review related governance context before adopting the standard for a production workflow.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/johnsmithfan/skills/ai-company-audit)
+- [Skill homepage](https://clawhub.com/skills/ai-company-audit)
+- [Publisher profile](https://clawhub.ai/user/johnsmithfan)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Configuration]
+
+**Output Format:** [Markdown guidance with YAML examples and compliance tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only; no file, network, command, MCP, or persistence authority requested.]
+
+## Skill Version(s):
+
+1.0.0-en2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

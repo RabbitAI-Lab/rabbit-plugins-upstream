@@ -1,43 +1,57 @@
-## Description: <br>
-Airbrake helps agents inspect Airbrake projects, deploys, error groups, notices, and notice statuses through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Airbrake enables agents to read, create, and update Airbrake projects, error groups, notices, deploys, and notice status through an OOMOL-connected Airbrake account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to inspect Airbrake projects, deploys, error groups, notices, and notice processing status through an OOMOL-connected Airbrake account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill operates through an OOMOL-connected Airbrake account, so granted Airbrake scopes determine what the agent can access. <br>
-Mitigation: Install it only for intended Airbrake use, review granted scopes, and keep the Airbrake connection limited to the access the workflow requires. <br>
-Risk: Actions marked write or destructive could change Airbrake state if run with an incorrect payload or target. <br>
-Mitigation: Inspect the live connector schema before building payloads and require explicit user confirmation before any action marked write or destructive. <br>
+## Use Case:
 
+Developers and support engineers use this skill to inspect Airbrake projects, deploys, error groups, notices, and notice status, and to perform supported Airbrake updates through the OOMOL oo CLI when the user confirms state-changing actions.
 
-## Reference(s): <br>
-- [Airbrake homepage](https://airbrake.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-airbrake) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill guides live schema inspection before connector actions and returns connector results as JSON when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill frontmatter) <br>
+Risk: The first-time setup path asks users to execute a remote oo CLI installer directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installation path first; prefer a verified or package-manager installation, or inspect the installer and validate checksum or signature before running it.
+
+Risk: Some Airbrake connector actions may change Airbrake state.
+
+Mitigation: Confirm any action tagged write or destructive, including the exact payload and target, before running it.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-airbrake)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Airbrake homepage](https://airbrake.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Fetches live connector schemas before constructing action payloads; command results are returned as JSON by the oo CLI.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

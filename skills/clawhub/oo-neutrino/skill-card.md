@@ -1,43 +1,56 @@
-## Description: <br>
-Neutrino API (neutrinoapi.com) supports agent requests for searching and reading Neutrino data through the documented connector workflow instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Neutrino API helps an agent run OOMOL-managed Neutrino connector actions for IP, domain, email, and phone intelligence lookups.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to run Neutrino lookup and validation actions through an OOMOL-connected account, including IP blocklist checks, IP geolocation, domain lookups, email validation, and phone validation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Lookup inputs may include IP addresses, domains, email addresses, or phone numbers that are sensitive or personal. <br>
-Mitigation: Use the skill only when sending that data to Neutrino through an OOMOL-connected account is appropriate for the user and task. <br>
-Risk: First-time CLI installation or account connection can affect the local environment or authenticated account state. <br>
-Mitigation: Review installation, sign-in, and connection steps before running them, and use them only when an action fails because setup is missing or expired. <br>
+## Use Case:
 
+Developers and agent users use this skill to inspect Neutrino connector schemas and run read-oriented Neutrino lookups for IP blocklists, IP geolocation, domains, email validation, and phone validation.
 
-## Reference(s): <br>
-- [Neutrino API homepage](https://www.neutrinoapi.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-neutrino) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces guidance for invoking oo CLI connector schema and run commands; command responses are JSON from Neutrino via OOMOL.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: The setup instructions include remote installer commands that execute downloaded code locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify OOMOL installer sources through a safer install path before running curl-to-shell or PowerShell download-and-execute commands.
+
+Risk: IP addresses, domains, email addresses, and phone numbers submitted through the connector are sent to OOMOL and Neutrino.
+
+Mitigation: Do not submit sensitive or regulated identifiers unless the user accepts the data-sharing implications and the connected account is appropriate for that data.
+
+## Reference(s):
+
+- [ClawHub Neutrino API skill page](https://clawhub.ai/oomol/skills/oo-neutrino)
+- [Neutrino API homepage](https://www.neutrinoapi.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are expected as JSON data with execution metadata when actions run successfully.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

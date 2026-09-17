@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Airbrake"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["airbrake"]
   icon: "https://static.oomol.com/logo/third-party/airbrake.png"
 ---

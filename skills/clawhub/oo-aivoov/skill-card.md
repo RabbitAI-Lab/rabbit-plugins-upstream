@@ -1,46 +1,56 @@
-## Description: <br>
-AiVOOV helps agents use an OOMOL-connected AiVOOV account to list voices and generate audio through the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AiVOOV helps an agent operate AiVOOV through an OOMOL-connected account to list voices and generate text-to-speech audio with the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill when an agent needs to work with AiVOOV via an OOMOL-connected account, including browsing available voices and generating audio from voice/text segments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected AiVOOV account and uses account credentials through the OOMOL connection flow. <br>
-Mitigation: Install it only when the user intends to use AiVOOV through OOMOL, and rely on the OOMOL account connection flow rather than exposing raw tokens. <br>
-Risk: The create_audio action is a write action and may consume account credits. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running create_audio, and stop on billing or insufficient-credit errors. <br>
-Risk: First-time setup may require installing or authenticating the oo CLI. <br>
-Mitigation: Review the oo CLI installer and run setup only when commands fail with a matching install, authentication, or connection error. <br>
+## Use Case:
 
+Developers and external users use this skill to run AiVOOV text-to-speech workflows from an agent through an OOMOL-connected account. It supports listing available voices and generating base64 audio from one or more voice/text segments.
 
-## Reference(s): <br>
-- [ClawHub AiVOOV release](https://clawhub.ai/oomol/oo-aivoov) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [AiVOOV homepage](https://aivoov.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Action responses are JSON from the oo CLI and may include generated audio data plus execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: Setup instructions include unverified remote installer commands that could execute arbitrary code if followed without review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the OOMOL installer source before running it, or prefer a pinned, signed, or package-manager installation path.
+
+Risk: The create_audio action is a write operation that can generate billable or persistent output from user-provided text and voice settings.
+
+Mitigation: Confirm the exact text, voice, and expected output effects with the user before running create_audio.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-aivoov)
+- [AiVOOV homepage](https://aivoov.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, Text, Code]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses oo CLI connector schema and run commands; create_audio returns base64 audio data with execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

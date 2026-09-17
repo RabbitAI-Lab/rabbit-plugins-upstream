@@ -1,0 +1,251 @@
+{
+  "id": "SWLS",
+  "name": "生活满意度量表（SWLS）",
+  "short_name": "SWLS 生活满意度",
+  "category": "生活满意",
+  "target_population": "成年人",
+  "estimated_time": "约 1 分钟",
+  "item_count": 5,
+  "description": "测量个体对生活总体满意度的单维度量表，5 题 7 点自评。",
+  "source": "Diener et al., 1985",
+  "license": "公共领域",
+  "scoring_type": "sum",
+  "items": [
+    {
+      "id": "q1",
+      "text": "我的生活在大多数方面都接近于我的理想。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "我的生活条件很好。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "我对我的生活感到满意。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "到目前为止，我已经得到了我在生活中想要的重要东西。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "q5",
+      "text": "如果我能重新活过，我基本上不会做任何改变。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    }
+  ],
+  "dimensions": [
+    {
+      "name": "满意度总分",
+      "items": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5"
+      ],
+      "max": 35,
+      "min": 5
+    }
+  ],
+  "standard_score": null,
+  "interpretation": {
+    "bands": [
+      {
+        "dimension": "满意度总分",
+        "min": 5,
+        "max": 14,
+        "level": "偏低",
+        "summary": "对生活总体满意度偏低。",
+        "advice": "可思考具体不满来源，逐步调整；持续低落建议倾诉或咨询。"
+      },
+      {
+        "dimension": "满意度总分",
+        "min": 15,
+        "max": 19,
+        "level": "中等",
+        "summary": "生活满意度处于中等水平。",
+        "advice": "保持，关注能提升幸福感的小事。"
+      },
+      {
+        "dimension": "满意度总分",
+        "min": 20,
+        "max": 24,
+        "level": "较高",
+        "summary": "对生活较为满意。",
+        "advice": "维持现有平衡。"
+      },
+      {
+        "dimension": "满意度总分",
+        "min": 25,
+        "max": 35,
+        "level": "高",
+        "summary": "对生活满意度很高。",
+        "advice": "可把经验分享给他人。"
+      }
+    ]
+  },
+  "safety": {
+    "crisis_items": [],
+    "crisis_rule": "",
+    "high_risk_rule": ""
+  }
+}

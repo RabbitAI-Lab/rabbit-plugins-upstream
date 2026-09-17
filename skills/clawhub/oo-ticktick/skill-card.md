@@ -1,44 +1,61 @@
-## Description: <br>
-Operate TickTick through an OOMOL-connected account for reading, creating, updating, moving, completing, and deleting projects, tasks, and habit check-ins. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TickTick (ticktick.com). Use this skill for ANY TickTick request - reading, creating, updating, and deleting data. Whenever a task involves TickTick, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and agents use this skill to manage TickTick projects, tasks, completed-task views, and habit check-ins through an OOMOL-connected TickTick account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change TickTick projects, tasks, and habit check-ins. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: Destructive actions can delete TickTick projects or tasks. <br>
-Mitigation: Confirm the target and obtain explicit approval before running destructive actions. <br>
-Risk: The skill requires a connected OOMOL and TickTick account with sensitive credential access handled server-side. <br>
-Mitigation: Use only the intended account connection and grant mutation authority that matches the requested task. <br>
+## Use Case:
 
+External users and developers use this skill to manage TickTick tasks, projects, habits, check-ins, filters, completions, and task moves through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [TickTick homepage](https://ticktick.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL app connections for TickTick](https://console.oomol.com/app-connections?provider=ticktick) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown instructions with bash and JSON snippets; connector action responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Remote installer commands can execute changing code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Independently verify the oo CLI installer or use a trusted installation path before running setup commands.
+
+Risk: OOMOL acts as an intermediary for TickTick actions.
+
+Mitigation: Install only when the user accepts this intermediary and has connected the intended TickTick account.
+
+Risk: Write and destructive actions can create, update, move, complete, or delete TickTick data.
+
+Mitigation: Require explicit user confirmation for the exact payload and target before running write or destructive actions.
+
+## Reference(s):
+
+- [TickTick homepage](https://ticktick.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-ticktick)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live TickTick connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

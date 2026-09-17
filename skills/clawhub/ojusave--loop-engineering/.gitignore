@@ -1,0 +1,6 @@
+# Local loop-engineering state
+.loop/
+
+# Generated Python caches
+__pycache__/
+*.py[cod]

@@ -1,45 +1,56 @@
-## Description: <br>
-Mailosaur (mailosaur.com). Use this skill for Mailosaur requests that read, create, update, or delete data through the OOMOL-connected oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mailosaur helps agents read, create, update, and delete Mailosaur servers and messages through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Mailosaur inbox servers, messages, usage limits, and recent usage transactions from an agent workflow connected through OOMOL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can delete Mailosaur messages, attachments, inbox servers, and stored server messages. <br>
-Mitigation: Require explicit user approval for destructive actions and confirm the exact target before running the command. <br>
-Risk: Write actions can create or rename Mailosaur inbox servers. <br>
-Mitigation: Inspect the live connector schema and confirm the payload and intended effect with the user before execution. <br>
-Risk: The skill lets an agent operate a connected Mailosaur account through OOMOL. <br>
-Mitigation: Install and use it only when that account-level access is intended. <br>
+## Use Case:
 
+Developers, QA teams, and support engineers use this skill to inspect Mailosaur inbox servers and messages, manage inbox servers, and review Mailosaur usage through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-mailosaur) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Mailosaur homepage](https://mailosaur.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: First-time setup includes remote install commands that execute downloaded scripts in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before installation, prefer an official versioned installer or package manager path with checksum or signature verification, and use pipe-to-shell commands only when the local code execution risk is acceptable.
+
+Risk: Mailosaur write and delete actions can change or remove servers, messages, and attachments.
+
+Mitigation: Confirm the exact server, message, and payload with the user before write actions, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-mailosaur)
+- [Mailosaur Homepage](https://mailosaur.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May run Mailosaur connector actions through the oo CLI and return JSON responses from the service.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

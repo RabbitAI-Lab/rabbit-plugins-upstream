@@ -1,46 +1,70 @@
-## Description: <br>
-Helps agents query authorized Shopee cross-border merchant information, shop lists, warehouse data, eligible shops, and prepaid accounts through LinkFox's Shopee Merchant API tools. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agent workflows and Python helpers for querying authorized Shopee cross-border merchant data, including merchant profile, shop lists, warehouses, warehouse locations, eligible shops, and prepaid accounts.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Developers and commerce operators use this skill to retrieve Shopee merchant profile details, linked shops, warehouse information, and prepaid account data for authorized cross-border seller accounts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Complete Shopee merchant API responses may be saved locally and can contain sensitive account or store data. <br>
-Mitigation: Install only where local retention is acceptable, review and manage generated linkfox data directories, and avoid highly sensitive accounts unless this storage is approved. <br>
-Risk: The skill uses LinkFox/Shopee merchant credentials and may involve point consumption for repeated API calls. <br>
-Mitigation: Use appropriate credentials, confirm point consumption before repeated calls, and avoid automated retries or broad probing. <br>
+## Use Case:
 
+External sellers, operators, and developers working with authorized Shopee cross-border merchant accounts use this skill to retrieve merchant, shop, warehouse, eligible-shop, and prepaid-account information through LinkFox-supported Shopee Merchant API calls.
 
-## Reference(s): <br>
-- [Skill API Reference](references/api.md) <br>
-- [Shopee Merchant get_merchant_info](https://open.shopee.com/documents/v2/v2.merchant.get_merchant_info?module=93&type=1) <br>
-- [Shopee Merchant get_shop_list_by_merchant](https://open.shopee.com/documents/v2/v2.merchant.get_shop_list_by_merchant?module=93&type=1) <br>
-- [Shopee Merchant get_merchant_warehouse_list](https://open.shopee.com/documents/v2/v2.merchant.get_merchant_warehouse_list?module=93&type=1) <br>
-- [Shopee Merchant get_merchant_warehouse_location_list](https://open.shopee.com/documents/v2/v2.merchant.get_merchant_warehouse_location_list?module=93&type=1) <br>
-- [Shopee Merchant get_warehouse_eligible_shop_list](https://open.shopee.com/documents/v2/v2.merchant.get_warehouse_eligible_shop_list?module=93&type=1) <br>
-- [Shopee Merchant get_merchant_prepaid_account_list](https://open.shopee.com/documents/v2/v2.merchant.get_merchant_prepaid_account_list?module=93&type=1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands; scripts emit JSON responses or summaries and save full responses as local JSON files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires LinkFox/Shopee merchant credentials. Evidence indicates complete merchant API responses may be saved locally, so users should manage generated linkfox data directories and clarify point consumption before repeated calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: Shopee merchant/account data and LinkFox credentials may be sent through LinkFox services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run the skill only when that data path is acceptable for the user's merchant account and organization.
+
+Risk: Phone numbers, SMS codes, API keys, merchant IDs, and saved response files may contain sensitive information.
+
+Mitigation: Treat those values as secrets, avoid sharing logs or outputs that contain them, and remove or protect saved response files after use.
+
+Risk: The skill includes onboarding and payment flows that can affect account setup or billing.
+
+Mitigation: Review the onboarding and billing flow before allowing it to run, and require explicit user confirmation before registration, plan selection, or payment actions.
+
+Risk: Environment overrides can change which LinkFox services receive requests.
+
+Mitigation: Use trusted environment configuration and avoid running the skill with untrusted service endpoint overrides.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-merchant)
+- [Shopee Merchant API reference](https://open.shopee.com/documents/v2/v2.merchant.get_merchant_info?module=93&type=1)
+- [LinkFox merchant API reference](references/api.md)
+- [Onboarding and billing reference](references/onboarding.md)
+- [get_merchant_info reference](references/apis/get-merchant-info.md)
+- [get_shop_list_by_merchant reference](references/apis/get-shop-list-by-merchant.md)
+- [get_merchant_warehouse_list reference](references/apis/get-merchant-warehouse-list.md)
+- [get_merchant_warehouse_location_list reference](references/apis/get-merchant-warehouse-location-list.md)
+- [get_warehouse_eligible_shop_list reference](references/apis/get-warehouse-eligible-shop-list.md)
+- [get_merchant_prepaid_account_list reference](references/apis/get-merchant-prepaid-account-list.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Files, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands; API responses are JSON saved to local files and optionally printed to stdout.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Large API responses are summarized on stdout unless inline output is requested; full responses are retained in a local linkfox output directory.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

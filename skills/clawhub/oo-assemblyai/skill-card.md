@@ -1,45 +1,56 @@
-## Description: <br>
-Use AssemblyAI through the OOMOL oo CLI to create, list, retrieve, and delete transcripts without calling the AssemblyAI API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AssemblyAI (assemblyai.com). Use this skill for ANY AssemblyAI request, including reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate AssemblyAI transcript workflows from an OOMOL-connected account, including creating transcripts from media URLs and retrieving transcript details, paragraphs, or sentences. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create transcripts and delete transcripts in the connected AssemblyAI account. <br>
-Mitigation: Confirm write payloads and require explicit approval for destructive transcript deletion before running the action. <br>
-Risk: The first-time setup path may run a remote oo CLI installer. <br>
-Mitigation: Run the installer only when the oo command is missing and the user trusts OOMOL's installation path. <br>
-Risk: Connector inputs may drift from documented examples. <br>
-Mitigation: Fetch the live action schema with oo connector schema before constructing each payload. <br>
+## Use Case:
 
+Developers and external users use this skill to operate AssemblyAI through an OOMOL-connected account, including creating transcripts from media URLs and retrieving transcript details, paragraphs, or sentences. Users can also list or delete transcripts when the requested action is confirmed.
 
-## Reference(s): <br>
-- [AssemblyAI homepage](https://www.assemblyai.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub AssemblyAI skill page](https://clawhub.ai/oomol/skills/oo-assemblyai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash, PowerShell, JSON, and text blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects with data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md metadata) <br>
+Risk: First-time setup includes direct execution of remote installer scripts in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified package or a downloaded installer whose checksum or signature can be validated; avoid running curl|bash or irm|iex from an elevated shell.
+
+Risk: Transcript creation and deletion can change or remove AssemblyAI data.
+
+Mitigation: Confirm the exact payload, target transcript, and expected effect before allowing create_transcript or delete_transcript to run.
+
+## Reference(s):
+
+- [AssemblyAI homepage](https://www.assemblyai.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-assemblyai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce AssemblyAI transcript data returned through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

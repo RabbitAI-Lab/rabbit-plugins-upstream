@@ -1,41 +1,56 @@
-## Description: <br>
-Pylon lets an agent read, create, and update Pylon records through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pylon (usepylon.com). Use this skill for Pylon requests that read, create, or update Pylon data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Pylon support and customer records from an agent session, including issue, account, contact, and organization workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create or update live Pylon records through a connected OOMOL account. <br>
-Mitigation: Confirm write payloads and expected effects with the user before running write actions. <br>
-Risk: First-time setup may install or authenticate the oo CLI if the tool is missing or disconnected. <br>
-Mitigation: Use setup fallbacks only after a matching command failure and only when the user trusts the OOMOL CLI process. <br>
+## Use Case:
 
+Developers, support operators, and other external users use this skill to inspect Pylon schemas and run Pylon connector actions for accounts, contacts, issues, internal notes, organization details, searches, and time-bounded issue lists.
 
-## Reference(s): <br>
-- [Pylon homepage](https://www.usepylon.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before building action payloads; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: Setup instructions include direct execution of a downloaded installer script.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI installation path before installing and prefer a signed package manager or installer with checksum or signature verification.
+
+Risk: Write actions can create or update Pylon records.
+
+Mitigation: Confirm exact payloads and expected effects with the user before running connector actions that change Pylon state.
+
+## Reference(s):
+
+- [Pylon homepage](https://www.usepylon.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub Pylon skill page](https://clawhub.ai/oomol/skills/oo-pylon)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are returned as JSON with data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.3 (source: skill metadata and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

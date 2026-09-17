@@ -1,45 +1,57 @@
-## Description: <br>
-Diffbot (diffbot.com). Use this skill for Diffbot requests involving searching and reading data through the OOMOL-backed Diffbot connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Diffbot lets agents extract normalized article data from public URLs through an OOMOL-connected Diffbot account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect the live Diffbot connector schema and run Diffbot article extraction through the oo CLI. It supports extracting normalized article data from a public URL without directly handling raw Diffbot API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive Diffbot credentials to be brokered by OOMOL. <br>
-Mitigation: Install only when the user accepts OOMOL as the credential broker and understands that connector actions run through the oo CLI. <br>
-Risk: The documented remote installer commands execute installer scripts for the oo CLI. <br>
-Mitigation: Review the oo CLI installer before running the install commands. <br>
-Risk: Future Diffbot connector actions could write, delete, or change account data if such actions are added. <br>
-Mitigation: Keep explicit user confirmation for any connector action marked write or destructive, including the exact payload and intended effect. <br>
+## Use Case:
 
+Developers and external users use this skill to have an agent inspect Diffbot connector schemas and run article extraction for public URLs through their connected OOMOL and Diffbot accounts.
 
-## Reference(s): <br>
-- [Diffbot homepage](https://www.diffbot.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-diffbot) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId fields when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: First-time setup includes remote installer commands that run downloaded scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified, versioned method that can be inspected, and do not allow an agent to run the remote installer automatically.
+
+Risk: The skill depends on OOMOL as the Diffbot access layer.
+
+Mitigation: Use the skill only after deliberately signing in to OOMOL and connecting the intended Diffbot account and scopes.
+
+## Reference(s):
+
+- [ClawHub Diffbot Skill](https://clawhub.ai/oomol/skills/oo-diffbot)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Diffbot Homepage](https://www.diffbot.com)
+- [oo CLI Repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, JSON, configuration, guidance]
+
+**Output Format:** [Markdown instructions with shell command examples and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Runs through the oo CLI connector and returns connector data with execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

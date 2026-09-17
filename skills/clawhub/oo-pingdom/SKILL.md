@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Pingdom"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["pingdom"]
   icon: "https://static.oomol.com/logo/third-party/Pingdom.svg"
 ---

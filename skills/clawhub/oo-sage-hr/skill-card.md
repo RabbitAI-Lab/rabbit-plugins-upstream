@@ -1,43 +1,61 @@
-## Description: <br>
-Use this skill to search and read Sage HR data through an OOMOL-connected account and the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Sage HR lets an agent read Sage HR employee, team, position, termination, and time-off data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees and business users use this skill to let an agent retrieve Sage HR employee, team, position, termination, and time-off information from their connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose sensitive HR records, including employee, termination, and time-off data. <br>
-Mitigation: Install it only when the agent should read Sage HR data through the user's OOMOL-connected account, and treat returned HR data as sensitive. <br>
-Risk: Connector requests may be incorrect if the agent relies on stale action inputs. <br>
-Mitigation: Inspect the live action schema before constructing a payload, and review any setup or connection step before proceeding. <br>
+## Use Case:
 
+Developers and authorized business users use this skill to perform explicit read-only Sage HR lookups through an agent, including employee records, positions, teams, termination reasons, and time off requests.
 
-## Reference(s): <br>
-- [Sage HR ClawHub skill page](https://clawhub.ai/oomol/skills/oo-sage-hr) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Sage HR homepage](https://www.sage.com/en-us/sage-business-cloud/people/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses read-only Sage HR connector actions and live action schemas before payload construction.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and skill metadata) <br>
+Risk: The setup guidance includes pipe-to-shell installer commands for remote scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the installer through an official, integrity-checked method before running setup commands.
+
+Risk: The skill handles sensitive HR data through OOMOL as an intermediary.
+
+Mitigation: Use the skill only where OOMOL-mediated Sage HR reads are approved and credentials are scoped for the intended account.
+
+Risk: Broad routing language could encourage speculative browsing of employee information.
+
+Mitigation: Limit use to explicit read-only Sage HR lookups and request only the minimum employee or HR records needed.
+
+## Reference(s):
+
+- [ClawHub Sage HR Skill](https://clawhub.ai/oomol/skills/oo-sage-hr)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Sage HR Homepage](https://www.sage.com/en-us/sage-business-cloud/people/)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only Sage HR connector actions are run through the oo CLI and return JSON responses.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,59 @@
-## Description: <br>
-Sage Sales Management helps agents read, create, update, and delete Sage Sales Management CRM data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Sage Sales Management (forcemanager.com). Use this skill for Sage Sales Management requests involving reading, creating, updating, and deleting data through the OOMOL `oo` CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Sage Sales Management CRM records from an agent, including account, contact, and opportunity lookup, listing, creation, update, and deletion. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, and delete CRM records in the connected Sage Sales Management account. <br>
-Mitigation: Review write and delete requests carefully and require explicit confirmation of the exact payload, target, and expected effect before execution. <br>
-Risk: The skill depends on an authenticated OOMOL connection to Sage Sales Management. <br>
-Mitigation: Use setup and recovery steps only after authentication, connection, scope, expiration, app readiness, or billing errors occur. <br>
+## Use Case:
 
+External users and operators use this skill to manage Sage Sales Management accounts, contacts, and opportunities through an OOMOL-connected account. It supports schema discovery plus read, create, update, list, and delete workflows.
 
-## Reference(s): <br>
-- [Sage Sales Management homepage](https://www.forcemanager.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-sage-sales-management) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing payloads; write and destructive actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: The fallback setup path includes one-line remote installer commands for the `oo` CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a separately reviewed, version-pinned, checksum- or signature-verified installation path before using the skill.
+
+Risk: Create, update, and delete actions can change Sage Sales Management CRM data.
+
+Mitigation: Review the live schema and confirm the exact payload, target, and effect with the user before approving write or destructive actions.
+
+Risk: The security verdict is suspicious because setup can ask an agent or user to run an unverified remote installer directly in a shell.
+
+Mitigation: Install only when the publisher is trusted and the `oo` CLI installation path has been independently reviewed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-sage-sales-management)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Sage Sales Management homepage](https://www.forcemanager.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses `oo connector schema` to inspect action schemas and `oo connector run --json` to execute actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

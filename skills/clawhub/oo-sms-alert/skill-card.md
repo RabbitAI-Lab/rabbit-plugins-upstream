@@ -1,43 +1,59 @@
-## Description: <br>
-SMS Alert (smsalert.co.in). Use this skill for ANY SMS Alert request - reading, creating, and updating data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SMS Alert helps an agent operate an OOMOL-connected SMS Alert account for SMS, OTP, template, sender ID, and credit balance workflows.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate an OOMOL-connected SMS Alert account, including sending SMS messages, generating and validating OTPs, and checking account resources such as balances, sender IDs, and templates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected SMS Alert account and may rely on sensitive credentials managed outside the agent. <br>
-Mitigation: Use the OOMOL connector flow and avoid exposing raw API tokens in prompts, files, or shell history. <br>
-Risk: The send_sms action can send real SMS messages and consume account credit. <br>
-Mitigation: Confirm the recipient, message body, sender, and intended effect with the user before running write actions. <br>
-Risk: Connector schemas may change over time. <br>
-Mitigation: Inspect the live action schema with oo connector schema before constructing each payload. <br>
+## Use Case:
 
+External users and developers use this skill to manage SMS Alert account workflows, including checking credits and templates, generating or validating OTPs, and sending direct SMS messages after confirmation.
 
-## Reference(s): <br>
-- [SMS Alert homepage](https://www.smsalert.co.in/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The skill can send SMS and OTP messages from a real SMS Alert account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation for recipients, message contents, and OTP actions before executing write operations.
+
+Risk: First-time setup includes remote installer commands for the OOMOL CLI.
+
+Mitigation: Run installer commands only after independently reviewing or verifying the OOMOL CLI source.
+
+Risk: The security verdict is suspicious because setup and action guidance can expose users to unverified installer execution and unconfirmed SMS or OTP actions.
+
+Mitigation: Review the skill before installation and enforce the documented confirmation checks for state-changing actions.
+
+## Reference(s):
+
+- [SMS Alert homepage](https://www.smsalert.co.in/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [SMS Alert skill on ClawHub](https://clawhub.ai/oomol/skills/oo-sms-alert)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, API Calls, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live schema inspection before constructing JSON payloads; write SMS actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

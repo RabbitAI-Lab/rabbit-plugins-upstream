@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Scrape.do"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.4"
   services: ["scrape_do"]
   icon: "https://static.oomol.com/logo/third-party/scrape_do.svg"
 ---

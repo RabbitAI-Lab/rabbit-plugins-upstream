@@ -1,43 +1,57 @@
-## Description: <br>
-OnePageCRM (onepagecrm.com). Use this skill for OnePageCRM requests involving reading, creating, and updating CRM data through the OOMOL connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OnePageCRM (onepagecrm.com). Use this skill for reading, creating, and updating CRM contacts and deals through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and agents use this skill to list and retrieve OnePageCRM contacts and deals, and to create contacts or deals after confirming write payloads. It is intended for CRM workflows mediated through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create OnePageCRM contacts or deals in the connected account. <br>
-Mitigation: Confirm the exact JSON payload and expected effect with the user before running create actions. <br>
-Risk: Incorrect action payloads may fail or create malformed CRM records. <br>
-Mitigation: Inspect the live connector schema before building each payload and match the command data to that schema. <br>
-Risk: The skill depends on the local oo CLI, OOMOL sign-in, and an active OnePageCRM connection. <br>
-Mitigation: Use first-time setup steps only after an auth, connection, missing CLI, or billing error is returned. <br>
+## Use Case:
 
+External users and agents use this skill to operate OnePageCRM workflows through the OOMOL connector, including listing, retrieving, and creating contacts and deals. Write actions should be used only after confirming the exact payload and effect with the user.
 
-## Reference(s): <br>
-- [OnePageCRM homepage](https://www.onepagecrm.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; read actions can run directly, while write actions require payload confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: skill frontmatter and server release evidence) <br>
+Risk: The setup instructions include remote installer pipe commands for the OOMOL CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid automatic approval of those commands; independently verify the installer or use a signed or package-managed installation path.
+
+Risk: The skill can create CRM contacts and deals, changing OnePageCRM data.
+
+Mitigation: Run write actions only for user-directed work and confirm the exact JSON payload and expected effect before execution.
+
+## Reference(s):
+
+- [OnePageCRM homepage](https://www.onepagecrm.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-one-page-crm)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; connector responses are JSON.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

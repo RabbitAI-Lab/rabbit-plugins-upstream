@@ -1,45 +1,60 @@
-## Description: <br>
-Use this skill for Fillout (fillout.com) requests involving reading, creating, updating, and deleting data through the OOMOL connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fillout (fillout.com). Use this skill for ANY Fillout request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent operate a connected Fillout workspace through OOMOL, including listing forms, reading form metadata and submissions, creating submissions, and deleting individual submissions after approval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill relies on OOMOL-brokered access to a connected Fillout account. <br>
-Mitigation: Install and use it only when the user trusts OOMOL to broker account access. <br>
-Risk: The skill can create submissions and delete individual submissions in the connected Fillout workspace. <br>
-Mitigation: Review write and delete requests carefully and require explicit approval before running state-changing actions. <br>
-Risk: Connector action inputs may drift from static documentation. <br>
-Mitigation: Inspect the live action schema before constructing payloads for connector actions. <br>
+## Use Case:
 
+Developers and operators use this skill to work with Fillout forms and submissions through an OOMOL-connected account. It supports listing forms, reading form metadata and submissions, creating submissions, and deleting submissions after explicit confirmation.
 
-## Reference(s): <br>
-- [Fillout homepage](https://www.fillout.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub Fillout skill](https://clawhub.ai/oomol/oo-fillout) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution; write and destructive actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and server release evidence) <br>
+Risk: Setup instructions include mutable remote installer scripts executed directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the official oo CLI documentation to download and verify the installer before running it.
+
+Risk: The skill can create and delete Fillout submissions in the connected account.
+
+Mitigation: Confirm the exact payload for create actions and the exact target submission for delete actions before execution.
+
+Risk: Connector access depends on the Fillout account permissions connected through OOMOL.
+
+Mitigation: Install and use the skill only when the OOMOL connection is trusted and scoped appropriately for the intended Fillout account.
+
+## Reference(s):
+
+- [Fillout homepage](https://www.fillout.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-fillout)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May execute Fillout connector actions through the oo CLI and return connector JSON responses.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,56 @@
-## Description: <br>
-Mails helps agents validate email addresses and manage Mails batch validation jobs through an OOMOL-connected Mails account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Mails (mails.so) email validation through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to validate single email addresses, create batch validation jobs, and retrieve batch validation results from Mails via their connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses sensitive account access through the connected OOMOL Mails account. <br>
-Mitigation: Install it only when the agent should use that account for email validation tasks, and rely on OOMOL server-side credential handling rather than exposing raw tokens. <br>
-Risk: Batch validation creation is a write action that can affect the connected Mails account or consume account resources. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: CLI installation and account connection steps change local or account setup. <br>
-Mitigation: Run setup only after an authentication or connection failure and only when OOMOL and the connector are trusted. <br>
+## Use Case:
 
+External users and developers use this skill to validate email addresses and manage Mails batch validation jobs through an OOMOL-connected Mails account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-mails-so) <br>
-- [Mails homepage](https://mails.so) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [OOMOL Mails connection](https://console.oomol.com/app-connections?provider=mails_so) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Successful connector runs return JSON with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: evidence release and frontmatter metadata) <br>
+Risk: Setup instructions pipe remote install scripts directly into shell interpreters.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing and prefer a verified package manager or a downloaded installer with a published checksum or signature.
+
+Risk: Creating a validation batch is a write action that can process unintended email lists or consume account resources.
+
+Mitigation: Confirm the exact batch payload and expected effect with the user before running the action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-mails-so)
+- [Mails homepage](https://mails.so)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

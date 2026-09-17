@@ -1,45 +1,57 @@
-## Description: <br>
-Fairing connector skill for searching and reading Fairing survey response data through the OOMOL oo CLI instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fairing (fairing.co). Use this skill for Fairing search and read requests through an OOMOL-connected account instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect the live Fairing connector schema and retrieve paginated Fairing survey responses through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on OOMOL and the oo CLI setup path for connector execution and credential handling. <br>
-Mitigation: Install and use it only when you trust OOMOL, the oo CLI, and the connected Fairing account. <br>
-Risk: Future connector actions tagged write or destructive could change or remove Fairing data. <br>
-Mitigation: Confirm the exact payload and effect with the user before write actions, and require explicit approval for destructive actions. <br>
-Risk: A stale assumed payload can fail or request the wrong Fairing data. <br>
-Mitigation: Inspect the live action schema with `oo connector schema` before constructing each `oo connector run` payload. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect live Fairing connector schemas and list paginated Fairing survey responses with optional filters. It supports account setup recovery for authentication, connection, and billing failures.
 
-## Reference(s): <br>
-- [ClawHub Fairing skill page](https://clawhub.ai/oomol/skills/oo-fairing) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Fairing homepage](https://fairing.co) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON response guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before running actions; Fairing credentials are handled by OOMOL server-side.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: The setup flow includes direct execution of remote installer scripts in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official package when available, or download and inspect the installer first and verify checksum or signature information before execution.
+
+Risk: Fairing response data is accessed through OOMOL as the connector service.
+
+Mitigation: Install and use the skill only when sharing Fairing response data through OOMOL is acceptable for the intended account and data.
+
+## Reference(s):
+
+- [Fairing homepage](https://fairing.co)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub Fairing skill page](https://clawhub.ai/oomol/skills/oo-fairing)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Fairing connector response data returned as JSON through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

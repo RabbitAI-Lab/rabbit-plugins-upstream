@@ -1,42 +1,60 @@
-## Description: <br>
-Freshservice enables an agent to read and create Freshservice tickets, service requests, locations, and service catalog data through the OOMOL Freshservice connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Freshservice helps agents read, create, and update Freshservice data through the OOMOL freshservice connector and oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, support teams, and developers use this skill to list and retrieve Freshservice tickets, create tickets or service requests, and resolve Freshservice locations or service catalog items through an OOMOL-connected Freshservice account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access Freshservice records through an OOMOL-connected account. <br>
-Mitigation: Install only when agent access to Freshservice is intended, and use an account with the least Freshservice permissions needed. <br>
-Risk: Ticket and service request creation can change Freshservice state. <br>
-Mitigation: Review the write payload and expected effect with the user before approving creation actions. <br>
+## Use Case:
 
+Developers and operations teams use this skill to inspect Freshservice connector schemas, list ticket and catalog data, and create Freshservice tickets or service requests through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Freshservice skill](https://clawhub.ai/oomol/oo-freshservice) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Freshservice homepage](https://www.freshworks.com/freshservice/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Write actions require user confirmation of the exact payload and expected effect before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Fallback setup includes remote installer commands that pipe downloaded scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path manually and do not let an agent run curl-to-bash or irm-to-iex installer commands automatically.
+
+Risk: Freshservice ticket data is sent through the OOMOL connector.
+
+Mitigation: Use the skill only when the connected Freshservice and OOMOL account path is acceptable for the data involved.
+
+Risk: Write actions can create Freshservice tickets or service requests.
+
+Mitigation: Confirm the exact JSON payload and expected Freshservice effect with the user before running any write action.
+
+## Reference(s):
+
+- [Freshservice Skill Page](https://clawhub.ai/oomol/skills/oo-freshservice)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Freshservice Homepage](https://www.freshworks.com/freshservice/)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Write actions require user confirmation of the exact payload and expected effect before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,61 @@
-## Description: <br>
-Fluxguard (fluxguard.com). Use this skill for ANY Fluxguard request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fluxguard lets an agent inspect live Fluxguard action schemas and run account, page, category, webhook, and crawl operations through an OOMOL-connected CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Fluxguard monitoring through the OOMOL oo CLI connector, including account reads, page and category management, crawls, and webhook administration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write or destructive Fluxguard actions can create, change, or delete monitored pages, sites, categories, webhooks, or account data. <br>
-Mitigation: Confirm the exact payload, target, and expected effect with the user before any write action, and require explicit approval before destructive actions. <br>
-Risk: Overbroad or stale Fluxguard credentials could expose more account access than the task requires. <br>
-Mitigation: Use the least-privileged Fluxguard credential available and reconnect only when the connector reports a missing, expired, or not-ready credential. <br>
-Risk: Connector input fields can drift from the skill text and cause incorrect requests. <br>
-Mitigation: Inspect the live connector schema before constructing each action payload. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Fluxguard resources and retrieve Fluxguard account data from an agent session while keeping Fluxguard credentials mediated by OOMOL.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-fluxguard) <br>
-- [Fluxguard homepage](https://fluxguard.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo CLI connector actions; write and destructive actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: skill metadata and server release evidence) <br>
+Risk: Setup instructions include curl-to-bash and irm-to-iex installer commands that can execute remote code locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not allow an agent to run those installer commands automatically; use a verified installation path for the oo CLI when available.
+
+Risk: The skill can create, update, or delete Fluxguard pages, sites, categories, and webhooks.
+
+Mitigation: Require user confirmation for write actions and explicit approval of the exact target and payload before destructive actions.
+
+Risk: Fluxguard operations are mediated through OOMOL, which means actions depend on the user's OOMOL-connected account and service availability.
+
+Mitigation: Install only when OOMOL-mediated Fluxguard access is acceptable and review account, connection, and billing errors before retrying.
+
+## Reference(s):
+
+- [Fluxguard homepage](https://fluxguard.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-fluxguard)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, JSON, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agent responses may include Fluxguard action names, request payloads, command output summaries, and confirmation prompts for write or destructive actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,54 @@
-## Description: <br>
-Local search/indexing CLI (BM25 + vectors + rerank) with MCP mode. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Local search/indexing CLI (BM25 + vectors + rerank) with MCP mode.
 
-## Publisher: <br>
-[steipete](https://clawhub.ai/user/steipete) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[steipete](https://clawhub.ai/user/steipete)
 
-## Use Case: <br>
-Developers and engineers use this skill to index local file collections and retrieve relevant content through keyword, vector, hybrid search, document lookup, or MCP mode. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on an external qmd package source. <br>
-Mitigation: Install only after verifying that the package source is trusted for the intended environment. <br>
-Risk: Broad local collections can index sensitive files. <br>
-Mitigation: Add narrow, intentional collection paths and exclude secrets or private directories from indexing. <br>
-Risk: MCP mode or non-local Ollama endpoints can expose indexed content to tools or services outside the local process. <br>
-Mitigation: Use MCP mode and remote Ollama endpoints only with trusted tools, servers, and network destinations. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [qmd source package](https://github.com/tobi/qmd) <br>
-- [Publisher homepage](https://tobi.lutke.com) <br>
-- [ClawHub skill page](https://clawhub.ai/steipete/skills/qmd) <br>
+## Use Case:
 
+Developers and engineers use Qmd to index local project or documentation folders and retrieve relevant file content through BM25, vector, hybrid search, and MCP workflows.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance centers on qmd CLI commands, local indexing paths, Ollama endpoint configuration, and MCP mode.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The install metadata references an unpinned GitHub package, creating supply-chain risk.
+
+Mitigation: Install from a reviewed release or pinned commit when available.
+
+Risk: Indexed collection contents are cached locally and become searchable.
+
+Mitigation: Add only directories whose contents are intended to be indexed, searched, and stored in the local qmd cache.
+
+## Reference(s):
+
+- [Qmd ClawHub Skill Page](https://clawhub.ai/steipete/skills/qmd)
+- [qmd GitHub package](https://github.com/tobi/qmd)
+- [Publisher homepage](https://tobi.lutke.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include qmd commands for indexing, status checks, search, document retrieval, and MCP mode.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

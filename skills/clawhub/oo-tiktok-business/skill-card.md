@@ -1,45 +1,57 @@
-## Description: <br>
-TikTok Business helps agents inspect authorized advertisers, campaigns, GMV Max stores, sessions, identities, videos, anchors, authorization status, reporting rows, and planning recommendations through an OOMOL-connected TikTok Business account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TikTok Business enables an agent to search and read TikTok Business data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Marketing operators, commerce teams, and agent developers use this skill to discover TikTok Business account structure and retrieve GMV Max campaign, store, reporting, budget, and bid information from a connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security summary says the skill's read-only framing conflicts with documented write/destructive account actions. <br>
-Mitigation: Review exact TikTok Business actions before installation and require explicit user confirmation for any action tagged [write] or [destructive]. <br>
-Risk: The security guidance flags an unsafe CLI install pattern. <br>
-Mitigation: Install the oo CLI through a verified method and avoid blindly executing remote shell installer commands. <br>
-Risk: The skill operates on connected TikTok Business data and may expose business account information through connector responses. <br>
-Mitigation: Use an account whose TikTok Business data access is appropriate for the intended agent workflow. <br>
+## Use Case:
 
+External marketers, commerce teams, and agents acting for connected TikTok Business users use this skill to list advertisers and campaigns, inspect GMV Max resources, and retrieve reporting or eligibility data through the OOMOL connector.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-tiktok-business) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [TikTok Business Homepage](https://business.tiktok.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON payload examples and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses OOMOL oo CLI actions against a connected TikTok Business account; action schemas should be inspected before payload construction.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: First-time setup asks users to run remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review or replace the installer flow with a safer verified installation method, such as an official signed package, pinned release, or locally reviewed installer before use.
+
+Risk: TikTok Business data is accessed through OOMOL as an intermediary.
+
+Mitigation: Use the skill only where sharing TikTok Business data through OOMOL is acceptable and the account connection has the intended scopes.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-tiktok-business)
+- [TikTok Business Homepage](https://business.tiktok.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [OOMOL TikTok Business Connection](https://console.oomol.com/app-connections?provider=tiktok_business)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence release and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

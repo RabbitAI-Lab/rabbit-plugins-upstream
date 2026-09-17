@@ -1,45 +1,64 @@
-## Description: <br>
-Mailtrap (mailtrap.io). Use this skill for Mailtrap requests that read, create, update, or delete data through the OOMOL connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mailtrap helps agents operate Mailtrap through an OOMOL-connected account, including reading, creating, updating, and deleting Mailtrap resources.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and support teams use this skill to operate Mailtrap inboxes, projects, contacts, templates, sending domains, suppressions, and sending statistics from an agent session. It supports both read workflows and confirmed state-changing Mailtrap operations through the OOMOL CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The inbox-cleaning action deletes messages and is not tagged for explicit confirmation under the skill's own safety rules. <br>
-Mitigation: Require explicit user confirmation of the target inbox before running clean_inbox. <br>
-Risk: The skill may ask users to run one-time remote installer commands for the OOMOL CLI. <br>
-Mitigation: Verify the OOMOL CLI install source before executing remote installation commands. <br>
-Risk: The skill requires sensitive credentials through a connected Mailtrap account. <br>
-Mitigation: Use the OOMOL-managed connection flow and avoid exposing raw Mailtrap API tokens in prompts, logs, or shell history. <br>
+## Use Case:
 
+Developers and operators use this skill to have an agent inspect live action schemas and run Mailtrap connector actions for inboxes, messages, projects, contacts, templates, domains, lists, and account data through the oo CLI.
 
-## Reference(s): <br>
-- [ClawHub Mailtrap skill page](https://clawhub.ai/oomol/oo-mailtrap) <br>
-- [Mailtrap homepage](https://mailtrap.io/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce live action schemas, connector command payloads, and Mailtrap operation guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The skill asks for broad oo CLI authority against the user's OOMOL-connected Mailtrap account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if granting agent access to the connected Mailtrap account is acceptable, and review requested actions before execution.
+
+Risk: Write and destructive Mailtrap actions can change or remove account data.
+
+Mitigation: Require explicit confirmation of the exact payload, target, and expected effect before running write or destructive actions.
+
+Risk: Setup guidance includes pipe-to-shell installation commands.
+
+Mitigation: Prefer verified or manual oo CLI installation before running connector commands.
+
+Risk: Inline JSON payload construction can be fragile for user- or message-derived content.
+
+Mitigation: Fetch the live action schema first and use file-based JSON payloads such as --data @path/to/file.json for complex or untrusted content.
+
+## Reference(s):
+
+- [ClawHub Mailtrap skill page](https://clawhub.ai/oomol/skills/oo-mailtrap)
+- [Mailtrap homepage](https://mailtrap.io/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include oo CLI commands that call Mailtrap connector actions and return JSON responses.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

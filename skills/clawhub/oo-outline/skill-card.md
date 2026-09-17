@@ -1,44 +1,52 @@
-## Description: <br>
-Outline helps agents search and read Outline workspace content through an OOMOL-connected account instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to search and read Outline collections and documents through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and other agent users use this skill to retrieve, list, and search Outline collections and documents available through their OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected account with access to Outline content. <br>
-Mitigation: Install only when the agent should search and read Outline content available through that connected account. <br>
-Risk: First-time setup may require installing the oo CLI. <br>
-Mitigation: Review the oo CLI installer before setup and only run setup steps after an authentication, connection, or missing-command error. <br>
-Risk: Future connector actions tagged write or destructive could alter Outline data. <br>
-Mitigation: Require explicit user approval for the exact payload and effect before allowing any write or delete action. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect Outline schemas and retrieve collections, documents, document trees, and search results from a connected Outline workspace.
 
-## Reference(s): <br>
-- [Outline homepage](https://www.getoutline.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI to return Outline connector responses as JSON when actions are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: First-time setup documents direct execution of remote installer scripts without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source and use a verified, pinned, or signed installation method before running setup commands.
+
+## Reference(s):
+
+- [Outline homepage](https://www.getoutline.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-outline)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-oriented Outline connector guidance; action responses are JSON returned by the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

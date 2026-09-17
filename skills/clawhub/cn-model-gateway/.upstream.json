@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cn-model-gateway",
   "slug": "cn-model-gateway",
   "ownerHandle": null,
-  "version": "1.2.0",
-  "updatedAt": 1784881345854,
-  "contentHash": "54d42ebd9227ad7f88dae27b135fd55d51b6d8f5331bcef3a0f30a339d5c1776",
-  "fetchedAt": "2026-07-26T18:05:28.048Z"
+  "version": "1.8.0",
+  "updatedAt": 1789617278253,
+  "contentHash": "da0bf608ab1533011882c77015d5df71f25074d135aa345e186d0f6374f7b275",
+  "fetchedAt": "2026-09-17T12:46:10.972Z"
 }

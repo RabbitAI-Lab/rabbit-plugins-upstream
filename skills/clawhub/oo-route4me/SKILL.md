@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Route4Me"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["route4me"]
   icon: "https://static.oomol.com/logo/third-party/route4me.svg"
 ---

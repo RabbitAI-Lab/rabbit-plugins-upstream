@@ -1,41 +1,61 @@
-## Description: <br>
-TPSCheck lets agents check UK phone numbers against TPS and CTPS and retrieve TPSCheck account usage through OOMOL's oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TPSCheck helps agents use an OOMOL-connected TPSCheck account to check UK phone numbers against TPS and CTPS and retrieve usage and credit details.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to run TPSCheck phone-number screening and account-credit lookups through an OOMOL-connected TPSCheck account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses sensitive TPSCheck credentials through an OOMOL-connected account. <br>
-Mitigation: Install only when comfortable connecting TPSCheck through OOMOL, and approve account connection steps intentionally. <br>
-Risk: First-time setup includes remote oo CLI installation commands and account or billing links. <br>
-Mitigation: Review install commands before running them, and use setup or billing steps only after an auth, connection, or credit failure. <br>
+## Use Case:
 
+External users and developers use this skill to check individual or batch UK phone numbers against TPS and CTPS through TPSCheck, and to review current TPSCheck credits and reset details.
 
-## Reference(s): <br>
-- [TPSCheck homepage](https://www.tpscheck.uk) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global, with TPSCheck actions focused on UK phone numbers.
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: Setup instructions include remote installer commands for the OOMOL oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer official package-manager or signed release instructions, verify checksums or signatures where available, and avoid elevated shells unless required.
+
+Risk: The skill depends on a locally installed and trusted OOMOL oo CLI connected to the user's TPSCheck account.
+
+Mitigation: Install and use the skill only when the user is comfortable trusting the CLI and has intentionally connected TPSCheck.
+
+Risk: Connector payloads may be rejected or produce unintended checks if they do not match the current TPSCheck action schema.
+
+Mitigation: Inspect the live action schema before constructing each payload and confirm any state-changing action if such an action appears in the schema.
+
+## Reference(s):
+
+- [ClawHub TPSCheck skill page](https://clawhub.ai/oomol/skills/oo-tpscheck)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [TPSCheck homepage](https://www.tpscheck.uk)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live TPSCheck action schemas before running connector actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

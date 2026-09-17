@@ -1,43 +1,59 @@
-## Description: <br>
-Searches Kalodata TikTok Shop livestream leaderboards and retrieves detailed metrics for a selected livestream by livestreamId. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches Kalodata TikTok Shop livestream leaderboards and retrieves detailed metrics for a selected livestream, including revenue, viewers, duration, GPM, and product count.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and agents use this skill to browse TikTok Shop livestream rankings by market, date range, language, and currency, then inspect one selected livestream's revenue, viewers, duration, GPM, and product count. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill makes authenticated external API calls and relies on environment-provided gateway and authorization settings. <br>
-Mitigation: Install and run it only when external API access is acceptable, review the gateway URL, and constrain API key exposure through environment controls. <br>
-Risk: The skill stores complete API responses locally, which may preserve sensitive or task-specific data in the workspace. <br>
-Mitigation: Avoid sending sensitive prompts or identifiers, review generated linkfox data files, and clean retained responses according to local data handling policy. <br>
-Risk: The evidence security summary flags under-scoped network, persistence, and external-install behavior. <br>
-Mitigation: Treat external onboarding or skill-install instructions as requiring separate manual review before use. <br>
+## Use Case:
 
+Developers and agents use this skill to browse TikTok Shop livestream rankings by region, currency, language, and date range, then fetch one livestream's detailed performance data by livestreamId. It is suited for presenting livestream analytics data without providing subjective business advice.
 
-## Reference(s): <br>
-- [Kalodata-TikTok直播搜索与详情 API Reference](artifact/references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-kalodata-tiktok-livestream) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown summaries with JSON API responses and saved JSON data files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts save complete API responses under the local linkfox session data directory and may print either full JSON or a compact summary depending on response size.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The security review notes that the skill should be reviewed before use because it stores full API responses locally and includes account, payment, and feedback-related flows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only in a trusted environment, review generated files before sharing, and require explicit user approval before feedback submission, account onboarding, or order/payment actions.
+
+Risk: Endpoint override environment variables could route requests to unintended services.
+
+Mitigation: Avoid untrusted LINKFOX_* endpoint overrides and confirm the configured gateway before use.
+
+Risk: API keys and phone verification codes may be exposed if routed through shared logs or transcripts.
+
+Mitigation: Keep LINKFOX API keys and verification codes out of shared logs, screenshots, and public issue reports.
+
+## Reference(s):
+
+- [Kalodata-TikTok直播搜索与详情 API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-kalodata-tiktok-livestream)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON data summaries and optional saved JSON files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full API responses are saved locally; small responses may also be printed inline, while larger responses are summarized.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

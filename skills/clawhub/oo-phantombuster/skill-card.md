@@ -1,42 +1,55 @@
-## Description: <br>
-PhantomBuster helps an agent read and operate PhantomBuster resources through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PhantomBuster (phantombuster.com). Use this skill for ANY PhantomBuster request — reading, creating, and updating data. Whenever a task involves PhantomBuster, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect PhantomBuster action schemas and run supported read, launch, and stop operations through an OOMOL-connected PhantomBuster account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be invoked too broadly for PhantomBuster-adjacent requests. <br>
-Mitigation: Use it only for PhantomBuster workflows and inspect the live action schema before constructing a payload. <br>
-Risk: Launch, stop, or other account-changing operations can affect PhantomBuster resources. <br>
-Mitigation: Ask for explicit user confirmation of the target, payload, and expected effect before running write actions, and keep connector permissions scoped to the intended account and work. <br>
+## Use Case:
 
+External users and developers use this skill to inspect PhantomBuster schemas, read agent and container data, launch agents, and stop running agents through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [PhantomBuster homepage](https://phantombuster.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-phantombuster) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live schema inspection before execution and returns connector responses as JSON when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: artifact metadata and release evidence) <br>
+Risk: First-time setup recommends installing the OOMOL CLI from web-hosted scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified or package-manager installation path and review the installer source before execution.
+
+Risk: Launching or stopping PhantomBuster agents can change account state, spend credits, or run automation.
+
+Mitigation: Require explicit user confirmation for launch_agent and stop_agent payloads before executing commands.
+
+## Reference(s):
+
+- [PhantomBuster ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-phantombuster)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [PhantomBuster Homepage](https://phantombuster.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, API Calls, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing PhantomBuster action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

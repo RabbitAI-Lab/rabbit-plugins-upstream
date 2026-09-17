@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Plausible Analytics"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["plausible_analytics"]
   icon: "https://static.oomol.com/logo/third-party/Plausible%20Analytics.svg"
 ---

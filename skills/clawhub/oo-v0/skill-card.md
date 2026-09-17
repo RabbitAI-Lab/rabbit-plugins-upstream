@@ -1,42 +1,60 @@
-## Description: <br>
-Operates v0 through an OOMOL-connected account for chat, project, deployment, environment variable, webhook, billing, usage, and account-scope actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+v0 (v0.dev) connector for reading, creating, updating, and deleting v0 data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and teams use this skill to let an agent manage a connected v0 workspace, including creating and updating chats, projects, deployments, environment variables, webhooks, and related account information. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform broad v0 account actions, including writes and deletes across chats, projects, deployments, webhooks, environment variables, billing, and account scope. <br>
-Mitigation: Review every write or delete request before approval and confirm the exact target, payload, and expected effect. <br>
-Risk: The skill depends on an OOMOL-connected account and the oo CLI, so use transfers trust to that connector and account connection. <br>
-Mitigation: Install and run it only when you want OOMOL-mediated v0 workspace management, and use the OOMOL CLI installer only if you trust that provider. <br>
+## Use Case:
 
+Developers and operators use this skill to manage v0 chats, projects, deployments, environment variables, webhooks, billing, usage, and account information through an OOMOL-connected v0 account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-v0) <br>
-- [v0 homepage](https://v0.dev) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: SKILL.md frontmatter and release evidence) <br>
+Risk: Setup instructions include unverified remote installer execution.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only through a verified official method and do not let an agent run a remote installer blindly.
+
+Risk: The skill can make high-impact v0 account changes, including deleting projects, chats, environment variables, and hooks.
+
+Mitigation: Require explicit user confirmation for write or destructive actions and verify targets and payloads against the live action schema before execution.
+
+Risk: The skill operates through OOMOL as an intermediary for a connected v0 account.
+
+Mitigation: Install only where OOMOL intermediary access is acceptable and connect only the intended v0 account and scopes.
+
+## Reference(s):
+
+- [ClawHub v0 skill page](https://clawhub.ai/oomol/skills/oo-v0)
+- [v0 homepage](https://v0.dev)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector action responses are JSON objects with data and meta.executionId when actions run.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

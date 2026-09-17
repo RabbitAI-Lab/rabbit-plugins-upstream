@@ -1,43 +1,55 @@
-## Description: <br>
-API2PDF converts raw Markdown into PDF output through an OOMOL-connected API2PDF account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+API2PDF (api2pdf.com) routes API2PDF tasks through an OOMOL-connected account, including Markdown-to-PDF conversion that returns generated PDF URLs and conversion metadata.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to convert Markdown content into PDF files and receive the generated PDF URL plus conversion metadata. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The PDF-generation action is presented as an untagged read, but it may send provided Markdown to API2PDF through OOMOL. <br>
-Mitigation: Treat markdown_to_pdf as an external conversion action, review the payload before execution, and avoid confidential content unless the connected service and account setup are acceptable. <br>
-Risk: The skill requires connected account credentials and service access. <br>
-Mitigation: Use the server-managed OOMOL connection flow and avoid exposing raw API keys or tokens in prompts, files, or command arguments. <br>
+## Use Case:
 
+Developers and external users use this skill to operate API2PDF through an OOMOL-connected account, primarily to convert raw Markdown into a PDF and receive the generated PDF URL plus metadata.
 
-## Reference(s): <br>
-- [ClawHub API2PDF listing](https://clawhub.ai/oomol/oo-api2pdf) <br>
-- [API2PDF homepage](https://www.api2pdf.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL connection setup for API2PDF](https://console.oomol.com/app-connections?provider=api2pdf) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON response expectations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The connector action returns a generated PDF URL and conversion metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: Markdown content is sent to API2PDF through OOMOL for conversion.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when the user is comfortable sending the Markdown content to the external PDF service.
+
+Risk: The setup guidance includes pipe-to-shell installer commands.
+
+Mitigation: Avoid running installer commands unless the installer source and integrity have been separately verified.
+
+## Reference(s):
+
+- [API2PDF homepage](https://www.api2pdf.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub API2PDF skill page](https://clawhub.ai/oomol/skills/oo-api2pdf)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, json, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns generated PDF URLs and conversion metadata from API2PDF through OOMOL.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

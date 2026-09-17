@@ -1,42 +1,60 @@
-## Description: <br>
-This skill operates Plausible Analytics through an OOMOL-connected account to query site analytics and record pageview or custom events. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill enables an agent to query Plausible Analytics data and record Plausible events through OOMOL's oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and analysts use this skill to inspect Plausible site traffic, breakdowns, timeseries data, and real-time analytics. It can also help record tracking events after the user confirms the target site, event name, payload, and expected analytics impact. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The record_event action can write Plausible Analytics events, and the security evidence says this write action is under-labeled. <br>
-Mitigation: Before running record_event, confirm the exact site, event name, payload, and expected analytics impact with the user. <br>
-Risk: The skill requires an OOMOL-connected Plausible Analytics account. <br>
-Mitigation: Install and use it only when the user intends to operate Plausible Analytics through OOMOL-connected credentials. <br>
+## Use Case:
 
+External developers and operators use this skill to inspect Plausible Analytics connector schemas, run stats queries for connected sites, and record pageview or custom events after confirming write payloads.
 
-## Reference(s): <br>
-- [ClawHub Plausible Analytics Skill](https://clawhub.ai/oomol/oo-plausible-analytics) <br>
-- [Plausible Analytics](https://plausible.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI to return connector responses as JSON with data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: Installer snippets can execute remote setup code locally if used without review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run installer commands only after trusting OOMOL's installer source and verifying the install path.
+
+Risk: The record_event action can write pageview or custom event data to Plausible Analytics.
+
+Mitigation: Require explicit confirmation of the exact site, event name, URL, and properties before running record_event.
+
+Risk: Credential or connection setup may fail or lack required scopes.
+
+Mitigation: Use normal read-only oo connector commands first and fall back to authentication or connection setup only when a command fails for that reason.
+
+## Reference(s):
+
+- [Plausible Analytics](https://plausible.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-plausible-analytics)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses may include JSON data and execution metadata from the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,60 @@
-## Description: <br>
-xAI (x.ai). Use this skill for any xAI request, including reading, creating, and updating data through the OOMOL `x_ai` connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate xAI through an OOMOL-connected account by inspecting live connector schemas and running supported xAI actions with the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate xAI through an OOMOL-connected account, inspect live connector schemas, and run chat completion or model metadata actions with the `oo` CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill runs credentialed OOMOL connector actions for a connected xAI account, including a write action that may create chat completions or consume account credits. <br>
-Mitigation: Inspect the live action schema before constructing payloads, confirm write payloads and expected effects with the user before execution, and use the skill only with an intended connected OOMOL/xAI account. <br>
-Risk: First-time setup and recovery steps may require authentication, connection repair, or billing actions outside the normal read-only flow. <br>
-Mitigation: Run setup commands only after an auth, connection, or billing error indicates they are needed, and verify the account and target connection before retrying. <br>
+## Use Case:
 
+Developers and agents use this skill to list xAI models, fetch model metadata, and create non-streaming chat completions through OOMOL-managed xAI connectivity.
 
-## Reference(s): <br>
-- [xAI homepage](https://x.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-x-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses from connector runs are JSON objects containing data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and server release evidence) <br>
+Risk: The first-time setup includes remote installer commands from OOMOL endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source and prefer a verified package-manager or documented installation path before executing installation commands.
+
+Risk: Chat-completion requests may consume xAI or OOMOL account resources.
+
+Mitigation: Inspect the live connector schema and confirm the exact chat-completion payload before running write actions.
+
+Risk: Account authentication and xAI connection steps affect the user's OOMOL-connected account.
+
+Mitigation: Run sign-in or connection flows only after an auth or connection failure and confirm the account context before proceeding.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-x-ai)
+- [xAI homepage](https://x.ai)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before action execution.]
+
+## Skill Version(s):
+
+1.0.4 (source: server evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

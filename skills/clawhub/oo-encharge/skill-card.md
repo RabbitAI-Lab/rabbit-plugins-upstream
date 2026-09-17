@@ -1,42 +1,56 @@
-## Description: <br>
-Encharge (encharge.io). Use this skill for Encharge requests that read, create, or update data through the OOMOL `oo` CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill lets agents inspect Encharge connector schemas and run Encharge actions through an OOMOL-connected account instead of calling the Encharge API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect the Encharge connector schema and run Encharge actions through an OOMOL-connected account, including sending transactional email after user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send transactional email through the connected Encharge account. <br>
-Mitigation: Review the recipient, subject, body, and complete payload before approving any write action. <br>
-Risk: Broad Encharge routing language could be mistaken for permission to perform automatic writes. <br>
-Mitigation: Treat the routing language as tool-selection guidance and require explicit user confirmation before actions that change Encharge state. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Encharge action schemas and run Encharge connector actions through an OOMOL-connected account, including sending transactional email after confirming the payload.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-encharge) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Encharge](https://encharge.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup may ask users to execute remote installer scripts for the oo CLI, which creates a local security risk if the installer source is not verified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path before installing, prefer official package-manager or version-pinned installers with signature or checksum verification, and avoid running remote shell or PowerShell installer pipelines from an elevated session.
+
+Risk: The send_email action changes Encharge state by sending transactional email.
+
+Mitigation: Confirm the exact email payload and intended effect with the user before allowing the send_email action.
+
+## Reference(s):
+
+- [ClawHub Encharge Skill](https://clawhub.ai/oomol/skills/oo-encharge)
+- [Encharge Homepage](https://encharge.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and meta.executionId when actions are run with --json.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

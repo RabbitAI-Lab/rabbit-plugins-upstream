@@ -1,47 +1,72 @@
-## Description: <br>
-标书智能制作 helps users interpret tender documents, generate editable bid documents, and review bid submissions for rejection and compliance risks through the 百炼标书 API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents process tender and bid documents through the BaiLian bidding platform, including structured tender interpretation, generated bid documents, compliance review, and similarity checks.
 
-## Publisher: <br>
-[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666)
 
-## Use Case: <br>
-External procurement, bid, and business-development teams use this skill to analyze tender requirements, draft bid responses, generate .docx bid documents, and review bid files for compliance issues before submission. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tender and bid documents may contain commercial or personal information and are uploaded to biaoshu.zhiliaobiaoxun.com for processing. <br>
-Mitigation: Use the skill only after confirming the upload is intentional and acceptable for the documents being processed. <br>
-Risk: The App Key is an account credential used for billing and service access. <br>
-Mitigation: Keep the App Key out of chat and store it only in the local config.json location described by the skill. <br>
-Risk: Custom ZCM_BASE or ZCM_CONFIG settings can affect the service endpoint or credential path used by the skill. <br>
-Mitigation: Review any custom ZCM_BASE or ZCM_CONFIG values before running file analysis, generation, or compliance review. <br>
-Risk: Generated bid content and compliance findings may be incomplete or incorrect for a real procurement submission. <br>
-Mitigation: Have qualified reviewers check generated documents, risk findings, and recommendations before relying on them. <br>
+## Use Case:
 
+External procurement, bidding, and proposal teams use this skill to interpret authorized tender files, generate draft bid documents, review bid submissions for risk, and compare two or three bid documents for similarity indicators. The skill sends user-provided files to the BaiLian bidding cloud API and requires the user's own API key.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-writer-spark) <br>
-- [百炼标书 API contract reference](references/api.md) <br>
-- [Execution and usage reference](references/usage.md) <br>
-- [百炼标书 service](https://biaoshu.zhiliaobiaoxun.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, files, guidance] <br>
-**Output Format:** [Markdown guidance plus generated HTML, Word, and DOCX file artifacts with local file paths.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated artifacts are written under biaoshu-bailian-files/; bid generation may consume account credits tied to the configured App Key.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release evidence) <br>
+Risk: The skill handles sensitive procurement documents and bid credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only with documents the user is authorized to process, prefer a dedicated revocable API key, and keep the key in the skill-local configuration file rather than in chat.
+
+Risk: Generated bid documents, compliance findings, and similarity findings may influence procurement decisions.
+
+Mitigation: Treat outputs as drafting and review assistance; have qualified users verify legal, commercial, and submission-critical content before use.
+
+Risk: Paid generation, review, or duplicate-check tasks can consume the API key owner's word entitlement.
+
+Mitigation: Confirm billed generation or review actions before submission and make expected consumption clear when the workflow provides an estimate.
+
+Risk: Local persistence may retain tender filename metadata, generated reports, and the skill-local API-key configuration.
+
+Mitigation: Use a controlled output directory, restrict permissions on local configuration, and remove retained artifacts when they are no longer needed.
+
+Risk: Untrusted prompts or document content could try to steer arbitrary local output paths.
+
+Mitigation: Keep reads and writes limited to user-authorized files and the configured skill output directory.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-writer-spark)
+- [BaiLian bidding platform](https://biaoshu.zhiliaobiaoxun.com/?ch=c666)
+- [Open API overview](artifact/references/api.md)
+- [Authentication, jobs, and word entitlement API](artifact/references/api-auth.md)
+- [Tender interpretation and bid-document generation API](artifact/references/api-bid-workflow.md)
+- [Bid compliance review API](artifact/references/api-compliance.md)
+- [Bid similarity check API](artifact/references/api-duplicate.md)
+- [Knowledge-base fields](artifact/references/knowledge-fields.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files, Guidance]
+
+**Output Format:** [Markdown responses, JSON summaries, HTML or Word reports, generated .docx bid documents, and short-lived download links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs use Simplified Chinese labels for bidding terminology and may include locally written reports under the skill output directory.]
+
+## Skill Version(s):
+
+1.0.15 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

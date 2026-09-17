@@ -1,43 +1,59 @@
-## Description: <br>
-Operate Getform (forminit.com) through an OOMOL-connected account for reading, creating, and updating form data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Getform helps agents inspect Getform action schemas, list form submissions, and submit protected forms through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to operate Getform through an OOMOL-connected account, including listing protected Forminit submissions and submitting protected forms. It is intended for schema-first connector use through the oo CLI rather than direct API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Setup guidance includes remote CLI installer commands that can execute local code. <br>
-Mitigation: Prefer the official OOMOL install guide, verify the installer source, and get explicit user approval before running an installer. <br>
-Risk: The skill requires sensitive credentials through an OOMOL-connected Getform account. <br>
-Mitigation: Install and use it only when OOMOL-mediated Getform access is acceptable, and rely on the connected account scopes required for the task. <br>
-Risk: The submit_form action can write data to a protected Forminit form. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
+## Use Case:
 
+Developers and external users use this skill to operate Getform through OOMOL's oo CLI, including reading submissions and submitting protected forms after reviewing the live action schema.
 
-## Reference(s): <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Getform homepage](https://forminit.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Guidance, Configuration instructions] <br>
-**Output Format:** [Markdown with inline bash and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce oo CLI connector commands and JSON payload guidance for Getform actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: First-time setup directs users to execute unverified remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run curl|bash or irm|iex setup commands automatically; prefer a verified installer, pinned release, or checksum/signature workflow.
+
+Risk: OOMOL mediates Getform access and injects credentials server-side.
+
+Mitigation: Install only when this access model is acceptable, and review the connected account scope before use.
+
+Risk: The submit_form action can create new Getform submissions.
+
+Mitigation: Confirm the exact submit_form payload and intended effect with the user before running the write action.
+
+## Reference(s):
+
+- [Getform skill on ClawHub](https://clawhub.ai/oomol/skills/oo-getform)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Getform homepage](https://forminit.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include JSON payloads for oo connector commands and confirmations for write actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

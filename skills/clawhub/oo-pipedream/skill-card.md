@@ -1,43 +1,55 @@
-## Description: <br>
-Routes Pipedream requests through the OOMOL oo CLI to search and read Pipedream user, workspace, workflow, event, and app-catalog data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides an agent workflow for read-oriented Pipedream lookups through the OOMOL oo CLI and a connected Pipedream account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Pipedream account, workspace, workflow, event, and app-catalog data through an OOMOL-connected Pipedream account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read sensitive Pipedream account, workspace, workflow, and emitted-event data through connected credentials. <br>
-Mitigation: Confirm the target Pipedream account, workspace, connected app, and action before allowing reads involving sensitive workflows. <br>
-Risk: Authentication, connection, scope, or billing failures can block connector execution. <br>
-Mitigation: Use the first-time setup and troubleshooting guidance only after a matching command failure. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Pipedream app, user, workflow, event, and workspace data from connected accounts while relying on live connector schemas before each action.
 
-## Reference(s): <br>
-- [Pipedream homepage](https://pipedream.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-pipedream) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Fallback setup includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid letting an agent run installer commands automatically; install the CLI yourself through a verified, versioned method before using the skill.
+
+Risk: The skill operates through an OOMOL-connected Pipedream account.
+
+Mitigation: Use it primarily for the documented read-only lookups and confirm exact payloads and effects before any future write or destructive action is executed.
+
+## Reference(s):
+
+- [Pipedream homepage](https://pipedream.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown instructions with shell command examples and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector action responses are JSON objects containing data and meta.executionId when commands run successfully.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

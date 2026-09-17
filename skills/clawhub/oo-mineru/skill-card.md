@@ -1,42 +1,55 @@
-## Description: <br>
-MinerU helps agents operate MinerU document extraction through OOMOL's oo CLI for reading, creating, and updating extraction tasks and batches. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MinerU enables agents to create precise document extraction tasks and batches, inspect their status, and retrieve result URLs through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and operations teams use this skill to create MinerU document extraction tasks or batches from document URLs and retrieve extraction status and result URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill submits document URLs and extraction requests through an OOMOL-connected MinerU account, so sensitive documents or extraction results may be exposed to that service. <br>
-Mitigation: Confirm OOMOL and MinerU are trusted for the submitted documents and avoid sending confidential URLs unless the user has approved that handling. <br>
-Risk: Task and batch creation actions can change MinerU state or consume credits. <br>
-Mitigation: Inspect the live action schema, review the exact payload and effect with the user, and require confirmation before running write actions. <br>
+## Use Case:
 
+Developers and external users use this skill to operate MinerU document extraction workflows from an agent without handling raw credentials directly. It supports creating extraction tasks or batches, then checking status and result URLs.
 
-## Reference(s): <br>
-- [ClawHub MinerU Skill](https://clawhub.ai/oomol/oo-mineru) <br>
-- [MinerU Homepage](https://mineru.net) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, Text] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live MinerU action schemas before running connector commands; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: The setup instructions include remote installer commands that pipe downloaded scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval before installation, inspect the installer first, or use an official package or pinned release when available.
+
+Risk: Write actions can create MinerU extraction tasks or batches.
+
+Mitigation: Confirm the exact action payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [MinerU homepage](https://mineru.net)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-mineru)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agent responses may include live schema-inspection commands, connector run commands, setup recovery guidance, and extracted task or batch result data.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

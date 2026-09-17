@@ -1,45 +1,56 @@
-## Description: <br>
-L2S (l2s.is) lets an agent read, create, and update shortened-link data through an OOMOL-connected L2S account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+L2S helps agents read, create, and update L2S shortened URL data through an OOMOL-connected oo CLI account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage L2S shortened links from an agent session, including retrieving stored link details, creating shortened URLs, and updating link metadata after reviewing write payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to an OOMOL-connected L2S account. <br>
-Mitigation: Install it only when the agent is expected to use that account, and review account connection or authentication failures before retrying. <br>
-Risk: Write actions can create or update short links with unintended destinations, custom keys, titles, or UTM tags. <br>
-Mitigation: Review the exact payload and intended effect before running create or update actions. <br>
-Risk: Connector input contracts may change over time. <br>
-Mitigation: Inspect the live action schema before constructing a payload for an L2S action. <br>
+## Use Case:
 
+Developers and external users use this skill to manage L2S shortened URLs from an agent session, including looking up existing links, creating new shortened URLs, and updating link details after confirming write actions.
 
-## Reference(s): <br>
-- [ClawHub L2S skill page](https://clawhub.ai/oomol/oo-l2s) <br>
-- [L2S homepage](https://www.l2s.is) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands target the OOMOL oo CLI and may return JSON responses from L2S connector actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and frontmatter) <br>
+Risk: The first-time setup guidance includes remote shell installer commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installer source or use a verified vendor installation path before installing.
+
+Risk: Shorten and update actions change L2S account data.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [L2S homepage](https://www.l2s.is)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [L2S ClawHub skill page](https://clawhub.ai/oomol/skills/oo-l2s)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before building action payloads; write actions require confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
