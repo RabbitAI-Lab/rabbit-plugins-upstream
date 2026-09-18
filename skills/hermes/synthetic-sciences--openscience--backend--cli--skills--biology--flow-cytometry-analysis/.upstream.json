@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/flow-cytometry-analysis",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/flow-cytometry-analysis",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/flow-cytometry-analysis",
+  "branch": "main",
+  "pushedAt": "2026-09-18T11:48:18Z",
+  "contentHash": "c66952b3b6b7bbef5dc86955215fbf442bdf81463205f2750a70041f752378c5",
+  "fetchedAt": "2026-09-18T12:17:17.952Z"
+}

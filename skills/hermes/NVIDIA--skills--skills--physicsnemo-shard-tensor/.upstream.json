@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/physicsnemo-shard-tensor",
+  "identifier": "NVIDIA/skills/skills/physicsnemo-shard-tensor",
+  "repo": "NVIDIA/skills",
+  "path": "skills/physicsnemo-shard-tensor",
+  "branch": "main",
+  "pushedAt": "2026-09-17T18:27:39Z",
+  "contentHash": "02e5f87a10e1a5fd5b6f42f3211f8741fb151359b9006548848d9af902f5c4ac",
+  "fetchedAt": "2026-09-18T12:17:16.260Z"
+}

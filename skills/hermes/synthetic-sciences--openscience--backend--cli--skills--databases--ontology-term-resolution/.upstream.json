@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/ontology-term-resolution",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/ontology-term-resolution",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/ontology-term-resolution",
+  "branch": "main",
+  "pushedAt": "2026-09-18T11:48:18Z",
+  "contentHash": "e645e6dae006fce3b066e916e263234ec65ccea09927a31ecd6a1127a8a50b74",
+  "fetchedAt": "2026-09-18T12:17:18.026Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-retriever-mcp",
+  "identifier": "NVIDIA/skills/skills/nemo-retriever-mcp",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-retriever-mcp",
+  "branch": "main",
+  "pushedAt": "2026-09-17T18:27:39Z",
+  "contentHash": "9355e5a578fbe60d29268c26a4ee2ffb48786163cdbdc1d40d3e01ccf1d0b061",
+  "fetchedAt": "2026-09-18T12:17:16.147Z"
+}

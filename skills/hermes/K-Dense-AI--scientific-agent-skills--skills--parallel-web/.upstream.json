@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/parallel-web",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/parallel-web",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/parallel-web",
+  "branch": "main",
+  "pushedAt": "2026-09-14T09:27:38Z",
+  "contentHash": "c06fb888e2e86f1fd1cf5265097bef9a46d009fd19971d639b497afb22c987be",
+  "fetchedAt": "2026-09-18T12:17:30.527Z"
+}
