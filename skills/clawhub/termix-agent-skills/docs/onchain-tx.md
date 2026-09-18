@@ -35,12 +35,6 @@ The script estimates gas (+20%), fetches EIP-1559 fees (floored to the network
 `eth_gasPrice` so BSC does not underprice), waits for the receipt, and **fails
 loudly if the tx reverts**.
 
-Transient RPC failures (public BSC nodes dropping the connection — `fetch failed`,
-`ECONNRESET`, 5xx) are **retried automatically** with backoff (`A2A_RPC_RETRIES`,
-default 3); definitive errors (revert, nonce too low) are not. Broadcast is
-idempotent — a resend after a lost response is recognized as already-broadcast and
-returns the same hash — so you should not manually re-run on a transient error.
-
 ## After broadcast — let the indexer confirm
 
 DB state is updated by the indexer from the on-chain event, NOT by broadcasting.

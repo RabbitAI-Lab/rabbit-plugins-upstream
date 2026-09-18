@@ -1,40 +1,56 @@
-## Description: <br>
-Businessmap (businessmap.io). Use this skill for Businessmap requests that read, create, update, or delete workspace, board, and card data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Businessmap helps agents read, create, update, and delete Businessmap workspaces, boards, and cards through an OOMOL-connected Businessmap account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Businessmap schemas, list and retrieve workspaces, boards, and cards, and perform confirmed board or card changes through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-businessmap) <br>
-- [Businessmap Homepage](https://businessmap.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+External users, developers, and operators use this skill to manage Businessmap boards and cards through the OOMOL `oo` CLI. It is suited for agents that need to inspect Businessmap action schemas, run read operations, and prepare confirmed write or delete requests.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill runs Businessmap connector actions through the oo CLI; write actions require payload review, and destructive card deletion requires explicit target confirmation.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Setup instructions include remote installer commands that pipe downloaded code directly into a shell.
+
+Mitigation: Install the oo CLI through a verifiable package, pinned release, checksum, or signed installer instead of piping a remote script directly into a shell.
+
+Risk: Connected Businessmap permissions can allow write or destructive changes to boards and cards.
+
+Mitigation: Review each write or delete payload, confirm the exact target and effect with the user, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [ClawHub Businessmap skill page](https://clawhub.ai/oomol/skills/oo-businessmap)
+- [Businessmap homepage](https://businessmap.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Fetches live Businessmap action schemas before constructing requests; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

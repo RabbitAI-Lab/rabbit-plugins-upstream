@@ -1,45 +1,61 @@
-## Description: <br>
-Operate Stability AI through OOMOL's oo CLI connector for supported actions such as text-to-audio generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Stability AI (stability.ai). Use this skill for Stability AI requests through an OOMOL-connected account instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate Stability AI through an OOMOL-connected account, inspect live connector schemas, and run supported Stability AI actions through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The documented text_to_audio action can generate audio and upload a file even though the skill summary emphasizes searching and reading data. <br>
-Mitigation: Treat generation as a write and cost-incurring action; require explicit user confirmation of the prompt, target action, and expected effect before running it. <br>
-Risk: The skill depends on a connected OOMOL account and Stability AI credentials injected server-side. <br>
-Mitigation: Use it only with an intended connected account and do not expose, request, or store raw API tokens in prompts, logs, or payload files. <br>
-Risk: Generated files are uploaded to connector transit storage. <br>
-Mitigation: Review where generated files are stored or shared before treating outputs as private or reusable artifacts. <br>
+## Use Case:
 
+Developers and external users use this skill to run Stability AI connector actions through the oo CLI with OOMOL-managed credentials. The documented action generates audio from text prompts and uploads the result to connector transit storage.
 
-## Reference(s): <br>
-- [Stability AI homepage](https://stability.ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-stabilityai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce or reference connector JSON responses and generated audio files stored in connector transit storage.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The security evidence reports that setup instructions include direct execution of unverified remote installer scripts in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer official package-manager installation or manually inspected, version-pinned downloads with checksums or signatures before installing the oo CLI.
+
+Risk: The security evidence notes that the skill trigger wording is broader than the documented Stability AI action.
+
+Mitigation: Confirm the exact connector action and payload with the live schema before running an action.
+
+Risk: Connector actions may consume account credits or create generated assets.
+
+Mitigation: Inspect the action schema first and confirm payload, expected cost-sensitive behavior, and destination before execution.
+
+## Reference(s):
+
+- [ClawHub Stability AI skill page](https://clawhub.ai/oomol/skills/oo-stabilityai)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Stability AI homepage](https://stability.ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector command responses are JSON when run with the documented --json flag.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

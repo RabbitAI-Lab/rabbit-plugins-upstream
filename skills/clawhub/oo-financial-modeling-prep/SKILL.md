@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Financial Modeling Prep"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.4"
   services: ["financial_modeling_prep"]
   icon: "https://static.oomol.com/logo/third-party/financial_modeling_prep.svg"
 ---

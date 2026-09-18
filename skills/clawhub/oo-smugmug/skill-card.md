@@ -1,46 +1,56 @@
-## Description: <br>
-Provides SmugMug search and read access through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SmugMug enables agents to search and read SmugMug data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to search and browse SmugMug users, folders, albums, nodes, images, image sizes, and metadata through an OOMOL-connected SmugMug account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses OOMOL as an intermediary for SmugMug access and server-side credential handling. <br>
-Mitigation: Install and connect the skill only after confirming that OOMOL is an acceptable intermediary for the SmugMug account. <br>
-Risk: First-time setup may require installing the oo CLI from an external OOMOL installer URL. <br>
-Mitigation: Run the one-time installer only from the documented source and only when the CLI is actually missing. <br>
-Risk: Connector commands can access data from the connected SmugMug account. <br>
-Mitigation: Inspect each action schema before building payloads and use the documented read-only actions unless the user explicitly approves a future write or destructive action. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve SmugMug albums, folders, images, metadata, profile information, and search results through an authenticated OOMOL connection.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-smugmug) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [SmugMug homepage](https://www.smugmug.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON connector payloads or responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-oriented connector actions return JSON data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Setup instructions include unverified remote installer commands that can execute changing network code on a user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing; prefer a verified, versioned oo CLI package or manually inspect and verify the installer before running it.
+
+Risk: Connecting OOMOL to SmugMug lets the connector read SmugMug account data through the authorized connection.
+
+Mitigation: Connect only the intended account and scopes, and run read actions only after confirming the target user, album, folder, or image.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-smugmug)
+- [SmugMug Homepage](https://www.smugmug.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only SmugMug connector actions return account or public content through the oo CLI; setup guidance may be needed when authentication or connection errors occur.]
+
+## Skill Version(s):
+
+1.0.3 (source: evidence release and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

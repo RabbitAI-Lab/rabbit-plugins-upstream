@@ -1,44 +1,56 @@
-## Description: <br>
-Operates Kommo through an OOMOL-connected account so an agent can search and read CRM data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Kommo (kommo.com). Use this skill for ANY Kommo request - searching and reading data. Whenever a task involves Kommo, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent inspect Kommo connector schemas and run get/list actions against a connected Kommo CRM account. It is intended for CRM account, company, contact, lead, pipeline, task, and user lookup or listing workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Kommo CRM records may include sensitive business or personal information. <br>
-Mitigation: Install and use the skill only for intended CRM read workflows, and review agent outputs before sharing or storing retrieved records. <br>
-Risk: First-time CLI installation or account connection can grant access to a connected Kommo account. <br>
-Mitigation: Review install and connection steps before running them, and connect only the Kommo account and scopes needed for the task. <br>
+## Use Case:
 
+External users and developers use this skill to let an agent search and read Kommo CRM account, company, contact, lead, pipeline, task, and user records through the OOMOL oo CLI. The skill directs the agent to inspect the live connector schema before building each action payload.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-kommo) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Kommo Homepage](https://www.kommo.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill guides schema-first execution through the oo CLI and returns connector responses as JSON when commands are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: The fallback setup path asks users to execute remote installer scripts directly, which the security evidence flags for review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup commands before installation and prefer a trusted, versioned, verifiable oo CLI installation source.
+
+Risk: The skill can read Kommo CRM records through OOMOL-mediated access.
+
+Mitigation: Connect Kommo only when the user is comfortable granting the connected OOMOL account access to the CRM records the skill can read.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-kommo)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Kommo homepage](https://www.kommo.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Configuration guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and meta.executionId when run with --json.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

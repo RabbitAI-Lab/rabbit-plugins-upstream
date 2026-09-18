@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "ChaserHQ"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["chaserhq"]
   icon: "https://static.oomol.com/logo/third-party/chaserhq.jpg"
 ---

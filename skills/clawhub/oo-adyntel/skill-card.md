@@ -1,44 +1,57 @@
-## Description: <br>
-Adyntel connector skill for searching ad-library data and reading keyword or ad details through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Adyntel helps agents search and read Adyntel advertising intelligence data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and analysts use this skill to query Adyntel for competitive ad intelligence across Google, LinkedIn, Meta, and TikTok, and to retrieve domain keyword metrics or TikTok ad details through their connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Adyntel-related requests can send search terms, company domains, LinkedIn page IDs, or ad IDs to external OOMOL and Adyntel services. <br>
-Mitigation: Confirm vague or sensitive queries with the user before running oo connector commands. <br>
-Risk: First-time setup includes shell installer commands for the oo CLI. <br>
-Mitigation: Review the installer source and run setup only when the oo CLI is missing or authentication or connection errors require it. <br>
+## Use Case:
 
+External users, developers, and agent operators use this skill to retrieve Adyntel ad-library and keyword intelligence for competitive advertising research across Google, LinkedIn, Meta, and TikTok.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-adyntel) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Adyntel homepage](https://www.adyntel.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May run oo CLI connector commands that return JSON data from Adyntel.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter metadata) <br>
+Risk: Setup instructions include remote installer commands that execute downloaded scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the oo CLI installer through an official, versioned OOMOL channel before running installation commands.
+
+Risk: The connector scope may be broader than the listed read and search actions.
+
+Mitigation: Use the skill for the listed read/search actions, inspect the live action schema before each connector run, and require explicit confirmation before any action that writes, deletes, posts, or changes account data.
+
+## Reference(s):
+
+- [ClawHub Adyntel Skill](https://clawhub.ai/oomol/skills/oo-adyntel)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Adyntel Homepage](https://www.adyntel.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce oo CLI schema-inspection and connector-run commands that return JSON responses from Adyntel.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

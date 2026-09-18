@@ -1,44 +1,56 @@
-## Description: <br>
-NinjaPear lets agents query company intelligence and email-provider checks through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+NinjaPear lets agents search and read company intelligence through the OOMOL-connected NinjaPear connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to retrieve NinjaPear company intelligence, check email provider status, inspect account credit balance, and resolve company websites through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Connector calls can use the user's connected NinjaPear account and credits. <br>
-Mitigation: Use the skill only for explicit NinjaPear or company-intelligence tasks, and avoid casual invocations that could trigger unwanted external lookups. <br>
-Risk: Authentication, connection, or billing failures can interrupt a requested lookup. <br>
-Mitigation: Run setup or billing steps only after a matching command failure and follow the documented OOMOL remediation path. <br>
+## Use Case:
 
+Developers and agent users use this skill to inspect NinjaPear action schemas, run company research actions, check email provider status, and view the authenticated account's credit balance through the oo CLI.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-ninjapear) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [NinjaPear homepage](https://nubela.co/) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector calls return JSON data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions include remote installer commands that execute changing code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation source first, prefer an official signed or package-manager install path when available, and do not run pipe-to-shell installers from an elevated shell.
+
+Risk: Running NinjaPear actions uses the user's OOMOL-connected NinjaPear account and can consume NinjaPear credits.
+
+Mitigation: Treat account and billing actions as user-visible operations, check credit balance when cost is a concern, and stop on HTTP 402 or OOMOL_INSUFFICIENT_CREDIT until the user recharges.
+
+## Reference(s):
+
+- [ClawHub NinjaPear Skill Page](https://clawhub.ai/oomol/skills/oo-ninjapear)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [NinjaPear homepage](https://nubela.co/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the live NinjaPear action schema before submitting JSON payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

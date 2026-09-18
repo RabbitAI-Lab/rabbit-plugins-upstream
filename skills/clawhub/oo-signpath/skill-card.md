@@ -1,42 +1,56 @@
-## Description: <br>
-SignPath lets an agent inspect SignPath action schemas, list signing policies, check signing request status, and submit fast hash-signing requests through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SignPath (signpath.io) skill for SignPath requests through the OOMOL oo CLI, including hash-signing requests, signing request status checks, and signing policy listing.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users who manage SignPath signing workflows use this skill to inspect live connector schemas, submit fast hash-signing requests, poll signing request status, and list visible signing policies. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can submit SignPath signing requests, including fast hash-signing requests, even though the available action list is not explicitly tagged as write-capable. <br>
-Mitigation: Require explicit user confirmation of the exact payload, signing policy, project, and expected effect before running fast_sign_hash. <br>
-Risk: The skill depends on sensitive SignPath credentials through the connected OOMOL account. <br>
-Mitigation: Use the existing OOMOL connection flow, avoid requesting or exposing raw credentials, and only revisit setup when an auth or connection error occurs. <br>
+## Use Case:
 
+Developers and operators use this skill to operate SignPath through an OOMOL-connected account, including submitting hash-signing requests, checking signing request status, and listing signing policies.
 
-## Reference(s): <br>
-- [ClawHub SignPath skill page](https://clawhub.ai/oomol/oo-signpath) <br>
-- [SignPath homepage](https://signpath.io/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an authenticated OOMOL account with SignPath connected; connector responses may include JSON data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and artifact metadata) <br>
+Risk: The fast_sign_hash action can create signing results for artifacts and should not be treated as a routine read-only action.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit approval before signing, and verify the exact hash, project, policy, and intended artifact before any fast_sign_hash call.
+
+Risk: The setup guidance includes remote installer commands that execute downloaded shell or PowerShell content.
+
+Mitigation: Avoid pipe-to-shell installation unless the installer source has been independently trusted and verified.
+
+## Reference(s):
+
+- [SignPath homepage](https://signpath.io/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [SignPath connection setup](https://console.oomol.com/app-connections?provider=signpath)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before execution; connector responses are JSON objects containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

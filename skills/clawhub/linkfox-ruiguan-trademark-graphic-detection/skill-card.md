@@ -1,47 +1,63 @@
-## Description: <br>
-Detects graphic trademarks in product images and searches for visually similar registered marks across supported regions to help assess listing risk. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects graphic trademarks in product images and searches for visually similar registered trademarks to help assess logo-related trademark risk.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External e-commerce sellers, brand owners, and developers use this skill to submit product images, review similar graphic trademark matches, and understand potential listing risk before publication. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Local product images may be uploaded to public LinkFox-hosted URLs. <br>
-Mitigation: Use non-confidential images, tell the user before uploading local files, and treat returned public URLs as externally accessible. <br>
-Risk: Full API responses are saved locally and may contain product, trademark, or account-context data. <br>
-Mitigation: Store outputs only in appropriate workspaces, avoid syncing saved response files to public locations, and delete them when no longer needed. <br>
-Risk: Feedback may be sent to a separate LinkFox endpoint. <br>
-Mitigation: Avoid including confidential user content in feedback and disclose feedback submission when it could affect user expectations. <br>
-Risk: A custom LINKFOX_TOOL_GATEWAY setting can redirect API traffic. <br>
-Mitigation: Use the default gateway unless a trusted operator has verified the custom endpoint. <br>
-Risk: Remote onboarding dependencies may be installed when authentication or credit problems occur. <br>
-Mitigation: Review remote onboarding packages before installation and obtain user approval when downloading is required. <br>
+## Use Case:
 
+External sellers, brand owners, and agents use this skill to compare product images against registered graphic trademarks across supported regions before listing or reviewing products.
 
-## Reference(s): <br>
-- [睿观-图形商标检测 API reference](artifact/references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-ruiguan-trademark-graphic-detection) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API parameters, shell commands, saved JSON responses, and summarized result tables.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are saved locally under LinkFox session data; large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Local image uploads create public 24-hour image URLs and send images for LinkFox processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use non-confidential product images unless public temporary hosting and third-party processing are acceptable.
+
+Risk: The artifact includes credential onboarding, billing, payment, and order commands.
+
+Mitigation: Run those commands only when intentionally setting up or purchasing LinkFox access, and use a limited API key where possible.
+
+Risk: LINKFOX_* endpoint environment variables can redirect the skill's network requests.
+
+Mitigation: Verify endpoint environment variables before use and remove unexpected overrides.
+
+Risk: The skill can auto-report feedback through a separate Feedback API.
+
+Mitigation: Review the feedback behavior before installation if automatic reporting is not acceptable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-ruiguan-trademark-graphic-detection)
+- [API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses or saved response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Trademark checks require a public image URL; large API responses are saved to local JSON files with a concise stdout summary.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

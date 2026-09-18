@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Instantly.ai"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["instantly_ai"]
   icon: "https://static.oomol.com/logo/third-party/instantly_ai.svg"
 ---

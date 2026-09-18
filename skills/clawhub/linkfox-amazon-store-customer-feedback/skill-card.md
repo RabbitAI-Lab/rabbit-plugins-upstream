@@ -1,51 +1,66 @@
-## Description: <br>
-Provides Amazon Store Customer Feedback insights through LinkFox-mediated SP-API Customer Feedback v2024-06-01 calls for item review topics, item browse nodes, review trends, browse node review topics, browse node review trends, return topics, and return trends. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes Amazon item and browse node customer feedback by querying review topics, review trends, return topics, and return trends through the Customer Feedback API.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Amazon sellers, ecommerce analysts, and agent operators use this skill to retrieve customer feedback, review trend, browse node, and return-topic data for ASINs or browse nodes through LinkFox-authenticated Amazon SP-API workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, subject to Amazon SP-API marketplace, role, and account availability. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Amazon seller feedback data is sent through LinkFox and full API responses are saved locally. <br>
-Mitigation: Run the skill only with intended seller accounts and avoid synced, shared, or repository directories unless saved linkfox data can be managed or deleted. <br>
-Risk: The security review reports contradictory credit-cost guidance in the artifact. <br>
-Mitigation: Treat calls as potentially billable until the publisher resolves the credit guidance, and confirm expected cost before repeated or exploratory calls. <br>
-Risk: The security verdict is suspicious because of local data persistence and cost-guidance ambiguity. <br>
-Mitigation: Review the security summary and guidance before deployment, then restrict use to environments where local response files and credentials are acceptable. <br>
+## Use Case:
 
+Amazon sellers, operators, and marketplace analysts use this skill to inspect aggregated review and return feedback for ASINs or browse nodes, including topics, mention volume, star-rating impact, and trend data.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-store-customer-feedback) <br>
-- [Local API reference](references/api.md) <br>
-- [Amazon Customer Feedback API use case guide](https://developer-docs.amazon.com/sp-api/docs/customer-feedback-api-v2024-06-01-use-case-guide) <br>
-- [getItemReviewTopics](https://developer-docs.amazon.com/sp-api/reference/getitemreviewtopics) <br>
-- [getItemBrowseNode](https://developer-docs.amazon.com/sp-api/reference/getitembrowsenode) <br>
-- [getBrowseNodeReviewTopics](https://developer-docs.amazon.com/sp-api/reference/getbrowsenodereviewtopics) <br>
-- [getItemReviewTrends](https://developer-docs.amazon.com/sp-api/reference/getitemreviewtrends) <br>
-- [getBrowseNodeReviewTrends](https://developer-docs.amazon.com/sp-api/reference/getbrowsenodereviewtrends) <br>
-- [getBrowseNodeReturnTopics](https://developer-docs.amazon.com/sp-api/reference/getbrowsenodereturntopics) <br>
-- [getBrowseNodeReturnTrends](https://developer-docs.amazon.com/sp-api/reference/getbrowsenodereturntrends) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands; scripts write JSON response files and print JSON or summaries to stdout.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires LinkFox API key environment configuration and the companion linkfox-amazon-store-auth skill; full API responses are saved under a local linkfox data directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The authoritative security scan marks this release suspicious because it handles seller feedback data, onboarding, billing, API keys, and locally retained response files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the publisher is trusted, use scoped pre-provisioned credentials, avoid shared workspaces, and delete retained LinkFox output files when they are no longer needed.
+
+Risk: The artifact supports environment overrides for service URLs used by its scripts.
+
+Mitigation: Prefer the default service endpoints and avoid environment URL overrides unless the replacement endpoint has been reviewed and approved.
+
+Risk: Repeated failed SP-API calls can trigger temporary store/interface protection responses.
+
+Mitigation: Do not retry automatically after repeated 400, 403, 404, or 429 responses; fix parameters or authorization first and respect retry timing before trying again.
+
+## Reference(s):
+
+- [Skill API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [Amazon Customer Feedback API v2024-06-01 Use Case Guide](https://developer-docs.amazon.com/sp-api/docs/customer-feedback-api-v2024-06-01-use-case-guide)
+- [Amazon getItemReviewTopics Reference](https://developer-docs.amazon.com/sp-api/reference/getitemreviewtopics)
+- [Amazon getItemBrowseNode Reference](https://developer-docs.amazon.com/sp-api/reference/getitembrowsenode)
+- [Amazon getBrowseNodeReviewTopics Reference](https://developer-docs.amazon.com/sp-api/reference/getbrowsenodereviewtopics)
+- [Amazon getItemReviewTrends Reference](https://developer-docs.amazon.com/sp-api/reference/getitemreviewtrends)
+- [Amazon getBrowseNodeReviewTrends Reference](https://developer-docs.amazon.com/sp-api/reference/getbrowsenodereviewtrends)
+- [Amazon getBrowseNodeReturnTopics Reference](https://developer-docs.amazon.com/sp-api/reference/getbrowsenodereturntopics)
+- [Amazon getBrowseNodeReturnTrends Reference](https://developer-docs.amazon.com/sp-api/reference/getbrowsenodereturntrends)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts save full API responses under a local linkfox session data directory and may print either full JSON or a summary depending on response size.]
+
+## Skill Version(s):
+
+1.0.8 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

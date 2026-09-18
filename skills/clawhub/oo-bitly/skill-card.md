@@ -1,43 +1,55 @@
-## Description: <br>
-Operates Bitly through the OOMOL oo CLI for reading Bitly data, creating shortened links, and updating existing Bitlinks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for Bitly requests including reading, creating, and updating data through the OOMOL-connected Bitly connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to handle Bitly requests through an OOMOL-connected account, including inspecting user or group data, creating short links, and updating editable Bitlink fields. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create or update Bitly resources through the user's connected OOMOL Bitly account. <br>
-Mitigation: Confirm the exact payload and intended effect before running account-changing actions, including Bitlink updates and link creation. <br>
-Risk: The artifact tags update_bitlink as a write action, while security guidance also treats shorten_link as a write because it creates a new link. <br>
-Mitigation: Treat shorten_link and update_bitlink as account-changing actions that require user confirmation before execution. <br>
+## Use Case:
 
+External users and developers use this skill to inspect Bitly action schemas, retrieve Bitlink, group, and user details, list groups, create short links, and update existing Bitlinks with confirmation for write actions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-bitly) <br>
-- [Bitly Homepage](https://bitly.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses OOMOL server-side injected credentials and requires schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md metadata) <br>
+Risk: Setup guidance includes unverified remote install commands for the oo CLI that can execute changing code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installing and prefer a signed or otherwise verifiable oo CLI release.
+
+Risk: Bitly write actions can change existing links or account-visible data.
+
+Mitigation: Inspect the live action schema, check the exact payload and intended account changes, and obtain user confirmation before running write actions.
+
+## Reference(s):
+
+- [ClawHub Bitly skill page](https://clawhub.ai/oomol/skills/oo-bitly)
+- [Bitly homepage](https://bitly.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill directs the agent to inspect live connector schemas before constructing requests and to confirm state-changing Bitly updates with the user.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

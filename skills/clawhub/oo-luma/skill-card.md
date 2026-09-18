@@ -1,43 +1,61 @@
-## Description: <br>
-Luma (lu.ma) helps an agent search and read Luma account data through the OOMOL oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Luma provides guidance for reading Luma calendar, event, guest, and profile data through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect Luma connector schemas and run read-only Luma actions for calendars, events, guests, and the current user profile through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Luma calendar, event, guest, and profile reads may expose sensitive account data. <br>
-Mitigation: Review the Luma connection scopes in OOMOL and run read actions only for data the user requested. <br>
-Risk: Future connector actions tagged write or destructive could change or remove Luma data. <br>
-Mitigation: Require explicit confirmation of the exact payload, target, and effect before running those actions. <br>
-Risk: Authentication, connection, credential, scope, or billing failures may require account setup steps. <br>
-Mitigation: Run setup, connection, or billing steps only after a matching command failure and clear user intent. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect live Luma connector schemas and run read actions for calendars, events, guests, and the current user profile through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Luma homepage](https://lu.ma) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId when returned by the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: skill metadata and release evidence) <br>
+Risk: Fallback setup asks users to run remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the CLI through a verified package where possible, or manually download and inspect a pinned installer with a published checksum or signature before running it.
+
+Risk: The connector can read Luma calendar, event, guest, and profile data from a connected account.
+
+Mitigation: Connect only approved accounts and scopes, and avoid exposing returned calendar, event, guest, or profile data beyond the intended task.
+
+Risk: Tagged write or destructive actions, if present in live connector schemas, could change or remove Luma data.
+
+Mitigation: Confirm the exact payload, target, and expected effect with the user before running any action tagged write or destructive.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-luma)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Luma homepage](https://lu.ma)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown instructions with shell command snippets and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

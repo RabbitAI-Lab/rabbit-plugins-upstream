@@ -1,41 +1,55 @@
-## Description: <br>
-Guru (getguru.com) skill for searching and reading Guru cards, collections, identity, and team statistics through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guru (getguru.com). Use this skill for Guru requests that search and read data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to search and read Guru workspace content visible to their connected OOMOL account, including cards, collections, identity, and team statistics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Guru search and read results may expose private workspace knowledge visible to the connected account. <br>
-Mitigation: Use the skill only with accounts whose Guru access is appropriate for the task, and avoid sharing returned content outside authorized contexts. <br>
-Risk: The skill depends on OOMOL-managed Guru connectivity and server-side credential handling. <br>
-Mitigation: Complete the oo CLI and OOMOL connection setup only when OOMOL is trusted for the Guru integration. <br>
+## Use Case:
 
+Employees and external users use this skill to search, list, and read Guru knowledge resources available to their connected Guru account.
 
-## Reference(s): <br>
-- [Guru homepage](https://www.getguru.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides the agent to inspect live connector schemas before running Guru read and search actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Setup instructions can run remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and trust the OOMOL installer source before running install commands, or use safer install and verification options.
+
+Risk: Connector payloads may not match the current Guru action contract.
+
+Mitigation: Inspect the live action schema before constructing payloads.
+
+## Reference(s):
+
+- [Guru homepage](https://www.getguru.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector actions are read-only in the artifact and require live schema inspection before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

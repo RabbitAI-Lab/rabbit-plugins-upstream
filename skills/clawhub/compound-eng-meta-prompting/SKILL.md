@@ -2,19 +2,26 @@
 name: ia-meta-prompting
 class: meta
 description: >-
-  Structured reasoning modifiers (/think, /verify, /adversarial, /edge,
-  /confidence, /assumptions, etc.) to stress-test decisions, surface
-  assumptions, or enumerate edge cases. Use when validating an important
+  Structured decision modifiers (/think, /verify, /adversarial, /edge,
+  /confidence, /assumptions, etc.) to stress-test conclusions, evidence,
+  assumptions, alternatives, and edge cases. Use when validating an important
   design, architecture decision, or ambiguous plan before committing.
 ---
 
 # Meta-Prompting
 
-Enhanced reasoning via `/commands` or natural language. Commands combine left-to-right: `/verify /adversarial`. Auto-trigger when context warrants -- note which pattern applied. Output: apply the pattern inline, then mark the result (e.g., `VERIFIED ANSWER:`, `REVISED ANSWER:`, confidence tier).
+Stress-test decisions via `/commands` or natural language. Commands combine
+left-to-right: `/verify /adversarial`. Auto-trigger when context warrants and
+note which pattern applied. Output a decision record with the conclusion,
+decisive evidence, alternatives, uncertainty, and the applicable marker (e.g.,
+`VERIFIED ANSWER:`, `REVISED ANSWER:`, confidence tier).
 
 ## Patterns
 
-**`/think`** | `/show` -- Show reasoning step-by-step: decision points, alternatives considered, why each accepted/rejected. With `/think doubt`: after each step, flag what could be wrong and why before proceeding.
+**`/think`** | `/show` -- Present a concise decision record: conclusion,
+decisive evidence, alternatives considered, rejection reasons, and material
+uncertainty. With `/think doubt`, state what evidence could overturn each
+material conclusion.
 
 **`/adversarial`** | `/argue` -- After answering, steelman the opposing case. 3 strongest counterarguments ranked by severity. Identify blind spots and unstated assumptions.
 
@@ -26,7 +33,9 @@ Enhanced reasoning via `/commands` or natural language. Commands combine left-to
 ```
 Custom keys: `/json {keys: summary, risks, recommendation}`
 
-**`/budget`** | `/deep` -- Extended thinking space (~500 words) showing dead ends and reasoning pivots, then clearly separated final answer.
+**`/budget`** | `/deep` -- Extended decision record (~500 words) covering
+evidence, the strongest counterargument, alternatives, trade-offs, and
+uncertainty, followed by a clearly separated final answer.
 
 **`/compare`** | `/vs` -- Compare options as table. Default dimensions: speed, accuracy, cost, complexity, maintenance. Custom: `/compare [dim1, dim2]`.
 
@@ -35,10 +44,10 @@ Custom keys: `/json {keys: summary, risks, recommendation}`
 **`/edge`** | `/break` -- 5+ inputs/scenarios that break the approach. Code: null/empty, concurrency, overflow, encoding, auth bypass. Strategies: market conditions, timing, dependencies.
 *Auto-triggers on: security, validation, parsing contexts.*
 
-**`/verify-think`** | `/check` -- Three phases: (1) **Answer** direct response, (2) **Challenge** 3 ways it could be wrong, (3) **Verify** investigate each, update if needed. Mark final as `VERIFIED ANSWER:` or `REVISED ANSWER:`. Distinct from the `/ia-verify` slash command, which runs the full pre-PR verification pipeline.
+**`/verify-think`** | `/check` -- Three phases: (1) **Answer** direct response, (2) **Challenge** 3 ways it could be wrong, (3) **Verify** investigate each, update if needed. Mark final as `VERIFIED ANSWER:` or `REVISED ANSWER:`. Distinct from the `/ia-verify` slash command (Claude Code), which runs the full pre-PR verification pipeline.
 *Auto-triggers on: architecture decisions, critical choices, "Am I right?"*
 
-**`/flip`** | `/alt` -- Identify the approach you'd take by default and state it. Then propose an alternative that uses a different mechanism (different data structure, different layer, different abstraction). State the conditions under which the alternative beats the default. Override: `/flip 3` for top 3 alternatives.
+**`/flip`** | `/alt` -- Identify the default approach and state it. Then propose an alternative that uses a different mechanism (different data structure, different layer, different abstraction). State the conditions under which the alternative beats the default. Override: `/flip 3` for top 3 alternatives.
 *Auto-triggers on: architecture decisions where the "easy" answer may break at scale.*
 
 **`/assumptions`** | `/presume` -- Before answering, list every implicit assumption in the question/task. Then answer with assumptions explicit. The assumption list is often more valuable than the answer.
@@ -63,9 +72,13 @@ Custom keys: `/json {keys: summary, risks, recommendation}`
 
 - Separate combined pattern outputs with `---`
 - Keep core answer prominent -- patterns enhance, not bury the response
+- Present decision-relevant rationale and evidence. Do not narrate private
+  step-by-step reasoning or dead ends.
 - Accept new pattern definitions mid-conversation ("Add `/eli5` for explain like I'm 5") -- apply for the session
 
 ## Verify
 
 - Pattern marker present in output (e.g., `VERIFIED ANSWER:` for /verify)
 - Core answer appears before any pattern-output separator (`---`)
+- Decision records distinguish observed evidence, inference, assumptions, and
+  uncertainty

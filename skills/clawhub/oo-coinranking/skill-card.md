@@ -1,45 +1,56 @@
-## Description: <br>
-Coinranking (coinranking.com). Use this skill for ANY Coinranking request: searching and reading data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Coinranking (coinranking.com). Use this skill for Coinranking search and read-only cryptocurrency data requests through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to query Coinranking cryptocurrency market data through the OOMOL oo CLI, including coin details, price history, global statistics, reference currencies, coin lists, and search suggestions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an authenticated OOMOL connection to Coinranking and may depend on sensitive credentials managed outside the agent. <br>
-Mitigation: Use the existing OOMOL connection flow and avoid exposing raw API tokens in prompts, files, or command output. <br>
-Risk: Coinranking market data can be time-sensitive and may be incomplete or stale for financial decisions. <br>
-Mitigation: Treat returned cryptocurrency data as informational and verify critical market decisions against authoritative sources before acting. <br>
-Risk: The skill executes oo CLI shell commands against a connected external service. <br>
-Mitigation: Inspect the live action schema before building payloads and review commands before execution. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Coinranking coin details, price history, global cryptocurrency market statistics, reference currencies, and keyword-based suggestions through the oo CLI.
 
-## Reference(s): <br>
-- [Coinranking homepage](https://coinranking.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Skill page](https://clawhub.ai/oomol/oo-coinranking) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill guides agents to inspect each live action schema before constructing payloads and returns Coinranking connector responses as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill metadata) <br>
+Risk: Fallback setup instructions include remote installer commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the OOMOL installer source, version, and integrity before running the macOS, Linux, or Windows installer command.
+
+Risk: Coinranking actions depend on an authenticated OOMOL-connected account.
+
+Mitigation: Run routine read-only actions only after the oo CLI is installed, signed in, and connected; use setup or reconnection steps only after a matching command failure.
+
+## Reference(s):
+
+- [Coinranking Skill on ClawHub](https://clawhub.ai/oomol/skills/oo-coinranking)
+- [Coinranking Homepage](https://coinranking.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses oo CLI connector schemas before running Coinranking actions; routine actions are read-only.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

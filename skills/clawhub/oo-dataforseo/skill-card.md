@@ -1,42 +1,55 @@
-## Description: <br>
-DataForSEO (dataforseo.com). Use this skill for DataForSEO search and read requests through the OOMOL connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+DataForSEO enables agents to read, create, and update DataForSEO data through the OOMOL connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, analysts, and SEO practitioners use this skill to retrieve DataForSEO backlinks, SERP, keyword, ranking, account, balance, limits, rates, and usage data through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses OOMOL as an intermediary for DataForSEO access and may require installing and signing into the oo CLI. <br>
-Mitigation: Install and use the skill only when the user intends to access DataForSEO through OOMOL. <br>
-Risk: Connected DataForSEO account details such as balance, rates, limits, and usage can be retrieved. <br>
-Mitigation: Treat account diagnostics as sensitive account data and request them only when relevant to the user's task. <br>
+## Use Case:
 
+Developers and agents use this skill to operate DataForSEO through an OOMOL-connected account for SEO, SERP, backlink, keyword, competitor, domain ranking, and Amazon Merchant API workflows.
 
-## Reference(s): <br>
-- [DataForSEO homepage](https://dataforseo.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas and returns DataForSEO response data with execution metadata when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: evidence release metadata and skill frontmatter) <br>
+Risk: Setup instructions include a remote installer that could run arbitrary code if its source is compromised.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing; prefer a trusted, versioned oo CLI source with checksum or signature verification.
+
+Risk: Write actions can create paid DataForSEO tasks or change account state.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [DataForSEO homepage](https://dataforseo.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live action schemas before constructing payloads; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

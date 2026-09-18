@@ -1,45 +1,56 @@
-## Description: <br>
-Dixa (dixa.com). Use this skill for ANY Dixa request -- searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Dixa (dixa.com). Use this skill for ANY Dixa request: searching and reading data through the OOMOL-connected Dixa connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect Dixa connector schemas and read Dixa agents, conversations, end users, conversation messages, and presence through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Read actions can expose sensitive support data, including customer conversations, end-user records, and agent presence. <br>
-Mitigation: Use least-privilege Dixa credentials and avoid retrieving or sharing records beyond the user's stated task. <br>
-Risk: Connector contracts can change, which may make stale payload assumptions inaccurate. <br>
-Mitigation: Inspect the live action schema before constructing each action payload. <br>
-Risk: Authentication, connection, scope, credential, or billing failures can trigger unnecessary setup actions. <br>
-Mitigation: Run setup or recovery steps only after the corresponding command failure is observed. <br>
+## Use Case:
 
+Support, operations, and developer users can use this skill to inspect Dixa agents, admins, conversations, messages, end users, and presence statuses through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-dixa) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Dixa Homepage](https://www.dixa.com) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action payloads; read actions may return Dixa support data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: The setup instructions include remote installer commands that execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Inspect and validate installer scripts or use a verified installer before running them.
+
+Risk: The connector can expose Dixa support data through the user's connected OOMOL account.
+
+Mitigation: Limit requests to the Dixa records required for the task and avoid retrieving unnecessary support data.
+
+## Reference(s):
+
+- [ClawHub Dixa skill page](https://clawhub.ai/oomol/skills/oo-dixa)
+- [Dixa homepage](https://www.dixa.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live action schemas before constructing Dixa connector requests.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "KIE.AI"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["kie_ai"]
   icon: "https://static.oomol.com/logo/third-party/kie_ai.png"
 ---

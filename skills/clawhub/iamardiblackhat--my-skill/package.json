@@ -1,0 +1,12 @@
+{
+  "name": "my-skill",
+  "version": "1.0.0",
+  "description": "A sample OpenClaw skill",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["openclaw", "skill"],
+  "author": "iamardiblackhat",
+  "license": "MIT"
+}

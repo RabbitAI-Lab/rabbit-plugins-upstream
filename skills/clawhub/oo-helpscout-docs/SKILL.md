@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Help Scout Docs"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["helpscout_docs"]
   icon: "https://static.oomol.com/logo/third-party/helpscout_docs.svg"
 ---

@@ -1,43 +1,57 @@
-## Description: <br>
-Databox (databox.com). Use this skill for ANY Databox request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Databox (databox.com). Use this skill for ANY Databox request: reading, creating, updating, and deleting data through the OOMOL-connected Databox connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Databox through an OOMOL-connected account, including listing accounts, checking dataset ingestion status, creating data sources and datasets, pushing dataset records, and deleting Databox resources. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The `push_dataset_data` action changes Databox data but is not marked for confirmation in the artifact's action list. <br>
-Mitigation: Require explicit user confirmation of the target dataset and payload before running `push_dataset_data`. <br>
-Risk: The skill requires sensitive Databox credentials through an OOMOL-connected account. <br>
-Mitigation: Use the server-side credential flow and avoid exposing raw Databox tokens in prompts, files, or command arguments. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Databox accounts, ingestion data sources, datasets, and dataset records through the OOMOL `oo` CLI. It supports reading account and ingestion status, creating resources, pushing JSON records, and deleting Databox resources after explicit approval.
 
-## Reference(s): <br>
-- [Databox homepage](https://databox.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-databox) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions can read Databox data, write datasets and data sources, or delete Databox resources through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: The first-time setup path uses remote installer commands that can execute changing code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before installation and prefer official OOMOL installation documentation or a verified, pinned installer.
+
+Risk: Write and delete actions can change or remove Databox resources.
+
+Mitigation: Require explicit approval with the exact target and payload before running state-changing or destructive Databox actions.
+
+## Reference(s):
+
+- [Databox homepage](https://databox.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-databox)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose or run OOMOL `oo connector` commands; state-changing Databox actions require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

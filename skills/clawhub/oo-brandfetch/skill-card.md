@@ -1,46 +1,56 @@
-## Description: <br>
-Brandfetch (brandfetch.com). Use this skill for ANY Brandfetch request: searching and reading brand data through an OOMOL-connected Brandfetch account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Brandfetch through an OOMOL-connected account to search and read brand data instead of calling the Brandfetch API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to retrieve Brandfetch brand profiles and resolve transaction labels through an OOMOL-connected Brandfetch account. It is suited for brand enrichment, merchant identification, and lookup workflows that should avoid direct Brandfetch API token handling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The first-time setup path installs the oo CLI with a remote installer. <br>
-Mitigation: Review the oo CLI installer before running the setup command, as recommended by the security guidance. <br>
-Risk: Brandfetch lookups may use the user's OOMOL connection and account credits. <br>
-Mitigation: Install and run the skill only when Brandfetch access through an OOMOL-connected account is intended; stop and resolve billing or credit errors before retrying. <br>
-Risk: Connector action schemas can change over time. <br>
-Mitigation: Fetch the live Brandfetch connector schema before constructing each action payload. <br>
+## Use Case:
 
+Developers and agents use this skill to fetch Brandfetch brand profiles and resolve transaction labels through the OOMOL-connected Brandfetch connector.
 
-## Reference(s): <br>
-- [ClawHub Brandfetch skill page](https://clawhub.ai/oomol/skills/oo-brandfetch) <br>
-- [Publisher profile: oomol](https://clawhub.ai/user/oomol) <br>
-- [Brandfetch homepage](https://brandfetch.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution; command responses are JSON objects with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: release evidence and SKILL.md metadata) <br>
+Risk: Setup instructions include one-line remote installer commands that execute local code without local verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path first, prefer official version-pinned or inspectable installer packages, and run remote shell installers only when OOMOL's installer infrastructure is trusted.
+
+Risk: Brandfetch connector action contracts can change over time.
+
+Mitigation: Fetch the live connector schema before each run and build payloads only from the current schema.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-brandfetch)
+- [Brandfetch Homepage](https://brandfetch.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON CLI responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live Brandfetch connector schemas before each run; OOMOL keeps credentials server-side.]
+
+## Skill Version(s):
+
+1.0.4 (source: skill frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

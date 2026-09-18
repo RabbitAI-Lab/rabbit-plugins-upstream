@@ -1,5 +1,10 @@
 # SOLO Mission Platform — Wallet Setup (On-Chain Missions)
 
+> ⚠️ **This is the Base wallet path — Base is closed to new mission creation.**
+> For any new on-chain mission, set up a Solana wallet instead: see
+> `references/solana-wallet.md`. This document remains accurate only for resuming
+> or managing a Base mission created before the closure.
+
 On-chain missions require a Sponsor wallet — an Ethereum EOA that signs `createTask()`,
 `cancelTask()`, `emergencyRefund()`, and `claimRefund()` on EscrowVault. All four
 functions must be called from the **same address**.
@@ -26,7 +31,17 @@ Set `WALLET_ADDRESS` and proceed to `references/onchain.md`. No new wallet neede
 
 ### Prerequisites
 
-- Foundry installed: `curl -L https://foundry.paradigm.xyz | bash && foundryup`
+- Foundry installed. `curl -L https://foundry.paradigm.xyz | bash` fetches only the
+  small `foundryup` bootstrap script — read it before running (`curl -L
+  https://foundry.paradigm.xyz -o foundryup-installer.sh && less
+  foundryup-installer.sh`) rather than piping blind. Then install a **pinned**
+  version rather than implicit latest, so this doesn't silently install a different
+  toolchain next time it's run:
+  ```bash
+  foundryup -i v1.7.1   # check https://github.com/foundry-rs/foundry/releases for current
+  ```
+  `foundryup` verifies binary checksums by default for the actual toolchain download —
+  only pass `--force` if you specifically need to skip that, and don't by default.
 - Verify: `cast --version`
 
 ### Generate the keypair
@@ -60,8 +75,17 @@ cast wallet new
 
 ## Securing the private key
 
-Encrypt the key so it never exists as plaintext on the server. Decrypt into memory
-only at runtime and unset immediately after use.
+Encrypt the key so it never exists as plaintext on the server, then convert it into
+a Foundry keystore **once** — after that, no `cast send` call ever needs the raw key
+again. This matters beyond the initial storage: `references/onchain.md`'s call
+sequence runs `cast send ... --private-key $PRIVATE_KEY` at every step (`approve`,
+`createTask`, `cancelTask`, `claimRefund`, `emergencyRefund`) over the life of a
+mission, and each of those invocations puts the raw key on that process's command
+line — visible to anything that can list processes on the box (`ps`, other users,
+monitoring agents). A keystore removes the key from that path entirely: only an
+encrypted file and a separate passphrase are ever referenced at call time, and
+`references/onchain.md` and the on-chain section of `SKILL.md` both assume this
+setup (`$KEYSTORE_PATH` / `$KEYSTORE_PASSWORD_FILE`, not `$PRIVATE_KEY`).
 
 ### Option A — OpenSSL (works everywhere, no cloud required)
 
@@ -80,19 +104,25 @@ scp wallet.enc user@your-server:/path/to/wallet.enc
 chmod 600 /path/to/wallet.enc
 ```
 
-At runtime (decrypt into memory only):
+At runtime, decrypt into memory and **immediately import into a keystore** — this is
+the one and only time the raw key exists outside `wallet.enc`:
 
 ```bash
 PRIVATE_KEY=$(openssl enc -d -aes-256-cbc -pbkdf2 -in wallet.enc)
-# ... use PRIVATE_KEY in cast send calls ...
+cast wallet import solo-sponsor --private-key "$PRIVATE_KEY" \
+  --keystore-dir ~/.foundry/keystores   # prompts for a NEW keystore passphrase
 unset PRIVATE_KEY
 ```
 
-Store the passphrase in a password manager. **Never store it on the same server as `wallet.enc`.**
+Store both passphrases (the OpenSSL one for `wallet.enc`, and the new keystore one)
+in a password manager. **Never store either on the same server as the file it
+protects.**
 
-### Option B — Cloud KMS (passphrase-free, recommended for automated agents)
+### Option B — Cloud KMS (passphrase-free at the encryption layer)
 
-The cloud VM authenticates automatically via its IAM role — no passphrase needed at runtime.
+The cloud VM authenticates automatically via its IAM role — no OpenSSL passphrase
+needed to decrypt `wallet.enc`. You still set a keystore passphrase in the import
+step below; that one is inherent to the keystore format, not something KMS replaces.
 
 | Environment | KMS option |
 |---|---|
@@ -109,9 +139,27 @@ PRIVATE_KEY=$(gcloud kms decrypt \
   --ciphertext-file=wallet.enc \
   --plaintext-file=- \
   --key=my-key --keyring=my-keyring --location=global)
-# ... use PRIVATE_KEY ...
+cast wallet import solo-sponsor --private-key "$PRIVATE_KEY" \
+  --keystore-dir ~/.foundry/keystores
 unset PRIVATE_KEY
 ```
+
+### Storing the keystore passphrase for unattended (agent-driven) signing
+
+An agent running the on-chain lifecycle end-to-end can't sit at an interactive
+password prompt for every `cast send`. Put the keystore passphrase — not the private
+key — in a file only the owner can read, the same way `wallet.enc`'s own passphrase
+would be handled if it had to live on the box:
+
+```bash
+echo -n "your-keystore-passphrase" > ~/.foundry/keystore.pass
+chmod 600 ~/.foundry/keystore.pass
+```
+
+This is a strictly smaller blast radius than the key itself: anyone who reads this
+file still needs the keystore file (`~/.foundry/keystores/solo-sponsor`) to sign
+anything, and anyone who copies the keystore file still needs this passphrase.
+Neither alone moves funds — unlike a leaked `$PRIVATE_KEY`, which does.
 
 ---
 
@@ -140,7 +188,12 @@ cast call 0x036CbD53842c5426634e7929541eC2318f3dCF7e \
 
 ```bash
 export WALLET_ADDRESS=0xYourWalletAddress
-export PRIVATE_KEY=0xYourPrivateKey   # from decryption step above — unset after use
+export KEYSTORE_PATH=~/.foundry/keystores/solo-sponsor
+export KEYSTORE_PASSWORD_FILE=~/.foundry/keystore.pass
 ```
 
-These are the values referenced throughout `references/onchain.md`.
+No `PRIVATE_KEY` variable — the keystore import step above is the last time the raw
+key exists anywhere outside `wallet.enc`. These three values are what
+`references/onchain.md` and the on-chain section of `SKILL.md` actually reference for
+every `cast send` call (`--keystore $KEYSTORE_PATH --password-file
+$KEYSTORE_PASSWORD_FILE` in place of `--private-key`).

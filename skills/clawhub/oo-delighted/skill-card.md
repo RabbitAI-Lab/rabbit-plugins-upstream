@@ -1,45 +1,56 @@
-## Description: <br>
-Operate Delighted through an OOMOL-connected account to read, create, update, delete, and unsubscribe Delighted people and retrieve metrics and survey data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Delighted helps agents read, create, update, and delete Delighted data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External developers and operators use this skill to manage Delighted account data through the OOMOL oo CLI, including metrics, people, bounced or unsubscribed lists, survey responses, and guarded write or destructive actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to a connected Delighted account through the OOMOL oo CLI. <br>
-Mitigation: Install and use it only when OOMOL CLI access to the Delighted account is intended. <br>
-Risk: Create or update actions can change Delighted account data. <br>
-Mitigation: Review the exact JSON payload and expected effect before approving write actions. <br>
-Risk: Delete and unsubscribe actions can remove survey history or suppress future contact. <br>
-Mitigation: Confirm the target person and get explicit approval before running destructive actions. <br>
+## Use Case:
 
+External users and developers use this skill to operate Delighted from an agent workflow, including people management, unsubscribe and delete workflows, survey response listing, and NPS or metrics retrieval.
 
-## Reference(s): <br>
-- [ClawHub Delighted skill page](https://clawhub.ai/oomol/oo-delighted) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Delighted homepage](https://delighted.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration instructions, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: Setup instructions include remote installer scripts that should be reviewed before use.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through verified official release instructions and prefer pinned versions, checksums, or signed packages.
+
+Risk: Write, delete, and unsubscribe actions can change or remove Delighted account data.
+
+Mitigation: Confirm the exact action, payload, and target with the user before executing state-changing or destructive commands.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-delighted)
+- [Delighted Homepage](https://delighted.com)
+- [oo CLI Repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [State-changing and destructive Delighted actions require confirmation of the exact payload and target before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

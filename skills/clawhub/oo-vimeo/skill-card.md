@@ -1,46 +1,56 @@
-## Description: <br>
-Vimeo (vimeo.com). Use this skill for ANY Vimeo request: reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Vimeo (vimeo.com). Use this skill for ANY Vimeo request: reading, creating, updating, and deleting data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to operate Vimeo through an OOMOL-connected account, including reading account and video information, organizing videos, uploading or replacing videos from URLs, and managing folders, showcases, and tags. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can modify Vimeo account state through upload, update, replacement, tagging, folder, showcase, and removal actions. <br>
-Mitigation: Confirm the exact action, target, and payload with the user before running any write action. <br>
-Risk: Destructive actions can delete videos, delete folders, remove tags, or remove videos from organizational containers. <br>
-Mitigation: Require explicit approval for destructive actions and verify the target identifier before execution. <br>
-Risk: The connector depends on an OOMOL-connected Vimeo OAuth account and the oo CLI. <br>
-Mitigation: Authorize OAuth only when the user trusts OOMOL and the oo CLI with the requested Vimeo scopes, and use setup steps only after authentication or connection failures. <br>
+## Use Case:
 
+Developers and agents use this skill to manage Vimeo videos, folders, showcases, tags, metadata, download links, uploads, replacements, and account information through an authenticated OOMOL connector.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-vimeo) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Vimeo](https://vimeo.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands call the oo CLI against the Vimeo connector and may return JSON responses containing connector data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Fallback setup instructions pipe remote installer scripts directly into bash or PowerShell without pinning or verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source first and prefer a trusted, versioned, verified oo CLI installation path before installing.
+
+Risk: Write and destructive Vimeo actions can alter or delete videos, folders, showcases, tags, or metadata.
+
+Mitigation: Confirm the exact action, target, payload, and expected effect with the user before running write or destructive commands.
+
+## Reference(s):
+
+- [ClawHub Vimeo skill page](https://clawhub.ai/oomol/skills/oo-vimeo)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Vimeo homepage](https://vimeo.com)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown guidance with oo CLI commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include connector JSON output with data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

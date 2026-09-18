@@ -1,39 +1,61 @@
-## Description: <br>
-Clinical-facility edition of iaiops for hospital building systems, medical-gas monitoring, OPC-UA plant SCADA, and patient-safety-oriented checks for isolation rooms, operating rooms, and medical gas. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+iaiops-clinical helps agents inspect clinical facility systems across BACnet/IP, Modbus, and OPC-UA, with patient-safety checks for isolation room pressure, medical gas pressure, and operating room environment readings.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Hospital facilities engineers, clinical operations teams, and automation specialists use this skill to inspect BACnet, Modbus, and OPC-UA signals, prioritize patient-safety checks, and triage facility alarms or downtime. It supports read-first workflows for isolation-room pressure, operating-room environment, medical-gas source pressure, and related building-control diagnostics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is mostly documentation-only, but it claims read-only behavior while also documenting high-impact BACnet write capability for hospital building controls. <br>
-Mitigation: Treat the skill as potentially write-capable; use it only where BACnet write access is intentionally allowed, external approval controls are enforced, and high-impact actions remain dry-run or explicitly approved. <br>
-Risk: Hospital and clinical OT environments can affect patient safety, and the evidence says Modbus capabilities should be clarified before deployment. <br>
-Mitigation: Review the skill carefully before installing in a hospital or clinical OT environment, verify Modbus behavior with the publisher, and rely on onsite clinical, facilities, and NFPA 99 controls for safety-critical decisions. <br>
+## Use Case:
 
+Developers, facilities engineers, and clinical operations teams use this skill to guide agents through read-first hospital facilities diagnostics, protocol checks, patient-safety inspections, downtime triage, and configuration drafting. Its outputs are decision-support artifacts and operating guidance that require site review before use in patient-safety or OT environments.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline commands and structured operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include clinical-facility safety checks, protocol-specific tool recommendations, and approval-oriented guidance for write-capable BACnet actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.19.0 (source: server release metadata) <br>
+Risk: The release evidence flags the skill as suspicious because it presents itself as read-only while documenting a high-risk BACnet write tool for clinical facilities.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the skill as write-capable, restrict BACnet credentials and network reachability to what is explicitly needed, and require independent human approval before any write.
+
+Risk: Outbound export and publish behavior may expose hospital facilities or OT data beyond the intended environment.
+
+Mitigation: Restrict or disable export and publish destinations unless they are explicitly approved for the site and data class.
+
+Risk: Use in hospital and OT environments can inherit dependency and deployment supply-chain risk.
+
+Mitigation: Install dependencies only from pinned, verified sources in an isolated environment.
+
+Risk: Clinical safety checks are structural analyses and may not reflect final site authority for life-safety decisions.
+
+Mitigation: Use outputs as decision support and verify results against site procedures, NFPA 99 alarm panels, infection-control practice, and authorized facilities review.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-clinical)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with command snippets, check results, configuration drafts, and structured analysis summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include references to source readings, worst-first issue ordering, dry-run write guidance, and site-specific review cautions.]
+
+## Skill Version(s):
+
+0.28.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

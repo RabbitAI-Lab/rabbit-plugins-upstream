@@ -1,44 +1,61 @@
-## Description: <br>
-Operates Elorus through an OOMOL-connected account so an agent can read, create, and update contacts, invoices, and products or services. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Elorus (elorus.com). Use this skill for ANY Elorus request - reading, creating, and updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Business users and developers can use this skill to have an agent list, inspect, create, and update Elorus contacts, invoices, and products or services through the OOMOL connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create and update Elorus contacts, invoices, and products or services. <br>
-Mitigation: Require user confirmation of the exact payload and intended effect before approving any write action. <br>
-Risk: The skill depends on a connected OOMOL account and server-side connector credentials. <br>
-Mitigation: Install and use it only when OOMOL handling connector credentials is acceptable for the deployment. <br>
+## Use Case:
 
+External users and developers use this skill to operate Elorus through an OOMOL-connected account, including listing, retrieving, creating, and updating contacts, invoices, and products or services.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-elorus) <br>
-- [Elorus Homepage](https://www.elorus.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [OOMOL Elorus Connection](https://console.oomol.com/app-connections?provider=elorus) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live connector schema inspection before constructing payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Fallback setup includes remote installer one-liners that run downloaded shell or PowerShell scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a reviewed, version-pinned, or otherwise verified method instead of allowing an agent to run installer one-liners automatically.
+
+Risk: Write actions can create or update Elorus contacts, invoices, and products or services.
+
+Mitigation: Confirm the exact payload and intended effect with the user before running any action tagged write.
+
+Risk: The connector operates through an OOMOL-connected Elorus account with server-side credentials.
+
+Mitigation: Use only with trusted OOMOL and Elorus accounts, and resolve authentication, connection, scope, or billing failures through deliberate user-controlled setup steps.
+
+## Reference(s):
+
+- [Elorus homepage](https://www.elorus.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-elorus)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, API Calls, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

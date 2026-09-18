@@ -1,45 +1,57 @@
-## Description: <br>
-SheetDB helps agents read, search, create, update, and delete SheetDB spreadsheet rows through an OOMOL-connected SheetDB account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill manages SheetDB (sheetdb.io) requests, including reading, creating, updating, and deleting data through the OOMOL-connected SheetDB connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to let an agent inspect SheetDB schemas and safely read, search, create, update, or delete spreadsheet rows through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, and delete spreadsheet rows in the connected SheetDB account. <br>
-Mitigation: Confirm the exact payload, matching criteria, and expected effect with the user before any write or destructive action. <br>
-Risk: The skill depends on the oo CLI and an OOMOL-connected SheetDB account. <br>
-Mitigation: Install and use it only when SheetDB access through the connected account is intended, and review the oo CLI installation source before running installer commands. <br>
-Risk: Incorrect action payloads or stale schema assumptions could affect the wrong data. <br>
-Mitigation: Fetch the live action schema with `oo connector schema` before constructing each action payload. <br>
+## Use Case:
 
+External users and developers use this skill to inspect SheetDB spreadsheet structure, list and search rows, count records, and perform confirmed create, update, or delete operations through the oo CLI.
 
-## Reference(s): <br>
-- [SheetDB homepage](https://sheetdb.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub SheetDB skill page](https://clawhub.ai/oomol/skills/oo-sheetdb) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live schema inspection before action payloads and explicit user confirmation for write or destructive actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and frontmatter metadata) <br>
+Risk: Setup instructions use remote installer scripts that run directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installation; download the oo CLI installer from a trusted release channel and verify its checksum or signature before execution.
+
+Risk: Create, update, and delete actions can change or remove SheetDB spreadsheet data.
+
+Mitigation: Require explicit user confirmation of the exact target, payload, and expected effect before running write or destructive actions.
+
+## Reference(s):
+
+- [SheetDB homepage](https://sheetdb.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-sheetdb)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, API Calls, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires the oo CLI, an OOMOL sign-in, and a connected SheetDB account for live actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

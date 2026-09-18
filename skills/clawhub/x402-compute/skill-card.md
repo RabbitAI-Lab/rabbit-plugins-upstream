@@ -1,48 +1,67 @@
-## Description: <br>
-x402 Compute helps agents browse, provision, manage, resize, extend, and destroy Singularity Cloud Network GPU/VPS instances, AI Machines, SGL Grid inference, and node-operator workflows using x402, MPP, or preloaded credits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+x402 Compute helps agents manage Singularity Cloud Network compute workflows, including GPU/VPS provisioning, private or grid LLM endpoints, agent pods, processors, datasets, and encrypted agent backup.
 
-## Publisher: <br>
-[ivaavimusic](https://clawhub.ai/user/ivaavimusic) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ivaavimusic](https://clawhub.ai/user/ivaavimusic)
 
-## Use Case: <br>
-Developers and operators use this skill to provision paid GPU/VPS compute, deploy private OpenAI-compatible LLM endpoints, consume SGL Grid inference, or run grid nodes from an agent workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can spend wallet funds and manage cloud servers. <br>
-Mitigation: Use a dedicated low-balance wallet, confirm spend and target instance before execution, and avoid unattended confirmation flags unless the cost and lifecycle action are known. <br>
-Risk: The skill handles sensitive wallet keys, API keys, and root-access material. <br>
-Mitigation: Keep secrets out of logs, prefer SSH keys over password fallback, delete any one-time password files immediately, and scope API keys to the intended workflow. <br>
-Risk: Runtime installers or dependency changes can introduce supply-chain exposure. <br>
-Mitigation: Pin or review dependencies and inspect the node installer before running remote install commands. <br>
+## Use Case:
 
+External developers and engineers use this skill to provision and manage paid compute, deploy OpenAI-compatible LLM endpoints and hosted agents, run grid inference, publish paid processors, and create datasets or agent backups through the Singularity Cloud Network.
 
-## Reference(s): <br>
-- [x402 Compute Documentation](https://docs.x402layer.cc/agentic-access/x402-compute) <br>
-- [x402 Compute Cloud App](https://cloud.x402compute.cc) <br>
-- [ClawHub Skill Page](https://clawhub.ai/ivaavimusic/skills/x402-compute) <br>
-- [AI Machines Reference](references/ai-machines.md) <br>
-- [x402Compute API Reference](references/api-reference.md) <br>
-- [SGL Grid Node Operator Reference](references/node-operator.md) <br>
-- [OpenWallet / OWS Reference](references/openwallet-ows.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, environment-variable guidance, API request examples, and operational checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce commands or configuration that manage paid cloud resources, wallet-backed payments, API keys, SSH access, and server lifecycle actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.10.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill can guide agents through paid cloud resource provisioning and lifecycle changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use explicit user approval, low prepaid balances or spend limits, and review commands before executing paid provisioning, extension, resize, pod, processor, or dataset actions.
+
+Risk: Wallet private keys and compute API keys can authorize payments or management actions.
+
+Mitigation: Use dedicated low-balance wallets, protect API keys as secrets, avoid passing secrets as CLI arguments, and revoke or rotate keys after use.
+
+Risk: Password fallback, plain HTTP endpoints, remote installers, persistent services, auto-renewing pods, and broad backups increase operational exposure.
+
+Mitigation: Prefer SSH keys, require HTTPS/TLS for private endpoints, verify remote installers before running them, review persistent service and auto-renew settings, and scope Agent Vault backups narrowly.
+
+## Reference(s):
+
+- [x402 Compute Documentation](https://docs.x402layer.cc/agentic-access/x402-compute)
+- [x402 Compute Cloud App](https://cloud.x402compute.cc)
+- [API Reference](references/api-reference.md)
+- [AI Machines](references/ai-machines.md)
+- [Agent Pods](references/agent-pods.md)
+- [Agent Pods API](references/agent-pods-api.md)
+- [SGL Processors](references/processors.md)
+- [Node Operator](references/node-operator.md)
+- [Agent Vault](references/agent-vault.md)
+- [Datasets](references/datasets.md)
+- [OpenWallet OWS](references/openwallet-ows.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with command examples, code snippets, API calls, and JSON payloads.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include concrete commands that create paid infrastructure or interact with wallet, API-key, pod, processor, dataset, and backup services.]
+
+## Skill Version(s):
+
+1.29.0 (source: SKILL.md frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

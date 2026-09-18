@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "TwitterAPI.io"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["twitterapi_io"]
   icon: "https://static.oomol.com/logo/third-party/twitterapi_io.svg"
 ---

@@ -1,41 +1,56 @@
-## Description: <br>
-Bird (bird.com). Use this skill for Bird requests involving reading, creating, updating, deleting data, and sending messages through the OOMOL `oo` CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Bird connector for reading, creating, updating, and deleting Bird data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Bird contacts, channels, messages, and message interactions through an OOMOL-connected Bird account. It supports read workflows as well as guarded write and destructive actions such as contact updates, message sends, and contact deletion. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The trigger wording is broad and may route many Bird-related requests toward live Bird data operations. <br>
-Mitigation: Install and invoke the skill only when the user intends the agent to work with Bird data, and confirm the intended workspace, action, and target before running state-changing commands. <br>
-Risk: Write and destructive actions can create, update, send, or delete customer and messaging data. <br>
-Mitigation: Review the exact payload and expected effect before writes, and require explicit approval for destructive actions such as deleting contacts. <br>
+## Use Case:
 
+External users and operators use this skill to manage Bird contacts, channels, messages, and message interactions through an OOMOL-connected Bird account. It supports read operations directly and requires confirmation for writes, message sends, batch sends, updates, and deletes.
 
-## Reference(s): <br>
-- [Bird homepage](https://bird.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before building action payloads; connector responses are JSON with data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: Remote installer commands can execute code from an external source during setup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the setup commands only when required by a command failure, and verify the oo CLI installer source, version, and integrity before running them.
+
+Risk: Write, message-send, batch-send, update, and delete actions can change or remove Bird data.
+
+Mitigation: Confirm the exact action, target, effect, and JSON payload with the user before execution; require explicit approval for destructive deletes.
+
+## Reference(s):
+
+- [Bird homepage](https://bird.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-bird)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance, Configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector command responses are JSON when run with --json.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

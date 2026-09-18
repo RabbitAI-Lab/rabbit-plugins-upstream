@@ -1,45 +1,57 @@
-## Description: <br>
-Helps agents search and read Productboard workspace data through OOMOL's Productboard connector and oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Productboard enables agents to search and read Productboard workspace data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and product teams use this skill to let an agent retrieve Productboard entities, notes, teams, members, and workspace configurations through their connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill allows an agent to read Productboard workspace data through OOMOL's connector. <br>
-Mitigation: Install it only when the user trusts OOMOL's connector and intends to grant Productboard read/search access. <br>
-Risk: Broad Productboard routing could make the skill eligible for ambiguous Productboard requests. <br>
-Mitigation: Clarify ambiguous requests and inspect the live action schema before running commands with uncertain scope. <br>
-Risk: Future actions tagged write or destructive could change or remove Productboard data. <br>
-Mitigation: Require explicit user confirmation of the target, payload, and expected effect before any write or destructive action. <br>
+## Use Case:
 
+Product managers, product operations teams, and agents supporting them use this skill to retrieve Productboard entities, notes, members, teams, and configuration data through an OOMOL-connected Productboard account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-productboard) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Productboard Homepage](https://www.productboard.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documents read-oriented Productboard get/list actions and directs agents to inspect live action schemas before constructing payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: artifact frontmatter and server release evidence) <br>
+Risk: One-line installer commands fetch and execute remote scripts on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid running installer commands unless the OOMOL installer source is trusted and verified; prefer a pinned, checksum-verified, or package-manager installation path.
+
+Risk: Connector requests may access Productboard workspace data through an authenticated OOMOL-connected account.
+
+Mitigation: Use the skill for read and list Productboard tasks, inspect live action schemas before requests, and confirm payloads before any state-changing action if one is introduced.
+
+## Reference(s):
+
+- [ClawHub Productboard skill page](https://clawhub.ai/oomol/skills/oo-productboard)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Productboard homepage](https://www.productboard.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; responses may include JSON data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

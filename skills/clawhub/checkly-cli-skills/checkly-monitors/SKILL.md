@@ -1,6 +1,6 @@
 ---
 name: checkly-monitors
-description: Create health and infrastructure monitors including heartbeat, TCP, DNS, URL, gRPC, SSL, and traceroute monitors. Use for uptime monitoring, service availability, TLS certificate validation, gRPC health or behavior checks, network path diagnostics, DNS validation, and infrastructure health without browser code. Triggers on heartbeat, TCP monitor, DNS monitor, URL monitor, gRPC monitor, SSL monitor, certificate expiry, traceroute, health check, uptime monitoring.
+description: Create health and infrastructure monitors including heartbeat, TCP, DNS, ICMP, URL, gRPC, SSL, and traceroute monitors. Use for uptime monitoring, service availability, TLS certificate validation, gRPC health or behavior checks, network path diagnostics, DNS validation, and infrastructure health without browser code. Triggers on heartbeat, TCP monitor, DNS monitor, ICMP monitor, ping monitor, URL monitor, gRPC monitor, SSL monitor, certificate expiry, traceroute, health check, uptime monitoring.
 ---
 
 # checkly monitors
@@ -14,10 +14,39 @@ Health and infrastructure checks without browser code execution.
 | **Heartbeat** | Periodic ping expected | Inbound webhook calls |
 | **TCP** | Port connectivity | Socket connection |
 | **DNS** | Domain resolution | DNS records |
+| **ICMP** | Host reachability | ICMP echo |
 | **URL** | HTTP availability | Status code only |
 | **gRPC** | gRPC service health or unary behavior | Status, health, response, metadata, latency |
 | **SSL** | Certificate and TLS posture | Expiry, trust, hostname, protocol, cipher, key |
 | **Traceroute** | Network path diagnostics | Latency, hop count, packet loss |
+
+## Structured monitor intent
+
+`TcpMonitor`, `DnsMonitor`, `IcmpMonitor`, `UrlMonitor`, and `GrpcMonitor` accept structured `intent` for durable root-cause-analysis and check-repair guidance. `HeartbeatMonitor`, `SslMonitor`, and `TracerouteMonitor` do not expose it.
+
+```typescript
+new UrlMonitor('dashboard-url', {
+  name: 'Dashboard URL',
+  request: {
+    url: 'https://example.com/dashboard',
+  },
+  intent: {
+    goal: 'Verify that the dashboard remains publicly reachable.',
+    constraints: [
+      {
+        type: 'REQUIRED_OUTCOME',
+        statement: 'The dashboard returns a successful HTTP response.',
+      },
+      {
+        type: 'MUST_PRESERVE',
+        statement: 'Keep the production hostname in the monitored URL.',
+      },
+    ],
+  },
+})
+```
+
+Intent supplements executable monitor assertions; it does not replace them. Omit the property to preserve existing backend-authored intent, provide an object to set/update it, or use `intent: null` to clear it deliberately. `goal` is required and limited to 2,000 trimmed characters. Constraints use exact uppercase types `REQUIRED_OUTCOME` or `MUST_PRESERVE`, with at most 20 of each type and 1,000 trimmed characters per statement.
 
 ## Heartbeat monitors
 
@@ -90,8 +119,9 @@ import { UrlMonitor } from 'checkly/constructs'
 
 new UrlMonitor('url-check', {
   name: 'Homepage URL Check',
-  url: 'https://example.com',
-  method: 'GET',
+  request: {
+    url: 'https://example.com',
+  },
 })
 ```
 
@@ -209,6 +239,23 @@ new TracerouteMonitor('network-path', {
 - `protocol` accepts `TCP` (default), `UDP`, `ICMP`, or `SCTP`. If `port` is omitted, the backend defaults to 443 for TCP and 33434 for UDP/SCTP; omit `port` for ICMP.
 - `responseTime()` accepts `avg` (default), `min`, `max`, or `stdDev`.
 - `hopCount()` and `packetLoss()` do not take a property.
+
+## Response-time validation
+
+`degradedResponseTime` and `maxResponseTime` are top-level monitor properties. They control degraded/failing check states and are separate from response-time assertions inside `request.assertions`.
+
+The CLI applies these standard client-side ceilings when the authenticated account does not advertise extended response-time limits:
+
+| Monitor | Standard ceiling |
+|---------|------------------|
+| TCP | 5 seconds |
+| DNS | 5 seconds |
+| URL | 30 seconds |
+| gRPC | 180 seconds |
+| SSL | 30 seconds |
+| Traceroute | 30 seconds |
+
+For accounts with extended limits, the CLI skips the fixed ceiling and lets the Checkly API enforce the account-specific limit. Do not assume the entitlement is present: validate with `npx checkly test` against the target account. Older or self-hosted APIs that do not expose account feature flags keep the standard ceilings. In every case, `degradedResponseTime` must be less than or equal to `maxResponseTime`.
 
 ## Validate and deploy
 

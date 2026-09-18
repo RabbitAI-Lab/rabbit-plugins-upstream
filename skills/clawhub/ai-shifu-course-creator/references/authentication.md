@@ -5,6 +5,22 @@
 - `language-policy.md`
 - `cli/cli-reference.md#authentication`
 
+## Conditional References
+
+- When opening a browser authorization link: `open-in-app-browser.md`
+
+## Select Site Before Connecting
+
+1. Run `python3 scripts/shifu-cli.py site` internally. Its output is configuration control data, not user-facing content.
+2. If `status=configured`, silently reuse the returned address without asking again. An existing explicit `SHIFU_BASE_URL` takes precedence over the remembered selection.
+3. If `status=selection_required`, ask the user to select their current region, in the resolved conversation language. In Chinese, use “请选择你所在的地区：” with exactly two options: “中国” and “其他国家或地区”. In English, use “Please select your current region:” with exactly two options: “China” and “Other countries or regions”. Do not display domains, CN/COM codes, CLI commands, configuration fields, or a site-selection explanation. Do not offer custom deployment as a default third choice. Do not infer the answer from conversation language or IP. An explicit answer already provided in the conversation does not need to be asked again; otherwise wait for the answer before connecting.
+4. Map “中国” / “China” to `site --set cn` and “其他国家或地区” / “Other countries or regions” to `site --set com` internally. If the user explicitly requests a custom deployment, use `site --url <user-supplied-URL>` instead; ask for its service URL only if it is missing. An explicitly requested service or existing configuration takes precedence over regional defaults.
+5. Require `status=configured` with the intended address internally, then continue verification or the original task immediately. Do not announce the selected address, echo configuration output, or ask for another confirmation. If saving fails, explain the impact in plain language and keep platform operations paused; do not silently use another site. The selection persists across sessions and Skill upgrades and does not select the conversation or course language.
+
+The hidden information is initialization machinery, not links the user needs to act on: browser authorization links, course links, and eligible official contact links still follow their normal display rules. Only show configuration details when the user explicitly requests them for inspection or troubleshooting; do not add them to normal progress, success, or error messages.
+
+These commands handle initial setup, not migration of a signed-in account between sites. If existing credentials block setup, restore their original explicit service configuration; never delete credentials or change the destination to bypass the error.
+
 ## Verify Before Login
 
 Use `scripts/shifu-cli.py`; never read tokens directly, construct authentication headers, or make raw platform API calls. Write every user-facing login prompt and failure explanation according to `language-policy.md`.
@@ -12,30 +28,39 @@ Use `scripts/shifu-cli.py`; never read tokens directly, construct authentication
 Run `verify` before deciding whether login is needed:
 
 - Exit `0`: continue the requested platform operation without logging in.
-- Exit `1`: run one SMS login session.
-- Exit `2`: report a network or service problem and retry `verify` later; do not send an SMS code.
+- Exit `1`: run one browser authorization session.
+- Exit `2`: report a network or service problem and retry `verify` later; do not start an authorization session.
+- Exit `4`: resolve the site using Select Site Before Connecting; do not treat it as an expired login.
 
 If any authenticated command returns token error `1001`, `1004`, or `1005`, run `verify` and apply the same decision again. After a successful login, run `verify` once before continuing.
 
-## Agent SMS Login Flow
+## Agent Browser Authorization Flow
 
-Protect the SMS quota: one phone number can receive at most five codes per day. Send one code per login session unless the user has entered three consecutive wrong codes.
+1. Run `login` exactly once.
+2. Open the verification link exactly as printed using the shared browser reference. If opening is unavailable, failed, queued, or skipped at the user's request, keep the same pending authorization request and continue with the original clickable link; do not run `login` again for a browser outcome.
+3. In one short turn, give the user the verification link exactly as printed and explain that approving it signs this device in, that the page shows which device is asking, and that they must press the approve button there themselves. Never click approve for the user. The CLI prefers `verification_uri_complete`, which carries the pairing code, but can fall back to `verification_uri`, which may require manual code entry. Include the separately printed pairing code and tell the user to enter it if the page asks; do not claim every link already carries it or modify the returned URL. Mention that an account is created on first use and that a browser session already signed in will not have to sign in again.
+4. Run `login --wait`.
+5. Act on the exit code:
+   - `0`: authorized and stored. Run `verify` once, then continue the original operation.
+   - `3`: still waiting. Ask the user to finish approving, then run `login --wait` again.
+   - `1`: denied, expired, or never started. Explain what happened, and start over with `login` only if the user wants to retry.
 
-1. In one short turn, explain that login uses SMS without a password, a four-digit code will arrive, the user should reply with it next, the saved local token completes login, and a new phone number creates an account on first use. Ask for the phone number in that same turn.
-2. Run `login --phone <phone>` exactly once.
-3. Ask only for the four-digit code.
-4. Run `login --phone <phone> --sms-code <code>`.
-5. On success, run `verify` once and continue the original operation.
+Do not insert readiness checks, account-status questions, acknowledgements, recaps, or other pauses between these steps.
 
-Do not insert readiness checks, account-status questions, acknowledgements, recaps, or other pauses between these steps. Each user turn supplies only the next required value.
-
-## SMS Failure Handling
+## Failure Handling
 
 | Result | Agent action |
 | --- | --- |
-| SMS send succeeds | Wait for the code; do not send another SMS. |
-| User asks to resend before entering three wrong codes | Explain that delivery can take 60 seconds and wait. |
-| `smsSendTooFrequent` | Wait 60 seconds, then retry the same command without asking for the phone again. |
-| First or second wrong code | Ask the user to re-enter the code; do not resend. |
-| Third consecutive wrong code | Run `login --phone <phone>` once more; this is the final SMS for the session. |
-| Login or verification has a network failure | Stop the login attempt and retry `verify` later; do not spend another SMS slot. |
+| `login` printed a link | Use the shared browser reference, hand the link to the user unchanged, and wait. Do not start a second request. |
+| Browser opening did not complete | Follow the shared browser result handling and wait on the same authorization request. Do not run `login` again. |
+| `login --wait` exits `3` | Ask the user to approve in the browser, then run `login --wait` again. |
+| User says the page reports an invalid or expired code | Run `login` once more to issue a fresh link. |
+| User denied the request by mistake | Run `login` once more to issue a fresh link. |
+| Network failure during `login` or `login --wait` | Stop and retry `verify` later; do not open repeated authorization requests. |
+
+Never run `login` again while the user is still looking at an earlier link: a new request replaces the pending one on disk, so approving the older link would leave nothing to collect.
+
+## Never Do
+
+- Never print, echo, or repeat the contents of the credentials file.
+- Never ask the user for a phone number, verification code, or password. The CLI does not collect any of them, and no agent-driven flow needs them.

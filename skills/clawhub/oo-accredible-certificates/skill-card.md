@@ -1,44 +1,60 @@
-## Description: <br>
-Enables an agent to operate Accredible Certificates through an OOMOL-connected account for reading, creating, searching, listing, and deleting credentials and groups. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Accredible Certificates (accredible.com). Use this skill for Accredible Certificates requests involving credential and group reads, creation, search, listing, and deletion through the OOMOL connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Accredible certificate credentials and credential groups from an agent workflow through the OOMOL connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create Accredible credentials and delete certificate data. <br>
-Mitigation: Review the exact payload and expected effect before approving creation, and require explicit approval for deletion targets. <br>
-Risk: The skill depends on OOMOL-mediated access to the user's Accredible account. <br>
-Mitigation: Install only when OOMOL should mediate account access, and confirm the account connection and scopes before use. <br>
-Risk: Installing the oo CLI from a remote installer may introduce supply-chain risk. <br>
-Mitigation: Verify the oo CLI installer source before installation, or use an already installed trusted CLI. <br>
+## Use Case:
 
+External users and developers use this skill to operate Accredible Certificates records from an OOMOL-connected account, including credential lifecycle actions and credential group discovery.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-accredible-certificates) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Accredible Certificates homepage](https://www.accredible.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live connector schema inspection before payload construction; write and destructive actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup guidance includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official, verified installation path and review any installer script before execution.
+
+Risk: The skill can expose certificate, group, and recipient records through the OOMOL connector.
+
+Mitigation: Install only when this data exposure is acceptable for the deployment and account context.
+
+Risk: Create and delete actions can change Accredible Certificates state.
+
+Mitigation: Require explicit user confirmation of the payload, target, and intended effect before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-accredible-certificates)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Accredible Certificates homepage](https://www.accredible.com/)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return connector JSON responses containing Accredible credential, group, recipient, and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

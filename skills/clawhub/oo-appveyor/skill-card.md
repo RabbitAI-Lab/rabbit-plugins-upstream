@@ -1,44 +1,56 @@
-## Description: <br>
-AppVeyor helps agents query AppVeyor CI/CD data through OOMOL's AppVeyor connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AppVeyor helps agents search and read AppVeyor build, project, environment, role, and user data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to inspect AppVeyor projects, build job artifacts, deployment environments, team roles, and team users through a connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires connecting AppVeyor through OOMOL and can read AppVeyor projects, users, roles, environments, and build artifacts. <br>
-Mitigation: Grant only the AppVeyor token scopes needed for the intended read-only queries and use an account appropriate for CI/CD visibility. <br>
-Risk: Build artifacts and team metadata may contain sensitive project or organization information. <br>
-Mitigation: Request only the specific project, build job, role, environment, or user data needed for the task and avoid sharing connector results outside the intended context. <br>
-Risk: First-time setup may require installing or authenticating the oo CLI. <br>
-Mitigation: Use only OOMOL's documented CLI installation source and run authentication or connection steps only after a command fails with the matching setup error. <br>
+## Use Case:
 
+Developers and engineers use this skill to inspect AppVeyor projects, build artifacts, deployment environments, roles, and users through an OOMOL-connected AppVeyor account.
 
-## Reference(s): <br>
-- [AppVeyor homepage](https://www.appveyor.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [AppVeyor skill on ClawHub](https://clawhub.ai/oomol/oo-appveyor) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration guidance, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before running actions; action responses include data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server-resolved release metadata) <br>
+Risk: The first-time setup path includes pipe-to-shell installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source or install the oo CLI through a verified package-managed method before use.
+
+Risk: The connected AppVeyor API key may expose more AppVeyor account data than intended.
+
+Mitigation: Use the narrowest AppVeyor API key scope available and keep routine use to the documented read actions.
+
+## Reference(s):
+
+- [ClawHub AppVeyor Skill](https://clawhub.ai/oomol/skills/oo-appveyor)
+- [AppVeyor Homepage](https://www.appveyor.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include oo CLI connector calls that return JSON-formatted AppVeyor data.]
+
+## Skill Version(s):
+
+1.0.3 (source: SKILL.md frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

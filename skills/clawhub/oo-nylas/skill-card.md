@@ -1,46 +1,57 @@
-## Description: <br>
-Operates Nylas through an OOMOL-connected account to read grants, calendars, and calendar events with the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agent guidance for reading Nylas grants, calendars, and calendar events through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers with connected OOMOL and Nylas accounts use this skill to inspect Nylas grants, list calendars, and retrieve calendar events without handling raw tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Nylas grant, calendar, and event data can contain sensitive account information. <br>
-Mitigation: Confirm the specific account, calendar, and date range before retrieving data, and handle returned results as sensitive. <br>
-Risk: The skill has a broad activation phrase for Nylas requests, which could lead to unintended connector use. <br>
-Mitigation: Use it only for explicit Nylas tasks and verify the requested scope before running oo connector commands. <br>
-Risk: Setup commands can install the oo CLI, start login, or open Nylas connection flows. <br>
-Mitigation: Run setup only after a matching command failure or user request, and avoid proactive authentication or connection changes. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect live Nylas connector schemas and run read-oriented Nylas actions for grants, calendars, and calendar events through OOMOL.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-nylas) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Nylas homepage](https://www.nylas.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schemas before constructing action payloads; Nylas grants, calendars, and events may contain sensitive account data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release, SKILL.md frontmatter) <br>
+Risk: The first-time setup path includes unverified internet installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official package or pinned release, verify checksums or signatures when available, and require explicit approval before running setup commands.
+
+Risk: Nylas actions depend on live connector schemas and account connection state.
+
+Mitigation: Inspect the live action schema before constructing payloads and only run authentication, connection, or billing recovery steps after a matching command failure.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-nylas)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Nylas Homepage](https://www.nylas.com)
+- [oo CLI Repository](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live oo connector schema inspection before building action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: evidence release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

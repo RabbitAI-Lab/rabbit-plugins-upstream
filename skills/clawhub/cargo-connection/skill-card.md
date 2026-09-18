@@ -1,46 +1,66 @@
-## Description: <br>
-Manage Cargo connectors and integrations from the Cargo CLI, including listing, creating, updating, removing, and inspecting connector actions for workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cargo Connection helps agents authenticate Cargo connectors, inspect integration capabilities, and resolve connector UUIDs and action slugs for workflow nodes.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Developers and operators use this skill to manage authenticated Cargo connectors and discover integration actions needed to configure workflow nodes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Connector configuration values, API keys, OAuth tokens, and command output may contain secrets. <br>
-Mitigation: Treat connector configs and CLI output as sensitive; avoid putting production keys in shell history or shared logs. <br>
-Risk: Connector create, update, and remove commands can mutate authenticated Cargo connector instances. <br>
-Mitigation: Verify the active Cargo session, connector UUIDs, and connector usage counts before changing or removing connectors. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Cargo connector setup, audit authenticated connector usage, discover supported integrations and actions, and prepare connector configuration for Cargo workflow nodes.
 
-## Reference(s): <br>
-- [Cargo Skill Page](https://clawhub.ai/cargo-ai/skills/cargo-connection) <br>
-- [Cargo Skills Homepage](https://github.com/getcargohq/cargo-skills) <br>
-- [Cargo CLI - Connections](SKILL.md) <br>
-- [Connector examples](references/examples/connectors.md) <br>
-- [Integration examples](references/examples/integrations.md) <br>
-- [Response shapes](references/response-shapes.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Cargo CLI command examples and JSON response shapes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires @cargo-ai/cli and a Cargo account authenticated by browser sign-in or API token.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: SKILL.md frontmatter, skill-metadata.json, release metadata) <br>
+Risk: The skill installs or uses @cargo-ai/cli@latest, which may change behavior across releases.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Pin the Cargo CLI version for production or shared agent environments.
+
+Risk: Connector commands can involve API tokens, connector credentials, and sensitive connector configuration.
+
+Mitigation: Avoid pasting real tokens or API keys into command lines or chat, keep connector JSON out of public logs, and rotate any exposed credentials.
+
+Risk: Connector list and get responses may expose workspace configuration for non-credit connectors.
+
+Mitigation: Treat connector JSON as sensitive operational data and limit transcript sharing to the minimum fields needed.
+
+Risk: The security verdict recommends review before production use.
+
+Mitigation: Review the skill before installing it in production or shared agent environments.
+
+## Reference(s):
+
+- [Cargo Connection on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo-connection)
+- [Cargo Skills Repository](https://github.com/getcargohq/cargo-skills)
+- [Connector Examples](references/examples/connectors.md)
+- [Integration Examples](references/examples/integrations.md)
+- [Response Shapes](references/response-shapes.md)
+- [Troubleshooting](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, JSON]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands return JSON and may include connector configuration; review outputs before sharing logs or transcripts.]
+
+## Skill Version(s):
+
+1.5.0 (source: frontmatter, skill-metadata.json, server evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

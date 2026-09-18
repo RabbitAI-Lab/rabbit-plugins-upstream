@@ -1,46 +1,66 @@
-## Description: <br>
-Provides agent guidance and scripts for Temu Europe tax workflows through LinkFox, including tax report export, Galerie signatures, invoice queries and downloads, merchant report downloads, and merchant invoice uploads. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agent guidance and scripts for Temu EU tax API workflows through the LinkFox gateway, including export reports, Galerie signatures, invoice queries and downloads, merchant report downloads, and merchant invoice uploads.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External developers and marketplace operators use this skill to call and troubleshoot Temu Europe tax and invoice APIs through LinkFox. It helps agents prepare API requests, manage required credentials, run helper scripts, and inspect saved JSON results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Europe for Temu EU tax workflows; globally usable by authorized agent environments. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan says this skill requires LinkFox gateway credentials, Temu seller access tokens, and local disk storage for tax and invoice responses. <br>
-Mitigation: Pass credentials only when needed, restrict access to the working directory and token store, and delete saved response files and saved Temu tokens when they are no longer required. <br>
-Risk: The security scan notes that the artifact includes broader Temu API and credential utilities than the tax-only description suggests. <br>
-Mitigation: Prefer the tax-specific scripts for normal use, and use the generic proxy or non-EU examples only when the broader Temu access is intentional and authorized. <br>
+## Use Case:
 
+External developers and operators use this skill to work with Temu EU tax and VAT-related Partner API tasks such as querying invoices, downloading invoice PDFs, uploading merchant invoices, and requesting monthly tax reports.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-tax-eu) <br>
-- [API Reference](references/api.md) <br>
-- [Temu Access Token Guide](references/access-token.md) <br>
-- [Authorization Flow](references/authorization-flow.md) <br>
-- [Partner EU Tax Catalog](references/partner-eu-catalog.md) <br>
-- [Tax API Documentation Index](references/apis/README.md) <br>
-- [Temu Partner EU Tax Documentation](https://partner-eu.temu.com/documentation?menu_code=7289390cfd724be4a196f11ebe45a896&sub_menu_code=6494bb7afd8048d380a13e92f6275d17) <br>
+### Deployment Geography for Use:
 
+Europe
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API responses saved to local files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Large API responses are summarized in stdout while full JSON responses are saved under the working directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill handles Temu and LinkFox credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in a trusted workspace, keep credentials private, and share access only with users authorized to operate the relevant Temu and LinkFox accounts.
+
+Risk: Scripts may store sensitive token or API response data locally.
+
+Mitigation: Use a private workspace, review saved response files before sharing project contents, and remove local token or response files when they are no longer needed.
+
+Risk: Generic proxy scripts and endpoint override environment variables can broaden what the skill can call.
+
+Mitigation: Prefer the specific tax workflow scripts, avoid generic proxy scripts unless required, and confirm endpoint override variables are unset or point to trusted services.
+
+Risk: Onboarding payment commands can create purchase actions.
+
+Mitigation: Require deliberate user approval before running payment-related onboarding commands.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-tax-eu)
+- [API reference](references/api.md)
+- [Temu access token guide](references/access-token.md)
+- [Authorization flow](references/authorization-flow.md)
+- [Partner EU tax interface catalog](references/partner-eu-catalog.md)
+- [Tax API document index](references/apis/README.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON examples and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts may save full JSON responses under a workspace linkfox data directory and print either full JSON or a summary depending on response size.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

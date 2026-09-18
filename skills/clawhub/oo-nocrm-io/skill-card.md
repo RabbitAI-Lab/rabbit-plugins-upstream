@@ -1,46 +1,60 @@
-## Description: <br>
-noCRM.io connector for agents to read, create, update, and delete noCRM.io data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate noCRM.io through an OOMOL-connected account for reading, creating, updating, and deleting CRM data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate a connected noCRM.io CRM account from an agent, including lead creation, assignment, tagging, status changes, duplication, deletion, and team listing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Agents can change or delete CRM lead records through the connected noCRM.io account. <br>
-Mitigation: Require explicit user confirmation for every state-changing action, including appending descriptions, changing status, tagging, assigning, duplicating, creating, and deleting leads. <br>
-Risk: Some state-changing actions are not tagged as write actions in the skill text. <br>
-Mitigation: Treat action behavior and the live connector schema as authoritative, and confirm the exact target, payload, and intended effect before running any action that can modify CRM data. <br>
-Risk: First-time setup may run remote CLI installation or account-connection commands. <br>
-Mitigation: Run setup only after an auth or connection failure and only when the user trusts OOMOL and intends to connect the noCRM.io account. <br>
+## Use Case:
 
+External users, developers, and CRM operators use this skill to have an agent inspect noCRM.io connector schemas and run lead-management actions through the oo CLI with OOMOL-managed credentials.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-nocrm-io) <br>
-- [noCRM.io homepage](https://www.nocrm.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [noCRM.io icon](https://static.oomol.com/logo/third-party/NoCRM.io.svg) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution and returns connector JSON responses when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Unsafe pipe-to-shell installer commands may be proposed during setup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only through a verified manual process; do not let an agent run installer commands automatically.
+
+Risk: CRM write actions can change lead state, ownership, tags, descriptions, reminders, or duplicate records.
+
+Mitigation: Require explicit user confirmation of the exact payload and intended effect before running any write action.
+
+Risk: Destructive lead deletion can remove CRM records.
+
+Mitigation: Require explicit approval for the specific target lead before running delete_lead.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-nocrm-io)
+- [noCRM.io homepage](https://www.nocrm.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before building action payloads; CRM write and destructive actions require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,57 @@
-## Description: <br>
-Perdoo lets agents read, create, and update Perdoo data through OOMOL's oo CLI connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Perdoo lets agents read, create, and update Perdoo data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to work with Perdoo goals, filters, progress updates, and GraphQL operations from an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad Perdoo GraphQL operations can include mutations that change workspace data. <br>
-Mitigation: Require explicit user confirmation for execute_graphql mutations and any operation that changes Perdoo data. <br>
-Risk: The skill can access sensitive company goals or metrics from a connected Perdoo workspace. <br>
-Mitigation: Review the skill before installation and limit use to appropriately authorized Perdoo accounts. <br>
+## Use Case:
 
+External users and developers use this skill to operate Perdoo goals and progress updates from an agent after connecting their Perdoo account through OOMOL. It supports goal retrieval, listing, GraphQL operations, and confirmed progress-update writes.
 
-## Reference(s): <br>
-- [Perdoo homepage](https://www.perdoo.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill instructs agents to inspect live connector schemas before building payloads and returns connector responses as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill exposes broad mutation capability through Perdoo GraphQL operations and progress update writes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit confirmation of the exact operation, variables, target records, and expected effect before any write or mutation.
+
+Risk: The artifact includes pipe-to-shell installer guidance for first-time oo CLI setup.
+
+Mitigation: Install only after independently verifying the official install method and trusting OOMOL and the requested Perdoo connection scope.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-perdoo)
+- [Perdoo Homepage](https://www.perdoo.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [OOMOL Perdoo Connection](https://console.oomol.com/app-connections?provider=perdoo)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, JSON, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands may call Perdoo through the OOMOL oo CLI and can return JSON responses.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

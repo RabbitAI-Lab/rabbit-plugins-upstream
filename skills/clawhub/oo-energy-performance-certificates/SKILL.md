@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Energy Performance Certificates"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["energy_performance_certificates"]
   icon: "https://static.oomol.com/logo/third-party/energy_performance_certificates.svg"
 ---

@@ -1,44 +1,57 @@
-## Description: <br>
-Use this skill for Crowdin requests that read, create, or update project data through the OOMOL Crowdin connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Crowdin (crowdin.com) skill for reading, creating, and updating Crowdin data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, localization managers, and agent users use this skill to inspect Crowdin projects and perform controlled project updates such as creating branches, creating directories, and uploading source files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Crowdin project changes can be made by write actions such as creating branches, creating directories, and uploading source files. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: The setup flow can install the OOMOL CLI from a remote installer. <br>
-Mitigation: Review the OOMOL CLI installer or use manually verified installation steps before setup. <br>
-Risk: Crowdin operations are mediated through OOMOL-connected credentials. <br>
-Mitigation: Install only when using OOMOL as an intermediary is acceptable for the workspace and project. <br>
+## Use Case:
 
+Developers and localization operators use this skill to list Crowdin projects, branches, directories, and files, and to create branches/directories or upload source files through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Crowdin homepage](https://crowdin.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub Crowdin skill page](https://clawhub.ai/oomol/oo-crowdin) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce Crowdin connector JSON responses when actions are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The setup path can run a downloaded installer directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source first and prefer a pinned, verified installation path.
+
+Risk: Write actions can create Crowdin resources or upload source files.
+
+Mitigation: Fetch the live action schema, confirm the exact payload and effect with the user, and only then run the write or upload command.
+
+## Reference(s):
+
+- [Crowdin homepage](https://crowdin.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-crowdin)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May run oo CLI commands after checking live action schemas; write and upload actions require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

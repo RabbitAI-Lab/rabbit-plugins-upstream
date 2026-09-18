@@ -1,43 +1,56 @@
-## Description: <br>
-Weatherbit enables an agent to retrieve current, daily, and hourly Weatherbit weather data through the OOMOL oo CLI with server-side credential injection. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Weatherbit (weatherbit.io). Use this skill for ANY Weatherbit request - searching and reading data. Whenever a task involves Weatherbit, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill when they want an agent to retrieve Weatherbit current observations and forecasts through an OOMOL-connected account without handling raw Weatherbit tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected Weatherbit account and may depend on sensitive account credentials managed outside the local workspace. <br>
-Mitigation: Install and use it only when Weatherbit access through OOMOL is intended, and review any one-time authentication or connection step before approving it. <br>
-Risk: Connector setup or billing errors can block weather requests or prompt additional account actions. <br>
-Mitigation: Treat setup, connection, and billing steps as one-time account operations and perform them only after a command fails with the matching error. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve current weather observations and daily or hourly forecasts from Weatherbit through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Weatherbit Skill](https://clawhub.ai/oomol/oo-weatherbit) <br>
-- [Weatherbit Homepage](https://www.weatherbit.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution and returns Weatherbit responses as JSON through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup includes remote installer commands that pipe scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OOMOL's official install guide or a pinned, verifiable package, and review the installer source before running it.
+
+Risk: Use depends on an OOMOL-connected account for Weatherbit access.
+
+Mitigation: Install only when the user is comfortable using OOMOL's oo CLI and Weatherbit through that connected account.
+
+## Reference(s):
+
+- [Weatherbit homepage](https://www.weatherbit.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub Weatherbit skill page](https://clawhub.ai/oomol/skills/oo-weatherbit)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the OOMOL oo CLI to inspect Weatherbit action schemas and run read-only weather queries.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

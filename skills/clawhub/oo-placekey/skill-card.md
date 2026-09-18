@@ -1,46 +1,55 @@
-## Description: <br>
-Placekey helps agents resolve postal addresses, geocodes, and Placekey identifiers through OOMOL-connected Placekey actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Placekey helps agents query Placekey data through the OOMOL oo CLI for address geocoding, single-location Placekey lookups, and bulk Placekey lookups.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to look up Placekey identifiers, resolve addresses into geocoded responses, and run bulk Placekey lookups through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Address and location data is sent through OOMOL as the intermediary for Placekey requests. <br>
-Mitigation: Install and use the skill only when that data path is acceptable for the user's task and organization. <br>
-Risk: The skill requires connected Placekey credentials through OOMOL. <br>
-Mitigation: Use an OOMOL-connected account with appropriate Placekey access and avoid exposing raw API credentials in prompts or shell commands. <br>
-Risk: First-time setup may involve running an external oo CLI installer. <br>
-Mitigation: Review the oo CLI installer before running optional setup commands, and run setup only when the connector command fails for an installation or authentication reason. <br>
+## Use Case:
 
+Developers and agents use this skill to resolve addresses, retrieve Placekey identifiers and enrichment fields, and run bulk Placekey lookups through an OOMOL-connected Placekey account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-placekey) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Placekey Homepage](https://www.placekey.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON response handling] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing payloads; bulk lookup supports up to 100 locations per request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup includes inline remote installer commands that can execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from verified official releases or package-manager instructions, and avoid running installer one-liners blindly.
+
+Risk: Placekey requests are routed through OOMOL as the credential-handling intermediary.
+
+Mitigation: Install only when the user accepts OOMOL's role as the intermediary and connects Placekey deliberately.
+
+## Reference(s):
+
+- [Placekey homepage](https://www.placekey.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, JSON, guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON CLI output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires live oo connector schema checks before payload construction; bulk lookup supports up to 100 locations per request.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

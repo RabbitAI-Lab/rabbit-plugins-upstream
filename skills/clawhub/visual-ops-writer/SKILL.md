@@ -70,7 +70,7 @@ description: 图文运营创作器。从选题、撰写、配图到质检，一�
 ### 安装步骤
 
 1. 将本 Skill 目录添加到你的 Agent 技能列表
-2. 获取 `REDFOX_API_KEY`：前往 [红狐 hub](https://redfox.hk?source=clawhub) 注册账号，在 [API Keys 页面](https://redfox.hk/settings/api-keys?source=clawhub) 创建密钥
+2. 获取 `REDFOX_API_KEY`：前往 [红狐 hub](https://redfox.hk?source=github) 注册账号，在 [API Keys 页面](https://redfox.hk/settings/api-keys?source=github) 创建密钥
 3. 配置环境变量：
 
 ```bash

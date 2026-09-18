@@ -1,42 +1,56 @@
-## Description: <br>
-Use SafetyCulture through OOMOL's safetyculture connector for reading, creating, and updating SafetyCulture data instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates SafetyCulture through an OOMOL-connected account, including reading inspections, listing or searching actions, inspecting live action schemas, and creating SafetyCulture actions with confirmation.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect SafetyCulture actions and inspections, list and search records, and create SafetyCulture actions through an OOMOL-connected account. The skill guides the agent to fetch live connector schemas before constructing payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The create_action operation can change SafetyCulture state. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running write actions. <br>
-Risk: The skill depends on OOMOL CLI and connector access to a connected SafetyCulture account. <br>
-Mitigation: Run installation, login, or connection steps only when needed and only when the user trusts the OOMOL CLI and connector setup. <br>
+## Use Case:
 
+Developers, operators, and support teams use this skill to run SafetyCulture read, search, and action-creation workflows through the OOMOL `oo` CLI. It is intended for agents that need to inspect the connector schema before constructing requests and confirm state-changing payloads before execution.
 
-## Reference(s): <br>
-- [ClawHub SafetyCulture skill page](https://clawhub.ai/oomol/skills/oo-safetyculture) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [SafetyCulture homepage](https://safetyculture.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash, PowerShell, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live OOMOL connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Setup guidance includes remote installer commands that execute scripts from the network.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the `oo` CLI installation path first and prefer official, versioned, verifiable installers or package-manager instructions before running curl-to-bash or PowerShell `iex` commands.
+
+Risk: SafetyCulture write actions can change workspace state.
+
+Mitigation: Inspect the live action schema, confirm the exact payload and intended effect with the user, and only then run state-changing actions.
+
+## Reference(s):
+
+- [ClawHub SafetyCulture Skill](https://clawhub.ai/oomol/skills/oo-safetyculture)
+- [SafetyCulture Homepage](https://safetyculture.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, API Calls, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands are executed through the OOMOL `oo` CLI; state-changing SafetyCulture actions require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: artifact frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

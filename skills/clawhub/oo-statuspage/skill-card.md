@@ -1,44 +1,60 @@
-## Description: <br>
-Statuspage (atlassian.com). Use this skill for ANY Statuspage request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Statuspage (atlassian.com). Use this skill for ANY Statuspage request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and support teams use this skill to let an agent read and manage Atlassian Statuspage pages, components, incidents, events, and automation email settings through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change Statuspage components or incidents. <br>
-Mitigation: Confirm the exact page, action, and JSON payload with the user before running create or update actions. <br>
-Risk: Destructive actions can delete Statuspage components or incidents. <br>
-Mitigation: Require explicit user approval for the target page and component or incident before running delete actions. <br>
-Risk: The connector operates through an OOMOL-connected Statuspage account. <br>
-Mitigation: Install and use the skill only when the agent should manage Statuspage through OOMOL, and review account-scoped changes before approving them. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Atlassian Statuspage pages, components, incidents, events, and automation email details through an OOMOL-connected account. It supports read workflows as well as confirmed write and destructive Statuspage actions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-statuspage) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Statuspage](https://www.atlassian.com/software/statuspage) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands use the oo CLI and return connector responses as JSON when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and frontmatter) <br>
+Risk: Remote installer commands could install unverified code if the installer source or delivery path is compromised.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installing and prefer a trusted, versioned, verifiable oo CLI source.
+
+Risk: Write and destructive actions can create, update, or delete Statuspage components and incidents.
+
+Mitigation: Confirm the exact page, component or incident, payload, and intended effect with the user before running write or destructive actions.
+
+Risk: Connector payloads may be wrong if they are built from stale assumptions about the live action schema.
+
+Mitigation: Inspect the current action schema with the oo CLI before constructing each action payload.
+
+## Reference(s):
+
+- [Statuspage homepage](https://www.atlassian.com/software/statuspage)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-statuspage)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands call the oo CLI and may return JSON connector responses.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

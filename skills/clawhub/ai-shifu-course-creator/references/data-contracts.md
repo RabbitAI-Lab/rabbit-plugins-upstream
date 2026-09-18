@@ -22,6 +22,7 @@ Provide one of:
 - Tone constraints.
 - Non-negotiable source fragments.
 - `course_author_name` (string): the optional name the author wants the Teaching Agent to use as the teacher identity during course delivery. A blank or unanswered value normalizes to an empty string, which produces no named teacher identity in the Course Prompt.
+- `course_author_avatar_source` (local path or attached-file reference): an optional, transient platform-management handoff. Accept only a JPG or PNG source. Do not serialize it into a Teaching Prompt, Course Prompt, course directory, import payload, or platform metadata; after the course exists, consume it through `set-avatar` and retain only the returned platform avatar URL in platform state and `course-config.json` when synchronized.
 - `course_profile` object.
 - `delivery_constraints` object.
 - `interaction_policy` object.
@@ -31,9 +32,9 @@ Provide one of:
 
 `teaching_prompt_personalization_level` is a top-level scalar and transient authoring input, and it must be strictly an integer from `1` through `5`. It is not a member of `course_profile`, `delivery_constraints`, or `interaction_policy`. Its author-facing names, level semantics, and materialization rules are owned exclusively by `teaching-prompt.md#personalization-levels`.
 
-This is a content-expression control, not a structure control. It never changes the fixed teaching sequence or slide structure, including which content slots appear, where they appear, and the teaching purpose each content slot and slide serves.
+This is a content-expression control, not a structure control. It never changes the internal lesson execution plan, including the teaching sequence, required actions and effects, slide count and order, or interaction and feedback placement.
 
-Pass the normalized value unchanged through the in-memory authoring handoff to Teaching Prompt generation and, when applicable, optimization review. Keep it absent from output artifacts, course-directory files, CLI inputs or configuration, all build or deployment payloads including `shifu-import.json`, and platform metadata. In particular, do not serialize this control as a field in `lesson_teaching_prompts`, `course_index`, `global_variable_table`, `course_prompt`, `course_description`, or fallback output extensions.
+Pass the normalized value unchanged through the in-memory authoring handoff to Teaching Prompt generation and, when applicable, optimization review. Its only effect on `teaching_prompt` is the amount of ordinary wording and already-permitted example detail materialized inside direct local runtime instructions. Keep the control's name, value, and authoring semantics absent from Prompt bodies, output fields, course-directory files, CLI inputs or configuration, all build or deployment payloads including `shifu-import.json`, and platform metadata. In particular, do not serialize this control as a field in `lesson_teaching_prompts`, `course_index`, `global_variable_table`, `course_prompt`, `course_description`, or fallback output extensions.
 
 ### Recommended Object Shapes
 
@@ -83,6 +84,7 @@ Pass the normalized value unchanged through the in-memory authoring handoff to T
 - When multiple files are provided, their order must be explicit.
 - `interaction_policy` must satisfy its mode and purpose invariants.
 - When present, `teaching_prompt_personalization_level` must be an integer from `1` through `5`. Reject booleans, floats, numeric strings, and out-of-range values rather than coercing them.
+- `course_author_avatar_source` never changes course content and never blocks authoring when absent or skipped.
 
 ## Output Contract
 

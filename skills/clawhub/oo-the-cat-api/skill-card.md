@@ -1,42 +1,55 @@
-## Description: <br>
-The Cat API skill helps agents search and read cat breed and image data through the OOMOL `oo` CLI and `the_cat_api` connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+The Cat API skill helps agents search and read cat breed and image data from The Cat API through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill when they need an agent to look up The Cat API breeds and images through an OOMOL-connected account instead of calling the API directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an installed and authenticated OOMOL oo CLI connection to The Cat API. <br>
-Mitigation: Run installer, login, or connection steps only when a command fails for that specific setup reason. <br>
-Risk: Future connector actions may add write or destructive behavior. <br>
-Mitigation: Inspect the live action schema and obtain explicit user approval before running any action that writes, deletes, or overwrites data. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect The Cat API connector schemas, retrieve individual breeds or images, list and search cat breeds, and search cat images with filters and pagination.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-the-cat-api) <br>
-- [The Cat API homepage](https://thecatapi.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only connector actions for breed and image lookup; requires an installed and authenticated OOMOL oo CLI connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and server evidence) <br>
+Risk: Setup instructions include remote installer commands that can execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer installing the oo CLI through a verifiable package manager or a pinned, checksum-verified installer, and avoid running remote installer commands from an elevated shell.
+
+Risk: The skill relies on an OOMOL account connection for The Cat API access.
+
+Mitigation: Use the connected-account flow rather than handling raw API tokens, and only run setup or reconnection steps after an auth or connection error.
+
+## Reference(s):
+
+- [The Cat API homepage](https://thecatapi.com/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill listing](https://clawhub.ai/oomol/skills/oo-the-cat-api)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing request payloads; responses from connector runs are JSON.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

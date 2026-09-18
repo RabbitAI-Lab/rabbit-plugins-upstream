@@ -1,44 +1,57 @@
-## Description: <br>
-BaseLinker helps an agent inspect connector schemas and run BaseLinker inventory and order-management actions through the OOMOL oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BaseLinker lets agents read, create, and update BaseLinker data through OOMOL's oo CLI connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to let an agent work with BaseLinker inventory catalogs, products, warehouses, orders, order statuses, and recent order events through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access business-sensitive BaseLinker order and inventory data through the user's connected account. <br>
-Mitigation: Install only when agent access to the OOMOL-connected BaseLinker account is intended, and handle returned order and inventory data as business-sensitive. <br>
-Risk: Actions tagged as write or destructive could change BaseLinker state if executed with an incorrect payload. <br>
-Mitigation: Inspect the live action schema before constructing payloads and require explicit user confirmation for write or destructive actions. <br>
-Risk: Account setup, expired credentials, missing scopes, or billing limits can prevent connector actions from running. <br>
-Mitigation: Use the documented first-time setup and connection recovery steps only after an action fails with the matching authentication, connection, scope, or billing error. <br>
+## Use Case:
 
+Developers and operations users use this skill to inspect BaseLinker connector schemas and run inventory and order-management actions through an OOMOL-connected oo CLI account.
 
-## Reference(s): <br>
-- [BaseLinker skill page](https://clawhub.ai/oomol/skills/oo-baselinker) <br>
-- [BaseLinker homepage](https://baselinker.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an installed, signed-in oo CLI and a connected BaseLinker account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup includes direct remote script execution for installing the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official signed or checksum-verified installer where available, inspect downloaded install scripts before execution, and run setup without elevated privileges.
+
+Risk: Some BaseLinker actions can change state.
+
+Mitigation: Inspect the live action schema first and confirm the exact payload and effect with the user before running actions marked as write or destructive.
+
+## Reference(s):
+
+- [ClawHub BaseLinker Skill](https://clawhub.ai/oomol/skills/oo-baselinker)
+- [BaseLinker Homepage](https://baselinker.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [OOMOL BaseLinker Connection](https://console.oomol.com/app-connections?provider=baselinker)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill instructs the agent to inspect live connector schemas before running BaseLinker actions and to confirm state-changing payloads before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

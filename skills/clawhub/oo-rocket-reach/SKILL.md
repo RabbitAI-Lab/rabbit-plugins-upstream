@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "RocketReach"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["rocket_reach"]
   icon: "https://static.oomol.com/logo/third-party/RocketReach.svg"
 ---

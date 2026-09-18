@@ -1,44 +1,60 @@
-## Description: <br>
-Provides agent-facing guidance and scripts for authorized Shopee stores to manage logistics workflows through LinkFox, including shipping orders, tracking numbers, shipping documents, addresses, channels, booking, and operating-hour actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Shopee Store Logistics helps agents call LinkFox-mediated Shopee Open Platform logistics APIs for shipping, tracking, shipping documents, addresses, channels, booking, and related store logistics tasks.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, store operators, and developers use this skill to run authorized Shopee logistics actions such as preparing shipments, obtaining tracking numbers, generating shipping documents, and managing logistics settings for a shop. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change live Shopee shop logistics data, including shipping orders, addresses, channels, pause status, and tracking state. <br>
-Mitigation: Confirm each state-changing action and its target shop, order, address, or channel before execution. <br>
-Risk: Saved LinkFox response files may contain sensitive business, customer, order, or logistics data. <br>
-Mitigation: Store response files only in protected workspaces and delete or retain them according to the user's data handling requirements. <br>
-Risk: The skill requires access to authorized Shopee store credentials through the LinkFox authentication dependency. <br>
-Mitigation: Use only authorized shop access, keep API keys out of shared logs, and resolve missing authentication through the documented dependency flow. <br>
+## Use Case:
 
+Developers and store operators use this skill to manage logistics workflows for authorized Shopee stores, including preparing shipments, retrieving tracking numbers, creating or downloading shipping documents, and managing logistics addresses or channels.
 
-## Reference(s): <br>
-- [Skill API reference](references/api.md) <br>
-- [Shopee Open Platform Logistics documentation](https://open.shopee.com/documents/v2/v2.logistics.get_shipping_parameter?module=95&type=1) <br>
-- [ClawHub skill listing](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-logistics) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, JSON, files] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON inputs; script runs return JSON responses and save full response files locally.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses up to 8 KB are printed in full after being saved; larger responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The skill can perform live Shopee logistics actions such as shipping, deleting, pausing, or updating store logistics resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation before actions that ship orders, delete or pause resources, or change logistics settings.
+
+Risk: The skill handles LinkFox account credentials and may write customer or store logistics data to local response files.
+
+Mitigation: Avoid sharing SMS codes or API keys in agent-visible transcripts, and periodically delete or protect saved LinkFox response files.
+
+Risk: Gateway URL overrides could route logistics requests away from trusted LinkFox services.
+
+Mitigation: Verify LINKFOX_* gateway environment variables point only to trusted LinkFox HTTPS domains before use.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-logistics)
+- [Shopee Open Platform Logistics documentation](https://open.shopee.com/documents/v2/v2.logistics.get_shipping_parameter?module=95&type=1)
+- [Logistics API reference](artifact/references/api.md)
+- [Authentication and billing onboarding](artifact/references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts save full JSON responses locally and print either the full response or a concise summary for large responses.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

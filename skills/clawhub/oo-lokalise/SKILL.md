@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Lokalise"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["lokalise"]
   icon: "https://static.oomol.com/logo/third-party/lokalise.svg"
 ---

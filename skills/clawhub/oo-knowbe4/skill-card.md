@@ -1,43 +1,55 @@
-## Description: <br>
-KnowBe4 lets an agent search and read KnowBe4 account, subscription, group, and user data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate KnowBe4 through an OOMOL-connected account to inspect schemas and read account, user, and group data through the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees and operators use this skill to retrieve KnowBe4 account, subscription, group, and user information from an OOMOL-connected KnowBe4 account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read KnowBe4 account, group, and user information through an OOMOL-connected account. <br>
-Mitigation: Install and use it only with an appropriate KnowBe4 connection and OOMOL account for the data being queried. <br>
-Risk: Setup, authentication, connection, or billing steps may be unnecessary during normal read workflows. <br>
-Mitigation: Run setup or billing recovery steps only when an oo command fails with the matching error. <br>
+## Use Case:
 
+Developers and operators use this skill to retrieve KnowBe4 account, subscription, group, and user data through an OOMOL-connected account while keeping credentials server-side.
 
-## Reference(s): <br>
-- [ClawHub KnowBe4 skill page](https://clawhub.ai/oomol/skills/oo-knowbe4) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [KnowBe4 homepage](https://www.knowbe4.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector command responses are JSON objects containing data and meta.executionId when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and SKILL.md metadata) <br>
+Risk: Setup instructions include remote installer commands that pipe downloaded scripts into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run those installer commands automatically; use a verified, pinned, or checksum-checked oo CLI installation path before using the skill.
+
+Risk: The skill depends on connecting KnowBe4 through OOMOL.
+
+Mitigation: Use it only when the user is comfortable with that connection path and has already connected the account or explicitly approves the setup.
+
+## Reference(s):
+
+- [ClawHub KnowBe4 Skill](https://clawhub.ai/oomol/skills/oo-knowbe4)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [KnowBe4 Homepage](https://www.knowbe4.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON response summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands inspect the live connector schema before execution and use server-side credentials through OOMOL.]
+
+## Skill Version(s):
+
+1.0.3 (source: evidence release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

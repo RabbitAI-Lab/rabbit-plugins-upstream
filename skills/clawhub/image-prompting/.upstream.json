@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/image-prompting",
   "slug": "image-prompting",
   "ownerHandle": null,
-  "version": "1.0.7",
-  "updatedAt": 1784810915051,
-  "contentHash": "daff45ccbd5ba574518b5d4105ff3abcff34d8964282530402727e99376d50e6",
-  "fetchedAt": "2026-07-26T18:07:09.055Z"
+  "version": "1.0.13",
+  "updatedAt": 1789653278531,
+  "contentHash": "75a615015b2b1e053534882d8bc5bc72e984771e2e215f840de0b677b1c24175",
+  "fetchedAt": "2026-09-18T12:24:22.945Z"
 }

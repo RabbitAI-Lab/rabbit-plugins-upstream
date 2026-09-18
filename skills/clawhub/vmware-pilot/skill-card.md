@@ -1,53 +1,65 @@
-## Description: <br>
-Designs, tracks, and gates multi-step VMware workflows across companion skills with human approvals, audited state, and rollback support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+vmware-pilot helps an agent design, approve, execute, and manage multi-step VMware workflows through companion VMware skills, with human approval gates and explicit best-effort rollback.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers and infrastructure engineers use this skill to plan and manage VMware incident response, maintenance, deployment, compliance, and change workflows that span companion VMware skills. It is intended for multi-step work that needs review checkpoints, workflow state, and recovery planning rather than single one-off VMware operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: High-impact infrastructure workflows may make changes through companion VMware skills. <br>
-Mitigation: Require explicit human review before running custom templates or continuing through approval gates, and use companion-skill RBAC and policy controls for read/write authorization. <br>
-Risk: Rollback is best-effort and may not restore every failed or partially completed operation. <br>
-Mitigation: Treat rollback as recovery assistance, verify each plan before execution, and validate post-change infrastructure state with monitoring checks. <br>
-Risk: Workflow, audit, and baseline files under ~/.vmware may contain operationally sensitive infrastructure details. <br>
-Mitigation: Restrict filesystem access to ~/.vmware files and protect audit, workflow, and baseline data as sensitive operational records. <br>
-Risk: Kubeconfig or guest credentials surfaced by companion workflows can be secrets even when associated operations are described as read-only. <br>
-Mitigation: Handle kubeconfig and guest credential material as secrets and avoid exposing them in shared prompts, logs, or reports. <br>
+## Use Case:
 
+Developers and infrastructure operators use this skill to coordinate VMware incident response, maintenance, deployment, compliance, and rollback workflows that span multiple companion skills. It is intended for multi-step work that needs checkpoints, approvals, and recorded undo actions rather than single VMware operations.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/vmware-pilot) <br>
-- [Publisher Profile](https://clawhub.ai/user/zw008) <br>
-- [Homepage](https://github.com/zw008/VMware-Pilot) <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [Built-in Templates Reference](references/templates.md) <br>
-- [Cross-Skill Integration Patterns](references/integration-patterns.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Workflow Design Guide](references/workflow-design.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
-- [Capabilities](references/capabilities.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and structured MCP workflow instructions with inline shell commands and YAML configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce workflow plans, approval prompts, rollback guidance, audit queries, and custom workflow template snippets.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.7 (source: server release metadata) <br>
+Risk: The skill relies on an external runtime package.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in an environment where the vmware-pilot package source is trusted, prefer the pinned installed entry point over uvx, and verify package provenance separately.
+
+Risk: Broad workflow dispatch can lead an agent toward production-changing actions through companion VMware skills.
+
+Mitigation: Review every workflow step, target, parameter, and approval message before execution, and run companion skills with least-privilege service accounts.
+
+Risk: Rollback is explicit and best-effort, so failed work may require manual follow-up.
+
+Mitigation: Confirm rollback intent with the user, inspect recorded rollback actions before running them, and manually undo any dispatched steps that the workflow engine did not record as successful.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/vmware-pilot)
+- [VMware Pilot Homepage](https://github.com/vmware-skills/VMware-Pilot)
+- [Capabilities](references/capabilities.md)
+- [Workflow Design](references/workflow-design.md)
+- [Integration Patterns](references/integration-patterns.md)
+- [Setup Guide](references/setup-guide.md)
+- [CLI Reference](references/cli-reference.md)
+- [Templates](references/templates.md)
+- [Agent Guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with workflow plans, tool-call guidance, YAML snippets, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include workflow identifiers, step parameters, approval messages, and rollback guidance.]
+
+## Skill Version(s):
+
+1.11.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

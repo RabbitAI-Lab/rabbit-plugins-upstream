@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "SunoAPI"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["sunoapi"]
   icon: "https://static.oomol.com/logo/third-party/sunoapi.png"
 ---

@@ -1,42 +1,56 @@
-## Description: <br>
-Buttondown operates a user's Buttondown account through the OOMOL-connected oo CLI for reading, creating, updating, and deleting account, newsletter, subscriber, and tag data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Buttondown (buttondown.com). Use this skill for ANY Buttondown request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to manage Buttondown account, newsletter, subscriber, and tag workflows through an OOMOL-connected account. It supports direct reads and requires confirmation before write or destructive actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, or delete Buttondown subscribers and tags. <br>
-Mitigation: Confirm the exact payload, target, and expected effect with the user before write actions, and require explicit approval before destructive actions. <br>
-Risk: The skill connects to a user's Buttondown account through OOMOL-managed credentials. <br>
-Mitigation: Install only when the user trusts OOMOL and intends to grant Buttondown access through the oo CLI. <br>
+## Use Case:
 
+External users and developers use this skill to operate Buttondown through an OOMOL-connected account, including subscriber, tag, newsletter, and account workflows. It supports read, write, and destructive Buttondown actions with schema inspection and user confirmation guidance.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-buttondown) <br>
-- [Buttondown Homepage](https://buttondown.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution and returns connector data with an execution id when commands run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence release.version and metadata.version) <br>
+Risk: Fallback setup can execute an unverified internet installer on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after manually reviewing the official OOMOL installation instructions and installer contents; do not have an agent run the curl-to-bash or PowerShell iex installer automatically.
+
+Risk: Write and destructive Buttondown actions can change or delete subscriber and tag data.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running actions marked write or destructive.
+
+## Reference(s):
+
+- [Buttondown homepage](https://buttondown.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-buttondown)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce Buttondown action results returned by the oo CLI as JSON.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

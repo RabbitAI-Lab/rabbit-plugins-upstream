@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Quo (OpenPhone)"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.4"
   services: ["quo"]
   icon: "https://static.oomol.com/logo/third-party/quo.svg"
 ---

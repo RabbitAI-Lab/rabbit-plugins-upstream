@@ -1,45 +1,60 @@
-## Description: <br>
-Quipteams (quipteams.com). Use this skill for ANY Quipteams request: searching and reading data through the OOMOL Quipteams connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Quipteams helps an agent search and read Quipteams data through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees and agents use this skill to search and read Quipteams employees, assets, device actions, kits, products, and hardware procurement quotes through an OOMOL-connected account. It is suited for business-data lookup tasks where the agent should inspect the connector schema before running read actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Quipteams business data, including employee HRIS metadata, quote recipients, comments, and inventory records. <br>
-Mitigation: Use the connected account with the minimum necessary scope and ask the agent to retrieve only the records needed for the task. <br>
-Risk: Connector payloads may be incorrect if the agent guesses action parameters. <br>
-Mitigation: Have the agent run the connector schema command before constructing each action payload. <br>
-Risk: Authentication, connection, scope, credential, or billing errors can interrupt execution. <br>
-Mitigation: Follow the first-time setup and recovery guidance only after a matching command failure occurs. <br>
+## Use Case:
 
+Employees, operators, and developers use this skill to retrieve Quipteams employees, devices, kits, products, quotes, assets, and device action records through an authenticated OOMOL connector.
 
-## Reference(s): <br>
-- [Quipteams homepage](https://www.quipteams.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-quipteams) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill guides an agent to inspect live connector schemas and run read-oriented Quipteams connector actions with JSON payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The setup instructions include one-line remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified, signed, or package-manager-based installation path before running Quipteams actions.
+
+Risk: The skill retrieves potentially sensitive Quipteams account, employee, device, procurement, and asset information through OOMOL as a broker.
+
+Mitigation: Install only when that brokered access is acceptable, and limit execution to documented read actions unless a future write action is clearly labeled and explicitly approved.
+
+Risk: Incorrect action payloads can lead to failed or misleading connector requests.
+
+Mitigation: Inspect the live action schema with `oo connector schema` before constructing each JSON payload.
+
+## Reference(s):
+
+- [ClawHub Quipteams Skill](https://clawhub.ai/oomol/skills/oo-quipteams)
+- [Quipteams Homepage](https://www.quipteams.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

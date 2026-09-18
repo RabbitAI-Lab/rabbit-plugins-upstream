@@ -1,0 +1,1318 @@
+{
+  "id": "FFMQ",
+  "name": "五因素正念问卷（FFMQ，39题）",
+  "short_name": "FFMQ 正念五因子",
+  "category": "正念",
+  "target_population": "成年人",
+  "estimated_time": "约 6 分钟",
+  "item_count": 39,
+  "description": "Baer 等(2006)五因素正念问卷，39 题，5 个因子：观察、描述、觉知行动、不评判、不反应。含反向计分题。各因子均分越高表示该特质越强。",
+  "source": "Baer et al., 2006；中文版 Deng et al., 2011",
+  "license": "学术免费使用",
+  "scoring_type": "average",
+  "items": [
+    {
+      "id": "ob1",
+      "text": "当我在车里、屋里或外面散步时，我会注意到一些以前从未注意过的东西。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "ob2",
+      "text": "我注意不到很多我正在经历的情绪和感觉。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "ob3",
+      "text": "我留意到食物和饮料的味道、气味和质感。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "ob4",
+      "text": "我留意到外界的声音，比如鸟叫、交通噪音或机器的声音。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "ob5",
+      "text": "我能敏锐地觉察到身体某个部位紧张或放松的感觉。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "ob6",
+      "text": "当我在户外时，我会留意到风或阳光照在身上的感觉。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "ob7",
+      "text": "我留意到想法和感受来去的过程，而不被它们裹挟。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "ob8",
+      "text": "我留意到呼吸时空气进出身体的感觉。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "de1",
+      "text": "我擅长用语言描述我的情绪。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "de2",
+      "text": "我很难用语言描述我内在的感受。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "de3",
+      "text": "我能够用语言描述我对某件事的感受。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "de4",
+      "text": "我能够用语言描述眼前事物的形状、颜色或质感。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "de5",
+      "text": "我能够用语言描述我对人或事的想法。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "de6",
+      "text": "我能够用语言描述我身体的感觉。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "de7",
+      "text": "我能够用语言描述我记忆中的画面。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "de8",
+      "text": "我能够用语言描述我对未来的想象。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "aa1",
+      "text": "我做事时，脑子常常在想别的事，没真正在体验。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "aa2",
+      "text": "我容易一边做事一边走神。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "aa3",
+      "text": "我常常自动地做事情，却不知道自己在做什么。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "aa4",
+      "text": "我发现自己忙着做事，却不记得刚才做了什么。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "aa5",
+      "text": "我容易在做一件事时分心去想别的。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "aa6",
+      "text": "我常常在做事情时心不在焉。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "aa7",
+      "text": "我容易对正在做的事失去觉察。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "aa8",
+      "text": "我做事情时，能够专注在当下的体验上。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "nj1",
+      "text": "我批评自己为什么会有那样的想法。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "nj2",
+      "text": "我对自己的缺点感到不耐烦。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "nj3",
+      "text": "当我不喜欢自己的某个想法时，我会觉得自己糟糕。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "nj4",
+      "text": "我对自己的一些想法感到尴尬。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "nj5",
+      "text": "我觉得自己的一些情绪是不对的、不应该的。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "nj6",
+      "text": "我会对自己产生负面评价。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "nj7",
+      "text": "当我有令人难受的情绪时，我会认为自己软弱。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "nj8",
+      "text": "我对自己的某些感受感到自责。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "nr1",
+      "text": "当我不想要的想法出现时，我能够不去理会它。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "nr2",
+      "text": "我能够让令人痛苦的想法自然流过，而不被卡住。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "nr3",
+      "text": "当我很烦躁时，我能够不立即做出反应。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "nr4",
+      "text": "我面对困难情绪时，能够保持不被其吞没。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "nr5",
+      "text": "当令我难受的情绪出现时，我能够与之保持距离。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "nr6",
+      "text": "我能够放下反复出现的念头。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "nr7",
+      "text": "遇到令人不安的想法时，我能够很快恢复平静。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "有时",
+          "score": 3
+        },
+        {
+          "label": "经常",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    }
+  ],
+  "dimensions": [
+    {
+      "name": "观察",
+      "items": [
+        "ob1",
+        "ob2",
+        "ob3",
+        "ob4",
+        "ob5",
+        "ob6",
+        "ob7",
+        "ob8"
+      ],
+      "method": "average",
+      "max": 5,
+      "min": 1
+    },
+    {
+      "name": "描述",
+      "items": [
+        "de1",
+        "de2",
+        "de3",
+        "de4",
+        "de5",
+        "de6",
+        "de7",
+        "de8"
+      ],
+      "method": "average",
+      "max": 5,
+      "min": 1
+    },
+    {
+      "name": "觉知行动",
+      "items": [
+        "aa1",
+        "aa2",
+        "aa3",
+        "aa4",
+        "aa5",
+        "aa6",
+        "aa7",
+        "aa8"
+      ],
+      "method": "average",
+      "max": 5,
+      "min": 1
+    },
+    {
+      "name": "不评判",
+      "items": [
+        "nj1",
+        "nj2",
+        "nj3",
+        "nj4",
+        "nj5",
+        "nj6",
+        "nj7",
+        "nj8"
+      ],
+      "method": "average",
+      "max": 5,
+      "min": 1
+    },
+    {
+      "name": "不反应",
+      "items": [
+        "nr1",
+        "nr2",
+        "nr3",
+        "nr4",
+        "nr5",
+        "nr6",
+        "nr7"
+      ],
+      "method": "average",
+      "max": 5,
+      "min": 1
+    }
+  ],
+  "standard_score": null,
+  "interpretation": {
+    "bands": [
+      {
+        "dimension": "观察",
+        "min": 1,
+        "max": 2.99,
+        "level": "偏低",
+        "summary": "观察维度偏低。",
+        "advice": "可通过对应练习提升（如观察练习、描述练习、不评判练习）。"
+      },
+      {
+        "dimension": "描述",
+        "min": 1,
+        "max": 2.99,
+        "level": "偏低",
+        "summary": "描述维度偏低。",
+        "advice": "可通过对应练习提升（如观察练习、描述练习、不评判练习）。"
+      },
+      {
+        "dimension": "觉知行动",
+        "min": 1,
+        "max": 2.99,
+        "level": "偏低",
+        "summary": "觉知行动维度偏低。",
+        "advice": "可通过对应练习提升（如观察练习、描述练习、不评判练习）。"
+      },
+      {
+        "dimension": "不评判",
+        "min": 1,
+        "max": 2.99,
+        "level": "偏低",
+        "summary": "不评判维度偏低。",
+        "advice": "可通过对应练习提升（如观察练习、描述练习、不评判练习）。"
+      },
+      {
+        "dimension": "不反应",
+        "min": 1,
+        "max": 2.99,
+        "level": "偏低",
+        "summary": "不反应维度偏低。",
+        "advice": "可通过对应练习提升（如观察练习、描述练习、不评判练习）。"
+      },
+      {
+        "dimension": "观察",
+        "min": 3,
+        "max": 3.99,
+        "level": "中等",
+        "summary": "观察维度处于中等水平。",
+        "advice": "保持并巩固练习。"
+      },
+      {
+        "dimension": "描述",
+        "min": 3,
+        "max": 3.99,
+        "level": "中等",
+        "summary": "描述维度处于中等水平。",
+        "advice": "保持并巩固练习。"
+      },
+      {
+        "dimension": "觉知行动",
+        "min": 3,
+        "max": 3.99,
+        "level": "中等",
+        "summary": "觉知行动维度处于中等水平。",
+        "advice": "保持并巩固练习。"
+      },
+      {
+        "dimension": "不评判",
+        "min": 3,
+        "max": 3.99,
+        "level": "中等",
+        "summary": "不评判维度处于中等水平。",
+        "advice": "保持并巩固练习。"
+      },
+      {
+        "dimension": "不反应",
+        "min": 3,
+        "max": 3.99,
+        "level": "中等",
+        "summary": "不反应维度处于中等水平。",
+        "advice": "保持并巩固练习。"
+      },
+      {
+        "dimension": "观察",
+        "min": 4,
+        "max": 5,
+        "level": "较高",
+        "summary": "观察维度较高。",
+        "advice": "维持现有正念习惯。"
+      },
+      {
+        "dimension": "描述",
+        "min": 4,
+        "max": 5,
+        "level": "较高",
+        "summary": "描述维度较高。",
+        "advice": "维持现有正念习惯。"
+      },
+      {
+        "dimension": "觉知行动",
+        "min": 4,
+        "max": 5,
+        "level": "较高",
+        "summary": "觉知行动维度较高。",
+        "advice": "维持现有正念习惯。"
+      },
+      {
+        "dimension": "不评判",
+        "min": 4,
+        "max": 5,
+        "level": "较高",
+        "summary": "不评判维度较高。",
+        "advice": "维持现有正念习惯。"
+      },
+      {
+        "dimension": "不反应",
+        "min": 4,
+        "max": 5,
+        "level": "较高",
+        "summary": "不反应维度较高。",
+        "advice": "维持现有正念习惯。"
+      }
+    ]
+  },
+  "safety": {
+    "crisis_items": [],
+    "crisis_rule": "",
+    "high_risk_rule": ""
+  }
+}

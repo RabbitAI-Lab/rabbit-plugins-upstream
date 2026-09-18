@@ -1,38 +1,64 @@
-## Description: <br>
-Searches Seerfar Ozon product-report data so an agent can filter product-level rows by sales, revenue, growth, conversion, price, rating, reviews, brand, seller, fulfillment, listing age, margin, return rate, and related Ozon metrics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches Seerfar Ozon product reports and returns product-level rows filtered by sales, revenue, growth, conversion, price, rating, reviews, brand, seller, fulfillment, listing age, margin, returns, and related metrics.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External agents and commerce analysts use this skill to screen Ozon products, inspect competitor product performance, mine best sellers, and build price or conversion-band reports from product-level Seerfar data. It is most relevant when the user needs Ozon product rows rather than keyword, shop, category, or non-Ozon marketplace data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/linkfox-ai/skills/linkfox-seerfar-ozon-product-report-search) <br>
-- [Seerfar Ozon product report API reference](artifact/references/api.md) <br>
+External ecommerce operators, marketplace analysts, and developers use this skill to screen Ozon products by product-report metrics and inspect comparable product rows for selection, competitor analysis, best-seller mining, and price or conversion-band filtering.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance, JSON API parameters, stdout summaries, and saved JSON response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires LinkFox API-key configuration and consumes LinkFox credits. Security review verdict is suspicious: install only if LinkFox receiving Ozon report queries, API keys, and session metadata is acceptable; review LINKFOX_TOOL_GATEWAY before use, avoid secrets in feedback text, and clear generated linkfox data and cache files when reports are no longer needed.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: The skill requires LinkFox account credentials or API keys to access the product-report service.
+
+Mitigation: Install only if sharing those credentials with this skill is acceptable, and prefer session or environment-specific secrets over broadly persisted shell startup configuration.
+
+Risk: Product-search results and cache entries can be written to local workspace storage.
+
+Mitigation: Review saved LinkFox output directories for sensitive commercial data and remove cached or persisted files when they are no longer needed.
+
+Risk: Queries consume paid LinkFox compute credits and the artifact includes payment and billing onboarding flows.
+
+Mitigation: Confirm expected credit use before repeated calls, and require explicit user approval before creating purchase orders or continuing after billing errors.
+
+Risk: The release evidence reports under-scoped automatic feedback behavior.
+
+Mitigation: Do not allow automatic feedback submission unless the exact feedback payload and reason are visible and acceptable to the user.
+
+## Reference(s):
+
+- [Seerfar Ozon Product Report Search API Reference](artifact/references/api.md)
+- [Authentication and Billing Onboarding](artifact/references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-seerfar-ozon-product-report-search)
+- [LinkFox Publisher Profile](https://clawhub.ai/user/linkfox-ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, JSON files, guidance]
+
+**Output Format:** [Markdown summaries or tables with optional shell commands and persisted JSON response files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Large responses may be summarized while the full response is saved locally; authentication or billing failures may produce setup guidance.]
+
+## Skill Version(s):
+
+1.0.5 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

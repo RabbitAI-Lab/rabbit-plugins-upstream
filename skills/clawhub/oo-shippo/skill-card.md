@@ -1,43 +1,59 @@
-## Description: <br>
-Shippo (goshippo.com). Use this skill for ANY Shippo request - reading, creating, and updating data. Whenever a task involves Shippo, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Shippo (goshippo.com). Use this skill for Shippo requests that read, create, update, validate, or track shipping-related data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Shippo through an OOMOL-connected account for shipping workflows such as reading addresses and parcels, creating address or parcel objects, validating addresses, and checking tracking status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create Shippo addresses and parcels, which changes state in the connected Shippo account. <br>
-Mitigation: Confirm write payloads and intended effects with the user before running actions tagged [write]. <br>
-Risk: Shippo workflows can expose addresses, parcel details, tracking information, and account connection state. <br>
-Mitigation: Treat shipping and account data as sensitive and share only what is needed for the user's request. <br>
-Risk: First-time setup may require installing the oo CLI or connecting a Shippo account. <br>
-Mitigation: Run setup or account connection steps only after an auth, connection, or missing-command failure and only from trusted sources. <br>
+## Use Case:
 
+External users and developers use this skill to operate Shippo through the OOMOL-connected oo CLI, including creating and retrieving address or parcel objects, validating addresses, listing saved objects, and checking tracking status.
 
-## Reference(s): <br>
-- [Shippo homepage](https://goshippo.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands return JSON responses from the OOMOL Shippo connector when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: Setup instructions may execute mutable remote installer scripts without an integrity check.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only from trusted OOMOL delivery paths; prefer reviewing the installer or using a verified package or checksum before running it.
+
+Risk: Write actions can create Shippo account objects such as addresses and parcels.
+
+Mitigation: Confirm the exact action payload and expected account effect with the user before running any action tagged as write.
+
+Risk: Connector access depends on an OOMOL-connected Shippo account and server-side credential handling.
+
+Mitigation: Use the live connector schema for each action, avoid requesting raw credentials, and retry setup only when authentication or connection errors require it.
+
+## Reference(s):
+
+- [Shippo homepage](https://goshippo.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; connector responses may include JSON data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

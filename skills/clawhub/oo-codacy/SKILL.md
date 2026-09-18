@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Codacy"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["codacy"]
   icon: "https://static.oomol.com/logo/third-party/codacy.png"
 ---

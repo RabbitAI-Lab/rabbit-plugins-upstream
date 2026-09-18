@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/qname-cli",
   "slug": "qname-cli",
   "ownerHandle": null,
-  "version": "0.1.2",
-  "updatedAt": 1779544762057,
-  "contentHash": "8c3ad1b473a591d3bd8fcf90aed3a5773316ab1490a6374225d1801ea785b6a9",
-  "fetchedAt": "2026-07-26T18:40:55.769Z"
+  "version": "0.2.0",
+  "updatedAt": 1789561552890,
+  "contentHash": "e7c5afe3aafe7d58c09d678d2c0b2152214c24fe791816e478c8aeb555a43d6d",
+  "fetchedAt": "2026-09-18T12:31:46.414Z"
 }

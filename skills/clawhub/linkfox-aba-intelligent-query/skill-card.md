@@ -1,46 +1,64 @@
-## Description: <br>
-Queries and analyzes Amazon Brand Analytics search-term data across 15 marketplaces with nearly three years of weekly history. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries and analyzes Amazon Brand Analytics search-term data across 15 Amazon marketplaces using nearly three years of weekly data.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Amazon sellers and ecommerce analysts use this skill to query ABA search-term rankings, click share, conversion share, marketplace trends, seasonal terms, and competitor keyword traffic. It helps translate a user's search-term analysis request into a precise LinkFox ABA query and present the returned data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: ABA query descriptions and the LinkFox API key are sent to LinkFox services. <br>
-Mitigation: Confirm the marketplace and query before use, and avoid including secrets or sensitive business context in query text or feedback. <br>
-Risk: Queries can spend LinkFox credits and may consume significant credits for broad requests. <br>
-Mitigation: Explain the expected paid-query behavior before continuing and keep filters precise to avoid unnecessary calls. <br>
-Risk: Full paid-query responses and cache files are saved locally under linkfox session folders. <br>
-Mitigation: Review or clean the generated linkfox folders after use, especially on shared workstations or sensitive projects. <br>
-Risk: The feedback flow can send user comments or context to an external LinkFox feedback endpoint. <br>
-Mitigation: Do not include credentials, private business details, or unnecessary user context when reporting feedback. <br>
+## Use Case:
 
+External Amazon sellers and ecommerce analysts use this skill to query ABA search-term rankings, click share, conversion share, seasonal trends, competitor keyword coverage, and market-opportunity patterns.
 
-## Reference(s): <br>
-- [ABA API Reference](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-aba-intelligent-query) <br>
-- [Publisher profile](https://clawhub.ai/user/linkfox-ai) <br>
+### Deployment Geography for Use:
 
+Global, with documented ABA data coverage for US, DE, BR, CA, AU, JP, AE, ES, FR, IT, SA, TR, MX, SE, and NL marketplaces.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, code, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API parameters, shell command examples, tabular result summaries, and saved JSON response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The helper script caches identical queries for 24 hours and saves full API responses under a local linkfox session directory before printing either full JSON or a compact summary.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: server release metadata) <br>
+Risk: ABA query content, account identifiers, API keys, phone/SMS login data, and billing/order data may be sent to LinkFox services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only after reviewing the LinkFox service flow, minimize sensitive business details in queries, and share login or billing data only when needed to resolve authentication or quota issues.
+
+Risk: API keys and endpoint override environment variables can affect where credentials and query data are sent.
+
+Mitigation: Store API keys in session-scoped or project-scoped environments where possible, avoid global shell startup files, and do not set custom LinkFox endpoint overrides unless the endpoint is explicitly trusted.
+
+Risk: Saved query responses, cached results, feedback reports, and downloaded CSV links can contain sensitive marketplace or business data.
+
+Mitigation: Treat generated linkfox data directories and feedback content as sensitive, restrict access to the workspace, and review or remove saved files when they are no longer needed.
+
+Risk: Queries and onboarding can consume paid compute credits or create payment orders.
+
+Mitigation: Confirm user intent before additional searches, downloads, plan purchases, or order creation, and present billing or quota errors plainly before proceeding.
+
+## Reference(s):
+
+- [ABA Intelligent Query API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-aba-intelligent-query)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, files, API calls, guidance]
+
+**Output Format:** [Markdown guidance with query tables, JSON API responses, saved JSON files, and shell commands.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full query responses are saved under a local linkfox session data directory; large responses may be summarized in stdout, and optional CSV download links may be requested.]
+
+## Skill Version(s):
+
+1.0.12 (source: release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,52 @@
-## Description: <br>
-ApiFlash helps agents operate ApiFlash through an OOMOL-connected account to capture website screenshots, check quota information, and retrieve screenshot metadata. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ApiFlash lets agents operate ApiFlash through an OOMOL-connected account to capture website screenshots and retrieve screenshot quota or metadata.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to run ApiFlash screenshot and quota actions through the oo CLI after connecting an OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may require installing or using the oo CLI before actions can run. <br>
-Mitigation: Install the CLI only from trusted OOMOL documentation, inspect remote installer scripts before execution, or use a pinned package when available. <br>
-Risk: The skill operates through connected ApiFlash credentials. <br>
-Mitigation: Use it only when the user intends to access ApiFlash through an OOMOL-connected account and follow the skill's auth recovery steps only after a command fails. <br>
+## Use Case:
 
+Developers and external users use this skill to operate ApiFlash through an OOMOL-connected account, including capturing website screenshots and retrieving quota or screenshot metadata.
 
-## Reference(s): <br>
-- [ApiFlash ClawHub page](https://clawhub.ai/oomol/oo-apiflash) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ApiFlash homepage](https://apiflash.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can return ApiFlash screenshot URLs, quota details, screenshot metadata, and oo CLI recovery guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Setup instructions include remote installer commands that can execute local code if run without review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not run installer commands automatically; use a verified installation path or review OOMOL's installer source before executing.
+
+## Reference(s):
+
+- [ClawHub ApiFlash skill page](https://clawhub.ai/oomol/skills/oo-apiflash)
+- [ApiFlash homepage](https://apiflash.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects with data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

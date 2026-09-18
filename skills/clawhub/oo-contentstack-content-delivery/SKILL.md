@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Contentstack Content Delivery"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["contentstack_content_delivery"]
   icon: "https://static.oomol.com/logo/third-party/contentstack_content_delivery.webp"
 ---

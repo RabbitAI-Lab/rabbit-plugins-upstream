@@ -1,43 +1,56 @@
-## Description: <br>
-BoxHero lets an agent read BoxHero inventory items, team information, and locations through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BoxHero helps agents read BoxHero inventory, team, and location data through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent inspect BoxHero inventory data, including items, locations, and linked team information, from an already connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads BoxHero inventory data through a connected account. <br>
-Mitigation: Install and use it only when the user trusts OOMOL and intends to grant agent access to that BoxHero inventory data. <br>
-Risk: First-time setup may require running an external oo CLI installer. <br>
-Mitigation: Review the installer URL before running setup, and run setup only when the oo command is missing or authentication fails. <br>
+## Use Case:
 
+External users and developers use this skill to search and read BoxHero inventory items, location records, and linked team information from an OOMOL-connected BoxHero account.
 
-## Reference(s): <br>
-- [ClawHub BoxHero skill page](https://clawhub.ai/oomol/oo-boxhero) <br>
-- [BoxHero homepage](https://www.boxhero-app.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL BoxHero connection settings](https://console.oomol.com/app-connections?provider=boxhero) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector runs return JSON with data and meta.executionId when executed through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Setup guidance includes remote installer commands that can execute changing code on a user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an independently verified OOMOL CLI installation path before running installer commands, and avoid repeating setup unless authentication or connection errors require it.
+
+Risk: BoxHero data passes through OOMOL's connector service during use.
+
+Mitigation: Install and use the skill only when the user trusts OOMOL's CLI distribution and connector service for the relevant BoxHero account data.
+
+## Reference(s):
+
+- [ClawHub BoxHero Skill](https://clawhub.ai/oomol/skills/oo-boxhero)
+- [BoxHero Homepage](https://www.boxhero-app.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses depend on live BoxHero connector schemas, authenticated OOMOL account state, and connected BoxHero permissions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

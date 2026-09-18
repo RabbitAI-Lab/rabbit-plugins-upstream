@@ -1,44 +1,59 @@
-## Description: <br>
-Interact with teemtape stock watchlists and anonymous notes via the teemtape CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Interact with teemtape stock watchlists and anonymous notes via the teemtape CLI.
 
-## Publisher: <br>
-[kiwifellows](https://clawhub.ai/user/kiwifellows) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kiwifellows](https://clawhub.ai/user/kiwifellows)
 
-## Use Case: <br>
-Developers and agent users use this skill to run the teemtape CLI for delayed quote lookup, ticker search, watchlist management, and reading or posting anonymous stock notes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a networked CLI that requires a teemtape watchlist token and can reveal share URLs. <br>
-Mitigation: Install only when agents should access teemtape, keep TEEMTAPE_TOKEN and share URLs out of chat logs, and avoid echoing secrets. <br>
-Risk: CLI notes are anonymous comments that may be visible to other watchlist viewers. <br>
-Mitigation: Read existing notes before posting, keep notes concise, and confirm before asking an agent to publish a note. <br>
-Risk: Quote data is delayed and informational only. <br>
-Mitigation: Do not use the skill as a trading tool or present quote output as real-time investment advice. <br>
+## Use Case:
 
+Developers and agents use this skill to operate teemtape watchlists: creating or sharing watchlists, searching ticker symbols, reading delayed quotes, and reading or posting concise anonymous notes.
 
-## Reference(s): <br>
-- [teemtape CLI command reference](references/commands.md) <br>
-- [teemtape CLI JSON output shapes](references/json-output.md) <br>
-- [teemtape skill page](https://clawhub.ai/kiwifellows/skills/teemtape-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON response shapes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill instructs agents to prefer --json output and to treat TEEMTAPE_TOKEN and share URLs as sensitive.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Watchlist tokens, Pro access tokens, and share URLs can expose private watchlist access if logged or shared.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat these values as sensitive, avoid echoing them in chat or logs, and use masked configuration output where available.
+
+Risk: Using npx without a pinned package version may resolve a newer CLI than the one reviewed with this release.
+
+Mitigation: In higher-security environments, use a pinned or locally reviewed @teemtape/cli version.
+
+Risk: Stock quotes are delayed and notes are public anonymous comments, so outputs may be unsuitable for trading decisions or private analysis.
+
+Mitigation: Use the data for informational workflows only, read existing notes before posting, and keep posted notes concise and non-sensitive.
+
+## Reference(s):
+
+- [teemtape CLI command reference](references/commands.md)
+- [teemtape CLI JSON output shapes](references/json-output.md)
+- [teemtape ClawHub skill page](https://clawhub.ai/kiwifellows/skills/teemtape-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON response shapes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Use --json for machine-readable CLI output; tokens, Pro access tokens, and share URLs should be treated as sensitive.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

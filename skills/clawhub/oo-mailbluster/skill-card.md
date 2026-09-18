@@ -1,47 +1,57 @@
-## Description: <br>
-MailBluster helps agents read, create, update, and delete MailBluster data through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MailBluster helps agents operate a connected MailBluster account through the OOMOL oo CLI for reading, creating, updating, and deleting lead data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage MailBluster leads and custom fields through an OOMOL-connected account. It supports routine lead lookup as well as carefully reviewed create, update, and delete actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can modify MailBluster lead data. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running create or update actions. <br>
-Risk: Destructive actions can delete lead records. <br>
-Mitigation: Confirm the target lead and obtain explicit user approval before running delete actions. <br>
-Risk: Broad account access could expose more MailBluster data than needed for a task. <br>
-Mitigation: Use a MailBluster account with only the access needed for the intended work. <br>
-Risk: Incorrect payloads can produce unintended changes. <br>
-Mitigation: Fetch the live connector schema before constructing action payloads. <br>
+## Use Case:
 
+External developers and operators use this skill to manage MailBluster leads, custom fields, tags, metadata, subscription state, and double opt-in settings from an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub MailBluster Skill](https://clawhub.ai/oomol/skills/oo-mailbluster) <br>
-- [MailBluster Homepage](https://mailbluster.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI and an OOMOL-connected MailBluster account; write and destructive actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup recommends running remote installer scripts directly in a shell without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer through a safer channel, prefer a pinned package or verified checksum/signature, and avoid executing installer commands automatically.
+
+Risk: The skill can create, update, or delete MailBluster lead data.
+
+Mitigation: For write or destructive actions, inspect the live action schema and confirm the exact payload, effect, and target with the user before execution.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-mailbluster)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [MailBluster Homepage](https://mailbluster.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce oo CLI schema-inspection and connector-run commands; write and destructive actions require user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

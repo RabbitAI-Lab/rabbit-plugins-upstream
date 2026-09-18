@@ -1,42 +1,60 @@
-## Description: <br>
-Datadog helps an agent search and read Datadog monitoring data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Datadog search and read access for metrics, monitors, timeseries points, and API key validation through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to retrieve Datadog metric metadata, monitor details, metric names, monitor search results, timeseries points, and API key validation results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill broadly applies to Datadog-related work, which could lead an agent to use it for tasks beyond simple read workflows. <br>
-Mitigation: Confirm that Datadog access is intended before installation or use, and keep actions scoped to the user's requested Datadog task. <br>
-Risk: Future or expanded Datadog actions could create, edit, or delete resources such as monitors, dashboards, incidents, or configuration. <br>
-Mitigation: Require explicit user confirmation of the exact target, payload, and expected effect before any state-changing Datadog action. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Datadog action schemas and retrieve monitoring data such as metric metadata, active metric names, monitor details, monitor search results, and timeseries points.
 
-## Reference(s): <br>
-- [ClawHub Datadog skill](https://clawhub.ai/oomol/skills/oo-datadog) <br>
-- [Datadog homepage](https://www.datadoghq.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, json, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill frontmatter) <br>
+Risk: Datadog queries and results are routed through OOMOL.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated read-only Datadog key with minimum scopes and review OOMOL credential and data-handling controls before installation.
+
+Risk: The artifact documents remote installer commands for the oo CLI.
+
+Mitigation: Run installer commands only when the CLI is missing and only after verifying the installer source and integrity.
+
+Risk: Broad Datadog requests through the connector may expose sensitive monitoring data.
+
+Mitigation: Inspect the live action schema before each request and keep queries limited to the data needed for the task.
+
+## Reference(s):
+
+- [ClawHub Datadog Skill Listing](https://clawhub.ai/oomol/skills/oo-datadog)
+- [Datadog Homepage](https://www.datadoghq.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include Datadog connector responses containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

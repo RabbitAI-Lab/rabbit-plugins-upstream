@@ -1,46 +1,56 @@
-## Description: <br>
-Habitica (habitica.com) support for reading, creating, updating, deleting, and scoring Habitica user data through the OOMOL Habitica connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables an agent to manage Habitica tasks, tags, scoring, and user profile data through an OOMOL-connected oo CLI Habitica connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent operate their connected Habitica account for profile, task, tag, scoring, and task-management workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Habitica account and depends on OOMOL-mediated account access. <br>
-Mitigation: Install it only when the user wants an agent to operate that Habitica account through OOMOL and trusts the account connection. <br>
-Risk: Write actions can create, update, or score Habitica tasks and tags. <br>
-Mitigation: Confirm the exact action, payload, and expected account effect with the user before running write actions. <br>
-Risk: Destructive actions can delete Habitica tasks or tags. <br>
-Mitigation: Require explicit approval for the target task or tag before deletion. <br>
+## Use Case:
 
+External users and developers use this skill to read and manage their Habitica tasks and tags through an OOMOL-connected account. It supports routine Habitica operations while requiring confirmation before actions that write, delete, or otherwise change account data.
 
-## Reference(s): <br>
-- [ClawHub Habitica skill page](https://clawhub.ai/oomol/oo-habitica) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Habitica homepage](https://habitica.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Habitica connector action names, payload descriptions, and returned JSON summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: First-time setup may direct users to execute remote installer scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path before use and prefer an official, version-pinned installer or package manager flow with checksum or signature verification.
+
+Risk: Write and destructive actions can change or delete Habitica account data.
+
+Mitigation: Confirm the exact payload, effect, and target with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Habitica Skill](https://clawhub.ai/oomol/skills/oo-habitica)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Habitica homepage](https://habitica.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads/results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live action schemas before requests; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: evidence release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

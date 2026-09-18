@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "PDF-API.io"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["pdf_api_io"]
   icon: "https://static.oomol.com/logo/third-party/pdf_api_io.png"
 ---

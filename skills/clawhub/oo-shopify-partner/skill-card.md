@@ -1,43 +1,60 @@
-## Description: <br>
-Shopify Partner (shopify.com). Use this skill for ANY Shopify Partner request - searching and reading data. Whenever a task involves Shopify Partner, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Shopify Partner connector skill for searching, reading, and executing Shopify Partner operations through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External developers and operators use this skill to inspect Shopify Partner apps, app events, partner events, and earnings transactions, and to run Shopify Partner GraphQL operations through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill exposes a broad Shopify Partner GraphQL interface that can run mutations even though its summary emphasizes searching and reading data. <br>
-Mitigation: Require explicit user confirmation for every mutation, including the exact payload and expected effect, before execution. <br>
-Risk: Broad or sensitive Shopify Partner tasks may have business impact if the query or mutation scope is unclear. <br>
-Mitigation: Inspect the live action schema and review the GraphQL operation before routing sensitive tasks through the connector. <br>
+## Use Case:
 
+External developers and Shopify Partner operators use this skill to inspect connector schemas, run Shopify Partner read actions, execute Partner GraphQL queries or mutations, and retrieve app, event, and earnings transaction data.
 
-## Reference(s): <br>
-- [ClawHub Shopify Partner Skill](https://clawhub.ai/oomol/skills/oo-shopify-partner) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Shopify Partner Homepage](https://www.shopify.com/partners) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects with data and meta.executionId; GraphQL mutations require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter, release metadata) <br>
+Risk: The skill exposes a write-capable Shopify Partner GraphQL path while presenting common usage as searching and reading data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat execute_graphql as write-capable, inspect the live schema, and require explicit user confirmation for any mutation or state-changing payload.
+
+Risk: First-time setup includes remote installer commands that execute downloaded scripts.
+
+Mitigation: Avoid pipe-to-shell installation unless the installer source and integrity have been independently verified; prefer reviewing the official install guide first.
+
+Risk: Use requires Shopify Partner credentials and scopes through an OOMOL-connected account.
+
+Mitigation: Use only credentials and scopes acceptable for exposure to OOMOL, apply least privilege, and reconnect or rotate credentials when access changes.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-shopify-partner)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Shopify Partner Homepage](https://www.shopify.com/partners)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides agents to inspect live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

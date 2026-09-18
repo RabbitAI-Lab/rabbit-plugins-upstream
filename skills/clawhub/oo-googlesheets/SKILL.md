@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Google Sheets"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["googlesheets"]
   icon: "https://static.oomol.com/logo/third-party/Google%20Sheets.svg"
 ---

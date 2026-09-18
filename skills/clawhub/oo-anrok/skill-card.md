@@ -1,44 +1,61 @@
-## Description: <br>
-Anrok (anrok.com). Use this skill for ANY Anrok request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents perform read-only Anrok customer, product, filing, product mapping, tax category, and transaction lookups through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to search and read Anrok customer, product, filing, transaction, product mapping, and tax category data through an OOMOL-connected Anrok account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Returned Anrok customer, transaction, filing, and tax data may contain sensitive business or customer information. <br>
-Mitigation: Limit responses to the user's requested data and treat connector results as sensitive. <br>
-Risk: Future versions could add write or destructive Anrok actions. <br>
-Mitigation: Review updated security evidence before upgrade and require explicit user confirmation before any write or destructive action. <br>
-Risk: Using an incorrect payload schema can cause failed or unintended connector requests. <br>
-Mitigation: Inspect the live `oo connector schema` for the selected action before constructing each payload. <br>
+## Use Case:
 
+External developers and operations teams use this skill to query connected Anrok account data for tax operations and support workflows. The documented action set is read-only and is intended for lookups rather than arbitrary Anrok operations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-anrok) <br>
-- [Anrok homepage](https://www.anrok.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only connector actions return Anrok data and an execution ID in response metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and ClawHub release evidence) <br>
+Risk: First-time setup includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installation and prefer a verified, versioned, or signed oo CLI installation method.
+
+Risk: Anrok account reads are routed through OOMOL's connector service.
+
+Mitigation: Use the skill only when OOMOL-mediated access is acceptable for the connected Anrok account.
+
+Risk: The trigger wording is broader than the documented read-only action set.
+
+Mitigation: Limit use to the listed get and list actions, and inspect the live action schema before running each connector command.
+
+## Reference(s):
+
+- [ClawHub Anrok Skill](https://clawhub.ai/oomol/skills/oo-anrok)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Anrok Homepage](https://www.anrok.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector actions return JSON; agents should inspect the live action schema before constructing payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

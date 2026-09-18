@@ -1,40 +1,55 @@
-## Description: <br>
-Documenso helps agents search and read Documenso envelopes and templates through OOMOL's oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Documenso (documenso.com). Use this skill for ANY Documenso request — searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill when an agent needs to retrieve individual Documenso envelopes or templates, or list envelopes and templates with filters. It is intended for connected OOMOL accounts with Documenso access. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on an OOMOL-connected Documenso account and may expose account-scoped envelope or template data to agent workflows. <br>
-Mitigation: Review OOMOL and Documenso connection scopes during setup, and require explicit confirmation before enabling any future action that writes, deletes, or overwrites data. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve and search Documenso envelopes and templates through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-documenso) <br>
-- [Documenso](https://documenso.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution and returns connector responses as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence) <br>
+Risk: First-time setup asks users to execute remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup instructions before installing, use a trusted and verifiable installation method, and do not let an agent run remote installer commands unattended.
+
+Risk: Connector actions rely on the live schema and account connection state.
+
+Mitigation: Inspect the action schema before preparing payloads and only use first-time setup steps after an authentication or connection failure.
+
+## Reference(s):
+
+- [ClawHub Documenso Skill](https://clawhub.ai/oomol/skills/oo-documenso)
+- [Documenso Homepage](https://documenso.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces guidance for read-only Documenso connector actions and setup recovery steps.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

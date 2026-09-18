@@ -1,41 +1,53 @@
-## Description: <br>
-Pangolin-SafeYield is a defensive-offensive investment AI agent that runs a five-dimensional resonance scan across macro, fundamental, technical, capital-flow, and risk signals for stocks and ETFs, then produces buy, hold, or sell-oriented investment decision reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pangolin SafeYield is an educational investment decision-support skill that guides ETF and stock analysis through pre-trade checklists, five-dimensional market review, risk red-line screening, position draft fields, and review workflows.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users use this skill to structure public-market stock and ETF analysis, compare macro and market signals, and produce investment decision reports with position sizing, execution levels, and risk notes. Outputs require human review before any financial decision. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can generate specific allocation and trade-plan suggestions for stocks and ETFs. <br>
-Mitigation: Treat reports as analytical guidance only and require human review before making financial decisions. <br>
-Risk: Broad trigger phrases can activate the workflow in general investment discussions. <br>
-Mitigation: Install it only where structured stock and ETF analysis is desired, and review generated outputs before use. <br>
+## Use Case:
 
+External users use this skill to structure ETF and individual-stock research, pre-trade checks, risk red-line review, and post-decision retrospectives. The skill produces decision-support drafts only; users remain responsible for verifying market data and making any real-world financial decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/pangolin-safe-yield) <br>
-- [Skill definition](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown investment analysis report with scoring tables, posture labels, allocation guidance, execution levels, and risk notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only workflow; uses public web searches; no executable code, privileged system access, persistent storage, or credential handling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: frontmatter and server release evidence) <br>
+Risk: The skill can produce buy or sell ranges, stop levels, and position-size drafts that may be mistaken for executable trading instructions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat outputs as educational decision support only, independently verify current market data, and consider qualified financial guidance before making real trades.
+
+Risk: Broad investing trigger phrases may invoke the checklist during general investing conversations.
+
+Mitigation: Confirm the user's intent and scope before applying the workflow, and keep conclusions framed as non-binding analysis requiring human review.
+
+## Reference(s):
+
+- [Pangolin SafeYield ClawHub listing](https://clawhub.ai/gechengling/skills/pangolin-safe-yield)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown investment decision-support report with checklist tables, scoring matrices, risk notes, and retrospective fields]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include reference buy ranges, stop levels, target levels, and position-size drafts for human review; it does not place orders or connect to brokers.]
+
+## Skill Version(s):
+
+3.2.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

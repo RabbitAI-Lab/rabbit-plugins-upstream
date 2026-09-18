@@ -1,48 +1,60 @@
-## Description: <br>
-AWS S3 helps an agent operate Amazon S3 through an OOMOL-connected account, including listing buckets and objects, reading metadata, uploading objects, generating pre-signed URLs, and deleting objects. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AWS S3 helps agents operate Amazon S3 through OOMOL's `oo` CLI, including bucket and object listing, metadata inspection, object transfer, pre-signed URL generation, and confirmed write or delete actions.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and automation users use this skill to let an agent inspect and manage AWS S3 resources through their connected OOMOL account. It is suited for bucket and object discovery, object metadata checks, uploads, pre-signed URL workflows, and carefully approved deletion tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate a connected AWS S3 account, including write, pre-signed URL, and delete workflows. <br>
-Mitigation: Review every write, pre-signed URL, and delete payload before approval, and confirm the target bucket, key, action, and expected effect. <br>
-Risk: Deleting an object removes data from the connected AWS S3 account. <br>
-Mitigation: Require explicit approval for destructive actions and verify the exact object target before running the command. <br>
-Risk: Pre-signed URLs can grant time-limited access to read, upload, or delete an object. <br>
-Mitigation: Generate pre-signed URLs only for intended recipients, actions, buckets, and keys, and avoid sharing them beyond the required workflow. <br>
-Risk: First-time setup may run an installer for the oo CLI. <br>
-Mitigation: Use the fallback install path only when the CLI is missing, and verify the installer from OOMOL's official source before running it. <br>
+## Use Case:
 
+Developers and operators use this skill when an agent needs to work with AWS S3 data through an OOMOL-connected account. It supports read workflows such as listing buckets and inspecting objects, plus user-confirmed uploads, deletes, and pre-signed URL generation.
 
-## Reference(s): <br>
-- [AWS S3 homepage](https://aws.amazon.com/s3/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-aws-s3) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include action payloads, connector schema inspection commands, command outputs, setup guidance, or approval prompts for write and destructive actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: Setup instructions include remote installer commands that execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified, pinned installer or package-manager path before installing the `oo` CLI.
+
+Risk: The skill can upload objects, delete objects, and generate pre-signed URLs that may expose or modify S3 data.
+
+Mitigation: Confirm the exact bucket, key, payload, URL operation, and intended effect with the user before running write, destructive, or pre-signed URL actions.
+
+Risk: The activation scope is broad for AWS S3 requests.
+
+Mitigation: Use the skill only for intended S3 operations through a trusted OOMOL connection, and inspect live action schemas before constructing payloads.
+
+## Reference(s):
+
+- [ClawHub AWS S3 skill page](https://clawhub.ai/oomol/skills/oo-aws-s3)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [AWS S3 homepage](https://aws.amazon.com/s3/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce or request JSON payloads matching live connector schemas; write, destructive, and pre-signed URL actions require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: server evidence release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

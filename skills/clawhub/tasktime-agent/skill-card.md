@@ -1,49 +1,64 @@
-## Description: <br>
-TaskTime Pro is a local-first work manager for freelancers, and this skill lets same-device agents operate tasks, timers, expenses, invoices, reports, and review screens through scoped access and approval controls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TaskTime Pro is a free, open-source, local-first work manager for freelancers, covering tasks, timers, expenses, invoices, and reports; this first-party TaskTime Pro skill lets same-device agents operate the app through scoped access and approval controls.
 
-## Publisher: <br>
-[tasktimepro](https://clawhub.ai/user/tasktimepro) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tasktimepro](https://clawhub.ai/user/tasktimepro)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent work with TaskTime Pro on the same device: planning and updating work, managing tasks and clients, tracking time, preparing invoice data, reviewing reports, handling expenses, opening app review screens, and recovering setup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Granting the skill access to a TaskTime Pro workspace can allow authorized agent actions to create or change business records. <br>
-Mitigation: Confirm the requested access before installation, use only needed scopes, inspect or preview data before writes, and rely on TaskTime Pro approval prompts for sensitive operations. <br>
-Risk: Pairing codes, approval tokens, authorization headers, exported account data, invoice PDFs, or email payloads may expose sensitive workspace information if logged or shared unnecessarily. <br>
-Mitigation: Keep these artifacts out of logs and durable notes unless the user explicitly asks for the artifact, and use short-lived pairing or approval flows through the visible app session. <br>
-Risk: Bypassing the bridge and editing browser storage, sync files, invoice records, or billing state directly could corrupt workspace data or skip application safeguards. <br>
-Mitigation: Use the supported TaskTime Pro bridge and visible app review screens; do not mutate raw persisted app data outside TaskTime Pro tools. <br>
+## Use Case:
 
+Freelancers, developers, and agent users use this skill to let a same-device agent manage TaskTime Pro work records through the supported local bridge. Common workflows include planning tasks, tracking time, reviewing expenses and reports, preparing invoice data, opening review screens, and recovering agent setup.
 
-## Reference(s): <br>
-- [TaskTime Pro OpenClaw setup](https://tasktime.pro/agents/openclaw/) <br>
-- [TaskTime Pro agent docs](https://tasktime.pro/agents/) <br>
-- [TaskTime Pro quickstart](https://tasktime.pro/agents/quickstart/) <br>
-- [TaskTime Pro security model](https://tasktime.pro/agents/security/) <br>
-- [TaskTime Pro MCP tool reference](https://tasktime.pro/agents/tools/) <br>
-- [TaskTime Pro MCP tools JSON](https://tasktime.pro/agents/mcp-tools.json) <br>
-- [TaskTime Pro bridge discovery manifest](https://tasktime.pro/.well-known/tasktime-agent.json) <br>
-- [TaskTime Pro debugging guide](https://tasktime.pro/agents/debugging/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline JSON and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide MCP tool calls and browser-visible review workflows; sensitive actions remain subject to granted scopes, explicit intent, and app approvals.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Installing an external bridge package can create supply-chain exposure if the package or publisher is not trusted.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when TaskTime Pro is an acceptable trusted publisher and prefer a pinned or verified bridge or plugin release when available.
+
+Risk: Granted scopes can permit high-impact billing, export, email, restore, deletion, or destructive record changes.
+
+Mitigation: Review granted scopes after pairing and reserve high-impact actions for explicit user approval in TaskTime Pro.
+
+Risk: Using storage, sync files, or invoice state outside the supported bridge can corrupt or bypass TaskTime Pro validation.
+
+Mitigation: Operate through the TaskTime Pro MCP bridge and visible app session; do not directly mutate browser storage, Yjs documents, Google Drive sync files, invoice state, or billing state.
+
+## Reference(s):
+
+- [TaskTime Pro Agent Docs](https://tasktime.pro/agents/)
+- [TaskTime Pro Agent Quickstart](https://tasktime.pro/agents/quickstart/)
+- [TaskTime Pro Agent Security Model](https://tasktime.pro/agents/security/)
+- [TaskTime Pro MCP Tool Reference](https://tasktime.pro/agents/tools/)
+- [Machine-readable MCP Tools](https://tasktime.pro/agents/mcp-tools.json)
+- [Bridge Discovery Manifest](https://tasktime.pro/.well-known/tasktime-agent.json)
+- [OpenClaw Setup](https://tasktime.pro/agents/openclaw/)
+- [TaskTime Pro Debugging Guide](https://tasktime.pro/agents/debugging/)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, configuration, shell commands, markdown]
+
+**Output Format:** [Markdown with JSON and bash snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agent guidance is scoped to TaskTime Pro MCP tools and same-device browser approval workflows.]
+
+## Skill Version(s):
+
+1.3.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

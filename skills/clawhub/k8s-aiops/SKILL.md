@@ -17,7 +17,7 @@ installer:
 argument-hint: "[resource name or describe your Kubernetes task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["K8S_AIOPS_CONFIG"],"bins":["k8s-aiops"],"config":["~/.k8s-aiops/config.yaml"]},"optional":{"env":["KUBECONFIG","K8S_AIOPS_HOME"]},"primaryEnv":"K8S_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/K8s-AIops","emoji":"☸️","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["k8s-aiops","uvx"]},"optional":{"env":["K8S_AIOPS_CONFIG","KUBECONFIG","K8S_AIOPS_HOME"]},"homepage":"https://github.com/AIops-tools/K8s-AIops","emoji":"☸️","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed Kubernetes operations. The governance harness (audit, token/runaway budget, undo, risk-tier labels) is bundled in the package — no external skill-family dependency.
   All write operations are audited to a local SQLite DB under ~/.k8s-aiops/ (relocatable via K8S_AIOPS_HOME).
@@ -64,6 +64,15 @@ uv tool install k8s-aiops
 k8s-aiops init            # friendly wizard: register your kube contexts as targets
 k8s-aiops doctor          # or skip init — works with your current kube-context too
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/k8s-aiops
+openclaw skills info k8s-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 

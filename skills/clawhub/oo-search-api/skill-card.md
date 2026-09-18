@@ -1,42 +1,52 @@
-## Description: <br>
-SearchApi (searchapi.io). Use this skill for ANY SearchApi request -- searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SearchApi (searchapi.io) lets an agent search, retrieve cached SearchApi results, look up canonical locations, and inspect SearchApi account usage through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to run SearchApi searches, retrieve cached search results, inspect account usage, and look up canonical locations through an OOMOL-connected SearchApi account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an OOMOL-connected SearchApi account and may trigger account-authenticated network requests. <br>
-Mitigation: Run only SearchApi actions expected by the user, inspect action schemas before payload construction, and confirm any write or destructive action before execution. <br>
-Risk: First-time setup and connection recovery can involve authentication, credential scope, or billing state. <br>
-Mitigation: Use setup steps only after a matching command failure and rely on OOMOL server-side credential injection rather than handling raw API keys. <br>
+## Use Case:
 
+Developers and agents use this skill to operate SearchApi through OOMOL's connector instead of handling API calls or raw credentials directly. It supports web search, cached result retrieval in HTML or JSON, location lookup for geo-targeted queries, and account usage checks.
 
-## Reference(s): <br>
-- [SearchApi homepage](https://www.searchapi.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-search-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return SearchApi JSON or HTML data through the oo CLI response envelope.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installation, prefer official package-manager or versioned release instructions when available and verify checksums or signatures where provided; do not run remote installer commands automatically in sensitive workspaces.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-search-api)
+- [SearchApi Homepage](https://www.searchapi.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the oo CLI to inspect live action schemas before constructing connector requests.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
