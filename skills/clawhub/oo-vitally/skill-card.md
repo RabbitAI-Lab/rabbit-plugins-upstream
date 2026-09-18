@@ -1,43 +1,56 @@
-## Description: <br>
-Vitally (vitally.io) lets an agent read, create, update, and delete Vitally account data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Vitally (vitally.io). Use this skill for reading, creating, updating, and deleting Vitally account data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage Vitally accounts through the OOMOL oo CLI while relying on connected credentials instead of raw API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and delete actions can change or remove Vitally account data. <br>
-Mitigation: Confirm the exact action, target account, payload, and effect before create, update, or delete operations; require explicit approval for destructive actions. <br>
-Risk: Agent actions use the user's OOMOL-connected Vitally account. <br>
-Mitigation: Install this skill only when agent-mediated Vitally access is intended, and review prompts carefully before allowing account changes. <br>
+## Use Case:
 
+External users and developers use this skill to manage Vitally accounts through an OOMOL-connected account. It supports reading account records and proposing create, update, or delete actions after checking the live connector schema.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-vitally) <br>
-- [Vitally Homepage](https://www.vitally.io/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and an execution id when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and frontmatter) <br>
+Risk: The first-time setup guidance includes shell commands that execute remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source and prefer a verified, version-pinned installation path for the oo CLI before using the skill.
+
+Risk: Vitally create, update, and delete actions can change or remove account data.
+
+Mitigation: Confirm the exact payload and effect with the user before write actions, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Vitally homepage](https://www.vitally.io/)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-vitally)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May call the oo CLI to inspect connector schemas and run Vitally actions; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence release.version and artifact metadata.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

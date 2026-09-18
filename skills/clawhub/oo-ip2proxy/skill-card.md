@@ -1,43 +1,53 @@
-## Description: <br>
-IP2Proxy helps an agent inspect IP2Proxy requests by looking up whether an IPv4 or IPv6 address is a proxy through the OOMOL IP2Proxy connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+IP2Proxy helps agents query the IP2Proxy service through OOMOL's oo CLI to inspect schemas and run proxy-detection lookups for IPv4 or IPv6 addresses.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill when they need an agent to check whether an IP address is associated with proxy usage through an OOMOL-connected IP2Proxy account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected OOMOL account and sensitive IP2Proxy credentials to run lookups. <br>
-Mitigation: Keep credentials scoped in the connected account, review each oo command before execution, and resolve authentication, scope, or billing errors only when command output requires it. <br>
-Risk: Incorrect connector payloads could send unintended lookup inputs or fail against the live IP2Proxy action contract. <br>
-Mitigation: Inspect the live action schema before constructing payloads and confirm any future write or destructive actions before running them. <br>
+## Use Case:
 
+Developers and agents use this skill to run read-only IP2Proxy lookups through an OOMOL-connected account, after checking the live connector schema and submitting a matching JSON payload.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-ip2proxy) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [IP2Proxy homepage](https://www.ip2location.com/web-service/ip2proxy) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema checks before running IP2Proxy lookup requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: First-time setup documents remote installer commands that execute scripts directly, which is a high-impact local installation path without integrity checks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source before execution and prefer a pinned, signed, or checksum-verified installation path when available.
+
+## Reference(s):
+
+- [IP2Proxy ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-ip2proxy)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [IP2Proxy Homepage](https://www.ip2location.com/web-service/ip2proxy)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Fetches the live connector schema before running actions; normal lookup responses include data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.3 (source: release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

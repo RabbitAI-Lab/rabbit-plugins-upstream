@@ -1,45 +1,61 @@
-## Description: <br>
-UnifAPI (unifapi.com) lets agents handle reading, creating, and updating data through the OOMOL `oo` CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+UnifAPI lets agents read, create, and update data through the OOMOL `oo` CLI instead of calling the UnifAPI API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect live UnifAPI action schemas, build matching JSON payloads, and run social, SEO, GEO, page rendering, link extraction, hotel, and ID conversion actions through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate many UnifAPI actions across social, SEO, GEO, rendering, and utility data sources through an OOMOL-connected account. <br>
-Mitigation: Install it only when that account-level access is intended, and review requested actions and payloads before execution. <br>
-Risk: Actions tagged `[write]` or with unclear write labeling may change UnifAPI state or have effects beyond simple reads. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running any tagged write action, and treat ambiguous labels cautiously. <br>
-Risk: First-time setup can install the `oo` CLI and connect UnifAPI credentials through OOMOL. <br>
-Mitigation: Run setup only after an authentication or connection failure requires it, and avoid proactively opening login or connection flows. <br>
+## Use Case:
 
+Developers and external agents use this skill to inspect UnifAPI action schemas, run connector actions with JSON payloads, and retrieve execution metadata across supported social, SEO, content, maps, local search, events, and hotel services.
 
-## Reference(s): <br>
-- [UnifAPI homepage](https://unifapi.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-unifapi) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses from `oo connector run` are JSON objects with `data` and `meta.executionId` fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill metadata) <br>
+Risk: The setup flow includes remote installer commands that could execute unreviewed code if run automatically.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not allow an agent to run installer commands automatically; install the oo CLI through a trusted, reviewable method and verify installer source and integrity before use.
+
+Risk: Connector actions run through the user's connected OOMOL account and may consume account credits.
+
+Mitigation: Confirm the account context and expected cost impact before running actions, and stop when OOMOL reports insufficient credit.
+
+Risk: Write-tagged UnifAPI actions can change remote data.
+
+Mitigation: Inspect the live action schema, confirm the exact payload and expected effect with the user, and avoid destructive or state-changing actions without explicit approval.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-unifapi)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [UnifAPI homepage](https://unifapi.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, JSON data, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload or response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [UnifAPI action responses include data and execution metadata from the connected OOMOL account.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

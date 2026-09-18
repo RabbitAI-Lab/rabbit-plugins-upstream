@@ -1,43 +1,56 @@
-## Description: <br>
-GTmetrix reads, creates, and updates GTmetrix data through the OOMOL gtmetrix connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates GTmetrix through OOMOL's oo CLI to read GTmetrix account, browser, location, page, report, and test data and to start new performance tests when confirmed.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate GTmetrix through an OOMOL-connected account, including reading account status, pages, reports, tests, browsers, locations, and simulated devices. It can also start new GTmetrix performance tests after confirming the payload and effect with the user. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires use of OOMOL as an intermediary for the connected GTmetrix account. <br>
-Mitigation: Install and use it only when that account-routing model is acceptable for the user or organization. <br>
-Risk: The start_test action can spend GTmetrix credits or create new account activity. <br>
-Mitigation: Review the exact payload and obtain user confirmation before running start_test. <br>
+## Use Case:
 
+Developers, site reliability teams, and external agents use this skill to inspect GTmetrix resources, retrieve reports, monitor test completion, and start performance tests for specified URLs through a connected account.
 
-## Reference(s): <br>
-- [GTmetrix homepage](https://gtmetrix.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-gtmetrix) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI to inspect GTmetrix action schemas and run connector actions; command responses include data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions include remote shell installers for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified installation method and do not allow an agent to run curl-to-bash or PowerShell installer commands automatically.
+
+Risk: The start_test action changes GTmetrix account state.
+
+Mitigation: Confirm the exact URL and action payload with the user before running the write action.
+
+## Reference(s):
+
+- [GTmetrix homepage](https://gtmetrix.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub GTmetrix skill page](https://clawhub.ai/oomol/skills/oo-gtmetrix)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas to shape action payloads and returns connector responses as JSON when actions run.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

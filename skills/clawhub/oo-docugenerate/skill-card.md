@@ -1,42 +1,61 @@
-## Description: <br>
-DocuGenerate operates DocuGenerate through an OOMOL-connected account to list templates and documents, generate documents from templates, retrieve documents, rename documents, and delete documents. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+DocuGenerate (docugenerate.com) support for reading, creating, updating, and deleting DocuGenerate data through the OOMOL-connected `oo` CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate DocuGenerate from an OOMOL-connected account, including reading templates and documents, generating documents with JSON merge data, renaming documents, and deleting documents after confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can act on a DocuGenerate account, including generating, renaming, and permanently deleting documents. <br>
-Mitigation: Approve write or delete commands only after checking the exact template, document ID, and payload. <br>
-Risk: First-time setup may require installing the oo CLI. <br>
-Mitigation: Install the oo CLI only from the documented OOMOL source when setup is needed. <br>
+## Use Case:
 
+External users and developers use this skill to operate DocuGenerate through an OOMOL-connected account, including template discovery, document generation, document retrieval, renaming, and deletion.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-docugenerate) <br>
-- [DocuGenerate Homepage](https://www.docugenerate.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence release.version and SKILL.md metadata.version) <br>
+Risk: Setup instructions include pipe-to-shell installation commands that can execute changing remote code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source independently before running it, or install the oo CLI through a trusted package or manually verified path.
+
+Risk: The skill can run write and destructive DocuGenerate actions, including document rename and permanent deletion.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before any write action, and require explicit approval before deletion.
+
+Risk: Commands operate through a connected OOMOL and DocuGenerate account.
+
+Mitigation: Use the skill only when the user trusts the connected account access and has verified that the DocuGenerate connection is intended for the requested task.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-docugenerate)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [DocuGenerate Homepage](https://www.docugenerate.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

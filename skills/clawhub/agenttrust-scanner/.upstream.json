@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agenttrust-scanner",
   "slug": "agenttrust-scanner",
   "ownerHandle": null,
-  "version": "1.4.0",
-  "updatedAt": 1782414475314,
-  "contentHash": "7f4d2b7ba64f18c601fdd86100dafb35336b0c1f0e82b4ff50411dfb3e2d4c41",
-  "fetchedAt": "2026-07-26T18:23:30.165Z"
+  "version": "1.4.1",
+  "updatedAt": 1789638812558,
+  "contentHash": "7ad49d221015bed240217550c5454674b1723d5d2661ecd1bb9b9fa22b37cef3",
+  "fetchedAt": "2026-09-18T12:25:24.564Z"
 }

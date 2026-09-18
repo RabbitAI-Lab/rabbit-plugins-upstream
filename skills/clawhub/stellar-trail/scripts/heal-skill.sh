@@ -1,0 +1,352 @@
+#!/usr/bin/env bash
+# ============================================================================
+# heal-skill.sh — SELF-HEAL INSTALASI stellar-trail (bundled sejak v3.3.0)
+# v3.3.1: fallback deteksi drift BERBASIS SUMBER saat manifest ikut hancur
+#        (insiden nyata: assets/ dihapus → integrity.sha256 lenyap → --check
+#        dulunya no-op; kini --check membandingkan instalasi dua arah terhadap
+#        sumber sehat bila manifest tidak tersedia)
+#
+# MASALAH YANG DISEMBUHKAN (bukti empiris 2026-09-17, insiden 07:37 UTC):
+#   Lingkungan container yang bisa di-reset dapat memulihkan skills/ dari
+#   arsip restore / salinan cache LAMA — instalasi skill terdegradasi
+#   diam-diam: versi _meta.json mundur, file hilang, aset lenyap.
+#   Memulihkannya biasanya butuh `clawhub update --force` + login registry
+#   (yang juga ikut hilang saat ~/.config ter-reset saat restart).
+#
+# SOLUSI — tiga kemampuan dalam satu skrip (opt-in, 100% lokal bila mungkin):
+#   1. VERIFIKASI: manifest SHA-256 (assets/integrity.sha256 + integrity.version,
+#      dibangun saat rilis via --manifest) membuktikan file mana yang
+#      hilang/rusak/ekstra — tanpa sumber eksternal; plus cross-check versi
+#      _meta.json vs versi rilis (persis signature degrade insiden asli).
+#   2. PERBAIKAN multi-sumber berurut:
+#        a. STELLAR_CANONICAL (env)
+#        b. <proyek>/download/stellar-trail (deteksi walk-up dari lokasi skill)
+#        c. /home/z/my-project/download/stellar-trail (default platform)
+#        d. subtree skills/stellar-trail di arsip restore
+#           (STELLAR_RESTORE_TAR, default /home/sync/repo.tar)
+#        e. hint terakhir: clawhub update stellar-trail --force (butuh login)
+#   3. NORMALISASI metadata: _meta.json & .clawhub/origin.json dipatch
+#      versinya agar konsisten dgn konten hasil heal — identitas install
+#      clawhub (ownerId, installedAt, fingerprint) tidak pernah ditimpa.
+#
+# LOKASI TARGET: default = direktori skill tempat skrip ini berada
+#   (self-locating — skrip menyembuhkan paketnya sendiri). Override dengan
+#   --dir <path> untuk menyembuhkan instalasi stellar-trail lain.
+#
+# EXEC BIT: hasil heal TIDAK diberi +x (0644) — identik dengan perilaku
+#   clawhub install/update dari registry. Seluruh invokasi protokol memang
+#   via `bash`/`python3` (exec-bit-independent by design — SKILL.md seksi
+#   Bundled scripts).
+#
+# PERINTAH:
+#   bash scripts/heal-skill.sh --status     # laporan versi + drift, TANPA aksi
+#   bash scripts/heal-skill.sh --check      # deteksi drift; heal bila ada (default)
+#   bash scripts/heal-skill.sh --force      # heal tanpa deteksi
+#   bash scripts/heal-skill.sh --manifest   # regenerasi manifest (SAAT RILIS,
+#                                           # dijalankan di salinan kanonik)
+#   bash scripts/heal-skill.sh --dir <path> <mode>   # target instalasi lain
+#
+# Override env: STELLAR_CANONICAL, STELLAR_RESTORE_TAR, STELLAR_PLATFORM_PROJECT
+#              (default /home/z/my-project), HEAL_TMP
+# Kebutuhan: bash, coreutils (sha256sum, find, sed, awk), tar; rsync untuk heal.
+# Exit: 0 = bersih / berhasil di-heal · 1 = drift bertahan / gagal heal · 2 = salah pakai
+# ============================================================================
+
+say() { echo "[heal-skill] $*"; }
+
+# ---------------------------------------------------------------------------
+# Parse argumen dulu — --dir boleh di mana saja; mode default --check
+# ---------------------------------------------------------------------------
+MODE="check"
+SKILL_DIR=""
+while [ $# -gt 0 ]; do case "$1" in
+    --status|--check|--force|--manifest) MODE="${1#--}"; shift;;
+    --dir) SKILL_DIR="${2:-}"; shift 2;;
+    -h|--help) sed -n '2,12p;44,52p' "$0" | sed 's/^# \{0,1\}//'; exit 0;;
+    *) echo "argumen tidak dikenal: $1 (pakai --help)" >&2; exit 2;;
+esac; done
+
+# Self-locate: direktori skill = parent dari scripts/ tempat skrip ini hidup
+if [ -z "$SKILL_DIR" ]; then
+    SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+else
+    SKILL_DIR="$(cd "$SKILL_DIR" && pwd)" || { echo "[heal-skill] --dir tidak valid: $SKILL_DIR" >&2; exit 2; }
+fi
+MANIFEST="$SKILL_DIR/assets/integrity.sha256"
+VERSIONF="$SKILL_DIR/assets/integrity.version"
+TAR_PATH="${STELLAR_RESTORE_TAR:-/home/sync/repo.tar}"
+PLATFORM_PROJECT="${STELLAR_PLATFORM_PROJECT:-/home/z/my-project}"
+REAL_SRC=""; TAR_TMP=""
+
+meta_version() {  # versi dari _meta.json (layout terinstal clawhub)
+    grep -oE '"version": *"[0-9]+\.[0-9]+\.[0-9]+"' "$1/_meta.json" 2>/dev/null \
+        | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1
+}
+card_version() {  # versi dari skill-card.md (salinan kanonik/paket rilis)
+    # anchor '^## Skill Version': frasa "skill version" bisa muncul di paragraf
+    # naratif deskripsi (mis. fitur guardian card) — jangan biarkan menipu
+    grep -A3 -i '^## *Skill Version' "$1/skill-card.md" 2>/dev/null \
+        | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -1
+}
+release_version() { [ -f "$VERSIONF" ] && tr -d '[:space:]' < "$VERSIONF"; }
+
+# ---------------------------------------------------------------------------
+# Deteksi drift (set: DRIFT 0|1, DRIFT_DESC, MISSING/DAMAGED/EXTRA/VDRIFT,
+# MMISS=1 bila manifest tak ada). Sumber kebenaran = manifest rilis.
+# ---------------------------------------------------------------------------
+detect_drift() {
+    DRIFT=0; DRIFT_DESC=""; MISSING=0; DAMAGED=0; EXTRA=0; VDRIFT=0; MMISS=0; SRC_BASED=0
+    if [ ! -f "$MANIFEST" ]; then
+        MMISS=1
+        # fallback (v3.3.1): manifest bisa ikut hancur bersama degrade (insiden
+        # nyata: assets/ dihapus). Bila ada sumber sehat, bandingkan DUA ARAH
+        # terhadap sumber — tetap terdeteksi tanpa manifest.
+        resolve_source || return 0
+        SRC_BASED=1
+        local f rel n=0 diffs="" e erel m=0 ex=""
+        while IFS= read -r f; do
+            rel="${f#"$REAL_SRC"/}"
+            [ "$rel" = "skill-card.md" ] && continue
+            if [ ! -f "$SKILL_DIR/$rel" ] || ! cmp -s "$f" "$SKILL_DIR/$rel"; then
+                n=$((n+1)); [ $n -le 5 ] && diffs="$diffs$rel, "
+            fi
+        done < <(find "$REAL_SRC" -type f | sort)
+        while IFS= read -r e; do
+            erel="${e#"$SKILL_DIR"/}"
+            case "$erel" in
+                _meta.json|.clawhub/*|skill-card.md|assets/integrity.sha256|assets/integrity.version) continue;;
+            esac
+            if [ ! -f "$REAL_SRC/$erel" ]; then
+                m=$((m+1)); [ $m -le 3 ] && ex="$ex$erel, "
+            fi
+        done < <(find "$SKILL_DIR" -type f | sort)
+        [ -n "$TAR_TMP" ] && { rm -rf "$TAR_TMP"; TAR_TMP=""; }
+        local vm vw
+        vm="$(meta_version "$SKILL_DIR")"; vw="$(card_version "$REAL_SRC")"
+        if [ $((n+m)) -gt 0 ]; then DRIFT=1; DRIFT_DESC="${n} beda/hilang, ${m} ekstra (vs sumber)${diffs:+ — ${diffs%, }}${ex:+ · ekstra: ${ex%, }}"; fi
+        if [ -n "$vm" ] && [ -n "$vw" ] && [ "$vm" != "$vw" ]; then
+            DRIFT=1; DRIFT_DESC="${DRIFT_DESC:+$DRIFT_DESC; }versi _meta $vm != sumber $vw"
+        fi
+        return 0
+    fi
+
+    # 1) verifikasi checksum seluruh file terdaftar.
+    #    File hilang memancarkan DUA baris ("No such file" + "FAILED open or
+    #    read") — maka hitung HILANG langsung dari daftar manifest (pasti satu
+    #    per file), dan RUSAK hanya dari baris FAILED yang bukan open-or-read.
+    local out line p
+    out="$(cd "$SKILL_DIR" && LC_ALL=C sha256sum -c assets/integrity.sha256 2>&1)" || true
+    while IFS= read -r p; do
+        [ -n "$p" ] || continue
+        [ -f "$SKILL_DIR/$p" ] || MISSING=$((MISSING+1))
+    done < <(awk '{print $2}' "$MANIFEST")
+    while IFS= read -r line; do
+        case "$line" in
+            *"No such file"*|*"FAILED open or read"*) ;;
+            *": FAILED"*) DAMAGED=$((DAMAGED+1));;
+        esac
+    done <<< "$out"
+
+    # 2) file ekstra di instalasi yang tak dikenal manifest (kecuali allowlist
+    #    metadata clawhub + artefak python)
+    local listed rel
+    listed="$(awk '{print $2}' "$MANIFEST")"
+    while IFS= read -r rel; do
+        [ -n "$rel" ] || continue
+        case "$rel" in
+            assets/integrity.sha256|skill-card.md|_meta.json|.clawhub/*) continue;;
+            *__pycache__/*|*.pyc) continue;;
+        esac
+        printf '%s\n' "$listed" | grep -qx -- "$rel" || EXTRA=$((EXTRA+1))
+    done < <(cd "$SKILL_DIR" && find . -type f | sed 's|^\./||')
+
+    # 3) cross-check versi: _meta.json (install) vs versi rilis (manifest)
+    #    — signature persis insiden degrade: _meta mundur, konten tertukar
+    local vm rv
+    vm="$(meta_version "$SKILL_DIR")"; rv="$(release_version)"
+    if [ -n "$vm" ] && [ -n "$rv" ] && [ "$vm" != "$rv" ]; then VDRIFT=1; fi
+
+    local parts=""
+    [ "$MISSING"  -gt 0 ] && parts="$parts ${MISSING} hilang ·"
+    [ "$DAMAGED"  -gt 0 ] && parts="$parts ${DAMAGED} rusak ·"
+    [ "$EXTRA"    -gt 0 ] && parts="$parts ${EXTRA} ekstra ·"
+    [ "$VDRIFT"   -eq 1 ] && parts="$parts versi _meta ${vm} != rilis ${rv} ·"
+    if [ -n "$parts" ]; then DRIFT=1; DRIFT_DESC="${parts% ·}"; fi
+}
+
+# ---------------------------------------------------------------------------
+# Resolusi sumber sehat (prioritas a→d; e hanya hint)
+# ---------------------------------------------------------------------------
+resolve_source() {
+    local c
+    for c in "${STELLAR_CANONICAL:-}" \
+             "$SKILL_DIR/../../download/stellar-trail" \
+             "$PLATFORM_PROJECT/download/stellar-trail"; do
+        [ -n "$c" ] || continue
+        if [ -f "$c/SKILL.md" ]; then
+            REAL_SRC="$(cd "$c" && pwd)"
+            return 0
+        fi
+    done
+    # arsip restore: ekstrak subtree skills/stellar-trail ke temp lokal
+    if [ -f "$TAR_PATH" ] && tar -tf "$TAR_PATH" 2>/dev/null | grep -q '^skills/stellar-trail/SKILL.md'; then
+        local tmp
+        tmp="$(mktemp -d "${HEAL_TMP:-/tmp}/heal-src-XXXXXX")" || return 1
+        if tar -xf "$TAR_PATH" -C "$tmp" skills/stellar-trail 2>/dev/null; then
+            REAL_SRC="$tmp/skills/stellar-trail"; TAR_TMP="$tmp"
+            return 0
+        fi
+        rm -rf "$tmp"
+    fi
+    return 1
+}
+
+source_desc() {
+    if [ -n "$REAL_SRC" ]; then
+        [ -n "$TAR_TMP" ] && echo "arsip restore ($TAR_PATH) -> $REAL_SRC" || echo "kanonik $REAL_SRC"
+    else
+        echo "(tidak ditemukan — fallback manual: clawhub update stellar-trail --force)"
+    fi
+}
+
+# ---------------------------------------------------------------------------
+# Heal: rsync sumber -> target (hapus ekstra, lindungi metadata clawhub),
+# lalu patch versi metadata, lalu verifikasi ulang.
+# ---------------------------------------------------------------------------
+do_heal() {
+    command -v rsync >/dev/null 2>&1 \
+        || { say "GAGAL: rsync tidak tersedia — fallback manual: clawhub update stellar-trail --force"; return 1; }
+    resolve_source || { say "GAGAL: tidak ada sumber sehat (kanonik & arsip restore tidak ditemukan) — fallback manual: clawhub update stellar-trail --force (butuh login)"; return 1; }
+    mkdir -p "$SKILL_DIR" 2>/dev/null || { say "GAGAL: tidak bisa menulis ke $SKILL_DIR"; return 1; }
+
+    say "sumber sehat: $(source_desc)"
+    if ! rsync -a --delete \
+            --exclude='skill-card.md' \
+            --exclude='_meta.json' \
+            --exclude='.clawhub/' \
+            "$REAL_SRC/" "$SKILL_DIR/" 2>&1; then
+        say "GAGAL: rsync sumber -> target error"
+        [ -n "$TAR_TMP" ] && rm -rf "$TAR_TMP"
+        return 1
+    fi
+
+    # patch versi metadata (identitas install dipertahankan, hanya versi)
+    local V vm
+    V="$(card_version "$REAL_SRC")"
+    [ -z "$V" ] && V="$(release_version)"
+    if [ -n "$V" ]; then
+        if [ -f "$SKILL_DIR/_meta.json" ]; then
+            sed -i "s/\"version\": *\"[^\"]*\"/\"version\": \"$V\"/" "$SKILL_DIR/_meta.json"
+        fi
+        if [ -f "$SKILL_DIR/.clawhub/origin.json" ]; then
+            sed -i "s/\"installedVersion\": *\"[^\"]*\"/\"installedVersion\": \"$V\"/" "$SKILL_DIR/.clawhub/origin.json"
+        fi
+    fi
+    [ -n "$TAR_TMP" ] && rm -rf "$TAR_TMP"
+
+    # verifikasi pasca-heal: wajib drift nol (bila manifest tersedia)
+    detect_drift
+    if [ "$MMISS" -eq 1 ]; then
+        if [ "$DRIFT" -eq 0 ] && [ "$SRC_BASED" -eq 1 ]; then
+            say "HEAL OK dari $(source_desc) — verifikasi vs sumber: drift nol (sumber tanpa manifest rilis)"
+        else
+            say "HEAL SELESAI dari sumber tanpa manifest — verifikasi otomatis tidak tersedia; cek manual bila perlu"
+        fi
+        return 0
+    fi
+    if [ "$DRIFT" -eq 0 ]; then
+        say "HEAL OK: instalasi disinkronkan dari $(source_desc) — drift nol (versi rilis $(release_version))"
+        return 0
+    fi
+    say "GAGAL: pasca-heal masih drift — $DRIFT_DESC"
+    return 1
+}
+
+# ---------------------------------------------------------------------------
+# Regenerasi manifest (build-time — jalankan di salinan KANONIK saat rilis)
+# ---------------------------------------------------------------------------
+gen_manifest() {
+    local v
+    v="$(card_version "$SKILL_DIR")"
+    if [ -z "$v" ]; then
+        say "GAGAL: versi tidak terbaca dari $SKILL_DIR/skill-card.md — --manifest hanya untuk salinan kanonik rilis"
+        return 1
+    fi
+    mkdir -p "$SKILL_DIR/assets"
+    printf '%s\n' "$v" > "$VERSIONF"
+    ( cd "$SKILL_DIR" && find . -type f \
+        | sed 's|^\./||' \
+        | grep -v '^assets/integrity\.sha256$' \
+        | grep -v '^skill-card\.md$' \
+        | grep -v '^_meta\.json$' \
+        | grep -v '^\.clawhub/' \
+        | grep -v '__pycache__/' \
+        | grep -v '\.pyc$' \
+        | sort | LC_ALL=C xargs sha256sum ) > "$MANIFEST"
+    say "manifest dibuat: $(wc -l < "$MANIFEST" | tr -d ' ') file, versi rilis $v -> $MANIFEST"
+    return 0
+}
+
+# ---------------------------------------------------------------------------
+# MODES
+# ---------------------------------------------------------------------------
+case "$MODE" in
+status)
+    echo "=== STELLAR-TRAIL SELF-HEAL ==="
+    echo "skill dir : $SKILL_DIR"
+    echo "versi     : rilis=$(release_version || echo '?') · _meta=$(meta_version "$SKILL_DIR" || echo '-')"
+    if [ -f "$MANIFEST" ]; then
+        echo "manifest  : $(wc -l < "$MANIFEST" | tr -d ' ') file terdaftar"
+    else
+        echo "manifest  : TIDAK ADA (instalasi tanpa manifest rilis — verifikasi otomatis mati)"
+    fi
+    resolve_source && echo "sumber    : $(source_desc)" || echo "sumber    : $(source_desc)"
+    [ -n "$TAR_TMP" ] && rm -rf "$TAR_TMP"; TAR_TMP=""
+    detect_drift
+    if [ "$MMISS" -eq 1 ] && [ "$SRC_BASED" -ne 1 ]; then
+        echo "verdict   : TIDAK TERVERIFIKASI (tanpa manifest & tanpa sumber pembanding) — heal --force dari sumber, atau pasang manifest rilis"
+    elif [ "$DRIFT" -eq 1 ]; then
+        echo "verdict   : DRIFT — $DRIFT_DESC"
+        echo "aksi      : bash scripts/heal-skill.sh --check"
+    else
+        echo "verdict   : BERSIH (drift nol)"
+    fi
+    exit 0
+    ;;
+check|force)
+    detect_drift
+    if [ "$MODE" = "force" ]; then
+        say "mode force — heal tanpa deteksi"
+        do_heal
+        exit $?
+    fi
+    if [ "$MMISS" -eq 1 ]; then
+        if [ "$DRIFT" -eq 1 ]; then
+            say "drift terdeteksi (tanpa manifest, vs sumber): $DRIFT_DESC"
+            do_heal
+            exit $?
+        fi
+        if [ "$SRC_BASED" -eq 1 ]; then
+            say "check: manifest tidak ada, tapi verifikasi vs sumber: BERSIH — tidak ada aksi"
+        else
+            say "WARN: manifest tidak ada & tanpa sumber pembanding — verifikasi tidak tersedia (pakai --force untuk heal buta dari sumber)"
+        fi
+        exit 0
+    fi
+    if [ "$DRIFT" -eq 0 ]; then
+        say "check: BERSIH (drift nol) — tidak ada aksi"
+        exit 0
+    fi
+    say "drift terdeteksi: $DRIFT_DESC"
+    do_heal
+    exit $?
+    ;;
+manifest)
+    gen_manifest
+    exit $?
+    ;;
+*)
+    echo "pakai: heal-skill.sh --status | --check | --force | --manifest [--dir <path>]" >&2
+    exit 2
+    ;;
+esac

@@ -1,42 +1,61 @@
-## Description: <br>
-Provides GitHub read, write, search, issue, pull request, release, workflow, branch, commit, file, and repository operations through the OOMOL-connected GitHub connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate GitHub through an OOMOL-connected account for reading, creating, updating, and deleting repository, issue, pull request, release, workflow, branch, commit, label, milestone, and file data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect, search, create, update, and delete GitHub resources through an OOMOL-connected account while following explicit confirmation rules for state-changing operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The connected OOMOL account can access GitHub data available to that account. <br>
-Mitigation: Install only when that access is acceptable, and verify the repository, target, and payload before approving any operation. <br>
-Risk: Write and destructive actions can create, overwrite, remove, or otherwise change GitHub resources. <br>
-Mitigation: Require explicit confirmation for actions tagged write or destructive, especially file changes, branch operations, workflow reruns, label clearing, and repository deletion. <br>
+## Use Case:
 
+Developers and agents use this skill to manage GitHub resources through the OOMOL-connected oo CLI while relying on live action schemas for request payloads. It supports read, write, and destructive GitHub workflows, including repository, issue, pull request, release, GitHub Actions, and file operations.
 
-## Reference(s): <br>
-- [GitHub](https://github.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-github) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands run through the OOMOL GitHub connector; write and destructive actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The first-time setup includes remote installer commands that could be unsafe if run blindly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official, verifiable installation method and review installer sources before execution.
+
+Risk: The skill can perform write and destructive GitHub operations, including deleting files, releases, labels, refs, comments, collaborators, and repositories.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before any write or destructive action runs.
+
+Risk: Using OOMOL as a GitHub connector requires granting permissions appropriate to the requested tasks.
+
+Mitigation: Install only with the GitHub scopes needed for the intended workflow and reconnect credentials when scope or credential errors occur.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-github)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [GitHub](https://github.com)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [OOMOL GitHub Connection Settings](https://console.oomol.com/app-connections?provider=github)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Code, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live action schemas before execution and returns connector responses as JSON when commands are run.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

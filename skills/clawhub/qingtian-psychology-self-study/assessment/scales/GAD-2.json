@@ -1,0 +1,100 @@
+{
+  "id": "GAD-2",
+  "name": "广泛性焦虑快速筛查（GAD-2）",
+  "short_name": "GAD-2 焦虑快速筛查",
+  "category": "焦虑",
+  "target_population": "成年人（≥12岁）",
+  "estimated_time": "约 30 秒",
+  "item_count": 2,
+  "description": "GAD-7 的前 2 题快速筛查：紧张焦虑与难以控制的担忧。总分 ≥3 提示焦虑阳性，建议继续完成完整 GAD-7 以评估严重程度。",
+  "source": "Kroenke et al., 2007（GAD-2，源自 Spitzer 2006 GAD-7）",
+  "license": "公共领域（Pfizer 公开授权），可免费使用",
+  "scoring_type": "sum",
+  "items": [
+    {
+      "id": "q1",
+      "text": "在过去两周里，你有多少时候感到紧张、焦虑或心烦？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "完全不会",
+          "score": 0
+        },
+        {
+          "label": "好几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "在过去两周里，你有多少时候不能停止或控制担忧？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "完全不会",
+          "score": 0
+        },
+        {
+          "label": "好几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ]
+    }
+  ],
+  "dimensions": [
+    {
+      "name": "筛查总分",
+      "items": [
+        "q1",
+        "q2"
+      ],
+      "max": 6,
+      "min": 0
+    }
+  ],
+  "standard_score": null,
+  "interpretation": {
+    "bands": [
+      {
+        "dimension": "筛查总分",
+        "min": 0,
+        "max": 2,
+        "level": "阴性（低风险）",
+        "summary": "焦虑核心症状轻微，暂无显著焦虑倾向。",
+        "advice": "如紧张担忧仍持续影响生活，建议完成 GAD-7 全量表复测。"
+      },
+      {
+        "dimension": "筛查总分",
+        "min": 3,
+        "max": 6,
+        "level": "阳性提示",
+        "summary": "紧张或担忧达到一定频率，提示需要进一步评估。",
+        "advice": "建议完成完整 GAD-7 评估严重程度，必要时就医。"
+      }
+    ]
+  },
+  "safety": {
+    "crisis_items": [],
+    "crisis_rule": "",
+    "high_risk_rule": ""
+  }
+}

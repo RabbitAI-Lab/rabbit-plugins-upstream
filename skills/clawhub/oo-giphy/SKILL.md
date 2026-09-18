@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "GIPHY"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["giphy"]
   icon: "https://static.oomol.com/logo/third-party/giphy.png"
 ---

@@ -156,6 +156,27 @@ description: 将当前对话、项目资料、会议记录、技术排障、工�
 | DOM / console 检查 | Obsidian CLI |
 | 版本对比 | Obsidian CLI 或 Git，按任务场景选择 |
 
+### `defuddle`：网页正文提取
+
+使用场景：当用户提供普通网页 URL（文章、博客、在线文档、新闻稿）并要求读取、分析或整理为笔记时，优先用 `defuddle` 提取正文，再进行消化整理。
+
+分工边界：
+
+- `defuddle` 只负责“网页 → 干净正文”这一层（去除导航、广告、侧栏等杂物，输出 Markdown 或 JSON）；本 skill 负责消化整理、笔记结构、Properties、引用边界和质量检查。
+- 提取产物属于消化过程材料：来源身份（URL、标题）按 `references/source-types.md` 的规则进入 `Context` 和 `Key references`；临时抽取文本默认不长期保留引用。
+- 需要 JavaScript 渲染的页面、登录墙等提取失败场景，按 `defuddle` 技能自身文档处理（如浏览器工具兜底）；本 skill 不定义提取实现。
+
+### `knap`：数据 → 笔记渲染
+
+使用场景：当用户要求把 JSON/CSV 等结构化数据、或已提取的文本（如网页正文）按模板转成一条或多条 Markdown 笔记时（含批量生成），交给官方 `knap` 完成渲染。
+
+分工边界：
+
+- `knap` 只负责“数据 → Markdown 渲染”这一层：模板、过滤器、批量生成和管道衔接；本 skill 定义笔记应该包含什么结构、哪些 Properties 字段、哪些 callout 样式、哪些内容质量要求和引用边界。
+- `knap` 渲染产物一律视为初稿：写入 vault 前，必须按 `references/note-template.md` 核对结构，并走本 skill 的质量检查和读回验证。
+- frontmatter 字段集合以本 skill 为准；`knap` 的 `yaml_property` 等过滤器只是生成手段，不得反向增减字段或改变字段规范。
+- `knap` 的模板语法、CLI 用法与版本以其官方 skill / 文档为准；本 skill 不定义模板语言。
+
 ## 参考文件
 
 - 起草笔记前阅读 `references/note-template.md`。

@@ -1,44 +1,56 @@
-## Description: <br>
-Crustdata (crustdata.com). Use this skill for ANY Crustdata request - searching and reading data. Whenever a task involves Crustdata, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Crustdata (crustdata.com). Use this skill for Crustdata company search and read workflows through the OOMOL oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to search, identify, and enrich Crustdata company records through an OOMOL-connected account without handling raw Crustdata API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The release evidence flags the package as suspicious because bundled maintainer helpers may run with broad authority or perform credentialed account actions. <br>
-Mitigation: Install only from the trusted publisher account, review the skill before use, and avoid full-access nested agent execution unless explicitly intended. <br>
-Risk: This skill requires sensitive credentials through an OOMOL-connected Crustdata account. <br>
-Mitigation: Use the OOMOL connection flow so credentials remain server-side, and reconnect or rotate credentials when scope or expiration errors occur. <br>
-Risk: Connector actions depend on live schemas and may fail or behave differently if the connected service changes. <br>
-Mitigation: Inspect the live action schema before constructing payloads and confirm any action marked write or destructive before execution. <br>
+## Use Case:
 
+Developers and agents use this skill to query Crustdata through an OOMOL-connected account for company autocomplete, identification, enrichment, and filtered search.
 
-## Reference(s): <br>
-- [Crustdata homepage](https://crustdata.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Skill page](https://clawhub.ai/oomol/oo-crustdata) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action payload construction; connector responses include data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions include remote installer commands that execute downloaded code without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer manually reviewed, version-pinned, checksum-verified OOMOL CLI installation instructions and avoid elevated privileges during installation.
+
+Risk: Crustdata actions use connected account credentials, so incorrect payloads could query unintended company data.
+
+Mitigation: Inspect the live action schema before building payloads and confirm any action marked write or destructive before execution.
+
+## Reference(s):
+
+- [Crustdata homepage](https://crustdata.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-crustdata)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing Crustdata action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

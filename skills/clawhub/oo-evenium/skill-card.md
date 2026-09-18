@@ -1,44 +1,55 @@
-## Description: <br>
-Evenium (corp.evenium.com). Use this skill for Evenium requests that read, create, or update event and guest data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Evenium lets an agent read, create, and update Evenium event and guest data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Evenium action schemas, list or retrieve events and guests, and perform confirmed status-changing guest actions through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use a connected Evenium account and therefore depends on sensitive account credentials managed by OOMOL. <br>
-Mitigation: Install and use it only for accounts the agent is allowed to access, and verify the OOMOL connection flow from trusted sources before first-time setup. <br>
-Risk: Some Evenium actions can change guest status or other event data. <br>
-Mitigation: Inspect the live action schema and confirm the exact payload and expected effect with the user before running any write or destructive action. <br>
+## Use Case:
 
+External users and operators use this skill to retrieve Evenium events and guests, inspect live connector schemas, and run approved Evenium actions through the oo CLI.
 
-## Reference(s): <br>
-- [ClawHub Evenium Skill](https://clawhub.ai/oomol/oo-evenium) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Evenium Homepage](https://corp.evenium.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses server-side OOMOL credential injection and requires confirmation before write or destructive actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions include remote installers that execute immediately in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified package or inspect and verify the downloaded installer before execution.
+
+Risk: Write actions can change sensitive Evenium guest or event data.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running any action tagged [write].
+
+## Reference(s):
+
+- [Evenium ClawHub release](https://clawhub.ai/oomol/skills/oo-evenium)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Evenium homepage](https://corp.evenium.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

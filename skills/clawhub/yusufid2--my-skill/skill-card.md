@@ -1,41 +1,58 @@
-## Description: <br>
-AI trading bot untuk BTC, ETH, dan SOL. <br>
+## Description:
 
-This skill is for demonstration purposes and not for production usage. <br>
+AI trading bot untuk BTC, ETH, dan SOL.
 
-## Publisher: <br>
-[yusufid2](https://clawhub.ai/user/yusufid2) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yusufid2](https://clawhub.ai/user/yusufid2)
 
-## Use Case: <br>
-Developers and agent users can use this skill to request crypto prices, rule-based signals, paper-trade actions, portfolio status, and simple trade history for BTC, ETH, and SOL. It should be treated as a paper-trading demo, not financial advice or a live trading system. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Security evidence marks the package suspicious because identity metadata is inconsistent and an unrelated shell-based chat wrapper can execute commands unsafely if run directly. <br>
-Mitigation: Review the package carefully before installing, avoid the extra index. chat wrapper unless it is fixed to avoid shell interpolation, and scan the package before deployment. <br>
-Risk: The tool performs paper-trading actions and can repeatedly call Binance APIs when run.sh is left running. <br>
-Mitigation: Treat outputs as simulation only, not financial advice or live trading instructions, and run the loop only when repeated local paper-trade updates and Binance API calls are intentional. <br>
+## Use Case:
 
+External users and developers use this skill to check BTC, ETH, and SOL prices, generate simple trading signals, and run paper-trade simulations from a Node.js CLI.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/yusufid2/my-skill) <br>
-- [Publisher profile](https://clawhub.ai/user/yusufid2) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration] <br>
-**Output Format:** [Console text with JSON-like command results and local JSON state files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local JSON files for prices, trade state, and trade history.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release metadata) <br>
+Risk: The package has a suspicious security verdict due to inconsistent metadata and an unrelated shell-based chat runner with command-injection risk.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the package before installing and do not run artifact/index. with untrusted input.
+
+Risk: The included run.sh script starts an endless local paper-trading loop.
+
+Mitigation: Use run.sh only when continuous local paper-trading is intended and monitor or stop the process explicitly.
+
+Risk: Trading signals and paper-trade results can be incorrect or misleading.
+
+Mitigation: Treat outputs as simulation guidance and validate results against independent market data before acting on them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/yusufid2/skills/my-skill)
+- [Binance ticker price API](https://api.binance.com/api/v3/ticker/price?symbol=${symbol}USDT)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with CLI command examples and JSON-like CLI output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reads and writes local JSON state files and may call the Binance ticker API.]
+
+## Skill Version(s):
+
+1.0.1 (source: ClawHub release metadata; artifact frontmatter 1.0.0 and package.json 1.1.0 differ)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Uniswap API"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["uniswap_api"]
   icon: "https://static.oomol.com/logo/third-party/uniswap_api.svg"
 ---

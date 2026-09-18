@@ -1,42 +1,51 @@
-## Description: <br>
-BuiltWith. Use this skill for ANY BuiltWith request - searching and reading data. Whenever a task involves BuiltWith, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BuiltWith helps agents inspect live connector schemas and retrieve BuiltWith domain technology profiles, summaries, recommendations, redirect history, and social-profile matches through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to retrieve BuiltWith technology intelligence for domains through an OOMOL-connected BuiltWith account, including domain profiles, summaries, recommendations, redirect history, and social-profile domain matches. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected BuiltWith account and uses OOMOL as an intermediary for access. <br>
-Mitigation: Connect only the BuiltWith account and scopes intended for this skill, and rely on the connector flow instead of exposing raw tokens to the agent. <br>
-Risk: First-time setup may involve piping a remote installer into a shell. <br>
-Mitigation: Review the official oo CLI installation guide or installer before running the install command. <br>
+## Use Case:
 
+External users and developers use this skill to query BuiltWith data through the OOMOL `oo` CLI for domain technology intelligence, recommendations, redirect history, and social-profile domain matches.
 
-## Reference(s): <br>
-- [BuiltWith skill on ClawHub](https://clawhub.ai/oomol/oo-builtwith) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI installation guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON containing data and metadata, including an execution ID.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release metadata and skill metadata) <br>
+Risk: Setup instructions include remote installer commands executed directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing; use the skill for BuiltWith lookups only and avoid remote installer commands unless the OOMOL distribution path and installer are independently verified.
+
+## Reference(s):
+
+- [ClawHub BuiltWith Skill](https://clawhub.ai/oomol/skills/oo-builtwith)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-oriented BuiltWith connector actions; responses include data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

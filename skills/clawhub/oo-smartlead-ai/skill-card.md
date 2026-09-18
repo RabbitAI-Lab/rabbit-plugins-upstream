@@ -1,42 +1,56 @@
-## Description: <br>
-Smartlead helps agents search and read Smartlead campaign, lead, and email-account data through an OOMOL-connected Smartlead account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Smartlead helps agents retrieve campaign, lead, and email-account data through an OOMOL-connected Smartlead account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers with a connected Smartlead account use this skill to inspect campaigns, campaign leads, and email accounts without calling the Smartlead API directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Read-only Smartlead actions can expose campaign, lead, and email-account data from the connected account. <br>
-Mitigation: Review command output before sharing it outside the authorized workflow. <br>
-Risk: The skill depends on trust in OOMOL and a connected Smartlead account. <br>
-Mitigation: Install only when the user trusts OOMOL and is comfortable connecting Smartlead to the OOMOL connector. <br>
+## Use Case:
 
+External users and operators use this skill to inspect Smartlead campaigns, campaign leads, and email accounts through connected OOMOL credentials without handling raw Smartlead tokens.
 
-## Reference(s): <br>
-- [ClawHub Smartlead skill](https://clawhub.ai/oomol/skills/oo-smartlead-ai) <br>
-- [Smartlead homepage](https://www.smartlead.ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Smartlead campaign, lead, and email-account data may be returned from the connected account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The first-time setup path includes unverified remote pipe-to-shell commands for installing the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installation path before use and prefer a pinned, signed, or checksum-verified oo CLI release or documented package-manager installation.
+
+Risk: Use beyond the disclosed read-only Smartlead actions could change the risk profile.
+
+Mitigation: Limit intended use to the listed get and list actions unless a future version clearly discloses and scopes write actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-smartlead-ai)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Smartlead Homepage](https://www.smartlead.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live action schemas before constructing JSON payloads and runs disclosed Smartlead get/list actions through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

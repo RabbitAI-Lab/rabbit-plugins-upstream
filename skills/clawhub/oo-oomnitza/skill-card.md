@@ -1,42 +1,60 @@
-## Description: <br>
-Oomnitza (oomnitza.com). Use this skill for Oomnitza requests that search and read data through the OOMOL connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Oomnitza helps agents search and read Oomnitza asset and user data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, operators, and developers use this skill to validate an Oomnitza connection and retrieve Oomnitza asset or user information through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on an installed and authenticated oo CLI plus an active Oomnitza connection. <br>
-Mitigation: Use the documented first-time setup path only after a command fails with an installation, authentication, connection, or billing error. <br>
-Risk: Future connector actions could include write or destructive operations even though this release is read-only. <br>
-Mitigation: Limit use to the listed read-only actions and require explicit user confirmation before any future action tagged write or destructive is run. <br>
+## Use Case:
 
+Employees, external users, developers, and IT operations teams use this skill to inspect Oomnitza assets, users, and connection metadata through an OOMOL-connected account. It supports read-only listing and retrieval workflows and instructs agents to inspect the live connector schema before running an action.
 
-## Reference(s): <br>
-- [Oomnitza homepage](https://www.oomnitza.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-oomnitza) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo CLI connector schema and run commands; connector responses are JSON with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: The first-time setup path asks users to run an internet installer directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified or separately reviewed oo CLI installation method before enabling the skill.
+
+Risk: The skill reads Oomnitza assets and users through OOMOL-mediated access.
+
+Mitigation: Confirm the connected Oomnitza account is scoped only to the asset and user data the agent should read.
+
+Risk: Connector action payloads can drift from examples or assumptions.
+
+Mitigation: Inspect the live connector schema before constructing each action payload.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-oomnitza)
+- [Oomnitza homepage](https://www.oomnitza.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include Oomnitza connector results returned as JSON under data and execution metadata under meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

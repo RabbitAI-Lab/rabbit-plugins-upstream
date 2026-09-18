@@ -1,45 +1,58 @@
-## Description: <br>
-SignWell (signwell.com). Use this skill for ANY SignWell request: reading, creating, and updating data through an OOMOL-connected SignWell account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SignWell (signwell.com). Use this skill for ANY SignWell request: reading, creating, and updating SignWell data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate SignWell workflows from an agent, including reading account, document, and template details, creating documents from templates, sending drafts for signature, and sending reminder emails. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires connected-account credentials and can expose connected service data in the agent session. <br>
-Mitigation: Install only when the user intends to let the agent access the connected account, and avoid using it with data that should not be visible in the session. <br>
-Risk: Write actions can create documents, send drafts for signature, or send reminder emails. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running any action marked as write. <br>
-Risk: Connector action payloads may drift from the current service contract. <br>
-Mitigation: Inspect the live action schema before building each payload. <br>
+## Use Case:
 
+Developers and agent users use this skill to inspect SignWell account, document, and template data, create documents from templates, send draft documents for signing, and send reminder emails after confirming write actions.
 
-## Reference(s): <br>
-- [SignWell homepage](https://www.signwell.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub SignWell skill page](https://clawhub.ai/oomol/oo-signwell) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Live connector schemas should be inspected before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup includes remote shell installer commands for the oo CLI, which can execute unverified code during installation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source before use and prefer a pinned, signed, checksum-verified, or package-manager installation path.
+
+Risk: Write actions can create SignWell documents, send documents for signature, or send reminder emails.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running any action tagged as write.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-signwell)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [SignWell homepage](https://www.signwell.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Skill icon](https://static.oomol.com/logo/third-party/signwell.svg)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses oo CLI connector schemas and JSON payloads; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/finance-news-aggregator",
   "slug": "finance-news-aggregator",
   "ownerHandle": null,
-  "version": "5.0.3",
-  "updatedAt": 1780413703707,
-  "contentHash": "937ae615a55e6600b916f921dbfa23b870b2794e463ccefdb438e035715e286f",
-  "fetchedAt": "2026-07-26T18:36:27.555Z"
+  "version": "5.0.4",
+  "updatedAt": 1789482031798,
+  "contentHash": "2aae148e29a4746f68eb3275f59cc8f127da93d18eb424146e982db5d0875828",
+  "fetchedAt": "2026-09-18T12:39:23.669Z"
 }

@@ -1,45 +1,61 @@
-## Description: <br>
-Loop Returns (loopreturns.com). Use this skill for Loop Returns requests that involve searching and reading data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches and reads Loop Returns return and destination data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to let an agent inspect Loop Returns return details, return lists, destinations, and destination lookups through an OOMOL-connected Loop Returns account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Loop Returns return, order, and destination information through the connected OOMOL account. <br>
-Mitigation: Install and use it only when that account-level read access is intended. <br>
-Risk: Future connector actions could include write or destructive behavior even though the current disclosed actions are read-only. <br>
-Mitigation: Review the live action schema and require explicit user approval before running any action tagged write or destructive. <br>
-Risk: First-time CLI installation and account connection steps change the local tool environment and account access state. <br>
-Mitigation: Run setup steps only when an auth, connection, or missing CLI error requires them. <br>
+## Use Case:
 
+Developers and operations teams use this skill to inspect Loop Returns records, return details, and configured destinations without handling raw API credentials directly.
 
-## Reference(s): <br>
-- [Loop Returns homepage](https://www.loopreturns.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-loop-returns) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides agents to inspect live connector schemas before running Loop Returns read actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: skill metadata and server release metadata) <br>
+Risk: The setup path includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI from a verified package source or inspect the installer before running it.
+
+Risk: Loop Returns requests and responses are routed through OOMOL.
+
+Mitigation: Confirm this routing is acceptable for sensitive or compliance-bound business data before installing or using the skill.
+
+Risk: Connector inputs depend on live action schemas.
+
+Mitigation: Fetch the action schema before constructing payloads and run only the read actions needed for the user request.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-loop-returns)
+- [Loop Returns homepage](https://www.loopreturns.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [OOMOL Loop Returns connection page](https://console.oomol.com/app-connections?provider=loop_returns)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing request payloads; read-only actions return Loop Returns data with execution metadata.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

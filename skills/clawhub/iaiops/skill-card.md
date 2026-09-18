@@ -1,39 +1,56 @@
-## Description: <br>
-Iaiops routes industrial and OT troubleshooting tasks to the appropriate edition skill and MCP profile for read-first diagnostics, analytics, and gated writes across PLC, SCADA, machine tool, IIoT, building, and fab protocols. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Vendor-neutral, governed industrial/OT data tap and intelligent troubleshooting skill that routes industrial protocol, PLC, SCADA, HMI, historian, CNC, RTU, IED, OEE, downtime root-cause, and OT asset inventory tasks to the appropriate iaiops MCP profile.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[zw008](https://clawhub.ai/user/zw008)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers and operations engineers use this skill to identify industrial and building automation tasks, choose the matching iaiops edition skill and MCP profile, and follow read-first troubleshooting or onboarding workflows. It is intended for governed OT diagnostics, routing, setup guidance, and carefully controlled write workflows.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Operators may misread or miss important Chinese operational instructions.
+
+Mitigation: Install and use the skill only with operators who can understand and review those instructions.
+
+Risk: The skill points users to an external iaiops-energy package for energy protocols.
+
+Mitigation: Pin or otherwise verify the external package before installation.
+
+Risk: Industrial and OT write actions can affect real equipment or production systems.
+
+Mitigation: Use least-privileged hosts and keep real OT writes behind the documented dry-run, approval, and change-management controls.
+
+## Reference(s):
 
 
-## Use Case: <br>
-External developers and OT engineers use Iaiops to select the right industrial protocol profile, inspect configured endpoints, run diagnostics, and prepare governed dry-run write actions for authorized control systems. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Guidance, Shell commands, Configuration]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can route users toward high-impact write-capable OT operations. <br>
-Mitigation: Use it only with authorized OT systems, keep credentials narrowly scoped, and require dry-run plus approval controls before any production write. <br>
-Risk: A broad MCP profile can expose more protocol tools than needed for a site. <br>
-Mitigation: Select the narrowest MCP profile that covers the target equipment or protocol before starting diagnostic work. <br>
+**Output Format:** [Markdown with inline shell commands and configuration references]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
+**Other Properties Related to Output:** [Routes users to specific iaiops edition skills and MCP profiles; emphasizes read-first operation, dry-run behavior, approval controls, and human-supplied site semantics.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration instructions] <br>
-**Output Format:** [Markdown with inline shell commands and configuration values] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Routes users toward narrower MCP profiles and emphasizes read-first, dry-run, and approval-controlled operation for write-capable OT actions.] <br>
+0.28.0 (source: server release evidence)
 
-## Skill Version(s): <br>
-0.19.0 (source: server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

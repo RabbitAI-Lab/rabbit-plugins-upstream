@@ -1,43 +1,59 @@
-## Description: <br>
-Cuttly (cutt.ly) helps an agent inspect Cuttly action schemas, retrieve link analytics, and create short URLs through the OOMOL-connected Cuttly connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cuttly lets an agent operate Cuttly through an OOMOL-connected account to inspect action schemas, shorten URLs, and retrieve short-link analytics.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate Cuttly through an OOMOL-connected account, including reading analytics for short links and creating new Cuttly short URLs after inspecting the live connector schema. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create Cuttly short URLs with a connected account and the security summary says this state-changing action is under-disclosed and under-controlled. <br>
-Mitigation: Require explicit user confirmation of the exact shorten_url payload and expected effect before running URL creation commands. <br>
-Risk: The skill requires sensitive credentials through the OOMOL-connected Cuttly connector. <br>
-Mitigation: Use the connector only after schema inspection, avoid exposing raw tokens, and review first-time CLI or connection setup before proceeding. <br>
+## Use Case:
 
+External users and developers use this skill to manage Cuttly short links from an agent session through the OOMOL-connected oo CLI. It supports schema inspection, URL shortening, and click analytics retrieval.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-cutt-ly) <br>
-- [Cuttly Homepage](https://cutt.ly) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce credentialed Cuttly connector commands that read analytics or create short URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: The skill includes oo CLI installation commands that fetch and execute remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified official source for oo CLI installation and avoid automatic pipe-to-shell execution where possible.
+
+Risk: The shorten_url action changes Cuttly account state by creating a new short URL.
+
+Mitigation: Confirm the destination URL, JSON payload, and intended account effect with the user before running the action.
+
+Risk: Cuttly action data passes through OOMOL's connector service.
+
+Mitigation: Review whether the destination URL, analytics, and account context are appropriate to send through the connector before execution.
+
+## Reference(s):
+
+- [Cuttly homepage](https://cutt.ly)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include connector response summaries containing Cuttly data and OOMOL execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

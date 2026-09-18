@@ -1,0 +1,934 @@
+{
+  "id": "MBI",
+  "name": "Maslach 职业倦怠量表（MBI，22项自填版）",
+  "short_name": "MBI 职业倦怠",
+  "category": "职业倦怠",
+  "target_population": "在职人群",
+  "estimated_time": "约 4 分钟",
+  "item_count": 22,
+  "description": "测量职业倦怠三维度：情绪耗竭(EE, q1-9)、去人格化(DP, q10-14)、个人成就感(PA, q15-22，反向计分，维度分越高表示成就感越低、倦怠越重)。0–6 自评。",
+  "source": "Maslach & Jackson, 1981",
+  "license": "学术使用，商业需授权",
+  "scoring_type": "sum",
+  "items": [
+    {
+      "id": "q1",
+      "text": "工作让我感到情绪枯竭。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "一天的工作结束，我感到筋疲力尽。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "早晨起床想到要面对一天的工作，我感到非常累。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "我整天工作感到非常累。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q5",
+      "text": "工作让我感到挫折。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q6",
+      "text": "工作让我觉得身心俱疲。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q7",
+      "text": "工作让我感到压力很大。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q8",
+      "text": "工作让我感到情绪被耗尽。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q9",
+      "text": "工作让我感到无力。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "text": "我对工作对象变得冷漠。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "text": "我对工作对象不再关心。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "text": "我觉得工作对象把本该自己承担的责任推给我。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "text": "我不太关心工作对象发生了什么。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "text": "我对待工作对象像对待没有感情的物件。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "text": "我能有效地处理他人的问题。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "text": "我觉得我对他人的生活有正面影响。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "text": "我和他人相处融洽。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "text": "我能冷静处理情绪化的问题。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "text": "我觉得自己在单位是一个有价值的人。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q20",
+      "text": "我掌握了工作所需的技能。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q21",
+      "text": "我对自己的工作有成就感。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    },
+    {
+      "id": "q22",
+      "text": "我能理解他人的感受。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "每年几次",
+          "score": 1
+        },
+        {
+          "label": "每月一次",
+          "score": 2
+        },
+        {
+          "label": "每月几次",
+          "score": 3
+        },
+        {
+          "label": "每周一次",
+          "score": 4
+        },
+        {
+          "label": "每周几次",
+          "score": 5
+        },
+        {
+          "label": "每天",
+          "score": 6
+        }
+      ]
+    }
+  ],
+  "dimensions": [
+    {
+      "name": "情绪耗竭(EE)",
+      "items": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7",
+        "q8",
+        "q9"
+      ],
+      "max": 54,
+      "min": 0
+    },
+    {
+      "name": "去人格化(DP)",
+      "items": [
+        "q10",
+        "q11",
+        "q12",
+        "q13",
+        "q14"
+      ],
+      "max": 30,
+      "min": 0
+    },
+    {
+      "name": "个人成就感(PA)",
+      "items": [
+        "q15",
+        "q16",
+        "q17",
+        "q18",
+        "q19",
+        "q20",
+        "q21",
+        "q22"
+      ],
+      "max": 48,
+      "min": 0
+    }
+  ],
+  "standard_score": null,
+  "interpretation": {
+    "bands": [
+      {
+        "dimension": "情绪耗竭(EE)",
+        "min": 0,
+        "max": 11,
+        "level": "低",
+        "summary": "情绪耗竭程度低。",
+        "advice": "维持工作节奏。"
+      },
+      {
+        "dimension": "情绪耗竭(EE)",
+        "min": 12,
+        "max": 26,
+        "level": "中",
+        "summary": "有一定情绪耗竭。",
+        "advice": "注意恢复与边界。"
+      },
+      {
+        "dimension": "情绪耗竭(EE)",
+        "min": 27,
+        "max": 54,
+        "level": "高（警示）",
+        "summary": "情绪耗竭明显，倦怠风险高。",
+        "advice": "建议调整负荷、寻求支持或休假。"
+      },
+      {
+        "dimension": "去人格化(DP)",
+        "min": 0,
+        "max": 5,
+        "level": "低",
+        "summary": "去人格化程度低。",
+        "advice": "维持。"
+      },
+      {
+        "dimension": "去人格化(DP)",
+        "min": 6,
+        "max": 11,
+        "level": "中",
+        "summary": "有一定去人格化。",
+        "advice": "关注对他人的态度与同理。"
+      },
+      {
+        "dimension": "去人格化(DP)",
+        "min": 12,
+        "max": 30,
+        "level": "高（警示）",
+        "summary": "去人格化明显。",
+        "advice": "建议干预与心理支持。"
+      },
+      {
+        "dimension": "个人成就感(PA)",
+        "min": 33,
+        "max": 48,
+        "level": "高（警示）",
+        "summary": "个人成就感偏低，倦怠风险高。",
+        "advice": "肯定自身价值，寻求反馈与支持。"
+      },
+      {
+        "dimension": "个人成就感(PA)",
+        "min": 17,
+        "max": 32,
+        "level": "中",
+        "summary": "个人成就感中等。",
+        "advice": "维持。"
+      },
+      {
+        "dimension": "个人成就感(PA)",
+        "min": 0,
+        "max": 16,
+        "level": "低",
+        "summary": "个人成就感较高。",
+        "advice": "维持。"
+      }
+    ]
+  },
+  "safety": {
+    "crisis_items": [],
+    "crisis_rule": "",
+    "high_risk_rule": ""
+  }
+}

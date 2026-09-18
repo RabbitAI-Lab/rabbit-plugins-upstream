@@ -1,44 +1,56 @@
-## Description: <br>
-News API connector skill for searching articles, retrieving top headlines, listing sources, and reading News API data through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+News API lets agents search and read News API content through OOMOL's news_api connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to query News API through an OOMOL-connected account for article search, top headlines, source discovery, and legacy v1 article compatibility. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected OOMOL account and News API credentials handled by the connector. <br>
-Mitigation: Install and use it only where OOMOL is an approved connector provider for News API access. <br>
-Risk: First-time setup may use remote installer commands for the oo CLI. <br>
-Mitigation: On sensitive machines, prefer official manual installation or checksum/signature-verified packages before running the CLI. <br>
+## Use Case:
 
+Developers and external users use this skill to search published articles, retrieve top headlines, list news sources, and request legacy source-based article results through an OOMOL-connected News API account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-news-api) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [News API homepage](https://newsapi.org) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads or results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI to inspect connector schemas and run News API actions; connector responses include data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill metadata) <br>
+Risk: First-time setup includes remote shell and PowerShell installer commands that could execute unverified code if run automatically.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI manually from a trusted, verified source and do not allow an agent to run curl-to-bash or PowerShell installer commands automatically.
+
+Risk: The connector uses an OOMOL-connected account, so actions may depend on account access, billing status, and intentionally connected News API credentials.
+
+Mitigation: Sign in and connect News API only when the user explicitly intends to use this connector, and stop on billing or connection errors until the user resolves them.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-news-api)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [News API Homepage](https://newsapi.org)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands return News API response data as JSON with execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

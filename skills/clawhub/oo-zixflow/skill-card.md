@@ -1,42 +1,57 @@
-## Description: <br>
-Zixflow (zixflow.com). Use this skill for ANY Zixflow request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zixflow (zixflow.com). Use this skill for Zixflow requests covering reading, creating, updating, and deleting workspace data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent read, create, update, query, and delete Zixflow workspace records, lists, and members through the OOMOL oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, and delete Zixflow data. <br>
-Mitigation: Use a least-privilege Zixflow token where possible, and explicitly review prompts and payloads before allowing write or destructive actions. <br>
-Risk: Incorrect query or record payloads could affect the wrong workspace data. <br>
-Mitigation: Inspect the live connector schema before building each payload and confirm the intended target for write or destructive operations. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Zixflow connector schemas and perform Zixflow workspace operations such as listing, querying, creating, updating, and deleting collections, lists, records, entries, and members.
 
-## Reference(s): <br>
-- [Zixflow homepage](https://zixflow.com) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-zixflow) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live Zixflow connector schemas before constructing payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup instructions include direct execution of remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the installer source before use, or use an approved package-management or verification path for the oo CLI.
+
+Risk: Write and destructive Zixflow actions can change or delete workspace data.
+
+Mitigation: Confirm the exact action, target, payload, and expected effect with the user before running any action tagged write or destructive.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-zixflow)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Zixflow homepage](https://zixflow.com)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Normal read actions can be run directly; write and destructive actions require user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

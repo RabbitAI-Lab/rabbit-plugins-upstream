@@ -27,8 +27,18 @@ Content-Type: application/x-www-form-urlencoded
 | 参数 | 必选 | 类型 | 说明 |
 |------|------|------|------|
 | file_data | 和 file_url 二选一 | string | 文件 Base64 编码。版式文档：pdf, jpg, jpeg, png, bmp, tif, tiff, ofd（图片最长边≤8192px）；流式文档：doc, docx, txt, wps, ppt, pptx。图片≤10M，版式文档≤100M，流式文档≤50M，PDF≤500 页。超过 50M 须用 file_url。优先级：file_data > file_url |
-| file_url | 和 file_data 二选一 | string | 文件 URL，≤1024 字节。请关闭 URL 防盗链 |
+| file_url | 和 file_data 二选一 | string | 文件 URL，≤1024 字节。PDF≤100M，最大 500 页。请关闭 URL 防盗链 |
 | file_name | 是 | string | 文件名，后缀须正确，如 "1.pdf" |
+
+### 图像预处理参数（可选）
+
+| 参数 | 必选 | 类型 | 默认值 | 说明 |
+|------|------|------|--------|------|
+| angle_adjust | 否 | bool | True | 角度矫正 |
+| angle_mode | 否 | string | direction | 角度矫正模式，开启角度矫正后生效。direction：四方向；arbitrary：任意方向 |
+| erase_seal | 否 | bool | False | 印章擦除 |
+| erase_watermark | 否 | bool | False | 水印擦除 |
+| unwarp | 否 | bool | False | 图像扭曲矫正 |
 
 ## 提交请求返回
 

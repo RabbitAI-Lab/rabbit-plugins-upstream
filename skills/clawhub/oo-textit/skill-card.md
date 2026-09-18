@@ -1,43 +1,55 @@
-## Description: <br>
-TextIt lets an agent use OOMOL's oo CLI connector to read, create, update, delete, and send data in a connected TextIt workspace. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate TextIt through an OOMOL-connected account to read, create, update, and delete TextIt contacts, groups, messages, broadcasts, and workspace data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage TextIt workspaces from an agent through the OOMOL oo connector, including listing workspace data, managing contacts and groups, and sending messages or broadcasts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change contacts, groups, messages, or broadcasts in the connected TextIt workspace. <br>
-Mitigation: Confirm the exact payload, recipients, and expected effect with the user before running write actions. <br>
-Risk: Destructive actions can delete TextIt contacts or groups. <br>
-Mitigation: Require explicit approval for the target UUID or URN before running destructive actions. <br>
+## Use Case:
 
+External users and developers use this skill to operate TextIt via the OOMOL-connected oo CLI, including contact and group management, message and broadcast listing, and sending messages or broadcasts.
 
-## Reference(s): <br>
-- [TextIt skill page](https://clawhub.ai/oomol/skills/oo-textit) <br>
-- [TextIt homepage](https://textit.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo connector schema and run commands; write and destructive actions should include explicit recipient, payload, and target confirmation before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill metadata) <br>
+Risk: Setup instructions include remote installer commands that can execute unverified code from the internet.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source before use and prefer a signed, versioned, or package-manager installation path with verification.
+
+Risk: Write and destructive TextIt actions can change or delete TextIt contacts, groups, messages, or broadcasts.
+
+Mitigation: Confirm exact targets, payloads, and expected effects with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [TextIt homepage](https://textit.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-textit)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector action responses are JSON objects containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

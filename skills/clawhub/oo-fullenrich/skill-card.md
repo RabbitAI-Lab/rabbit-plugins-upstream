@@ -1,43 +1,55 @@
-## Description: <br>
-FullEnrich connector skill for searching and reading company, person, and credit balance data through OOMOL's oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+FullEnrich (fullenrich.com). Use this skill for any FullEnrich request, including searching and reading FullEnrich data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to inspect FullEnrich action schemas and run read-focused lookups for workspace credit balance, company records, and person records through a connected OOMOL and FullEnrich account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: FullEnrich lookups and credit balance checks go through OOMOL and FullEnrich and may consume FullEnrich credits. <br>
-Mitigation: Use the skill only with an intended connected account, inspect the live action schema before sending payloads, and stop on billing or insufficient-credit errors. <br>
-Risk: Future FullEnrich actions tagged write or destructive could change, remove, or overwrite data. <br>
-Mitigation: Confirm the exact payload and effect with the user before write actions, and require explicit approval before destructive actions. <br>
+## Use Case:
 
+External users and developers use this skill to check FullEnrich workspace credit balance and perform company or person lookups through an OOMOL-connected FullEnrich account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-fullenrich) <br>
-- [Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [FullEnrich Homepage](https://www.fullenrich.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read actions return JSON data with execution metadata from the oo CLI connector run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and frontmatter) <br>
+Risk: First-time setup includes remote installer commands that pipe downloaded scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path and independently trust the OOMOL CLI installer before running those commands.
+
+Risk: FullEnrich actions depend on an authenticated OOMOL-connected account and may expose business contact or enrichment data returned by the connector.
+
+Mitigation: Run only the needed read action, inspect the live action schema before sending a payload, and handle returned data according to the workspace's data policies.
+
+## Reference(s):
+
+- [FullEnrich homepage](https://www.fullenrich.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-fullenrich)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return JSON data from FullEnrich connector actions when the oo CLI command is run.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

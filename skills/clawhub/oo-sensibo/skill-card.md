@@ -1,43 +1,60 @@
-## Description: <br>
-Sensibo helps an agent list linked Sensibo devices, inspect device and AC state, and update AC state through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Sensibo devices through an OOMOL-connected account, including listing devices, retrieving device details and AC states, and setting AC state with the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Sensibo devices from an agent after the oo CLI is installed, the OOMOL account is signed in, and Sensibo is connected. It supports device discovery, state inspection, and confirmed AC state updates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can update AC state for a Sensibo device through the `set_ac_state` write action. <br>
-Mitigation: Confirm the exact device, payload, and intended AC state with the user before running any write action. <br>
-Risk: The skill requires access to an OOMOL-connected Sensibo account and depends on the local `oo` CLI installation. <br>
-Mitigation: Review the `oo` CLI installation path, connect only the intended Sensibo account, and use the connector only for requested Sensibo actions. <br>
+## Use Case:
 
+External users and developers use this skill to operate Sensibo devices connected through OOMOL: list devices, inspect device details and AC state, and update AC state after confirming write payloads.
 
-## Reference(s): <br>
-- [Sensibo homepage](https://home.sensibo.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-sensibo) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read actions may run directly; write actions require confirming the exact Sensibo device and AC state before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: First-time setup includes remote installer commands executed directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not run the installer commands as-is; use an official, versioned installation method with checksum or signature verification.
+
+Risk: The set_ac_state action changes Sensibo AC state.
+
+Mitigation: Approve the action only after reviewing the exact target device and full payload with the user.
+
+Risk: The skill depends on OOMOL-mediated access to Sensibo.
+
+Mitigation: Use it only where OOMOL account access, Sensibo connection status, and billing requirements are acceptable for the task.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-sensibo)
+- [Sensibo homepage](https://home.sensibo.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline bash, PowerShell, text, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an OOMOL-connected Sensibo account; write actions require explicit confirmation of the target device and payload.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

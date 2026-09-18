@@ -1,42 +1,56 @@
-## Description: <br>
-ScraperAPI (scraperapi.com). Use this skill for ANY ScraperAPI request - reading, creating, and updating data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ScraperAPI (scraperapi.com). Use this skill for ANY ScraperAPI request - reading, creating, and updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to check ScraperAPI account usage, scrape public URLs, and send POST or PUT requests through an OOMOL-connected ScraperAPI account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation wording may cause the skill to be used for many ScraperAPI-related requests, including requests that submit URLs or use account credentials. <br>
-Mitigation: Review the selected ScraperAPI action before execution and confirm payload details before any action that submits URLs or uses credentialed access. <br>
-Risk: The submit_url action can send POST or PUT requests to public URLs through ScraperAPI. <br>
-Mitigation: Confirm the exact target URL, HTTP method, payload, and expected effect with the user before running submit_url. <br>
+## Use Case:
 
+Developers and agents use this skill to operate ScraperAPI through an OOMOL-connected account, including checking account usage, scraping a public URL, and submitting POST or PUT requests when explicitly confirmed.
 
-## Reference(s): <br>
-- [ClawHub ScraperAPI skill page](https://clawhub.ai/oomol/skills/oo-scraperapi) <br>
-- [ScraperAPI homepage](https://www.scraperapi.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo CLI connector commands; ScraperAPI responses are returned as JSON with data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: The setup path documents remote installer scripts that execute with local privileges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installation and prefer an official, version-pinned installer or package-manager method with checksum or signature verification.
+
+Risk: The submit_url action can send POST or PUT requests through ScraperAPI.
+
+Mitigation: Confirm the exact target URL, method, payload, and expected effect with the user before running submit_url.
+
+## Reference(s):
+
+- [ScraperAPI homepage](https://www.scraperapi.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-scraperapi)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return JSON responses from OOMOL connector runs, including data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

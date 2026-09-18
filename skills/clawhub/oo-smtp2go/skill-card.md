@@ -1,45 +1,55 @@
-## Description: <br>
-SMTP2GO lets agents operate an OOMOL-connected SMTP2GO account for account summaries, sender data, templates, activity search, API key permission reads, and email sending. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+The SMTP2GO skill lets an agent manage SMTP2GO account data through an OOMOL-connected account, including account summaries, sender verification data, activity and template searches, and standard email sending.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate SMTP2GO through the OOMOL oo CLI connector, including reading account status, searching email activity, reviewing sender and template data, checking API key permissions, and sending standard JSON emails with user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The send_email action can send email from the connected SMTP2GO account. <br>
-Mitigation: Confirm the exact recipient, sender, subject, body, and intended effect with the user before running send_email. <br>
-Risk: Read actions can expose sensitive account information, including account activity, sender data, templates, and API key permissions. <br>
-Mitigation: Treat connector output as sensitive and avoid sharing or storing it beyond the user's requested task. <br>
-Risk: Incorrect payloads can cause unintended email sends or failed connector actions. <br>
-Mitigation: Inspect the live action schema with oo connector schema before constructing payloads. <br>
+## Use Case:
 
+Agents assisting SMTP2GO account users use this skill to inspect account and sender status, search email activity and templates, retrieve template details, view API key permissions, and send standard JSON emails after write-action confirmation.
 
-## Reference(s): <br>
-- [SMTP2GO ClawHub skill page](https://clawhub.ai/oomol/skills/oo-smtp2go) <br>
-- [SMTP2GO homepage](https://www.smtp2go.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose or run oo CLI connector commands and summarize JSON responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md metadata) <br>
+Risk: First-time setup includes remote installer commands that run downloaded scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing; prefer an official signed or version-pinned package, inspect downloaded scripts before execution, and approve any install or login step explicitly.
+
+Risk: The send_email action can send messages through the connected SMTP2GO account.
+
+Mitigation: Confirm the exact recipients, payload, and intended effect with the user before running the write action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-smtp2go)
+- [SMTP2GO homepage](https://www.smtp2go.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, JSON]
+
+**Output Format:** [Markdown guidance with shell command snippets and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

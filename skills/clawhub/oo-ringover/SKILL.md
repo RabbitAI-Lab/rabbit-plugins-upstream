@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Ringover"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["ringover"]
   icon: "https://static.oomol.com/logo/third-party/ringover.svg"
 ---

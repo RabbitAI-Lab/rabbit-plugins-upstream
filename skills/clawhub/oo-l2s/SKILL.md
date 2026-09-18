@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "L2S"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["l2s"]
   icon: "https://static.oomol.com/logo/third-party/l2s.png"
 ---

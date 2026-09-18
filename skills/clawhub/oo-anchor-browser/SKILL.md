@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Anchor Browser"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["anchor_browser"]
   icon: "https://static.oomol.com/logo/third-party/anchor_browser.svg"
 ---

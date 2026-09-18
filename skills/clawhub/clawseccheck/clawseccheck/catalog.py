@@ -7,6 +7,61 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
+#: Statuses that carry FAIL's weight. B-751.
+#:
+#: ``check_installed_skills`` can return ``SKILL_ARCHIVE_PATH_TRAVERSAL`` — a confirmed
+#: zip-slip in an installed skill — and ``_VET_MERGE_RANK``/``dossier._STATUS_RANK`` both
+#: rank it with FAIL. Nothing else did. Thirty-odd sites across eight modules compared
+#: against the bare literal ``"FAIL"``, so the status matched none of them and every one
+#: degraded toward "fine" rather than toward "unknown". Measured, on a home whose only
+#: installed skill ships a confirmed escape:
+#:
+#:     scoring.compute()              96 / grade A   (79 / C once it counts)
+#:     report._worst_of_statuses()    "PASS"
+#:     risk_paths()                   []             (RISK-09, CRITICAL, never fires)
+#:     render_sarif()                 7 results, none naming the escape
+#:     render_pdf()                   the word "traversal" absent from the document
+#:
+#: This lives in ``catalog`` because it is the one layer-1 leaf that both ``checks/`` and
+#: every renderer already import, so the check layer and the report layer can share one
+#: definition without a cycle. Import it; do not re-spell the set, and do not write a bare
+#: ``in (FAIL, WARN)`` in a status-filtering position — ``tests/test_b751_fail_weight.py``
+#: fails the build on both.
+FAIL_WEIGHT_STATUSES: frozenset = frozenset({"FAIL", "SKILL_ARCHIVE_PATH_TRAVERSAL"})
+
+#: FAIL-weight or WARN: the statuses that are "something to act on". The second most
+#: repeated literal after the one above, and it fails the same way.
+ACTIONABLE_STATUSES: frozenset = FAIL_WEIGHT_STATUSES | {"WARN"}
+
+
+def display_status(status: str) -> str:
+    """The status as a HUMAN should see it: every FAIL-weight status reads ``FAIL``.
+
+    B-755. Presentation is the one place the raw enum must not survive. A status table keyed on
+    the literal silently falls through to its default — which for the inventory swatch was the
+    grey reserved for "not assessed" — and an f-string interpolating the status prints the enum
+    itself. Neither is a wrong verdict; both tell the reader the wrong thing.
+
+    It lives in ``catalog`` rather than in ``report`` because the check layer needs it too:
+    ``checks/_mcp.py`` writes a status into evidence text a person reads, and ``checks/`` may
+    not import ``report``.
+    """
+    return "FAIL" if status in FAIL_WEIGHT_STATUSES else status
+
+
+def fail_weight_rows(value):
+    """Every FAIL-weight status mapped to ``value`` — for a status-keyed table.
+
+    B-755. A table that spells ``"FAIL"`` as a key and stops there hands the FAIL-weight
+    statuses to its own default, which in every case measured was the value meaning "nothing
+    to see here" — the grey reserved for "could not assess", or no entry at all. Spelling the
+    extra keys by hand fixes today and rots tomorrow: the next status added to the cascade
+    needs an edit in every table. Splat this instead::
+
+        _VERDICT = {**fail_weight_rows("DANGEROUS"), WARN: "SUSPICIOUS", ...}
+    """
+    return {status: value for status in FAIL_WEIGHT_STATUSES}
+
 CRITICAL = "CRITICAL"
 HIGH = "HIGH"
 MEDIUM = "MEDIUM"
@@ -45,6 +100,7 @@ SURFACES: tuple[str, ...] = (
     "host",
     "update",
     "trifecta",  # cross-cutting: A1 headline check only — not a bucket surface
+    "logs",  # F-163: trajectory/audit-trail/behavioral checks split out of "monitoring"
 )
 
 # 13-surface → 7-family roll-up (dashboard grouping; unblocks F-029).
@@ -61,6 +117,7 @@ FAMILY_OF: dict[str, str] = {
     "secrets": "secrets",  # Secrets & Data
     "monitoring": "detection",  # Detection & Host
     "host": "detection",
+    "logs": "detection",  # F-163: trajectory/audit-trail/behavioral checks
     "hooks": "automation",  # Automation & Maintenance
     "update": "automation",
 }
@@ -79,39 +136,61 @@ FAMILY_LABEL: dict[str, str] = {
 }
 FAMILY_ORDER: tuple[str, ...] = tuple(FAMILY_LABEL.keys())
 
-# 14-surface -> 5-subject roll-up (F-131 Phase 1: owner-facing "Inventory by subject").
+# 15-surface -> 8-subject roll-up (F-131 Phase 1, extended by F-163: owner-facing
+# "Inventory by subject" grows from 5 to 8 subjects).
 # Additive metadata only, next to FAMILY_OF — no verdict/score impact. Distinct from
 # FAMILY_OF (analyst-facing security categories): this groups findings the way an owner
-# actually owns things — "my system", "my agents", "each of my skills" — per the approved
-# design docs/design/2026-07-17-subject-inventory-block-design.md (workspace-root only,
-# not shipped). Every SURFACES slug (incl. "trifecta") maps to exactly one subject; a
-# coherence test asserts completeness, mirroring FAMILY_OF's own contract.
+# actually owns things — "my openclaw core", "my host machine", "my agents", "each of my
+# skills" — per the approved design docs/design/2026-07-17-subject-inventory-block-design.md
+# (workspace-root only, not shipped). Every SURFACES slug (incl. "trifecta" and "logs")
+# maps to exactly one subject; a coherence test asserts completeness, mirroring FAMILY_OF's
+# own contract. F-163 split the old "system" bucket three ways: "host" (already its own
+# SURFACES slug — B50/B51/B52/B53/B54/C5/B150) gets a standalone subject instead of being
+# folded into "system"; "system" itself is renamed "openclaw" (it was always OpenClaw-core
+# concerns, not the whole host); and the audit/trajectory-trail half of "monitoring" moves
+# to a NEW "logs" surface + subject (B164/B180/B85/T1/T2/T3/B191) while the remaining
+# config-integrity half of "monitoring" (B10/B14/B16/B77/B78/B173/B183/C014) stays mapped
+# to "openclaw". "plugins" has no SURFACES/CheckMeta entry — it is populated purely from
+# the --full plugin-sweep inventory in report.py, not from CATALOG.
 SUBJECT_OF: dict[str, str] = {
-    "gateway": "system",
-    "tools": "system",
-    "secrets": "system",
-    "monitoring": "system",
-    "hooks": "system",
-    "host": "system",
-    "update": "system",
-    "sessions": "system",
+    "gateway": "openclaw",
+    "tools": "openclaw",
+    "secrets": "openclaw",
+    "monitoring": "openclaw",
+    "hooks": "openclaw",
+    "update": "openclaw",
+    "sessions": "openclaw",
+    "host": "host",
     "agents": "agents",
     "bootstrap": "agents",
     "trifecta": "agents",  # A1: an agent-behavior signal, not a standalone bucket
     "skills": "skills",
     "mcp": "mcp",
     "channels": "channels",
+    "logs": "logs",
 }
 
 # Human-facing subject labels, in the fixed order the Inventory block renders them.
 SUBJECT_LABEL: dict[str, str] = {
-    "system": "System (OpenClaw core)",
+    "openclaw": "OpenClaw core",
+    "host": "Host machine",
     "agents": "Agents",
     "skills": "Skills",
     "mcp": "MCP servers",
+    "plugins": "Plugins",
     "channels": "Channels",
+    "logs": "Logs & trajectories",
 }
-SUBJECT_ORDER: tuple[str, ...] = ("system", "agents", "skills", "mcp", "channels")
+SUBJECT_ORDER: tuple[str, ...] = (
+    "openclaw",
+    "host",
+    "agents",
+    "skills",
+    "mcp",
+    "plugins",
+    "channels",
+    "logs",
+)
 
 
 @dataclass(frozen=True)
@@ -315,6 +394,157 @@ CATALOG: list[CheckMeta] = [
         surface="bootstrap",
     ),
     CheckMeta("B24", "MCP server hardening", HIGH, "hardening", "MCP Trust", surface="mcp"),
+    # B333 (F-143/W2.1). The subject is version-split (B-706) because the two builds do
+    # OPPOSITE things with these annotations.
+    #   2026.7.1-2 (grounded 2026-07-25): registration stored exactly {serverName,
+    #     safeServerName, toolName, title, description, inputSchema, fallbackDescription}
+    #     — `annotations` was NEVER stored (0 occurrences), so a server declaring
+    #     destructiveHint:true got zero behavioral effect. A HOST LIMITATION.
+    #   2026.8.1: registration stores `codexAnnotations`, and
+    #     `requiresMcpCodexToolApproval` reads them to decide which MCP tools reach an
+    #     UNATTENDED scheduled run. A server's own `readOnlyHint: true` WAIVES the
+    #     approval gate for its tool — the hints are load-bearing in the server's favour.
+    # WARN-only (never FAIL) on both, for different reasons: on the old build it is a host
+    # limitation and not server wrongdoing; on the new one most `readOnlyHint: true`
+    # declarations are honest and nothing static can separate an honest one from a lying
+    # one, so a FAIL would fire on every well-behaved server that annotates truthfully. MEDIUM/scored=True: an operator relying on these hints for a safety
+    # policy has a real, silent enforcement gap. Fires only when a raw manifest dump
+    # (source == "manifest") shows the server DID declare a hint — OpenClaw's own
+    # retained/compiled form (trajectory / probe-names) never carries annotations at
+    # all, so absence there proves nothing about what was originally declared and
+    # reports UNKNOWN rather than guessing a clean PASS (B-092).
+    # B334: a bundled helper script introduced ONLY by a block that tells the reading
+    # agent to run it outside the user's control (before the reply / without asking /
+    # without showing the output / on an input keyword), and named nowhere else in the
+    # skill's own documentation. Both halves are required: a documented helper is
+    # ordinary setup and a bare directive is another check's business. WARN-only and
+    # confidence=MEDIUM -- new detection, real-fleet false-positive behavior not yet
+    # proven, and a legitimately-needed-but-poorly-documented helper is a plausible
+    # benign source. Deliberately NOT keyed on the filename's shape: see the design
+    # comment in checks/_content.py for why an underscore-prefixed-path regex scores
+    # far better on a synthetic corpus and is nonetheless unshippable. That comment also
+    # carries the scope decided by the check's second adversarial pass: a prohibition
+    # ("never run X") is not an instance of X, a helper catalogued in the skill's own
+    # scripts/usage inventory is documented even when listed once, and a helper named
+    # with no directory component is an accepted, test-pinned residual.
+    CheckMeta(
+        "B334",
+        "Undocumented bundled helper run under an agent-directed directive",
+        MEDIUM,
+        "hardening",
+        "Prompt Injection / Undocumented Execution",
+        scored=True,
+        confidence="MEDIUM",
+        surface="skills",
+    ),
+    CheckMeta(
+        "B333",
+        "MCP tool safety-hint annotations and what this OpenClaw build does with them",
+        MEDIUM,
+        "hardening",
+        "MCP Trust",
+        scored=True,
+        confidence="HIGH",
+        surface="mcp",
+    ),
+    # B332 (F-145/W2.3): cross-server MCP tool-NAME collision/homoglyph/near-miss
+    # (shadowing). Names-only by design -- see checks/_mcp.py's section docstring above
+    # _B332_GENERIC_TOOL_NAMES for the full FP-trap reasoning. FAIL on an exact
+    # collision of a rare/specific name, or a homoglyph substitution (always
+    # suspicious, unconditional on genericness); WARN on an edit-distance-1 near-miss
+    # of a long, specific name; UNKNOWN with fewer than two servers or no tool names
+    # available. HIGH/scored=True: the model cannot reliably tell two same-named
+    # tools on different servers apart, so a collision is a real, silent
+    # tool-shadowing exposure, not just a hygiene nit.
+    # B353 (F-185): `mcp.servers.<name>.codex.defaultToolsApprovalMode` accepts
+    # "auto" | "prompt" | "approve", and "approve" means PRE-APPROVED, not "requires
+    # approval" — `requiresMcpCodexToolApproval` returns false for every tool on that
+    # server before any annotation is consulted (dist/mcp-codex-tool-approval-*.js;
+    # grounded on openclaw@2026.8.1 and re-verified against 2026.8.2). The consumer is unattended execution: a scheduled run drops
+    # every MCP tool that would need approval, so pre-approving keeps all of them.
+    #
+    # The value's NAME reads like the safe one and is the dangerous one, which is why this
+    # is a check rather than a documentation line.
+    #
+    # WARN, not FAIL, and for a reason that is expected to change: the mechanism lives on
+    # the Codex app-server path only — OpenClaw's own schema calls the block "projection
+    # metadata for Codex app-server threads only" — and this audit does not yet determine
+    # whether any configured agent runs that harness (B-708). A FAIL would
+    # assert a live grant on a setup where the block is inert. Once the harness can be
+    # determined, the confirmed case is FAIL-worthy: it is a break-glass override in the
+    # same family as B48/B171, differing only in that those are unconditionally live.
+    CheckMeta(
+        "B353",
+        "MCP server pre-approves every tool for unattended runs",
+        HIGH,
+        "hardening",
+        "MCP Trust",
+        scored=True,
+        confidence="HIGH",
+        surface="mcp",
+    ),
+    CheckMeta(
+        "B332",
+        "Cross-server MCP tool-name collision / homoglyph / near-miss (shadowing)",
+        HIGH,
+        "hardening",
+        "MCP Trust",
+        scored=True,
+        confidence="HIGH",
+        surface="mcp",
+    ),
+    # B331 (F-144/W2.2, blocked on C-294 grounding, now resolved — see
+    # docs/research/openclaw-schema-recon.md #38, workspace-root, not shipped): OpenClaw's
+    # own MCP tool-metadata sanitizer (`sanitizeMcpMetadataText`,
+    # agent-bundle-mcp-runtime--G82BMQs.js:959-964, dist openclaw@2026.7.1-2) redacts
+    # exactly two literal phrase families ("ignore ... instructions" / "disregard ...
+    # instructions") and truncates at 1200 chars — and it runs on only ONE of three
+    # model-facing runtime paths that consume mcp.servers (recon #38.3: the embedded
+    # `openclaw` harness; the CLI-backend and Codex harness paths never sanitize at all).
+    # `inputSchema` descriptions are never sanitized on ANY path (recon #38.5). A flat PASS
+    # would be a false PASS on the two non-sanitizing paths; a flat FAIL would over-claim on
+    # a payload the sanitizer genuinely neutralizes. HIGH/scored=True because the dominant
+    # real-world outcome (2 of 3 paths, plus anything the narrow 2-pattern regex misses on
+    # the third) is unmitigated tool-description injection reaching the model raw.
+    CheckMeta(
+        "B331",
+        "MCP tool-description injection surviving OpenClaw's host sanitizer",
+        HIGH,
+        "hardening",
+        "MCP Trust",
+        scored=True,
+        confidence="MEDIUM",
+        surface="mcp",
+    ),
+    # B369-B370 (C-413, child of E-074): runtime-exec inventory, disclosure-only
+    # (scored=False), matching B364's precedent — neither attempts to classify a value
+    # as safe/risky, only discloses it. acp.backend/fallbacks/runtime.installCommand
+    # (openclaw@2026.9.4, zod-schema-Q1KXOooO.mjs:1390-1403) are real, current,
+    # top-level fields — a richer surface than the filed task's stub named.
+    # agentRuntime.id's real path is
+    # agents.{defaults,entries.<id>}.models.<ref>.agentRuntime.id
+    # (openclaw@2026.9.4, zod-schema.agent-runtime-Ca6cjqf9.mjs:28-32), NOT the stub's cited
+    # models.providers.*.agentRuntime.id — B331's own pre-existing grounding note
+    # (above) already declined to characterize this field's value vocabulary as
+    # safe/risky for the same reasons B370 inherits.
+    CheckMeta(
+        "B369",
+        "acp.backend routes agent turn execution to a plugin backend",
+        MEDIUM,
+        "advisory",
+        "Supply Chain",
+        scored=False,
+        surface="mcp",
+    ),
+    CheckMeta(
+        "B370",
+        "agentRuntime.id names the external process that runs a model's turns",
+        MEDIUM,
+        "advisory",
+        "Supply Chain",
+        scored=False,
+        surface="mcp",
+    ),
     CheckMeta(
         "B25", "Update / pinning hygiene", MEDIUM, "hardening", "Supply Chain", surface="skills"
     ),
@@ -368,6 +598,25 @@ CATALOG: list[CheckMeta] = [
         "Browser / SSRF",
         surface="sessions",
     ),
+    # B330 (C-298): the Chrome DevTools Protocol control port OpenClaw opens on every
+    # managed browser launch carries no authentication. The port itself is NOT graded --
+    # it is vendor design an operator cannot switch off, so the ordinary loopback-confined
+    # case is a genuine PASS that states the fact instead of docking a grade for it
+    # (B-331's rule: grade the state a config CHOOSES, never one OpenClaw created). What
+    # IS graded is the operator's own two levers: an off-host cdpUrl (WARN -- the
+    # corroborated cdpUrl rung stays with B322/B196 rather than being triple-counted), and
+    # a wildcard --remote-allow-origins (FAIL), which was MEASURED on Chrome 150 to turn a
+    # refused cross-origin CDP handshake into a live one. HIGH because that FAIL means any
+    # page the browser has open can drive it.
+    CheckMeta(
+        "B330",
+        "browser CDP control port — unauthenticated, and how far it reaches",
+        HIGH,
+        "hardening",
+        "Browser / SSRF",
+        confidence="HIGH",
+        surface="sessions",
+    ),
     # E-060 parallel-workflow batch (2026-07-25): B321/B322/B323/B325/B327/B328 grounded,
     # implemented, and independently C-135-adversarially reviewed against the installed
     # OpenClaw dist. B329 (cron.webhook/cron.webhookToken) was deferred, NOT shipped --
@@ -382,7 +631,7 @@ CATALOG: list[CheckMeta] = [
     # trigger surface never independently verified this session.
     CheckMeta(
         "B321",
-        "browser.executablePath / profiles.*.executablePath / mcpCommand",
+        "browser.executablePath / profiles.*.executablePath / mcpCommand / mcpArgs",
         HIGH,
         "hardening",
         "Browser / SSRF",
@@ -425,6 +674,17 @@ CATALOG: list[CheckMeta] = [
         scored=False,
         confidence="HIGH",
         surface="skills",
+    ),
+    # B326 (E-060 follow-up): the only elevatedDefault value that
+    # skips human approval outright ("on"/"ask" are both approval-gated and behaviorally
+    # identical -- see clawseccheck/checks/_capability.py's grounding comment).
+    CheckMeta(
+        "B326",
+        'agents.defaults.elevatedDefault="full" bypasses human approval by default',
+        HIGH,
+        "hardening",
+        "Human Approval",
+        surface="tools",
     ),
     CheckMeta(
         "B327",
@@ -471,6 +731,50 @@ CATALOG: list[CheckMeta] = [
     CheckMeta(
         "B178",
         "Cleartext http:// baseUrl on a model provider (API-key + traffic leak)",
+        HIGH,
+        "hardening",
+        "Proxy / Egress Hardening",
+        surface="tools",
+    ),
+    # B365-B366 (C-412, child of E-074): raw-content egress the filed task's own stub
+    # got wrong on two of its three items — re-grounded against openclaw@2026.9.3.
+    #
+    # B365: diagnostics.otel.captureContent is a plain boolean (zod-schema-CTg_faEc.mjs
+    # :1278), not the granular {enabled,inputMessages,outputMessages,...} object the stub
+    # described — that shape is retired (legacy-D51FqLiI.mjs's migrateFinalLayoutKills
+    # collapses it to a boolean on every load). The real content-capture gate, traced
+    # from resolveDiagnosticModelContentCapturePolicy (dist/worker/worker.mjs), is a
+    # 4-key conjunction: diagnostics.enabled not-false AND otel.enabled===true AND
+    # otel.traces not-false AND captureContent===true — reading captureContent alone
+    # (the stub's own proposed condition) would false-positive on otel.enabled unset.
+    # FAIL-capable but narrow (HIGH severity, mirrors B178's classify-host bar exactly)
+    # to hold Golden Rule #5.
+    #
+    # B366: the stub's cited path `agents.defaults.memorySearch.remote.*` does not
+    # exist — real path is `memory.search.remote.*`, at the config ROOT (global) and,
+    # separately, PER-AGENT (agents.entries.<id>.memory.search.remote.*, NOT reachable
+    # under agents.defaults at all — AgentDefaultsSchema has no memory key). Checks both
+    # scopes independently via agent_roster(). FAIL-capable, same classify-host bar as
+    # B178/B365.
+    #
+    # `memory.qmd.sessions.exportDir` (the stub's third item) is dropped entirely: the
+    # QMD memory backend is RETIRED (openclaw@2026.9.4, legacy-fR_P797G.mjs:3668 names it
+    # explicitly —
+    # "memory.qmd is retired because the QMD memory backend was removed; configured
+    # external paths migrate to memory.search.extraPaths") — there is no field left to
+    # audit.
+    CheckMeta(
+        "B365",
+        "OpenTelemetry content capture ships raw agent turns to a network collector",
+        HIGH,
+        "hardening",
+        "Data Protection",
+        surface="secrets",
+    ),
+    CheckMeta(
+        "B366",
+        "memory.search.remote sends embedded memory chunks to a third-party endpoint "
+        "over cleartext http://",
         HIGH,
         "hardening",
         "Proxy / Egress Hardening",
@@ -682,8 +986,11 @@ CATALOG: list[CheckMeta] = [
     ),
     # B55 (C-013): filesystem-write tool exposure. Advisory (scored=False) — it names
     # the fs-write capability and feeds RISK-12 (write + untrusted ingress = tamper /
-    # persistence); the scored write/least-privilege dimensions stay with B3/B22/B31 so
-    # this never introduces a new scored FAIL on real configs.
+    # persistence); the general write/least-privilege dimension stays with B3/B22/B31.
+    # B-376/B-369 (2026-07-31): the one FAIL branch (proven broad reach — a wildcard
+    # elevated sender or a genuinely open channel, unscoped or exec-gated-only) carries
+    # a per-Finding scored=True override, the same B186 narrow-FAIL-override precedent —
+    # see check_fs_write_exposure's own docstring/comment.
     CheckMeta(
         "B55",
         "Filesystem-write tool exposure (broad fs-write without scoping)",
@@ -967,11 +1274,16 @@ CATALOG: list[CheckMeta] = [
     # lying-PASS); B-236's own adversarial review REFUTED that: OpenClaw computes the
     # effective exec policy as minSecurity(tools.exec.security, execApprovals.security)
     # + maxAsk(tools.exec.ask, execApprovals.ask) (bash-tools*.js:581-582;
-    # exec-approvals-BIKWP8_V.js:1126-1140), so a standing grant can only TIGHTEN the
-    # gate, never loosen it -- B8/B22/B23/B48's PASS was already correct. This check is
-    # therefore a pure visibility/inventory advisory (WARN-only, never FAIL, scored=False):
-    # it surfaces a standing grant the user may have forgotten about, it does not claim
-    # the grant defeats any other check's verdict.
+    # exec-approvals-BIKWP8_V.js:1126-1140) -- on those two TIER knobs (security/ask), a
+    # standing grant can only TIGHTEN the gate, never loosen it, so B8/B22/B23/B48's PASS
+    # was already correct. That refutation is scoped to the tier knobs ONLY (C-430): the
+    # allowlist entry's own CONTENTS are a separate axis -- an allow-always entry exists
+    # precisely to WIDEN what auto-approves, and a path-only entry (no argPattern -- the
+    # default on every non-Windows OpenClaw build, per buildArgPatternFromArgv) widens it
+    # to the WHOLE BINARY, any arguments. This check is therefore a pure visibility/
+    # inventory advisory (WARN-only, never FAIL, scored=False): it surfaces a standing
+    # grant the user may have forgotten about, it does not claim the grant defeats any
+    # other check's verdict.
     CheckMeta(
         "B172",
         "Standing exec-approvals.json allow-always grant (uninventoried persisted authority)",
@@ -1107,7 +1419,7 @@ CATALOG: list[CheckMeta] = [
         "Log Threat Intel",
         scored=False,
         confidence="MEDIUM",
-        surface="monitoring",
+        surface="logs",
     ),
     # B180 (F-127/E-044 Phase 5): the agent's own MEMORY corpus (the `memory` LogSink
     # kind in logdiscovery.py — `<workspace>/memory/**`, the same convention B7/B19
@@ -1147,7 +1459,7 @@ CATALOG: list[CheckMeta] = [
         "Log Threat Intel / Memory Re-consumption",
         scored=False,
         confidence="MEDIUM",
-        surface="monitoring",
+        surface="logs",
     ),
     # B67 (C-092): per-source tool-output trust contracts.
     # Complements B21 (generic trust boundary): checks that bootstrap has
@@ -1198,7 +1510,7 @@ CATALOG: list[CheckMeta] = [
     ),
     CheckMeta(
         "B71",
-        "gateway.nodes.denyCommands ineffective patterns (non-exact entries)",
+        "Node command deny-list entries that are silently ineffective",
         MEDIUM,
         "hardening",
         "Least Privilege / Node Commands",
@@ -1348,7 +1660,7 @@ CATALOG: list[CheckMeta] = [
         "hardening",
         "Incident Response / Audit Trail",
         scored=False,
-        surface="monitoring",
+        surface="logs",
     ),
     # B86 (defensibility axis — D1) — import-path hijack surface. A benign skill that
     # extends sys.path with a relative / writable / env-derived location can be weaponized
@@ -1499,6 +1811,79 @@ CATALOG: list[CheckMeta] = [
         confidence="MEDIUM",
         surface="skills",
     ),
+    # A helper reads and joins MULTIPLE chunked/part files at runtime (e.g.
+    # `_load.part1.txt`, `.part2.txt`), and the assembled result is passed to
+    # exec()/eval() — the split-by-file scanner-evasion loader shape, where the
+    # payload never exists whole in any single shipped .py file. Reuses skillast.py's
+    # CHUNKED_FILE_EXEC AST rule — pure wiring, no separate logic here. Same tier as
+    # B91 (hidden-payload assembly + scanner evasion family, cf. B90/B91). Advisory
+    # (scored=False); WARN-only.
+    CheckMeta(
+        "B336",
+        "Chunked multi-file-read assembly executed via exec()/eval() (split-by-file payload loader)",
+        HIGH,
+        "advisory",
+        "Obfuscation / Malicious Skill",
+        scored=False,
+        confidence="MEDIUM",
+        surface="skills",
+    ),
+    # B337 (B-364): a skill's own Markdown frames a shell command as a
+    # MANDATORY, pre-response checkpoint (or tells the agent not to ask the user's
+    # permission), and that command reads one or more hidden dotfiles/config paths via a
+    # `$(cat ...)`/backtick-`cat` substitution and POSTs the captured bytes to a remote
+    # host via curl/wget — a "Skill Licensing Check" data-exfil pattern found evading
+    # every existing check across 4 SkillTrustBench gold-malicious cases. Neither B63
+    # (keys on HIDING an action) nor B334 (keys on a BUNDLED HELPER PATH) matches this
+    # shape — see the module comment above `_B337_MANDATORY_RE` in checks/_content.py.
+    # New detection surface, real-fleet FP behavior unproven; WARN-only (never FAIL).
+    CheckMeta(
+        "B337",
+        'Mandatory-directive shell exfil of dotfiles via curl/wget ("licensing check" pattern)',
+        HIGH,
+        "hardening",
+        "Data Exfiltration / Prompt Injection",
+        scored=True,
+        confidence="MEDIUM",
+        surface="skills",
+    ),
+    # B338 (E-065): a skill's own code launches a covert tunnel / mesh-VPN primitive
+    # (tailscale/tailscaled, cloudflared tunnel, ngrok, ssh -R, socat listener, frpc,
+    # bore, a SOCKS5 proxy flag) — the HuggingFace July-2026 agent-intrusion incident's
+    # mesh-VPN pivot + reverse-tunnel C2 shape (huggingface.co/blog/
+    # agent-intrusion-technical-timeline). See the module comment above
+    # `_B338_LAUNCH_RE` in checks/_content.py. New detection surface, real-fleet FP
+    # behavior unproven; WARN-only (never FAIL) — a bare primitive alone is real and
+    # benign (a large share of developers run tailscale/cloudflared legitimately).
+    CheckMeta(
+        "B338",
+        "Covert tunnel / mesh-VPN enrollment primitive in an installed skill",
+        HIGH,
+        "hardening",
+        "Command & Control / Covert Channel",
+        scored=True,
+        confidence="MEDIUM",
+        surface="skills",
+    ),
+    # B339 (E-065): a skill's own code fetches cloud instance-metadata credentials —
+    # the HuggingFace incident's IMDS credential-theft primitive (AWS/GCP role
+    # credentials harvested post-compromise). FAIL-only, gated on defensive/
+    # documentation context — a credential-issuing URL at a known metadata host
+    # (curated, unambiguous — same FAIL discipline as B156's known-exfil-host anchor);
+    # non-credential metadata (instance-id, hostname, region) is ordinary environment
+    # detection and produces no finding at all (C-135 round 1: even WARN there was a
+    # false positive against this project's own zero-FP-on-clean-fixtures gate). See the
+    # module comment above `_B339_CRED_URL_RE` in checks/_content.py.
+    CheckMeta(
+        "B339",
+        "Cloud instance-metadata credential fetch in an installed skill",
+        HIGH,
+        "hardening",
+        "Credential Theft / Cloud Metadata",
+        scored=True,
+        confidence="MEDIUM",
+        surface="skills",
+    ),
     # A confusable/mixed-script character in a skill's frontmatter DESCRIPTION (the actual
     # trigger-phrase surface) can register as a distinct near-duplicate for preferential
     # routing while looking identical to a human reader. F-022 already covers the skill NAME;
@@ -1619,6 +2004,29 @@ CATALOG: list[CheckMeta] = [
         confidence="HIGH",
         surface="skills",
     ),
+    # B335 (T06, SkillTrustBench / B-343): B99's sibling. B99 catches a file *shipped
+    # as-is* named sitecustomize.py/.pth; B335 catches a script that *computes* an
+    # auto-exec target path at runtime and writes/installs it, where the shipped skill
+    # itself contains no such filename -- closing the T06 blind spot. Two independent
+    # co-occurrence signals, both textual/regex (same idiom as B99, no AST), scoped to
+    # a SINGLE file's body (not cross-file -- two unrelated files each doing something
+    # benign is too FP-prone to correlate). Mechanism A: a site-packages target lookup
+    # + a write-mode open() in the same file (installs a sitecustomize/usercustomize).
+    # Mechanism B: PYTHONSTARTUP + a shell rc target + a write-mode open() in the same
+    # file (installs a PYTHONSTARTUP hook via a shell rc file). Advisory (scored=False);
+    # WARN-only, never FAIL. MEDIUM confidence (not B99's HIGH): this is a multi-signal
+    # co-occurrence heuristic, not an exact filename match.
+    CheckMeta(
+        "B335",
+        "Runtime-computed Python auto-execution persistence install "
+        "(sitecustomize/usercustomize write, PYTHONSTARTUP shell-rc)",
+        HIGH,
+        "advisory",
+        "Defensibility / Supply-Chain Tamper",
+        scored=False,
+        confidence="MEDIUM",
+        surface="skills",
+    ),
     # A Prerequisites/Setup/Installation heading whose body instructs the reader to
     # paste a remote-fetch shell command into a terminal is the ClickFix 2.0 / ClawHavoc
     # delivery technique (standard §2.1) — distinct from B13's bare remote-fetch WARN,
@@ -1699,6 +2107,26 @@ CATALOG: list[CheckMeta] = [
         MEDIUM,
         "advisory",
         "Secrets / Filesystem",
+        scored=False,
+        confidence="MEDIUM",
+        surface="secrets",
+    ),
+    # B381 (C-405): a secret-shaped value sits at a config path neither OpenClaw's own
+    # redactor nor SECRET_KEY_RE/_secret_paths (B1's own detector) recognizes --
+    # measured directly (see check_redactor_blind_secret_paths's own docstring):
+    # Authorization/bearer/bare-key key names, and a "tokens" array (SECRET_KEY_RE
+    # matches the key, but _secret_paths' own recursion loses the key/value pairing
+    # once it descends into a list). Deliberately a NEW, narrowly ANCHORED check
+    # rather than widening the shared SECRET_KEY_RE in place -- that regex also feeds
+    # B1 (scored, FAIL-capable) and logsafe.redact()'s live output path, and a bare
+    # "key" alternative there would match ordinary field names like "primaryKey"/
+    # "sortKey" as a substring. WARN-only, unscored, never FAIL.
+    CheckMeta(
+        "B381",
+        "Secret-shaped value at an OpenClaw-redactor-blind config path",
+        MEDIUM,
+        "advisory",
+        "Secrets / Redaction Blind Spot",
         scored=False,
         confidence="MEDIUM",
         surface="secrets",
@@ -1818,6 +2246,24 @@ CATALOG: list[CheckMeta] = [
         confidence="MEDIUM",
         surface="host",
     ),
+    # B379 (F-178): host-level scheduled persistence (systemd user *.timer / world-
+    # readable system cron) that names OpenClaw, outside openclaw.json's own `cron`
+    # block (C048 covers only that). See check_host_scheduled_persistence
+    # (checks/_host.py) for the full three-way scoping (why .service/shell_rc are
+    # excluded, why the signal is a name/content match rather than bare existence).
+    # Advisory, never FAIL — matches B150's precedent one entry up (a real host
+    # scheduling surface, legitimate infrastructure that also happens to be a
+    # persistence substrate worth disclosing).
+    CheckMeta(
+        "B379",
+        "Host-level scheduled persistence (cron/systemd timer) naming OpenClaw",
+        LOW,
+        "advisory",
+        "Persistence / Host Watch",
+        scored=False,
+        confidence="MEDIUM",
+        surface="host",
+    ),
     # B151: third-party Codex CLI connector caches (agents/*/agent/codex-home/.tmp/
     # plugins/plugins/*/hooks.json) that wire a shell script to a tool-use/lifecycle
     # event. Informational disclosure of an upload-shaped surface in a third-party
@@ -1920,6 +2366,30 @@ CATALOG: list[CheckMeta] = [
         "Write Integrity / Self-Modification",
         surface="skills",
     ),
+    # B367-B368 (C-413, child of E-074): skills.load's other two siblings of
+    # extraDirs (zod-schema-CTg_faEc.mjs:1502-1508, live and current — the LOAD side,
+    # distinct from skills.workshop.allowSymlinkTargetWrites, the WRITE side B175 covers
+    # and which OpenClaw 2026.9.3 removed entirely, see B175's own B-783 note).
+    # B367's FAIL classifier reuses _shared._dir_replaceable_by_others (the discriminator
+    # B186, checks/_host.py, replaced a "well-known broad root" string heuristic with
+    # after that shape was tried and retracted there) rather than inventing a new one.
+    CheckMeta(
+        "B367",
+        "skills.load.allowSymlinkTargets widens where executable skill code may load "
+        "from via a symlink",
+        HIGH,
+        "hardening",
+        "Write Integrity / Self-Modification",
+        surface="skills",
+    ),
+    CheckMeta(
+        "B368",
+        "skills.load.watch hot-reloads skill definitions with no gateway restart",
+        MEDIUM,
+        "hardening",
+        "Write Integrity / Self-Modification",
+        surface="skills",
+    ),
     # B179 (B-250): hooks.webhooks / hooks.internal(.load.extraDirs) enable-toggle
     # inventory. The originating bug report's field name "hooks.webhooks" is NOT a real
     # config path -- grounded against the dist, the native audit's own inventory line
@@ -1946,6 +2416,26 @@ CATALOG: list[CheckMeta] = [
         LOW,
         "advisory",
         "Attack Surface / Hook Exposure",
+        scored=False,
+        confidence="HIGH",
+        surface="hooks",
+    ),
+    # B380 (C-406): hooks.mappings[].transform.module -- a config-loaded module path
+    # OpenClaw dynamically imports and invokes on every matching message, before the
+    # agent (or any other check) ever sees it. Never FAIL: both the module path and
+    # hooks.transformsDir itself are CONFINED (resolveContainedPath/
+    # resolveOptionalContainedPath, re-verified against the installed 2026.9.4 dist --
+    # see check_hook_transform_modules's own docstring for the symbol-level
+    # grounding), so there is no path-escape vector to FAIL on. Advisory disclosure,
+    # same shape as its sibling B179 immediately above (also hooks-surface, also
+    # advisory/LOW/scored=False), escalated to MEDIUM only when the resolved
+    # transforms directory is also group/world-writable.
+    CheckMeta(
+        "B380",
+        "hooks.mappings[].transform.module — config-loaded code run on messages",
+        LOW,
+        "advisory",
+        "Persistence / Supply-Chain Tamper",
         scored=False,
         confidence="HIGH",
         surface="hooks",
@@ -2334,7 +2824,7 @@ CATALOG: list[CheckMeta] = [
         "Lethal Trifecta (behavioral)",
         scored=False,
         confidence="MEDIUM",
-        surface="monitoring",
+        surface="logs",
     ),
     # T2: outcome anomaly — a fail -> fail -> success series on a sensitive verb within
     # one thread (from tool.result status/isError/success). Conservative on purpose: only
@@ -2349,7 +2839,7 @@ CATALOG: list[CheckMeta] = [
         "Anomalous Behavior",
         scored=False,
         confidence="MEDIUM",
-        surface="monitoring",
+        surface="logs",
     ),
     # T3: runtime capability drift — a HIGH-BLAST verb PROVEN in the trajectory log that is
     # NOT in the declared (tools.allow / gateway.tools.allow) ∪ attested grant. Complements
@@ -2366,7 +2856,7 @@ CATALOG: list[CheckMeta] = [
         "Excessive Agency (behavioral)",
         scored=False,
         confidence="MEDIUM",
-        surface="monitoring",
+        surface="logs",
     ),
     # B191 (F-134, DISK-1): OpenClaw's OWN runtime audit trail (`audit_events` in the
     # shared state SQLite DB — grep for "audit_events" across this package was ZERO hits
@@ -2413,7 +2903,460 @@ CATALOG: list[CheckMeta] = [
         "Incident Response / Runtime Audit Trail (behavioral)",
         scored=False,
         confidence="HIGH",
+        surface="logs",
+    ),
+    # B340 (F-156): every OTHER gateway-exposure verdict (B2, B70) is declared-state
+    # only -- it reads gateway.bind out of the config and reasons about that string,
+    # never what the process is ACTUALLY listening on. This corroborates the two:
+    # sockets.py reads /proc/net/tcp{,6} (no subprocess, matching hostwatch.py's
+    # doctrine) and check_effective_bind (checks/_config.py) compares the decoded
+    # listener against the declared bind. FAIL-capable (declared loopback + effective
+    # non-loopback = the config lies and the port is reachable from the network), so
+    # C-135 adversarial review is mandatory before this ships -- see the task record.
+    # HIGH (corroborates/contradicts CRITICAL B2 rather than replacing it, same tier
+    # as B70, its closest sibling). Degrades to UNKNOWN, never a guess, whenever the
+    # runtime signal is missing: no explicit port declared, the socket scan was not
+    # run (hermetic-by-default, same as ctx.host/include_host), /proc unavailable,
+    # nothing listening on the declared port yet, or the declared bind profile itself
+    # is unresolvable from the config alone.
+    # C-135 bugs 1+2 (independent review, 2026-07-30, both live-reproduced): (1) a
+    # non-loopback listener on the declared port now only FAILs when it can't be
+    # positively cleared as an unrelated process (/proc/*/fd socket-inode -> PID/comm
+    # correlation) -- e.g. Docker's userland proxy sharing a port number no longer
+    # false-FAILs a correctly loopback-only fixtures/home_safe; (2) an absent/empty
+    # gateway.bind now classifies as ambiguous, same as "auto", instead of "loopback"
+    # -- it resolves through the SAME container-dependent vendor default path.
+    CheckMeta(
+        "B340",
+        "Effective-bind verification (declared gateway.bind vs. the actual listening socket)",
+        HIGH,
+        "hardening",
+        "Zero Trust / Gateway",
+        surface="gateway",
+    ),
+    # B341: disclosure advisory for plugins.entries.<id>.hooks.allowPromptInjection /
+    # .hooks.allowConversationAccess (PluginEntrySchema, zod-schema-O9ml_nmo.js:788-806 in
+    # the installed openclaw npm dist) -- a per-plugin-entry grant to mutate the in-flight
+    # prompt / read the transcript, distinct from the ROOT-level `hooks` object
+    # (InternalHooksSchema, a separate .strict() schema with no such fields). Nothing reads
+    # either field today. WARN-only, scored=False, never FAIL: config alone cannot tell an
+    # intentional grant from an abusive one, and plugins already run in-process as trusted
+    # code (same posture as B57/B167).
+    CheckMeta(
+        "B341",
+        "plugins.entries.<id>.hooks.allowPromptInjection / .allowConversationAccess grants",
+        MEDIUM,
+        "advisory",
+        "Plugin / MCP Hardening",
+        scored=False,
+        confidence="HIGH",
+        surface="skills",
+    ),
+    # B342: disclosure advisory for plugins.slots.{memory,contextEngine} ownership and
+    # plugins.allow/plugins.deny contradictions (zod-schema-O9ml_nmo.js:1521-1529 in the
+    # installed openclaw npm dist -- `slots` is a .strict() object with exactly those two
+    # fields, not a record of arbitrary slot names). A slot owner sits in the agent's
+    # memory / context-assembly path; an id in both lists is silently blocked because deny
+    # wins over allow. WARN-only, scored=False, never FAIL: naming a memory plugin is
+    # ordinary configuration and a stale deny entry is usually an emergency-rollback
+    # leftover -- neither is adjudicable from config alone.
+    CheckMeta(
+        "B342",
+        "Plugin runtime-slot ownership and plugins.allow / plugins.deny contradictions",
+        MEDIUM,
+        "advisory",
+        "Plugin / MCP Hardening",
+        scored=False,
+        confidence="HIGH",
+        surface="skills",
+    ),
+    # B343 (C-341, ESET H1 2026): ML model artifact provenance — the one dependency
+    # class libraries/scripts/APIs/CLI utilities already get provenance checks for
+    # (B95/B157/C5/B86) but models do not. Distinct from B92 (unsafe deserialization
+    # FORMAT); this is about WHERE the model artifact came from. FAIL only for the same
+    # unverifiable-provenance shape B103/B157 already FAIL on (plaintext http/ftp, raw
+    # public IP, .onion), reusing their vetted host predicates verbatim — an unpinned
+    # reference or an arbitrary-but-HTTPS-named-host repo stays WARN, matching B103's
+    # own "unpinned is the norm" tension (there is no sound way to tell a legitimate
+    # community fine-tune from a typosquat by string shape alone).
+    CheckMeta(
+        "B343",
+        "ML model artifact loaded without provenance (huggingface / gguf / safetensors / ollama)",
+        HIGH,
+        "hardening",
+        "Supply Chain",
+        scored=True,
+        confidence="MEDIUM",
+        surface="skills",
+    ),
+    # B344 (C-338, ESET H1 2026): a skill instructing the agent to run named
+    # offensive-security tooling (Mimikatz/Impacket/BloodHound/Rubeus/CrackMapExec)
+    # against Active Directory. Naming a tool is not malice — these have legitimate
+    # authorized-defender uses and a detection-engineering skill legitimately discusses
+    # all of them by name (same hazard the B-202 accepted residual documents). WARN
+    # only when an agent-directed imperative is tightly bound to the tool name, or an
+    # AD-credential/DC-access prerequisites phrase sits nearby a bare mention, AND no
+    # defensive/detection framing is present. Advisory (scored=False), never FAIL — a
+    # bare tool-name match has no hard technical anchor the way B156/B13's confirmed
+    # exfil transport does.
+    CheckMeta(
+        "B344",
+        "Offensive-security tooling (Mimikatz/Impacket/BloodHound/Rubeus/CrackMapExec) directive",
+        HIGH,
+        "advisory",
+        "Skill Malware / Offensive Tooling",
+        scored=False,
+        confidence="MEDIUM",
+        surface="skills",
+    ),
+    # B345 (B-392, ESET H1 2026): a skill's own CONTENT (prose or code) instructs
+    # rewriting its own principles/instructions. Distinct from B22 (a config-posture
+    # check — writable identity/skill files + tools enabled), which inspects nothing
+    # about a skill's content: a skill can ship the full self-evolution recipe and B22
+    # still reads clean. WARN on the bare rewrite-your-own-principles directive
+    # (ambiguous alone); FAIL only when corroborated by a literal self-write sink in
+    # the same window (`open(__file__, "a"/"w").write(...)` / `Path(__file__)
+    # .write_text(...)`) — the skill's own code writing to its own source file, an
+    # unambiguous technical anchor. Same "two independent signals, never a bare one"
+    # discipline B159/B335 already established for this content ring.
+    CheckMeta(
+        "B345",
+        "Self-modification directive in skill content, corroborated by a self-write sink",
+        CRITICAL,
+        "hardening",
+        "Prompt Injection / Self-Modification",
+        confidence="MEDIUM",
+        surface="skills",
+    ),
+    # B346 (F-160, TA488/OWAReaper — Proofpoint/NSA, CVE-2026-42897): a skill's content
+    # instructs, or its code implements, erasing the agent's OWN audit trail (trajectory
+    # sidecar / shell history / log directory) after it runs — the anti-forensic
+    # behavior OWAReaper used to strip its delivery evidence from Exchange, applied to a
+    # skill's own footprint. Distinct from B22 (config-posture only), B345 (the direct
+    # sibling — self-modification CONTENT, not erasure), and B189 (cron run-log
+    # orphans — deliberately advisory/never-FAIL because self-erasure is the OpenClaw
+    # product default for one-shot cron jobs; this check must not resurrect that as a
+    # FAIL). WARN on a bare directive or a bare sink alone (legitimate log rotation/temp
+    # cleanup looks identical at the verb level); FAIL only when a directive is
+    # corroborated by a sink targeting the agent's trajectory/history/log path — the
+    # same "two independent signals, never a bare one" discipline B159/B335/B345 already
+    # established for this content ring.
+    CheckMeta(
+        "B346",
+        "Anti-forensic self-erase directive targeting the agent's own audit trail",
+        CRITICAL,
+        "hardening",
+        "Incident Response / Audit Trail",
+        confidence="MEDIUM",
+        surface="skills",
+    ),
+    # B347 (F-159, TA488/OWAReaper — Proofpoint/NSA, CVE-2026-42897): a skill's code
+    # implements a dead-drop C2 resolver — a periodic poll of a remote content/search
+    # API (loop + sleep), whose response is decoded (base64/hex/b85/zlib), and the
+    # decoded value reaches an exec sink (eval/exec/os.system/subprocess.*). Each leg
+    # alone is common and benign; all three chained is a resolver — TA488's OWAReaper
+    # implant took commands this way from the GitHub API's commit-message search,
+    # polled every 24 hours. Deliberately host-agnostic: the polled host is legitimate
+    # BY DESIGN (that is the whole point of a dead drop), so unlike B156/B339 this check
+    # never anchors on a specific host — a host list would be the exact C-303
+    # cautionary shape (perfect on a corpus, unsound on real skills, since every
+    # legitimate skill touching the same host would also match). WARN when a poll loop,
+    # a decode primitive, and an exec sink are all present but no confirmed dataflow
+    # connects the decode to the sink (ambiguous — co-located, not confirmed); FAIL only
+    # when the decoded value demonstrably reaches the exec sink (taint confirmed) — the
+    # same "encoding is the FAIL discriminator" discipline this project already applies
+    # elsewhere (B13's decoded-payload path).
+    CheckMeta(
+        "B347",
+        "Dead-drop C2 resolver composition (periodic poll -> decode -> exec)",
+        CRITICAL,
+        "hardening",
+        "Command & Control / Dead-Drop Resolver",
+        confidence="MEDIUM",
+        surface="skills",
+    ),
+    # B348 (F-161): a plugins.load.paths entry resolves to an on-disk directory whose
+    # openclaw.plugin.json manifest declares an "id" with no matching
+    # plugins.entries.<id> record. plugins.load.paths (config_plugin_load_paths, reused
+    # from B158) is an auto-load surface independent of plugins.entries. Advisory,
+    # WARN-only (Golden Rule #5): a load path with no entries record is normal
+    # local-dev shape, not proof of malice — the operational consequence (that removing
+    # the entries record alone does not stop the plugin loading) is surfaced only in the
+    # check's WARN detail/fix text, not here.
+    CheckMeta(
+        "B348",
+        "Plugin load path with no matching plugins.entries record",
+        LOW,
+        "advisory",
+        "Supply Chain / Plugin Hygiene",
+        scored=False,
+        confidence="MEDIUM",
+        surface="mcp",
+    ),
+    # B349 (F-167): B42's sibling for the installed npm dependency tree -- the one directory
+    # every content scanner here steps around, and where a compromised TRANSITIVE package
+    # actually lives. FAIL requires a conjunction (install-lifecycle hook AND an obfuscated
+    # hook target), because a hook alone measured 3 benign hits on a real clean tree.
+    # confidence=MEDIUM: a filesystem+heuristic match, per this file's own convention.
+    CheckMeta(
+        "B349",
+        "Obfuscated install-time target in the dependency tree",
+        CRITICAL,
+        "hardening",
+        "Supply Chain / Dependency Tree",
+        confidence="MEDIUM",
+        surface="skills",
+    ),
+    # B350: the gateway operator terminal — a PTY-backed shell with the gateway process
+    # environment, served to Control UI and mobile. Grounded on the installed dist
+    # (config-schema.d.ts:4499-4503, description :129-131), default false. WARN-only:
+    # enabling it is the owner's explicit act, so it is a capability disclosure, not a
+    # compromise. A FAIL tier would need its own C-135 pass.
+    # B351: code mode swaps the model's tool surface for exec+wait behind a QuickJS-WASI
+    # catalog bridge. MEDIUM, not HIGH: the guest is sandboxed and the feature fails
+    # closed, so this is a disclosure that recontextualises every other tool-policy
+    # verdict, not a hole. Grounded on the vendor's own resolver (code-mode-D5mNEiYV.js).
+    # B352: tools.exec.pathPrepend — directories exported AHEAD of $PATH for every exec
+    # run, deliberately outranking the operator's own shell startup files
+    # (wrapPosixCommandWithPathPrepend). A writable entry there is a standing
+    # binary-hijack primitive with no approval prompt. HIGH; WARN-only for now.
+    CheckMeta(
+        "B352",
+        "Exec PATH prepend puts a hijackable directory ahead of every command",
+        HIGH,
+        "hardening",
+        "Least Privilege / Execution",
+        surface="tools",
+    ),
+    CheckMeta(
+        "B351",
+        "Code mode replaces the model's tool surface with exec/wait",
+        MEDIUM,
+        "hardening",
+        "Least Privilege / Tool Surface",
+        surface="tools",
+    ),
+    CheckMeta(
+        "B350",
+        "Gateway operator terminal (browser/mobile shell) enabled",
+        HIGH,
+        "hardening",
+        "Zero Trust / Gateway",
+        surface="gateway",
+    ),
+    # B354 (B-725): the state DB's shared skill-library/upload surface -- a skill
+    # install/enable channel our filesystem-based skill discovery never sees at all.
+    # WARN-only (can prove a live untracked skill EXISTS, never that it is malicious;
+    # never reads its content) and UNKNOWN, not PASS, when the surface could not be
+    # examined -- absence of the table on this DB is not evidence the feature is unused.
+    CheckMeta(
+        "B354",
+        "Shared skill-library / upload surface bypasses filesystem discovery",
+        HIGH,
+        "hardening",
+        "Supply Chain",
+        surface="skills",
+    ),
+    # B355 (C-408): models.providers.*.localService.command auto-spawns a binary at
+    # provider startup with config-chosen args/cwd/env. WARN-only, never FAIL -- a
+    # writable command path needs its own independent C-135 pass to escalate, per this
+    # task's own "WARN/INFO ship first" allowance (same tier B352 already set for the
+    # sibling tools.exec.pathPrepend surface).
+    CheckMeta(
+        "B355",
+        "Model-provider local-service command is writable by another account",
+        HIGH,
+        "hardening",
+        "Least Privilege",
+        surface="tools",
+    ),
+    # B356/B357 (C-409): re-scoped by measurement against openclaw@2026.9.3 — the
+    # filed "reconcile a live allowFrom/device-auth store against config" premise no
+    # longer holds (both files are now migration-only markers; see checks/_lifecycle.py's
+    # docstrings for the full grounding trail). Advisory/hygiene, never FAIL: presence
+    # means "run openclaw doctor --fix", not "you were tampered with".
+    CheckMeta(
+        "B356",
+        "Legacy pre-migration runtime-state file(s) present (allowFrom/device-auth)",
+        LOW,
+        "advisory",
+        "Patch hygiene",
+        surface="secrets",
+    ),
+    CheckMeta(
+        "B357",
+        "Supervisor restart-handoff file outlived its own expiry",
+        LOW,
+        "advisory",
+        "Monitoring",
+        surface="host",
+    ),
+    # B358/B359/B360 (C-410): gateway HTTP/remote/embed hardening, re-grounded against
+    # openclaw@2026.9.3 (the filed "hot"/"hybrid" reload.mode item was dropped — that
+    # enum is now "off"/"hybrid" and "hybrid" is the vendor's own default/recommended
+    # posture, not a hardening gap; see the task's Pulse trail). All three are
+    # WARN-only: the filed FAIL premise for B358 (SSRF to cloud metadata/internal
+    # services via images.allowUrl with no urlAllowlist) is REFUTED by the runtime's
+    # own unconditional allowPrivateNetwork=false SSRF guard — see the check's
+    # docstring (checks/_config.py) for the full grounding trail.
+    CheckMeta(
+        "B358",
+        "OpenAI-compatible chat-completions endpoint (remote ingress; open-proxy-shaped image-URL fetch)",
+        MEDIUM,
+        "hardening",
+        "Zero Trust / Gateway",
+        surface="gateway",
+    ),
+    CheckMeta(
+        "B359",
+        "Remote-gateway SSH host-key policy delegated to OpenSSH instead of pinned",
+        HIGH,
+        "hardening",
+        "Zero Trust / Gateway",
+        surface="gateway",
+    ),
+    CheckMeta(
+        "B360",
+        "Control-UI embed sandbox set to 'trusted' (allow-same-origin)",
+        MEDIUM,
+        "hardening",
+        "Zero Trust / Control-UI Origin",
+        surface="gateway",
+    ),
+    # B361-B364 (C-411): remote-ingress / multi-user session hardening, re-grounded
+    # against openclaw@2026.9.3. sessions.visibility was DROPPED from this task's
+    # scope — already covered by the pre-existing B39 (checks/_agents.py) — and its
+    # own default was found to be "all" (the permissive end), not "tree" as the
+    # C-411 stub assumed; filed separately as a bug against B39, not fixed here.
+    # requireMention/chatmode/allowBots were DROPPED from scope: each is nested
+    # differently per channel provider (top-level for some, .groups.*/.guilds.* for
+    # others), needing its own dedicated grounding pass rather than one bullet
+    # among four in this task.
+    CheckMeta(
+        "B361",
+        "Cross-agent session-tool access unrestricted, reachable from an open channel",
+        MEDIUM,
+        "hardening",
+        "Least Privilege / Multi-Agent",
+        surface="agents",
+    ),
+    CheckMeta(
+        "B362",
+        "session.scope=global shares one session across every sender on an open channel",
+        MEDIUM,
+        "hardening",
+        "Session Isolation",
+        surface="sessions",
+    ),
+    CheckMeta(
+        "B363",
+        "Cross-provider message sends allowed (tools.message.crossContext.allowAcrossProviders)",
+        MEDIUM,
+        "hardening",
+        "Least Privilege / Cross-Context Messaging",
+        surface="tools",
+    ),
+    CheckMeta(
+        "B364",
+        "session.resetTriggers configures inbound phrases that force a session reset",
+        MEDIUM,
+        "advisory",
+        "Session Isolation",
+        scored=False,
+        surface="sessions",
+    ),
+    # B371/B372 (C-525, split out of C-411 2026-09-11 — the requireMention/chatmode/
+    # allowBots bullets needed their own grounding pass: nesting is genuinely
+    # heterogeneous per channel provider, not one config path).
+    CheckMeta(
+        "B371",
+        "Group/room mention gate disabled or bypassed on an externally-reachable channel",
+        MEDIUM,
+        "hardening",
+        "Untrusted Input Gating",
+        surface="channels",
+    ),
+    CheckMeta(
+        "B372",
+        "Bot-authored messages accepted (allowBots) on an externally-reachable channel",
+        MEDIUM,
+        "hardening",
+        "Untrusted Input Gating",
+        surface="channels",
+    ),
+    # B373 (C-527): OPENCLAW_CONFIG_READONLY / OPENCLAW_NIX_MODE — new in
+    # OpenClaw 2026.9.4, grounded against the live installed 9.4 dist. See the module
+    # comment above check_config_externally_managed (checks/_config.py) for the full
+    # resolver/isBlockedConfigEnvVar grounding. Disclosure-only by construction: an
+    # externally-managed read-only config is a deliberate hardening posture an operator
+    # opts into (Nix, a container/K8s-managed deployment); its absence is simply the
+    # default OpenClaw setup, not a gap. LOW/advisory/scored=False — there is no
+    # plausible FAIL or WARN shape for "the config is protected from being rewritten"
+    # (Golden Rule #5), so this can only ever report PASS or UNKNOWN.
+    CheckMeta(
+        "B373",
+        "Externally-managed, read-only config posture (OPENCLAW_CONFIG_READONLY / Nix mode)",
+        LOW,
+        "advisory",
+        "Config Integrity / External Management",
+        scored=False,
         surface="monitoring",
+    ),
+    # B374 (C-526): cloudWorkers prepared-pool — new in OpenClaw 2026.9.4, grounded
+    # against the live installed 9.4 dist. See the module comment above
+    # check_cloudworkers_prepared_pool (checks/_config.py) for the full
+    # createPreparedWorkerPool/DEFAULT_READY_WORKERS/DEFAULT_MAX_TOTAL grounding.
+    # Gated on cloudWorkers.profiles actually being configured (UNKNOWN otherwise —
+    # the overwhelming majority of installs today). WARN/advisory/scored=False: a
+    # default-on warm remote-worker reserve existing is not itself a hole, so this
+    # never reaches FAIL and needed no C-135 pass.
+    CheckMeta(
+        "B374",
+        "cloudWorkers prepared-pool default-on warm reserve",
+        LOW,
+        "advisory",
+        "Off-Machine Execution",
+        scored=False,
+        surface="agents",
+    ),
+    # B375 (F-177): the AST-persistence-layer twin of B335. B335 already recognizes this
+    # exact sitecustomize/usercustomize + PYTHONSTARTUP install shape via a whole-file
+    # regex + character-proximity window, but it carries no AST0x rule of its own, and
+    # dossier.py's Persistence axis has exactly three feeders (B86/B87/B89) with no
+    # AST0x category fallback reaching it (see dossier.py's _AXIS_BY_ID comment on
+    # B335's own dual-axis stopgap). This check reruns the same two mechanisms at
+    # FUNCTION-SCOPE precision via skillast.py's AST walk (not a whole-file regex), so
+    # Persistence gets a genuine fourth feeder rather than a re-routed existing id — see
+    # this check's own docstring for the two mechanisms. Advisory (scored=False);
+    # WARN-only, never FAIL. MEDIUM confidence, same as B335 — a multi-signal
+    # co-occurrence heuristic, not an exact filename match.
+    CheckMeta(
+        "B375",
+        "Sitecustomize/PYTHONSTARTUP persistence install, function-scoped (AST)",
+        HIGH,
+        "advisory",
+        "Persistence / Supply-Chain Tamper",
+        scored=False,
+        confidence="MEDIUM",
+        surface="skills",
+    ),
+    # B378: agents.defaults.cwd / agents.entries.<id>.cwd — new
+    # in OpenClaw 2026.9.1, grounded against the installed 2026.9.4 dist's zod schema
+    # (AgentDefaultsSchema / AgentEntryBaseSchema both carry a plain `cwd:
+    # string().optional()` sibling to `workspace`). See
+    # check_agent_cwd_relocation (checks/_capability.py) for the full
+    # resolveAgentRunCwd / resolveAttemptWorkspaceSandbox grounding. MEDIUM severity,
+    # hardening/scored — a real reach-widening signal, not merely informative, but
+    # the WARN-only design (never FAIL) reflects that the check cannot prove
+    # relocation against OpenClaw's full implicit-workspace fallback chain, only
+    # against an EXPLICITLY declared workspace (see the check's own docstring).
+    CheckMeta(
+        "B378",
+        "agents.*.cwd relocates the task/exec working directory outside the workspace",
+        MEDIUM,
+        "hardening",
+        "Least Privilege / Sandbox",
+        surface="agents",
     ),
 ]
 
@@ -2510,6 +3453,11 @@ AST_MAP = {
     "B22": ("AST03", "AST06"),
     "B175": ("AST03", "AST06"),  # skill workshop auto-author + no-review install = over-privileged self-modification (cf. B22)
     "B39": ("AST06",),
+    "B362": ("AST06",),  # session.scope=global on an open channel = weak isolation (cf. B39)
+    "B361": ("AST03",),  # unrestricted agent-to-agent pivot reachable from an open channel = over-privileged reach (cf. B72)
+    "B371": ("AST05",),  # mention-gate bypass on a reachable channel = untrusted external instructions (cf. B140)
+    "B372": ("AST05",),  # bot-authored input admitted on a reachable channel = untrusted external instructions (cf. B140)
+    "B363": ("AST03",),  # cross-provider message send = over-privileged reach (cf. B76)
     "B48": ("AST06", "AST03"),
     "B70": ("AST06",),
     "B25": ("AST02", "AST07"),
@@ -2529,6 +3477,7 @@ AST_MAP = {
     "B38": ("AST06",),  # headless browser without OS sandbox = Weak Isolation (cf. B4)
     "B195": ("AST06",),  # extraArgs disables same-origin/loads extensions = Weak Isolation
     "B196": ("AST06",),  # arbitrary-JS eval sink reachable from page content = Weak Isolation
+    "B330": ("AST06",),  # unauthenticated CDP control channel reachable off-host/cross-origin
     "B73": ("AST06",),  # mDNS full advertise on non-loopback exposes the agent (cf. B70)
     "B74": ("AST05",),  # forged role/provenance = untrusted external instructions (cf. B64)
     "B76": ("AST03",),  # MCP tool-inheritance bypass = over-privileged reach (cf. B75)
@@ -2537,8 +3486,14 @@ AST_MAP = {
     "B79": ("AST03",),  # approval_policy=never = over-autonomous agency (cf. B8)
     "C032": ("AST06",),  # trusting spoofable forwarded headers = weak boundary (cf. B70)
     "B80": ("AST06",),  # no rate limiting on an exposed auth'd gateway = weak isolation (cf. B70)
+    "B340": ("AST06",),  # effective listening-socket bind diverges from declared gateway.bind = weak isolation (cf. B2/B70)
+    "B358": ("AST06",),  # chat-completions remote ingress / SSRF via images.allowUrl = weak isolation (cf. B83)
+    "B359": ("AST06",),  # remote-gateway SSH host-key verification delegated to OpenSSH = weak isolation (cf. B340)
+    "B360": ("AST06",),  # Control-UI embed sandbox "trusted" removes origin isolation = weak isolation (cf. B330)
     "B81": ("AST03",),  # raised subagent spawn limits = over-privileged delegation (cf. B72)
     "B82": ("AST02",),  # bulk turn transcripts at rest = sensitive-data exposure (cf. C5)
+    "B365": ("AST02",),  # otel content capture ships raw turns off-host = sensitive-data exposure (cf. B82)
+    "B366": ("AST02",),  # memory.search.remote embeds/sends memory chunks off-host = sensitive-data exposure (cf. B82)
     "B83": ("AST06",),  # excessive redirect-follow on fetch = weak isolation/SSRF (cf. B38)
     "B84": (
         "AST03",
@@ -2554,6 +3509,9 @@ AST_MAP = {
     "B103": ("AST02",),  # install[] plaintext/IP/onion fetch = ML supply-chain compromise (cf. B13/B95)
     "B91": ("AST01",),  # dynamic-dispatch sink obfuscation = hidden malicious code / scanner evasion (cf. B89/B90)
     "B92": ("AST02",),  # unsafe deserialization sink = RCE-from-data supply-chain tamper (cf. B86)
+    "B336": ("AST01",),  # chunked file-read assembly -> exec/eval = hidden malicious code / scanner evasion (cf. B90/B91)
+    "B338": ("AST01",),  # covert tunnel / mesh-VPN enrollment primitive = C2 infrastructure (cf. B13)
+    "B339": ("AST01",),  # cloud instance-metadata credential fetch = active credential theft (cf. B13)
     "B93": ("AST04",),  # confusable trigger description = insecure metadata / trigger-squat (cf. B88)
     "B94": ("AST02",),  # extended lifecycle hooks = supply-chain tamper on install/version/publish (cf. B42)
     "B95": ("AST02",),  # dependency confusion (unpinned + typosquat name) = supply-chain tamper (cf. B13)
@@ -2564,6 +3522,7 @@ AST_MAP = {
     "B96": ("AST04",),  # config-driven trust widening (heuristic) = insecure metadata (cf. B62/B88)
     "B98": ("AST04",),  # missing capability declaration = insecure/absent least-privilege metadata (cf. B62/B88/B96)
     "B99": ("AST02",),  # .pth/sitecustomize auto-execution persistence = supply-chain tamper (cf. B86/B94)
+    "B375": ("AST02",),  # function-scoped sitecustomize/PYTHONSTARTUP install (AST) = supply-chain tamper (cf. B86/B99/B335)
     "B100": ("AST01", "AST02"),  # ClickFix paste-into-terminal + remote-fetch = malicious skill / supply-chain (cf. B13)
     "B135": ("AST02",),  # accepted-despite-failed-verification install = supply-chain trust bypass (cf. B103/B95)
     "B136": ("AST06",),  # codex trust_level="trusted" disables approval/sandbox gating = weak isolation (cf. B4/B48/B70)
@@ -2579,8 +3538,11 @@ AST_MAP = {
     "B184": ("AST02",),  # skills installed from a redirected registry = supply-chain compromise at the source (cf. B135/B177/B181)
     "B185": ("AST04", "AST05"),  # poisoned tool description delivered to the model = insecure metadata carrying untrusted external instructions (cf. B62/B64)
     "B186": ("AST02",),  # relocated bundled skills/hooks root = supply-chain code-load root the scanners never enumerated (cf. B184)
+    "B367": ("AST02",),  # skills.load.allowSymlinkTargets writable-by-others = supply-chain code-load root (cf. B186)
+    "B368": ("AST02",),  # skills.load.watch hot-reloads live from an extraDir = supply-chain code-load, no restart boundary (cf. B186/B367)
     "B187": ("AST02",),  # non-bundled plugin declares agentToolResultMiddleware = supply-chain interception capability disclosure (cf. B151/B152/B177)
     "B193": ("AST02",),  # gateway secret inlined in the service unit = credential exposure on the persistence surface (cf. B182)
+    "B348": ("AST02",),  # plugins.load.paths entry not in plugins.entries = supply-chain visibility gap (cf. B152/B158)
 }
 
 # Each check mapped to the OWASP-LLM-2025 category/categories it addresses ON THE AGENT
@@ -2622,6 +3584,11 @@ OWASP_MAP = {
     "B32": ("LLM06",),
     "B33": ("LLM03",),
     "B39": ("LLM02",),
+    "B362": ("LLM02",),  # session.scope=global cross-sender context bleed = Sensitive Info Disclosure (cf. B39)
+    "B361": ("LLM06",),  # agent-to-agent pivot = Excessive Agency (cf. B72)
+    "B371": ("LLM01",),  # mention-gate bypass on a reachable channel = Prompt Injection surface (cf. B140)
+    "B372": ("LLM01",),  # bot-authored input admitted on a reachable channel = Prompt Injection surface (cf. B140)
+    "B363": ("LLM02",),  # cross-provider message egress = Sensitive Info Disclosure (cf. B12/C014)
     "B41": ("LLM02", "LLM06"),
     "B42": ("LLM03",),
     "B174": ("LLM03",),
@@ -2681,9 +3648,14 @@ OWASP_MAP = {
     "B80": ("LLM10",),  # no rate limiting on an exposed auth'd gateway = Unbounded Consumption
     "B81": ("LLM06",),  # raised subagent spawn limits = Excessive Agency (cf. B72)
     "B82": ("LLM02",),  # unredacted transcripts persisted at rest = Sensitive Info Disclosure
+    "B365": ("LLM02",),  # otel content capture ships raw turns off-host = Sensitive Info Disclosure
+    "B366": ("LLM02",),  # memory.search.remote embeds/sends memory chunks off-host = Sensitive Info Disclosure
     "B83": (
         "LLM02",
     ),  # excessive redirect-follow on fetch = SSRF data-disclosure surface (cf. B38)
+    "B358": ("LLM02",),  # images.allowUrl = open-proxy-shaped server-side URL fetch, data-disclosure-adjacent (cf. B83)
+    "B360": ("LLM01",),  # embedSandbox=trusted removes origin isolation = Control-UI origin/session compromise (cf. B56)
+    # B359 (SSH host-key MITM) stays unmapped — no clean LLM analog, same as B38/C3/B77/B78.
     "B84": (
         "LLM06",
     ),  # proven high-blast verb with an ungated posture = Excessive Agency (cf. B43/B44)
@@ -2701,6 +3673,8 @@ OWASP_MAP = {
     "B184": ("LLM03",),  # skills installed from a redirected registry = Supply Chain
     "B185": ("LLM01",),  # poisoned tool description already delivered to the model = Prompt Injection
     "B186": ("LLM03",),  # relocated bundled skills/hooks code-load root = Supply Chain
+    "B367": ("LLM03",),  # skills.load.allowSymlinkTargets writable-by-others = Supply Chain (cf. B186)
+    "B368": ("LLM03",),  # skills.load.watch hot-reloads live from an extraDir = Supply Chain (cf. B186/B367)
     "B187": ("LLM03", "LLM05"),  # non-bundled plugin declares agentToolResultMiddleware = Supply Chain + Improper Output Handling
     "B193": ("LLM02",),  # gateway secret inlined in the service unit = Sensitive Information Disclosure
 }
@@ -2756,8 +3730,27 @@ REMEDIATION = {
         "config": [
             {
                 "path": "agents.defaults.sandbox.mode",
-                "set": "non-main",
-                "note": "run exec tools in a sandbox",
+                # B-738: was "non-main". This is the MACHINE-APPLICABLE remediation — a fixer
+                # or a host agent writes it without reading prose — and "non-main" does not
+                # do what the note promised: OpenClaw keeps the agent's own MAIN session on
+                # the host under it, which is the session an operator actually uses.
+                # Re-grounded against the INSTALLED openclaw@2026.9.1 (2026-09-05): the
+                # bundle name B-738 cited (launch-BmPwk1y9.js) rotated away in 9.1, but the
+                # behaviour did not. The vendor states it itself, as advice for ESCAPING the
+                # sandbox: runtime-status-hcw0I7bE.js:153 offers "Use the agent main session
+                # instead of a non-main session" when sandbox.mode === "non-main", and
+                # sandbox-cli-W3C8RnNf.js:283 branches on the same mode against
+                # payload.sandbox.sessionIsSandboxed. Cite the STRINGS above, not the bundle
+                # names, when re-checking after an upgrade — the names rotate every release.
+                # OpenClaw's own audit remediation says "all" too
+                # (dist/audit-*.js: "use sandbox mode \"all\" and workspaceAccess \"ro\" or
+                # \"none\""). Applying the old value cleared B4 and RISK-03 while leaving
+                # exec on the host — a fix that satisfied the check and not the threat.
+                "set": "all",
+                "note": (
+                    "run exec tools in a sandbox — 'all' sandboxes every session; "
+                    "'non-main' leaves the agent's own main session on the host"
+                ),
             }
         ]
     },
@@ -2807,8 +3800,18 @@ REMEDIATION = {
             {
                 "path": "browser.extraArgs",
                 "set": None,
-                "note": "remove --disable-web-security / --load-extension / a "
-                "non-loopback --remote-debugging-address / unreviewed --proxy-server",
+                "note": "remove --disable-web-security / --load-extension / "
+                "unreviewed --proxy-server",
+            }
+        ]
+    },
+    "B330": {
+        "config": [
+            {
+                "path": "browser.extraArgs",
+                "set": None,
+                "note": "remove --remote-allow-origins; keep browser.cdpUrl and every "
+                "profile cdpUrl on loopback",
             }
         ]
     },
@@ -2864,6 +3867,30 @@ class Finding:
     # 'no_signal' = PASS by absence of a bad signal (config absent/default).
     # None for FAIL/WARN/UNKNOWN findings (not meaningful there).
     pass_confidence: str | None = None
+    # B-399: UNKNOWN-specific origin tag. True only when this check ran (or the engine
+    # tried to run it) and could not reach a verdict for an ENGINE-SIDE reason — a crash,
+    # a timeout/scan-budget escape, or an input the check expected to read that turned out
+    # unreadable/corrupt/malformed (e.g. `_config_unreadable()`'s openclaw.json-present-
+    # but-unparseable case, checks/_shared.py). B-741 adds a fourth shape the list did not
+    # anticipate: a DELIBERATE refusal to open files that are readable — `vet_skill` holds
+    # a loose-`SKILL.md` scan to the manifest so a folder that may not be the skill's own
+    # is never read. The flag still fits, because its real contrast is engine-side versus
+    # GENUINELY ABSENT, and files present-but-unread are emphatically not absent; the cap
+    # below ("cannot rule out a CRITICAL") is exactly the right consequence for them.
+    # False (the default) covers everything
+    # else, including the very common "genuinely absent" case — there is simply nothing to
+    # check (no openclaw.json at all, a feature/file that legitimately does not exist for
+    # this subject). Meaningless outside `status == UNKNOWN`; every producer of a FAIL/
+    # WARN/PASS finding leaves it at the default. scoring.DEGRADED_CHECK_CAP is the only
+    # reader (via `_degraded_signal`) — an engine-side UNKNOWN is worst-case "cannot rule
+    # out a CRITICAL", the same reasoning already applied to a crashed/timed-out check
+    # (`Finding.id` prefixed `"ERR:"`); a genuinely-absent UNKNOWN is strictly weaker
+    # evidence (nothing was ever there to examine) and must NOT trigger that cap. Defaults
+    # False so every existing UNKNOWN-producing call site (~300 of them) keeps its exact
+    # current scoring behavior unless a check deliberately opts in — see
+    # docs/CHECK_AUTHORING.md's "UNKNOWN details name why state is undetermined" section
+    # for the authoring guidance this field backs.
+    engine_degraded: bool = False
     # vet_skill() attaches per-check ring findings here (content-ring checks B59–B67, B74,
     # B42) so callers can inspect individual check results without changing the return type.
     # Not used by the full audit (stays empty); not rendered by report.py / sarif.py
@@ -2890,3 +3917,103 @@ class Finding:
     # as ring_findings/axis_reasons above — internal bookkeeping for a future
     # corroborating-check FAIL rule, not rendered by report.py/sarif.py).
     corroborating_buckets: list[str] = field(default_factory=list)
+    # F-138 (B1): true when the check determined its SURFACE does not exist on this host
+    # (e.g. no MCP servers configured at all), as opposed to the surface existing but
+    # nothing wrong being found there. Default False — an unaware/legacy caller gets the
+    # ordinary UNKNOWN posture, never a silent "doesn't apply" it never proved. Only
+    # meaningful alongside status == UNKNOWN (see __post_init__ below); no emitter sets
+    # this yet (that starts with B2/F-139) — this field is plumbing only.
+    not_applicable: bool = False
+    # B-681: true when the SPECIFIC subject named on the command line does not exist —
+    # `--vet-mcp <name>` where no configured server answers to that name and no readable
+    # spec file sits at that path. Distinct from `not_applicable` above, which says the
+    # whole SURFACE is missing (no MCP servers configured at all): here the surface is
+    # present and it was the named subject that was not found, so the honest answer is a
+    # usage error rather than a verdict about anything.
+    #
+    # It exists because the alternative was keying an exit code on a `detail` string. The
+    # reader is cli.py's `_run_vet_mcp`, which returns 2 — the code `_empty_mode_target`
+    # already answers for the neighbouring malformed invocation — instead of the 0 a
+    # clean vet returns. Before B-681 a mistyped server name rendered a CAUTION dossier
+    # over five UNKNOWN axes and exited 0, i.e. reported "I checked it and there is
+    # nothing to act on" about a subject that was never found.
+    #
+    # Default False, so an unaware producer keeps the ordinary UNKNOWN posture. Only
+    # meaningful alongside status == UNKNOWN. Never rendered by report.py / sarif.py —
+    # its whole destination is the process exit status.
+    subject_absent: bool = False
+    # F-154 (round 2, C-135): names WHICH of a multi-signal check's internal sub-signals
+    # actually fired, for a check whose WARN status alone conflates strengths a CAP-ONLY
+    # consumer needs to tell apart. Introduced for B191 (checks/_host.py:
+    # check_audit_trail_signals), which folds three sub-signals — "blocked" (a runtime
+    # policy-denied tool call), "evasive" (a malformed/evasive tool name), both near-
+    # zero-FP — and "divergence" (an audit_events session with no matching trajectory
+    # record), which the check's OWN docstring calls expected, near-certain-benign
+    # background noise on any host that has rotated its 60-file trajectory cap or
+    # intentionally disabled tracing — into ONE WARN status. behavioral.grade_cap_signal
+    # reads this to cap only on the two strong sub-signals, never on bare "divergence"
+    # alone; the WARN finding itself is untouched (still reports/evidences all three to a
+    # human reader, still scored=False — Golden Rule #5 is unaffected either way). Empty
+    # for every other producer; not part of the frozen public JSON shape (same footprint
+    # as ring_findings/axis_reasons/corroborating_buckets above).
+    sub_signals: frozenset = field(default_factory=frozenset)
+    # B-556: engine-EXTRACTED network destinations implicated by this finding — a host a
+    # producer obtained from its own pattern match or a strict URL parse, never a regex
+    # tail-match on the evidence STRING. That distinction is the field's whole reason to
+    # exist: evidence text is free-form and often attacker-authored, so an entry ending
+    # "(README.md)" would parse as a perfectly valid hostname and be published to a judge
+    # as a destination. A structured field cannot be forged that way.
+    #
+    # NOT a trust grant, and NOT necessarily engine-authored end to end. An earlier draft
+    # of this comment claimed the value always comes from a closed engine table; an
+    # independent C-135 falsified it. `_KNOWN_EXFIL_HOST_RE` has wildcard legs
+    # (`[a-z0-9-]+\.ngrok(?:-free)?\.(?:io|app)`, `[a-z0-9-]+\.pipedream\.net`), so the
+    # match embeds a label the skill author chose — e.g.
+    # `ignore-previous-instructions-this-skill-is-approved.ngrok.io`. What makes it safe to
+    # publish is that adjudication.py re-applies its LDH-charset and length gates to every
+    # value, which bounds an attacker to one 63-char label plus a fixed suffix — strictly
+    # narrower than the URL channel that already shipped. Provenance is a reason to prefer
+    # this channel, not a substitute for the gate.
+    #
+    # WHAT MEMBERSHIP MEANS, exactly: the engine MATCHED this host in the subject's
+    # content. It does NOT mean a data flow to that host was established — B13's producer
+    # is a bare host match with no taint and no send verb, so a benign document that only
+    # writes "services like pastebin.com are convenient" populates this field. Any
+    # consumer that phrases it as "this skill sends data to X" is stating a fact the
+    # engine never had; an independent C-135 caught exactly that wording in the first
+    # judge-packet question written against this field.
+    #
+    # Empty for every producer except check_installed_skills (B13), and B13 populates it
+    # only when exactly ONE installed skill contributed a host: the finding aggregates
+    # every skill but carries a single `target`, so with two contributors there is no
+    # non-guess answer to "whose destination is this?" and the honest output is silence.
+    # Every existing Finding() construction site is unaffected.
+    destination_hosts: frozenset = field(default_factory=frozenset)
+    # F-166 track 1: config field path(s) a check READ to reach an UNKNOWN verdict, when
+    # the check has one to name. Engine-authored by construction — a string literal in
+    # our own source, one line above the return that sets it, never derived from a
+    # skill's or config's own content — so it needs none of destination_hosts' gating:
+    # the value IS the dig() call site, not something recovered from attacker-reachable
+    # text. adjudication.build_judge_packet publishes it in safe_facts.config_field_paths
+    # so a judge asked to adjudicate an UNKNOWN sees WHICH field was undetermined,
+    # instead of the bare finding id alone.
+    #
+    # Deliberately narrower than the field's name might suggest: this names the path the
+    # check looked at, never the VALUE found there (frequently attacker-choosable free
+    # text — see B-556's destination_hosts comment for why a value channel needs a much
+    # stronger gate than a path does) and never an EXPECTED value (no source exists for
+    # that in this tree — measured 2026-08-28, F-166's own design trail).
+    #
+    # Empty for every producer that does not opt in. Every existing Finding() construction
+    # site is unaffected.
+    config_field_paths: frozenset = field(default_factory=frozenset)
+
+    def __post_init__(self):
+        # Normalizes, never raises: a Finding built with not_applicable=True at a
+        # non-UNKNOWN status (a bug in whichever caller set it) silently corrects
+        # itself rather than crashing on untrusted/legacy input. This also means
+        # dataclasses.replace() — which re-invokes __post_init__ — automatically clears
+        # a stale not_applicable when adjudication._escalate_finding() escalates
+        # UNKNOWN -> WARN, with no separate guard needed at each escalation call site.
+        if self.not_applicable and self.status != UNKNOWN:
+            self.not_applicable = False

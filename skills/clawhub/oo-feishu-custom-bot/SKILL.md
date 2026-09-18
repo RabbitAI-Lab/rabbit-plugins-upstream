@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Feishu Custom Bot"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["feishu_custom_bot"]
   icon: "https://static.oomol.com/logo/third-party/feishu_custom_bot.svg"
 ---

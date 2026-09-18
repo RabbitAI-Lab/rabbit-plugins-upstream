@@ -1,50 +1,65 @@
-## Description: <br>
-Industry Research v1.3.2 helps an agent collect market, commodity, equity, ETF, technical, valuation, institutional-flow, and news signals and assemble structured industry research reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Industry Research v1.3.2 helps agents produce structured industry, commodity, and equity research reports using CLI-based market data collection, multi-source fallback, ETF linkage, technical indicators, valuation checks, institutional flow signals, and Bocha/Bing news search.
 
-## Publisher: <br>
-[whitertigerwilson](https://clawhub.ai/user/whitertigerwilson) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[whitertigerwilson](https://clawhub.ai/user/whitertigerwilson)
 
-## Use Case: <br>
-External users, developers, and analysts use this skill to produce Chinese-market industry, commodity, ETF, and public-equity research workflows. It is intended to gather public market data, run local CLI analysis, and draft structured reports for human review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill routes research queries to external search and market-data services, including Bocha, Bing, Eastmoney, Tencent, akshare-backed sources, and yfinance. <br>
-Mitigation: Use only non-sensitive research queries and review generated reports before relying on them. <br>
-Risk: The release describes a workflow that works around disabled platform web_search controls. <br>
-Mitigation: Review the search workflow before installation and remove or disable the bypass behavior if it conflicts with local policy. <br>
-Risk: The API-key checker can print API-key prefixes in terminal output. <br>
-Mitigation: Avoid running the checker in shared or logged sessions, and update it to report only whether keys are present. <br>
-Risk: The skill can create local archives and HTML reports under the user's OpenClaw workspace. <br>
-Mitigation: Periodically inspect and delete archives and reports, especially after researching confidential or sensitive topics. <br>
+## Use Case:
 
+External users, developers, and finance research agents use this skill to gather public market data, compare related equities and ETFs, analyze technical and valuation signals, and draft industry or commodity research reports. Outputs should be reviewed before investment, commercial, or operational decisions.
 
-## Reference(s): <br>
-- [Industry Research Skill Page](https://clawhub.ai/whitertigerwilson/skills/industry-research) <br>
-- [Publisher Profile](https://clawhub.ai/user/whitertigerwilson) <br>
-- [Industry Research Reference Manual](artifact/references/research_manual.md) <br>
-- [Bocha Web Search API](https://api.bochaai.com/v1/web-search) <br>
-- [Bing Search](https://www.bing.com/search) <br>
-- [Eastmoney Quotes](https://quote.eastmoney.com/) <br>
-- [Tencent Quote API](https://qt.gtimg.cn/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, HTML files, Shell commands, Guidance] <br>
-**Output Format:** [Markdown research reports, JSON search results, HTML report files, and terminal output from CLI commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create local archives and report files under the user's OpenClaw workspace.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.2 (source: server release metadata) <br>
+Risk: The skill makes direct web and API requests, including Bocha API usage and market data calls.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when direct external requests are acceptable, use HTTPS data sources where possible, and review network behavior before relying on outputs.
+
+Risk: The skill handles API keys and includes a credential environment checker.
+
+Mitigation: Avoid running credential-checking utilities with real secrets and keep API keys out of shared logs, reports, and archives.
+
+Risk: The skill writes local archives, ETF caches, and generated reports.
+
+Mitigation: Treat generated files as untrusted when inputs come from users or external sources, and review storage paths and retained data before deployment.
+
+Risk: The security verdict is suspicious and the evidence says the skill contains unsafe implementation details.
+
+Mitigation: Review and scan the skill before deployment, pin dependencies, and require human review before using research outputs for decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/whitertigerwilson/skills/industry-research)
+- [Industry research reference manual](references/research_manual.md)
+- [Bocha web search API](https://api.bochaai.com/v1/web-search)
+- [Eastmoney quote data source](https://quote.eastmoney.com/)
+- [Tencent quote data source](https://qt.gtimg.cn/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown research reports, HTML report files, JSON search results, and CLI text output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write local archives, ETF caches, and generated reports; report content depends on public web and market data source availability.]
+
+## Skill Version(s):
+
+1.3.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

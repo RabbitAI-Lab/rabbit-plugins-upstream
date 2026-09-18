@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "DeepSeek"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["deepseek"]
   icon: "https://static.oomol.com/logo/third-party/DeepSeek.svg"
 ---

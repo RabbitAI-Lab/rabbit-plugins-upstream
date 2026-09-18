@@ -1,44 +1,56 @@
-## Description: <br>
-The Odds API (the-odds-api.com) skill helps agents search and read sports odds, scores, events, participants, and market data through the OOMOL `oo` CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+The Odds API (the-odds-api.com) skill helps agents search and read live sports odds, events, participants, market keys, and scores through the OOMOL connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to connect an agent to an OOMOL-connected The Odds API account for sports odds, scores, events, participants, and market lookup tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a connected OOMOL account for The Odds API access. <br>
-Mitigation: Install only if you trust OOMOL and want the agent to use that connected account. <br>
-Risk: Live odds queries may consume The Odds API account quota or credits. <br>
-Mitigation: Monitor API usage and stop retrying when billing or insufficient-credit errors occur. <br>
-Risk: First-time setup may require installing the oo CLI from an external install command. <br>
-Mitigation: Review the oo CLI installation command before running it. <br>
+## Use Case:
 
+External developers and agent users use this skill when they need read-only access to The Odds API data, including sports, events, odds, markets, participants, and scores, without calling the API directly.
 
-## Reference(s): <br>
-- [The Odds API homepage](https://the-odds-api.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-the-odds-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and a meta.executionId when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: artifact frontmatter and release evidence) <br>
+Risk: The first-time setup guidance includes remote installer commands that pipe downloaded scripts directly to a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from a trusted and verified source and version; avoid running pipe-to-shell commands automatically or from an elevated shell.
+
+Risk: Authentication or connector setup may be triggered unnecessarily if setup steps are run before an actual command failure.
+
+Mitigation: Run authentication or connection setup only after a command returns the matching auth or connection error.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-the-odds-api)
+- [The Odds API Homepage](https://the-odds-api.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are expected as JSON when commands are run with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

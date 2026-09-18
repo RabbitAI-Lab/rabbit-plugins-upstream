@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "channel": "bullet-writer",
+  "workflow": "listing",
+  "focus": "bullets",
+  "outputTemplate": "ops_listing",
+  "requiredCapabilities": [
+    "product-detail",
+    "reviews"
+  ],
+  "allowedCommands": [
+    "setup",
+    "configure",
+    "check",
+    "version",
+    "collect",
+    "status",
+    "operations"
+  ]
+}

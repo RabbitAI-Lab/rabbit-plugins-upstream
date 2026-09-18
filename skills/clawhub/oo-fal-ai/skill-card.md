@@ -1,43 +1,57 @@
-## Description: <br>
-fal.ai lets an agent operate fal.ai through an OOMOL-connected account by using the oo CLI connector for model discovery, pricing, queue status, results, and request cancellation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+fal.ai (fal.ai). Use this skill for ANY fal.ai request - reading, creating, and updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect fal.ai model endpoints, estimate pricing, manage queued fal requests, retrieve completed results, and fetch JWKS data for webhook verification through their connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate fal.ai through the user's OOMOL-connected account and includes a write action for request cancellation. <br>
-Mitigation: Install it only when that account access is intended, and confirm the exact payload and effect before running write actions. <br>
-Risk: The setup instructions include shell-based oo CLI installation commands. <br>
-Mitigation: Prefer a verified installation method for the oo CLI before running connector commands. <br>
+## Use Case:
 
+Developers and agents use this skill to operate fal.ai through an OOMOL-connected account: inspect live action schemas, discover models and pricing, submit queued model requests, monitor status, cancel requests, and retrieve results.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-fal-ai) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
-- [fal.ai homepage](https://fal.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce or summarize JSON responses returned by the oo CLI connector.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: The setup instructions include remote shell installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent automatically run curl|bash or irm|iex; install the oo CLI only from a trusted, verifiable source, preferably with a pinned version and checksum or signature.
+
+Risk: Write actions can submit or cancel fal.ai queued model requests.
+
+Mitigation: Require separate user approval for fal.ai write actions, including the exact payload and expected effect, before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-fal-ai)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [fal.ai homepage](https://fal.ai)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return connector JSON responses containing data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.4 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

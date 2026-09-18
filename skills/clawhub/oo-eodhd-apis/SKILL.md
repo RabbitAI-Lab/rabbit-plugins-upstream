@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "EODHD APIs"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["eodhd_apis"]
   icon: "https://static.oomol.com/logo/third-party/eodhd_apis.svg"
 ---

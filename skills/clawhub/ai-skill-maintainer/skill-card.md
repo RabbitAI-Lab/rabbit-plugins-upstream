@@ -1,40 +1,53 @@
-## Description: <br>
-Guides agents through maintenance of published skills, including version updates, bug fixes, feature enhancements, dependency upgrades, security patches, deprecation, changelog, rollback, and review steps. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI Skill Maintainer (EN) guides agents through maintaining published skills, including version updates, bug fixes, feature changes, dependency upgrades, security patches, deprecation, emergency isolation, health checks, and dependency audits.
 
-## Publisher: <br>
-[johnsmithfan](https://clawhub.ai/user/johnsmithfan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[johnsmithfan](https://clawhub.ai/user/johnsmithfan)
 
-## Use Case: <br>
-Developers and agent operators use this skill to plan and execute ClawHub/OpenClaw skill maintenance, including diagnosis, patching, dependency auditing, security response, deprecation, release notes, and publish checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad maintenance workflows may propose code, dependency, or publishing changes for a target skill. <br>
-Mitigation: Confirm the exact target repository and task, review proposed changes, run tests, and scan the skill before deployment. <br>
-Risk: Some maintenance actions may require elevated repository or account access. <br>
-Mitigation: Use scoped permissions and avoid providing credentials or account access unless a specific maintenance action clearly requires them. <br>
+## Use Case:
 
+Developers and skill maintainers use this skill to diagnose, patch, publish, deprecate, isolate, and audit ClawHub skills while tracking version, changelog, rollback, and security-review requirements.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/johnsmithfan/ai-skill-maintainer) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON examples, shell command examples, checklists, and process guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose repository maintenance actions that require human review before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0-en2 (source: server release metadata; artifact frontmatter: 1.1.0) <br>
+Risk: Broad maintenance authority could allow unauthorized modification, publication, deprecation, or isolation of skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in a controlled maintainer environment with explicit target skill allowlists, review before publish or deprecation, and audit logs for every write or distribution change.
+
+Risk: Security patch and emergency isolation tasks use caller and authorization values that could be spoofed if the runtime does not enforce identity.
+
+Mitigation: Require runtime-enforced authenticated caller identity and signed approvals for security patch and emergency isolation tasks before allowing writes or distribution changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/johnsmithfan/skills/ai-skill-maintainer)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with JSON, YAML, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces maintenance plans, task schemas, review checklists, versioning guidance, command examples, and status-style JSON examples.]
+
+## Skill Version(s):
+
+1.1.0-en2 (source: server release metadata; artifact frontmatter version is 1.1.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

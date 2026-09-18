@@ -1,42 +1,56 @@
-## Description: <br>
-EODHD APIs helps agents search and read EODHD market and economic data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+EODHD APIs provides an agent interface for retrieving financial market, macroeconomic, account, and reference data from EODHD through OOMOL's oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to query authenticated EODHD market data, instrument metadata, macro indicators, U.S. Treasury yield rates, and account usage through OOMOL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires connection to an EODHD API account and may use sensitive account credentials managed by OOMOL. <br>
-Mitigation: Install and use the skill only when the user trusts OOMOL and intends to connect an EODHD API account. <br>
-Risk: The documented first-time setup includes a remote shell installer for the oo CLI. <br>
-Mitigation: Prefer OOMOL's install guide or inspect the installer before executing it, especially in managed or production environments. <br>
+## Use Case:
 
+Developers and analysts use this skill to search EODHD instruments and retrieve market, macroeconomic, Treasury yield, account, and API usage data through an authenticated OOMOL connection.
 
-## Reference(s): <br>
-- [ClawHub Skill Listing](https://clawhub.ai/oomol/oo-eodhd-apis) <br>
-- [EODHD APIs Homepage](https://eodhd.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an installed and authenticated oo CLI plus a connected EODHD APIs account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and frontmatter) <br>
+Risk: First-time setup asks users to execute remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installation, prefer a signed or otherwise verifiable oo CLI release path, and inspect installer contents before execution.
+
+Risk: The skill relies on an authenticated EODHD account connected through OOMOL.
+
+Mitigation: Connect only the EODHD account intended for this skill and stop if authentication, scope, credential expiration, or billing errors occur.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-eodhd-apis)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [EODHD APIs Homepage](https://eodhd.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before running actions; credentials are handled by OOMOL and are not exposed to the agent.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "remove.bg"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.4"
   services: ["remove_bg"]
   icon: "https://static.oomol.com/logo/third-party/Remove.bg.svg"
 ---

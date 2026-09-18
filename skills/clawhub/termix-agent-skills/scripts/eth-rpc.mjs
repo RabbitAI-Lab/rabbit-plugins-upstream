@@ -9,44 +9,18 @@ export function rpcUrl() {
   return (process.env.A2A_RPC_URL || DEFAULT_RPC).replace(/\/$/, "");
 }
 
-// Public BSC RPCs intermittently drop connections ("fetch failed", ECONNRESET,
-// 5xx, or an HTML error page). Those are transport-level and safe to retry — the
-// request never produced a definitive node answer. A JSON-RPC `error` object IS a
-// definitive answer (revert, nonce too low, …) and is NEVER retried.
-const RPC_RETRIES = Number(process.env.A2A_RPC_RETRIES ?? 3);
-const RPC_BACKOFF_MS = [500, 1500, 3000];
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
 let idCounter = 0;
-export async function rpc(method, params = [], { retries = RPC_RETRIES } = {}) {
-  let lastErr;
-  for (let attempt = 0; ; attempt++) {
-    try {
-      const res = await fetch(rpcUrl(), {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ jsonrpc: "2.0", id: ++idCounter, method, params }),
-      });
-      if (!res.ok && res.status >= 500) throw new Error(`RPC ${method}: HTTP ${res.status}`);
-      const text = await res.text();
-      let json;
-      try { json = JSON.parse(text); } catch { throw new Error(`RPC ${method}: non-JSON response ${text.slice(0, 200)}`); }
-      if (json.error) {
-        // Definitive node response — surface it, do not retry.
-        const e = new Error(`RPC ${method} error ${json.error.code}: ${json.error.message}`);
-        e.rpcError = json.error;
-        throw e;
-      }
-      return json.result;
-    } catch (err) {
-      // rpcError is definitive; anything else (fetch throw, 5xx, parse) is transient.
-      if (err.rpcError || attempt >= retries) throw err;
-      lastErr = err;
-      process.stderr.write(`[eth-rpc] ${method} transient error (attempt ${attempt + 1}/${retries + 1}): ${err.message.slice(0, 120)} — retrying\n`);
-      await sleep(RPC_BACKOFF_MS[Math.min(attempt, RPC_BACKOFF_MS.length - 1)]);
-    }
-  }
-  throw lastErr; // unreachable
+export async function rpc(method, params = []) {
+  const res = await fetch(rpcUrl(), {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ jsonrpc: "2.0", id: ++idCounter, method, params }),
+  });
+  const text = await res.text();
+  let json;
+  try { json = JSON.parse(text); } catch { throw new Error(`RPC ${method}: non-JSON response ${text.slice(0, 200)}`); }
+  if (json.error) throw new Error(`RPC ${method} error ${json.error.code}: ${json.error.message}`);
+  return json.result;
 }
 
 export const toHex = (v) => "0x" + BigInt(v).toString(16);
@@ -84,22 +58,8 @@ export async function estimateGas({ from, to, value, data }) {
   return (est * 12n) / 10n; // +20% buffer
 }
 
-// The signed raw tx has a deterministic hash, so broadcasting is idempotent: if a
-// prior attempt's response was lost in transit (transport retry) the resend hits an
-// "already known / nonce too low" node error — that means our tx already landed, so
-// we return the locally-computed hash instead of failing. Pass `knownHash` (the
-// value signTransaction returns) to enable this; without it, errors propagate.
-const ALREADY_BROADCAST = /already known|known transaction|already exists|nonce too low|replacement transaction underpriced/i;
-export async function sendRawTransaction(rawHex, knownHash) {
-  try {
-    return await rpc("eth_sendRawTransaction", [rawHex]);
-  } catch (err) {
-    if (knownHash && err.rpcError && ALREADY_BROADCAST.test(err.rpcError.message || "")) {
-      process.stderr.write(`[eth-rpc] resend saw "${(err.rpcError.message || "").slice(0, 60)}" — tx already broadcast, using ${knownHash}\n`);
-      return knownHash;
-    }
-    throw err;
-  }
+export async function sendRawTransaction(rawHex) {
+  return rpc("eth_sendRawTransaction", [rawHex]);
 }
 
 export async function waitReceipt(txHash, { timeoutMs = 120000, intervalMs = 3000 } = {}) {

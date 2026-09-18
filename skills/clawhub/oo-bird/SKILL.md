@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Bird"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["bird"]
   icon: "https://static.oomol.com/logo/third-party/bird.png"
 ---

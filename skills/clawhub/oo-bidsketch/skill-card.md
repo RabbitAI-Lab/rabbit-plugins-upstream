@@ -1,42 +1,57 @@
-## Description: <br>
-BidSketch uses the OOMOL connector to let agents search, read, and retrieve BidSketch client or proposal data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BidSketch lets an agent search and read BidSketch clients, proposals, and proposal content through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Agents use this skill to inspect BidSketch clients and proposals from an OOMOL-connected account, including proposal content and client-specific proposal lists. It is intended for read-oriented BidSketch workflows where the agent should fetch the live action schema before running connector commands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill includes a visible CLI installer command that can modify the user's shell or CLI environment. <br>
-Mitigation: Review the OOMOL CLI installer source or use the official install guide or package manager before running installation commands. <br>
-Risk: The skill requires a connected BidSketch account and sensitive credentials managed through OOMOL. <br>
-Mitigation: Run connector actions only in an environment where the user has intentionally connected BidSketch, and do not request or handle raw BidSketch tokens. <br>
+## Use Case:
 
+Developers and external users with an OOMOL-connected BidSketch account use this skill to list and retrieve clients, proposals, proposal content, and client-specific proposals without handling raw API tokens.
 
-## Reference(s): <br>
-- [BidSketch homepage](https://www.bidsketch.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include BidSketch data and an execution ID when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The first-time setup instructions include remote installer one-liners that execute downloaded code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI from a verified, signed, or checksum-pinned source before using the BidSketch connector.
+
+Risk: The skill accesses live BidSketch account data through an OOMOL-connected account.
+
+Mitigation: Use an account with appropriate BidSketch access and review returned client and proposal data before sharing it outside the authorized workflow.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-bidsketch)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [BidSketch Homepage](https://www.bidsketch.com/)
+- [oo CLI Repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash and PowerShell command examples plus JSON payload and response conventions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only BidSketch connector actions return JSON data with execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

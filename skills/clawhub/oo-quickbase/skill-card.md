@@ -1,42 +1,61 @@
-## Description: <br>
-Enables agents to operate Quickbase through the OOMOL oo CLI for app and table discovery, record queries, and guarded record creation, updates, and deletion. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Quickbase (quickbase.com). Use this skill for ANY Quickbase request: reading, creating, updating, and deleting data through the OOMOL-connected Quickbase connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and business operators use this skill to let an agent inspect Quickbase schemas, query records, and perform confirmed record mutations through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can route broad Quickbase requests, including writes and deletions against business data. <br>
-Mitigation: Use narrowly scoped Quickbase credentials and require an explicit app, table, record target, and user confirmation before write or delete actions. <br>
-Risk: Incorrect payloads can affect the wrong Quickbase data if action schemas or targets are assumed. <br>
-Mitigation: Inspect the live action schema before constructing payloads and confirm the exact effect for write and destructive actions. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect Quickbase app and table metadata, query records, and perform guarded record writes or deletes through the OOMOL-connected oo CLI.
 
-## Reference(s): <br>
-- [ClawHub Quickbase Skill Page](https://clawhub.ai/oomol/skills/oo-quickbase) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Quickbase Homepage](https://www.quickbase.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return JSON command output from oo connector actions when executed with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill can upsert or delete Quickbase records when write or destructive actions are requested.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact payload, target table, record ids, and expected effect with the user before running write or destructive commands.
+
+Risk: First-time setup may require running shell or PowerShell installer commands for the oo CLI.
+
+Mitigation: Review the OOMOL installer or official install guide before running installer commands.
+
+Risk: Quickbase access is mediated by OOMOL-connected credentials.
+
+Mitigation: Install and use the skill only when the user accepts OOMOL as the intermediary for Quickbase operations.
+
+## Reference(s):
+
+- [ClawHub Quickbase Skill](https://clawhub.ai/oomol/skills/oo-quickbase)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Quickbase Homepage](https://www.quickbase.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are returned as JSON when commands are run with --json.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

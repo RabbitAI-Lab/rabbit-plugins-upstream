@@ -1,45 +1,57 @@
-## Description: <br>
-Use Iru (Kandji) for requests that search and read data through the Kandji connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Iru (Kandji) helps an agent search and read Kandji blueprint and directory user data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect the live Kandji connector schema, then run read-only Kandji blueprint and directory-user lookup or listing actions through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an OOMOL-connected Kandji account to read blueprint and directory-user data. <br>
-Mitigation: Install and run it only when you trust oomol and intend the agent to use the connected Kandji account for read-only lookups. <br>
-Risk: Future versions could add Kandji actions that change or remove data. <br>
-Mitigation: Before any write action, confirm the exact payload and effect with the user; before any destructive action, require explicit approval for the target. <br>
-Risk: Authentication, connection, scope, credential, or billing failures may require setup steps outside the normal read-only action flow. <br>
-Mitigation: Run setup, connection, or billing commands only after a command fails with the matching error. <br>
+## Use Case:
 
+IT, security, and device-management teams use this skill to let an agent retrieve Kandji blueprints and directory users, including filtered and paginated list operations. The skill is intended for read-only operational lookup through an already connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-kandji) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Iru (Kandji) homepage](https://www.iru.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The agent should inspect the live connector schema before constructing payloads; the listed actions are read-only get and list operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: The first-time setup instructions include remote installer commands that can execute local code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a trusted, pinned, and verified oo CLI installation method before running connector actions.
+
+Risk: The skill depends on an OOMOL-connected Kandji account and may fail when authentication, connection scope, billing, or app readiness is missing.
+
+Mitigation: Run ordinary read actions only after the account is signed in and connected; address auth, scope, connection, or billing errors through the documented setup paths.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-kandji)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Iru homepage](https://www.iru.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands return JSON responses from the OOMOL connector when run with --json.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

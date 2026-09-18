@@ -1,45 +1,65 @@
-## Description: <br>
-Drive a native GUI app (macOS, Windows, Linux) via the cua-driver CLI or MCP server; snapshot its accessibility tree, click, type, or scroll by element index or pixel coordinates, and verify via re-snapshot without bringing the target to the foreground. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Drive a native GUI app (macOS, Windows, Linux) via the cua-driver CLI (default) or MCP server; snapshot its accessibility tree, click/type/scroll by element_index or pixel coordinates, and verify via re-snapshot without bringing the target to the foreground.
 
-## Publisher: <br>
-[cua](https://clawhub.ai/user/cua) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cua](https://clawhub.ai/user/cua)
 
-## Use Case: <br>
-Developers, engineers, and automation agents use this skill to operate real native desktop applications through Cua Driver while preserving a snapshot-action-verify loop and platform-specific permission boundaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill grants high-impact desktop automation authority, including screen inspection and input across native applications. <br>
-Mitigation: Use it only for explicit GUI automation tasks, keep the window-scoped snapshot-action-verify loop, and require specific user intent before destructive actions. <br>
-Risk: Installer examples execute remote shell or PowerShell scripts from the Cua Driver distribution endpoint. <br>
-Mitigation: Prefer verified installers or trusted publisher installation paths, and run cua-driver doctor after installation before using automation capabilities. <br>
-Risk: Browser attachment, screenshots, and session recordings may expose authenticated pages, full-screen contents, or typed actions. <br>
-Mitigation: Prefer isolated browser profiles, require explicit approval before attaching to existing profiles or recording sessions, and treat trajectory and video outputs as sensitive. <br>
-Risk: Embedded unrestricted mode can bypass Cua runtime approvals when a host application opts into that mode. <br>
-Mitigation: Use standard embedded mode unless the host provides clear consent, logging, and permission UI, and keep unrestricted launch settings in trusted host configuration. <br>
+## Use Case:
 
+Developers and external users use this skill to let an agent operate native GUI applications across macOS, Windows, and Linux through Cua Driver while preserving snapshot-action-verify checks and explicit escalation.
 
-## Reference(s): <br>
-- [Cua Driver documentation](https://cua.ai/docs/cua-driver) <br>
-- [Cua Driver ClawHub release](https://clawhub.ai/cua/skills/driver) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, Code] <br>
-**Output Format:** [Markdown guidance with CLI command examples and JSON tool arguments] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include platform-specific setup steps, MCP or CLI invocations, and verification instructions for GUI automation workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.11.0 (source: frontmatter and server release metadata) <br>
+Risk: The skill enables powerful control of real desktop applications.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when an agent is expected to operate host GUI apps, require explicit intent for destructive steps, and keep snapshot-action-verify checks in the workflow.
+
+Risk: Installer commands fetch and execute remote installation scripts.
+
+Mitigation: Review or replace the remote installer flow with a verified package before deployment.
+
+Risk: Recording can capture screenshots, action metadata, and video that may include sensitive information.
+
+Mitigation: Do not enable recording around secrets, and opt out of video capture when visual evidence is unnecessary.
+
+Risk: Browser automation can interact with authenticated browser profiles.
+
+Mitigation: Prefer isolated browser profiles and require explicit approval before attaching to existing authenticated profiles.
+
+Risk: Autostart and unrestricted embedded mode can broaden local exposure.
+
+Mitigation: Disable autostart or unrestricted embedded mode unless there is a specific need and the exposure has been reviewed.
+
+## Reference(s):
+
+- [Cua Driver documentation](https://cua.ai/docs/cua-driver)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with inline CLI and JSON command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes platform-specific operating constraints and verification steps.]
+
+## Skill Version(s):
+
+0.11.0 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,48 +1,68 @@
-## Description: <br>
-Use this skill for VMware compliance auditing, baseline checking, drift detection, remediation suggestions, and reporting across vSphere, ESXi, and NSX environments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+VMware Harden helps agents run VMware cyber compliance audits, baseline checks, drift detection, remediation suggestions, and dashboard or report workflows for vSphere, ESXi, and NSX environments.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, platform engineers, and compliance operators use this skill to scan VMware estates against built-in or custom baselines, inspect violations and drift, and prepare remediation advice without directly changing managed VMware resources. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The remediation workflow may be mistaken for a reporting-only path even though evidence says it can hand changes to vmware-pilot. <br>
-Mitigation: Use the skill for scans, reports, drift review, and advice; for reporting-only use, avoid vmware-harden apply and route any real changes through normal vmware-pilot approval review. <br>
-Risk: Compliance evidence is stored locally and may contain sensitive posture details about VMware environments. <br>
-Mitigation: Protect the configured Twin DuckDB path and review who can read generated reports, dashboard output, and audit logs. <br>
-Risk: LLM remediation advice can be incomplete, generic, or wrong, especially when the optional Anthropic key is not configured. <br>
-Mitigation: Treat remediation output as a proposal, verify it against the actual violation evidence, and require human review before any change is submitted. <br>
+## Use Case:
 
+Developers, security engineers, and VMware platform operators use this skill to scan vSphere, ESXi, and NSX estates against supported compliance baselines, inspect coverage and drift, and collect remediation advice. The skill is intended for point-in-time compliance assessment and agent-assisted reporting, with infrastructure changes requiring explicit approval through the appropriate remediation path.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/vmware-harden) <br>
-- [Project Homepage](https://github.com/zw008/VMware-Harden) <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [Capabilities](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
-- [Cross-Skill Workflows](references/cross-skill-workflows.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands and text or JSON report references] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference local Twin DuckDB state, MCP tool outputs, web dashboard views, and optional LLM remediation suggestions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.7 (source: server release metadata) <br>
+Risk: The security evidence says the skill under-discloses a remediation path that can initiate real infrastructure changes through other skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit approval, audit review, and environment scoping before enabling remediation extras, using vmware-harden apply, or dispatching changes through a pilot workflow.
+
+Risk: Compliance evidence may be sent to Anthropic when live remediation advice is enabled.
+
+Mitigation: Avoid sending compliance evidence to Anthropic unless policy permits it, or run without ANTHROPIC_API_KEY so the advisor uses local fallback suggestions.
+
+Risk: The web dashboard can expose compliance posture data if it is made reachable beyond the local host.
+
+Mitigation: Keep the dashboard bound to localhost or place it behind appropriate access controls.
+
+Risk: Server-resolved GitHub import provenance is unavailable for this release.
+
+Mitigation: Prefer verified package provenance before production deployment and review the release evidence before installation.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/vmware-harden)
+- [Clawdis Homepage](https://github.com/vmware-skills/VMware-Harden)
+- [Capabilities Reference](artifact/references/capabilities.md)
+- [Setup Guide](artifact/references/setup-guide.md)
+- [CLI Reference](artifact/references/cli-reference.md)
+- [Agent Guardrails](artifact/references/agent-guardrails.md)
+- [STIG Content Sync](artifact/references/stig-content-sync.md)
+- [Cross-Skill Workflows](artifact/references/cross-skill-workflows.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, configuration snippets, and JSON or report summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agent responses should preserve coverage and truncation fields and distinguish remediation suggestions from executed changes.]
+
+## Skill Version(s):
+
+1.10.10 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

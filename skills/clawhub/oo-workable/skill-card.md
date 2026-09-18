@@ -1,43 +1,56 @@
-## Description: <br>
-Provides read-only Workable candidate and job search and retrieval through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Workable through an OOMOL-connected account to search and read candidate and job data with the oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Recruiting and people operations users can ask an agent to list Workable jobs and candidates or retrieve candidate and job details from a connected Workable account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can retrieve Workable candidate and job information through an OOMOL-connected account. <br>
-Mitigation: Connect only trusted OOMOL and Workable accounts, keep use to read requests, and review retrieved recruiting data before sharing it. <br>
-Risk: Workable connector contracts can change over time. <br>
-Mitigation: Inspect the live action schema before constructing payloads, as the artifact instructs. <br>
+## Use Case:
 
+Employees, recruiters, and recruiting operations teams use this skill to inspect Workable records, list candidates or jobs, and retrieve details without handling raw Workable API credentials directly.
 
-## Reference(s): <br>
-- [ClawHub Workable Skill Page](https://clawhub.ai/oomol/oo-workable) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Workable Homepage](https://www.workable.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI bash commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live Workable connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Setup guidance includes running an unverified remote installer directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing and prefer an official or otherwise verified oo CLI installation method.
+
+Risk: The skill relies on OOMOL-mediated access to Workable data.
+
+Mitigation: Use it only when that access path is acceptable for the workspace and confirm any future write or destructive Workable action explicitly.
+
+## Reference(s):
+
+- [ClawHub Workable skill listing](https://clawhub.ai/oomol/skills/oo-workable)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Workable homepage](https://www.workable.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read actions return JSON data with execution metadata when run through the connector.]
+
+## Skill Version(s):
+
+1.0.4 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

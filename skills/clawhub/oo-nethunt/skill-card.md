@@ -1,45 +1,56 @@
-## Description: <br>
-NetHunt helps an agent read, create, update, and delete NetHunt CRM data through OOMOL's oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+NetHunt (nethunt.com). Use this skill for ANY NetHunt request: reading, creating, updating, and deleting data through the OOMOL NetHunt connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and CRM operators use this skill to let an agent inspect NetHunt schemas, run read actions, and perform approved record, comment, and call-log mutations through an OOMOL-connected NetHunt account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Read actions may expose NetHunt CRM data. <br>
-Mitigation: Install and use the skill only for intended CRM access, and review returned data before sharing it outside the authorized context. <br>
-Risk: Write and delete actions can change or remove business records. <br>
-Mitigation: Confirm the exact payload, target record, and expected effect with the user before running any write or destructive action. <br>
-Risk: The one-time CLI install command runs OOMOL's remote installer. <br>
-Mitigation: Run the installer only when the oo CLI is required and the user trusts OOMOL's installer source. <br>
+## Use Case:
 
+Employees and external users with connected NetHunt accounts use this skill to inspect CRM schemas, read and search CRM data, and create or update records, comments, and call logs through confirmed connector actions.
 
-## Reference(s): <br>
-- [ClawHub NetHunt skill page](https://clawhub.ai/oomol/skills/oo-nethunt) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [NetHunt homepage](https://nethunt.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands typically return JSON from the oo CLI; write and destructive actions require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md metadata) <br>
+Risk: Setup instructions include direct execution of downloaded installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verifiable installation method, or inspect and verify the installer before execution.
+
+Risk: The skill can read CRM data and perform write or destructive NetHunt actions.
+
+Mitigation: Install only when OOMOL is trusted as an intermediary, confirm exact payloads for write actions, and require explicit approval before deletion.
+
+## Reference(s):
+
+- [NetHunt homepage](https://nethunt.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-nethunt)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance, API calls]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are returned as JSON objects containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,53 @@
-## Description: <br>
-Use CodexBar CLI local cost usage to summarize per-model usage for Codex or Claude, including the current most recent model or a full model breakdown. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Summarizes CodexBar local cost usage by model for Codex or Claude, including the current model or a full model breakdown.
 
-## Publisher: <br>
-[steipete](https://clawhub.ai/user/steipete) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[steipete](https://clawhub.ai/user/steipete)
 
-## Use Case: <br>
-Developers and engineers use this skill to summarize local CodexBar cost logs by model for Codex or Claude, either for the current model or for all models in the available cost history. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: CodexBar reads local Codex or Claude session logs to compute costs. <br>
-Mitigation: Install and run the skill only where local usage logs may be processed for cost reporting, and review CodexBar separately if local log privacy requirements are strict. <br>
-Risk: Model-level values are cost-only because CodexBar output does not split token counts by model. <br>
-Mitigation: Use the reported model costs for cost review, and avoid presenting them as per-model token accounting. <br>
-Risk: The bundled installation metadata targets macOS with CodexBar available through a Homebrew cask. <br>
-Mitigation: Confirm CodexBar CLI availability before use, especially on non-macOS systems. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [CodexBar CLI quick ref](references/codexbar-cli.md) <br>
-- [Model Usage skill listing](https://clawhub.ai/steipete/skills/model-usage) <br>
+## Use Case:
 
+Developers and engineers use this skill to inspect local Codex or Claude model cost usage from CodexBar and produce current-model or all-model cost summaries for scripting or review.
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, shell commands, guidance] <br>
-**Output Format:** [Plain text or JSON summaries, with Markdown guidance and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports cost-only per-model summaries; token counts are not split by model in CodexBar output.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill depends on the third-party CodexBar CLI and can inspect local Codex or Claude usage logs for cost summaries.
+
+Mitigation: Install only in environments where CodexBar and the publisher are trusted, and confirm that local usage-log access is acceptable.
+
+Risk: Per-model summaries are cost-only because CodexBar output does not split tokens by model.
+
+Mitigation: Use the output for cost review rather than token-level attribution, and consult raw CodexBar data when token totals are needed.
+
+## Reference(s):
+
+- [CodexBar CLI quick ref](references/codexbar-cli.md)
+- [ClawHub skill page](https://clawhub.ai/steipete/skills/model-usage)
+
+## Skill Output:
+
+**Output Type(s):** [text, json, shell commands, guidance]
+
+**Output Format:** [Plain text or JSON, with Markdown guidance and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Cost-only per-model summaries; tokens are not split by model in CodexBar output.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

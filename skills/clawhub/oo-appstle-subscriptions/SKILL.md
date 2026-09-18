@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Appstle Subscriptions"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["appstle_subscriptions"]
   icon: "https://static.oomol.com/logo/third-party/appstle_subscriptions.png"
 ---

@@ -17,7 +17,7 @@ installer:
 argument-hint: "[a queue/key/client id, or describe your cache/broker task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["QUEUE_AIOPS_CONFIG"],"bins":["queue-aiops"],"config":["~/.queue-aiops/config.yaml","~/.queue-aiops/secrets.enc"]},"optional":{"env":["QUEUE_AIOPS_MASTER_PASSWORD"]},"primaryEnv":"QUEUE_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/Queue-AIops","emoji":"📬","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["queue-aiops","uvx"]},"optional":{"env":["QUEUE_AIOPS_CONFIG","QUEUE_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/Queue-AIops","emoji":"📬","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed broker operations across redis (RESP wire protocol via the redis Python client; password optional — auth-less lab instances are supported — TLS optional) and rabbitmq (management HTTP API /api/..., HTTP Basic auth with a monitoring/management-tagged user). Each target in the config names its own platform, and a name-keyed platform registry selects the protocol shape, so one config can span a mixed estate. The governance harness (audit, policy, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency.
   All write operations are audited to a local SQLite DB under ~/.queue-aiops/ (relocatable via QUEUE_AIOPS_HOME).
@@ -75,6 +75,15 @@ queue-aiops init       # wizard: pick platform (redis/rabbitmq) + encrypted secr
 queue-aiops doctor
 ```
 
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/queue-aiops
+openclaw skills info queue-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
+
 ## When to Use This Skill
 
 - Get a one-shot snapshot (`overview` / `redis_server_info` / `rabbitmq_overview`)
@@ -112,8 +121,8 @@ skill.
    works before you read numbers off it.
 2. `queue-aiops redis memory` → used vs `maxmemory`, the eviction policy in force, and
    the fragmentation ratio, straight from `INFO memory`.
-3. `queue-aiops analyze memory --used-pct 85` → ranked findings, each citing its measured
-   number: **noeviction near the limit** (the dangerous one — writes will start failing
+3. `queue-aiops analyze memory --used-pct 85` → findings in check order, each citing its measured
+   number (order is not severity — weigh them all): **noeviction near the limit** (the dangerous one — writes will start failing
    with OOM rather than evicting), active eviction in progress, fragmentation versus real
    swapping, and oversized keys.
 4. `queue-aiops redis bigkeys --count 500` → a SCAN-budgeted sample of the largest keys,

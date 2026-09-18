@@ -1,43 +1,52 @@
-## Description: <br>
-VATlayer helps agents validate VAT numbers, retrieve EU VAT rates, list reduced-rate types, and calculate VAT-inclusive or VAT-exclusive prices through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables an agent to operate VATlayer through an OOMOL-connected account for VAT rate lookup, VAT number validation, and VAT-inclusive or VAT-exclusive price calculation.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to ask an agent for VAT validation, EU rate lookup, reduced-rate type lists, and VAT price calculations through their connected VATlayer account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected VATlayer API key brokered through OOMOL. <br>
-Mitigation: Confirm trust in OOMOL as the credential broker and connect only the intended VATlayer account before use. <br>
-Risk: One-time CLI install, login, or connection steps may be needed when authentication or connection errors occur. <br>
-Mitigation: Run setup commands only when the corresponding command failure occurs, and avoid repeating authentication or connection steps unnecessarily. <br>
+## Use Case:
 
+External users and developers use this skill to query VATlayer through the oo CLI for VAT rates, VAT number validation, and VAT-compliant price calculations without handling raw VATlayer credentials.
 
-## Reference(s): <br>
-- [ClawHub VATlayer Skill](https://clawhub.ai/oomol/oo-vatlayer) <br>
-- [VATlayer Homepage](https://vatlayer.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an installed and authenticated oo CLI plus an OOMOL-connected VATlayer API key.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: Setup instructions include remote installer commands that can run arbitrary local code if executed without integrity verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and install the oo CLI through an official, integrity-verified method before using VATlayer actions.
+
+## Reference(s):
+
+- [VATlayer homepage](https://vatlayer.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-vatlayer)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, JSON, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live VATlayer connector schemas before running actions; raw VATlayer credentials are not handled by the agent.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

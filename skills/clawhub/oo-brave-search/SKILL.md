@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Brave Search"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["brave_search"]
   icon: "https://static.oomol.com/logo/third-party/brave_search.svg"
 ---

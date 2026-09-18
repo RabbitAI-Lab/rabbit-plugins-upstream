@@ -1,45 +1,59 @@
-## Description: <br>
-Use this skill for Lodgify requests that search and read data through OOMOL's Lodgify connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lodgify (lodgify.com). Use this skill for ANY Lodgify request - searching and reading data. Whenever a task involves Lodgify, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and support agents use this skill to read Lodgify bookings, properties, room types, availability, and quotes through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads Lodgify booking and property data through an OOMOL-connected account. <br>
-Mitigation: Use it only when the user intends to read Lodgify data and trusts the OOMOL CLI and account connection model. <br>
-Risk: Authentication, connection, or billing setup can enable or resume access to the Lodgify integration. <br>
-Mitigation: Only run login, connection, or recharge steps after a matching command failure and clear user intent. <br>
-Risk: Connector action schemas may change over time. <br>
-Mitigation: Inspect the live `oo connector schema` output before building each action payload. <br>
+## Use Case:
 
+External users and developers use this skill to inspect Lodgify schemas and retrieve booking, property, room, availability, and quote information through an OOMOL-connected Lodgify account.
 
-## Reference(s): <br>
-- [Lodgify homepage](https://www.lodgify.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-lodgify) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: First-time setup guidance includes remote installer commands that run downloaded scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installer instructions before use and prefer a verified, pinned, or package-managed oo CLI installation source.
+
+Risk: Complex or user-supplied JSON payloads can be malformed or interpreted differently than intended.
+
+Mitigation: Inspect the live action schema before constructing payloads and use file-based JSON payloads for complex input.
+
+Risk: Future connector actions could add write or destructive behavior beyond the current read-oriented release.
+
+Mitigation: Require explicit user confirmation before adding or running any write or destructive Lodgify connector action.
+
+## Reference(s):
+
+- [ClawHub Lodgify skill listing](https://clawhub.ai/oomol/skills/oo-lodgify)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Lodgify homepage](https://www.lodgify.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce oo CLI connector commands and summarize JSON responses from read-oriented Lodgify actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

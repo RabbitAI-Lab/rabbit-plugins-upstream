@@ -1,45 +1,55 @@
-## Description: <br>
-Manus (manus.im) lets an agent read, create, update, and delete Manus data through the OOMOL `oo` CLI connector instead of calling the Manus API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manus (manus.im). Use this skill for ANY Manus request -- reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate Manus tasks, projects, agents, connectors, skills, browser clients, and task messages through an OOMOL-connected account. It supports read workflows as well as user-confirmed write and destructive Manus actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run authenticated Manus actions through an OOMOL-connected account, including actions that change Manus state. <br>
-Mitigation: Inspect the live connector schema, confirm the exact payload and effect with the user, and run write actions only after user approval. <br>
-Risk: The `delete_task` action permanently deletes a stopped Manus task. <br>
-Mitigation: Confirm the target task and obtain explicit approval before running destructive actions. <br>
-Risk: The skill depends on connected account credentials and may fail when the CLI, login, connection, scope, or billing state is missing or expired. <br>
-Mitigation: Use first-time setup steps only after a matching command failure and avoid proactively opening login or connection flows. <br>
+## Use Case:
 
+Agents use this skill to operate Manus through an OOMOL-connected account, including creating, listing, updating, stopping, messaging, and deleting Manus tasks. It is intended for users who need Manus workflow operations via the oo CLI while preserving confirmation checks for write and destructive actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-manus) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Manus homepage](https://manus.im) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands should inspect live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: The setup instructions include remote installer scripts that can execute directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a pinned, signed, or package-manager installation path for the oo CLI and review installer contents before execution.
+
+Risk: Write and destructive Manus actions can change account state or permanently delete stopped tasks.
+
+Mitigation: Confirm the exact action, payload, target account, and task or project identifier with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-manus)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Manus homepage](https://manus.im)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce oo CLI commands that read from or change Manus account state, depending on the selected action.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

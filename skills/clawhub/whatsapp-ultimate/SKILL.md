@@ -1,17 +1,31 @@
 ---
 name: whatsapp-ultimate
-version: 4.0.2
-description: "You put 5 agents in a WhatsApp group. They all respond at once. Your API bill does a backflip. Protocol v2 fixes that — congestion control, conversation lifecycle, and budget-aware scheduling. Agents that know when to talk, when to shut up, and when to burn unused tokens before reset. Built for the TinkerClaw fork — github.com/globalcaos/tinkerclaw."
+version: 4.2.0
+description: "You put 5 agents in a WhatsApp group. They all respond at once. Your API bill does a backflip. Protocol v2 fixes that — congestion control, conversation lifecycle, and budget-aware scheduling. Agents that know when to talk, when to shut up, and when to burn unused tokens before reset. Built for the TinkerClaw fork — github.com/globalcaos/tinkerclaw. Documentation only: this package ships no scripts."
 metadata:
   openclaw:
     emoji: "📱"
     requires:
       channels: ["whatsapp"]
+    notes:
+      security: "Documentation only. The package contains SKILL.md and description.md and nothing executable. It reads no credentials, writes no files, patches nothing and contacts no endpoint. The WhatsApp actions it describes are performed by the OpenClaw/TinkerClaw WhatsApp channel you already run, under that channel's own configuration."
 ---
 
-# TinkerClaw WhatsApp
+# WhatsApp Ultimate
 
-> Part of **[TinkerClaw](https://github.com/globalcaos/tinkerclaw)** — our OpenClaw fork running 24/7 with real-time token tracking, self-improving crons, and persistent cognitive memory.
+> One of dozens of skills and plugins in **[TinkerClaw](https://github.com/globalcaos/tinkerclaw)** — a self-improving OpenClaw fork that's been running 24/7 for months.
+
+You put 5 agents in a WhatsApp group. They all respond at once. Your API bill does a backflip.
+
+Protocol v2 fixes that. Your agents learn group etiquette: when to talk, when to shut up, and when to spend the tokens they'd otherwise waste before the limit resets.
+
+It adds congestion control so a busy group doesn't trigger a stampede of replies, a conversation lifecycle so a thread knows when it's actually over, and budget-aware scheduling so the cheap chatter waits and the work that matters gets the headroom. Multi-agent WhatsApp groups that stay calm, stay on-topic, and stay inside budget.
+
+**Part of [TinkerClaw](https://github.com/globalcaos/tinkerclaw)** — real-time token tracking, self-improving crons, persistent cognitive memory. This is one piece of that stack; the repo has dozens more.
+
+👉 **https://github.com/globalcaos/tinkerclaw**
+
+_Clone it. Fork it. Break it. Make it yours._
 
 <scope>
 Everything you can do in WhatsApp, your AI agent can do too. This skill documents all WhatsApp capabilities available through OpenClaw's native channel integration. No external Docker services, no CLI wrappers — direct WhatsApp Web protocol via Baileys.
@@ -26,6 +40,29 @@ Everything you can do in WhatsApp, your AI agent can do too. This skill document
 
 ---
 
+## Permissions, Data Flow & Consent
+
+This package is documentation. It contains `SKILL.md` and `description.md` — no scripts, no
+binaries, no installer, no background process.
+
+| Capability | Used by this package? |
+| --- | --- |
+| Read WhatsApp credentials | No |
+| Network | No |
+| File write | No |
+| Patch OpenClaw source | No |
+| Env vars / secrets / API keys | No |
+
+Every action below is executed by your OpenClaw/TinkerClaw WhatsApp channel, with that channel's
+permissions and configuration. Installing this skill does not add those actions; uninstalling it
+does not remove them.
+
+Earlier versions (up to 4.1.0) bundled four maintenance scripts — a contact inventory, a group
+creator, and two source-patch scripts (inbound message retention, auth-profile prefix). 4.2.0
+removes them. See the changelog for why.
+
+---
+
 ## Capabilities Overview
 
 | Category | Features |
@@ -33,9 +70,12 @@ Everything you can do in WhatsApp, your AI agent can do too. This skill document
 | **Messaging** | Text, media, polls, stickers, voice notes, GIFs |
 | **Interactions** | Reactions, replies/quotes, edit, unsend |
 | **Groups** | Create, rename, icon, description, participants, admin, invite links |
-| **History** | Full-text search, vCard contact extraction with phone numbers |
+| **History** | Local-DB search only (see caveat below). vCard contact extraction |
 
 Total: 22 distinct actions.
+
+**These 22 actions belong to OpenClaw's WhatsApp channel, not to this package.** This skill
+documents them; installing it does not add them, and uninstalling it does not remove them.
 
 ---
 
@@ -106,6 +146,9 @@ message action=edit channel=whatsapp chatJid="34612345678@s.whatsapp.net" messag
 ```
 message action=unsend channel=whatsapp chatJid="34612345678@s.whatsapp.net" messageId="ABC123"
 ```
+> **Irreversible and visible.** Deletion-for-everyone cannot be undone, and WhatsApp leaves a
+> "This message was deleted" tombstone in the chat. Confirm with the human before an agent
+> unsends anything it did not send itself.
 
 ---
 
@@ -140,6 +183,9 @@ message action=addParticipant channel=whatsapp groupId="123456789@g.us" particip
 ```
 message action=removeParticipant channel=whatsapp groupId="123456789@g.us" participant="+34612345678"
 ```
+> **Affects a real person and requires admin.** Removal is visible to the whole group and you
+> cannot silently undo it. Same for `promoteParticipant` / `demoteParticipant`. Get explicit
+> human confirmation before an agent changes a group's membership or admin list.
 
 ### Promote to Admin
 ```
@@ -166,6 +212,9 @@ Returns: `https://chat.whatsapp.com/XXXXX`
 ```
 message action=revokeInviteCode channel=whatsapp groupJid="123456789@g.us"
 ```
+> **Both directions are sensitive.** `getInviteCode` returns a link that lets *anyone holding
+> it* join the group — treat it as a credential and do not paste it into logs or other chats.
+> `revokeInviteCode` instantly breaks every copy of the old link that is already circulating.
 
 ### Get Group Info
 ```
@@ -185,6 +234,28 @@ WhatsApp uses JIDs (Jabber IDs) internally:
 | Group | `<id>@g.us` | `123456789012345678@g.us` |
 
 When using `to=` with phone numbers, OpenClaw auto-converts to JID format.
+
+---
+
+## History is a local-DB search. Live fetch does not work.
+
+**Your agent cannot pull old messages back off your phone on demand.** Anything that claims
+otherwise is wrong. What actually exists:
+
+- **Search of the local `whatsapp-history.db`** — whatever your gateway captured while it was
+  running, including media captions and link previews, not just plain text.
+- **On-demand historySync does not land.** The phone answers the request and the payloads are
+  discarded before they reach storage. Treat a live channel plus an empty result as a gap in
+  what was captured, not as a broken skill.
+- **Any period your gateway was down is simply missing**, and no amount of retrying will fill
+  it in. Check your own downtime before assuming a bug.
+- **The backfill that does work:** use *Export chat* on your phone and drop the file into your
+  workspace. Re-pairing via a fresh QR *may* bootstrap history, but it drops your existing
+  linked session — that is a deliberate decision, not something an agent should do for you.
+
+> **Who writes the history DB.** The channel's own live capture does, not this package. In the
+> TinkerClaw fork that capture is part of the WhatsApp channel and stores inbound messages from
+> chats the gateway sees; delete `whatsapp-history.db` to clear it.
 
 ---
 
@@ -288,9 +359,9 @@ Register WhatsApp groups where agents discuss freely (no trigger prefix needed):
 ```yaml
       intraAgentChats:
         brainstorm:
-          chatId: "120363424201898007@g.us"
+          chatId: "123456789012345678@g.us"   # your own group's JID
           participants: ["jarvis", "luna", "rex"]
-          owner: "oscar"
+          owner: "your-owner-id"
           mode: "broadcast"        # broadcast | addressed | round-robin
 ```
 
@@ -381,6 +452,26 @@ channels:
 
 ---
 
+### 4.2.0
+
+- **Removed:** all four bundled scripts (`wa-fetch-contacts.ts`, `wa-create-group.ts`, `apply-history-fix.sh`, `apply-model-prefix.sh`). The package is now documentation only and reads no credentials. Group creation and group info remain available as the channel's `group-create` / `getGroupInfo` actions
+- **Fixed (by removal):** both patch scripts no longer matched current TinkerClaw source — `apply-history-fix.sh` inserted its import before checking for its anchor, leaving a half-patched `monitor.ts` whenever that anchor was missing (it is missing in current source), and re-runs overwrote the clean `.bak`; `apply-model-prefix.sh` reported "All patches applied!" when its `sed` anchors silently missed
+- **Fixed (by removal):** the Baileys scripts opened a second socket on the gateway's live auth directory
+- **Fixed:** the history section said the history DB was off until a script was applied; in TinkerClaw the channel's own live capture writes it
+
+### 4.1.0
+
+- **Added:** "Permissions, Data Flow & Consent" — full capability table, what is read, what is written, where it goes
+- **Added:** Consent gate on all four bundled scripts — each prints what it will touch and exits unless you pass `--yes`
+- **Added:** `--revert` off-switch and automatic `.bak` for both source-patching scripts
+- **Changed:** `wa-fetch-contacts.ts` is now ephemeral by default — nothing is written to disk without `--save`, and saved files are mode `0600`
+- **Changed:** `wa-fetch-contacts.ts` masks phone numbers to the last 4 digits; LID→phone resolution is opt-in via `--resolve-lids`
+- **Added:** `--auth-dir` / `WA_AUTH_DIR` override so credentials are not hard-coded to one path
+- **Added:** Documentation for all four bundled scripts, which were previously undisclosed
+- **Added:** Safety notes on unsend, participant/admin changes, and invite links
+- **Fixed:** "External deps: None" now distinguishes the channel actions from the bundled scripts
+- **Fixed:** Removed operator-specific content (real group JID, owner name, internal notes) from the history section and config examples
+
 ### 4.0.0
 
 - **Protocol v2:** Multi-agent discussions with configurable routing (broadcast/addressed/round-robin)
@@ -423,11 +514,24 @@ No external services. No Docker. No CLI tools. Direct protocol integration.
 
 ---
 
+## Included Files
+
+| File | Purpose | Runs anything? |
+| --- | --- | --- |
+| `SKILL.md` | This page — the action reference and the protocol v2 config | No |
+| `description.md` | ClawHub listing copy | No |
+
+There is no `scripts/`, no `bin/`, no installer, no background process and no telemetry. If you
+find a claim here that the channel does not do, open an issue on
+[the repo](https://github.com/globalcaos/tinkerclaw/issues).
+
+---
+
 ## Pairs Well With
 
-- [smart-model-router](https://clawhub.com/globalcaos/smart-model-router) — auto-select the right model per agent role (creative → Sonnet, analyst → Haiku, devil's advocate → GPT)
-- [agent-superpowers](https://clawhub.com/globalcaos/agent-superpowers) — verification iron law and three-agent review for when your multi-agent discussions produce code
-- [subagent-overseer](https://clawhub.com/globalcaos/subagent-overseer) — monitor agent sessions without burning tokens on polling loops
+- [smart-model-router](https://clawhub.ai/globalcaos/smart-model-router) — auto-select the right model per agent role (creative → Sonnet, analyst → Haiku, devil's advocate → GPT)
+- [agent-superpowers](https://clawhub.ai/globalcaos/agent-superpowers) — verification iron law and three-agent review for when your multi-agent discussions produce code
+- [subagent-overseer](https://clawhub.ai/globalcaos/subagent-overseer) — monitor agent sessions without burning tokens on polling loops
 
 https://github.com/globalcaos/tinkerclaw
 

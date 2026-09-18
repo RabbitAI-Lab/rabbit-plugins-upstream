@@ -1,44 +1,55 @@
-## Description: <br>
-This skill lets agents operate Databricks through OOMOL-connected oo CLI actions for reading, creating, updating, and deleting Databricks resources. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Databricks helps agents read, create, update, and delete Databricks workspace resources through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and workspace operators use this skill to inspect Databricks schemas and run OOMOL-connected Databricks actions for jobs, clusters, repositories, secret scopes, and workspace files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, start, trigger, cancel, overwrite, or delete Databricks resources and workspace files. <br>
-Mitigation: Require explicit user approval for every state-changing action and confirm the exact payload, target resource, and expected effect before execution. <br>
-Risk: The skill requires an OOMOL-connected Databricks account with sensitive workspace credentials. <br>
-Mitigation: Use least-privileged Databricks access and keep credentials in the OOMOL connection rather than exposing raw tokens in prompts or files. <br>
-Risk: First-time setup may install or invoke the external oo CLI. <br>
-Mitigation: Review the oo CLI installer before running it and only perform setup when an auth, connection, or missing-command error requires it. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Databricks action schemas, run read-only workspace queries, and perform confirmed write or destructive Databricks actions through a connected OOMOL account.
 
-## Reference(s): <br>
-- [Databricks](https://www.databricks.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-databricks) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads or results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI to execute Databricks connector actions; state-changing and destructive actions require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: The skill can perform broad Databricks write and delete actions in the connected workspace.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit confirmation for every write or destructive Databricks action, including the exact target and payload.
+
+Risk: The skill documentation includes remote installer commands that pipe downloaded scripts into a shell or PowerShell.
+
+Mitigation: Prefer a verified package, pinned release, or separately downloaded installer that can be inspected before execution.
+
+## Reference(s):
+
+- [ClawHub Databricks Skill](https://clawhub.ai/oomol/skills/oo-databricks)
+- [Databricks Homepage](https://www.databricks.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance, json]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions that change or delete Databricks resources require explicit user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

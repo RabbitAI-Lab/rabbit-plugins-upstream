@@ -1,45 +1,59 @@
-## Description: <br>
-Campaign Cleaner helps agents manage email campaign analysis through an OOMOL-connected Campaign Cleaner account, including listing campaigns, retrieving analysis payloads, checking status, downloading PDF reports, submitting HTML for processing, and checking credits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Campaign Cleaner helps an agent operate Campaign Cleaner through the OOMOL oo CLI to inspect action schemas, submit email campaign HTML for analysis, retrieve campaign data and reports, check credits, and delete saved campaigns.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Agents use this skill to operate Campaign Cleaner through an OOMOL-connected account for email campaign analysis workflows. It supports read operations, campaign submission, deletion, credit lookup, and PDF analysis retrieval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an OOMOL-connected Campaign Cleaner account and therefore depends on sensitive credentials managed outside the artifact. <br>
-Mitigation: Install and use it only when the user intends to connect Campaign Cleaner through OOMOL; do not request or expose raw API keys in prompts or command output. <br>
-Risk: Campaign submission changes live Campaign Cleaner state and may consume service credits. <br>
-Mitigation: Confirm the exact HTML payload, target account context, and expected effect with the user before running the write action. <br>
-Risk: Campaign deletion removes saved Campaign Cleaner data. <br>
-Mitigation: Require explicit user approval for the campaign ID and destructive effect before running the deletion action. <br>
+## Use Case:
 
+External users and developers use this skill to operate Campaign Cleaner from an agent. It supports reading saved campaigns, submitting campaign HTML for analysis, retrieving statuses and PDF reports, checking credits, and performing confirmed write or delete actions.
 
-## Reference(s): <br>
-- [Campaign Cleaner homepage](https://campaigncleaner.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-campaign-cleaner) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return Campaign Cleaner JSON responses, processing status, credit details, and transit-file references for PDF reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup instructions include direct execution of remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use reviewed official installation steps, verify the source where possible, and avoid pipe-to-shell installation before setup.
+
+Risk: The skill can submit campaign data and delete saved Campaign Cleaner campaigns.
+
+Mitigation: Confirm the exact payload and expected effect before write actions, and require explicit user approval before destructive deletion.
+
+Risk: The skill depends on the OOMOL oo CLI, an OOMOL-connected Campaign Cleaner account, and available credits.
+
+Mitigation: Install only when comfortable with the OOMOL CLI and connector, and handle authentication, connection, or billing failures through the documented setup flow.
+
+## Reference(s):
+
+- [Campaign Cleaner homepage](https://campaigncleaner.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Campaign Cleaner on ClawHub](https://clawhub.ai/oomol/skills/oo-campaign-cleaner)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Files, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return a Campaign Cleaner PDF analysis report as a transit file; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

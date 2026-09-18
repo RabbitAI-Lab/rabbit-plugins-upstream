@@ -1,43 +1,60 @@
-## Description: <br>
-This skill lets an agent search and read Best Buy product, category, store, and review data through the OOMOL bestbuy connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Best Buy enables agents to search and read Best Buy product, category, review, and store information through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers with an OOMOL-connected Best Buy account use this skill to inspect action schemas and run read-only Best Buy lookup actions for products, categories, stores, and reviews. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected Best Buy account and can lead the agent through optional CLI installation or login setup. <br>
-Mitigation: Install and use it only when the user wants an agent to query Best Buy, and run CLI install or login steps only when intentionally setting up that connection. <br>
-Risk: The connector is described as read-only, but its results depend on live Best Buy and OOMOL service access. <br>
-Mitigation: Review returned product, store, category, and review data before relying on it for purchasing or operational decisions. <br>
+## Use Case:
 
+External users and agents use this skill to look up Best Buy catalog, product review, and store data from an OOMOL-connected Best Buy account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-bestbuy) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Best Buy homepage](https://www.bestbuy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI; Best Buy credentials are handled through the user's OOMOL connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: The setup instructions include remote installer scripts that are piped directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from a trusted OOMOL source or a verified vendor installation method, and review installer behavior before execution.
+
+Risk: Connector behavior depends on live action schemas and account connection state.
+
+Mitigation: Fetch the action schema before constructing payloads, and run authentication or connection setup only after a matching command failure.
+
+Risk: Future or changed connector actions may include write or destructive behavior.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running any action tagged write or destructive.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-bestbuy)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Best Buy Homepage](https://www.bestbuy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses include Best Buy connector data and meta.executionId when actions are run with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

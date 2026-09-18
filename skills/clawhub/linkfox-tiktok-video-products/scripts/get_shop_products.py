@@ -20,7 +20,7 @@ def main() -> None:
     if len(sys.argv) < 2:
         print(
             "Usage: get_shop_products.py '<JSON>'\n"
-            "Required: openId (or ttsAccessToken), page_size (default 20)\n"
+            "Required: openId, page_size (default 20)\n"
             "Optional: title_keyword, sort_field, sort_order, page_token\n"
             "Returns product_id for use in linkfox-tiktok-video precheck/post APIs",
             file=sys.stderr,

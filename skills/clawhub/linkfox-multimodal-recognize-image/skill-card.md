@@ -1,46 +1,63 @@
-## Description: <br>
-Analyzes publicly accessible image URLs with a multimodal AI service to produce text descriptions, OCR-style extraction, visual question answering, and product-image analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes publicly accessible image URLs with LinkFox's multimodal image-recognition API to return text descriptions, OCR-style extraction, visual Q&A, and product-image analysis.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users, developers, and e-commerce operators use this skill to analyze image URLs, extract visible text, answer visual questions, and summarize product or marketing imagery. When given a local image path, the skill can upload it to obtain a temporary public URL before analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Local images may be uploaded to a public URL before analysis. <br>
-Mitigation: Use only images the user is comfortable sending to LinkFox, and avoid screenshots, documents, or other sensitive files unless the user explicitly approves upload. <br>
-Risk: Saved response files may contain sensitive extracted text or image-analysis results. <br>
-Mitigation: Run the skill from a controlled workspace and delete saved JSON outputs when they are no longer needed. <br>
-Risk: A custom LINKFOX_TOOL_GATEWAY can redirect requests and credentials. <br>
-Mitigation: Configure LINKFOX_TOOL_GATEWAY only to a trusted endpoint, or leave it unset to use the documented LinkFox gateway. <br>
-Risk: Feedback can send user comments or result-quality details to an external service. <br>
-Mitigation: Avoid including sensitive user content in feedback and confirm before reporting feedback that contains user-specific details. <br>
+## Use Case:
 
+External users and developers use this skill to route image-description, OCR extraction, visual question answering, and e-commerce product-image review tasks to LinkFox. It can convert local image files into temporary public URLs before analysis when the user accepts that upload behavior.
 
-## Reference(s): <br>
-- [图片识别 API 参考](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-multimodal-recognize-image) <br>
-- [LinkFox API Key Guide](https://skill.linkfox.com/linkfoxskills/guide.htm) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown guidance plus JSON API responses saved to files and summarized on stdout] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full responses are saved under ./linkfox/<date>/<session>/data; responses over 8 KB are summarized unless --inline is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Image recognition and local-image upload use a paid external LinkFox service and may consume compute credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Tell users before additional calls may incur cost, reuse the built-in 24-hour cache where appropriate, and avoid repeated retries without user consent.
+
+Risk: Local image uploads are converted into publicly reachable URLs for analysis.
+
+Mitigation: Avoid private or sensitive local images unless the user explicitly accepts public upload exposure and the temporary URL behavior.
+
+Risk: The skill performs authentication, API-key creation, billing-plan listing, payment-order creation, and feedback reporting.
+
+Mitigation: Use only official LinkFox endpoints, verify environment variables before use, avoid casually sharing SMS codes or API keys, and prefer safer secret storage over shell startup files.
+
+Risk: Endpoint environment variables can redirect requests away from the default LinkFox hosts.
+
+Mitigation: Confirm configured LinkFox endpoint variables point to expected official hosts before sending credentials, images, or billing requests.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-multimodal-recognize-image)
+- [Image Recognition API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance, shell commands, and JSON API responses containing text analysis and cost fields.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The recognition script stores full JSON responses in a local LinkFox session directory, prints small responses inline, summarizes larger responses unless --inline is used, and caches identical calls for 24 hours.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

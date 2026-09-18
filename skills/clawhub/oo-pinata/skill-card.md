@@ -1,45 +1,60 @@
-## Description: <br>
-Pinata (pinata.cloud). Use this skill for Pinata requests, including reading, creating, updating, and deleting data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Pinata helps agents read, create, update, and delete Pinata data through an OOMOL-connected account instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate Pinata through the OOMOL oo CLI, including file and group reads, group management, pin-by-CID workflows, metadata updates, and controlled destructive actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and destructive Pinata actions can create, update, remove, or overwrite Pinata data. <br>
-Mitigation: Confirm the exact action, target, payload, and expected effect with the user before running write or destructive commands. <br>
-Risk: The skill can operate a user's Pinata account through an OOMOL-connected account. <br>
-Mitigation: Install and use it only when the user intends to let the agent operate that Pinata account through OOMOL. <br>
-Risk: First-time setup may use a remote oo CLI installer if the CLI is not already installed. <br>
-Mitigation: Prefer an already installed oo CLI where available, and review the installer source before approving remote installation. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Pinata files, groups, metadata, and pin-by-CID requests from an agent session. It supports read workflows and state-changing Pinata actions while requiring schema inspection before constructing action payloads.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-pinata) <br>
-- [Pinata Homepage](https://pinata.cloud) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses from the connector include data and meta.executionId when actions are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The setup path includes remote installer commands that execute downloaded scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation source before installing and prefer a verified package, pinned release, checksum, or signature-checked install path.
+
+Risk: Write actions can create groups, update metadata, pin CIDs, or add files to groups.
+
+Mitigation: Inspect the live action schema, confirm the exact payload and intended effect with the user, and run only after approval.
+
+Risk: Destructive actions can delete Pinata files or remove files from groups.
+
+Mitigation: Confirm the target file or group identifiers and obtain explicit approval before running destructive actions.
+
+## Reference(s):
+
+- [ClawHub Pinata skill](https://clawhub.ai/oomol/skills/oo-pinata)
+- [Pinata homepage](https://pinata.cloud)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before action execution; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: skill frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,59 @@
-## Description: <br>
-Analyzes bathroom doorway or privacy-preserving silhouette video to detect elderly toilet entry and exit events, calculate continuous occupancy time, and alert when a stay exceeds the configured safety threshold. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Using a camera installed at the bathroom doorway, or inside the bathroom only detecting human silhouettes without capturing private details, this skill detects elderly bathroom entry and exit events, calculates continuous occupancy time, and raises an abnormal alert when the stay exceeds the configured threshold.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Caregivers, nursing-home operators, and home-safety system developers use this skill to monitor toilet occupancy duration from privacy-preserving camera inputs and surface abnormal-stay alerts for human follow-up. It provides monitoring statistics and alerts, not medical diagnosis or rescue instructions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill processes highly sensitive bathroom-monitoring footage or URLs through cloud APIs. <br>
-Mitigation: Use doorway-only or pre-blurred footage where possible, avoid credential-bearing URLs, and deploy only with informed consent from the monitored person or authorized caregivers. <br>
-Risk: Cloud history queries and report links may expose sensitive elder-care records if access controls or retention practices are weak. <br>
-Mitigation: Verify publisher retention, deletion, authentication, and access-control practices before use in a care environment. <br>
-Risk: The skill silently creates or reuses persistent local or remote user identities and tokens. <br>
-Mitigation: Review account association behavior before deployment and ensure operators understand how identities, tokens, and historical reports are created, reused, and revoked. <br>
+## Use Case:
 
+External caregivers, family members, and elder-care operators use this skill to analyze privacy-minimized bathroom doorway or silhouette video for prolonged toilet occupancy alerts and report history. It supports safety monitoring workflows for solo-living elder households, nursing homes, senior apartments, and home-security integrations.
 
-## Reference(s): <br>
-- [API Interface Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-elderly-toilet-time-abnormal-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown summary with structured JSON analysis results and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can list cloud-hosted historical reports and export report links when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: The skill may send highly sensitive bathroom-adjacent video, video URLs, and report history to a configured cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with explicit consent, privacy-minimized camera placement, HTTPS production endpoints, and documented data retention controls.
+
+Risk: The skill silently manages local identity and persistent tokens for report association.
+
+Mitigation: Review identity and token storage before deployment, restrict access to local configuration and history, and rotate or revoke credentials when needed.
+
+Risk: Alerts are safety-monitoring signals and may be incorrect or incomplete.
+
+Mitigation: Treat abnormal occupancy alerts as prompts for human verification, not as medical diagnosis or a substitute for emergency response judgment.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-elderly-toilet-time-abnormal-analysis)
+- [API Documentation](references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Structured analysis report or history table, with JSON detail available by parameter]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include occupancy duration, entry and exit events, alert level, suggested contacts, and report links.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release evidence; artifact frontmatter states 1.0.13)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

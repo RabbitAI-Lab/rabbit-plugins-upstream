@@ -1,0 +1,110 @@
+{
+  "version": "2.0.0",
+  "userConfig": {
+    "level": "beginner",
+    "goal": "counselor",
+    "timeBudget": "standard",
+    "startDate": "2026-08-10",
+    "createdAt": "2026-08-10"
+  },
+  "currentStage": "enlightenment",
+  "stageCompleted": true,
+  "stageSummary": "本阶段完成。",
+  "lastDialogueAt": "2026-08-10",
+  "modules": {
+    "theory": {
+      "completed": 1,
+      "total": 30,
+      "items": [
+        "经典条件作用"
+      ]
+    },
+    "counseling": {
+      "completed": 2,
+      "total": 17,
+      "items": [
+        "CBT",
+        "共情反映"
+      ]
+    },
+    "assessment": {
+      "completed": 1,
+      "total": 19,
+      "items": [
+        "PHQ-9"
+      ]
+    },
+    "reading": {
+      "completed": 1,
+      "total": 10,
+      "items": [
+        "心理学与生活"
+      ]
+    },
+    "cases": {
+      "completed": 1,
+      "total": 12,
+      "items": [
+        "考试焦虑个案"
+      ]
+    },
+    "methods": {
+      "completed": 1,
+      "total": 8,
+      "items": [
+        "费曼技巧"
+      ]
+    },
+    "support": {
+      "completed": 1,
+      "total": 3,
+      "items": [
+        "进度追踪"
+      ]
+    }
+  },
+  "stats": {
+    "totalHours": 8,
+    "totalDays": 7,
+    "practiceCount": 1,
+    "analyses": 1,
+    "dialogues": 1,
+    "booksRead": 1,
+    "assessments": 1,
+    "reflections": 1,
+    "feynmanOutputs": 0
+  },
+  "readings": [],
+  "assessments": [
+    {
+      "scale": "PHQ-9",
+      "total": 3.0,
+      "level": "无·极轻度"
+    }
+  ],
+  "logs": [
+    {
+      "type": "理论",
+      "topic": "经典条件作用"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "m1",
+      "text": "学完第一个流派",
+      "reached": true
+    },
+    {
+      "id": "m2",
+      "text": "完成第一次 TPR 练习",
+      "reached": true
+    }
+  ],
+  "dialogueState": {
+    "context": "daily",
+    "step": 0,
+    "pendingQuestion": "",
+    "tempData": {},
+    "lastTopic": ""
+  }
+}

@@ -1,45 +1,56 @@
-## Description: <br>
-Devin lets an agent operate Devin organization sessions through an OOMOL-connected account, including creating, listing, inspecting, messaging, and terminating sessions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Devin (devin.ai). Use this skill for ANY Devin request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to manage Devin organization sessions from an agent workflow while relying on live connector schemas before each action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create sessions, send messages, and terminate Devin sessions through a connected account. <br>
-Mitigation: Review prompts carefully and confirm exact payloads before approving write or destructive actions. <br>
-Risk: First-time setup may require installing the oo CLI through a remote installer command. <br>
-Mitigation: Treat the one-time CLI installation command like any remote installer and review it before execution. <br>
-Risk: A missing, expired, or under-scoped Devin connection can block actions. <br>
-Mitigation: Use the documented setup and connection recovery steps only after an auth, connection, scope, or billing failure. <br>
+## Use Case:
 
+External users and developers use this skill to operate Devin sessions through an OOMOL-connected account, including creating sessions, inspecting session state, listing sessions, sending messages, and terminating sessions with confirmation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-devin) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Devin homepage](https://devin.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action calls; write and destructive actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release metadata) <br>
+Risk: First-time setup may direct users to run remote installer scripts in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path first, prefer a verified or pinned installer, and require explicit user approval before setup commands.
+
+Risk: Write actions and session termination can change or end Devin sessions.
+
+Mitigation: Confirm the exact payload, target session, and effect with the user before write or destructive actions.
+
+## Reference(s):
+
+- [Devin homepage](https://devin.ai)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-devin)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; state-changing and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: release metadata, skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

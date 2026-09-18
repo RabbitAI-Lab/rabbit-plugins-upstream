@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "AlgoDocs"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["algo_docs"]
   icon: "https://static.oomol.com/logo/third-party/algo_docs.png"
 ---

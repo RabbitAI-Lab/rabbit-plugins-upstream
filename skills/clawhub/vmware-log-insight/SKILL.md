@@ -2,13 +2,13 @@
 name: vmware-log-insight
 description: >
   Use this skill whenever the user needs to search, aggregate, or investigate
-  centralized logs in VMware Aria Operations for Logs (formerly vRealize Log
-  Insight) — the appliance that collects syslog from ESXi hosts, vCenter, and
+  centralized logs in VMware VCF Operations for Logs (formerly Aria Operations
+  for Logs / vRealize Log Insight) — the appliance that collects syslog from ESXi hosts, vCenter, and
   VMs. It is the log data source of the VMware family: full-text event search
   over a time window, aggregation with spike detection, field discovery, and
   alert queries. Always use this skill for "search the logs", "what did the host
   log", "find errors in Log Insight", "show me a log spike", "query vRealize Log
-  Insight", "Aria Operations for Logs" when the context is explicitly
+  Insight", "Aria Operations for Logs", "VCF Operations for Logs" when the context is explicitly
   VMware/vSphere/ESXi. It is strictly READ-ONLY — it never ingests, edits, or
   deletes anything. Do NOT use it for vCenter events/alarms (use vmware-monitor)
   or for performance metrics and anomalies (use vmware-aria). To correlate logs
@@ -19,7 +19,7 @@ installer:
   package: vmware-log-insight
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["VMWARE_LOG_INSIGHT_CONFIG"],"bins":["vmware-log-insight"],"config":["~/.vmware-log-insight/config.yaml","~/.vmware-log-insight/.env"]},"optional":{"env":["VMWARE_LOG_INSIGHT_<TARGET>_PASSWORD","VMWARE_LOG_INSIGHT_<TARGET>_USERNAME","VMWARE_AUDIT_APPROVED_BY"]},"primaryEnv":"VMWARE_LOG_INSIGHT_CONFIG"}}
+metadata: {"openclaw":{"requires":{"anyBins":["vmware-log-insight","uvx"]},"optional":{"env":["VMWARE_LOG_INSIGHT_CONFIG","VMWARE_LOG_INSIGHT_<TARGET>_PASSWORD","VMWARE_LOG_INSIGHT_<TARGET>_USERNAME","VMWARE_AUDIT_APPROVED_BY"]}}}
 ---
 
 # VMware Log Insight
@@ -46,7 +46,7 @@ family. Strictly non-destructive: it queries, it never writes.
 ## Quick Install
 
 ```bash
-uv tool install vmware-log-insight
+uv tool install vmware-log-insight==1.8.17
 cp config.example.yaml ~/.vmware-log-insight/config.yaml   # then edit
 vmware-log-insight doctor       # verify connectivity
 ```

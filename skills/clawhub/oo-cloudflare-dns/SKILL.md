@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Cloudflare DNS"
   author: "OOMOL"
-  version: "1.0.3"
+  version: "1.0.5"
   services: ["cloudflare_dns"]
   icon: "https://static.oomol.com/logo/third-party/Cloudflare.svg"
 ---

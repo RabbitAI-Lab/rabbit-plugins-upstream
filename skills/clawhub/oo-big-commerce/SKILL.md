@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "BigCommerce"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["big_commerce"]
   icon: "https://static.oomol.com/logo/third-party/big_commerce.svg"
 ---

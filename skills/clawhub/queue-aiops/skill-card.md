@@ -1,46 +1,66 @@
-## Description: <br>
-Queue Aiops helps agents inspect and operate Redis and RabbitMQ deployments, including memory, latency, backlog, connection churn, policies, audited writes, and undo-aware workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queue AIops helps agents inspect and operate Redis caches and RabbitMQ brokers, including health overviews, memory and latency analysis, queue backlog RCA, connection churn analysis, governed broker writes, and undo-aware operations.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, SREs, and platform operators use this skill to inspect Redis caches and RabbitMQ brokers, triage memory, latency, backlog, and connection churn issues, and perform governed broker changes when appropriate. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform destructive Redis or RabbitMQ writes through MCP without a built-in approval gate. <br>
-Mitigation: Start with read-only Redis ACL or RabbitMQ monitoring accounts, grant write permissions only when needed, and require explicit human approval before purge, delete-queue, Redis CONFIG SET, or policy changes. <br>
-Risk: Purge and queue deletion can remove messages that undo workflows cannot restore. <br>
-Mitigation: Use dry-run previews, confirm the queue state and business impact first, and reserve destructive actions for cases with explicit sign-off. <br>
-Risk: QUEUE_AIOPS_MASTER_PASSWORD unlocks the encrypted broker secret store. <br>
-Mitigation: Provide the master password through a private runtime environment and keep it out of shared configuration, logs, and source control. <br>
+## Use Case:
 
+Developers, operators, and site reliability engineers use this skill to diagnose Redis and RabbitMQ operational issues, inspect broker state, and perform audited broker changes. It is scoped to self-managed Redis and RabbitMQ deployments, not managed cloud queue services or unrelated infrastructure.
 
-## Reference(s): <br>
-- [Project homepage](https://github.com/AIops-tools/Queue-AIops) <br>
-- [Capability reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include broker observations, RCA findings, dry-run recommendations, and audit or undo guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.0 (source: server release metadata) <br>
+Risk: The skill can expose an agent to production Redis and RabbitMQ operational state and credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use dedicated least-privilege broker accounts, prefer read-only credentials for diagnostics, enable TLS, and avoid placing the master password in synced configuration files.
+
+Risk: The skill exposes production-impacting actions such as purge, delete, config-set, policy changes, and kill-client.
+
+Mitigation: Treat write operations as change-controlled actions, require human process outside the tool, use dry runs where available, and verify broker permissions limit unwanted writes.
+
+Risk: Some destructive operations cannot restore lost data, especially queue purge, client kill, and queue deletion messages.
+
+Mitigation: Confirm queue state and business impact before execution, keep backups or recovery procedures where applicable, and use undo only for operations whose captured prior state is sufficient.
+
+Risk: Executable installation depends on external package resolution.
+
+Mitigation: Pin or verify the executable package before use and install only from trusted release channels.
+
+## Reference(s):
+
+- [Queue AIops GitHub homepage](https://github.com/AIops-tools/Queue-AIops)
+- [Queue AIops ClawHub skill page](https://clawhub.ai/zw008/skills/queue-aiops)
+- [Capability reference](references/capabilities.md)
+- [CLI reference](references/cli-reference.md)
+- [Setup guide](references/setup-guide.md)
+- [Agent guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, configuration snippets, and JSON-style operational results.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include broker observations, RCA findings, risk-tiered write guidance, dry-run recommendations, audit context, and undo guidance.]
+
+## Skill Version(s):
+
+0.9.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

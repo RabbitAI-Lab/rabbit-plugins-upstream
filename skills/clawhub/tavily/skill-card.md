@@ -1,45 +1,61 @@
-## Description: <br>
-AI-optimized web search using the Tavily Search API for research, current-events lookup, domain-specific search, image search, raw content extraction, and AI-generated answer summaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tavily AI Search helps agents run Tavily Search API queries for web research, current events lookup, domain-specific search, image search, and AI-generated answer summaries.
 
-## Publisher: <br>
-[bert-builder](https://clawhub.ai/user/bert-builder) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[bert-builder](https://clawhub.ai/user/bert-builder)
 
-## Use Case: <br>
-Developers, researchers, and agents use this skill to run Tavily-powered web, news, domain-filtered, image, and raw-content searches for research, fact-checking, current-events lookup, and source gathering. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Search queries and selected options are sent to Tavily under the configured API key. <br>
-Mitigation: Do not submit secrets, private internal documents, regulated data, or sensitive personal information in search queries or options. <br>
-Risk: Search results, source URLs, image URLs, and raw content can contain inaccurate or untrusted third-party material. <br>
-Mitigation: Review sources before relying on results, and treat URLs or content fetched from results as untrusted. <br>
-Risk: The skill depends on the tavily-python package at runtime. <br>
-Mitigation: Pin or review the dependency in stricter environments before deployment. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [Tavily API Reference](references/api-reference.md) <br>
-- [Tavily](https://tavily.com) <br>
-- [Tavily Documentation](https://docs.tavily.com) <br>
-- [Tavily Python SDK](https://github.com/tavily-ai/tavily-python) <br>
-- [ClawHub Skill Page](https://clawhub.ai/bert-builder/skills/tavily) <br>
+## Use Case:
 
+Developers and agents use this skill to perform Tavily-backed web research, current-events lookup, source filtering, and retrieval of structured results for downstream analysis.
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance and JSON search responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search responses may include AI answers, result snippets, source URLs, image URLs, raw content, response time, and usage credits.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Search queries and selected search options are sent to Tavily.
+
+Mitigation: Use the skill only when external search disclosure is acceptable, and avoid sending sensitive or confidential queries.
+
+Risk: A Tavily API key can be exposed if passed directly on the command line or stored insecurely.
+
+Mitigation: Store the key in protected configuration or the TAVILY_API_KEY environment variable, and avoid committing real keys or leaving them in shell history.
+
+Risk: The skill depends on the tavily-python package.
+
+Mitigation: Install dependencies in an isolated environment and pin or review package versions before deployment.
+
+## Reference(s):
+
+- [Tavily AI Search on ClawHub](https://clawhub.ai/bert-builder/skills/tavily)
+- [Tavily API Reference](references/api-reference.md)
+- [Tavily](https://tavily.com)
+- [Tavily Documentation](https://docs.tavily.com)
+- [Tavily Python SDK](https://github.com/tavily-ai/tavily-python)
+- [Tavily Pricing](https://tavily.com/pricing)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, Python examples, and JSON response examples.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a Tavily API key and the tavily-python package; optional settings control search depth, topic, domain filters, images, raw content, and answer generation.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

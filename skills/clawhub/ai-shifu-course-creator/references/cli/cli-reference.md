@@ -12,11 +12,21 @@ All commands use:
 python3 {skillDir}/scripts/shifu-cli.py <command>
 ```
 
-Authenticated commands accept `--token <jwt>` and otherwise read `SHIFU_TOKEN` from `{skillDir}/.env`. The CLI always uses `https://app.ai-shifu.cn`.
+Authenticated commands accept `--token <jwt>` and otherwise use `SHIFU_TOKEN` or saved credentials. Select a site before the first platform command. Use `{skillDir}/.env.example` as the reference when creating or editing `{skillDir}/.env`:
+
+```dotenv
+SHIFU_BASE_URL=
+SHIFU_TOKEN=
+```
+
+Resolution order: process `SHIFU_BASE_URL` → `{skillDir}/.env` (loaded only when the process variable is absent) → remembered site. An empty, whitespace-only, or slash-only environment value uses the remembered site. If none is configured, platform commands exit `4` without connecting. Leading and trailing whitespace and trailing slashes are removed. Existing non-empty `.env` configurations continue to work without a new selection.
+
+Before every command, the CLI checks for `{skillDir}/.env`. When it is missing, the CLI copies `{skillDir}/.env.example` to `{skillDir}/.env`, sets owner-only permissions, and then loads it. An existing `.env` is never replaced, so an author or agent can change `SHIFU_BASE_URL` before starting an authorization request. The `.env` file holds configuration only; the issued token is stored separately under the user's config directory (see [Authentication](#authentication)).
 
 ## Contents
 
 - [Update Check](#update-check)
+- [Site Selection](#site-selection)
 - [Authentication](#authentication)
 - [Query Commands](#query-commands)
 - [Analytics Query](#analytics-query)
@@ -38,20 +48,40 @@ check-update [--force] [--dev-manifest-url <loopback-url>]
 
 `check-update` reads the public Skill-version manifest and prints a compact JSON result. `--force` bypasses the local TTL. `--dev-manifest-url` accepts only a localhost or loopback URL and exists for end-to-end development checks.
 
+## Site Selection
+
+```bash
+site
+site --set cn
+site --set com
+site --url https://your-service.example
+```
+
+`site` prints JSON with `status=configured` and the effective `base_url`, plus the official `contact_url`, or `status=selection_required` with both URLs null. CN uses the Chinese official contact page; COM and custom deployments use the international official contact page. It does not make network requests or send usage events. `--set cn` selects `https://app.ai-shifu.cn`; `--set com` selects `https://app.ai-shifu.com`. `--url` accepts an HTTPS service address (HTTP is allowed only for loopback development), without embedded credentials, query parameters, or fragments. All API and course-page URLs use this service base.
+
+Selections are stored in `${XDG_CONFIG_HOME:-~/.config}/ai-shifu/settings.json`, alongside but separate from credentials; `AI_SHIFU_CONFIG_DIR` overrides the directory. An explicit environment or `.env` value still takes precedence. A conflicting explicit override is reported instead of silently saving an ineffective selection. The command does not switch signed-in accounts: if credentials exist and the effective site would change (or was unknown), it refuses before saving. Restore the original explicit service address in that case.
+
+`site` output and setup commands are internal control data. During normal setup, ask the user to select their current region with two options: China or Other countries or regions, then configure silently; do not present these URLs, fields, or commands. Custom deployment is used only when explicitly requested or already configured.
+
+`build`, `check-update`, and `site` do not require site selection. Agent intake behavior is defined in `../authentication.md#select-site-before-connecting`.
+
 ## Authentication
 
 ```bash
 verify
-login --phone 13800138000
-login --phone 13800138000 --sms-code 1234
+login
+login --wait [--timeout 120]
 ```
 
 - `verify` exits `0` when the token is accepted, `1` when it is expired or invalid, and `2` when network, service, or response errors make its state unknown.
-- `login --phone` sends an SMS code and exits without prompting.
-- `login --phone --sms-code` verifies the code and writes `SHIFU_TOKEN=<jwt>` to `{skillDir}/.env`.
-- A saved token is valid for seven days; successful authenticated API calls refresh that expiry.
+- `login` starts a browser authorization request, saves the pending request, prints the verification link and a pairing code, and exits immediately. It does not open a browser. The Agent opens the link in its built-in browser; terminal users open the printed link manually. The CLI prefers `verification_uri_complete`, which carries the pairing code. If unavailable, it prints `verification_uri` instead; users enter the separately printed pairing code if the page requests it.
+- `login --wait` polls the pending request. It exits `0` once the request is approved and the token is stored, `1` when the request was denied, expired, or never started, and `3` while the request is still valid but nobody has approved it yet. Exit `3` means the same command can simply be run again.
+- `--timeout` bounds a single `--wait` invocation in seconds; it does not shorten the request's own lifetime.
+- `SHIFU_BASE_URL` must use `https`; only a loopback host may use `http`, for local development. Authorization carries credentials, so the CLI refuses to send them in the clear. A request is also bound to the host that issued it: changing `SHIFU_BASE_URL` between `login` and `login --wait` fails rather than sending the device code elsewhere.
+- Credentials are stored in `${XDG_CONFIG_HOME:-~/.config}/ai-shifu/credentials.json` with owner-only permissions, so upgrading or reinstalling the skill no longer signs the user out. `AI_SHIFU_CONFIG_DIR` overrides that location. A token left in `{skillDir}/.env` by an older version is migrated on first run; an exported `SHIFU_TOKEN` is never rewritten and still takes precedence.
+- A stored token is valid for thirty days; successful authenticated API calls refresh that expiry.
 
-Agent decisions about when to send or resend SMS are defined in `../authentication.md`; this section defines only CLI inputs and effects.
+Agent behavior during a login session is defined in `../authentication.md`; this section defines only CLI inputs and effects.
 
 ## Query Commands
 
@@ -70,7 +100,7 @@ find-title <keyword>
 - `export` writes course JSON to stdout or the path passed with `-o`.
 - `find-title` requires at least two non-whitespace characters, then matches the keyword case-insensitively after whitespace normalization against current draft and published titles. It does not match historical or renamed titles.
 
-`show` without an outline BID prints a `Verification URLs:` block containing admin and preview URLs plus the published URL when available. `create`, `import`, `pull`, and `publish` also print command-appropriate verification URL blocks. Per-lesson preview URLs are not printed.
+Course links are printed one per line with `Admin console`, `Preview URL`, and optional `Published URL` labels, without headings or explanations. `show` without an outline BID prints the admin and course preview URLs even when the outline tree is empty. A non-empty tree also includes the public learner URL, without checking publication state. `create`, `import`, and `pull` print the admin and course preview URLs; `publish` prints all three. Lesson preview URLs are not printed. Agent browser handoff follows `../session-controls.md#course-admin-handoff`.
 
 ## Analytics Query
 
@@ -134,6 +164,8 @@ set-access <shifu_bid> <outline_bid> --access guest|trial|normal \
   [--hidden true|false] [--course-dir ./course-a/]
 set-tts <shifu_bid> --enabled true|false [--speed <number>] \
   [--course-dir ./course-a/]
+set-avatar <shifu_bid> --file <teacher.jpg|teacher.png> \
+  [--course-dir ./course-a/]
 reorder <shifu_bid> --order bid1,bid2,bid3
 ```
 
@@ -155,9 +187,15 @@ The command maps `guest`, `trial`, and `normal` to the platform learning-access 
 
 ### `set-tts`
 
-Disabling sends only `tts_enabled=false`. Enabling fetches platform TTS defaults and sends provider, model, voice, speed, normalized pitch `0`, and empty emotion; `--speed` overrides the default. Invalid or incomplete settings exit `1`.
+Disabling sends only `tts_enabled=false`. Enabling fetches the platform TTS configuration and selects the model option the platform declares as default (`is_default`), falling back to the first option on backends without the marker, plus the first voice compatible with that model. It sends provider, model, voice, speed, normalized pitch `0`, and empty emotion; `--speed` overrides the default. Invalid or incomplete settings exit `1`.
 
 With a matching sync manifest, the command checks the course revision before writing, then refreshes `course-config.json` and the manifest after success. On conflict it records the intended metadata, pulls the cloud course, and exits `2`.
+
+### `set-avatar`
+
+The command accepts a local JPG or PNG, corrects EXIF orientation, limits the longest side to 2048 px, and automatically compresses the upload to at most 2 MB. If it cannot reach the limit without excessive loss, it exits `1` so the Skill can request a replacement. A non-square image is accepted with a warning because course cards and learning pages display the avatar in a square frame; 1:1 is recommended.
+
+After upload, the command sends only the returned resource URL as `avatar`, reads course detail back, and exits `1` if the new URL cannot be verified. With a matching sync manifest, it checks the course revision before upload, then refreshes `course-config.json` and the manifest after success. This path uses the platform APIs directly and does not require browser or Chrome control.
 
 ### `reorder`
 
@@ -206,7 +244,7 @@ upload-image --url <http-or-https-url> [--course-dir <dir>] [--alt "<description
 
 - A local file is opened with Pillow, has EXIF orientation corrected, is downscaled to a maximum side of 2048 px, and is recompressed to at most 2 MB. Transparent images remain PNG; other accepted images are uploaded as JPEG. Invalid image input exits `1`.
 - A remote URL is sent to the backend for validation and re-hosting.
-- Stdout contains exactly the resulting `https://res.ai-shifu.cn/<uuid32>` URL; diagnostics and manifest messages go to stderr.
+- Stdout contains exactly the resource URL returned by the selected deployment (preserve its host and path); diagnostics and manifest messages go to stderr.
 - With `--course-dir`, the CLI upserts an entry in `assets/image-manifest.json`, keyed by `local` or `source_url`.
 - `--alt` is stored in the manifest.
 - `--no-process` skips local preprocessing and is a debug-only flag.
@@ -221,7 +259,7 @@ archive <shifu_bid>
 unarchive <shifu_bid>
 ```
 
-- `publish` publishes the current draft and prints admin, preview, and public verification URLs.
+- `publish` publishes the current draft and prints the course links described in [Query Commands](#query-commands).
 - `archive` archives the course.
 - `unarchive` restores an archived course.
 
@@ -230,6 +268,8 @@ unarchive <shifu_bid>
 - `0`: command completed successfully.
 - `1`: validation, transport, file, authentication, or platform business error; `status --exit-code` also uses `1` for divergence.
 - `2`: `verify` could not determine token state, or a version-aware write found a conflict and auto-pulled the cloud baseline. Interpret the command context before handling this code.
+
+- `4`: platform site selection is required; no platform request was sent. Run `site` and resolve the choice before authentication.
 
 Commands print platform business error payloads before exiting when available.
 
@@ -241,4 +281,4 @@ CLI JSON uses UTF-8 and `ensure_ascii=False`. If an agent subprocess renders Chi
 python3 scripts/shifu-cli.py analytics-query <bid> --dsl '<json>' > /tmp/shifu-result.json
 ```
 
-The saved token remains in `{skillDir}/.env`; authenticated commands load it automatically.
+Saved credentials remain in the user configuration directory; authenticated commands load them automatically after site selection.

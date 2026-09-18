@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "channel": "product-page-audit",
+  "workflow": "audit",
+  "focus": "page",
+  "outputTemplate": "ops_audit",
+  "requiredCapabilities": [
+    "product-detail",
+    "reviews"
+  ],
+  "allowedCommands": [
+    "setup",
+    "configure",
+    "check",
+    "version",
+    "collect",
+    "status",
+    "operations"
+  ]
+}

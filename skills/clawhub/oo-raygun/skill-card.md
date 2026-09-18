@@ -1,44 +1,55 @@
-## Description: <br>
-Raygun lets agents operate a Raygun account through OOMOL's connector for reading applications, deployments, and crash reporting data and managing deployments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Raygun through the OOMOL oo CLI connector for reading, creating, updating, and deleting Raygun data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Raygun applications, deployments, and crash reporting error groups, and to create, update, or delete deployment records after explicit confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The connector can create, update, or delete Raygun deployment records. <br>
-Mitigation: Confirm the exact target, payload, and expected effect with the user before running any write or destructive action. <br>
-Risk: The OOMOL connector acts on the user's connected Raygun account. <br>
-Mitigation: Review the Raygun scopes on the OOMOL connection and install the skill only when that account access is intended. <br>
-Risk: Raygun connector action schemas may change over time. <br>
-Mitigation: Inspect the live action schema before constructing payloads so requests match the current contract. <br>
+## Use Case:
 
+Developers and operations teams use this skill to inspect Raygun applications, deployments, and crash reporting error groups, and to manage Raygun deployments through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Raygun Skill on ClawHub](https://clawhub.ai/oomol/skills/oo-raygun) <br>
-- [Raygun Homepage](https://raygun.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads; connector responses are JSON when --json is used.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live schema inspection before each action; write and destructive actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and SKILL.md metadata) <br>
+Risk: Setup instructions include remote installer commands that execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Independently verify and trust the installer source before running curl-to-bash or PowerShell iex commands.
+
+Risk: The skill can create, update, and delete Raygun deployments.
+
+Mitigation: Confirm each write or destructive action with the user and use a Raygun account with only the permissions needed.
+
+## Reference(s):
+
+- [ClawHub Raygun skill page](https://clawhub.ai/oomol/skills/oo-raygun)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Raygun homepage](https://raygun.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill instructs agents to inspect live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

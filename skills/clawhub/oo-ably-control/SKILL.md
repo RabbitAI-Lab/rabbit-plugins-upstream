@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Ably Control"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["ably_control"]
   icon: "https://static.oomol.com/logo/third-party/ably_control.svg"
 ---

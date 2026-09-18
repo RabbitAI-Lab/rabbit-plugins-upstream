@@ -1,0 +1,264 @@
+---
+name: clawflight
+version: 0.3.3
+description: >-
+  Track and follow family flights, alert a group chat or ntfy on takeoff, landing,
+  delays, schedule changes and tight connections; mute alerts, run diagnostic
+  audits of stored data and system health. Forward an airline confirmation to
+  track it. No API key.
+homepage: https://github.com/alfredjbclaw/clawflight
+metadata:
+  openclaw:
+    requires:
+      bins: [python3]
+---
+
+# clawflight
+
+Family flight alerts from a forwarding address. Airline confirmations are parsed,
+matched to the family member travelling, watched with free public feeds, and
+posted to whatever chat the family already uses.
+
+Two cron jobs do the work unattended. You are the conversational layer: turn
+what the user says into one CLI verb, run it, and report the result.
+
+## Run the CLI
+
+The engine ships inside this skill. It is pure standard library, so there is
+nothing to install — run the bundled launcher directly:
+
+```sh
+{baseDir}/clawflight status                                  # what is tracked
+{baseDir}/clawflight --json status                           # same, as JSON
+{baseDir}/clawflight follow <flight-id> --recipient <key>    # subscribe someone
+{baseDir}/clawflight unfollow <flight-id> --recipient <key>
+{baseDir}/clawflight mute <flight-id> --recipient <key>      # stop alerts
+{baseDir}/clawflight unmute <flight-id> --recipient <key>
+{baseDir}/clawflight doctor                                  # validate + audit
+{baseDir}/clawflight setup                                   # print cron recipes
+{baseDir}/clawflight serve                                   # push receiver (opt-in upgrade)
+```
+
+Setting it up and changing it, all without editing a file:
+
+```sh
+{baseDir}/clawflight person add sam --name Sam --match "sam kestrel"
+{baseDir}/clawflight person list
+{baseDir}/clawflight recipient add sam --name Sam --channel telegram --to "-100…"
+{baseDir}/clawflight recipient add sam --name Sam --channel ntfy --to "https://ntfy.sh/<topic>"
+{baseDir}/clawflight recipient list
+{baseDir}/clawflight flight add DL767 --date 2026-09-12 \
+    --from JFK --to LAX --depart 16:55 --arrive 20:20 --person sam
+{baseDir}/clawflight flight remove DL767-2026-09-12
+{baseDir}/clawflight config set owner sam
+{baseDir}/clawflight config show
+{baseDir}/clawflight config keys        # what is settable
+```
+
+If the user has also installed the package, a bare `clawflight` on PATH works
+too and is the same program. Prefer the bundled launcher: it is the supported
+path, is always present, and always matches these instructions.
+
+Add `--json` when you need to read fields rather than show text.
+`--recipient` defaults to the configured owner. Every verb accepts `--config`
+and `--state-dir`.
+
+## Data, permissions, and deletion
+
+This skill handles sensitive travel data. Its bundled CLI stores state locally
+in its resolved state directory: `~/.openclaw/clawflight` by default, or the
+directory selected by `--state-dir`, `CLAWFLIGHT_STATE_DIR`, or `state_dir` in
+the config. Its state files can include `clawflight.json` plus registry, monitor,
+follows, consent, subscriptions, and outbox files. It stores flights
+(including itinerary details and confirmation codes), traveller records,
+recipient names and channel targets, config values, follow/consent state, and
+pending or failed alert text in the outbox. A `--config` path or
+`CLAWFLIGHT_CONFIG` may place the config file outside that directory.
+
+When the optional mailbox is configured, the CLI reads and parses forwarded
+email bodies to extract itinerary details. It retains bounded extracted fields
+and provenance, not the email body itself. The configured IMAP mailbox is
+optional; adding flights by hand does not read email.
+
+The CLI makes outbound HTTPS requests to the public `api.adsb.lol` and FAA NAS
+flight feeds. It sends alert text only to each configured delivery target:
+through the `openclaw` subprocess for a configured channel, or directly to
+a configured ntfy topic. The optional `serve` command runs a local
+webhook receiver; it does not contact AeroDataBox. The CLI reads
+`CLAWFLIGHT_STATE_DIR` and `CLAWFLIGHT_CONFIG`, plus the environment variables
+named for the optional IMAP password, ntfy token, AeroDataBox key, and webhook
+secret; `serve` also reads `CLAWFLIGHT_WEBHOOK_PATH_PREFIX`. It does not store
+those secret values.
+
+### Least-privilege access
+
+The bundled CLI's allowed tools and resources are limited to this list:
+
+- **Local files:** it reads and writes the resolved state directory
+  (`~/.openclaw/clawflight` by default, or the directory selected by
+  `--state-dir`, `CLAWFLIGHT_STATE_DIR`, or config `state_dir`) and the resolved
+  config file (the `clawflight.json` there, or the path selected by `--config`
+  or `CLAWFLIGHT_CONFIG`). It also reads the bundled airport table and, when
+  selected, the configured local mbox file or directory.
+- **Network destinations:** it contacts only `api.adsb.lol` and
+  `nasstatus.faa.gov` for public flight feeds, the configured IMAP mailbox host
+  when IMAP ingestion is enabled, and the configured notification target (the
+  ntfy HTTP(S) target directly or the channel target passed to `openclaw`). The
+  optional `serve` command accepts requests only on `127.0.0.1` and makes no
+  AeroDataBox request.
+- **Subprocess:** the only subprocess it spawns is `openclaw`, without a shell,
+  for configured chat delivery or for `setup --apply` cron creation.
+- **Environment:** it reads `HOME` for `~` expansion, `PATH` to find
+  `openclaw`, `CLAWFLIGHT_STATE_DIR`, `CLAWFLIGHT_CONFIG`,
+  `CLAWFLIGHT_NTFY_TOKEN`, and `CLAWFLIGHT_WEBHOOK_PATH_PREFIX`. When those
+  features are configured, it also reads the variables named by
+  `mailbox.password_env` (default `CLAWFLIGHT_IMAP_PASSWORD`),
+  `push.rapidapi_key_env` (default `CLAWFLIGHT_RAPIDAPI_KEY`), and
+  `push.webhook_secret_env` (default `CLAWFLIGHT_WEBHOOK_SECRET`).
+
+To delete all local state, stop any scheduled jobs, then delete the resolved
+state directory. If `--config` or `CLAWFLIGHT_CONFIG` named a config outside
+that directory, delete that file too:
+
+```sh
+{baseDir}/clawflight doctor    # prints the resolved state directory and config path
+```
+
+Delete those two paths yourself once you have read them back — the state directory
+and, if `--config` or `CLAWFLIGHT_CONFIG` named one outside it, that config file.
+Removing the state directory forgets every tracked flight, traveller, recipient and
+queued alert, and cannot be undone.
+
+Use `clawflight flight remove <id>`, `person remove <key>`, or `recipient
+remove <key>` when deleting only that record. See `docs/privacy.md` for the
+full data-handling details.
+
+## Mapping what people say
+
+| the user says | run |
+|---|---|
+| "what flights are tracked?" / "any flights coming up?" | `{baseDir}/clawflight --json status` |
+| "follow DL767" / "I want alerts for Robin's flight" | resolve to a flight id, then `{baseDir}/clawflight follow <id>` |
+| "mute AA1203" / "stop telling me about that flight" | `{baseDir}/clawflight mute <id>` |
+| "unmute" / "start telling me again" | `{baseDir}/clawflight unmute <id>` |
+| "is clawflight working?" / "why am I not getting alerts?" | `{baseDir}/clawflight doctor` |
+| "set up clawflight" / "add the cron jobs" | `{baseDir}/clawflight setup`, then show the commands |
+| "add my flight DL767 on the 12th" | `{baseDir}/clawflight flight add DL767 --date … --from … --to … --depart … --person …` |
+| "stop tracking that flight" / "delete it" | `{baseDir}/clawflight flight remove <id>` — different from mute, this forgets it |
+| "add my sister" / "track flights for Robin" | `{baseDir}/clawflight person add robin --name Robin --match "robin kestrel"` |
+| "send alerts to our group chat" | `{baseDir}/clawflight recipient add … --channel telegram --to …` — any OpenClaw channel works |
+| "send them to my phone without a chat app" | `{baseDir}/clawflight recipient add … --channel ntfy --to "https://ntfy.sh/<topic>"` |
+| "who gets alerts?" / "what channels" | `{baseDir}/clawflight recipient list` |
+
+### Resolving a flight id
+
+Ids look like `DL767-2026-07-16`, and a second booking on the same flight gets
+`#<confirmation>` appended: `DL767-2026-07-16#FAKE02`.
+
+Users say "DL767" or "Robin's flight". Run `{baseDir}/clawflight --json status`, match on
+`flight`, `traveler`, `date` or `route`, and use the row's `flight_id`.
+
+- **One match** — act, then confirm what you did.
+- **Several** — list them with date and route and ask which. Never guess: muting
+  the wrong flight silently stops the alerts someone was relying on.
+- **None** — say so plainly. It usually means the confirmation email has not
+  been ingested yet; suggest `clawflight doctor`.
+
+## Rules
+
+**Never invent flight data.** Everything you report comes from a command you
+just ran. If `status` is empty, the answer is "nothing is tracked yet" — not a
+guess from the conversation.
+
+**Mute and follow are per person.** Ask whose alerts to change if it is
+ambiguous, and say which recipient you changed when you report back.
+
+**Do not paste secrets.** Config holds environment-variable *names*. If a user
+offers a mailbox password or an API key in chat, tell them to set it with
+`openclaw config set skills.entries.clawflight.env.<VAR>` instead, and do not
+repeat the value back.
+
+**Use the commands, not the config file.** `person`, `recipient`, `config set`
+and `flight` all write it for you, validate the input, and refuse a credential.
+Editing the JSON by hand loses its comments and skips those checks.
+
+**`mute` and `remove` are different.** `mute` stops alerts for one recipient
+and is reversible; `flight remove` forgets the flight entirely. Ask which one
+they mean if it is ambiguous — silently forgetting a booking somebody is
+relying on is the worst outcome here.
+
+**A flight with no `--depart` is never watched.** The watch window opens six
+hours before departure, so with no departure time nothing ever fires. The
+command warns; relay that warning rather than reporting success.
+
+**Report failures with their reason.** `doctor` exits non-zero and prints the
+cause. Relay that, do not summarise it as "something went wrong".
+
+## Setup, in order
+
+Everything here is a command. Do not hand-edit the config file.
+
+1. `{baseDir}/clawflight doctor` — see what is missing.
+2. Add each traveller. `--match` is how an **airline** spells them, which is
+   often not their display name, so ask and add every variant that appears on a
+   ticket:
+   `{baseDir}/clawflight person add sam --name Sam --match "sam kestrel" --match "samuel t kestrel"`
+3. Set the owner — they receive flights nobody could be matched to:
+   `{baseDir}/clawflight config set owner sam`
+4. Add where alerts go. `--follow-all` means "every flight for everyone", which
+   is usually what one family chat wants:
+   `{baseDir}/clawflight recipient add family --name Family --channel telegram --to "-100…" --follow-all`
+5. Optional — a mailbox, so confirmations are ingested automatically.
+   **The trusted sender is whoever the mail arrives FROM.** Forwarding rewrites
+   the sender, so a forwarded confirmation arrives from the forwarding mailbox,
+   not from `delta.com`. Trust the forwarding address you control. Trusting an
+   airline domain instead is the most common reason a working setup ingests
+   nothing. `doctor` flags that combination:
+   `{baseDir}/clawflight config set mailbox.adapter imap`, then `mailbox.host`,
+   `mailbox.username`, `mailbox.trusted_senders`, and the password by NAME:
+   `openclaw config set skills.entries.clawflight.env.CLAWFLIGHT_IMAP_PASSWORD '<app-password>'`
+6. `{baseDir}/clawflight doctor` again — it must exit 0.
+7. `{baseDir}/clawflight setup` and create the two cron jobs it prints.
+
+**No mailbox is needed to start.** Adding a flight by hand works immediately
+and is the fastest way to show someone it works.
+
+The jobs use command payloads, so they make no model call and cost nothing
+while idle. `setup` prints them with the correct absolute path already filled
+in — show what it printed rather than retyping this shape:
+
+```sh
+openclaw cron create --name clawflight-tick  --cron "*/2 * * * *" \
+  --command "<path>/clawflight tick"  --session isolated --delivery none
+openclaw cron create --name clawflight-sweep --cron "17 * * * *" \
+  --command "<path>/clawflight sweep" --session isolated --delivery none
+```
+
+## What it alerts on
+
+Confirmations are read from plain-text and HTML airline mail across the major US
+and international carriers, including multi-leg itineraries, schedule-change and
+cancellation notices, and records naming more than one passenger.
+
+Takeoff, halfway, landing and arrival; FAA ground stops and delay programmes;
+schedule changes and cancellations found in ingested email; tight and missed
+connections; a trip card at the start of a travel day.
+
+Two behaviours worth explaining when they come up:
+
+- **Backup bookings are kept, not merged.** Two flights for one person on one
+  day with different confirmation codes are treated as an intentional
+  primary/backup pair. Both are tracked and flagged.
+- **Gate changes need the push upgrade.** The default configuration uses only
+  keyless public feeds, which have no airline-side gate data. Live gate
+  information requires the opt-in AeroDataBox setup in `docs/push-upgrade.md`.
+
+## Troubleshooting
+
+| symptom | first move |
+|---|---|
+| nothing tracked | add one by hand: `flight add … --depart HH:MM`. If mail should be arriving, `sweep --dry-run` — is the sender in `trusted_senders`? For forwarded mail that is the FORWARDING address, not the airline. |
+| flight added but no alerts | it needs `--from` and `--depart`; without them the watch window never opens |
+| traveler shows "Unknown" | pass `--person <key>` when adding, or add the airline's spelling to `match_substrings` |
+| no messages arriving | `{baseDir}/clawflight doctor` — `openclaw` on PATH, and does the recipient have a `channel`? |
+| deliveries failing | `doctor` reports outbox failures; the outbox retries with backoff, so check the channel target first |

@@ -31,6 +31,10 @@ This CLI keeps the heavy, deterministic work OUT of the model's context:
   * `notes`    reads a PO's prior chatter (log notes) so a partial-shipment
                match can see which lines earlier shipments already checked.
   * `apply`    corrects PO line prices (and optional freight/fees) in one call.
+  * `bill`     creates the DRAFT vendor bill from a reconciled PO (never posts).
+  * `post`     posts a DRAFT vendor bill once it MATCHES — gated on the bill's
+               total reconciling to the vendor invoice's `expected_total`
+               within tolerance (a mismatch is refused, never posted blind).
   * `matched`  posts the "checked" LOG NOTE on the PO and files the document
                into the `Matched` subfolder — the clean-result tail in one call.
   * `questions` raises a reviewer activity on the document and files it into
@@ -52,6 +56,8 @@ Usage
     python3 scripts/paymatch.py po-lines  '{"po": "P13189"}'
     python3 scripts/paymatch.py notes     '{"po": "P13137"}'
     python3 scripts/paymatch.py apply     '{"po_id": 13145, "lines": [{"line_id": 40941, "price_unit": 11.94}]}'
+    python3 scripts/paymatch.py bill      '{"po_id": 13145, "vendor_bill_number": "INV-98765", "invoice_date": "2026-07-22", "expected_total": 1041.90, "tolerance": 0.02}'
+    python3 scripts/paymatch.py post      '{"bill_id": 8842, "expected_total": 1041.90, "tolerance": 0.02, "note": "Matched INV-98765; totals reconcile."}'
     python3 scripts/paymatch.py matched   '{"po_id": 13145, "body": "Pricing checked ...", "document_id": 481}'
     python3 scripts/paymatch.py questions '{"document_id": 485, "question": "Can't reconcile total ...", "reviewer": "Zach Tucker"}'
     python3 scripts/paymatch.py move      '{"document_id": 481, "to": "Matched"}'
@@ -70,14 +76,17 @@ vision/OCR fallback. Args are the 2nd CLI arg or JSON on stdin.
 from __future__ import annotations
 
 import base64
+import inspect
 import io
 import json
 import mimetypes
 import os
+import re
 import shutil
 import subprocess
 import sys
 import tempfile
+from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any
 
@@ -94,7 +103,43 @@ _bootstrap.ensure()
 
 import anyio  # noqa: E402
 from mcp import ClientSession  # noqa: E402
-from mcp.client.streamable_http import streamablehttp_client  # noqa: E402
+
+# The streamable-HTTP client API has drifted across mcp SDK generations
+# (mirrors drivethru-odoo/scripts/odoo_mcp.py):
+#   - 1.9-era: streamablehttp_client(url, headers=...) yields
+#     (read, write, get_session_id)
+#   - newer:   streamable_http_client(url, http_client=...) yields
+#     (read, write); headers ride on an httpx client built by
+#     create_mcp_http_client(headers=...)
+# Import whichever spelling exists, then adapt the CALL by SIGNATURE, not by
+# name — a spelling proves nothing about the parameters. A build missing the
+# module entirely is caught earlier: _bootstrap probes
+# `mcp.client.streamable_http` and re-execs into a venv with mcp>=1.9.0 when
+# the host's pre-installed mcp is too old.
+try:
+    from mcp.client.streamable_http import streamablehttp_client as _shttp  # noqa: E402
+except ImportError:  # pragma: no cover — depends on the installed mcp build
+    from mcp.client.streamable_http import (  # noqa: E402
+        streamable_http_client as _shttp,
+    )
+
+_SHTTP_TAKES_HEADERS = "headers" in inspect.signature(_shttp).parameters
+if not _SHTTP_TAKES_HEADERS:  # pragma: no cover — new API only
+    from mcp.client.streamable_http import (  # noqa: E402
+        create_mcp_http_client as _mcp_http_client,
+    )
+
+
+@asynccontextmanager
+async def _mcp_streams(url: str, headers: dict[str, str]) -> Any:
+    """Yield (read, write) MCP streams for `url`, whichever SDK generation."""
+    if _SHTTP_TAKES_HEADERS:
+        async with _shttp(url, headers=headers) as streams:
+            yield streams[0], streams[1]
+    else:
+        async with _mcp_http_client(headers=headers) as client:
+            async with _shttp(url, http_client=client) as streams:
+                yield streams[0], streams[1]
 
 
 # ── error contract ───────────────────────────────────────────────────────────
@@ -135,7 +180,7 @@ async def _with_session(fn: Any) -> Any:
         return _fail("config_error", "Set ODOO_MCP_URL and ODOO_MCP_TOKEN before using this skill.", 2)
     headers = {"Authorization": f"Bearer {token}"}
     try:
-        async with streamablehttp_client(url, headers=headers) as (read, write, _):
+        async with _mcp_streams(url, headers) as (read, write):
             async with ClientSession(read, write) as session:
                 await session.initialize()
                 return await fn(session)
@@ -144,9 +189,18 @@ async def _with_session(fn: Any) -> Any:
         return _fail("connection_error", f"{type(cause).__name__}: {cause}")
 
 
+def _result_field(result: Any, camel: str, snake: str) -> Any:
+    """Read a CallToolResult field across mcp SDK generations — 1.x exposes
+    camelCase attributes (`structuredContent`, `isError`), 2.x snake_case."""
+    v = getattr(result, camel, None)
+    if v is None:
+        v = getattr(result, snake, None)
+    return v
+
+
 def _tool_json(result: Any) -> dict[str, Any]:
     """Pull the JSON payload out of an MCP CallToolResult (structured or text)."""
-    sc = getattr(result, "structuredContent", None)
+    sc = _result_field(result, "structuredContent", "structured_content")
     if isinstance(sc, dict) and sc:
         if set(sc.keys()) == {"result"} and isinstance(sc["result"], dict):
             return sc["result"]
@@ -163,11 +217,32 @@ def _tool_json(result: Any) -> dict[str, Any]:
     return {}
 
 
+def _unwrap_envelope(name: str, payload: dict[str, Any]) -> dict[str, Any]:
+    """Unwrap drivethru_mcp's tool envelope `{status, tool, data: {...}}`.
+
+    The live server wraps every result this way, while every caller here
+    expects the INNER data (`page["documents"]`, `payload["folders"]`, ...).
+    Without the unwrap, `page.get("documents")` on the envelope is None and a
+    whole folder reads as "zero documents" — silently. A bare inner dict
+    (tests, other MCP servers) passes through untouched; an error envelope
+    RAISES so a failure can never masquerade as an empty result.
+    """
+    if "status" in payload and "tool" in payload:
+        if payload.get("status") == "error":
+            raise RuntimeError(
+                f"{name} failed: {json.dumps(payload.get('error') or payload)}"
+            )
+        data = payload.get("data")
+        if isinstance(data, dict):
+            return data
+    return payload
+
+
 async def _call(session: Any, name: str, args: dict[str, Any]) -> dict[str, Any]:
     result = await session.call_tool(name, args)
-    if getattr(result, "isError", False):
+    if bool(_result_field(result, "isError", "is_error")):
         raise RuntimeError(f"{name} failed: {_tool_json(result) or result}")
-    return _tool_json(result)
+    return _unwrap_envelope(name, _tool_json(result))
 
 
 # ── local PDF/text extraction (no bytes leave this process) ──────────────────
@@ -288,6 +363,30 @@ def _squeeze(text: str) -> str:
     return "\n".join(out).strip()
 
 
+_PO_TOKEN_RE = re.compile(r"\bP\d{4,6}\b")
+# `\b` binds only to the word forms; "#" is punctuation and takes no boundary
+# (a trailing \b after "#" never matches, which would miss the common "Invoice #").
+_INV_HEADER_RE = re.compile(r"invoice\s*(?:#|(?:no\.?|number)\b)", re.IGNORECASE)
+
+
+def _invoice_signals(text: str) -> dict[str, Any]:
+    """Deterministic hints for the multi-invoice-in-one-PDF case.
+
+    Returns the distinct PO tokens (``P#####``) the text contains, in order of
+    appearance, and ``multi_invoice`` — true when more than one distinct PO
+    appears OR more than one "Invoice #/No/Number" header does. These are HINTS
+    the caller verifies against the full ``text`` (a batch PDF is usually one
+    invoice per page); they are NOT an authoritative split, and a single PO here
+    does not by itself prove a single invoice."""
+    text = text or ""
+    pos: list[str] = []
+    for tok in _PO_TOKEN_RE.findall(text):
+        if tok not in pos:
+            pos.append(tok)
+    inv_headers = len(_INV_HEADER_RE.findall(text))
+    return {"po_candidates": pos, "multi_invoice": len(pos) > 1 or inv_headers > 1}
+
+
 def _extract_text(data: bytes, mimetype: str) -> tuple[str, bool]:
     """Return (text, needs_vision).
 
@@ -375,6 +474,19 @@ def _lean_po(po: dict[str, Any]) -> dict[str, Any]:
 
 
 async def _extract(session: Any, args: dict[str, Any]) -> dict[str, Any]:
+    # Optional narrowing — lets a scheduled batch extract only the documents it
+    # picked from a metadata listing instead of pulling the whole folder's bytes:
+    #   document_ids: [int]  only these documents (folder still scopes the search)
+    #   name_excludes: [str] drop docs whose name contains any substring (case-insensitive)
+    #   max_docs: int        stop after this many extracted documents (oldest first
+    #                        when the caller orders the folder that way)
+    document_ids = args.get("document_ids")
+    if document_ids is not None:
+        document_ids = {int(d) for d in document_ids}
+    name_excludes = [str(s).lower() for s in (args.get("name_excludes") or [])]
+    max_docs = args.get("max_docs")
+    max_docs = int(max_docs) if max_docs is not None else None
+
     folder_id = args.get("folder_id")
     folder_name = args.get("folder")
     if folder_id is None:
@@ -398,6 +510,10 @@ async def _extract(session: Any, args: dict[str, Any]) -> dict[str, Any]:
                 "limit": limit,
                 "offset": offset,
                 "include_subfolders": include_subfolders,
+                # The server's default detail ("minimal") returns only
+                # id/name/folder, dropping the mimetype/type this extractor
+                # keys on. Ask for the fields explicitly.
+                "fields": ["name", "mimetype", "file_size", "type"],
             },
         )
         docs = page.get("documents") or []
@@ -407,12 +523,32 @@ async def _extract(session: Any, args: dict[str, Any]) -> dict[str, Any]:
         if not docs or offset >= total:
             break
 
+    if document_ids is not None:
+        metas = [m for m in metas if int(m["id"]) in document_ids]
+    if name_excludes:
+        metas = [
+            m for m in metas
+            if not any(sub in (m.get("name") or "").lower() for sub in name_excludes)
+        ]
+
+    skipped = 0
     out: list[dict[str, Any]] = []
-    for meta in metas:
+    for idx, meta in enumerate(metas):
+        if max_docs is not None and len(out) >= max_docs:
+            skipped = len(metas) - idx
+            break
         if meta.get("type") not in (None, "binary"):
             continue  # folders / URL bookmarks carry no bytes
         doc_id = meta["id"]
-        full = await _call(session, "documents_get", {"document_id": doc_id})
+        full = await _call(
+            session,
+            "documents_get",
+            # response_detail defaults to "minimal", which returns identity only
+            # and OMITS data_base64 — even with include_content. "full" is what
+            # surfaces the bytes. Without it every document reads as
+            # needs_vision/empty and gets wrongly escalated.
+            {"document_id": doc_id, "include_content": True, "response_detail": "full"},
+        )
         b64 = full.get("data_base64")
         if not b64:
             out.append(
@@ -431,6 +567,7 @@ async def _extract(session: Any, args: dict[str, Any]) -> dict[str, Any]:
             continue
         data = base64.b64decode(b64)
         text, needs_vision = _extract_text(data, meta.get("mimetype", ""))
+        signals = _invoice_signals(text) if text else {"po_candidates": [], "multi_invoice": False}
         out.append(
             {
                 "document_id": doc_id,
@@ -440,41 +577,55 @@ async def _extract(session: Any, args: dict[str, Any]) -> dict[str, Any]:
                 "chars": len(text),
                 "text": text,
                 "needs_vision": needs_vision,
+                # Multi-invoice hint: distinct PO tokens present, and whether the
+                # doc likely holds several invoices (process each against its own
+                # PO rather than billing only the first).
+                "po_candidates": signals["po_candidates"],
+                "multi_invoice": signals["multi_invoice"],
                 "open_activities": full.get("open_activities") or [],
             }
         )
 
-    return {
+    result = {
         "folder": {"id": folder_id, "name": folder_name},
         "count": len(out),
         "total_matched": total if total is not None else len(out),
         "documents": out,
     }
+    if skipped:
+        result["skipped_beyond_max_docs"] = skipped
+    return result
 
 
 async def _po_lines(session: Any, args: dict[str, Any]) -> dict[str, Any]:
+    po = str(args.get("po") or "").strip()
     po_id = args.get("po_id")
-    if po_id is None:
-        po = str(args.get("po") or "").strip()
-        if not po:
-            raise ValueError("Pass `po` (PO number) or `po_id`.")
-        found = await _call(session, "ap_search_purchase_orders", {"search": po, "limit": 10})
+    # Resolve by DISPLAY NAME whenever a PO string is given. The "P#####" printed
+    # on a vendor invoice is the purchase order's *name*, NOT its database id —
+    # those are different numbers (e.g. name "P12774" lives at id 12730, while id
+    # 12774 is an unrelated PO). Passing the P-number's digits as po_id therefore
+    # returns the WRONG order silently, so a `po` name ALWAYS wins over any po_id.
+    if po:
+        found = await _call(session, "ap_search_purchase_orders", {"search": po, "limit": 20})
         pos = found.get("purchase_orders") or []
-        exact = [p for p in pos if (p.get("name") or "").strip().lower() == po.lower()]
-        chosen = (exact or pos)
-        if not chosen:
-            return {"found": False, "searched": po, "candidates": []}
-        po_id = chosen[0]["id"]
-        if len(chosen) > 1 and not exact:
+        target = po.strip().lower()
+        exact = [p for p in pos if (p.get("name") or "").strip().lower() == target]
+        # Require an EXACT name match for a financial lookup — never fall back to
+        # a substring hit (that is how the wrong PO gets billed). Surface the
+        # candidates so the caller can escalate to a human instead of guessing.
+        if len(exact) != 1:
             return {
                 "found": False,
                 "searched": po,
-                "ambiguous": True,
+                "ambiguous": len(exact) > 1,
                 "candidates": [
                     {"po_id": p["id"], "name": p.get("name"), "vendor": p.get("partner_name")}
-                    for p in chosen
+                    for p in (exact or pos)[:10]
                 ],
             }
+        po_id = exact[0]["id"]
+    elif po_id is None:
+        raise ValueError('Pass `po` (the PO display name, e.g. "P12774") or `po_id`.')
     detail = await _call(session, "ap_get_purchase_order", {"po_id": int(po_id)})
     return {"found": True, "po": _lean_po(detail)}
 
@@ -498,10 +649,11 @@ async def _apply(session: Any, args: dict[str, Any]) -> dict[str, Any]:
 
 
 async def _bill(session: Any, args: dict[str, Any]) -> dict[str, Any]:
-    """Create a DRAFT vendor bill from a reconciled PO. Never posts — a human
-    posts it via the scheduled review activity. `expected_total` (the invoice
-    docTotal) is verified within `tolerance`; a mismatch returns success:false
-    and no bill is created (so the caller escalates instead of billing blind).
+    """Create a DRAFT vendor bill from a reconciled PO. This command never posts
+    — posting is the separate `post` command (or a human via the scheduled
+    review activity). `expected_total` (the invoice docTotal) is recorded for
+    the total check; keep the same value for the `post` step, which is what
+    actually gates posting on the bill matching within `tolerance`.
     """
     if "po_id" not in args:
         raise ValueError("`po_id` is required.")
@@ -518,6 +670,38 @@ async def _bill(session: Any, args: dict[str, Any]) -> dict[str, Any]:
     if args.get("line_ids"):
         payload["line_ids"] = [int(x) for x in args["line_ids"]]
     return await _call(session, "ap_create_vendor_bill", payload)
+
+
+async def _post(session: Any, args: dict[str, Any]) -> dict[str, Any]:
+    """Post a DRAFT vendor bill once it MATCHES — the 'match & post' tail.
+
+    Only reach here for a bill whose total reconciles to the vendor invoice.
+    `expected_total` (the vendor invoice total) is REQUIRED and passed to the
+    guarded `ap_post_vendor_bill` tool, which REFUSES to post a bill whose total
+    misses it beyond `tolerance` (an absolute currency amount) — a mismatch
+    comes back success:false/error, so you escalate rather than post blind.
+    Pass `post: false` for a dry-run that reports `would_post` + `total_check`
+    without posting; the default is to post. `vendor_bill_number` / `invoice_date`
+    set the bill's ref/date first if unset; `note` is logged as an internal note.
+    """
+    if "bill_id" not in args:
+        raise ValueError("`bill_id` is required.")
+    if args.get("expected_total") is None:
+        raise ValueError(
+            "`expected_total` (the vendor invoice total) is required — posting is "
+            "gated on the bill matching it within tolerance."
+        )
+    payload: dict[str, Any] = {
+        "bill_id": int(args["bill_id"]),
+        "post": bool(args.get("post", True)),
+        "expected_total": float(args["expected_total"]),
+    }
+    if args.get("tolerance") is not None:
+        payload["tolerance"] = float(args["tolerance"])
+    for key in ("vendor_bill_number", "invoice_date", "note"):
+        if args.get(key):
+            payload[key] = str(args[key])
+    return await _call(session, "ap_post_vendor_bill", payload)
 
 
 async def _matched(session: Any, args: dict[str, Any]) -> dict[str, Any]:
@@ -563,12 +747,19 @@ async def _questions(session: Any, args: dict[str, Any]) -> dict[str, Any]:
     doc_msg_args: dict[str, Any] = {
         "document_id": doc_id,
         "body": str(question),
-        "activity_user": str(args.get("reviewer", "Zach Tucker")),
     }
-    if args.get("summary"):
-        doc_msg_args["activity_summary"] = str(args["summary"])
-    if args.get("deadline"):
-        doc_msg_args["activity_date_deadline"] = str(args["deadline"])
+    # A reviewer activity is OPT-IN: pass `reviewer` (or `activity_user`) only
+    # when a human genuinely needs a to-do assigned. By default this posts a
+    # plain internal Log note and moves the doc to Questions — the note explains
+    # what happened; the folder is the queue. (Blanket activities on every
+    # Questions doc just spam the reviewer's to-do list.)
+    reviewer = args.get("reviewer") or args.get("activity_user")
+    if reviewer:
+        doc_msg_args["activity_user"] = str(reviewer)
+        if args.get("summary"):
+            doc_msg_args["activity_summary"] = str(args["summary"])
+        if args.get("deadline"):
+            doc_msg_args["activity_date_deadline"] = str(args["deadline"])
     activity = await _call(session, "documents_post_message", doc_msg_args)
 
     folder_id, _ = await _folder_id_for(session, {"to": args.get("to", "Questions"), "under": args.get("under", "Purchasing")})
@@ -580,7 +771,7 @@ async def _questions(session: Any, args: dict[str, Any]) -> dict[str, Any]:
     return {
         "document_id": doc_id,
         "activity_id": activity.get("activity_id"),
-        "reviewer": doc_msg_args["activity_user"],
+        "reviewer": reviewer,
         "po_message_id": (po_result or {}).get("message_id"),
         "filed_to": "Questions",
         "folder_id": folder_id,
@@ -644,7 +835,13 @@ async def _render(session: Any, args: dict[str, Any]) -> dict[str, Any]:
     if fitz is None:
         raise RuntimeError("PyMuPDF is required for render; add `pymupdf` to the skill's install deps.")
     doc_id = int(args["document_id"])
-    full = await _call(session, "documents_get", {"document_id": doc_id})
+    # "full" detail is required to get data_base64 back (see the note in
+    # _extract); the default "minimal" omits the bytes.
+    full = await _call(
+        session,
+        "documents_get",
+        {"document_id": doc_id, "include_content": True, "response_detail": "full"},
+    )
     b64 = full.get("data_base64")
     if not b64:
         return {
@@ -706,6 +903,7 @@ ACTIONS = {
     "notes": _notes,
     "apply": _apply,
     "bill": _bill,
+    "post": _post,
     "matched": _matched,
     "questions": _questions,
     "move": _move,

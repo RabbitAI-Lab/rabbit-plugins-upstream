@@ -1,43 +1,56 @@
-## Description: <br>
-Buildkite helps agents read and manage Buildkite organizations, pipelines, and builds through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Buildkite (buildkite.com). Use this skill for Buildkite requests that read, create, and update data through the OOMOL-connected oo CLI instead of direct API calls.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and CI operators use this skill to let an agent inspect Buildkite account, organization, pipeline, and build data, and to perform approved build operations such as create, cancel, and rebuild. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform state-changing Buildkite operations such as creating, canceling, or rebuilding builds. <br>
-Mitigation: Confirm the exact organization, pipeline, build number, payload, and intended effect with the user before running state-changing actions. <br>
-Risk: The skill depends on an OOMOL-connected Buildkite account and can use sensitive credentials through that connection. <br>
-Mitigation: Install and use it only when the user intends to let an agent operate Buildkite through OOMOL, and have the user approve oo CLI installation, sign-in, and connection steps. <br>
+## Use Case:
 
+Developers and engineers use this skill to inspect Buildkite action schemas and operate Buildkite organizations, pipelines, builds, users, and access-token details through an OOMOL-connected account. It supports read workflows and confirmed write workflows such as creating, canceling, and rebuilding builds.
 
-## Reference(s): <br>
-- [ClawHub Buildkite skill page](https://clawhub.ai/oomol/oo-buildkite) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Buildkite homepage](https://buildkite.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May execute Buildkite connector actions through the oo CLI when the user has connected an OOMOL account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The skill documents remote pipe-to-shell installer commands for first-time setup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified package or inspect and verify the installer before execution.
+
+Risk: Buildkite token inspection and build creation, cancellation, or rebuild actions can expose sensitive account details or change CI state.
+
+Mitigation: Run sensitive actions only after a clear user request, schema inspection, and explicit confirmation of the payload and expected effect.
+
+## Reference(s):
+
+- [ClawHub Buildkite Skill](https://clawhub.ai/oomol/skills/oo-buildkite)
+- [Buildkite Homepage](https://buildkite.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects with data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

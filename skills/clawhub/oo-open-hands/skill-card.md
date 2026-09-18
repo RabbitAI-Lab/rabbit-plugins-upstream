@@ -1,45 +1,60 @@
-## Description: <br>
-OpenHands (all-hands.dev). Use this skill for reading, creating, and updating OpenHands data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OpenHands lets agents read, create, update, and monitor OpenHands Cloud conversations through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and engineers use this skill to inspect OpenHands Cloud conversations, start repository tasks, check task status, and send follow-up messages through the OOMOL `oo` CLI. It is intended for agents that need schema-guided OpenHands connector actions without directly handling raw service credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can start conversations or send messages that change OpenHands state. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running actions tagged [write]. <br>
-Risk: First-time setup may require installing or authenticating the oo CLI. <br>
-Mitigation: Run setup steps only after an auth, connection, or command-not-found failure, and inspect installer and authentication steps before proceeding. <br>
-Risk: Connector payloads may be invalid if action schemas change. <br>
-Mitigation: Fetch the live action schema with `oo connector schema` before constructing each JSON payload. <br>
+## Use Case:
 
+Developers and agent operators use this skill to inspect OpenHands action schemas, list or retrieve conversations, start repository tasks, and send follow-up messages through an OOMOL-connected OpenHands account.
 
-## Reference(s): <br>
-- [OpenHands homepage](https://www.all-hands.dev) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-open-hands) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId when actions run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded scripts immediately.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installing, and prefer a verified package manager or installer with a published checksum or signature.
+
+Risk: Connected OOMOL and OpenHands credentials may allow actions against the linked account.
+
+Mitigation: Connect only an account with acceptable permissions for this connector and confirm write-action payloads before execution.
+
+Risk: Write actions such as starting conversations or sending messages can change OpenHands state.
+
+Mitigation: Confirm the target conversation or repository task, payload, and expected effect with the user before running those actions.
+
+## Reference(s):
+
+- [OpenHands homepage](https://www.all-hands.dev)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill listing](https://clawhub.ai/oomol/skills/oo-open-hands)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON payloads or results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read actions can run directly; write actions require confirmation of the payload and expected effect.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

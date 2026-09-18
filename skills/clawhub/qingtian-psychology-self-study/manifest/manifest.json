@@ -1,0 +1,49 @@
+﻿{
+  "manifest_version": 1,
+  "skill": {
+    "id": "qingtian-psychology-self-study",
+    "name": "青田·心理自习室（咨询师实战训练台）",
+    "version": "2.1.0",
+    "summary": "面向心理咨询师（含准咨询师）的实战训练台：以对话练习为核心，17 流派 TPR 三模式（体验/实操/督导）+ 逐字稿五维分析 + 来访者画像扮演 + 评估施测演练 + 伦理两难决策，配套理论补课与能力五维成长追踪。即用即走、按阶段推进。",
+    "description": "咨询师实战训练台。帮助心理咨询师提高、完善、丰富自己的理论与对话实践本领。核心是『练对话』：体验模式（AI 扮 17 流派咨询师）/ 实操模式（AI 扮来访者，可选画像：4 类困扰 × 4 类人格 × 3 档强度，用户当咨询师施技）/ 督导模式（贴逐字稿，AI 当督导师做五步分析 + 五维透镜）。配套理论补课（服务练习缺口）、评估施测演练（21 量表）、个案概念化、伦理两难决策、反移情记录、成长支持。即用即走：一键默认开跑、一句话可定制、日常单推荐；阶段制推进，阶段总结为完成门槛；能力五维成长追踪。始终坚持伦理边界：不诊断、不开药、不替代真实咨询/真实督导。",
+    "category": "education",
+    "tags": [
+      "心理咨询",
+      "咨询师训练",
+      "对话练习",
+      "来访者扮演",
+      "逐字稿督导",
+      "量表测评",
+      "个案概念化",
+      "伦理决策"
+    ],
+    "license": "MIT",
+    "entry": "SKILL.md",
+    "agent_created": true
+  },
+  "capabilities": [
+    "一键默认开跑与一句话定制",
+    "对话练习三模式闭环（体验/实操/督导 → 逐字稿分析 → 理论补课 → 阶段总结）",
+    "TPR 17 流派咨询练习（体验/实操三模式）与 HTML 个案报告",
+    "21 个标准量表（PHQ-9/GAD-7/SCL-90 等）自评与评估施测演练 + 计分报告",
+    "认知记录卡（Thought Diary）与咨询师反移情记录",
+    "每日情绪打卡与趋势聚合",
+    "经验等级与里程碑进度系统",
+    "危机干预与情绪急救包",
+    "进度导出/导入备份与 v2 迁移"
+  ],
+  "resources": {
+    "modules": "modules/",
+    "curriculum": "curriculum/",
+    "scales": "assessment/scales/",
+    "practice": "practice/",
+    "schemas": "schemas/progress-schema.json",
+    "crisis_single_source": "resources/crisis-resources.md",
+    "tests": "tests/"
+  },
+  "data": {
+    "progress_file": "<workspace>/.workbuddy/psychology-study/progress.json",
+    "schema": "schemas/progress-schema.json",
+    "migrate_v2": "tools/migrate-v2.py"
+  }
+}

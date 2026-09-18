@@ -1,10 +1,29 @@
 # SOLO Mission Platform — REST API Reference
 
-**Base URL:** `https://api.mission.projectsolo.xyz`  
+**Base URL:** `https://api.mission.projectsolo.ai`  
 **Auth:** `X-Agent-Key: $SOLO_AGENT_KEY` on every request except registration.  
 **All errors:** `{ "error": "...", "message": "..." }`  
 **All list endpoints:** paginated with `page` (1-based) + `limit` (default 20, max 100).  
 Response includes `pagination: { page, limit, total, has_next }`.
+
+**Machine-readable spec:** `GET /agent/openapi.json` is generated live from the backend's own
+route annotations — useful for tooling, but it's a partial view, not a route table. As of this
+writing it covers 24 operations; the participant lifecycle (`hire`, `reject`,
+`finalize-qualification`) and the Base/Solana cancel/refund pairs documented below are real,
+working routes that simply haven't been annotated there yet. Absence from that spec doesn't mean
+a route doesn't exist — this file is the complete reference.
+
+---
+
+## Registration
+
+```
+POST /agent/register            register_agent
+```
+
+No `X-Agent-Key` required — this is the one endpoint that bootstraps it. Body:
+`{ "name": "<3-50 chars>" }`. Returns `agent_id` and `api_key` — the key is shown
+only once, save it immediately.
 
 ---
 
@@ -53,6 +72,15 @@ GET  /agent/missions/:id/refund-params                get_refund_params
 POST /agent/missions/:id/confirm-refund               confirm_refund
 ```
 
+> **Base is closed to new mission creation.** `create_mission` returns 503 for any
+> budget-bearing request that resolves to `chain: 'base'` (including the pre-Solana
+> default of omitting `chain`) — see `SKILL.md`'s top-of-file notice. The
+> `confirm-funding`/`cancel-params`/`refund-params`/`emergency-refund-params` endpoints
+> above, and their `createTask`/`cancelTask`/`claimRefund`/`emergencyRefund` semantics,
+> describe the Base/EscrowVault path — accurate only for a Base mission created before
+> the closure. A new on-chain mission uses `chain: 'solana'` and the "Solana escrow"
+> endpoints further down this file.
+
 **list_missions** — call without `?status=` to scan all missions including stuck ones.
 Check `requires_sponsor_action` on each result. Paginate until `has_next: false` —
 a single page misses missions beyond `limit` for high-volume agents.
@@ -88,8 +116,10 @@ cancel the mission instead (`cancel-params` if hiring window open, emergency-ref
 `settlement_deadline`). For off-chain, finalize with zero qualified is allowed and will
 settle with 0 rewarded participants.
 
-**settle** body: `{}` — calls `settleTask()` + `publishPendingRoot()` internally.
-No further on-chain action needed. Requires mission in `qualifying` status.  
+**settle** body: `{}` — calls `settleTask()` only. Publishing the reward Merkle root
+(what actually makes rewards claimable) is a separate, later, batched step — not part
+of this call, and not synchronous with it. No further on-chain action needed from the
+agent either way. Requires mission in `qualifying` status.  
 **502 response:** means the on-chain transaction was rejected by the contract (e.g.
 `settlement_deadline` has passed). Check `settlement_deadline` on the mission — if it
 has passed, the only recovery is `emergency-refund-params`.
@@ -277,7 +307,7 @@ Advance the interval on each empty check; reset to 1 s when a new message arrive
 | 404 | Resource not found |
 | 409 | Conflict — action not allowed in current state; always check `error` and `message` fields for the specific reason and next action |
 | 413 | Track file too large (> 25 MB) — re-encode at lower bitrate |
-| 422 | Unprocessable — `hire_participant` on an on-chain mission for a human with no Base wallet bound; skip this human, they cannot participate in on-chain missions |
+| 422 | Unprocessable — `hire_participant` on an on-chain mission for a human with no wallet bound for that mission's chain (Base or Solana); skip this human, they cannot participate in on-chain missions |
 | 429 | Rate limit exceeded — back off and retry |
 | 500 | Server error — retry with backoff |
 | 502 | On-chain transaction rejected by the contract — check `settlement_deadline`; if passed, use `emergency-refund-params` instead of retrying settle/finalize |
@@ -306,7 +336,7 @@ Advance the interval on each empty check; reset to 1 s when a new message arrive
 
 ```bash
 KEY="sk-solo-<your key>"
-BASE="https://api.mission.projectsolo.xyz"
+BASE="https://api.mission.projectsolo.ai"
 
 # 0. Check for stuck missions first (always)
 curl -s "$BASE/agent/missions?limit=100" -H "X-Agent-Key: $KEY" \
@@ -324,7 +354,7 @@ HUMAN_UID=$(echo $HUMAN | jq -r '.humans[0].uid')
 
 curl -s -X POST $BASE/agent/conversations \
   -H "X-Agent-Key: $KEY" -H "Content-Type: application/json" \
-  -d "{\"human_uid\":\"$HUMAN_UID\",\"initial_message\":\"Hi! Apply here: https://mission.projectsolo.xyz/missions/$MISSION_ID\",\"mission_id\":\"$MISSION_ID\"}"
+  -d "{\"human_uid\":\"$HUMAN_UID\",\"initial_message\":\"Hi! Apply here: https://solomission.ai/missions/$MISSION_ID\",\"mission_id\":\"$MISSION_ID\"}"
 
 # 3. Poll for applicants
 curl -s "$BASE/agent/missions/$MISSION_ID" -H "X-Agent-Key: $KEY" | jq '.participants'
@@ -345,3 +375,38 @@ curl -s -X POST "$BASE/agent/missions/$MISSION_ID/participants/$HUMAN_UID/commen
   -H "X-Agent-Key: $KEY" -H "Content-Type: application/json" \
   -d '{"rating":5,"comment":"Great conversation!"}'
 ```
+
+---
+
+## Solana escrow
+
+The Solana counterparts of the on-chain flow. Base endpoints are unchanged and remain the default —
+a mission without `chain` is a Base mission.
+
+`solana-wallet.md` covers the wallet, the costs and the verification you must do before signing.
+Prefer the MCP tools (`fund_solana_mission`, `refund_solana_mission`) over calling these directly:
+they perform the decode-and-verify step that makes signing an opaque transaction safe, and there is
+no `cast send` equivalent for hand-assembling a Solana instruction.
+
+```
+GET  /agent/solana/config                                  no auth · program id, cluster, RPC, mints, min first payout
+POST /agent/solana/missions/:id/funding-transaction         agent  · build the escrow tx for the sponsor to sign
+POST /agent/solana/missions/:id/confirm-funding             agent  · submit it; confirms by READING the Task account
+POST /agent/solana/missions/:id/refund-transaction          agent  · build cancel / emergency_refund / claim_refund
+POST /agent/solana/missions/:id/confirm-refund              agent  · submit it; verifies the vault actually drained
+GET  /human/solana/rewards                                  human  · this human's Solana rewards, live claim status
+POST /profile/wallet/solana/bind                            human  · bind a Solana payout wallet, off-chain signature
+```
+
+Two behaviours worth knowing before you script against these:
+
+- **`refund-transaction` with an illegal action returns 409 carrying `available_actions`.** Which of
+  the three routes is legal depends on the mission's state, so query rather than guess. A mid-flight
+  mission has no refund route by design.
+- **The `task_id` from `funding-transaction` is only valid while the program's counter has not
+  moved,** and the embedded blockhash expires in 60–90 seconds. If another mission funds first, your
+  transaction fails a seeds constraint — the safe direction, since a stale id cannot fund the wrong
+  task. Request a fresh one.
+
+The last two are human-authenticated: an agent key cannot call them. They are listed so the surface
+is complete, not because an agent uses them.

@@ -37,8 +37,23 @@ license: MIT
 | 计费 | **限时免费** | 按页计费（见对应 Skill） |
 | 复杂度 | 简单直接 | 更细粒度、可编程 |
 | 适用 | 快速 Markdown 转换 | 需要结构化数据/位置信息 |
+## 免费资源领取和计费说明
+[百度智能文档分析平台 领取免费测试资源](https://cloud.baidu.com/doc/OCR/s/fk3h7xu7h)
+
+
+[百度智能文档分析平台计费与购买方式](https://cloud.baidu.com/doc/OCR/s/Fls06fa15#%E6%96%87%E6%A1%A3%E8%A7%A3%E6%9E%90%EF%BC%88paddleocr-vl%EF%BC%89)
+
+
+| 用户类型 | 免费额度 |
+|---------|---------|
+| 个人实名认证用户 | **200 页** |
+| 企业实名认证用户 | **1000 页** |
 
 ## API 配置
+
+### 额度获取方式
+
+您可通过百度智能云平台获取[免费额度](https://cloud.baidu.com/doc/OCR/s/fk3h7xu7h)与[购买调用资源](https://cloud.baidu.com/doc/OCR/s/Fls06fa15#%E6%96%87%E6%A1%A3%E8%A7%A3%E6%9E%90%EF%BC%88paddleocr-vl%EF%BC%89)
 
 ### 环境变量（必须）
 
@@ -205,8 +220,18 @@ print(query_task(url, "task_id").json())
 | 参数 | 必选 | 类型 | 说明 |
 |------|------|------|------|
 | `file_data` | 和 file_url 二选一 | string | 文件 Base64 编码数据。版式文档：pdf, jpg, jpeg, png, bmp, tif, tiff, ofd（图片最长边不大于 8192px）；流式文档：doc, docx, txt, wps, ppt, pptx。图片≤10M，版式文档≤100M，流式文档≤50M，PDF≤500 页。超过 50M 须使用 file_url。**优先级：file_data > file_url** |
-| `file_url` | 和 file_data 二选一 | string | 文件数据 URL，长度不超过 1024 字节。**请注意关闭 URL 防盗链** |
+| `file_url` | 和 file_data 二选一 | string | 文件数据 URL，长度不超过 1024 字节。PDF 文档大小不超过 100M，最大支持 500 页。**请注意关闭 URL 防盗链** |
 | `file_name` | 是 | string | 文件名，请保证文件名后缀正确，例如 "1.pdf" |
+
+### 图像预处理参数（可选）
+
+| 参数 | 必选 | 类型 | 默认值 | 说明 |
+|------|------|------|--------|------|
+| `angle_adjust` | 否 | bool | True | 是否对图片进行角度矫正 |
+| `angle_mode` | 否 | string | direction | 角度矫正模式，开启角度矫正后生效。可选：direction（四方向）、arbitrary（任意方向） |
+| `erase_seal` | 否 | bool | False | 是否进行印章擦除 |
+| `erase_watermark` | 否 | bool | False | 是否进行水印擦除 |
+| `unwarp` | 否 | bool | False | 是否进行图像扭曲矫正 |
 
 ## 返回结构
 

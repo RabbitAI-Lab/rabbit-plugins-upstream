@@ -20,7 +20,7 @@ def main() -> None:
     if len(sys.argv) < 2:
         print(
             "Usage: get_showcase_products.py '<JSON>'\n"
-            "Required: openId (or ttsAccessToken), page_size (default 20), origin (default SHOWCASE)\n"
+            "Required: openId, page_size (default 20), origin (default SHOWCASE)\n"
             "Optional: page_token\n"
             "origin: SHOWCASE | LIVE\n"
             "Returns product_id for use in linkfox-tiktok-video precheck/post APIs",
