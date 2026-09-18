@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/stable-baselines3",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/stable-baselines3",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/stable-baselines3",
+  "branch": "main",
+  "pushedAt": "2026-09-14T09:27:38Z",
+  "contentHash": "cfd0a6cdcc917517b4f5afecbdf7f8fcdbd6deb0deebb567f8ac8ff0db17174e",
+  "fetchedAt": "2026-09-18T12:17:30.595Z"
+}

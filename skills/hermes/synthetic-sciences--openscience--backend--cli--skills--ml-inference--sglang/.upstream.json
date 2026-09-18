@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-inference/sglang",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-inference/sglang",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-inference/sglang",
+  "branch": "main",
+  "pushedAt": "2026-09-18T11:48:18Z",
+  "contentHash": "9775fa1d5d5be15ae16a2c52441a6dc57e5c909ee990e13740506e88df7e4580",
+  "fetchedAt": "2026-09-18T12:17:18.088Z"
+}

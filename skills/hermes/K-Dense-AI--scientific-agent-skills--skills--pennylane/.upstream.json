@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pennylane",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pennylane",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pennylane",
+  "branch": "main",
+  "pushedAt": "2026-09-14T09:27:38Z",
+  "contentHash": "bed4cfd75aeb28758cd50c1787bd5c51d8b6b0e9768b17a4b4e0f1b5970720c6",
+  "fetchedAt": "2026-09-18T12:17:30.533Z"
+}
