@@ -1,44 +1,73 @@
-## Description: <br>
-Legacy compatibility alias for the Atoll skill that provides Atoll project management API and CLI guidance for tasks, projects, goals, KPIs, initiatives, milestones, comments, members, teams, labels, dependencies, automation, and webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Atoll for project, issue, goal, KPI, initiative, milestone, artifact, PRD, implementation plan, comment, dependency, runner, and workflow operations.
 
-## Publisher: <br>
-[doubledipcode](https://clawhub.ai/user/doubledipcode) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[doubledipcode](https://clawhub.ai/user/doubledipcode)
 
-## Use Case: <br>
-Developers and agents use this skill to work with Atoll project-management workflows through CLI commands, REST API examples, and configuration guidance. It is intended for managing Atoll work items, strategy objects, comments, dependencies, automation, and related operational context. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Atoll API keys grant access according to the key's Atoll role and project scope. <br>
-Mitigation: Treat keys as sensitive, prefer skill-scoped configuration or auth profiles, and grant only the Atoll role and project access needed. <br>
-Risk: The documented workflows can create, update, archive, delete, comment on, and otherwise manage Atoll work items. <br>
-Mitigation: Review proposed write actions before execution, use dry-run or archive paths where available, and avoid broad owner/admin credentials unless required. <br>
-Risk: KPI sync and integration examples may involve third-party endpoints and secrets. <br>
-Mitigation: Use allowlisted HTTPS JSON endpoints, secret references instead of inline secret values, and human-admin review for sync drafts. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Atoll workspaces, including planning, issue management, strategy tracking, artifact workflows, local runners, agent executions, integrations, and API-oriented operations.
 
-## Reference(s): <br>
-- [Atoll API Endpoint Reference](references/api-endpoints.md) <br>
-- [Atoll API Field Reference](references/api-fields.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/doubledipcode/skills/atoll-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, Code] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON/JSON5 configuration examples, and REST API examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Markdown-only skill; no runtime scripts are included.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.16 (source: server release evidence) <br>
+Risk: Agents operating this skill can act against live Atoll data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for intended Atoll use, use a least-privileged Atoll profile, and confirm the selected actor and project before state-changing operations.
+
+Risk: API keys, OAuth selectors, or local configuration values could be exposed through copied commands or chat content.
+
+Mitigation: Keep credentials in approved local configuration or environment variables and avoid pasting real API keys into shell commands or conversation text.
+
+Risk: Destructive deletes, service installation, or external communications can have durable effects.
+
+Mitigation: Require explicit confirmation before destructive actions, service installation, production mutation, or external communication.
+
+Risk: Unpinned package installation may change behavior over time.
+
+Mitigation: Pin npm package versions where possible when installing or operating the Atoll CLI or runner tooling.
+
+## Reference(s):
+
+- [Atoll Skill on ClawHub](https://clawhub.ai/doubledipcode/skills/atoll-api)
+- [Atoll](https://atollhq.com)
+- [Atoll MCP Endpoint](https://atollhq.com/mcp)
+- [Authentication and profiles](references/authentication-and-profiles.md)
+- [Artifact workflow](references/artifact-workflow.md)
+- [CLI operations](references/cli-operations.md)
+- [Local runner](references/local-runner.md)
+- [Strategy and heartbeat](references/strategy-and-heartbeat.md)
+- [Execution and human attention](references/execution-and-attention.md)
+- [Integrations and advanced API use](references/integrations-and-api.md)
+- [Atoll API Endpoint Reference](references/api-endpoints.md)
+- [Atoll API Field Reference](references/api-fields.md)
+- [Platform rules](references/platform-rules.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON examples, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include API request details, Atoll CLI commands, artifact drafts, implementation plans, status updates, and verification notes.]
+
+## Skill Version(s):
+
+1.0.20 (source: server release metadata, released 2026-09-16)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

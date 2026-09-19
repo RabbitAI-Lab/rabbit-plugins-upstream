@@ -3,7 +3,7 @@ name: p-video-avatar
 description: Use when someone wants a person on camera speaking a script — lip-synced host, spokesperson, or narrated avatar from a portrait photo.
 license: MIT
 metadata:
-  version: "1.0.7"
+  version: "1.0.13"
   package: pruna-skills
   pruna_model: p-video-avatar
 ---
@@ -25,7 +25,7 @@ Follow each skill's **Before generating** / craft sections — do not restate gu
 
 ## Agent habit
 
-In the **first reply**, name `` `p-video-avatar` `` in backticks, confirm `PRUNA_API_KEY` (or stop with signup links from `pruna-api`), then ask for required inputs. **Multiple talking-head scenes with the same person → redirect to `avatar-multi-scene`** (this skill is one clip only). Draft host motion with **Prompt craft (dynamic + faithful)** — do not paste skill examples.
+In the **first reply**, name `` `p-video-avatar` `` in backticks, confirm `PRUNA_API_KEY` (or stop with signup links from `pruna-api`), then ask for required inputs. Open intake → **`generation-diversity`** clarification intake before the first `POST`. **Multiple talking-head scenes with the same person → redirect to `avatar-multi-scene`** (this skill is one clip only). Draft host motion with **Prompt craft (dynamic + faithful)** — do not paste skill examples.
 
 ## Skill boundary
 
@@ -57,7 +57,9 @@ Use a different skill instead:
 
 | Skill | Description | Install |
 | --- | --- | --- |
-| `p-video` | Use when someone wants one short video clip from text or images — B-roll, start/end frame animation, or a quick motion shot. Not for full multi-scene films or lip-synced hosts. | `npx skills add PrunaAI/pruna-skills@p-video -y` |
+| `p-video-2-pro` | Use when someone wants a cinematic clip from text or start/end frames — product ads, documentary shots, or dialogue with generated audio. Not for 1080p, imported audio tracks, or talking-head-only hosts. | `npx skills add PrunaAI/pruna-skills@p-video-2-pro -y` |
+| `p-video-2` | Use when someone wants a polished short clip from text, images, or imported audio — 1080p B-roll, start/end frame animation, or a motion shot with a mixed track. Not for cinematic generated-audio clips or talking-head-only hosts. | `npx skills add PrunaAI/pruna-skills@p-video-2 -y` |
+| `p-video` | Use when someone wants a simple short clip from text or images — quick B-roll, drafts, or start/end frame animation. Not when the brief needs cinematic generation, highest quality, tight lip-sync, or imported audio at 1080p. | `npx skills add PrunaAI/pruna-skills@p-video -y` |
 | `p-video-animate` | Use when someone wants a photo to move like another video — motion transfer, dance remixes, or performance variations from a template clip. | `npx skills add PrunaAI/pruna-skills@p-video-animate -y` |
 | `p-video-replace` | Use when someone wants to swap a person, outfit, or product inside existing footage while keeping the camera move and audio. | `npx skills add PrunaAI/pruna-skills@p-video-replace -y` |
 | `avatar-multi-scene` | Use when someone wants the same person hosting several clips — multi-segment UGC, comparison reels, or mixed speaking and animated scenes with continuity. | `npx skills add PrunaAI/pruna-skills@avatar-multi-scene -y` |
@@ -127,7 +129,7 @@ curl -X POST 'https://api.pruna.ai/v1/predictions' \
 
 ### Uploaded narration (audio wins over voice_script)
 
-Generate `gemini-3.1-flash-tts` → upload to `/v1/files`. Pass as `input.audio` with portrait `image` (optional `last_frame_image`).
+Generate `gemini-3.1-flash-tts` → upload to `/v1/files`. Pass as `input.audio` with portrait `image`. If both `audio` and `voice_script` are set, `audio` wins.
 
 ```bash
 curl -X POST 'https://api.pruna.ai/v1/predictions' \
@@ -136,8 +138,7 @@ curl -X POST 'https://api.pruna.ai/v1/predictions' \
   -H 'Model: p-video-avatar' \
   -d '{
     "input": {
-      "image": "https://api.pruna.ai/v1/files/PORTRAIT_START",
-      "last_frame_image": "https://api.pruna.ai/v1/files/PORTRAIT_END",
+      "image": "https://api.pruna.ai/v1/files/PORTRAIT_ID",
       "audio": "https://api.pruna.ai/v1/files/NARRATION_ID",
       "resolution": "720p",
       "video_prompt": "Medium close-up, natural head motion matching narration"

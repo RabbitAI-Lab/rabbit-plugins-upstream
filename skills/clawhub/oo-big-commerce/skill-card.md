@@ -1,44 +1,57 @@
-## Description: <br>
-Operates a BigCommerce catalog through OOMOL's big_commerce connector, supporting product read, create, list, update, and delete workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BigCommerce (bigcommerce.com). Use this skill for ANY BigCommerce request -- reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External developers and commerce operators use this skill to let an agent inspect and manage BigCommerce catalog products through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change BigCommerce catalog product data. <br>
-Mitigation: Confirm the exact action, product target, and JSON payload with the user before running create or update actions. <br>
-Risk: Delete actions can remove BigCommerce catalog products. <br>
-Mitigation: Require explicit approval for the target product ID before running destructive actions. <br>
-Risk: One-time CLI installation and account connection steps involve external commands and account authorization. <br>
-Mitigation: Run setup only after an auth or connection failure and only from trusted OOMOL sources. <br>
+## Use Case:
 
+Developers and commerce operators use this skill to manage BigCommerce catalog products through an OOMOL-connected account, including create, retrieve, list, update, and delete workflows.
 
-## Reference(s): <br>
-- [BigCommerce homepage](https://www.bigcommerce.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-big-commerce) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May execute live BigCommerce product read, write, and delete actions through the oo CLI when the user approves the requested operation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Setup instructions include unverified remote installer scripts executed directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installing; prefer official documentation or a pinned release with checksum or signature checks.
+
+Risk: BigCommerce write and delete actions can change or remove catalog products.
+
+Mitigation: Confirm exact write payloads with the user and require explicit approval before destructive deletion actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-big-commerce)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [BigCommerce homepage](https://www.bigcommerce.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce BigCommerce connector commands that return JSON responses from the oo CLI.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

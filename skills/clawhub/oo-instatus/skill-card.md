@@ -1,42 +1,56 @@
-## Description: <br>
-Use this skill to read, create, update, and delete Instatus data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Instatus (instatus.com). Use this skill for ANY Instatus request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to manage Instatus status pages, components, incidents, and incident updates through the oo CLI and an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Create, update, and delete actions can change Instatus status pages, incidents, components, or incident updates. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before write actions, and require explicit approval before destructive delete actions. <br>
-Risk: Action payloads can drift from the connector contract if the live schema is not checked. <br>
-Mitigation: Inspect the live oo connector schema before building each action payload. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Instatus status pages through an OOMOL-connected account. It supports reading status data and creating, updating, or deleting components, incidents, and incident updates after checking the live action schema.
 
-## Reference(s): <br>
-- [Instatus homepage](https://instatus.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-instatus) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup includes remote installer commands that pipe downloaded scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a signed or checksum-verified installation path where available, and run the remote installer only after trusting the OOMOL installer endpoint.
+
+Risk: Write and destructive actions can change or remove Instatus data.
+
+Mitigation: Confirm the exact payload, target object, and intended effect before running write or destructive connector actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-instatus)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Instatus homepage](https://instatus.com)
+- [OOMOL Instatus connection setup](https://console.oomol.com/app-connections?provider=instatus)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId when actions are run.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

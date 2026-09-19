@@ -1,43 +1,56 @@
-## Description: <br>
-Eventzilla (eventzilla.net). Use this skill for Eventzilla requests involving searching and reading data through the OOMOL connector rather than calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Eventzilla helps agents search and read Eventzilla organizer account data through OOMOL's oo connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to search and read Eventzilla events, attendees, tickets, transactions, organizers, and sub-organizers through an OOMOL-connected Eventzilla account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to an OOMOL-connected Eventzilla account and can read event, attendee, ticket, transaction, and user data visible to that account. <br>
-Mitigation: Install and connect it only for intended Eventzilla accounts, and review the requested action and query before execution. <br>
-Risk: First-time setup may require CLI installation, OOMOL sign-in, or Eventzilla account connection steps. <br>
-Mitigation: Approve setup steps only when an action fails because authentication or connection is missing, and only if granting that access is intended. <br>
+## Use Case:
 
+Developers and event-operations agents use this skill to retrieve Eventzilla events, attendees, ticket categories, transactions, organizers, and sub-organizers through an authenticated OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub Eventzilla skill listing](https://clawhub.ai/oomol/oo-eventzilla) <br>
-- [Eventzilla homepage](https://www.eventzilla.net) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions include curl-to-bash and irm-to-iex installer commands that execute remote code without pinning or verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installation, prefer official versioned OOMOL installation guidance or a package manager, and run remote installer commands only after trusting the endpoint and understanding their effect.
+
+Risk: The skill depends on an authenticated OOMOL Eventzilla connection and may fail when authentication, connection scope, credentials, or billing are not ready.
+
+Mitigation: Run setup or connection recovery only after a matching command failure, then resolve sign-in, Eventzilla connection, credential, scope, or billing errors before retrying.
+
+## Reference(s):
+
+- [Eventzilla Skill on ClawHub](https://clawhub.ai/oomol/skills/oo-eventzilla)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Eventzilla Homepage](https://www.eventzilla.net)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown text with oo CLI command examples and JSON connector payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before execution; normal supported actions are read-only get and list operations.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

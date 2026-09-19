@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>青田·心理自习室 功能评估与缝合方案</title>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@500;600;700;900&family=Noto+Sans+SC:wght@300;400;500;600&display=swap">
+<style>
+  :root{
+    --ink:#2E5D4F;          /* 苔绿：主结构（自习室·安静成长） */
+    --ink-deep:#1F4238;
+    --paper:#F7F6F1;        /* 纸白 */
+    --card:#FFFFFF;
+    --line:#D9D6CA;
+    --line-soft:#E7E4D9;
+    --keep:#2E6B4F;         /* 保留 */
+    --keep-bg:#EDF4EF;
+    --hide:#A97B2F;         /* 隐藏/收敛 */
+    --hide-bg:#F8F0E2;
+    --out:#B04A35;          /* 清理/归档 */
+    --out-bg:#F9ECE7;
+    --add:#2F5D7A;          /* 补充 */
+    --add-bg:#EAF1F6;
+    --gray:#6E6A5E;
+    --text:#23272E;
+    --serif:"Noto Serif SC",serif,"Songti SC","SimSun";
+    --sans:"Noto Sans SC",sans-serif,"Microsoft YaHei","PingFang SC";
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--sans);color:var(--text);background:var(--paper);line-height:1.75;font-size:15px;}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 24px;}
+
+  header{background:var(--ink-deep);color:#F2EFE6;}
+  .head-inner{padding:56px 24px 44px;}
+  .kicker{font-size:13px;letter-spacing:.18em;color:#A9C4BA;font-weight:500;}
+  h1{font-family:var(--serif);font-weight:700;font-size:clamp(26px,4.2vw,40px);line-height:1.3;margin:14px 0 16px;}
+  .headline{font-family:var(--serif);font-size:clamp(16px,2vw,20px);color:#D8E3DE;line-height:1.6;max-width:780px;}
+  .stats{display:flex;flex-wrap:wrap;gap:0;margin-top:36px;border-top:1px solid rgba(242,239,230,.18);}
+  .stat{flex:1 1 130px;padding:18px 18px 6px 0;}
+  .stat b{font-family:var(--serif);font-size:30px;font-weight:700;color:#fff;display:block;line-height:1.2;}
+  .stat span{font-size:12.5px;color:#A9C4BA;}
+
+  section{padding:52px 0 8px;}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px;}
+  .sec-no{font-family:var(--serif);font-weight:700;font-size:15px;color:#fff;background:var(--ink);width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none;}
+  .sec-title{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--ink-deep);}
+  .sec-sub{color:var(--gray);font-size:14px;margin:6px 0 24px 50px;}
+
+  .verdict-box{background:var(--card);border:1px solid var(--line-soft);border-left:5px solid var(--ink);border-radius:6px;padding:22px 26px;margin-top:6px;}
+  .verdict-box h3{font-family:var(--serif);font-size:17px;color:var(--ink-deep);margin-bottom:8px;}
+  .verdict-box p{font-size:14.2px;color:#3A3F46;}
+  .verdict-box b{color:var(--ink);}
+
+  .diag-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:8px;}
+  .diag{background:var(--card);border:1px solid var(--line-soft);border-top:3px solid var(--ink);padding:20px 22px;border-radius:4px;}
+  .diag h3{font-family:var(--serif);font-size:16px;color:var(--ink-deep);margin-bottom:8px;}
+  .diag p{font-size:13.8px;color:#4A4E55;}
+  .diag .evi{display:block;margin-top:10px;font-size:12.3px;color:var(--gray);border-left:3px solid var(--line);padding-left:10px;}
+
+  .matrix{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line-soft);margin-top:10px;font-size:13.6px;}
+  .matrix th{background:var(--ink-deep);color:#F2EFE6;text-align:left;padding:11px 14px;font-weight:500;font-size:13px;white-space:nowrap;}
+  .matrix td{padding:13px 14px;border-top:1px solid var(--line-soft);vertical-align:top;}
+  .matrix tr:hover td{background:#F4F3ED;}
+  .fn-name{font-weight:600;color:var(--ink-deep);font-size:14px;white-space:nowrap;}
+  .fn-tag{display:inline-block;font-size:12px;padding:3px 11px;border-radius:20px;font-weight:500;white-space:nowrap;}
+  .tag-keep{background:var(--keep-bg);color:var(--keep);}
+  .tag-hide{background:var(--hide-bg);color:var(--hide);}
+  .tag-out{background:var(--out-bg);color:var(--out);}
+  .tag-add{background:var(--add-bg);color:var(--add);}
+  .fn-reason{color:#4A4E55;}
+  .fn-ev{display:block;margin-top:6px;font-size:12px;color:var(--gray);}
+  .grp{background:#F1EFE7;font-weight:600;color:var(--ink-deep);font-size:12.6px;letter-spacing:.05em;}
+
+  .gap{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;}
+  .gap-card{background:var(--card);border:1px solid var(--line-soft);border-radius:6px;padding:20px 22px;}
+  .gap-card h3{font-size:16px;color:var(--ink-deep);margin-bottom:8px;font-weight:600;}
+  .gap-card .st{display:inline-block;font-size:12px;padding:2px 10px;border-radius:12px;margin-bottom:10px;font-weight:500;}
+  .gap-card p{font-size:13.6px;color:#4A4E55;margin-bottom:8px;}
+  .gap-card .act{margin-top:10px;border-top:1px dashed var(--line);padding-top:10px;font-size:13px;color:var(--ink);font-weight:500;}
+
+  .add-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;}
+  .add{background:var(--card);border:1px solid var(--line-soft);border-left:4px solid var(--add);padding:18px 20px;border-radius:4px;}
+  .add h3{font-size:15.5px;color:var(--ink-deep);margin-bottom:6px;font-weight:600;}
+  .add p{font-size:13.4px;color:#4A4E55;}
+  .add .why{margin-top:8px;font-size:12.4px;color:var(--gray);}
+
+  .tl{--date:92px;--axis:36px;--gap:16px;margin-top:14px;}
+  .tl-item{display:grid;grid-template-columns:var(--date) var(--axis) 1fr;gap:0 var(--gap);position:relative;padding-bottom:26px;}
+  .tl-item::before{content:"";position:absolute;left:calc(var(--date) + var(--gap) + var(--axis)/2);top:26px;bottom:0;width:2px;background:var(--line);}
+  .tl-item:last-child::before{display:none;}
+  .tl-phase{font-family:var(--serif);font-weight:700;font-size:15px;color:var(--ink);text-align:right;padding-top:16px;}
+  .tl-dot{grid-column:2;justify-self:center;align-self:start;width:12px;height:12px;border-radius:50%;background:var(--ink);border:2px solid var(--paper);margin-top:20px;box-sizing:border-box;}
+  .tl-body{background:var(--card);border:1px solid var(--line-soft);border-radius:6px;padding:16px 20px;}
+  .tl-body h4{font-size:15px;color:var(--ink-deep);margin-bottom:6px;font-weight:600;}
+  .tl-body ul{list-style:none;}
+  .tl-body li{font-size:13.4px;color:#3A3F46;padding:3px 0 3px 18px;position:relative;}
+  .tl-body li::before{content:"·";position:absolute;left:2px;color:var(--ink);font-weight:700;}
+
+  .closing{margin:40px 0 60px;background:var(--ink-deep);color:#F2EFE6;border-radius:8px;padding:34px 38px;}
+  .closing h2{font-family:var(--serif);font-size:22px;margin-bottom:10px;font-weight:600;}
+  .closing p{color:#C7D5CE;font-size:14.5px;max-width:800px;}
+  .closing .verdict{margin-top:16px;border-top:1px solid rgba(242,239,230,.2);padding-top:14px;font-size:15px;color:#fff;font-weight:500;}
+
+  footer{padding:30px 0 46px;color:var(--gray);font-size:12.6px;border-top:1px solid var(--line-soft);}
+  .legend{display:flex;gap:22px;flex-wrap:wrap;font-size:12.6px;color:var(--gray);margin-bottom:12px;}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;}
+
+  @media (max-width:720px){
+    .diag-grid,.add-grid,.t-core,.gap{grid-template-columns:1fr;}
+    .stats{display:grid;grid-template-columns:repeat(2,1fr);}
+    .matrix{display:block;overflow-x:auto;}
+    .tl{--date:70px;--axis:24px;--gap:10px;}
+    .tl-phase{font-size:13.5px;padding-top:14px;}
+    .tl-dot{margin-top:18px;}
+    .sec-sub{margin-left:0;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap head-inner">
+    <div class="kicker">功能评估与缝合方案 · 体检单</div>
+    <h1>青田·心理自习室<br>功能评估与缝合方案</h1>
+    <p class="headline">这个技能刚做完 v2.0「即用即走」改造：一键默认开跑、单推荐、阶段制、组队已删——主体结构是健康的，与「自媒体内容生成器」不同，不需要大手术。它的问题是「体检时发现的伤口没缝合」：三份模板成了死文件、承诺过的可视化进度页从未交付。本方案：确认健康的部分，缝合剩余缺口。</p>
+    <div class="stats">
+      <div class="stat"><b>20 KB</b><span>SKILL.md（14 章）</span></div>
+      <div class="stat"><b>8+1</b><span>主处理器（含危机）</span></div>
+      <div class="stat"><b>5</b><span>对话状态</span></div>
+      <div class="stat"><b>17 / 21</b><span>流派 / 量表</span></div>
+      <div class="stat"><b>2</b><span>未缝合缺口</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section id="verdict">
+    <div class="verdict-box">
+      <h3>总判断：健康，剩三处未收尾</h3>
+      <p>v2.0 已把该做的治理做完了——<b>入口收敛</b>（一键默认开跑 + 单推荐）、<b>概念简化</b>（周制→阶段制）、<b>冗余删除</b>（组队已清、状态机 13→5、处理器 19→8）。本轮评估结果是：<b>主流程 8 个处理器全部适合对话，零删除</b>；真正要处理的是 <b>3 个死模板、1 个缺失的进度页、2 处体验闭环</b>。</p>
+    </div>
+  </section>
+
+  <!-- 01 能力裁决 -->
+  <section id="matrix">
+    <div class="sec-head"><span class="sec-no">01</span><h2 class="sec-title">全部能力逐个裁决</h2></div>
+    <p class="sec-sub">判定标准：是否由对话驱动、是否与阶段制一致、是否兑现了承诺。</p>
+    <table class="matrix">
+      <thead><tr><th>能力</th><th>处置</th><th>判断理由</th></tr></thead>
+      <tbody>
+        <tr class="grp"><td colspan="3">主处理器 · 全部保留（对话天然适合）</td></tr>
+        <tr>
+          <td class="fn-name">learn / practice / assess<br>record / daily / summary</td>
+          <td><span class="fn-tag tag-keep">保留 · 主流程</span></td>
+          <td class="fn-reason">六件日常动作全部是 LLM 强项：讲理论、带练习、出题计分、认知记录、单推荐、阶段总结。v2 已是「说一个词就开跑」，无需改动。<span class="fn-ev">证据：处理器 19→8 已收敛，daily 单推荐已默认</span></td>
+        </tr>
+        <tr>
+          <td class="fn-name">query / crisis</td>
+          <td><span class="fn-tag tag-keep">保留 · 主流程</span></td>
+          <td class="fn-reason">进度查询是低开销对话；危机识别必须保留在对话第一线（热线单源 + 情绪急救包）。<span class="fn-ev">crisis 处理器 + resources/crisis-resources.md 为最高优先级护栏</span></td>
+        </tr>
+        <tr class="grp"><td colspan="3">隐藏能力 · 保留（低频但有用，命中即触发）</td></tr>
+        <tr>
+          <td class="fn-name">改配置 / 备份恢复 / 继续</td>
+          <td><span class="fn-tag tag-hide">保留 · 隐藏</span></td>
+          <td class="fn-reason">三个都是一句话能力，不占菜单、不污染主流程，语义命中才触发。<span class="fn-ev">tools/progress-backup.py（导出/导入）+ resume 状态恢复</span></td>
+        </tr>
+        <tr>
+          <td class="fn-name">暴露练习（exposure）</td>
+          <td><span class="fn-tag tag-hide">保留 · 隐藏</span></td>
+          <td class="fn-reason">CBT 渐进暴露教学演示，安全边界严（创伤/惊恐/自伤人群禁用、SUDS≥8/10 停）。作为 practice 的隐藏辅助合理，不单独计进度。<span class="fn-ev">modules/exposure.md 四步流程 + 安全筛查</span></td>
+        </tr>
+        <tr class="grp"><td colspan="3">内容资产 · 保留（已是正确结构）</td></tr>
+        <tr>
+          <td class="fn-name">17 流派 TPR · 21 量表<br>11 模块库 · 案例/书单/影视库</td>
+          <td><span class="fn-tag tag-keep">保留 · 按需加载</span></td>
+          <td class="fn-reason">对话层只暴露「练」「测」两个动作，内容按需加载——这正是 v2 的集成机制（十三节加载指南），结构正确，不动。<span class="fn-ev">practice/ 41 文件 + assessment/ 21 量表 + resources/ 4 库</span></td>
+        </tr>
+        <tr class="grp"><td colspan="3">需清理 · 死资产（v2 重构的遗留）</td></tr>
+        <tr>
+          <td class="fn-name">weekly-review.md<br>monthly-review.md</td>
+          <td><span class="fn-tag tag-out">归档</span></td>
+          <td class="fn-reason">「周回顾」「月反思」模板绑定的周/月概念已被阶段制取代，v2 的 summary 处理器不再读它们，零引用。归档或删除，避免与阶段制并存造成混淆。<span class="fn-ev">已核实：SKILL.md 及全部文档零引用</span></td>
+        </tr>
+        <tr>
+          <td class="fn-name">reflection-diary.md</td>
+          <td><span class="fn-tag tag-add">接入</span></td>
+          <td class="fn-reason">「反思日记」模板与阶段总结天然兼容（阶段总结=多次反思的汇总），应挂到 summary 处理器，写阶段总结时作为引导模板。<span class="fn-ev">当前零引用；summary 已有 summaryPrompt，模板补结构化引导</span></td>
+        </tr>
+        <tr class="grp"><td colspan="3">需补充 · 承诺未兑现</td></tr>
+        <tr>
+          <td class="fn-name">学习进度汇总.html</td>
+          <td><span class="fn-tag tag-add">补交付</span></td>
+          <td class="fn-reason">README、tools/progress-tracker.md、审查报告都声明它是独立可视化进度页，但项目内没有该文件。兑现承诺：读 progress.json（阶段制字段）渲染进度页。<span class="fn-ev">README 已知边界：「进度仪表盘的可视化由独立 HTML 承担」——文件不存在</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 02 两个缺口 -->
+  <section id="gap">
+    <div class="sec-head"><span class="sec-no">02</span><h2 class="sec-title">两处缺口，缝合方式</h2></div>
+    <p class="sec-sub">一个来自 v2 重构时的引用丢失，一个来自从未交付的承诺。</p>
+    <div class="gap">
+      <div class="gap-card">
+        <span class="st" style="background:var(--out-bg);color:var(--out);">缺口 A · 死文件</span>
+        <h3>三份模板无人认领</h3>
+        <p>weekly-review / monthly-review 绑定的「周」「月」概念已废除，与阶段制矛盾；reflection-diary 本可以服务阶段总结，却没接上。</p>
+        <div class="act">处置：weekly/monthly 移入归档（或删除）；reflection-diary 挂到 summary 处理器，写阶段总结时给三栏引导：本阶段学了什么 / 卡在哪 / 下一步调什么。</div>
+      </div>
+      <div class="gap-card">
+        <span class="st" style="background:var(--add-bg);color:var(--add);">缺口 B · 承诺未兑现</span>
+        <h3>学习进度汇总.html 缺失</h3>
+        <p>文档承诺了独立可视化进度页，但项目里没有这个文件——进度目前只能看 query 的文字摘要。</p>
+        <div class="act">处置：新建单文件 HTML，读 progress.json 渲染：六阶段进度条、七大模块完成度、经验/等级、情绪趋势（moodLog）、里程碑点亮。浏览器直接打开。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 补充建议 -->
+  <section id="add">
+    <div class="sec-head"><span class="sec-no">03</span><h2 class="sec-title">顺带补三块体验拼图</h2></div>
+    <p class="sec-sub">不新增功能负担，只把已有数据的价值用起来。</p>
+    <div class="add-grid">
+      <div class="add">
+        <h3>打卡闭环</h3>
+        <p>学完/练完/测完后自然提示一句打卡（totalDays + moodLog 顺手记），让「坚持」成为可见数据，而不是靠用户自觉登记。</p>
+        <div class="why">已有 totalDays / moodLog 字段，缺的是处理器里的顺手提示动作。</div>
+      </div>
+      <div class="add">
+        <h3>阶段切换仪式</h3>
+        <p>阶段总结通过、进入下一阶段时，点亮里程碑（m1–m10）并给一句「下一阶段换挡提示」，让完成感可感知。</p>
+        <div class="why">milestones 与阶段制已就绪，缺展示与点亮时机的话语引导。</div>
+      </div>
+      <div class="add">
+        <h3>情绪趋势入进度页</h3>
+        <p>moodLog 已有数据，进度页里加一条情绪趋势（近 14 条折线），让用户看见自己情绪曲线的方向。</p>
+        <div class="why">与缺口 B 一并交付，进度页一个文件同时承担进度与情绪两类可视化。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 落地顺序 -->
+  <section id="plan">
+    <div class="sec-head"><span class="sec-no">04</span><h2 class="sec-title">落地顺序：三小步，当天可完</h2></div>
+    <p class="sec-sub">每步独立可验证、可回退；不改任何处理器行为，只补缺失与接线。</p>
+    <div class="tl">
+      <div class="tl-item">
+        <div class="tl-phase">P0 补承诺</div>
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <h4>学习进度汇总.html</h4>
+          <ul>
+            <li>读 progress.json（阶段制字段 currentStage/stageCompleted/modules/stats/xp/moodLog）</li>
+            <li>六阶段进度条 + 七大模块完成度 + 经验等级 + 情绪趋势 + 里程碑点亮</li>
+            <li>单文件 HTML，浏览器直接打开；README 中「独立进度页」声明落实</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-phase">P1 清死资产</div>
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <h4>三模板处置</h4>
+          <ul>
+            <li>weekly-review.md / monthly-review.md 移入归档目录（标注阶段制替代说明）</li>
+            <li>reflection-diary.md 接入：SKILL.md 第八节 summary 处理器补一行「读 tools/templates/reflection-diary.md 作引导」</li>
+            <li>同步 README 目录说明，消除「模板与阶段制并存」的混淆</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-phase">P2 接闭环</div>
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <h4>打卡提示 + 阶段仪式</h4>
+          <ul>
+            <li>learn/practice/record 收尾各加一行「顺手打卡」提示（totalDays/moodLog）</li>
+            <li>summary 通过时点亮里程碑 + 换挡提示</li>
+            <li>selftest / 回归补两条断言（模板引用存在、进度页文件存在）</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="closing">
+    <h2>一句话结论</h2>
+    <p>心理自习室不需要第二个「v3 手术」——它已经在正确的路上。剩下的是把体检发现的三处伤口缝合：<b>兑现进度页的承诺、清掉与阶段制矛盾的死模板、把反思模板和打卡闭环接回对话</b>。做完这些，这个技能就是干净的「即用即走」状态。</p>
+    <div class="verdict">裁决速览：保留 10（8 主 + crisis + 隐藏能力）· 归档 2（周/月模板）· 接入 1（反思模板）· 补交付 1（进度页）· 体验增强 3（打卡/仪式/情绪趋势）</div>
+  </div>
+
+  <div class="legend">
+    <span><i style="background:var(--keep)"></i>保留 · 主流程</span>
+    <span><i style="background:var(--hide)"></i>保留 · 隐藏能力</span>
+    <span><i style="background:var(--out)"></i>归档 / 清理</span>
+    <span><i style="background:var(--add)"></i>接入 / 补充</span>
+  </div>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>本方案基于对 SKILL.md（v2.0.0，14 章）、11 个模块、17 流派 TPR、21 量表、tools 与 tests 的逐文件核查，以及 v2.0 改造与组队删除后的回归记录（5/5 通过）。所有处置均指文件层与入口层，不影响已保存的用户进度（.workbuddy/psychology-study/progress.json）。</p>
+  </div>
+</footer>
+
+</body>
+</html>

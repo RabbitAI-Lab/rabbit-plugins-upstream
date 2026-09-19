@@ -1,43 +1,59 @@
-## Description: <br>
-Helps agents query and filter Shopify product opportunities by keyword or URL, price, weekly sales, listing date, Facebook ads, competition, supplier availability, and shipping country. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Shopify商品查询 helps agents search and filter Shopify products by keyword or URL, price, weekly sales, listing date, Facebook ads, competition, supplier availability, and shipping country.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and developers use this skill to research Shopify products and stores, compare sales and advertising signals, and narrow ecommerce product selections through LinkFox API queries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may install a separate onboarding skill from an external ZIP while resolving authentication or credit issues. <br>
-Mitigation: Require explicit user authorization and separate verification before downloading or installing external onboarding content. <br>
-Risk: Full API responses may be saved in local linkfox directories, including workspace, home, or temporary fallback locations. <br>
-Mitigation: Warn users before execution, avoid sensitive product-research queries when unnecessary, and remove saved response files when they are no longer needed. <br>
-Risk: LinkFox credits are consumed dynamically based on returned product count, so broad queries or pagination can cost more than expected. <br>
-Mitigation: Confirm credit consumption with the user before running and prefer narrow filters or smaller page sizes for exploratory searches. <br>
+## Use Case:
 
+External users and ecommerce operators use this skill to research Shopify products for independent-store selection, dropshipping analysis, and competitive product comparison.
 
-## Reference(s): <br>
-- [Shopify Product Query API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopify-product-query) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Files] <br>
-**Output Format:** [Markdown guidance with JSON request parameters, API response summaries, and optional saved JSON response files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Small responses may be printed inline; larger responses are summarized while full responses are saved in local linkfox session directories.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata) <br>
+Risk: The skill handles LinkFox account login, API key generation, paid-plan ordering, and payment QR creation in addition to Shopify product lookup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation before login, API-key generation, package purchase, or payment QR creation.
+
+Risk: API keys, SMS codes, and LINKFOX_* environment variables can expose account or billing access if entered into retained logs or untrusted environments.
+
+Mitigation: Use trusted environments, avoid untrusted LINKFOX_* variables, do not paste secrets into retained transcripts, and prefer secure credential storage.
+
+Risk: Product-query responses and cached results may be stored in local workspace files.
+
+Mitigation: Run the skill in a trusted workspace and review or remove local linkfox output files when search results contain sensitive business research.
+
+## Reference(s):
+
+- [Shopify Product Query API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopify-product-query)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown guidance with JSON command outputs and local JSON result files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Product-query responses may be summarized for large result sets while the full JSON response is written locally.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

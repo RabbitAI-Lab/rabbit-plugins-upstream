@@ -1,41 +1,60 @@
-## Description: <br>
-Use this skill for MailerLite requests involving reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MailerLite (mailerlite.com). Use this skill for MailerLite requests that read, create, update, or delete data through the OOMOL MailerLite connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage MailerLite subscribers, groups, fields, and group membership through an OOMOL-connected MailerLite account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change MailerLite account state, including creating, updating, assigning, removing, or deleting subscribers and groups. <br>
-Mitigation: Confirm the exact action, payload, and subscriber or group target before approving write or destructive commands. <br>
-Risk: The skill requires a trusted OOMOL connection to a MailerLite account. <br>
-Mitigation: Only complete the oo CLI and OOMOL connection flow for accounts the user intends to let the agent manage. <br>
+## Use Case:
 
+Developers and operators use this skill to manage MailerLite subscribers, groups, group membership, and account fields through an OOMOL-connected MailerLite account.
 
-## Reference(s): <br>
-- [MailerLite homepage](https://www.mailerlite.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands return JSON data and execution metadata from the MailerLite connector.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: First-time setup includes remote installer commands for the OOMOL CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the OOMOL CLI installation path and do not run remote installer commands automatically.
+
+Risk: MailerLite subscriber and account operation data may be routed through OOMOL-connected services.
+
+Mitigation: Connect MailerLite only when the user accepts that routing model and the account has appropriate access for the requested task.
+
+Risk: Write and destructive actions can change or delete MailerLite groups, subscribers, or group memberships.
+
+Mitigation: Require explicit user confirmation of the target, payload, and expected effect before running any write or destructive action.
+
+## Reference(s):
+
+- [ClawHub MailerLite skill page](https://clawhub.ai/oomol/skills/oo-mailerlite)
+- [MailerLite homepage](https://www.mailerlite.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL MailerLite connection page](https://console.oomol.com/app-connections?provider=mailerlite)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with shell commands and JSON command payloads or results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before payload construction and requires confirmation before write or destructive actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

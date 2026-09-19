@@ -1,42 +1,57 @@
-## Description: <br>
-AlgoDocs lets agents read, create, and update AlgoDocs data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AlgoDocs helps agents operate AlgoDocs through an OOMOL-connected account to read extracted document data, list account resources, and upload public document URLs.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate AlgoDocs from an agent session: inspect schemas, list extractors, folders, and extracted data, fetch document records, check account identity, and import public document URLs after confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use a connected AlgoDocs account for account-scoped reads and one confirmed write action. <br>
-Mitigation: Install it only when AlgoDocs account access is intended, and confirm the exact upload payload and expected effect before running write actions. <br>
-Risk: Broad or vague AlgoDocs mentions could trigger connector use when the user only wants general information. <br>
-Mitigation: Use the skill for explicit AlgoDocs account operations, and avoid invoking it for general AlgoDocs background questions. <br>
+## Use Case:
 
+External users and developers use this skill to operate AlgoDocs from an agent through the OOMOL `oo` CLI. It supports reading extractors, folders, extracted data, account identity, and importing a public document URL into AlgoDocs after confirmation.
 
-## Reference(s): <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [AlgoDocs homepage](https://algodocs.com) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON payload notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI to inspect connector schemas before running account-scoped AlgoDocs actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release metadata and skill metadata) <br>
+Risk: Setup instructions include remote installer commands, which creates supply-chain risk if run without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer the official install guide and verify package integrity with available checksums or signatures before installing the `oo` CLI.
+
+Risk: `upload_document_from_url` changes AlgoDocs account state by importing a document URL.
+
+Mitigation: Confirm the exact URL, extractor, folder, and expected effect with the user before running the upload action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-algo-docs)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+- [AlgoDocs homepage](https://algodocs.com)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses `oo connector schema` to inspect action contracts before constructing connector payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

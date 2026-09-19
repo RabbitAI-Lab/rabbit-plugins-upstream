@@ -1,0 +1,570 @@
+{
+  "id": "SDS",
+  "name": "抑郁自评量表（SDS，Zung）",
+  "short_name": "SDS 抑郁自评（中国常模）",
+  "category": "抑郁",
+  "target_population": "成年人",
+  "estimated_time": "约 4 分钟",
+  "item_count": 20,
+  "description": "Zung 抑郁自评量表中文版，20 题，10 道反向计分题（q2, q5, q6, q11, q12, q14, q16, q17, q18, q20）。原始分 ×1.25 得标准分，按标准分判级。",
+  "source": "Zung, 1965；中文版王征宇 1984",
+  "license": "学术使用，商业需授权",
+  "scoring_type": "sum",
+  "items": [
+    {
+      "id": "q1",
+      "text": "我感到情绪沮丧，郁闷。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "我感到早晨心情最好。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "我要哭或想哭。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "我夜间睡眠不好。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q5",
+      "text": "我吃饭像平时一样多。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q6",
+      "text": "我的性功能正常（无实际障碍前提下）。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q7",
+      "text": "我感到体重减轻。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q8",
+      "text": "我为便秘而苦恼。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q9",
+      "text": "我的心跳比平时快。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "text": "我无故感到疲劳。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "text": "我的头脑像往常一样清楚。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "text": "我做事情像平时一样不感到困难。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "text": "我坐卧不安，难以保持平静。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "text": "我对未来感到有希望。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "text": "我比平时更容易激怒。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "text": "我觉得决定什么事很容易。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "text": "我感到自己是有用的和不可缺少的人。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "text": "我的生活很有意义。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "text": "假若我死了别人会过得更好。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q20",
+      "text": "我仍旧喜爱自己平时喜爱的东西。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    }
+  ],
+  "dimensions": [
+    {
+      "name": "原始总分",
+      "items": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7",
+        "q8",
+        "q9",
+        "q10",
+        "q11",
+        "q12",
+        "q13",
+        "q14",
+        "q15",
+        "q16",
+        "q17",
+        "q18",
+        "q19",
+        "q20"
+      ],
+      "max": 80,
+      "min": 20
+    }
+  ],
+  "standard_score": {
+    "slope": 1.25,
+    "intercept": 0,
+    "dimension": "原始总分"
+  },
+  "interpretation": {
+    "bands": [
+      {
+        "dimension": "原始总分",
+        "min": 25,
+        "max": 52.99,
+        "level": "正常",
+        "summary": "标准分在正常范围，无明显抑郁倾向。",
+        "advice": "保持即可。"
+      },
+      {
+        "dimension": "原始总分",
+        "min": 53,
+        "max": 62.99,
+        "level": "轻度抑郁",
+        "summary": "标准分提示轻度抑郁。",
+        "advice": "关注情绪与睡眠，增加支持；持续两周以上建议心理咨询。"
+      },
+      {
+        "dimension": "原始总分",
+        "min": 63,
+        "max": 72.99,
+        "level": "中度抑郁",
+        "summary": "标准分提示中度抑郁，症状较明显。",
+        "advice": "建议心理咨询或就诊评估。"
+      },
+      {
+        "dimension": "原始总分",
+        "min": 73,
+        "max": 100,
+        "level": "重度抑郁",
+        "summary": "标准分提示重度抑郁。",
+        "advice": "建议尽快到精神科/心理科规范评估与治疗。"
+      }
+    ]
+  },
+  "safety": {
+    "crisis_items": [],
+    "crisis_rule": "",
+    "high_risk_rule": ""
+  }
+}

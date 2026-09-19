@@ -1,44 +1,55 @@
-## Description: <br>
-ntfy lets agents inspect ntfy connector schemas, retrieve account profile and usage details, and publish notification messages through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+The ntfy skill lets agents inspect ntfy connector schemas, retrieve account details, and publish notifications through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate ntfy through an OOMOL-connected account, including account checks and notification publishing. It is suited for workflows that need ntfy messages without directly handling raw API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A publish_message action can send a notification to the wrong topic or with the wrong payload. <br>
-Mitigation: Confirm the exact topic, message, and payload with the user before running publish_message. <br>
-Risk: The skill depends on OOMOL as the credential broker for ntfy access. <br>
-Mitigation: Use the skill only when the user is comfortable with OOMOL-managed credentials and the required ntfy connection. <br>
-Risk: First-time setup may require installing the oo CLI with a platform-specific install command. <br>
-Mitigation: Review the oo CLI install command before running it, and perform setup only after an auth, connection, or missing-command failure. <br>
+## Use Case:
 
+Developers and agent users use this skill to operate ntfy through an OOMOL-connected account, including account inspection and notification publishing. It is useful when an agent needs connector-backed ntfy access without handling raw credentials directly.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-ntfy) <br>
-- [ntfy homepage](https://ntfy.sh) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include oo CLI commands, connector schema guidance, and confirmation prompts for write actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill metadata) <br>
+Risk: Setup instructions include online installer commands that execute downloaded shell or PowerShell scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI manually through a trusted and verifiable path before using the skill.
+
+Risk: The publish_message action changes ntfy state by sending a notification to a topic.
+
+Mitigation: Require explicit user confirmation of the exact topic, message, and expected effect before publishing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-ntfy)
+- [ntfy homepage](https://ntfy.sh)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline bash, PowerShell, and JSON command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector actions return JSON with data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

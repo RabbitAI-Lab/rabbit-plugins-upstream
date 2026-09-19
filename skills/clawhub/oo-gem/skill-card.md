@@ -1,45 +1,61 @@
-## Description: <br>
-Gem helps agents search and read Gem CRM data through an OOMOL-connected account using the oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses the OOMOL oo CLI Gem connector to search and read Gem CRM data through an authenticated OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect Gem connector schemas and run read-oriented Gem CRM actions such as listing candidates, projects, sequences, users, and custom fields. It is intended for users with an OOMOL-connected Gem account and appropriate Gem access scopes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent can read Gem CRM data available to the connected OOMOL account. <br>
-Mitigation: Install and use the skill only when CRM read access is intended, and review Gem and OOMOL scopes before connecting or refreshing credentials. <br>
-Risk: First-time setup may require installing the oo CLI and connecting a Gem API key in OOMOL. <br>
-Mitigation: Run setup only after an auth, connection, scope, credential, or missing-CLI failure, and use the documented OOMOL setup path for the Gem connection. <br>
-Risk: Invalid connector payloads can cause failed requests or unexpected reads. <br>
-Mitigation: Inspect the live connector schema with `oo connector schema` before constructing each action payload. <br>
+## Use Case:
 
+Developers and operators use this skill to let an agent inspect Gem connector schemas and run read-oriented Gem CRM actions for candidates, projects, sequences, users, custom fields, and project memberships.
 
-## Reference(s): <br>
-- [Gem homepage](https://www.gem.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-gem) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill directs agents to inspect live connector schemas before sending JSON payloads and returns connector responses as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Setup guidance includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not allow the agent to run installer commands automatically; install the oo CLI only from a trusted source, preferably with a pinned version and verified checksum or signature.
+
+Risk: Authentication and Gem connection setup can open account access or billing workflows.
+
+Mitigation: Have the user confirm login, connection, billing, and credential-recovery steps manually before any command or browser action is taken.
+
+Risk: Connector request payloads can drift from the live Gem connector contract.
+
+Mitigation: Inspect the live action schema with `oo connector schema` before constructing each payload.
+
+## Reference(s):
+
+- [ClawHub Gem skill page](https://clawhub.ai/oomol/skills/oo-gem)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Gem homepage](https://www.gem.com)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the oo CLI and return connector JSON responses when run with --json.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

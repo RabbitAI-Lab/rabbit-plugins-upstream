@@ -1,44 +1,60 @@
-## Description: <br>
-ImageKit helps an agent list, inspect, purge, and delete ImageKit media assets through the OOMOL ImageKit connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agent guidance for managing ImageKit assets through the OOMOL oo CLI connector, including listing assets, retrieving metadata, purging cache, and deleting files with confirmation for destructive actions.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage ImageKit media library assets from an agent session, including search, metadata lookup, cache purge, purge status checks, and file deletion with confirmation controls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad ImageKit prompts could be interpreted as permission to take account-impacting actions. <br>
-Mitigation: Treat the trigger narrowly and confirm the exact payload and intended effect before approving write, purge, or delete actions. <br>
-Risk: The skill requires sensitive ImageKit-connected credentials through the OOMOL account connection. <br>
-Mitigation: Install it only for users who intend to manage ImageKit resources and keep credential handling inside the configured OOMOL connection. <br>
-Risk: Destructive actions can permanently delete files or purge cached content. <br>
-Mitigation: Require explicit user approval for destructive targets and verify identifiers or URLs before execution. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect and manage ImageKit media-library assets through an OOMOL-connected account. It supports read workflows such as listing assets and metadata lookup, plus cache purge and file deletion workflows that require explicit confirmation.
 
-## Reference(s): <br>
-- [ImageKit homepage](https://imagekit.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub release page](https://clawhub.ai/oomol/oo-imagekit) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON when actions are run with the oo CLI --json flag.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Setup guidance includes remote installer commands that could execute changing code on a user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source before use, and prefer an official pinned installer or package-manager flow with checksum or signature verification.
+
+Risk: Some supported ImageKit actions purge cache or permanently delete files and all versions.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running destructive actions.
+
+Risk: Inline JSON command payloads can be fragile when they contain user-supplied text.
+
+Mitigation: Use file-based JSON payloads for values that may contain user-supplied text.
+
+## Reference(s):
+
+- [ClawHub ImageKit skill](https://clawhub.ai/oomol/skills/oo-imagekit)
+- [ImageKit homepage](https://imagekit.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON command payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector actions return JSON-shaped responses when executed through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

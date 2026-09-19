@@ -1,46 +1,59 @@
-## Description: <br>
-Searches the MPSTATS Ozon Russia database by Russian keyword or SKU and returns product identity fields such as product ID, title, brand, seller, image URL, and product page URL. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches MPSTATS data for Ozon Russia products by Russian keyword or SKU and returns product identity details such as product ID, title, brand, seller, page URL, and image URL.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External marketplace analysts, e-commerce operators, and agent users can use this skill to find or reverse-lookup Ozon Russia products before deciding whether to run deeper product, brand, seller, category, or trend analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill makes LinkFox API calls that may consume account credits. <br>
-Mitigation: Confirm the search parameters and expected credit use before running calls, especially when retrying or changing keywords. <br>
-Risk: Full search responses are stored locally and may include product, seller, or session-related metadata. <br>
-Mitigation: Review the saved JSON location and handle those files according to the workspace's data retention and sharing requirements. <br>
-Risk: The security scan notes remote onboarding-skill installation guidance and feedback submission to a separate LinkFox service. <br>
-Mitigation: Review those behaviors before deployment and require user approval for installing additional skills or sending feedback where policy requires consent. <br>
+## Use Case:
 
+External commerce analysts, sellers, and agents use this skill to find or reverse-lookup Ozon Russia products before choosing product, brand, seller, or detail workflows for deeper analysis.
 
-## Reference(s): <br>
-- [MPSTATS Ozon Product Search API Reference](artifact/references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-mpstats-ozon-product-search) <br>
-- [Publisher Profile](https://clawhub.ai/user/linkfox-ai) <br>
-- [LinkFox Tool Gateway Product Search Endpoint](https://tool-gateway.linkfox.com/mpstats/ozon/productSearch) <br>
-- [LinkFox Feedback API](https://skill-api.linkfox.com/api/v1/public/feedback) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON parameters, shell command examples, and JSON response summaries or saved response files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are saved to local JSON files; small responses may also be printed inline, while larger responses are summarized.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: The security evidence says the skill can collect phone and SMS login information, generate and persist API keys, and create billing or payment orders.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only trusted LinkFox credentials, avoid storing secrets in shared shell profiles, and run onboarding or billing flows only when the user intentionally requests those account actions.
+
+Risk: The security evidence says the skill can write response and QR data to disk and send feedback externally.
+
+Mitigation: Review local output paths before sharing workspaces and confirm external feedback reporting is acceptable for the use case.
+
+Risk: The security evidence warns that environment variables can redirect LinkFox hosts.
+
+Mitigation: Verify LinkFox environment variables point to official HTTPS LinkFox hosts before using the skill.
+
+## Reference(s):
+
+- [MPSTATS Ozon Product Search Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-mpstats-ozon-product-search)
+- [MPSTATS Ozon 商品搜索 API 参考](references/api.md)
+- [解决认证和算力问题](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, JSON files]
+
+**Output Format:** [Markdown guidance with shell commands plus JSON API responses or saved JSON files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The product search flow can write full responses to a local linkfox session directory, use a 24-hour local cache, and summarize large responses in stdout.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

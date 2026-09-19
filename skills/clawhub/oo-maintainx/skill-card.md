@@ -1,43 +1,56 @@
-## Description: <br>
-MaintainX (getmaintainx.com). Use this skill for any MaintainX request, including reading, creating, updating, and deleting data through the OOMOL MaintainX connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MaintainX enables agents to read, create, update, and delete MaintainX data through the OOMOL oo CLI and a connected MaintainX account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent retrieve and manage MaintainX locations, users, work orders, comments, and work order status through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change MaintainX data, including records, users, work order status, comments, and locations. <br>
-Mitigation: Require explicit user confirmation before write actions and destructive actions, including the exact target, payload, and expected effect. <br>
-Risk: The skill operates a MaintainX account through OOMOL. <br>
-Mitigation: Install it only for users who intend agent-operated MaintainX access through OOMOL, and review the oo CLI installation and OOMOL connection steps before approving setup. <br>
+## Use Case:
 
+Employees, external users, and developers use this skill to operate MaintainX locations, users, work orders, statuses, and comments from an agent-connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub MaintainX skill page](https://clawhub.ai/oomol/skills/oo-maintainx) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [MaintainX homepage](https://www.getmaintainx.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, JSON, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before running MaintainX actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence.release.version and SKILL.md metadata.version) <br>
+Risk: The setup flow can require running remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path first and prefer a verified package, pinned release, checksum, or signed installer.
+
+Risk: Create, update, and delete actions can change MaintainX records.
+
+Mitigation: Confirm the exact payload, target, and expected effect with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub MaintainX Skill](https://clawhub.ai/oomol/skills/oo-maintainx)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [MaintainX Homepage](https://www.getmaintainx.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

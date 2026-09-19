@@ -1,45 +1,56 @@
-## Description: <br>
-Logo.dev (logo.dev) helps an agent search Logo.dev brand records, retrieve structured brand metadata, and build logo image URLs through the OOMOL `logo_dev` connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Logo.dev enables agents to search Logo.dev brand data, retrieve structured brand metadata by domain, and build logo image URLs through the OOMOL logo_dev connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill when they want an agent to look up Logo.dev brand data or generate logo URLs for domains, brand names, crypto symbols, ISINs, and stock tickers. It is suited for read-oriented brand and logo lookup workflows that rely on an OOMOL-connected Logo.dev account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected Logo.dev account and may need first-time CLI installation, login, provider connection, or billing setup. <br>
-Mitigation: Treat setup, login, provider connection, and billing actions as user-approved prerequisites, and do not ask users to paste raw credentials into chat. <br>
-Risk: Connector schemas and Logo.dev action contracts can change over time. <br>
-Mitigation: Fetch the live connector schema before constructing each action payload. <br>
-Risk: Logo lookup results may be ambiguous when searching by brand name or query text. <br>
-Mitigation: Prefer precise identifiers such as domains, tickers, ISINs, or crypto symbols when available, and have the user confirm candidates before relying on ambiguous search results. <br>
+## Use Case:
 
+Employees, external users, developers, and agents use this skill to search Logo.dev brand records, look up brand metadata, and generate logo image URLs by domain, name, ticker, ISIN, or crypto symbol.
 
-## Reference(s): <br>
-- [ClawHub Logo.dev skill](https://clawhub.ai/oomol/oo-logo-dev) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Logo.dev homepage](https://logo.dev) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill produces read-oriented Logo.dev connector requests and may return structured brand data, logo image URLs, or setup guidance when authentication, connection, or billing prerequisites are missing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: First-time setup includes remote installer one-liners that execute downloaded shell or PowerShell content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer official, versioned installation instructions and inspect what the installer will execute before running it.
+
+Risk: Logo.dev actions depend on the current OOMOL connector schema and the user's authenticated Logo.dev connection state.
+
+Mitigation: Inspect the live connector schema before each action and run setup or connection steps only after a matching command failure.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-logo-dev)
+- [Logo.dev Homepage](https://logo.dev)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include Logo.dev connector command results with data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

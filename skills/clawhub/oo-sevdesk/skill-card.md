@@ -1,45 +1,57 @@
-## Description: <br>
-sevdesk (sevdesk.com). Use this skill for ANY sevdesk request: reading, creating, updating, and deleting data through the OOMOL sevdesk connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents handle sevdesk contact workflows through OOMOL's oo CLI connector, including reading, creating, updating, and deleting contact data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent manage sevdesk contacts through an OOMOL-connected sevdesk account. It supports reading contact records and, after confirmation, creating, updating, or deleting contacts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use a connected sevdesk account and may access sensitive contact data. <br>
-Mitigation: Install it only when you intend to let the agent use your OOMOL-connected sevdesk account. <br>
-Risk: Write and delete actions can change or remove sevdesk contact records. <br>
-Mitigation: Review confirmations carefully, especially contact identifiers and payload details, before allowing state-changing actions. <br>
-Risk: First-time setup may require installing the oo CLI. <br>
-Mitigation: Install the oo CLI only from the documented OOMOL source if prompted by an auth or connection failure. <br>
+## Use Case:
 
+External users and developers use this skill to operate sevdesk contacts through an OOMOL-connected account, including creating, reading, listing, updating, and deleting contact records.
 
-## Reference(s): <br>
-- [sevdesk homepage](https://sevdesk.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-sevdesk) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action payload construction; state-changing actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: First-time setup directs users to run remote installer scripts in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source before execution and prefer a pinned or verified oo CLI installation method.
+
+Risk: The skill can create, update, or delete sevdesk contact data.
+
+Mitigation: Confirm exact payloads, targets, and expected effects with the user before allowing write or destructive contact actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-sevdesk)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [sevdesk homepage](https://sevdesk.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

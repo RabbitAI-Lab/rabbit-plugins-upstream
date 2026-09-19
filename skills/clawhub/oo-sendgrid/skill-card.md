@@ -1,47 +1,56 @@
-## Description: <br>
-This skill helps agents read, create, and update SendGrid data through an OOMOL-connected SendGrid account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SendGrid helps agents inspect SendGrid account data, list transactional templates, and send transactional email through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect SendGrid account details, list transactional templates, check user scopes, and send transactional email through an OOMOL-connected SendGrid account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may operate a SendGrid account using sensitive connected credentials. <br>
-Mitigation: Install only if the user trusts OOMOL and wants this connector to operate the linked SendGrid service. <br>
-Risk: The optional first-time setup path includes remote installer commands. <br>
-Mitigation: Prefer official installation documentation or verify the installer before running remote scripts in a shell. <br>
-Risk: The send_email action changes external service state by sending transactional email. <br>
-Mitigation: Confirm the exact payload and effect with the user before running write actions. <br>
+## Use Case:
 
+Developers and teams using ClawHub agents use this skill to operate a connected SendGrid account, inspect account and template information, and send transactional email after confirming write payloads.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-sendgrid) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [SendGrid Homepage](https://sendgrid.com) <br>
-- [SendGrid Connection Setup](https://console.oomol.com/app-connections?provider=sendgrid) <br>
-- [SendGrid Icon](https://static.oomol.com/logo/third-party/SendGrid.svg) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May execute oo CLI connector actions that return JSON data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded shell or PowerShell scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the OOMOL CLI installation path before installation and prefer a signed or version-pinned installer with checksum verification.
+
+Risk: The send_email action can send transactional email from the connected SendGrid account.
+
+Mitigation: Confirm the exact recipients, message content, and SendGrid account context before allowing send_email actions.
+
+## Reference(s):
+
+- [ClawHub SendGrid skill page](https://clawhub.ai/oomol/skills/oo-sendgrid)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [SendGrid homepage](https://sendgrid.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, API Calls, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live SendGrid action schemas before request construction; write actions require confirmation of recipient, content, and account context.]
+
+## Skill Version(s):
+
+1.0.3 (source: skill frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

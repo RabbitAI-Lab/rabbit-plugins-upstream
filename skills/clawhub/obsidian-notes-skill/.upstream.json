@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/obsidian-notes-skill",
   "slug": "obsidian-notes-skill",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1784874954486,
-  "contentHash": "9a59869607dc70d6eb23c03c76b6fc7f535acbd3f1c074e455f1dd1dd250ca33",
-  "fetchedAt": "2026-07-26T18:05:37.259Z"
+  "version": "1.0.1",
+  "updatedAt": 1789721254179,
+  "contentHash": "bba5d42a2fa4ae65909b4fd057e2de3beed1a7c8c105b632028bee39cefcc3c9",
+  "fetchedAt": "2026-09-19T12:06:14.812Z"
 }

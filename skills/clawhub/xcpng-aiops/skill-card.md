@@ -1,47 +1,62 @@
-## Description: <br>
-Xcpng Aiops helps agents operate XCP-ng virtualization fleets through Xen Orchestra with fleet health summaries, infrastructure inventory, RCA workflows, and governed VM, storage, and snapshot actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+xcpng-aiops helps agents inspect and operate XCP-ng fleets through Xen Orchestra, covering fleet health, VM, host, pool, storage, snapshot, backup, and task views plus RCA workflows and governed writes.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, operators, and infrastructure teams use this skill to inspect and troubleshoot XCP-ng fleets managed by Xen Orchestra, including VM health, pool posture, storage pressure, snapshots, backups, and XO tasks. It can also propose and execute governed operational writes such as VM start, stop, reboot, migration, snapshot operations, and SR rescans. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact writes against XCP-ng infrastructure through the connected Xen Orchestra account. <br>
-Mitigation: Use a dedicated least-privileged or read-only Xen Orchestra user for triage, require dry-run previews, and obtain explicit human approval before destructive or disruptive actions. <br>
-Risk: Snapshot delete and revert operations are irreversible, and VM stop, reboot, or migration can disrupt running workloads. <br>
-Mitigation: Review the target UUIDs and current state before write tools run, prefer dry-run first, and confirm rollback options where the operation supports undo. <br>
-Risk: Stored Xen Orchestra credentials and master passwords can expose infrastructure control if shared or committed. <br>
-Mitigation: Keep the master password out of shared MCP configuration and source control, use the encrypted secret store, and rotate or revoke XO tokens when access changes. <br>
+## Use Case:
 
+Developers and infrastructure operators use this skill to triage and operate XCP-ng environments managed by Xen Orchestra. It is intended for fleet health checks, VM and storage RCA, backup failure analysis, patch and HA posture review, and guarded operational changes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/xcpng-aiops) <br>
-- [Project homepage](https://github.com/AIops-tools/XCPng-AIops) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
-- [Capabilities](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup and security guide](references/setup-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and structured JSON tool results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include triage findings, RCA explanations, dry-run previews, audit context, and configuration steps for the xcpng-aiops CLI or MCP server.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.0 (source: server release metadata) <br>
+Risk: The skill may run external package code with Xen Orchestra credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Pin and verify the xcpng-aiops package where possible, run it under a dedicated local account, and connect with a least-privilege XO user until write access is explicitly needed.
+
+Risk: VM, migration, and snapshot write actions can affect a live XCP-ng fleet, and snapshot delete or revert actions are irreversible.
+
+Mitigation: Start from read-only XO permissions for triage, require operator review before writes, use dry-run previews, and rely on CLI double confirmation for destructive actions.
+
+Risk: XO tokens and the master password can be exposed if placed in command lines or persistent configuration files.
+
+Mitigation: Use the encrypted secret store, keep secrets out of command arguments and durable config, and provide the master password only through controlled runtime environment handling.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/xcpng-aiops)
+- [Project homepage](https://github.com/AIops-tools/XCPng-AIops)
+- [xcpng-aiops - Capabilities](references/capabilities.md)
+- [xcpng-aiops - Setup & security guide](references/setup-guide.md)
+- [xcpng-aiops - CLI reference](references/cli-reference.md)
+- [Agent guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and structured command guidance, with JSON returned by CLI and MCP operations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce dry-run previews, RCA findings, audit-oriented guidance, and configuration snippets for Xen Orchestra connectivity.]
+
+## Skill Version(s):
+
+0.8.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

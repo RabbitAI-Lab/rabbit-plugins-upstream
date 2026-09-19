@@ -1,47 +1,67 @@
-## Description: <br>
-Tsearch-网页实时搜索 lets agents search the live web and retrieve extracted page content for current news, facts, Reddit and community discussions, product research, trends, and online references. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches the live web, extracts content from top results, and returns source material that an agent can summarize with citations.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and developers use this skill when an agent needs current online information, source pages, market or product research, recent news, community discussion, or other live web context. It is suited to summarizing retrieved web results with source titles and URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries, retrieved content, and feedback details may be sent to LinkFox services. <br>
-Mitigation: Avoid sensitive personal, financial, medical, credential, or proprietary searches unless LinkFox data handling and retention are acceptable. <br>
-Risk: The skill uses LinkFox credits and may incur user-visible cost. <br>
-Mitigation: Warn users before high-frequency use or when credit consumption may exceed expectations. <br>
-Risk: Full search responses may be stored on disk by the helper script. <br>
-Mitigation: Review the generated local response files and remove them when results contain sensitive or unnecessary retained content. <br>
-Risk: The skill may direct agents to install the LinkFox onboarding skill when credentials or credits are missing. <br>
-Mitigation: Review the onboarding download step and obtain user authorization before installing additional skills. <br>
+## Use Case:
 
+External users and agents use this skill when they need current online information, news, trends, Reddit or community discussion, product research, fact checks, or source-backed web retrieval.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-tsearch-search) <br>
-- [Publisher profile](https://clawhub.ai/user/linkfox-ai) <br>
-- [API reference](references/api.md) <br>
-- [LinkFox skill guide](https://skill.linkfox.com/linkfoxskills/guide.htm) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown summaries with source titles and URLs, plus JSON search responses or compact response summaries from the helper script.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a LinkFox API key, consumes LinkFox credits, can call LinkFox feedback, and may persist full search responses to local files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: LinkFox receives search queries and account or onboarding data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for queries and account workflows appropriate to share with LinkFox.
+
+Risk: Full search responses and payment QR artifacts may remain in local LinkFox data and cache files.
+
+Mitigation: Review and clean local LinkFox output directories when results or payment artifacts contain sensitive information.
+
+Risk: Endpoint override environment variables can redirect requests away from the default LinkFox services.
+
+Mitigation: Set override environment variables only for destinations that are fully trusted.
+
+Risk: Generated API keys can appear in logs or shell configuration during onboarding.
+
+Mitigation: Treat generated API keys as secrets and avoid sharing logs, terminal output, or shell configuration that contains them.
+
+Risk: The skill consumes paid credits for searches and includes billing flows.
+
+Mitigation: Confirm expected usage volume and credit cost before high-frequency calls.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-tsearch-search)
+- [Web search API reference](artifact/references/api.md)
+- [Authentication and billing onboarding guide](artifact/references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries and JSON search responses with titles, URLs, extracted content, and cost metadata.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Searches use a single keyword parameter up to 1000 characters; full responses may be written to local LinkFox data and cache files.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

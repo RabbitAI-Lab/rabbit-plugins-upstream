@@ -1,44 +1,60 @@
-## Description: <br>
-Operates Owl Protocol through an OOMOL-connected account to read project information, retrieve token metadata, and patch token metadata. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Owl Protocol (owlprotocol.xyz). Use this skill for Owl Protocol requests to read, create, and update data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Owl Protocol data through the OOMOL oo CLI, including reading project summaries, retrieving token metadata, and preparing confirmed metadata updates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to an OOMOL-connected Owl Protocol account. <br>
-Mitigation: Install and use it only when the agent is intended to operate that connected Owl Protocol account. <br>
-Risk: The patch_project_token action changes token metadata. <br>
-Mitigation: Review the exact payload and intended effect with the user before running write actions. <br>
-Risk: The optional first-time setup can run an external CLI installer. <br>
-Mitigation: Avoid the installer unless the oo CLI is needed and the OOMOL installer is trusted in the execution environment. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Owl Protocol action schemas, read project and token metadata, and patch token metadata through the OOMOL `oo` CLI after confirming write payloads.
 
-## Reference(s): <br>
-- [ClawHub Owl Protocol Skill](https://clawhub.ai/oomol/oo-owl-protocol) <br>
-- [Owl Protocol Homepage](https://owlprotocol.xyz) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, JSON] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands use the OOMOL oo CLI and return JSON responses from Owl Protocol connector actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Fallback setup includes remote installer commands that pipe downloaded scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install `oo` only through a verified, versioned vendor method and review installer contents before execution.
+
+Risk: `patch_project_token` changes Owl Protocol token metadata.
+
+Mitigation: Fetch the live action schema and require explicit user confirmation of the exact payload and intended effect before running write actions.
+
+Risk: Authentication, connection, or billing recovery steps can redirect the user into account setup flows.
+
+Mitigation: Run setup or recovery steps only after a matching command failure and avoid proactively opening login or connection URLs.
+
+## Reference(s):
+
+- [Owl Protocol homepage](https://owlprotocol.xyz)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub Owl Protocol skill](https://clawhub.ai/oomol/skills/oo-owl-protocol)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return connector JSON responses that include data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,62 @@
-## Description: <br>
-Sofagent adds an agent governance and reflection layer for keeping work scoped, checking risky actions, recording task outcomes, and preserving lessons across sessions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+FDE Skill helps front-line deployment engineers operationalize enterprise AI by constraining agent behavior, auditing changes, and preserving deployment knowledge.
 
-## Publisher: <br>
-[kongfangxun](https://clawhub.ai/user/kongfangxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kongfangxun](https://clawhub.ai/user/kongfangxun)
 
-## Use Case: <br>
-Developers and agent operators use this skill to add task gates, scope checks, reflection, and closure routines to agent sessions that involve complex work, multi-file changes, or higher-risk operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill changes agent behavior across a session and may influence task acceptance, execution, and closure decisions. <br>
-Mitigation: Review the injected guidance before deployment and confirm that its gates, escalation behavior, and completion criteria match the intended operating policy. <br>
-Risk: The skill may read and write persistent .sofagent memory, task logs, evaluation records, orchestration records, and knowledge files. <br>
-Mitigation: Set retention and sanitization controls before use on sensitive projects, and periodically review stored records for unnecessary or sensitive data. <br>
-Risk: The security scan notes under-scoped external and local tooling behavior. <br>
-Mitigation: Review configured scripts and disable or pin live GitHub or template lookup when supply-chain control is required. <br>
+## Use Case:
 
+Developers, deployment engineers, and enterprise IT teams use this skill to structure front-line AI deployment work: intake, business-flow discovery, AI-node identification, knowledge capture, delivery, audit, and ongoing optimization.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kongfangxun/skills/sofagent) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/kongfangxun) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with inline bash or PowerShell commands and local file-record templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update .sofagent memory, task logs, evaluation records, orchestration records, and knowledge files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.9 (source: frontmatter and server release evidence) <br>
+Risk: The skill describes a broad persistent enterprise agent platform with high-impact tools, data flows, and configuration changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in a controlled enterprise deployment after reviewing install.sh, the MCP server implementation, and the exact configuration files that will be modified.
+
+Risk: MCP roles and tools can create a wide operational surface if enabled broadly.
+
+Mitigation: Restrict MCP roles and tools to the minimum needed for the deployment, and disable unneeded cloud, device, browser, connector, and daemon features.
+
+Risk: Sensitive systems can be exposed if credentials, retention, redaction, offline mode, or rollback behavior are not verified before use.
+
+Mitigation: Avoid broad credentials and verify data retention, redaction, offline mode, and rollback behavior before using the skill on sensitive systems.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/kongfangxun/skills/sofagent)
+- [Root Skill Definition](artifact/SKILL.md)
+- [Agent Library](artifact/AGENTS.md)
+- [FDE Harness Subagent](artifact/agents/fde/SKILL.md)
+- [Installer Workflow](artifact/harness/installer.md)
+- [FDE Stage Guides](artifact/skills/01-entry.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands and configuration instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce staged checklists, audit prompts, deployment verification steps, rollback guidance, and enterprise skill handoff material.]
+
+## Skill Version(s):
+
+1.4.9 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

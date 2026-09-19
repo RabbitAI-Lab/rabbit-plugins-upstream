@@ -1,44 +1,60 @@
-## Description: <br>
-GoDial (godial.cc). Use this skill for ANY GoDial request: reading, creating, and updating data through the OOMOL GoDial connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+GoDial (godial.cc). Use this skill for ANY GoDial request - reading, creating, and updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate GoDial through an OOMOL-connected account, including listing accounts and lists, reading contacts, and creating contacts in a selected list. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to a connected GoDial account and may use sensitive credentials through OOMOL. <br>
-Mitigation: Connect only the GoDial account needed for the workflow and avoid broader permissions than the task requires. <br>
-Risk: The create_contact action changes GoDial state by adding a contact to a target list. <br>
-Mitigation: Confirm the target account, list, and complete contact payload with the user before running write actions. <br>
-Risk: Connector action schemas can change over time, making stale payload assumptions unreliable. <br>
-Mitigation: Inspect the live GoDial connector schema before building each action payload. <br>
+## Use Case:
 
+External users and agents use this skill to operate GoDial through an OOMOL-connected account, including listing accounts, lists, and contacts, fetching contacts, and creating contacts after confirmation.
 
-## Reference(s): <br>
-- [ClawHub GoDial skill](https://clawhub.ai/oomol/oo-godial) <br>
-- [GoDial homepage](https://godial.cc) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Setup instructions include remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup steps before installation and prefer an independently verified or package-manager installation of the oo CLI.
+
+Risk: Generated or user-supplied GoDial data can be embedded into shell command payloads.
+
+Mitigation: Use file-based JSON payloads for generated or user-supplied GoDial data.
+
+Risk: The create_contact action changes GoDial account state.
+
+Mitigation: Confirm the exact payload and effect with the user before allowing write actions to run.
+
+## Reference(s):
+
+- [GoDial homepage](https://godial.cc)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub release page](https://clawhub.ai/oomol/skills/oo-godial)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May call the OOMOL oo CLI to inspect live connector schemas and run GoDial actions; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,55 @@
-## Description: <br>
-ima (ima.qq.com). Use this skill for ANY ima request: reading, creating, and updating data through the OOMOL-connected ima connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ima (ima.qq.com). Use this skill for ANY ima request -- reading, creating, and updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent operate Tencent ima through an OOMOL-connected account. It supports reading and searching knowledge bases, folders, items, media, notebooks, and notes, and can create, append, import, upload, or add content when the user confirms write actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change data in the connected ima account, including creating notes, appending content, importing URLs, uploading files, or adding notes to knowledge bases. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running actions tagged as write, and inspect the live connector schema before constructing payloads. <br>
-Risk: The skill depends on an authenticated OOMOL-connected ima account and may prompt setup, account connection, or billing steps when access is unavailable. <br>
-Mitigation: Use existing authentication when available, run setup only after relevant command failures, and review requested permissions or account connection steps before proceeding. <br>
+## Use Case:
 
+Developers and agent users use this skill to operate ima through an OOMOL-connected account, including reading notes and knowledge bases, creating or appending notes, and importing URLs or files when explicitly confirmed.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-ima) <br>
-- [ima homepage](https://ima.qq.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON responses from the oo CLI] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server evidence and skill metadata) <br>
+Risk: The skill's fallback setup includes remote installer commands, and evidence.security marks this as suspicious.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only through a trusted, verified method; do not let an agent run installer commands automatically.
+
+Risk: Several ima actions can change account data, including creating notes, adding notes to knowledge bases, importing URLs, and uploading files.
+
+Mitigation: Confirm the exact action payload and expected effect with the user before running any write action.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-ima)
+- [ima Homepage](https://ima.qq.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Markdown, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May issue read actions directly; write actions require user confirmation of the payload and effect.]
+
+## Skill Version(s):
+
+1.0.4 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

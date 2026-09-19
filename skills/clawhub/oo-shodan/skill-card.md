@@ -1,45 +1,57 @@
-## Description: <br>
-Shodan (shodan.io). Use this skill for Shodan requests that search and read internet-exposure data through the OOMOL Shodan connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Shodan is an agent skill for searching and reading Shodan data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, security analysts, and operators use this skill to query Shodan host data, DNS information, subdomains, facets, and account credit information from an OOMOL-connected Shodan account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Shodan account and sensitive credentials managed through OOMOL. <br>
-Mitigation: Use only with the intended OOMOL account connection, avoid handling raw tokens, and perform setup only after an auth or connection failure. <br>
-Risk: Incorrect Shodan queries can return irrelevant or misleading exposure data. <br>
-Mitigation: Inspect the live connector action schema before building payloads and review query terms, facets, and target identifiers before execution. <br>
-Risk: Account credit or billing limits can stop Shodan actions. <br>
-Mitigation: Check account API information or billing status when the connector reports insufficient credit before retrying. <br>
+## Use Case:
 
+Developers, security practitioners, and external users use this skill to run Shodan searches and lookups, including host search counts, IP host details, domain information, hostname resolution, reverse DNS, and API account details.
 
-## Reference(s): <br>
-- [Shodan homepage](https://www.shodan.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-shodan) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses may include JSON data and execution metadata from the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The setup instructions ask users to run remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after trusting OOMOL's installer endpoint, or use a reviewed, version-pinned oo CLI installation path with checksum or signature verification.
+
+Risk: The skill depends on OOMOL-managed credentials for Shodan access.
+
+Mitigation: Confirm the OOMOL account and Shodan connection are appropriate for the user or organization before running lookups.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-shodan)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Shodan homepage](https://www.shodan.io)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live action schemas before execution and returns Shodan connector responses as JSON.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

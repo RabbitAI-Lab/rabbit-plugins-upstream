@@ -1,42 +1,59 @@
-## Description: <br>
-Operate JumpCloud through an OOMOL-connected account to search and read systems and system users. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+JumpCloud (jumpcloud.com). Use this skill for ANY JumpCloud request: searching and reading data through the OOMOL JumpCloud connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, administrators, and support agents use this skill to inspect JumpCloud system and system-user records through an OOMOL-connected account without handling raw credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read JumpCloud systems and system users through the user's OOMOL-connected account. <br>
-Mitigation: Install only when this read access is intended, and review the OOMOL connection scopes before use. <br>
-Risk: Future releases could add write or destructive JumpCloud actions beyond the current read-only behavior. <br>
-Mitigation: Review future action lists, security summaries, and connection scopes before approving an upgrade. <br>
+## Use Case:
 
+Developers and IT operators use this skill to inspect JumpCloud systems and system users through an OOMOL-connected account. It supports read-oriented directory lookup workflows while directing agents to fetch live connector schemas before running actions.
 
-## Reference(s): <br>
-- [JumpCloud homepage](https://jumpcloud.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-jumpcloud) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; read-only JumpCloud actions return JSON data through the OOMOL CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: The skill includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer official verified release materials and review installer contents before executing setup commands.
+
+Risk: JumpCloud system and user directory data may pass through OOMOL as an intermediary.
+
+Mitigation: Install only when OOMOL mediation is intended and use least-privilege JumpCloud credentials.
+
+Risk: The skill broadly routes JumpCloud requests through the connector.
+
+Mitigation: Fetch the live connector schema before each action and confirm any future write or destructive action payloads with the user.
+
+## Reference(s):
+
+- [JumpCloud homepage](https://jumpcloud.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-jumpcloud)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return JSON-shaped connector responses containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

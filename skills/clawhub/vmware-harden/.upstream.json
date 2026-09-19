@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/vmware-harden",
   "slug": "vmware-harden",
   "ownerHandle": null,
-  "version": "1.8.7",
-  "updatedAt": 1784640661253,
-  "contentHash": "841ae814fc1728970ec7c825c0956b398d9ac4f3812c16ce9b82e7680afc9558",
-  "fetchedAt": "2026-07-26T18:08:59.324Z"
+  "version": "1.10.10",
+  "updatedAt": 1789536169536,
+  "contentHash": "647814e14ce760270745ba81d987539c74a3875db70484ead4b28474e960dd87",
+  "fetchedAt": "2026-09-19T12:17:34.602Z"
 }

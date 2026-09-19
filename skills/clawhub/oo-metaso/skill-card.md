@@ -1,44 +1,61 @@
-## Description: <br>
-Metaso lets an agent search Metaso, read webpages, and create Metaso chat completions through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Metaso through an OOMOL-connected account to search content, read webpages, and create scoped chat completions.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate Metaso from an agent session through OOMOL's oo CLI, including search, webpage reading, and Metaso-grounded chat completions. It is most useful when the user has already connected a Metaso account in OOMOL and wants the agent to inspect live action schemas before running connector commands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an OOMOL-connected Metaso account and requires sensitive credentials managed outside the agent session. <br>
-Mitigation: Install it only when the user trusts OOMOL and intends the agent to use the connected Metaso account. <br>
-Risk: Write actions can create Metaso chat completions or otherwise affect account-backed service usage. <br>
-Mitigation: Inspect the live connector schema first and confirm the exact payload and expected effect with the user before running any action tagged [write]. <br>
-Risk: Setup commands for installing or signing into the oo CLI can change the local environment or open account access flows. <br>
-Mitigation: Run install, login, or connection setup only after a matching command failure or an explicit user request. <br>
+## Use Case:
 
+Developers and agent operators use this skill to operate Metaso via an OOMOL-connected account for search, webpage extraction, and chat completions grounded in a requested Metaso scope.
 
-## Reference(s): <br>
-- [Metaso homepage](https://metaso.cn) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL connection settings for Metaso](https://console.oomol.com/app-connections?provider=metaso) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return Metaso connector responses as JSON, including data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Fallback setup recommends executing unpinned remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a versioned installer or package manager with signature or checksum verification before installing the oo CLI.
+
+Risk: Metaso chat completion actions are tagged as write actions and may change service-side state or consume account resources.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions.
+
+Risk: The skill requires an OOMOL-connected Metaso account for connector access.
+
+Mitigation: Connect only an OOMOL or Metaso account intended for this skill and avoid opening login or connection flows unless an auth or connection error requires it.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-metaso)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Metaso Homepage](https://metaso.cn)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return extracted webpage Markdown, structured JSON, search results, or streamed chat chunks depending on the selected Metaso action.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

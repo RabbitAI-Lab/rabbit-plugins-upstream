@@ -1,45 +1,59 @@
-## Description: <br>
-This skill helps agents search and read Timelink data through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+timelink provides read-oriented access to Timelink data through an OOMOL-connected account and the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill when an agent needs read-only access to Timelink clients, projects, services, users, time entries, company details, or token metadata through an existing OOMOL connection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Timelink business data available through the connected OOMOL account. <br>
-Mitigation: Install and use it only when the user trusts OOMOL's oo CLI and is comfortable granting the agent read access through that connected account. <br>
-Risk: Action schemas may change or differ from assumptions in a prompt. <br>
-Mitigation: Inspect the live action schema with the oo CLI before constructing command payloads. <br>
-Risk: Setup commands can alter local CLI authentication or connection state. <br>
-Mitigation: Run authentication, connection, installer, or billing-recovery steps only after an actual setup-related failure. <br>
+## Use Case:
 
+External users and developers use this skill to search, list, and fetch Timelink clients, companies, projects, services, users, tokens, and time entries from a connected Timelink account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-timelink) <br>
-- [Timelink homepage](https://timelink.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include oo CLI commands, action names, JSON payloads, and setup guidance for authentication, connection, or billing errors.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The setup guidance includes remote installer commands that execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official, versioned, signed, or checksum-verified oo CLI installer and review setup commands before execution.
+
+Risk: Using the skill requires OOMOL-mediated access to Timelink data.
+
+Mitigation: Install only when OOMOL is an acceptable intermediary for the intended Timelink account and data.
+
+Risk: Account connection and CLI login can make persistent changes to the local environment.
+
+Mitigation: Run setup only after an authentication or connection error, and use an account scoped to the intended Timelink access.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-timelink)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Timelink homepage](https://timelink.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-oriented Timelink get and list actions; setup guidance may require oo CLI authentication and a connected Timelink account.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

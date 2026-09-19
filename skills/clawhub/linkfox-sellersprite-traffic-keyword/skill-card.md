@@ -1,44 +1,63 @@
-## Description: <br>
-查询 Amazon ASIN 的 SellerSprite 流量关键词、流量来源占比、自然和广告排名、转化类型以及历史月份指标。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries SellerSprite traffic keyword data for an Amazon ASIN, including keyword sources, traffic share categories, conversion categories, organic rank, ad rank, historical month filters, and sorting.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and agents use this skill to inspect how an Amazon ASIN receives keyword traffic through SellerSprite data, including organic and ad positions, traffic share, conversion type, and optional historical month filters. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: ASIN queries and session metadata are sent to LinkFox/SellerSprite services. <br>
-Mitigation: Install only if this external sharing is acceptable, use a trusted LINKFOX_TOOL_GATEWAY value, and avoid placing sensitive notes in feedback. <br>
-Risk: Calls can consume SellerSprite or LinkFox credits. <br>
-Mitigation: Confirm expected cost before repeated pagination or uncached calls, and use the skill's cache where appropriate. <br>
-Risk: Full responses and cache files are saved locally and may retain query history. <br>
-Mitigation: Periodically delete the linkfox output and cache directories when local retention is not desired. <br>
+## Use Case:
 
+External marketplace analysts, sellers, and agent users use this skill to inspect keyword traffic sources and ranking signals for a specific Amazon ASIN. It helps retrieve structured SellerSprite keyword data while preserving result files for follow-up analysis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-sellersprite-traffic-keyword) <br>
-- [Publisher profile](https://clawhub.ai/user/linkfox-ai) <br>
-- [SellerSprite traffic keyword API reference](references/api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON API responses and saved JSON result files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full responses are saved locally; large responses print summaries unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill contacts LinkFox/SellerSprite services with ASIN query data and API credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only when that data sharing is acceptable, and confirm destination URLs before entering credentials or running API calls.
+
+Risk: The onboarding helper can create API keys and initiate payment-order flows.
+
+Mitigation: Prefer obtaining keys directly from the official provider site, and use the in-skill SMS login or payment flow only after verifying the provider and payment destination.
+
+Risk: Full API responses and cache files are persisted in local linkfox session directories.
+
+Mitigation: Treat generated response files as sensitive when ASIN or keyword data is confidential, and review or clean the local cache and session folders after use.
+
+Risk: Automatic feedback reporting may send skill-quality feedback to the publisher service.
+
+Mitigation: Avoid including secrets, proprietary ASIN analysis, or customer-sensitive details when feedback content is generated or submitted.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-sellersprite-traffic-keyword)
+- [卖家精灵-流量词反查 API 参考](artifact/references/api.md)
+- [解决认证和算力问题](artifact/references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, JSON, files]
+
+**Output Format:** [Markdown guidance, shell commands, and JSON API responses saved to local files with summaries printed to stdout for larger responses.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires marketplace and ASIN inputs, can consume 15 credits per query, caches matching requests for 24 hours, and writes full responses under the local linkfox session data directory.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

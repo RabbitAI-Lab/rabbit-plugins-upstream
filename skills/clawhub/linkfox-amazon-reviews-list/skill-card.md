@@ -1,43 +1,59 @@
-## Description: <br>
-Fetches and analyzes Amazon product reviews by ASIN across supported marketplaces, with filters for star rating, recency, helpfulness, verified purchase status, media, and keywords. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fetches and analyzes Amazon product reviews by ASIN across 15 marketplaces with star, keyword, verified-purchase, sort, format, and media filters.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Developers and commerce operators use this skill to retrieve Amazon customer reviews for a single ASIN, summarize customer sentiment, identify recurring complaints or praised features, and support competitor review research. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can retain full Amazon review responses and cache data locally. <br>
-Mitigation: Review saved files before committing or sharing a workspace, and avoid using the skill where retained review data could be exposed. <br>
-Risk: The skill may submit feedback automatically and includes external onboarding behavior. <br>
-Mitigation: Review the feedback and onboarding behavior before use, and prefer disabling or ignoring automatic feedback submission when it is not appropriate. <br>
-Risk: API calls consume LinkFox credits and repeated calls can incur additional cost. <br>
-Mitigation: Confirm marketplace, ASIN, and review counts before calling the API, and reuse cached or saved results when they are sufficient. <br>
+## Use Case:
 
+External sellers, ecommerce analysts, and agents use this skill to retrieve Amazon reviews for a single ASIN, filter them by marketplace, star rating, keyword, media, or verified-purchase status, and summarize customer praise, complaints, and product improvement signals.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-reviews-list) <br>
-- [Amazon reviews API reference](artifact/references/api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown summaries with JSON API responses or saved JSON data files when the script is run.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write full review responses and cache data under a local linkfox directory; large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence) <br>
+Risk: The security scan reports under-disclosed account, billing, credential, and automatic feedback-reporting behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the LinkFox account, billing, and feedback flows before installation; make feedback submission explicit opt-in for sensitive deployments.
+
+Risk: The skill handles API keys and may guide users to configure credentials in shell startup files.
+
+Mitigation: Prefer a managed secret store or scoped environment injection, and avoid committing or sharing shell profiles that contain API keys.
+
+Risk: The skill can create persistent local review result files and may process customer review data from live third-party services.
+
+Mitigation: Run it only in appropriate workspaces, disclose paid API use before large requests, and clean local result files according to the user's data retention requirements.
+
+## Reference(s):
+
+- [Amazon Reviews API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-reviews-list)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown responses with JSON result files and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes full API responses to workspace-local linkfox session data files; stdout may contain full JSON or a compact summary depending on response size.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,57 @@
-## Description: <br>
-AMap helps an agent use the OOMOL AMap connector for geocoding, place search, routing, IP location, weather, and district lookup through the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AMap (amap.com) enables agents to search and read AMap data through OOMOL's `oo` CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to ask an agent to retrieve AMap place, address, route, weather, IP location, and administrative district information through an authenticated OOMOL connection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Map queries, coordinates, route requests, IP lookup inputs, weather searches, and place searches may be processed by the OOMOL or AMap connector. <br>
-Mitigation: Avoid sending sensitive location data unless the user intends to use the connected AMap service for that request. <br>
-Risk: First-time setup can include a remote oo CLI installer command when the CLI is missing. <br>
-Mitigation: Prefer a verified OOMOL installation path or review OOMOL's official install instructions before running the remote installer. <br>
-Risk: The skill depends on an authenticated OOMOL account and connected AMap credentials. <br>
-Mitigation: Use setup steps only after an auth or connection failure, and do not proactively start login or connection flows. <br>
+## Use Case:
 
+External users and developers use this skill to perform AMap place search, geocoding, reverse geocoding, route planning, IP location, district lookup, place detail, and weather requests through an OOMOL-connected AMap account.
 
-## Reference(s): <br>
-- [ClawHub AMap skill page](https://clawhub.ai/oomol/oo-amap) <br>
-- [AMap homepage](https://www.amap.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payload examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May emit JSON returned by the oo connector when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Setup instructions include direct execution of remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from a verified, versioned source with signature or checksum validation; do not let an agent run curl-to-bash or irm-to-iex installer commands automatically.
+
+Risk: AMap access depends on a connected OOMOL account and server-side credential handling.
+
+Mitigation: Confirm the user has already installed, signed in, and connected AMap before running connector actions; use setup steps only after an authentication or connection failure.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-amap)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [AMap homepage](https://www.amap.com)
+- [OOMOL app connection console](https://console.oomol.com/app-connections?provider=amap)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live `oo connector schema` checks before constructing request payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

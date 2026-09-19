@@ -1,43 +1,61 @@
-## Description: <br>
-Pingdom (pingdom.com). Use this skill for ANY Pingdom request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Pingdom through an OOMOL-connected account to search and read uptime checks, credits, and probe server details.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to inspect Pingdom uptime monitoring data through an OOMOL-connected account. It supports listing checks and probes, retrieving check details, and checking account credit status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Pingdom account and uses OOMOL as an intermediary for access. <br>
-Mitigation: Connect only the minimum Pingdom access needed for read-only monitoring tasks and review the OOMOL connection before use. <br>
-Risk: The first-time setup documentation includes remote installer commands for the oo CLI. <br>
-Mitigation: Review OOMOL's official install instructions before running installer scripts, and avoid executing remote scripts blindly. <br>
+## Use Case:
 
+Developers and operations teams use this skill to inspect Pingdom uptime monitoring data through the OOMOL oo CLI without handling raw Pingdom API tokens.
 
-## Reference(s): <br>
-- [Pingdom homepage](https://www.pingdom.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Pingdom skill on ClawHub](https://clawhub.ai/oomol/oo-pingdom) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before running Pingdom read actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: Setup documentation asks users to run a remote installer command for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a pinned and verifiable oo CLI release, or inspect and verify the installer before running it.
+
+Risk: OOMOL mediates Pingdom requests and setup may create persistent local or account-level state.
+
+Mitigation: Use only an intended OOMOL account connection, review account permissions, and remove stale local or account connections when no longer needed.
+
+Risk: The scanner summary notes that the connector scope is broader than a read-only Pingdom helper should be.
+
+Mitigation: Use this release only for the documented read actions unless future documentation clearly declares write actions and confirmation requirements.
+
+## Reference(s):
+
+- [Pingdom ClawHub listing](https://clawhub.ai/oomol/skills/oo-pingdom)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Pingdom homepage](https://www.pingdom.com)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses read-oriented Pingdom connector actions and may include execution metadata returned by the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

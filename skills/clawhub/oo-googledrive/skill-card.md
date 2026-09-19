@@ -1,45 +1,57 @@
-## Description: <br>
-Google Drive (workspace.google.com). Use this skill for Google Drive requests, including reading, creating, updating, and deleting Drive data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Drive (workspace.google.com) skill for reading, creating, updating, and deleting Google Drive data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to let an agent inspect Google Drive content and perform file, shared drive, permission, comment, reply, revision, label, approval, and change workflows through OOMOL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Read actions can expose private Google Drive files, permissions, metadata, comments, labels, revisions, and change history to the agent. <br>
-Mitigation: Install only for users who want an agent to access their OOMOL-connected Google Drive, and treat read results as sensitive. <br>
-Risk: Write and destructive actions can change permissions, comments, labels, files, folders, shared drives, replies, revisions, or trash state. <br>
-Mitigation: Inspect the live action schema, review the exact payload and effect, and require explicit user confirmation before state-changing or destructive operations. <br>
-Risk: First-time setup may require installing or authenticating the oo CLI. <br>
-Mitigation: Verify the oo CLI installer source before setup and only run authentication or connection steps after a relevant command fails. <br>
+## Use Case:
 
+Employees, external users, developers, and agent operators use this skill to inspect and manage Google Drive files, folders, shared drives, permissions, comments, replies, labels, revisions, and change tracking through the OOMOL oo CLI connector.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-googledrive) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Google Drive](https://workspace.google.com/products/drive/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return Google Drive connector responses as JSON when actions are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: frontmatter and server release metadata) <br>
+Risk: The setup guidance includes remote installer commands that execute code from an installer endpoint.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a trusted, pinned, signed, or checksum-verified installer before running setup commands.
+
+Risk: Google Drive write and destructive actions can change or remove Drive data.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-googledrive)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Google Drive Homepage](https://workspace.google.com/products/drive/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and meta.executionId; state-changing and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

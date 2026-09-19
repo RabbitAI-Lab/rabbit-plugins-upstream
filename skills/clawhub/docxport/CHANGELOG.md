@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.2.1](https://github.com/es6kr/skills/compare/docxport-v0.2.0...docxport-v0.2.1) (2026-09-18)
+
+
+### Bug Fixes
+
+* **cleanup:** make the session-end report table self-sufficient ([#487](https://github.com/es6kr/skills/issues/487)) ([c4a0255](https://github.com/es6kr/skills/commit/c4a02557fb8de3b32cf337c549f62535dabf824b))
+
+## [0.2.0](https://github.com/es6kr/skills/compare/docxport-v0.1.0...docxport-v0.2.0) (2026-08-29)
+
+
+### Features
+
+* **backlog:** merge plane-backlog into backlog and register missing skills in release-please ([7ed72a1](https://github.com/es6kr/skills/commit/7ed72a1be1a7df7e91252494828d96f77bb769ad))
+* promote next-feat batch (backlog skill, hooks JS port, git-repo doctor, pre-push guard) ([0d76a4c](https://github.com/es6kr/skills/commit/0d76a4c01180fbdc78bfeec8dea91373b4912470))
+
+
+### Bug Fixes
+
+* promote next-fix staging (38 fixes across 16 skills) ([94f8c33](https://github.com/es6kr/skills/commit/94f8c33800ce411ae63e22c5259cdae8435508a4))
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([4982364](https://github.com/es6kr/skills/commit/49823641a7b08123ebd0325273892bee41bc3280))
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([951c1e6](https://github.com/es6kr/skills/commit/951c1e6871e78e226757c6a7ae5ae53efeb7bfb0))
+
 ## [0.1.1](https://github.com/es6kr/skills/compare/docxport-v0.1.0...docxport-v0.1.1) (2026-07-23)
 
 

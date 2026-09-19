@@ -1,42 +1,59 @@
-## Description: <br>
-Operate Segment through an OOMOL-connected account to send analytics events and update identity or group associations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Segment through an OOMOL-connected account by inspecting live connector schemas and running Segment Alias, Batch, Group, Identify, Page, Screen, and Track actions.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to run Segment connector actions through an OOMOL-connected account, including analytics event calls and identity or group association updates. Because the available actions can write Segment data, users should confirm exact payloads before execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send Segment analytics and identity data even though its summary emphasizes searching and reading. <br>
-Mitigation: Review before installation and require explicit confirmation of the exact payload before running any Segment action. <br>
-Risk: The skill is not suitable for read-only Segment lookup, search, or reporting tasks as written. <br>
-Mitigation: Use it only when the user intends to send events or update Segment identity or group associations. <br>
+## Use Case:
 
+Developers and operators use this skill to send Segment analytics, identity, group, page, and screen events through OOMOL's Segment connector after checking each live action schema.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-segment) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Segment](https://segment.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return connector responses that include data and a meta.executionId value.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: The skill can write Segment analytics, identity, and group data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation of the exact action, payload, and expected effect before running any Segment action.
+
+Risk: The security summary says the skill describes itself as read/search oriented while supporting write actions.
+
+Mitigation: Treat Alias, Batch, Group, Identify, Page, Screen, and Track as data-changing operations unless live schema and user intent prove otherwise.
+
+Risk: The setup guidance includes remote script execution for installing the oo CLI.
+
+Mitigation: Prefer a verified package-manager or manual installation path, and review installer contents before executing remote scripts.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/oomol/skills/oo-segment)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Segment homepage](https://segment.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce Segment connector commands whose responses are JSON objects containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

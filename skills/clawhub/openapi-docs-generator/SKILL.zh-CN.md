@@ -1,7 +1,7 @@
 ---
 name: openapi-docs-generator
 description: >-
-  帮助用户处理“Validated demand: Backend and platform teams need practical help generating, improving, and validating OpenAPI or Swagger documentation for REST APIs. This requirement is supported by 12 separate online signals across 3 source families, so it represents broader demand rather than a single isolated request.”。当用户提出 software-and-data, openapi, swagger, api documentation, rest api，或需要围绕该需求获得实用流程、产物、检查清单、分析或实现支持时使用。
+  帮助用户处理“Validated demand: Backend and platform teams need practical help generating, improving, and validating OpenAPI or Swagger documentation for REST APIs. This requirement is supported by 12 separate online signals across 4 source families, so it represents broader demand rather than a single isolated request.”。当用户提出 software-and-data, openapi, swagger, api documentation, rest api，或需要围绕该需求获得实用流程、产物、检查清单、分析或实现支持时使用。
 ---
 
 # Openapi Docs Generator
@@ -10,10 +10,10 @@ description: >-
 
 使用这个技能帮助以下用户群体：API developers, backend teams, developer-experience teams, and maintainers who must make services understandable to other engineers
 
-> Validated demand: Backend and platform teams need practical help generating, improving, and validating OpenAPI or Swagger documentation for REST APIs. This requirement is supported by 12 separate online signals across 3 source families, so it represents broader demand rather than a single isolated request.
+> Validated demand: Backend and platform teams need practical help generating, improving, and validating OpenAPI or Swagger documentation for REST APIs. This requirement is supported by 12 separate online signals across 4 source families, so it represents broader demand rather than a single isolated request.
 
 需求评分：100/100（需求强度 `70/70`，本地可执行性 `30/30`）。
-证据：12 条信号，覆盖 3 个来源类型。
+证据：12 条信号，覆盖 4 个来源类型。
 
 如需查看来源证据、执行计划或评审标准，请阅读 `references/requirement-plan.md`。
 

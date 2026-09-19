@@ -1,42 +1,57 @@
-## Description: <br>
-StatusPal routes StatusPal requests through the OOMOL oo CLI connector for searching and reading status page, incident, and service data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+StatusPal helps agents search and read StatusPal data through the OOMOL-connected oo CLI instead of calling the StatusPal API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to query StatusPal status pages, incidents, and services from an OOMOL-connected account through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad or vague StatusPal requests could cause the agent to query account, status page, incident, or service data the user did not intend to inspect. <br>
-Mitigation: Confirm the intended StatusPal page, incident, service, or query before running connector reads when the request is ambiguous. <br>
-Risk: The skill depends on the oo CLI and a connected StatusPal account, so setup, credential, scope, or billing failures can interrupt use. <br>
-Mitigation: Use the documented setup and recovery steps only after a matching command failure, and do not initiate sign-in or connection flows proactively. <br>
+## Use Case:
 
+Developers, operators, and support teams use this skill to inspect StatusPal incidents, services, page status, and page summaries through an authenticated OOMOL connection.
 
-## Reference(s): <br>
-- [StatusPal homepage](https://www.statuspal.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [StatusPal skill on ClawHub](https://clawhub.ai/oomol/skills/oo-statuspal) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payload examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON with data and metadata fields when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Fallback setup may execute remote installer scripts without independent verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup commands before installation and prefer a verified, version-pinned, signed, or package-manager source for the oo CLI.
+
+Risk: Connector actions depend on live schemas and authenticated OOMOL/StatusPal connection state.
+
+Mitigation: Inspect the action schema before constructing payloads and only run setup or connection steps after a matching auth, scope, connection, or command-not-found failure.
+
+## Reference(s):
+
+- [StatusPal homepage](https://www.statuspal.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [StatusPal skill page](https://clawhub.ai/oomol/skills/oo-statuspal)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

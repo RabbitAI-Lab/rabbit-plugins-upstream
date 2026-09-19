@@ -1,45 +1,61 @@
-## Description: <br>
-Adyen helps agents search and read Adyen company, merchant, and API credential details through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for Adyen search and read requests through an OOMOL-connected account instead of calling the Adyen API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect Adyen account data through the OOMOL oo CLI, including company accounts, merchant accounts, and the connected API credential. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill operates through OOMOL as an intermediary for an Adyen account. <br>
-Mitigation: Install and use it only after reviewing the OOMOL connection scopes and confirming that this intermediary access is acceptable. <br>
-Risk: Setup commands can install the oo CLI or start an authentication flow if run unnecessarily. <br>
-Mitigation: Run setup steps only after an auth, connection, or missing-CLI failure, as the artifact directs. <br>
-Risk: Future connector actions could change or delete Adyen data if write or destructive actions are added. <br>
-Mitigation: Require explicit user confirmation of the exact payload and effect before any write or destructive Adyen action. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Adyen connector schemas and retrieve accessible API credential, company, and merchant account information through the oo CLI.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-adyen) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Adyen homepage](https://www.adyen.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides agents to fetch the live connector schema before running an Adyen action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: The setup instructions include remote installer commands that execute downloaded code directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify the oo CLI installer source before use, or prefer a pinned, signed, or package-manager installation path.
+
+Risk: The connector can read Adyen credential, company, and merchant account information available to the connected OOMOL account.
+
+Mitigation: Confirm the connected account scopes and expected readable data before running actions against production Adyen accounts.
+
+Risk: Action inputs may become stale if constructed without the current connector contract.
+
+Mitigation: Inspect the live action schema with oo connector schema before building each request payload.
+
+## Reference(s):
+
+- [ClawHub Adyen skill page](https://clawhub.ai/oomol/skills/oo-adyen)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Adyen homepage](https://www.adyen.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include live connector schemas, action payload guidance, and read-only Adyen account data returned by the oo CLI.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

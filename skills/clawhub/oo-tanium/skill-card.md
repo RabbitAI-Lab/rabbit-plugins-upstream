@@ -1,43 +1,55 @@
-## Description: <br>
-Tanium (tanium.com). Use this skill for ANY Tanium request - searching and reading data. Whenever a task involves Tanium, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tanium enables an agent to inspect connector schemas and execute GraphQL documents against a connected Tanium Gateway endpoint through the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Tanium through an OOMOL-connected account, inspect live connector schemas, and execute Tanium Gateway GraphQL operations through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill exposes a broad raw GraphQL action against a high-impact endpoint management system. <br>
-Mitigation: Review each GraphQL document before execution, especially mutation-like operations, and require explicit user confirmation for changes to Tanium assets, endpoints, or configuration. <br>
-Risk: The skill describes untagged actions as read-oriented, but the available GraphQL action can express operations whose effects depend on the submitted document. <br>
-Mitigation: Fetch the live action schema, inspect the operation text and variables, and treat any state-changing or ambiguous operation as requiring confirmation before running it. <br>
+## Use Case:
 
+Developers and security operators use this skill to work with Tanium data through an existing OOMOL-connected Tanium account. It supports schema-first command construction before running GraphQL operations against Tanium Gateway.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-tanium) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Tanium homepage](https://www.tanium.com) <br>
-- [OOMOL Tanium connection](https://console.oomol.com/app-connections?provider=tanium) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks and JSON command payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands should fetch the live connector schema before execution and preserve the execution id from JSON responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server metadata and skill frontmatter) <br>
+Risk: The raw GraphQL action may change enterprise security data if a mutation or ambiguous operation is executed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a Tanium/OOMOL account limited to the intended read-only scope and require explicit approval before any GraphQL mutation or ambiguous operation.
+
+Risk: The first-time setup section includes remote installer commands that pipe downloaded content directly to a shell.
+
+Mitigation: Avoid the pipe-to-shell installer path unless the installer source and integrity have been independently verified.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Tanium homepage](https://www.tanium.com)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-tanium)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses schema-first oo CLI commands and JSON responses that include data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

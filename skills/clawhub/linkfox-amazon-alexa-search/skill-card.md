@@ -1,47 +1,68 @@
-## Description: <br>
-亚马逊-Alexa购物助手 lets an agent ask Amazon's storefront Alexa shopping assistant one natural-language shopping prompt at a time and return Alexa's answer, curated product recommendations, ASINs, links, and follow-up questions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses Amazon's storefront Alexa shopping assistant to answer a single natural-language shopping prompt, return a guide-style answer, grouped product recommendations with ASINs, and follow-up questions.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and agents use this skill for conversational shopping discovery on Amazon, including product recommendations, ASIN links, and follow-up questions from Alexa. It is best suited to single-turn or agent-summarized follow-up shopping prompts, optionally anchored to a specific Amazon page URL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, optional Amazon page URLs, API credentials, and session metadata are sent to LinkFox services. <br>
-Mitigation: Use only in trusted environments, avoid sensitive shopping intent when possible, and set LINKFOX_TOOL_GATEWAY only to a destination the user controls or trusts. <br>
-Risk: The skill can consume LinkFox credits for successful Alexa shopping calls. <br>
-Mitigation: Warn users before additional calls, rely on the built-in 24-hour cache for identical parameters, and avoid automatic retries, keyword changes, page turns, or postal-code probing after failures or empty results. <br>
-Risk: Full API responses are persisted locally and may contain shopping intent, product choices, page context, screenshots, or session metadata. <br>
-Mitigation: Periodically delete local linkfox response and cache files when they may contain sensitive information, and avoid forcing inline full-output mode unless needed. <br>
-Risk: Automatic feedback submission may disclose user sentiment or task context to the feedback service. <br>
-Mitigation: Review or disable feedback submission behavior when user context is sensitive or when organizational policy requires explicit approval. <br>
-Risk: Alexa responses are live and non-deterministic, and each call starts a new session without cross-call memory. <br>
-Mitigation: Treat recommendations as time-sensitive guidance, summarize prior results explicitly for follow-ups, and verify important product details before purchase decisions. <br>
+## Use Case:
 
+External agents and developers use this skill for conversational Amazon product discovery when a user wants Alexa-style shopping recommendations, product ASINs, prices, ratings, and suggested follow-up questions. It is best suited to one prompt at a time, with the agent summarizing prior answers before making any follow-up request.
 
-## Reference(s): <br>
-- [亚马逊 Alexa 购物助手 API 参考](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-alexa-search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown shopping report or structured JSON response, with full responses saved as JSON files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Each API call supports one prompt; results may include Alexa answer text, grouped product recommendations, ASINs, prices, ratings, follow-up questions, screenshots, task metadata, cost tokens, and latency.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Shopping prompts and page context are sent to LinkFox and may include user preferences or commercial research intent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when the user accepts LinkFox processing those prompts, and avoid including sensitive personal or business information in shopping questions.
+
+Risk: The skill can guide LinkFox account setup, SMS-code login, API-key provisioning, package purchase, and payment-order creation.
+
+Mitigation: Ask the user before account or billing actions, share SMS codes only when the user intends to log in or register, and confirm plan and payment method before creating an order.
+
+Risk: API keys or account details may appear in terminal output, logs, transcripts, or local files.
+
+Mitigation: Treat keys as secrets, rotate any key that is exposed, and review local LinkFox output folders for retained prompts, responses, QR images, and credentials.
+
+Risk: Environment endpoint overrides can redirect requests away from the default LinkFox services.
+
+Mitigation: Use endpoint override environment variables only in trusted environments and remove unexpected overrides before handling real user data.
+
+Risk: Repeated calls consume LinkFox credits and Alexa responses can vary between calls.
+
+Mitigation: Use the script cache where appropriate, avoid automatic retry loops for empty or failed results, and explain additional cost before making follow-up calls.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-alexa-search)
+- [Amazon Alexa shopping assistant API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown report or structured JSON, with full responses saved as local JSON files by the helper script.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Each API call accepts one prompt; optional URL context can anchor the answer to a specific Amazon page.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

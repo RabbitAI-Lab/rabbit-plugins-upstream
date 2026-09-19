@@ -1,485 +1,341 @@
 ---
-name: loop-engineering
-description: "Loop engineering CLI v0.4.4 with project intake, adaptive queues, progress reports, and human gates."
+name: "taskforce-loop-engineering"
+description: "Durable explicit task/project loops with verification, revisions, live progress, and governed completion."
 ---
 
-# Loop Engineering
+# Taskforce Loop Engineering
 
-Use this skill when a user explicitly asks to use loop engineering, says `走 loop`,
-asks to enqueue a task into a loop-managed runner, or wants a repeated agent task
-wrapped with preflight, verification, local artifacts, and escalation rules.
+Use this skill only when the user explicitly invokes Loop Engineering, says `走 loop`, `loop engineering`, `丢进 Ironman loop`, `loop Ironman`, `task-runner`, names a loop queue, or asks to operate an existing loop.
 
-## Default Policy
+Do not route ordinary chat, research, explanations, or simple direct tasks into a loop unless the user explicitly invokes it.
 
-- Do not route ordinary chat or simple tasks into loop engineering.
-- Route only when the user explicitly says `走 loop`, `loop engineering`,
-  `丢进 <queue> loop`, `走 task-runner`, or otherwise names a loop queue.
-- If the user says `走 loop 并立刻执行`, enqueue the task and immediately run one tick.
-- Keep high-risk actions gated: external sends, publishing, destructive commands,
-  production config changes, memory deletion/migration, or credential changes still
-  require separate confirmation.
-- Treat live instrumentation and process-control tasks as gated even when local:
-  `frida`, `tcpdump`, `adb`, `mitmproxy`, `hook`, `spawn`, `attach`, `decrypt`,
-  `pcap`, `su`, `kill`, `pkill`, and similar device/process work must stop at
-  artifacts and human review unless explicitly approved for execution.
-- Treat device permission prompts, missing authorization, and explicit
-  human-action blockers as stop conditions, not retryable failures. In
-  particular, `INSTALL_FAILED_USER_RESTRICTED` means the human must fix phone
-  USB install permission before another install attempt.
-- Queue command timeouts should terminate the whole spawned process group; after
-  any timeout involving live instrumentation, verify that no child `frida`,
-  `tcpdump`, `adb`, or proxy process remains.
+## Distribution and CLI Installation
 
-## CLI
-
-Prefer the npm CLI when installed:
+A skill installation may provide only this `SKILL.md`; it does **not** prove that the Loop Engineering CLI or an OpenClaw/Hermes integration is installed. Before running loop commands, check the deployment explicitly:
 
 ```bash
-loop-engineering verify --root /path/to/workspace
-loop-engineering run --root /path/to/workspace --config configs/loops/<id>.json
-loop-engineering status --root /path/to/workspace
-loop-engineering doctor --root /path/to/workspace
-loop-engineering summarize --root /path/to/workspace --limit 20
-loop-engineering project-intake --root /path/to/workspace --name <project> --brief "Project brief" --type auto
-loop-engineering project-plan --root /path/to/workspace --project <project>
-loop-engineering project-status --root /path/to/workspace --project <project>
-loop-engineering enqueue --root /path/to/workspace --queue <queue> --title "Title" --task "Task body"
-loop-engineering queue-init --root /path/to/workspace --queue <queue>
-loop-engineering run-queue --root /path/to/workspace --config configs/loops/queues/<queue>.json
-loop-engineering queue-status --root /path/to/workspace --queue <queue>
-loop-engineering queue-scheduler-tick --root /path/to/workspace --config configs/loops/queues/<queue>.json
-loop-engineering queue-scheduler-tick --root /path/to/workspace --queue <queue> --plan-only --json
-loop-engineering queue-peek --root /path/to/workspace --queue <queue>
-loop-engineering queue-cancel --root /path/to/workspace --queue <queue> --task-id <id>
-loop-engineering queue-requeue --root /path/to/workspace --queue <queue> --task-id <id>
-loop-engineering queue-revision-next --root /path/to/workspace --queue <queue> --task-id <id>
-loop-engineering queue-lineage --root /path/to/workspace --queue <queue> --task-id <id>
-loop-engineering queue-lineage-bundle --root /path/to/workspace --queue <queue> --task-id <id>
-loop-engineering queue-human-decision --root /path/to/workspace --queue <queue> --task-id <id> --decision approve|request_changes|reject
-loop-engineering code-queue-init --root /path/to/workspace --queue <queue>
-loop-engineering code-worktree-list --root /path/to/workspace --queue <queue>
-loop-engineering code-worktree-inspect --root /path/to/workspace --queue <queue> --task-id <id>
-loop-engineering code-worktree-diff --root /path/to/workspace --queue <queue> --task-id <id>
-loop-engineering code-worktree-export --root /path/to/workspace --queue <queue> --task-id <id>
-loop-engineering code-patch-verify --root /path/to/workspace --patch runtime/loops/<queue>/patches/<id>.patch
-loop-engineering code-patch-apply-plan --root /path/to/workspace --patch runtime/loops/<queue>/patches/<id>.patch
-loop-engineering code-patch-apply --root /path/to/workspace --patch runtime/loops/<queue>/patches/<id>.patch --confirm-apply
-loop-engineering code-review-bundle --root /path/to/workspace --queue <queue> --task-id <id>
-loop-engineering code-task-closeout --root /path/to/workspace --queue <queue> --task-id <id>
-loop-engineering code-task-autoflow --root /path/to/workspace --queue <queue> --task-id <id>
-loop-engineering code-task-autoflow --root /path/to/workspace --queue <queue> --all-actionable --until closeout
-loop-engineering code-task-finish --root /path/to/workspace --queue <queue> --task-id <id> --confirm-apply --confirm-cleanup
-loop-engineering code-task-run --root /path/to/workspace --queue <queue> --title "Title" --task "Task body" --confirm-apply --confirm-cleanup
-loop-engineering code-task-dashboard --root /path/to/workspace --queue <queue>
-loop-engineering code-task-status --root /path/to/workspace --queue <queue>
-loop-engineering code-worktree-cleanup-plan --root /path/to/workspace --queue <queue>
-loop-engineering code-worktree-cleanup --root /path/to/workspace --queue <queue> --confirm-cleanup
+command -v loop-engineering
+loop-engineering --help
 ```
 
-If the package is not installed but exists in the workspace, use:
+Official distribution:
+
+- npm package: `taskforce-loop-engineering`
+- GitHub repository: `https://github.com/ambitioncn/taskforce-loop-engineering`
+- ClawHub skill: `https://clawhub.ai/ambitioncn/skills/taskforce-loop-engineering`
+- license: Apache-2.0
+- runtime requirement: Node.js 22 or newer
+
+Install the CLI globally from npm:
+
+```bash
+node --version
+npm install -g taskforce-loop-engineering
+loop-engineering --help
+```
+
+For a temporary read-only invocation without a global install:
+
+```bash
+npx -p taskforce-loop-engineering loop-engineering --help
+```
+
+For source-based development, clone the official repository and install its dependencies:
+
+```bash
+git clone https://github.com/ambitioncn/taskforce-loop-engineering.git
+cd taskforce-loop-engineering
+npm install
+npm run check
+node bin/loop-engineering.mjs --help
+```
+
+Do not guess a workspace source path. Use `node packages/loop-engineering/bin/loop-engineering.mjs ...` only after confirming that exact path exists in the current workspace.
+
+### OpenClaw Integration
+
+Installing the npm package exposes the CLI, but it does not automatically route conversations, select a worker agent, or create queue wrappers. First generate a read-only installation plan:
+
+```bash
+loop-engineering-openclaw-install \
+  --root /path/to/openclaw/workspace \
+  --queue agent-tasks
+```
+
+Review the installation confirmation summary before proceeding. It must show the target platform, absolute platform CLI path, workspace, queue, scheduler, notification routing, and `writes enabled: no (plan only)`. If any field identifies the wrong platform or destination, stop. Then install with an existing worker-agent id:
+
+```bash
+loop-engineering-openclaw-install \
+  --root /path/to/openclaw/workspace \
+  --queue agent-tasks \
+  --worker-agent main \
+  --confirm-install
+```
+
+The installer never creates the worker agent. After installation, verify wiring before using a real task:
+
+```bash
+loop-engineering-openclaw-doctor \
+  --root /path/to/openclaw/workspace \
+  --queue agent-tasks \
+  --worker-agent main
+
+loop-engineering-openclaw-smoke \
+  --root /path/to/openclaw/workspace \
+  --queue agent-tasks \
+  --worker-agent main
+```
+
+If the CLI or integration is missing and the user requested installation or repair, install it within the authorized host/workspace scope, then run doctor and the disposable smoke. If the user only asked what is missing, report the exact package, repository, commands, and current deployment state without mutating the system.
+
+### Hermes Agent Integration
+
+The core CLI is platform-neutral, but Hermes conversation routing requires its own dispatcher and notifier. Generate a plan and verify its installation confirmation summary identifies Hermes, the absolute Hermes CLI path, intended workspace and queue, systemd scheduler, source-bound notification routing, and `writes enabled: no (plan only)`. If any field identifies the wrong platform or destination, stop. Confirm installation only after that review, then run the read-only doctor and disposable smoke:
+
+```bash
+loop-engineering-hermes-install \
+  --root /path/to/hermes/workspace \
+  --queue agent-tasks
+
+loop-engineering-hermes-install \
+  --root /path/to/hermes/workspace \
+  --queue agent-tasks \
+  --confirm-install
+
+loop-engineering-hermes-doctor \
+  --root /path/to/hermes/workspace \
+  --queue agent-tasks
+
+loop-engineering-hermes-smoke \
+  --root /path/to/hermes/workspace \
+  --queue agent-tasks
+```
+
+The generated worker uses `hermes -z` (`--oneshot`); the notifier uses `hermes send` without
+an LLM call. Preserve source metadata and pass `--source-target` in Hermes
+`platform:chat_id[:thread_id]` format. The managed systemd scheduler owns wakeups
+so durable queue continuity does not depend on resuming a Hermes Cron session.
+
+## Conversation Contract
+
+Interpret explicit loop language as follows:
+
+- `走 loop：<task>`: enqueue and immediately execute one runner tick with notification.
+- `走 loop 并立刻执行`: synonym for the default above.
+- `走 loop，只入队`, `只排队`, `暂不执行`, or `不立即执行`: enqueue without starting a tick.
+- `继续当前 loop，补充要求：…`: amend the active task in place. Preserve the task id and worker session, write a versioned amendment, update the task contract/dev plan/acceptance plan, and require the worker to reread the latest amendment before checkpoints and completion.
+- A new explicit `走 loop` request while another task is active is a correction/replacement, not ordinary backlog. Supersede the active task at a safe boundary, retain its evidence and lineage, then start the replacement after the lock is released.
+- Status, progress, evidence, or failure questions are read-only and must not start another tick unless the user explicitly asks to continue/run.
+
+In this workspace, the default queue is `ironman-task-runner` when no queue is named. Use the installed workspace wrapper when present:
+
+```bash
+node scripts/loops/ironman-task-runner.mjs route --message "<original user message>" --confirm-execute [source options]
+node scripts/loops/ironman-task-runner.mjs run-once --notify
+node scripts/loops/ironman-task-runner.mjs status --json
+node scripts/loops/ironman-task-runner.mjs peek --json
+```
+
+Pass the original request faithfully. Preserve source channel, target, account, message id, and reply-to metadata so progress, human gates, and terminal results return to the originating conversation. Missing delivery routing must fail closed.
+
+## Task vs Project Classification
+
+Classify scope before enqueueing.
+
+### Scoped task
+
+A bounded change, diagnosis, review, or deliverable with a clear local acceptance target can use one task contract.
+
+### Project-level objective
+
+Treat a request as project-level when the user asks to build/develop/finish a complete product or system, achieve an overall outcome, or otherwise describes a multi-milestone terminal goal.
+
+For a project-level objective:
+
+1. Run project intake and create a project spec.
+2. Write an explicit terminal-state/completion contract.
+3. Build a complete backlog covering every requirement and known acceptance dimension.
+4. Link queue tasks to the project backlog and terminal contract.
+5. Continue through implementation, verification, revisions, and the next actionable backlog item within the authorized safety boundary.
+6. Stop only when total project acceptance passes, or a genuine human authorization/product decision/external-state blocker prevents meaningful progress.
+
+Never silently narrow a complete-project request into “first milestone” and call that the Loop complete. A single queue task or milestone may be complete while the project remains active.
+
+Recommended commands:
+
+```bash
+loop-engineering project-intake --root <workspace> --name <project> --brief "<full brief>" --type auto
+loop-engineering project-plan --root <workspace> --project <project>
+loop-engineering project-status --root <workspace> --project <project>
+```
+
+The project completion contract must contain:
+
+- terminal user-visible outcome;
+- in-scope and explicitly out-of-scope capabilities;
+- complete requirement/backlog mapping;
+- acceptance checks and evidence locations;
+- operational/security/data/deployment requirements when relevant;
+- unresolved decisions and required authority;
+- a rule that milestone completion cannot satisfy project completion;
+- final acceptance status with unmet items and blockers.
+
+If implementation reveals missing work, amend the project backlog/contract before continuing. Do not redefine the terminal goal downward to fit completed work.
+
+## Completion Semantics
+
+Use precise language:
+
+- `阶段完成` or `任务完成`: one task/milestone passed its own acceptance checks.
+- `项目完成` or `Loop 跑完`: only when the project completion contract is fully accepted and no required work remains.
+- `blocked`: only for a concrete blocker requiring human authority/input or an external state change, with evidence and a specific unblock request.
+- `needs_revision`: acceptance found actionable gaps; create a changed-strategy revision rather than claiming completion.
+- `superseded`: a newer explicit loop request replaced the task; preserve lineage and evidence.
+
+Final reporting for project work must always state both task/milestone status and total-project status.
+
+## Safety and Authority
+
+Loop invocation authorizes the requested workflow, not unlimited external action.
+
+Require separate explicit confirmation for:
+
+- external messages, publication, social posting, or outreach;
+- destructive deletion or difficult-to-recover changes;
+- production configuration/deployment changes not already clearly requested;
+- credential creation/change/exposure;
+- paid model/API usage beyond an established budget;
+- memory deletion or migration;
+- device/process instrumentation such as `frida`, `tcpdump`, `adb`, `mitmproxy`, hooks, attach/spawn, decrypt, `su`, `kill`, or `pkill`.
+
+Human permission prompts and missing authorization are stop conditions, not retryable failures. `INSTALL_FAILED_USER_RESTRICTED`, device unauthorized, permission denied, and equivalent states require a concrete human-action gate.
+
+Timeouts must terminate the spawned process group. After instrumentation timeouts, verify that no child instrumentation/proxy process remains.
+
+## Operating Flow
+
+1. Read existing project docs, loop configs, queue state, and relevant dirty worktree state.
+2. Classify task vs project and define the correct contract before execution.
+3. Use `route-message` or the installed conversation wrapper to preserve source metadata and apply immediate/queue-only/amend/supersede semantics.
+4. Run preflight before mutable work.
+5. Execute one bounded tick or the project’s next actionable backlog item.
+6. Emit ordered progress: planning, preflight, worker start, checkpoints, verification, acceptance, final judgement.
+7. Inspect run artifacts; never infer success only from dispatcher exit code.
+8. If acceptance fails, write a revision request with changed diagnosis/tactic/evidence/verification.
+9. Run `doctor` after configuration or queue changes.
+10. For projects, re-read project status and completion contract, then automatically advance to the next safe actionable item.
+11. Report terminal status with evidence, unmet items, blockers, and next action.
+
+Do not add cron/timers until one manual tick passes.
+
+## Core CLI
+
+Prefer the installed CLI:
+
+```bash
+loop-engineering verify --root <workspace>
+loop-engineering doctor --root <workspace> [--json]
+loop-engineering summarize --root <workspace> --limit 20
+loop-engineering route-message --root <workspace> --message "<message>" --queue <queue> --route --confirm-execute [--supersede-active | --amend-active] [source options]
+loop-engineering queue-status --root <workspace> --queue <queue>
+loop-engineering queue-peek --root <workspace> --queue <queue>
+loop-engineering run-queue --root <workspace> --config configs/loops/queues/<queue>.json
+loop-engineering queue-revision-next --root <workspace> --queue <queue> --task-id <id>
+loop-engineering queue-lineage --root <workspace> --queue <queue> --task-id <id>
+loop-engineering queue-lineage-bundle --root <workspace> --queue <queue> --task-id <id>
+loop-engineering queue-human-decision --root <workspace> --queue <queue> --task-id <id> --decision approve|request_changes|reject
+loop-engineering queue-human-input-resolve --root <workspace> --queue <queue> --gate-id <task:checkpoint> --input "<response>" [--secret-input|--non-secret-input]
+loop-engineering queue-terminal-notify --root <workspace> --queue <queue> (--notify-command "<command>" | --dry-run)
+loop-engineering queue-human-input-notify --root <workspace> --queue <queue> (--notify-command "<command>" | --dry-run)
+```
+
+If the package is available only in the workspace:
 
 ```bash
 node packages/loop-engineering/bin/loop-engineering.mjs <command>
 ```
 
-Initialize a workspace:
+Use `run-queue-drain` only when batch draining is explicitly intended. Conversation routing normally runs one task/tick and uses supersede/amend behavior.
+
+## Revision Discipline
+
+A dispatcher-successful run is not automatically accepted. Inspect `final_judgement.json`, acceptance reviews, checkpoints, and verification evidence.
+
+When acceptance needs changes:
+
+- mark `needs_revision`;
+- retain the failed source task;
+- use `queue-revision-next`;
+- require a changed diagnosis, implementation tactic, evidence source, or verification step;
+- inspect lineage before forcing repeated attempts.
+
+Default revision policy may stop after three rounds, two repeated goal signatures, or repeated unchanged strategy. `--force` requires an explicit human override after lineage review.
+
+## Code Work
+
+For L2 code-changing tasks, prefer isolated worktrees. The runner prepares reviewable local changes and verification evidence; it does not implicitly commit, push, publish, deploy, merge, or delete branches.
+
+Safe review flow:
 
 ```bash
-loop-engineering init --root /path/to/workspace
+loop-engineering code-task-status --root <workspace> --queue <queue>
+loop-engineering code-worktree-inspect --root <workspace> --queue <queue> --task-id <id>
+loop-engineering code-worktree-diff --root <workspace> --queue <queue> --task-id <id>
+loop-engineering code-task-autoflow --root <workspace> --queue <queue> --task-id <id> --until closeout
+loop-engineering code-patch-apply-plan --root <workspace> --patch <patch> --json
 ```
 
-## Loop Spec
+Applying a patch and cleaning a worktree require their explicit confirmation flags. Preserve unrelated user changes and never treat a dirty worktree as disposable.
 
-Create specs under `configs/loops/<id>.json`. Keep first versions `L1` and
-`report-only` unless the user has approved a stronger action policy.
+## Observability and Artifacts
 
-Minimal shape:
-
-```json
-{
-  "id": "workspace-health",
-  "goal": "Keep this workspace loop-ready and detect obvious drift.",
-  "level": "L1",
-  "mode": "report-only",
-  "maxRuntimeMs": 120000,
-  "breaker": {
-    "maxConsecutiveFailures": 3,
-    "sameFailureThreshold": 2
-  },
-  "checks": [
-    {
-      "id": "git-status",
-      "type": "command",
-      "cmd": "git status --short",
-      "expectExitCode": 0,
-      "timeoutMs": 10000
-    }
-  ]
-}
-```
-
-Supported check types:
-
-- `files`: assert relative paths exist.
-- `command`: run a shell command and compare its exit code.
-
-## Observability
-
-Use read-only diagnostics before changing loop configs or queue state:
+Use read-only diagnostics before mutation:
 
 ```bash
-loop-engineering doctor --root /path/to/workspace
-loop-engineering doctor --root /path/to/workspace --json
+loop-engineering doctor --root <workspace> --json
+loop-engineering summarize --root <workspace> --queue <queue> --limit 20
+loop-engineering project-status --root <workspace> --project <project>
 ```
 
-`doctor` checks the workspace root, loop configs, queue configs, runtime
-directories, latest loop outcomes, queue status, active tasks, failed tasks, and
-active queue locks. Warnings do not fail the command; hard config/runtime
-errors exit non-zero.
-
-Use `summarize` when the user asks how a loop or queue has been doing:
-
-```bash
-loop-engineering summarize --root /path/to/workspace --limit 20
-loop-engineering summarize --root /path/to/workspace --id workspace-health
-loop-engineering summarize --root /path/to/workspace --queue agent-tasks
-```
-
-`summarize` reports inspected/readable/skipped runs, status counts, success
-rate, average duration, latest matching run, and recent failure reasons. Use
-`--id` for loop-spec runs and `--queue` for queue-dispatch runs.
-
-## Queue Runner
-
-Use queue commands only for explicit loop-managed handoffs, not ordinary chat.
-
-Use project intake before queue commands when the user has a project brief
-rather than a scoped task. `project-intake` converts the brief into a
-conservative project spec, action policy, initial backlog, and human-readable
-plan without starting execution:
-
-```bash
-loop-engineering project-intake \
-  --root /path/to/workspace \
-  --name launch-site \
-  --brief "Build a launch website" \
-  --type auto \
-  --check "npm test"
-```
-
-Then use `project-plan` to write `configs/loops/projects/<project>.json`,
-generate the queue config, and write
-`runtime/loops/projects/<project>/backlog/initial.json`:
-
-```bash
-loop-engineering project-plan --root /path/to/workspace --project launch-site
-loop-engineering project-status --root /path/to/workspace --project launch-site
-```
-
-Project intake does not enqueue tasks, run schedulers, apply patches, commit,
-push, publish, deploy, or perform external writes. It prepares queue-ready work
-for the existing queue runner.
-
-Create a queue config first when one does not exist:
-
-```bash
-loop-engineering queue-init --root /path/to/workspace --queue agent-tasks
-```
-
-Queue configs live under `configs/loops/queues/<queue>.json` and can define:
-
-```json
-{
-  "queue": "agent-tasks",
-  "dispatcher": "node scripts/dispatch-task.mjs",
-  "preflightConfig": "configs/loops/workspace-health.json",
-  "timeoutMs": 1800000,
-  "leaseMs": 1860000,
-  "staleActiveMs": 3600000,
-  "scheduler": {
-    "initialInterval": "10m",
-    "minInterval": "1m",
-    "maxInterval": "4h",
-    "speedupFactor": 0.5,
-    "backoffFactor": 2,
-    "idleBackoffFactor": 2,
-    "humanGateBackoffFactor": 3,
-    "longRunHeadroomFactor": 1.25,
-    "jitter": "30s",
-    "progressReport": {
-      "enabled": true,
-      "minInterval": "30m",
-      "idleInterval": "4h",
-      "notifyOnFailure": true,
-      "notifyOnHumanGate": true,
-      "notifyOnCompletion": true,
-      "notifyOnStatusChange": true
-    }
-  },
-  "retry": {
-    "maxAttempts": 1,
-    "retryDelayMs": 0,
-    "retryExitCodes": [1],
-    "requiresHumanActionPatterns": [
-      "INSTALL_FAILED_USER_RESTRICTED",
-      "device unauthorized",
-      "no devices/emulators found",
-      "Permission denied",
-      "Operation not permitted",
-      "requires human",
-      "需要人工",
-      "权限未开"
-    ]
-  }
-}
-```
-
-```bash
-loop-engineering enqueue \
-  --root /path/to/workspace \
-  --queue agent-tasks \
-  --title "Check target app logs" \
-  --task "Inspect the latest logs and summarize blockers."
-```
-
-```bash
-loop-engineering run-queue \
-  --root /path/to/workspace \
-  --config configs/loops/queues/agent-tasks.json
-```
-
-The dispatcher receives `LOOP_TASK_ID`, `LOOP_TASK_TITLE`, `LOOP_TASK_BODY`,
-`LOOP_TASK_FILE`, `LOOP_TASK_FILE_REL`, `LOOP_QUEUE_ID`, `LOOP_RUN_ID`,
-`LOOP_ATTEMPT`, `LOOP_MAX_ATTEMPTS`, `LOOP_TASK_CONTRACT_FILE`,
-`LOOP_ACCEPTANCE_PLAN_FILE`, `LOOP_DEV_PLAN_FILE`, `LOOP_CHECKPOINTS_DIR`, and
-`LOOP_REVIEWS_DIR`.
-Keep dispatcher commands local to the target workspace and do not put private
-machine paths into public package templates.
-
-For v0.4 task runs, the queue runner writes `task_contract.json`,
-`acceptance_plan.json`, `dev_plan.json`, checkpoint files, acceptance review
-files, `final_judgement.json`, and `revision_request.json` when acceptance
-needs another development pass under
-`runtime/loops/<queue>/tasks/<task_id>/`. If acceptance needs changes, a
-dispatcher-successful task is marked `needs_revision` instead of completed,
-and the revision request carries compact next-round goals.
-
-Use `queue-revision-next` for a failed `needs_revision` task when the next
-development round should be enqueued without moving or overwriting the failed
-source task.
-
-`queue-revision-next` enforces the queue's `revisionPolicy` by default: up to 3
-revision rounds, block when the same revision-goal signature appears in 2
-consecutive rounds, and require a changed strategy or new evidence in the next
-task. Use `--force` only for an explicit human override after inspecting the
-lineage or bundle.
-
-Use `queue-lineage` to inspect a task's full revision chain, including the root
-task, current path, revision edges, known attempts, checkpoints, reviews, final
-judgements, and revision requests.
-
-Use `queue-lineage-bundle` to write a Markdown human review bundle and JSON
-sidecar for that chain under `runtime/loops/<queue>/lineage-bundles/`.
-
-Use `queue-human-decision` to record a human gate decision after inspecting a
-task, lineage, or bundle. It writes `human_review_decision.json` with
-`approve`, `request_changes`, or `reject`. `request_changes` also writes
-`human_revision_request.json`, and `--enqueue-revision` can immediately queue
-the next round from the human feedback.
-
-Use `queue-peek` before changing a queue by hand. Use `queue-cancel` to move a
-queued task to `canceled/`, and `queue-requeue` to move a failed, active, or
-canceled task back to `inbox/`. `run-queue` uses a lease lock to prevent
-overlapping ticks and can move stale active tasks to `failed/` using
-`staleActiveMs`.
-
-Use `queue-scheduler-tick` when a queue should loop under an external timer.
-The scheduler treats 10 minutes as a bootstrap interval, then persists adaptive
-state under `runtime/loops/<queue>/scheduler/state.json`. More successful queued
-work speeds the cadence up, empty queues slow it down, failures and human gates
-back off harder, and long runs force the next interval above the observed run
-duration. Use `--plan-only` for read-only cadence planning and `--force-due`
-after an explicit human "do the next step" nudge.
-
-For long-running autonomous queues, scheduler ticks write
-`runtime/loops/<queue>/progress/latest.json`. Use
-`--no-progress-report` for explicit quiet mode. Use
-`--progress-notify-command "command"` only when a surrounding OpenClaw wrapper
-has explicit permission to send the throttled report into chat. Report failures,
-human gates, status changes, and queue completion promptly; throttle routine
-progress by `minInterval` and idle pings by `idleInterval`.
-
-Queue artifacts live under:
+Task artifacts live under:
 
 ```text
-runtime/loops/<queue>/inbox/
-runtime/loops/<queue>/active/
-runtime/loops/<queue>/done/
-runtime/loops/<queue>/failed/
-runtime/loops/<queue>/canceled/
+runtime/loops/<queue>/tasks/<task_id>/
 runtime/loops/<queue>/runs/
+runtime/loops/<queue>/{inbox,active,done,failed,canceled}/
 ```
 
-## Assisted Code Worktrees
+Expected evidence includes `task_contract.json`, `acceptance_plan.json`, `dev_plan.json`, checkpoints, acceptance reviews, `final_judgement.json`, revision requests, amendments, supersede markers, progress notifications, and lineage bundles.
 
-Use code worktree queues only for explicit L2 code-changing tasks, and keep
-human review in the loop. The runner prepares local changes; it does not push,
-merge, or delete worktrees.
-
-Create a starter config:
-
-```bash
-loop-engineering code-queue-init --root /path/to/workspace --queue code-tasks
-```
-
-The generated queue config enables:
-
-```json
-{
-  "worktree": {
-    "enabled": true,
-    "baseDir": "runtime/loops/code-tasks/worktrees",
-    "branchPrefix": "loop/code-tasks",
-    "verifyCommands": ["npm test"],
-    "keepOnSuccess": true
-  }
-}
-```
-
-When `worktree.enabled` is true, `run-queue` creates a git worktree and branch
-for the task, runs the dispatcher with cwd set to that worktree, runs
-`verifyCommands`, then records the branch, worktree path, verification results,
-`git status --short`, `git diff --stat`, and `git diff --name-status` in the
-run artifact, plus untracked file names.
-
-The dispatcher receives the normal queue environment plus `LOOP_ROOT`,
-`LOOP_WORKTREE_PATH`, `LOOP_WORKTREE_PATH_REL`, and `LOOP_WORKTREE_BRANCH`.
-
-Inspect code worktree artifacts without changing git state:
-
-```bash
-loop-engineering code-worktree-list --root /path/to/workspace --queue code-tasks
-loop-engineering code-worktree-inspect --root /path/to/workspace --queue code-tasks --task-id <id>
-loop-engineering code-worktree-inspect --root /path/to/workspace --queue code-tasks --run-id <id> --json
-loop-engineering code-worktree-diff --root /path/to/workspace --queue code-tasks --task-id <id>
-loop-engineering code-worktree-diff --root /path/to/workspace --queue code-tasks --run-id <id> --json
-loop-engineering code-worktree-export --root /path/to/workspace --queue code-tasks --task-id <id>
-loop-engineering code-worktree-export --root /path/to/workspace --queue code-tasks --run-id <id> --output review.patch --json
-loop-engineering code-patch-verify --root /path/to/workspace --patch runtime/loops/code-tasks/patches/<id>.patch
-loop-engineering code-patch-verify --root /path/to/workspace --patch review.patch --json
-loop-engineering code-patch-apply-plan --root /path/to/workspace --patch review.patch --json
-loop-engineering code-patch-apply --root /path/to/workspace --patch review.patch --confirm-apply
-loop-engineering code-review-bundle --root /path/to/workspace --queue code-tasks --task-id <id>
-loop-engineering code-review-bundle --root /path/to/workspace --queue code-tasks --run-id <id> --output review.md --json
-loop-engineering code-task-closeout --root /path/to/workspace --queue code-tasks --task-id <id>
-loop-engineering code-task-closeout --root /path/to/workspace --queue code-tasks --run-id <id> --output closeout.md --json
-loop-engineering code-task-autoflow --root /path/to/workspace --queue code-tasks --task-id <id>
-loop-engineering code-task-autoflow --root /path/to/workspace --queue code-tasks --run-id <id> --until closeout --json
-loop-engineering code-task-autoflow --root /path/to/workspace --queue code-tasks --all-actionable --until closeout --json
-loop-engineering code-task-finish --root /path/to/workspace --queue code-tasks --task-id <id> --confirm-apply --confirm-cleanup
-loop-engineering code-task-finish --root /path/to/workspace --queue code-tasks --run-id <id> --confirm-apply --confirm-cleanup --json
-loop-engineering code-task-run --root /path/to/workspace --queue code-tasks --title "Title" --task "Task body" --confirm-apply --confirm-cleanup
-loop-engineering code-task-dashboard --root /path/to/workspace --queue code-tasks
-loop-engineering code-task-dashboard --root /path/to/workspace --queue code-tasks --json
-loop-engineering code-task-status --root /path/to/workspace --queue code-tasks
-loop-engineering code-task-status --root /path/to/workspace --queue code-tasks --task-id <id> --json
-loop-engineering code-worktree-cleanup-plan --root /path/to/workspace --queue code-tasks
-loop-engineering code-worktree-cleanup-plan --root /path/to/workspace --queue code-tasks --json
-loop-engineering code-worktree-cleanup --root /path/to/workspace --queue code-tasks --confirm-cleanup
-loop-engineering code-worktree-cleanup --root /path/to/workspace --queue code-tasks --confirm-cleanup --include-orphans --json
-```
-
-These commands report branch, path, dirty status, verification status, diff
-summaries, and untracked files from queue run artifacts. `code-worktree-diff`
-resolves the recorded worktree and prints the actual patch plus untracked file
-names for review. `code-worktree-export` writes the patch plus a JSON manifest
-under `runtime/loops/<queue>/patches/` by default and refuses to overwrite
-unless `--force` is set. `code-patch-verify` reads an exported patch, strips
-loop-engineering metadata comments, and runs `git apply --check --binary` from
-the workspace root to confirm the patch still applies. `code-patch-apply-plan`
-is read-only and reports whether the patch can be safely applied, including
-dirty affected files. `code-patch-apply` requires `--confirm-apply`, reruns the
-plan, and applies only when the plan is ready. `code-review-bundle` writes a
-Markdown review artifact plus JSON sidecar with run identity, worktree summary,
-verification, diff, patch export status, patch verify, and apply-plan status.
-`code-worktree-cleanup-plan`
-reports missing worktrees, dirty worktrees that have not been exported, rejected
-patch exports, orphan worktree directories, and suggested cleanup commands.
-`code-worktree-cleanup` requires `--confirm-cleanup`, reruns the cleanup plan,
-and removes only gated candidates with `git worktree remove`. Dirty worktrees
-must have a default exported patch, passing patch verification, and an existing
-review bundle Markdown plus JSON sidecar. Orphan worktrees are skipped unless
-`--include-orphans` is supplied. `doctor` reports the same code queue findings
-as warnings. `code-task-closeout` writes a Markdown closeout artifact plus JSON
-sidecar with task/run identity, verification, patch export/verify/apply-plan
-status, review presence, cleanup recommendation, and remaining next actions.
-`code-task-autoflow` is a safe orchestration command that runs the review
-preparation flow through export, patch verification, apply-plan, and review
-bundle generation by default. With `--until closeout`, it also writes the
-closeout artifact. It skips existing patch/review/closeout artifacts unless
-`--force` is supplied. With `--all-actionable`, it reads `code-task-status` and
-runs the same safe flow across tasks whose next actions require export, review,
-or closeout generation; custom output paths are disabled in batch mode.
-`code-task-status` is a read-only task ledger that reports queue state, worktree
-existence, patch/review/closeout/finish presence, cleanup recommendation,
-aggregate counts, and next recommended commands. It reports `ready_to_finish`
-when a task has the required review and closeout artifacts plus a ready cleanup
-gate, and `landed` after a successful finish artifact exists. Planning, status,
-and closeout commands do not remove worktrees. `code-task-run` is the basic
-end-to-end code task command: it enqueues one task, processes one code worktree
-queue run, runs autoflow through closeout, finishes the reviewed task, and then
-reruns the queue's `worktree.verifyCommands` in the main workspace. It requires
-`--confirm-apply` and `--confirm-cleanup`, and stops with artifact pointers if
-any stage fails. `code-task-dashboard` is a read-only queue dashboard that
-combines queue counts, task ledger counts, action counts, cleanup/orphan
-summaries, ready-to-finish and landed task buckets, priority tasks, and
-recommended follow-up commands. Autoflow does not apply patches, remove
-worktrees, or change queue state. `code-task-finish` is a single-task,
-confirmation-gated landing command: it requires default patch, review, and
-closeout artifacts, verifies the apply plan and cleanup gate, applies the patch
-to the main workspace, removes that one reviewed worktree, and writes a finish
-artifact. It intentionally has no batch mode and does not stage, commit, push,
-merge, delete branches, or change queue state. Cleanup does not checkout, stage,
-commit, push, merge, delete branches, or change queue state.
-
-## Operating Flow
-
-1. Read the existing loop docs and configs in the target workspace.
-2. Add or edit the smallest `configs/loops/<id>.json` or queue dispatcher needed.
-3. Run `loop-engineering verify --config ...` for loop specs.
-4. Run one manual tick with `loop-engineering run --config ...` or `loop-engineering run-queue ...`.
-5. Inspect `runtime/loops/<id>/runs/*.json` or `runtime/loops/<queue>/runs/*.json` before summarizing.
-6. Run `loop-engineering doctor --root ...` after changing queue or loop configuration.
-7. Add cron only after a manual run succeeds.
-
-## Cron
-
-Use a command cron that executes one tick. Keep success silent and notify only
-on non-zero exit or breaker escalation.
-
-Example:
-
-```bash
-openclaw cron add \
-  --name "workspace-health" \
-  --every 1h \
-  --command "LOOP_WORKDIR=/path/to/workspace run-loop-cron.sh configs/loops/workspace-health.json" \
-  --command-cwd "/path/to/workspace" \
-  --timeout-seconds 180 \
-  --no-output-timeout-seconds 120 \
-  --output-max-bytes 20000 \
-  --no-deliver
-```
-
-## Artifacts
-
-Loop state and ledgers live under:
+Project artifacts live under:
 
 ```text
-runtime/loops/<loop_id>/state.json
-runtime/loops/<loop_id>/runs/*.json
+configs/loops/projects/<project>.json
+runtime/loops/projects/<project>/
 ```
 
-Summaries should cite the latest run path, outcome, failed checks, breaker
-reason, and verification performed. Do not put raw noisy run logs into durable
-memory; only save distilled operational facts.
+Summaries must cite the latest run/task/project evidence, verification performed, unmet checks, and blocker reason. Keep raw noisy logs in runtime artifacts; durable memory receives only distilled decisions, recurring failures, accepted safety rules, and verified completion facts.
+
+## Scheduler Policy
+
+Use scheduler ticks only after manual verification. Adaptive schedules may speed up with successful queued work and back off on empty queues, failures, long runs, or human gates.
+
+`queue-scheduler-tick` is adaptive cadence logic, not a resident daemon. A cron, systemd timer, or equivalent external scheduler must wake it regularly. For project queues that promise automatic continuation, set `scheduler.required=true` and a bounded `scheduler.heartbeatMaxAge`; `doctor` must fail with `scheduler_missing` whenever queued work exists without a fresh scheduler heartbeat.
+
+Progress notification must be scoped and idempotent. Report failures, human gates, status changes, and terminal completion promptly; throttle routine progress and idle updates.
+
+## Final Checklist
+
+Before saying a loop is finished, verify:
+
+- Was this a scoped task or project-level objective?
+- Is the correct contract present and current?
+- Were all amendments applied?
+- Did verification and acceptance pass?
+- Is `final_judgement.json` acceptable?
+- For a project, are all completion-contract items accepted and the backlog terminal?
+- Are there any unmet requirements, pending revisions, gates, or external-write confirmations?
+- Does the report distinguish milestone status from total-project status?
+- Are evidence paths and next actions included?
+
+If any project requirement remains, report a phase/task result and continue with the next authorized item; do not claim the project or Loop is complete.

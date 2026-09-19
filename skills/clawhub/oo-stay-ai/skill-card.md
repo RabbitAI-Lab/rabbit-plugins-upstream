@@ -1,42 +1,56 @@
-## Description: <br>
-Stay AI lets an agent query account settings, subscriptions, and orders through the OOMOL stay_ai connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Stay AI lets agents search and read Stay AI account settings, orders, and subscriptions through the OOMOL-connected oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and operators use this skill to have an agent read Stay AI account, subscription, and order information through an OOMOL-connected account. It is intended for lookup, filtering, and pagination workflows rather than direct API handling by the user. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent can query Stay AI account, subscription, and order data through the user's connected OOMOL account. <br>
-Mitigation: Install only when that read access is acceptable, and review requested filters or identifiers before running commands that expose customer or order details. <br>
-Risk: Future connector actions may include write or destructive operations even though this version lists read-oriented actions. <br>
-Mitigation: Confirm the exact action and payload with the user before any action tagged write or destructive, and rely on the live connector schema before sending data. <br>
+## Use Case:
 
+External users and developers use this skill to inspect Stay AI account settings, subscriptions, and orders through an OOMOL-connected Stay AI account.
 
-## Reference(s): <br>
-- [Stay AI homepage](https://stay.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Skill page](https://clawhub.ai/oomol/skills/oo-stay-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Bash commands and JSON payloads; connector responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing payloads and treats current untagged actions as read-oriented.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release and skill metadata) <br>
+Risk: The setup path includes an internet installer command for the oo CLI, which the security evidence flags as unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified manual process when possible, and avoid letting an agent run the installer command directly.
+
+Risk: The skill can expose Stay AI account, order, and subscription data through OOMOL-connected actions.
+
+Mitigation: Use only with a Stay AI account whose data may be exposed through OOMOL, and confirm any future write-capable action before execution.
+
+## Reference(s):
+
+- [ClawHub Stay AI Skill](https://clawhub.ai/oomol/skills/oo-stay-ai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Stay AI homepage](https://stay.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill runs read-oriented Stay AI connector actions and returns JSON responses containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: skill frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,59 @@
-## Description: <br>
-Gumroad (gumroad.com). Use this skill for Gumroad requests that read, create, or update data through the OOMOL-connected Gumroad connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for Gumroad requests: reading, creating, and updating data through the OOMOL-connected oo CLI instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate a Gumroad account through the oo CLI, including retrieving user, product, sale, subscriber, and sales data and performing supported sale operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to a connected Gumroad account. <br>
-Mitigation: Install only when the user is comfortable granting the connector access to that account. <br>
-Risk: Refund, shipment update, and receipt resend actions can affect money, fulfillment, or customers. <br>
-Mitigation: Require explicit confirmation of the target sale and exact effect before running those actions. <br>
-Risk: The first-time setup guidance includes one-line CLI installer commands. <br>
-Mitigation: Review the installer source or use a safer installation path before running those commands. <br>
+## Use Case:
 
+External users and developers use this skill to operate a connected Gumroad account through the OOMOL oo CLI, including retrieving user, product, subscriber, and sales data. The skill can also guide state-changing sale actions such as marking shipments, refunds, and receipt resends.
 
-## Reference(s): <br>
-- [ClawHub Gumroad skill page](https://clawhub.ai/oomol/oo-gumroad) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Gumroad](https://gumroad.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce oo CLI commands that return JSON connector responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: Refunds and buyer receipt resends can affect customers, payments, or post-purchase communication.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation of the sale ID, payload, and intended effect before running refund_sale or resend_sale_receipt.
+
+Risk: First-time setup includes remote installer commands for the oo CLI.
+
+Mitigation: Prefer a verified or manually inspected oo CLI installation path before executing installer commands.
+
+Risk: The skill relies on an OOMOL-connected Gumroad account with server-side credential handling.
+
+Mitigation: Use the skill only when the user trusts OOMOL with the Gumroad connection and has connected the intended account.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Gumroad](https://gumroad.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Fetches the live action schema before constructing connector payloads.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

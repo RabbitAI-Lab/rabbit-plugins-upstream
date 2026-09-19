@@ -1,45 +1,65 @@
-## Description: <br>
-Provides Amazon ASIN and keyword analytics via Xiyou Insights through the LinkFox gateway, covering traffic scores, reverse ASIN keyword lookup, ranking and traffic trends, BSR, ABA weekly trends, keyword competition, and suggested CPC across supported Amazon marketplaces. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+西柚-关键词洞察 helps agents query Xiyou Insights through LinkFox for Amazon ASIN and keyword traffic, ranking, BSR, ABA trend, competition, and suggested CPC analysis across supported marketplaces.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and ecommerce analysts use this skill to query Xiyou Amazon marketplace data for ASIN research, keyword discovery, traffic and rank trend review, and competitive keyword analysis. It requires LinkFox and Xiyou credentials before use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: ASINs, keywords, Xiyou credentials, and analytics requests are sent through an external LinkFox gateway to the Xiyou service. <br>
-Mitigation: Use only in environments where this data sharing is acceptable, and configure credentials through environment variables rather than prompts, files, or chat messages. <br>
-Risk: Full analytics responses are saved locally as plaintext JSON and may contain commercially sensitive product research. <br>
-Mitigation: Run the skill in a controlled workspace, restrict access to generated linkfox output directories, and clean saved responses when they are no longer needed. <br>
-Risk: The security review notes that feedback can be sent to an external endpoint without clear user confirmation. <br>
-Mitigation: Do not submit feedback automatically when the content is confidential or not safe to share with the provider. <br>
+## Use Case:
 
+External Amazon sellers, marketplace analysts, and agent users use this skill to retrieve Xiyou ASIN and keyword analytics for product research, keyword discovery, trend review, and competitive analysis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-xiyou-dongcha) <br>
-- [西柚找词 API 参考](references/api.md) <br>
-- [Xiyou Insights OpenAPI console](https://www.xydc.com/openapi?xiyou-insights-web=%2Fopenapi) <br>
-- [Xiyou OpenAPI](https://openapi.xiyouzhaoci.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API results or summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are saved locally as JSON; large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.6 (source: server release evidence) <br>
+Risk: The skill handles LinkFox API keys, Xiyou client credentials, and phone-login flows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the publisher is trusted; keep credentials in environment variables and avoid placing secrets in chats or source control.
+
+Risk: The skill can invoke billing-related flows and API calls that may consume credits or require payment.
+
+Mitigation: Confirm endpoint settings, plan selection, payment method, and repeated data requests before proceeding.
+
+Risk: Full API responses may be stored locally without retention limits.
+
+Mitigation: Review saved JSON files for sensitive marketplace data and delete or restrict access according to local retention needs.
+
+Risk: Security evidence flags suspicious behavior involving credential handling, billing, feedback reporting, and persistent local storage.
+
+Mitigation: Review the skill before deployment and disable or avoid automatic feedback reporting where local policy requires it.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-xiyou-dongcha)
+- [Xiyou API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [LinkFox API Key Guide](https://skill.linkfox.com/linkfoxskills/guide.htm)
+- [Xiyou OpenAPI Console](https://www.xydc.com/openapi?xiyou-insights-web=%2Fopenapi)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON files]
+
+**Output Format:** [Markdown guidance with shell commands and JSON response summaries; full API responses are persisted as JSON files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses of 8 KB or less are printed inline; larger responses are summarized while the full JSON is saved under a LinkFox session data directory.]
+
+## Skill Version(s):
+
+0.0.8 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

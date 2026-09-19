@@ -1,43 +1,55 @@
-## Description: <br>
-PDF-API.io helps agents inspect templates and render PDFs through an OOMOL-connected PDF-API.io account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PDF-API.io helps agents operate PDF-API.io through the OOMOL pdf_api_io connector to list templates, retrieve template details, and render PDFs.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to list accessible PDF templates, inspect template variables, and render template-backed PDFs through an OOMOL-connected PDF-API.io account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: PDF generation can produce a temporary hosted PDF URL from user-provided data. <br>
-Mitigation: Confirm the template, payload, and sensitivity of the data before running render_pdf. <br>
-Risk: The skill requires a connected OOMOL account and PDF-API.io credentials. <br>
-Mitigation: Install only when the user is comfortable using OOMOL's oo CLI and the connected PDF-API.io account. <br>
+## Use Case:
 
+External users and developers use this skill to operate a connected PDF-API.io account from an agent: list templates, retrieve template details, and render templates with JSON data into temporary hosted PDF URLs.
 
-## Reference(s): <br>
-- [PDF-API.io ClawHub listing](https://clawhub.ai/oomol/oo-pdf-api-io) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [PDF-API.io homepage](https://pdf-api.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can return JSON connector responses and temporary hosted PDF URLs when rendering PDFs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server evidence) <br>
+Risk: Fallback setup may run an unverified remote installer for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified or package-manager-based oo CLI installation path before allowing an agent to execute connector commands.
+
+Risk: PDF rendering may send user-provided payload data to PDF-API.io and create a temporary hosted PDF URL.
+
+Mitigation: Review render_pdf payloads and confirm the intended data exposure before rendering templates.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-pdf-api-io)
+- [PDF-API.io Homepage](https://pdf-api.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce temporary hosted PDF URLs from PDF-API.io render operations.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

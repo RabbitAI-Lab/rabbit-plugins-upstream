@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Cert Spotter"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["sslmate_cert_spotter_api"]
   icon: "https://static.oomol.com/logo/third-party/SSLMate%20Cert%20Spotter%20API.svg"
 ---

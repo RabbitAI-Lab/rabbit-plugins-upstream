@@ -1,43 +1,56 @@
-## Description: <br>
-Rosette Text Analytics lets agents use OOMOL-connected Rosette Text Analytics actions to analyze sentiment, extract entities, identify categories and languages, and tokenize text. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Rosette Text Analytics helps agents use an OOMOL-connected Rosette Text Analytics account to analyze sentiment, extract entities, identify languages, classify categories, and tokenize text.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to route Rosette Text Analytics requests through an OOMOL-connected account for text analytics tasks such as sentiment analysis, entity extraction, category identification, language identification, and tokenization. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected text is sent to Rosette Text Analytics through OOMOL when actions are run. <br>
-Mitigation: Send only text the user intends to analyze and connect a Rosette account only when using this service. <br>
-Risk: First-time setup may require installing or authenticating the oo CLI. <br>
-Mitigation: Use setup steps only after command, authentication, connection, or billing errors, and review the oo CLI installer source before first-time installation. <br>
+## Use Case:
 
+Developers and agents use this skill to route Rosette Text Analytics requests through the OOMOL `oo` CLI for sentiment analysis, entity extraction, language identification, category identification, and tokenization.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-rosette-text-analytics) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Rosette Text Analytics Homepage](https://www.babelstreet.com/babel-street-insights) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payload and response expectations.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill directs the agent to inspect the live connector schema before sending JSON payloads and to expect action responses with data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions include remote installer commands that can execute changing external code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer official verified package or release instructions, and review or verify any installer before running it.
+
+Risk: The skill depends on trust in OOMOL and the Rosette connector path for credential handling and request execution.
+
+Mitigation: Use it only when OOMOL and the connector path are trusted, and connect or refresh credentials only through the documented OOMOL account flow.
+
+## Reference(s):
+
+- [Rosette Text Analytics ClawHub page](https://clawhub.ai/oomol/skills/oo-rosette-text-analytics)
+- [Rosette Text Analytics homepage](https://www.babelstreet.com/babel-street-insights)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires the oo CLI, an authenticated OOMOL account, and a connected Rosette Text Analytics API key; live action schemas are checked before payload construction.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

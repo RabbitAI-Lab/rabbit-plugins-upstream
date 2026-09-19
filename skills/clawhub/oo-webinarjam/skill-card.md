@@ -1,46 +1,60 @@
-## Description: <br>
-Operate WebinarJam through an OOMOL-connected account to read webinar data and register users with the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agent guidance for using the OOMOL oo CLI to read WebinarJam data and register WebinarJam users through a connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Agents and operators use this skill to list WebinarJam webinars, inspect webinar details, list registrants or attendees, and register users through an authenticated OOMOL connection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read WebinarJam account data and register users through a connected OOMOL account. <br>
-Mitigation: Use only the intended authenticated account and confirm registration payloads before running write actions. <br>
-Risk: First-time CLI install or login steps establish trust in OOMOL tooling and account access. <br>
-Mitigation: Run setup steps only after an auth, connection, or missing-CLI error and only when the user trusts OOMOL for the task. <br>
-Risk: Connector action contracts can change, making stale payloads incorrect. <br>
-Mitigation: Inspect the live connector schema before constructing each action payload. <br>
+## Use Case:
 
+Agents use this skill when a user asks to list WebinarJam webinars, inspect webinar details or registrants, or register a user after confirmation. It is intended for users operating a connected WebinarJam account through OOMOL.
 
-## Reference(s): <br>
-- [WebinarJam homepage](https://webinarjam.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub WebinarJam skill page](https://clawhub.ai/oomol/skills/oo-webinarjam) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON when commands are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The first-time setup path includes remote installer commands that execute downloaded scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer before execution and prefer a pinned, verified install method with checksums or signatures.
+
+Risk: The register_user action changes WebinarJam account state by adding a registrant.
+
+Mitigation: Confirm the exact register_user payload and intended webinar with the user before running the write action.
+
+Risk: A connected WebinarJam account may expose webinar and registrant data to the skill's connector actions.
+
+Mitigation: Connect only the WebinarJam account intended for this workflow and re-check authorization if scopes or credentials change.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-webinarjam)
+- [WebinarJam homepage](https://webinarjam.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before action payload construction.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

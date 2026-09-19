@@ -39,8 +39,16 @@ REQUIREMENTS = ["mcp>=1.9.0", "pymupdf>=1.24", "pypdf>=4.0"]
 
 # (label, [importable module names that satisfy it]). ``anyio`` rides in with
 # ``mcp``; PyMuPDF exposes both ``pymupdf`` (new) and ``fitz`` (classic).
+#
+# The ``mcp`` probe targets the STREAMABLE-HTTP TRANSPORT SUBMODULE, not the
+# bare package. A host can pre-install an `mcp` old enough to import fine yet
+# predate ``mcp.client.streamable_http`` — exactly what happened on the agent
+# vessel: probing plain "mcp" passed, the venv was never built, and paymatch
+# died on `from mcp.client.streamable_http import streamablehttp_client`.
+# Probing the submodule makes a too-old install read as MISSING, which routes
+# through the venv below, where REQUIREMENTS pins mcp>=1.9.0.
 _PROBE = [
-    ("mcp", ["mcp"]),
+    ("mcp", ["mcp.client.streamable_http"]),
     ("anyio", ["anyio"]),
     ("pymupdf", ["pymupdf", "fitz"]),
     ("pypdf", ["pypdf"]),
@@ -73,9 +81,13 @@ def _in_our_venv() -> bool:
 def _importable(names: list[str]) -> bool:
     for n in names:
         try:
+            # For a dotted name, find_spec imports the PARENT packages, and a
+            # broken or ancient install can raise more than ImportError while
+            # doing so. Any failure means "this probe is not satisfied" — the
+            # venv path then installs a known-good version.
             if importlib.util.find_spec(n) is not None:
                 return True
-        except (ImportError, ValueError):
+        except Exception:
             continue
     return False
 

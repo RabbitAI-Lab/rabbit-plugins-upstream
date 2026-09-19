@@ -1,40 +1,58 @@
-## Description: <br>
-AI assistant for bank credit due diligence covering borrower analysis, financial review, industry risk, ESG factors, and investigation report drafting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a bilingual advisory framework for bank credit officers, loan analysts, and risk managers to structure borrower due diligence, financial review, industry risk assessment, ESG checks, and credit investigation reports.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Bank credit officers, loan analysts, and risk managers use this skill as an internal analytical framework for borrower due diligence, financial health review, industry and ESG risk assessment, and report drafting. It supports analysis and templates but does not make final credit approval or rejection decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Credit due diligence is a high-stakes banking workflow, and generated ratings, facility amounts, pricing guidance, collateral suggestions, or report text could be mistaken for final lending decisions. <br>
-Mitigation: Use the skill only as an advisory aid for trained credit staff, and require formal policy review plus authorized approval before relying on outputs for lending action. <br>
-Risk: Borrower analysis may involve customer PII, confidential financial data, or other sensitive banking information. <br>
-Mitigation: Do not enter real customer PII or confidential borrower data unless the institution permits it and appropriate data protection controls are in place. <br>
+## Use Case:
 
+Bank credit officers, loan analysts, and risk managers use this skill to organize credit due diligence, assess borrower and financial risk, identify early warning indicators, and draft investigation report content. Its outputs support internal review but do not replace qualified credit approval, regulatory verification, or signed human review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/bank-credit-due-diligence) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Conversational guidance and Markdown-style report templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code, shell commands, persistent storage, network calls, or credential collection are included in the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.1.1 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Users may enter borrower, financial, or personal data that is sensitive in a bank credit workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Minimize inputs, de-identify personal information, and use real customer data only when the institution permits it and appropriate data protection controls are in place.
+
+Risk: Regulatory references or credit-risk guidance may be incomplete, outdated, or unsuitable for a specific institution.
+
+Mitigation: Verify regulatory references against official sources and apply the institution's current policies before using generated analysis.
+
+Risk: Generated analysis could be mistaken for a final credit approval, rejection, rating, or facility decision.
+
+Mitigation: Require qualified credit staff to review, recalculate key ratios, approve, and sign off before any report or recommendation enters a formal credit process.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/bank-credit-due-diligence)
+- [Publisher profile](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown conversation output with report templates, checklists, tables, and advisory analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory-only output; no executable tools; requires human review before real-world use.]
+
+## Skill Version(s):
+
+4.1.2 (source: release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

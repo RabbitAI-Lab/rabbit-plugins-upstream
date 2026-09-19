@@ -18,7 +18,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
 from .config import GAMMA_API, HTTP_TIMEOUT
-from .http import ApiError, get_json
+from .http import ApiError, clean_slug, clean_text, get_json
 
 PAGE_SIZE = 100
 MAX_PAGES = 10  # cap of 1000 markets scanned in the fallback
@@ -99,7 +99,7 @@ def _as_float(raw: Any, default: float = 0.0) -> float:
 
 def parse_market(raw: Dict[str, Any]) -> Market:
     """Normalize a Gamma market, pairing outcome ↔ price ↔ token_id."""
-    names = [str(n) for n in _as_list(raw.get("outcomes"))]
+    names = [clean_text(n, 60) for n in _as_list(raw.get("outcomes"))]
     prices = _as_list(raw.get("outcomePrices"))
     tokens = [str(t) for t in _as_list(raw.get("clobTokenIds"))]
 
@@ -116,8 +116,8 @@ def parse_market(raw: Dict[str, Any]) -> Market:
 
     return Market(
         id=str(raw.get("id") or ""),
-        question=str(raw.get("question") or raw.get("title") or "Unknown"),
-        slug=str(raw.get("slug") or ""),
+        question=clean_text(raw.get("question") or raw.get("title")) or "Unknown",
+        slug=clean_slug(raw.get("slug")),
         volume_24h=_as_float(raw.get("volume24hr")),
         liquidity=_as_float(raw.get("liquidityNum") or raw.get("liquidity")),
         end_date=str(raw.get("endDate") or ""),

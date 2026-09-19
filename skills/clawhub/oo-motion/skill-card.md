@@ -1,45 +1,61 @@
-## Description: <br>
-Motion lets an agent operate Motion through an OOMOL-connected account to read, create, update, and delete Motion data using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Motion (usemotion.com). Use this skill for ANY Motion request: reading, creating, updating, and deleting Motion data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to manage Motion workspaces, projects, schedules, statuses, users, and tasks through an OOMOL-connected Motion account. It supports read actions plus confirmed creation, update, and deletion workflows for Motion projects and tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create or modify Motion projects and tasks. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running write actions. <br>
-Risk: Destructive task deletion can remove Motion data. <br>
-Mitigation: Get explicit approval for the target task before running delete_task. <br>
-Risk: The skill requires an OOMOL-connected Motion account and sensitive credentials. <br>
-Mitigation: Use OOMOL credential injection and avoid handling raw Motion tokens directly. <br>
+## Use Case:
 
+Employees and teams using Motion use this skill to list workspaces, users, schedules, statuses, projects, and tasks, and to create or update Motion projects and tasks through the OOMOL connector. Agents should confirm write payloads and destructive targets before changing Motion data.
 
-## Reference(s): <br>
-- [ClawHub Motion Skill](https://clawhub.ai/oomol/oo-motion) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Motion Homepage](https://www.usemotion.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payloads or results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before payload construction; write and destructive actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source and prefer an official signed or checksum-verified installation path before running it.
+
+Risk: The skill can create, update, and delete Motion data.
+
+Mitigation: Confirm the exact JSON payload and intended effect with the user before write actions, and require explicit approval before destructive actions.
+
+Risk: The OOMOL connector requires access to Motion account data.
+
+Mitigation: Install only when the user accepts OOMOL as the Motion connector and grants the minimum account access needed for the task.
+
+## Reference(s):
+
+- [Motion homepage](https://www.usemotion.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Motion skill page](https://clawhub.ai/oomol/skills/oo-motion)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses Motion connector schemas to shape JSON inputs and returns connector responses as JSON when actions are run.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

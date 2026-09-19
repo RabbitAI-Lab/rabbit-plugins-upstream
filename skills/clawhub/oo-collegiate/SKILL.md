@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Merriam-Webster Collegiate"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.4"
   services: ["collegiate"]
   icon: "https://static.oomol.com/logo/third-party/collegiate.png"
 ---

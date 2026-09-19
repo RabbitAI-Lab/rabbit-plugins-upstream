@@ -1,43 +1,60 @@
-## Description: <br>
-This skill lets agents operate Gitea through an OOMOL-connected account for repository discovery, issue workflows, and approved issue or comment creation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gitea connector for reading, creating, updating, and deleting repositories, issues, pull requests, releases, webhooks, keys, labels, milestones, branches, tags, and related data through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and teams use this skill to inspect Gitea account, repository, issue, and comment data through an OOMOL-connected Gitea account. With explicit confirmation, it can also create issues and issue comments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Gitea account and repository information through the connected OOMOL account. <br>
-Mitigation: Connect only a Gitea account whose repositories you are comfortable exposing to this connector. <br>
-Risk: The skill can create Gitea issues and issue comments when write actions are approved. <br>
-Mitigation: Review the exact payload and expected effect before allowing any write action. <br>
+## Use Case:
 
+Developers and external users use this skill to operate Gitea through an OOMOL-connected account, including repository, branch, file, tag, release, issue, milestone, label, pull request, review, webhook, collaborator, key, and topic workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-gitea) <br>
-- [Gitea product page](https://about.gitea.com/products/gitea/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return JSON data from Gitea connector actions when commands are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: First-time setup may ask users to execute remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a signed or package-manager installation path, or download and review or verify the installer before running it.
+
+Risk: The skill can perform write and destructive Gitea actions.
+
+Mitigation: Confirm the exact target, payload, and expected effect before running any state-changing or destructive action.
+
+Risk: Use requires connecting a Gitea account through OOMOL's service.
+
+Mitigation: Limit Gitea permissions to the scopes needed for the task and review permissions before use.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-gitea)
+- [Gitea Homepage](https://about.gitea.com/products/gitea/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector command responses may include JSON data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Capsule CRM"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["capsule_crm"]
   icon: "https://static.oomol.com/logo/third-party/capsule_crm.svg"
 ---

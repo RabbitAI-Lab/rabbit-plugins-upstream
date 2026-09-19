@@ -1,44 +1,56 @@
-## Description: <br>
-MiniMax lets an agent operate MiniMax through an OOMOL-connected account for model discovery, token estimation, and non-streaming response creation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MiniMax (minimax.io). Use this skill for ANY MiniMax request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect MiniMax connector schemas, list or retrieve OpenAI-compatible MiniMax model metadata, estimate input tokens, and create non-streaming MiniMax responses through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on OOMOL as the credential-handling connector for MiniMax. <br>
-Mitigation: Install only if that connector model is acceptable, and avoid handling raw MiniMax credentials outside the OOMOL connection flow. <br>
-Risk: The first-time setup path includes remote oo CLI installer commands. <br>
-Mitigation: Treat the installer like any third-party installer and review it before running it; use setup commands only when oo is missing or authentication fails. <br>
-Risk: The create_response action changes MiniMax state by creating a non-streaming response. <br>
-Mitigation: Fetch the live connector schema, review the exact JSON payload and expected effect, and get user confirmation before running the write action. <br>
+## Use Case:
 
+Developers and external agent users use this skill to operate MiniMax through an OOMOL-connected account with schema-first command guidance for reads, writes, media generation, and deletion workflows.
 
-## Reference(s): <br>
-- [MiniMax homepage](https://www.minimax.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [MiniMax ClawHub listing](https://clawhub.ai/oomol/skills/oo-minimax) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo connector schemas and JSON payloads; create_response is a write action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: artifact frontmatter and server release metadata) <br>
+Risk: Setup instructions include mutable remote installer scripts executed directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation method before installing and prefer an official package manager, pinned release, or verified installer.
+
+Risk: Write and destructive MiniMax actions can create or delete remote resources.
+
+Mitigation: Confirm exact payloads for write actions and deletion targets before allowing the skill to run them.
+
+## Reference(s):
+
+- [MiniMax homepage](https://www.minimax.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-minimax)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands invoke the oo CLI and may return JSON connector responses.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

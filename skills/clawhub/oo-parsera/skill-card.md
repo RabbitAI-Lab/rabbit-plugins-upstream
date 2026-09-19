@@ -1,42 +1,56 @@
-## Description: <br>
-Parsera helps agents extract structured data or clean Markdown from webpages and parse attributes from supplied HTML or text through the OOMOL `oo` CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Parsera (parsera.org) helps agents search, read, and extract structured or Markdown data from webpages through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill when they need Parsera-backed webpage extraction, Markdown extraction, or structured parsing while keeping Parsera credentials behind an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: First-time setup includes a remote shell installer for the `oo` CLI. <br>
-Mitigation: Install the `oo` CLI from official documentation using any available integrity checks before using the skill, rather than asking an agent to pipe a remote installer directly into the shell. <br>
-Risk: Parsera requests are brokered through OOMOL and require a connected account for credentials. <br>
-Mitigation: Use the skill only after intentionally signing in and connecting Parsera in OOMOL, and only if that credential-broker model is acceptable for the deployment. <br>
+## Use Case:
 
+Developers and external users can use this skill to operate Parsera from an agent session for webpage extraction, Markdown conversion, schema inspection, and parsing of provided HTML or text.
 
-## Reference(s): <br>
-- [Parsera homepage](https://parsera.org) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub Parsera skill page](https://clawhub.ai/oomol/oo-parsera) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with `oo` CLI shell commands and JSON payloads or responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing Parsera action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: release evidence and frontmatter) <br>
+Risk: The setup guidance includes remote installer commands that can execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer an official package or a downloaded installer that can be reviewed before execution, and require explicit approval for first-time setup steps.
+
+Risk: Parsera access depends on the OOMOL oo CLI and a connected Parsera account.
+
+Mitigation: Run connector actions only after the user has installed the CLI, signed in, and connected Parsera, and fall back to setup only after an authentication or connection failure.
+
+## Reference(s):
+
+- [Parsera homepage](https://parsera.org)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-parsera)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return connector JSON responses containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

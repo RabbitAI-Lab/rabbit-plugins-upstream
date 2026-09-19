@@ -1,42 +1,53 @@
-## Description: <br>
-SmartRecruiters helps agents search and read SmartRecruiters jobs and candidates through the OOMOL-connected oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SmartRecruiters helps agents search and read SmartRecruiters jobs and candidate records through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees and recruiting operations teams use this skill to retrieve SmartRecruiters job and candidate information through OOMOL. It supports read-only workflows such as listing jobs, getting job details, searching candidates, and getting candidate details. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Candidate records may contain sensitive recruiting data. <br>
-Mitigation: Install and use this skill only in workspaces where SmartRecruiters access is appropriate, and avoid broad or ambiguous requests when candidate data should not be queried. <br>
-Risk: The skill depends on OOMOL-managed CLI access and server-side credentials. <br>
-Mitigation: Use the documented setup and recovery steps when authentication, connection, scope, credential, or billing errors occur. <br>
+## Use Case:
 
+Recruiting teams and their agents use this skill to retrieve SmartRecruiters candidate details, job details, job search results, and candidate search results from an OOMOL-connected SmartRecruiters account.
 
-## Reference(s): <br>
-- [SmartRecruiters skill page](https://clawhub.ai/oomol/skills/oo-smartrecruiters) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [SmartRecruiters homepage](https://www.smartrecruiters.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses from the connector include data and an executionId under meta.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and skill frontmatter) <br>
+Risk: The skill is a coherent SmartRecruiters read connector, but its setup instructions include directly executing remote installer scripts, which warrants review before installation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if you trust OOMOL and the oo CLI installer source. Prefer reviewing or manually installing the CLI from a trusted, versioned release with integrity verification instead of running the pipe-to-shell commands directly, and connect only the SmartRecruiters account/data scopes you intend the agent to read.
+
+## Reference(s):
+
+- [SmartRecruiters icon](https://static.oomol.com/logo/third-party/smartrecruiters.png)
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-smartrecruiters)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [SmartRecruiters](https://www.smartrecruiters.com/)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-oriented SmartRecruiters connector actions; live schemas should be inspected before each action payload.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

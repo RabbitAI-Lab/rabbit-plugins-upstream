@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Ayrshare"
   author: "OOMOL"
-  version: "1.0.3"
+  version: "1.0.5"
   services: ["ayrshare"]
   icon: "https://static.oomol.com/logo/third-party/ayrshare.png"
 ---

@@ -1,41 +1,56 @@
-## Description: <br>
-Klaviyo (klaviyo.com). Use this skill for ANY Klaviyo request - reading, creating, and updating data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Klaviyo connector skill for reading, creating, and updating Klaviyo data through the OOMOL-connected oo CLI instead of direct API calls.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to work with Klaviyo through an OOMOL-connected account: reading campaigns, profiles, and events, validating account access, and creating events after confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Klaviyo campaigns, profiles, and events through the connected account. <br>
-Mitigation: Install it only when OOMOL is trusted as the Klaviyo connector provider and ensure the connected account has appropriate access. <br>
-Risk: The create_event action can write new Klaviyo event data. <br>
-Mitigation: Confirm the exact action payload and expected effect with the user before running write actions. <br>
+## Use Case:
 
+External users and developers use this skill to operate Klaviyo through an OOMOL-connected account, including reading campaigns, profiles, events, and account metadata and creating profile events after confirming write payloads.
 
-## Reference(s): <br>
-- [Klaviyo homepage](https://www.klaviyo.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: First-time setup may ask users to execute remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source and prefer a pinned, checksum-verified installer or package-manager installation before use.
+
+Risk: The skill can perform write-capable Klaviyo actions through the OOMOL CLI.
+
+Mitigation: Confirm the exact payload, target account, and expected account impact before allowing write actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-klaviyo)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Klaviyo Homepage](https://www.klaviyo.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live Klaviyo connector schemas before action execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: evidence release.version and artifact metadata.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

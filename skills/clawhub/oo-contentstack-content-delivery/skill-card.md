@@ -1,42 +1,55 @@
-## Description: <br>
-Contentstack Content Delivery lets agents search and read published Contentstack content through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Contentstack Content Delivery helps agents search and read published Contentstack content types, entries, and assets through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and content operators use this skill to let an agent inspect Contentstack content types, entries, and assets from an already connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent may read more published Contentstack content than intended when a user request is broad or ambiguous. <br>
-Mitigation: Confirm ambiguous requests before running connector actions and keep the OOMOL Contentstack connection limited to the intended account scope. <br>
-Risk: Use depends on installing the oo CLI and connecting an OOMOL account before content can be accessed. <br>
-Mitigation: Review the oo CLI installer and account connection flow before first use, then run setup only when an auth or connection command fails. <br>
+## Use Case:
 
+Developers and content operators use this skill to retrieve Contentstack schemas, published entries, assets, and content-type lists through an authenticated OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-contentstack-content-delivery) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Contentstack Content Delivery homepage](https://www.contentstack.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with bash snippets and JSON connector responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI and an OOMOL account connection for Contentstack Content Delivery.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup may ask users to execute a remote installer script before the oo CLI is installed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verifiable package manager or official versioned installer with checksum or signature verification, and avoid elevated privileges unless the installer has been independently verified.
+
+Risk: Connector actions depend on an authenticated OOMOL-connected Contentstack account.
+
+Mitigation: Run authentication or connection setup only after an action fails with a matching auth or connection error, then retry the read-only action.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-contentstack-content-delivery)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Contentstack](https://www.contentstack.com/)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, JSON, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution; available actions are read-only get and list operations.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

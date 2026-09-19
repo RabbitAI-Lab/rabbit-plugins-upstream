@@ -1,44 +1,56 @@
-## Description: <br>
-Findymail (findymail.com) enables an agent to search, read, and verify professional email data through an OOMOL-connected Findymail account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Findymail helps agents search and verify professional email information through a connected Findymail account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and business users can use this skill to let an agent check Findymail credits, search for professional contacts by person or company domain, search employees, and verify professional email addresses through a connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Findymail searches and email verification may consume Findymail or OOMOL credits. <br>
-Mitigation: Check remaining credits when relevant and run searches or verification only when the user intends to spend account credits. <br>
-Risk: The skill can return professional contact data from Findymail. <br>
-Mitigation: Handle returned contact data according to the user's business purpose and applicable privacy or data-handling requirements. <br>
-Risk: First-time CLI installation, sign-in, and account connection steps affect the user's local environment or connected account. <br>
-Mitigation: Run setup steps only when an action fails due to a missing CLI, authentication issue, or missing/expired Findymail connection. <br>
+## Use Case:
 
+External users and developers use this skill to have an agent retrieve Findymail credit usage, search professional contacts by name or domain, search employees, and verify email addresses through a connected Findymail account.
 
-## Reference(s): <br>
-- [Findymail homepage](https://www.findymail.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-findymail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution; responses include connector data and an execution id when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: The setup instructions include remote installer commands that can execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path first and prefer a signed package, pinned release, or downloaded installer that can be inspected before execution.
+
+Risk: Connector calls can fail when the user is not authenticated, Findymail is not connected, credentials are expired, or account credit is insufficient.
+
+Mitigation: Run setup, reconnection, or billing steps only after a matching command failure and follow the skill's scoped recovery guidance.
+
+## Reference(s):
+
+- [Findymail ClawHub skill page](https://clawhub.ai/oomol/skills/oo-findymail)
+- [Findymail homepage](https://www.findymail.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return Findymail connector results as JSON when actions are run.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

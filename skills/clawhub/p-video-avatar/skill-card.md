@@ -1,44 +1,55 @@
-## Description: <br>
-Use when someone wants a person on camera speaking a script: a lip-synced host, spokesperson, or narrated avatar from a portrait photo. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when someone wants a person on camera speaking a script — lip-synced host, spokesperson, or narrated avatar from a portrait photo.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-Developers and creative operators use this skill to prepare one Pruna p-video-avatar generation for a portrait-based talking-head clip, including prompt drafting, media upload, API request construction, and confirmation gates before a paid call. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow sends portrait images, scripts or audio, prompts, voice settings, and language choices to Pruna's API and may incur paid generation costs. <br>
-Mitigation: Confirm PRUNA_API_KEY availability, media inputs, script or audio, voice settings, language, resolution, and prompts with the user before making any API call. <br>
-Risk: Using the skill for multi-scene continuity, silent B-roll, or motion transfer can produce the wrong workflow and mismatched expectations. <br>
-Mitigation: Use this skill for one p-video-avatar prediction per invocation and redirect multi-scene, B-roll, and motion-transfer requests to the specialized Pruna skills named in the artifact. <br>
-Risk: A weak or reused prompt can drift from the user's intended speaker, host beat, or approved wording. <br>
-Mitigation: Draft a fresh, faithful video prompt for the clip, keep the portrait identity and script or audio fixed, and show the prompt and voice fields before posting when wording is not locked. <br>
+## Use Case:
 
+External users and developers use this skill to prepare and submit one Pruna p-video-avatar prediction that turns a portrait plus a script or narration audio into a lip-synced talking-head avatar video.
 
-## Reference(s): <br>
-- [ClawHub p-video-avatar Skill Page](https://clawhub.ai/pruna-ai/skills/p-video-avatar) <br>
-- [Pruna Files API Endpoint](https://api.pruna.ai/v1/files) <br>
-- [Pruna Predictions API Endpoint](https://api.pruna.ai/v1/predictions) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with curl examples and JSON request bodies] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a single-stream agent workflow for one Pruna p-video-avatar prediction; the generated video is produced by Pruna's API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill may send portraits, scripts, and optional narration audio to Pruna's API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only when the user accepts sending those inputs to Pruna and avoid submitting sensitive personal media or scripts without permission.
+
+Risk: The setup guidance can install changing external skill components through floating npx skills add commands.
+
+Mitigation: Prefer pinned or pre-reviewed skill installs and install the optional full suite only when all included capabilities are intended.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/p-video-avatar)
+- [Pruna file upload endpoint](https://api.pruna.ai/v1/files)
+- [Pruna predictions endpoint](https://api.pruna.ai/v1/predictions)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with curl commands and JSON request bodies]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides prompt drafting, input confirmation, API upload, prediction creation, polling, and download for a single avatar-video generation.]
+
+## Skill Version(s):
+
+1.0.13 (source: server release metadata and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,11 +1,10 @@
 #!/bin/bash
 # ============================================================
 # Project Daily Recap - 项目进度定时提醒
-# 完全独立于 LLM，通过 openclaw CLI 推送到企业微信Agent（不受48h限制）
-# 修改时间：2026-07-13 已切换走企业微信Agent通道
+# 完全独立于 LLM，直接通过 openclaw CLI 推送到微信
 # ============================================================
 
-set -E
+set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CONFIG_FILE="${SCRIPT_DIR}/config"
@@ -36,20 +35,17 @@ NODE_CMD=$(detect_node)
 export PATH="$(dirname "$NODE_CMD"):$HOME/.local/share/pnpm:/usr/local/bin:/usr/bin:$PATH"
 
 # ---------- 加载配置 ----------
+PROJECT_NAME="我的项目"
+TODAY_PROGRESS=""
+TOMORROW_PLAN=""
+CHECKLIST="发了技术内容?,有客户沟通?,项目有推进?"
+PUSH_HOUR=20
+PUSH_MINUTE=0
+WEIXIN_CHANNEL="openclaw-weixin"
+WEIXIN_TARGET=""
+WEIXIN_ACCOUNT=""
+
 [ -f "$CONFIG_FILE" ] && source "$CONFIG_FILE"
-
-# 默认值
-PROJECT_NAME="${PROJECT_NAME:-我的项目}"
-TODAY_PROGRESS="${TODAY_PROGRESS:-}"
-TOMORROW_PLAN="${TOMORROW_PLAN:-}"
-CHECKLIST="${CHECKLIST:-发了技术内容?,有客户沟通?,项目有推进?}"
-PUSH_HOUR="${PUSH_HOUR:-20}"
-PUSH_MINUTE="${PUSH_MINUTE:-0}"
-
-# ⭐ 2026-07-13 切换为企业微信Agent通道（不受48h限制），config文件仅管理项目内容
-WEIXIN_CHANNEL="wecom"
-WEIXIN_TARGET="wecom-agent:default:Feng"
-WEIXIN_ACCOUNT="default"
 
 # ---------- 生成消息 ----------
 WEEKDAYS=("日" "一" "二" "三" "四" "五" "六")

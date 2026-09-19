@@ -1,42 +1,60 @@
-## Description: <br>
-Parallel (parallel.ai) helps agents read, create, and update Parallel data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Parallel (parallel.ai) lets agents read, create, and update data through the OOMOL-connected oo CLI instead of calling the Parallel API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate Parallel through an OOMOL-connected account for web research, structured data enrichment, URL extraction, ranked web search, and task-run retrieval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create Parallel task runs that change account state. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before approving create_task_run or any future write/destructive connector action. <br>
-Risk: The skill depends on OOMOL account setup, the oo CLI, and a connected Parallel account. <br>
-Mitigation: Run first-time setup only when a command fails with an authentication, missing CLI, missing scope, expired credential, or connection error. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Parallel through an OOMOL-connected account for web search, public URL extraction, structured data enrichment, and task-run creation or retrieval.
 
-## Reference(s): <br>
-- [Parallel homepage](https://parallel.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-parallel) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce Parallel task-run status, ranked source excerpts, extracted content, or setup guidance depending on the requested action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: artifact metadata and release evidence) <br>
+Risk: The fallback setup path tells agents to run a remote installer script directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified package or inspect the installer before execution, and do not let an agent automatically run the installer pipeline.
+
+Risk: Creating a Parallel task run changes third-party service state.
+
+Mitigation: Require user confirmation of the exact payload and expected effect before running write actions.
+
+Risk: The skill depends on OOMOL's server-side credential flow for Parallel.
+
+Mitigation: Install only when the publisher is trusted and the user is comfortable with server-managed credentials.
+
+## Reference(s):
+
+- [Parallel homepage](https://parallel.ai)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-parallel)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with bash command examples and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution and returns connector responses as JSON when the CLI is run with --json.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

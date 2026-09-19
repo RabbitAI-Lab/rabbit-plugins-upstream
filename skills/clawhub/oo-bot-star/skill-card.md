@@ -1,41 +1,61 @@
-## Description: <br>
-BotStar helps an agent read, create, update, publish, and delete BotStar bots, bot attributes, CMS content, and audience user attributes through the OOMOL BotStar connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BotStar helps agents read, create, update, publish, and delete BotStar bots, CMS entities, bot attributes, and audience user attributes through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and BotStar operators use this skill to inspect and manage BotStar bots, CMS entities, CMS items, bot attributes, and audience user attributes from an agent workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change live BotStar bots, CMS content, bot attributes, and audience user attributes. <br>
-Mitigation: Review the exact payload and expected effect with the user before approving write, publish, update, or delete actions. <br>
-Risk: The skill relies on OOMOL to broker the BotStar account connection. <br>
-Mitigation: Install and use it only when the publisher and connected BotStar account are trusted for the intended workspace. <br>
+## Use Case:
 
+Developers and BotStar operators use this skill to manage BotStar bots, CMS entities, bot attributes, and audience user attributes from an agent. It supports read workflows and state-changing workflows where payloads and effects should be confirmed before writes, publishing, or deletes.
 
-## Reference(s): <br>
-- [BotStar homepage](https://botstar.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live schema inspection before action payloads; write and destructive actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Installer instructions execute remotely downloaded code directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installer instructions before installation and prefer a verified package or documented manual installation path for the oo CLI.
+
+Risk: Write, publish, and delete actions can change or remove BotStar resources.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running write, publish, or destructive actions.
+
+Risk: Connector payloads can be invalid if based on stale assumptions.
+
+Mitigation: Inspect the live action schema before constructing BotStar connector payloads.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-bot-star)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [BotStar homepage](https://botstar.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agent output may include BotStar connector action names, live schema inspection commands, JSON payloads, and cautions for write or destructive actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "sourceType": "local-static-artifact",
   "dossierSha256": "<sha256-of-deployment-dossier.json>",
   "upload": {
-    "provider": "coze-file-transfer",
-    "endpoint": "https://coze-js-api.devtool.uk/file-transfer/upload",
+    "provider": "f-file-transfer",
+    "endpoint": "https://f.devtool.uk/file-transfer/upload",
     "storage": "temp",
     "relativePath": "<server-assigned-name-from-upload-response>",
     "bytes": 0,

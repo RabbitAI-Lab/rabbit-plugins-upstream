@@ -1,42 +1,57 @@
-## Description: <br>
-Personal AI (personal.ai) lets agents read, create, and update data through an OOMOL-connected Personal AI account instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Personal AI (personal.ai) lets an agent read, create, and update Personal AI data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to let an agent operate Personal AI personas, send messages or instructions, and upload memories, text documents, or public URLs through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and write Personal AI data through a connected account, including content that may persist in memories or document libraries. <br>
-Mitigation: Install it only for intended Personal AI account use, and review proposed write payloads before approving state-changing actions. <br>
-Risk: Incorrect payloads could send unintended persona messages, instructions, memories, documents, or URL uploads. <br>
-Mitigation: Inspect the live connector schema before constructing payloads and confirm the exact effect with the user for write actions. <br>
+## Use Case:
 
+External users and developers use this skill to operate Personal AI personas through an OOMOL-connected account, including sending messages or instructions and uploading memories, text documents, or public URL content.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-personal-ai) <br>
-- [Personal AI homepage](https://personal.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector actions may return JSON responses containing data and meta.executionId; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: release evidence and skill metadata) <br>
+Risk: First-time setup recommends running unverified remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a signed package, pinned release, checksum or signature verification, or manual inspection before installing the oo CLI.
+
+Risk: Using the skill can send selected content through OOMOL to Personal AI and write to Personal AI state.
+
+Mitigation: Install only if OOMOL is an acceptable intermediary, review selected content before sending, and confirm the exact payload and effect before write actions.
+
+## Reference(s):
+
+- [Personal AI homepage](https://personal.ai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Personal AI skill on ClawHub](https://clawhub.ai/oomol/skills/oo-personal-ai)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agent actions may return JSON from the oo CLI connector.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

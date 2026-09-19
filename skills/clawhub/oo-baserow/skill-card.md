@@ -1,46 +1,64 @@
-## Description: <br>
-Baserow (baserow.io). Use this skill for ANY Baserow request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Baserow (baserow.io). Use this skill for Baserow requests that read, create, update, or delete data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate connected Baserow accounts through the OOMOL oo CLI, including table discovery and row read, create, update, and delete workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill operates through a connected Baserow account and may use sensitive service credentials. <br>
-Mitigation: Run it only with accounts and scopes appropriate for the task, and avoid privileged credentials unless they are required. <br>
-Risk: Create and update actions change Baserow data. <br>
-Mitigation: Confirm the exact table, row, payload, and expected effect with the user before running write actions. <br>
-Risk: The delete action removes Baserow rows. <br>
-Mitigation: Require explicit user approval for the target row before executing destructive deletion. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Baserow tables, fields, and rows through an authenticated OOMOL connector. It supports reads, writes, and destructive deletes, with user confirmation expected before state-changing actions.
 
-## Reference(s): <br>
-- [ClawHub Baserow skill page](https://clawhub.ai/oomol/oo-baserow) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Baserow homepage](https://baserow.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The skill routes all Baserow requests through OOMOL as an intermediary for Baserow data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after reviewing the OOMOL connector posture and use least-privilege Baserow credentials.
+
+Risk: The setup guidance includes remote installer commands for the oo CLI.
+
+Mitigation: Review safer installation options before running installer commands.
+
+Risk: The skill can create, update, and delete Baserow records.
+
+Mitigation: Require explicit user confirmation for exact write and delete targets and payloads before execution.
+
+Risk: Secrets or sensitive values could be sent in row data, filters, or connector payloads.
+
+Mitigation: Avoid placing secrets in Baserow row data or query filters and inspect payloads before submission.
+
+## Reference(s):
+
+- [ClawHub Baserow Skill](https://clawhub.ai/oomol/skills/oo-baserow)
+- [Baserow Homepage](https://baserow.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON connector payloads or results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before building action payloads; requires explicit confirmation before writes or deletes.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

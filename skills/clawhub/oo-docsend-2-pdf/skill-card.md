@@ -1,42 +1,56 @@
-## Description: <br>
-Docsend2pdf helps an agent convert a DocSend document URL to a PDF through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Docsend2pdf converts DocSend document URLs to PDF download metadata through the docsend_2_pdf connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill when a task requires converting a specific DocSend document link into PDF download metadata through the Docsend2pdf connector. Users should confirm the document URL is intended for conversion before running it. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Converting a document sends the DocSend URL to OOMOL/Docsend2pdf for external processing. <br>
-Mitigation: Confirm the exact URL and intended conversion before running the convert action, and avoid sending sensitive links unless the user accepts that processing. <br>
-Risk: First-time setup may require installing the oo CLI from an external installer. <br>
-Mitigation: Use the install command only when the CLI is missing and the user trusts the OOMOL installer source. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect the live Docsend2pdf connector schema, submit a DocSend URL for conversion, and return JSON-safe PDF download metadata without handling raw service credentials.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-docsend-2-pdf) <br>
-- [Docsend2pdf homepage](https://docsend2pdf.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown instructions with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action execution; converted PDF results are returned as JSON-safe download metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release and SKILL.md metadata) <br>
+Risk: Fallback setup instructions include unverified remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a trusted, reviewed, version-pinned method and verify the source before allowing agent use.
+
+Risk: The skill runs connector actions that fetch PDF conversion results from a third-party service.
+
+Mitigation: Inspect the live connector schema before execution and review the DocSend URL and expected conversion target with the user when the request is sensitive.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-docsend-2-pdf)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+- [Docsend2pdf homepage](https://docsend2pdf.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON response metadata]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector action output is JSON-safe PDF download metadata with execution details.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

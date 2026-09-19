@@ -1,44 +1,51 @@
-## Description: <br>
-Cincopa (cincopa.com). Use this skill for ANY Cincopa request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cincopa enables agents to search and read Cincopa account data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect Cincopa account data through an OOMOL-connected account, including assets, galleries, gallery items, and asset tag clouds. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected Cincopa account and uses OOMOL as an intermediary for read access. <br>
-Mitigation: Use it only with accounts and data that are approved for access through OOMOL, and review the OOMOL connection before use. <br>
-Risk: The setup path includes remote shell installer commands for the oo CLI. <br>
-Mitigation: Review OOMOL's official installation guidance before running an installer, and avoid executing remote shell commands blindly. <br>
-Risk: Connector payloads may become stale if action schemas change. <br>
-Mitigation: Inspect the live Cincopa connector schema before constructing each payload. <br>
+## Use Case:
 
+Developers and external agent users use this skill to inspect Cincopa action schemas and list asset tags, assets, galleries, and gallery items through an OOMOL-connected Cincopa account.
 
-## Reference(s): <br>
-- [Cincopa homepage](https://www.cincopa.com/) <br>
-- [OOMOL oo CLI repository](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill instructs agents to inspect the live connector schema before running read-only Cincopa actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Setup instructions include remote installer commands that pipe downloaded scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing; if the oo CLI is not already trusted, prefer a verified installer or documented package source instead of running the remote installer blindly.
+
+## Reference(s):
+
+- [Cincopa homepage](https://www.cincopa.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Cincopa skill](https://clawhub.ai/oomol/skills/oo-cincopa)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, JSON, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON-oriented guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read actions return JSON data with a meta.executionId value.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata, target metadata, and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

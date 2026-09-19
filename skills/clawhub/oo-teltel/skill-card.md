@@ -1,42 +1,59 @@
-## Description: <br>
-TelTel lets an agent operate a TelTel account through OOMOL's oo CLI for account balance checks, SMS delivery reports, and single outbound SMS sending. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TelTel helps agents operate TelTel through the OOMOL oo CLI for account balance checks, SMS delivery report retrieval, and outbound SMS sending.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to perform TelTel account and SMS workflows from an agent while relying on OOMOL-connected credentials. Read actions cover balances and delivery reports; the write action sends one outbound SMS after user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send real outbound SMS messages that may reach external recipients and incur costs. <br>
-Mitigation: Confirm the recipient, message body, and expected effect with the user before allowing any send_sms action. <br>
-Risk: The skill requires access to a connected TelTel account and related credentials. <br>
-Mitigation: Install only when OOMOL's oo CLI and a connected TelTel account are intended for use; rely on OOMOL-managed credential injection rather than handling raw tokens. <br>
+## Use Case:
 
+External users and developers use this skill to interact with a connected TelTel account through OOMOL, including checking account balance, reviewing SMS delivery reports, and sending outbound SMS after confirmation.
 
-## Reference(s): <br>
-- [ClawHub TelTel Skill](https://clawhub.ai/oomol/oo-teltel) <br>
-- [TelTel Homepage](https://www.teltel.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a connected TelTel account through OOMOL; SMS sending may incur external communication costs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: The setup instructions include remote installer commands that can execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified or package-managed oo CLI installation path when available, and do not run pipe-to-shell or irm-to-iex commands blindly.
+
+Risk: The send_sms action changes TelTel state and may affect account usage or billing.
+
+Mitigation: Confirm the exact outbound SMS payload and effect with the user before running the action.
+
+Risk: Commands may fail when the oo CLI is not installed, the user is not signed in, the TelTel connection is missing or expired, or account credit is insufficient.
+
+Mitigation: Follow the documented setup and billing recovery steps only after a matching command failure occurs.
+
+## Reference(s):
+
+- [TelTel homepage](https://www.teltel.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May invoke the oo CLI to inspect live action schemas and run TelTel connector actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/todowrite",
   "slug": "todowrite",
   "ownerHandle": null,
-  "version": "0.6.0",
-  "updatedAt": 1784815722935,
-  "contentHash": "74d89286793b7928cc5b50b630246a02fef94b731ea19057fad22b21f23051c5",
-  "fetchedAt": "2026-07-26T18:06:58.674Z"
+  "version": "0.9.2",
+  "updatedAt": 1789747140813,
+  "contentHash": "bd91556af85463f961fb88b63096051b7b290fd42a2aab02f1324f0fd1e43e1a",
+  "fetchedAt": "2026-09-19T12:05:07.736Z"
 }

@@ -1,47 +1,68 @@
-## Description: <br>
-Reviews tender and bid documents through the 百炼标书 cloud API to produce compliance findings, disqualification-risk checks, similarity checks, and bid-document outputs when the user provides local files and an App Key. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents use the 百炼®标书 service to interpret tender files, generate bid documents, review bid submissions for compliance risks, and compare bid files for duplicate or similarity signals.
 
-## Publisher: <br>
-[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666)
 
-## Use Case: <br>
-External users and bid teams use this skill to interpret tender files, generate editable bid documents, and review one or more bid files for compliance risks before submission. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tender and bid documents may contain commercial, pricing, and personal information and are uploaded to the 百炼标书 cloud service. <br>
-Mitigation: Confirm the user understands and agrees before upload; process only user-provided local files and remind the user that results are retained by the service account for about seven days. <br>
-Risk: The App Key is an account credential and can expose the account if pasted into chat, logs, screenshots, or forwarded service links. <br>
-Mitigation: Have the user store the key only in the local config.json file with restrictive permissions; never ask the user to paste the key and never forward URLs containing bind_key or App Key parameters. <br>
-Risk: Security evidence says the API host can be configured, which could send the App Key and uploaded documents to an unintended endpoint. <br>
-Mitigation: Use the default service endpoint unless the user intentionally trusts an alternate endpoint, and verify config.json contains only the expected App Key and output settings. <br>
-Risk: Automated bid interpretation, generation, and compliance findings can be incomplete or wrong for a specific procurement. <br>
-Mitigation: Treat reports as drafting and review aids; have qualified staff review high-risk findings, manual-check items, and generated bid content before submission. <br>
+## Use Case:
 
+External users and procurement teams use this skill to analyze tender files, produce bid documents, review bid submissions for compliance risks, and compare bid files for duplicate or similarity signals before submission.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-writer-audit) <br>
-- [Execution guide](references/usage.md) <br>
-- [百炼标书 API reference](references/api.md) <br>
-- [百炼标书 service](https://biaoshu.zhiliaobiaoxun.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, files] <br>
-**Output Format:** [Markdown guidance and status text with generated HTML reports, Word reports, DOCX bid files, and JSON-derived analysis.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated results include absolute local file paths; compliance findings use high-risk, review-needed, and tip categories with evidence and modification suggestions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: Sensitive tender and bid documents are uploaded to the 百炼®标书 service and may contain commercial, pricing, or personal information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when the user is comfortable with that upload and the service's handling of task outputs.
+
+Risk: Paid workflows charge against the account associated with the API key.
+
+Mitigation: Keep the API key in the skill-local config file, avoid sharing it in chat, and monitor account word balance before and after paid tasks.
+
+Risk: The security review notes persistent local storage, writable paths, and possible ~/.zcm/projects.json creation.
+
+Mitigation: Prefer the generated-files directory for outputs, avoid custom output paths unless intentional, and review local project storage when operating in sensitive environments.
+
+Risk: The security review notes fixed promotional platform URLs in setup guidance.
+
+Mitigation: Review account, registration, and recharge links before following them, especially in managed enterprise environments.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-writer-audit)
+- [百炼®标书 Service](https://biaoshu.zhiliaobiaoxun.com/?ch=c666)
+- [Open API Overview](references/api.md)
+- [Authentication, Jobs, and Billing](references/api-auth.md)
+- [Bid Workflow API](references/api-bid-workflow.md)
+- [Compliance Review API](references/api-compliance.md)
+- [Duplicate Review API](references/api-duplicate.md)
+- [Usage Guide](references/usage.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files]
+
+**Output Format:** [Plain text and Markdown guidance with command-backed workflows; generated artifacts may include JSON, HTML reports, Word reports, and .docx bid documents.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires user-provided local tender or bid files and a skill-local API key; paid workflows consume the API-key account's available word balance.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

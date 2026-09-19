@@ -1,42 +1,56 @@
-## Description: <br>
-Slab (slab.com). Use this skill for ANY Slab request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Slab (slab.com). Use this skill for ANY Slab request - reading, creating, updating, and deleting data. Whenever a task involves Slab, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external collaborators, and developers use this skill to search, read, create, update, sync, and delete Slab workspace content through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, sync, or delete Slab content in a connected workspace. <br>
-Mitigation: Review write and delete requests carefully, confirm the exact payload and target, and require explicit approval before destructive actions. <br>
-Risk: First-time setup may install or run the remote OOMOL oo CLI. <br>
-Mitigation: Install the CLI only if you trust OOMOL and are comfortable allowing the agent to operate through an OOMOL-connected Slab account. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Slab through OOMOL's oo CLI, including reading and searching Slab content and creating, updating, syncing, tagging, or deleting posts and topics.
 
-## Reference(s): <br>
-- [Slab homepage](https://slab.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: SKILL.md metadata and release evidence) <br>
+Risk: First-time setup includes unverified remote installer scripts that can run arbitrary code on a user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before use; prefer a verified or package-manager installation for the oo CLI.
+
+Risk: Write and destructive Slab actions can change or remove workspace content.
+
+Mitigation: Confirm the exact target, payload, and expected effect before allowing write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-slab)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Slab Homepage](https://slab.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Code, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

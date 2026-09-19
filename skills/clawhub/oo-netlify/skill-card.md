@@ -1,47 +1,56 @@
-## Description: <br>
-Operate Netlify through an OOMOL-connected account to read site, account, user, deploy, build, form, and submission data and to run deployment-related actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Netlify helps agents read, create, update, and delete Netlify resources through an OOMOL-connected Netlify account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and site operators use this skill to inspect and manage Netlify resources from an agent session through the OOMOL `oo` CLI connector. It supports read workflows and user-confirmed state-changing deployment, build, lock, unlock, upload, and submission deletion actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can act with sensitive Netlify credentials through the connected OOMOL account. <br>
-Mitigation: Use only with an intended Netlify connection and rely on the server-side credential flow rather than handling raw tokens in the agent session. <br>
-Risk: Write actions can change deploy, build, lock, unlock, notification, or upload state in Netlify. <br>
-Mitigation: Confirm the exact target and payload with the user before running any action marked `[write]`. <br>
-Risk: The `delete_submission` action removes Netlify form submission data. <br>
-Mitigation: Require explicit approval for the specific submission ID before running the destructive action. <br>
-Risk: Connector schemas and authentication status can change outside the artifact. <br>
-Mitigation: Fetch the live action schema before constructing payloads and use first-time setup or reconnection steps only after an authentication or connection failure. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Netlify action schemas and manage accounts, users, sites, deploys, builds, forms, and submissions from an agent workflow.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-netlify) <br>
-- [Netlify homepage](https://www.netlify.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May invoke Netlify connector actions through the OOMOL `oo` CLI and return JSON-shaped action responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installing and prefer a verified, pinned, or package-manager-based oo CLI installation method.
+
+Risk: Write and destructive Netlify actions can change, cancel, delete, lock, unlock, or upload resources in the connected account.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Netlify Skill](https://clawhub.ai/oomol/skills/oo-netlify)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Netlify](https://www.netlify.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Directs the agent to inspect live connector schemas before constructing Netlify action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

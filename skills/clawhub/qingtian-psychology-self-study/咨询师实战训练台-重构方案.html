@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>青田·心理自习室 重构方案 · 咨询师实战训练台</title>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@500;600;700;900&family=Noto+Sans+SC:wght@300;400;500;600&display=swap">
+<style>
+  :root{
+    --ink:#2E5D4F;          /* 苔绿：主结构 */
+    --ink-deep:#1F4238;
+    --paper:#F7F6F1;
+    --card:#FFFFFF;
+    --line:#D9D6CA;
+    --line-soft:#E7E4D9;
+    --keep:#2E6B4F;
+    --keep-bg:#EDF4EF;
+    --hide:#A97B2F;
+    --hide-bg:#F8F0E2;
+    --out:#B04A35;
+    --out-bg:#F9ECE7;
+    --add:#2F5D7A;
+    --add-bg:#EAF1F6;
+    --core:#7A3E5C;         /* 核心：练习紫红（对话练习是心脏） */
+    --core-bg:#F6EDF1;
+    --gray:#6E6A5E;
+    --text:#23272E;
+    --serif:"Noto Serif SC",serif,"Songti SC","SimSun";
+    --sans:"Noto Sans SC",sans-serif,"Microsoft YaHei","PingFang SC";
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{font-family:var(--sans);color:var(--text);background:var(--paper);line-height:1.75;font-size:15px;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  header{background:var(--ink-deep);color:#F2EFE6;}
+  .head-inner{padding:56px 24px 44px;}
+  .kicker{font-size:13px;letter-spacing:.18em;color:#A9C4BA;font-weight:500;}
+  h1{font-family:var(--serif);font-weight:700;font-size:clamp(26px,4.2vw,40px);line-height:1.3;margin:14px 0 16px;}
+  .headline{font-family:var(--serif);font-size:clamp(16px,2vw,20px);color:#D8E3DE;line-height:1.7;max-width:820px;}
+  .headline b{color:#F4D3A8;}
+  .corr{margin-top:20px;display:inline-block;background:rgba(244,211,168,.12);border:1px solid rgba(244,211,168,.35);color:#F4D3A8;font-size:13.5px;padding:9px 18px;border-radius:6px;}
+  .stats{display:flex;flex-wrap:wrap;gap:0;margin-top:36px;border-top:1px solid rgba(242,239,230,.18);}
+  .stat{flex:1 1 130px;padding:18px 18px 6px 0;}
+  .stat b{font-family:var(--serif);font-size:30px;font-weight:700;color:#fff;display:block;line-height:1.2;}
+  .stat span{font-size:12.5px;color:#A9C4BA;}
+
+  section{padding:52px 0 8px;}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:8px;}
+  .sec-no{font-family:var(--serif);font-weight:700;font-size:15px;color:#fff;background:var(--ink);width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:none;}
+  .sec-title{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--ink-deep);}
+  .sec-sub{color:var(--gray);font-size:14px;margin:6px 0 24px 50px;}
+
+  .posi{background:var(--card);border:1px solid var(--line-soft);border-radius:6px;padding:24px 26px;margin-top:6px;}
+  .posi-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:22px;}
+  .posi h3{font-family:var(--serif);font-size:17px;color:var(--ink-deep);margin-bottom:10px;}
+  .posi p{font-size:14px;color:#3A3F46;margin-bottom:10px;}
+  .loop{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px;}
+  .loop .step{background:var(--core-bg);color:var(--core);font-weight:600;font-size:13.5px;padding:7px 16px;border-radius:20px;}
+  .loop .arr{color:var(--gray);font-weight:700;}
+  .kano{list-style:none;font-size:13.6px;color:#4A4E55;}
+  .kano li{padding:4px 0;border-bottom:1px dashed var(--line-soft);}
+  .kano li:last-child{border-bottom:none;}
+  .kano b{color:var(--ink-deep);}
+
+  .mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px;}
+  .mode{background:var(--card);border:1px solid var(--line-soft);border-radius:6px;padding:20px 22px;position:relative;}
+  .mode .tag{position:absolute;top:-11px;left:16px;font-size:11.5px;padding:2px 12px;border-radius:12px;font-weight:500;}
+  .mode .t-keep{background:var(--keep);color:#fff;}
+  .mode .t-new{background:var(--core);color:#fff;}
+  .mode .t-up{background:var(--add);color:#fff;}
+  .mode h4{font-size:16px;color:var(--ink-deep);margin:6px 0 6px;font-weight:600;}
+  .mode .roles{font-size:12.4px;color:var(--gray);margin-bottom:8px;}
+  .mode p{font-size:13.4px;color:#4A4E55;}
+  .mode .ex{margin-top:8px;font-size:12.2px;color:var(--gray);border-top:1px dashed var(--line);padding-top:8px;}
+
+  .matrix{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line-soft);margin-top:10px;font-size:13.6px;}
+  .matrix th{background:var(--ink-deep);color:#F2EFE6;text-align:left;padding:11px 14px;font-weight:500;font-size:13px;white-space:nowrap;}
+  .matrix td{padding:13px 14px;border-top:1px solid var(--line-soft);vertical-align:top;}
+  .matrix tr:hover td{background:#F4F3ED;}
+  .fn-name{font-weight:600;color:var(--ink-deep);font-size:14px;white-space:nowrap;}
+  .fn-tag{display:inline-block;font-size:12px;padding:3px 11px;border-radius:20px;font-weight:500;white-space:nowrap;}
+  .tag-keep{background:var(--keep-bg);color:var(--keep);}
+  .tag-hide{background:var(--hide-bg);color:var(--hide);}
+  .tag-out{background:var(--out-bg);color:var(--out);}
+  .tag-add{background:var(--add-bg);color:var(--add);}
+  .tag-core{background:var(--core-bg);color:var(--core);}
+  .fn-reason{color:#4A4E55;}
+  .fn-ev{display:block;margin-top:6px;font-size:12px;color:var(--gray);}
+  .grp{background:#F1EFE7;font-weight:600;color:var(--ink-deep);font-size:12.6px;letter-spacing:.05em;}
+
+  .dim{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:8px;}
+  .dim-card{background:var(--card);border:1px solid var(--line-soft);border-top:3px solid var(--ink);border-radius:5px;padding:16px 16px;}
+  .dim-card h4{font-size:14.5px;color:var(--ink-deep);margin-bottom:6px;font-weight:600;}
+  .dim-card p{font-size:12.6px;color:#4A4E55;}
+  .stage{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:14px;}
+  .stage-card{background:var(--ink-deep);color:#E8EFEB;border-radius:6px;padding:16px 18px;}
+  .stage-card h4{font-family:var(--serif);font-size:15.5px;color:#fff;margin-bottom:6px;}
+  .stage-card p{font-size:12.6px;color:#B9CCC4;line-height:1.7;}
+
+  .add-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;}
+  .add{background:var(--card);border:1px solid var(--line-soft);border-left:4px solid var(--core);padding:18px 20px;border-radius:4px;}
+  .add h3{font-size:15.5px;color:var(--ink-deep);margin-bottom:6px;font-weight:600;}
+  .add p{font-size:13.4px;color:#4A4E55;}
+  .add .why{margin-top:8px;font-size:12.4px;color:var(--gray);}
+
+  .tl{--date:92px;--axis:36px;--gap:16px;margin-top:14px;}
+  .tl-item{display:grid;grid-template-columns:var(--date) var(--axis) 1fr;gap:0 var(--gap);position:relative;padding-bottom:26px;}
+  .tl-item::before{content:"";position:absolute;left:calc(var(--date) + var(--gap) + var(--axis)/2);top:26px;bottom:0;width:2px;background:var(--line);}
+  .tl-item:last-child::before{display:none;}
+  .tl-phase{font-family:var(--serif);font-weight:700;font-size:15px;color:var(--ink);text-align:right;padding-top:16px;}
+  .tl-dot{grid-column:2;justify-self:center;align-self:start;width:12px;height:12px;border-radius:50%;background:var(--ink);border:2px solid var(--paper);margin-top:20px;box-sizing:border-box;}
+  .tl-body{background:var(--card);border:1px solid var(--line-soft);border-radius:6px;padding:16px 20px;}
+  .tl-body h4{font-size:15px;color:var(--ink-deep);margin-bottom:6px;font-weight:600;}
+  .tl-body ul{list-style:none;}
+  .tl-body li{font-size:13.4px;color:#3A3F46;padding:3px 0 3px 18px;position:relative;}
+  .tl-body li::before{content:"·";position:absolute;left:2px;color:var(--ink);font-weight:700;}
+
+  .closing{margin:40px 0 60px;background:var(--ink-deep);color:#F2EFE6;border-radius:8px;padding:34px 38px;}
+  .closing h2{font-family:var(--serif);font-size:22px;margin-bottom:10px;font-weight:600;}
+  .closing p{color:#C7D5CE;font-size:14.5px;max-width:820px;}
+  .closing .verdict{margin-top:16px;border-top:1px solid rgba(242,239,230,.2);padding-top:14px;font-size:15px;color:#fff;font-weight:500;}
+
+  footer{padding:30px 0 46px;color:var(--gray);font-size:12.6px;border-top:1px solid var(--line-soft);}
+  .legend{display:flex;gap:22px;flex-wrap:wrap;font-size:12.6px;color:var(--gray);margin-bottom:12px;}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;}
+
+  @media (max-width:860px){
+    .posi-grid{grid-template-columns:1fr;}
+    .mode-grid{grid-template-columns:1fr;margin-top:16px;}
+    .dim{grid-template-columns:repeat(2,1fr);}
+    .stage{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:720px){
+    .add-grid{grid-template-columns:1fr;}
+    .stats{display:grid;grid-template-columns:repeat(2,1fr);}
+    .matrix{display:block;overflow-x:auto;}
+    .tl{--date:70px;--axis:24px;--gap:10px;}
+    .tl-phase{font-size:13.5px;padding-top:14px;}
+    .tl-dot{margin-top:18px;}
+    .sec-sub{margin-left:0;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap head-inner">
+    <div class="kicker">重构方案 · 定位修正版</div>
+    <h1>青田·心理自习室<br>重构方案：咨询师实战训练台</h1>
+    <p class="headline">此前的规划把技能当成「0 基础自学入门」——<b>定位错了</b>。这个技能服务的是<b>心理咨询师</b>：提高、完善、丰富自己的理论与对话实践本领。核心不是「学知识」，而是<b>练对话</b>——原来的 17 流派对话练习器正是这个技能的心脏，要围绕它重构一切。</p>
+    <div class="corr">定位修正：自学教练 → 咨询师实战训练台；学习主线 → 练习主线</div>
+    <div class="stats">
+      <div class="stat"><b>17</b><span>流派对话练习器（核心）</span></div>
+      <div class="stat"><b>1</b><span>现有练习模式（体验）</span></div>
+      <div class="stat"><b>2</b><span>缺失的关键模式</span></div>
+      <div class="stat"><b>5</b><span>能力成长维度</span></div>
+      <div class="stat"><b>4</b><span>成长阶段</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- 01 重新定位 -->
+  <section id="posi">
+    <div class="sec-head"><span class="sec-no">01</span><h2 class="sec-title">重新定位：从「学」到「练」</h2></div>
+    <p class="sec-sub">用户画像早已印证（goal=counselor）——这是要当咨询师的人，不是随便学学的人。</p>
+    <div class="posi">
+      <div class="posi-grid">
+        <div>
+          <h3>核心循环：练 → 析 → 督 → 学</h3>
+          <div class="loop">
+            <span class="step">练 · 对话练习</span><span class="arr">→</span>
+            <span class="step">析 · 逐字稿分析</span><span class="arr">→</span>
+            <span class="step">督 · 督导视角</span><span class="arr">→</span>
+            <span class="step">学 · 理论补课</span><span class="arr">→</span>
+            <span class="step">再练</span>
+          </div>
+          <p style="margin-top:14px;">每练一次对话，产出逐字稿；贴回给 AI 当督导师分析（五维透镜 + 替代推演）；发现技术短板后回到理论补课；带着新理解再练。理论永远服务于「下一次对话怎么更好」。</p>
+        </div>
+        <div>
+          <h3>与「自学入门」定位的本质差异</h3>
+          <ul class="kano">
+            <li><b>主线</b>：对话练习（不是理论学习）</li>
+            <li><b>产出</b>：咨询技术能力（不是知识量）</li>
+            <li><b>评估</b>：五维能力成长（不是模块完成度）</li>
+            <li><b>AI 角色</b>：来访者 / 督导师 / 教练（不是讲师）</li>
+            <li><b>节奏</b>：每天一练一析（不是按阶段刷课）</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 对话练习三模式 -->
+  <section id="modes">
+    <div class="sec-head"><span class="sec-no">02</span><h2 class="sec-title">心脏重构：对话练习三模式</h2></div>
+    <p class="sec-sub">现有 TPR 只有「AI 当咨询师」一种；咨询师练本领最缺的是「自己当咨询师」。补齐三模式 = 练习闭环完整。</p>
+    <div class="mode-grid">
+      <div class="mode">
+        <span class="tag t-keep">已有 · 保留</span>
+        <h4>模式一 · 体验（来访者视角）</h4>
+        <div class="roles">AI 扮 17 流派咨询师 · 用户扮来访者</div>
+        <p>感受各流派真实的干预方式：CBT 怎么提问、精神动力怎么工作移情、森田怎么「顺其自然」。建立「被咨询」的体感，是新手理解技术的起点。</p>
+        <div class="ex">现有 practice/ 41 文件 + 17 流派对话示例原样保留；入口从「练」的默认动作改为新手引导第一步。</div>
+      </div>
+      <div class="mode">
+        <span class="tag t-new">新增 · 核心缺口</span>
+        <h4>模式二 · 实操（咨询师视角）</h4>
+        <div class="roles">AI 扮来访者 · 用户扮咨询师施技</div>
+        <p>用户选流派（默认 CBT）、选来访者画像（困扰类型 × 人格 × 阻抗程度），AI 以来访者身份真实回应。这是「练真技术、练应变」的主战场。</p>
+        <div class="ex">需新增：来访者画像库（焦虑/抑郁/关系/职业 × 倾诉型/沉默型/阻抗型）+ 每轮后的即时技术反馈 + 会话结束个案报告。</div>
+      </div>
+      <div class="mode">
+        <span class="tag t-up">升级 · 督导</span>
+        <h4>模式三 · 督导（督导师视角）</h4>
+        <div class="roles">用户贴逐字稿 · AI 扮督导师</div>
+        <p>把实操练习的对话（或真实个案脱敏稿）贴回，AI 用五步分析法 + 五维透镜逐句标注、挑 3 处做替代推演、提炼 1 条改进原则。</p>
+        <div class="ex">现有 modules/dialogue-analysis.md + 分析提示词已具备；升级为三模式之一并接入「练→析」自动衔接。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 能力五维 -->
+  <section id="dims">
+    <div class="sec-head"><span class="sec-no">03</span><h2 class="sec-title">成长框架：能力五维 × 四阶段</h2></div>
+    <p class="sec-sub">替换「自学模块完成度」的旧逻辑——咨询师的成长用五维能力衡量，进度页照此展示。</p>
+    <div class="dim">
+      <div class="dim-card"><h4>对话技术</h4><p>共情/提问/反映/面质等基础技术 + 17 流派干预技术，由练习与督导驱动。</p></div>
+      <div class="dim-card"><h4>个案概念化</h4><p>用流派框架理解来访者：认知三角、防御机制、依恋模式……练 cases 与实操后的报告。</p></div>
+      <div class="dim-card"><h4>理论功底</h4><p>流派理论与技术原理，learn 服务「练什么、为什么」，不孤立刷课。</p></div>
+      <div class="dim-card"><h4>评估能力</h4><p>学会施测与解读 21 量表（PHQ-9/GAD-7 等）：何时用、怎么问、怎么读、怎么反馈。</p></div>
+      <div class="dim-card"><h4>伦理与自我</h4><p>伦理两难决策 + 反移情觉察（thought-diary 咨询师版）+ 危机边界内化。</p></div>
+    </div>
+    <div class="stage">
+      <div class="stage-card"><h4>见习期</h4><p>体验模式走遍 17 流派；基础技术（共情/倾听/提问）过关；理论打底。</p></div>
+      <div class="stage-card"><h4>技术期</h4><p>实操模式主攻 2–3 个流派；每次练完必做逐字稿分析；技术维显著成长。</p></div>
+      <div class="stage-card"><h4>整合期</h4><p>复杂来访者画像；个案概念化训练；多流派整合与切换；评估施测演练。</p></div>
+      <div class="stage-card"><h4>独立期</h4><p>伦理两难决策；督导视角复盘他人案例；个人议题与反移情工作。</p></div>
+    </div>
+  </section>
+
+  <!-- 04 资产裁决 -->
+  <section id="matrix">
+    <div class="sec-head"><span class="sec-no">04</span><h2 class="sec-title">全部资产 · 新定位下重新裁决</h2></div>
+    <p class="sec-sub">已有资产大多能用，关键是「重新定位用途」+「补核心缺口」。</p>
+    <table class="matrix">
+      <thead><tr><th>资产</th><th>处置</th><th>新定位下的用途</th></tr></thead>
+      <tbody>
+        <tr class="grp"><td colspan="3">核心 · 对话练习资产（技能的心脏）</td></tr>
+        <tr>
+          <td class="fn-name">practice/ 17 流派练习器</td>
+          <td><span class="fn-tag tag-core">核心 · 重构入口</span></td>
+          <td class="fn-reason">从「练习列表让你选」重构为三模式：体验（现有）/ 实操（新增 AI 扮来访者）/ 督导（升级逐字稿分析）。41 个流派文件零改动，只换调度层。<span class="fn-ev">practice/RUNBOOK.md 第八节处理器名需同步 v2（do_practice→practice）</span></td>
+        </tr>
+        <tr>
+          <td class="fn-name">dialogue-analysis.md 逐字稿分析</td>
+          <td><span class="fn-tag tag-core">核心 · 升级</span></td>
+          <td class="fn-reason">从「附随功能」升级为督导模式，成为练习闭环的固定一环——每次实操后自动建议「贴回分析」。<span class="fn-ev">五步分析法 + 五维透镜已就绪</span></td>
+        </tr>
+        <tr class="grp"><td colspan="3">重新定位 · 服务咨询师成长</td></tr>
+        <tr>
+          <td class="fn-name">counseling.md 咨询技术</td>
+          <td><span class="fn-tag tag-keep">保留 · 强化</span></td>
+          <td class="fn-reason">基础技术库（共情/提问/反映/面质）作为实操模式的「技术查表」，练前看、练后核。</td>
+        </tr>
+        <tr>
+          <td class="fn-name">assessment.md 21 量表</td>
+          <td><span class="fn-tag tag-add">重新定位</span></td>
+          <td class="fn-reason">从「用户自我测评」改为「咨询师评估技能」：模拟施测演练、量表解读训练、报告反馈练习。<span class="fn-ev">21 量表 JSON + 计分引擎保留，加施测话术与解读练习</span></td>
+        </tr>
+        <tr>
+          <td class="fn-name">ethics.md 伦理</td>
+          <td><span class="fn-tag tag-add">重新定位</span></td>
+          <td class="fn-reason">从「知识红线」升级为「伦理两难决策练习」：情境库 + 决策推演 + 边界内化。</td>
+        </tr>
+        <tr>
+          <td class="fn-name">cases.md 案例分析</td>
+          <td><span class="fn-tag tag-keep">保留 · 强化</span></td>
+          <td class="fn-reason">个案概念化训练主场：读案例 → 写概念化 → AI 对照点评，直接支撑「概念化」能力维。</td>
+        </tr>
+        <tr>
+          <td class="fn-name">thought-diary.md 认知记录</td>
+          <td><span class="fn-tag tag-add">重新定位</span></td>
+          <td class="fn-reason">从「自我觉察工具」升级为「咨询师反移情记录」：练完对话后记「我刚才的情绪/反应」，对应独立期个人议题。<span class="fn-ev">五栏结构可直接复用</span></td>
+        </tr>
+        <tr class="grp"><td colspan="3">保留 · 支撑资产</td></tr>
+        <tr>
+          <td class="fn-name">theory / reading / methods / support / exposure</td>
+          <td><span class="fn-tag tag-keep">保留 · 支撑</span></td>
+          <td class="fn-reason">理论精学服务练习补课；精读/学习方法为长期素养；support 应对职业倦怠；exposure 为教学演示工具（隐藏）。</td>
+        </tr>
+        <tr class="grp"><td colspan="3">清理与补交付（沿用上一轮判断）</td></tr>
+        <tr>
+          <td class="fn-name">weekly / monthly 模板</td>
+          <td><span class="fn-tag tag-out">归档</span></td>
+          <td class="fn-reason">周/月概念已被阶段制取代，零引用，归档。</td>
+        </tr>
+        <tr>
+          <td class="fn-name">reflection-diary.md</td>
+          <td><span class="fn-tag tag-add">接入</span></td>
+          <td class="fn-reason">挂到 summary 处理器，阶段总结引导用（本阶段练了什么 / 卡在哪 / 下一步练什么）。</td>
+        </tr>
+        <tr>
+          <td class="fn-name">学习进度汇总.html</td>
+          <td><span class="fn-tag tag-add">补交付</span></td>
+          <td class="fn-reason">承诺的可视化进度页从未交付；补建并按「能力五维 + 练习次数 + 阶段进度」展示。</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 05 新增需求 -->
+  <section id="add">
+    <div class="sec-head"><span class="sec-no">05</span><h2 class="sec-title">需要新增的五件事</h2></div>
+    <p class="sec-sub">围绕「实操模式」这个最大缺口展开。</p>
+    <div class="add-grid">
+      <div class="add">
+        <h3>来访者画像库（实操模式核心）</h3>
+        <p>可配置 AI 来访者：困扰类型（焦虑/抑郁/关系/职业/原生家庭）× 人格（倾诉型/沉默型/阻抗型/讨好型）× 强度（轻/中/重）。用户选完即开练，AI 全程维持角色不穿帮。</p>
+        <div class="why">咨询师练技术必须面对「活」的来访者，而不是背话术。</div>
+      </div>
+      <div class="add">
+        <h3>即时技术反馈</h3>
+        <p>实操每轮后 AI 以「来访者」身份回应的同时，可选附一行教练点评：这一轮用了什么技术、哪里可以更好；结束再出完整个案报告。</p>
+        <div class="why">把「练」和「析」的间隔从课后缩到当轮，学习曲线更陡。</div>
+      </div>
+      <div class="add">
+        <h3>伦理两难情境库</h3>
+        <p>10–15 个咨询伦理两难情境（保密例外/双重关系/来访者馈赠/危机中知情同意……），用户做决策、AI 推演后果并对照伦理框架。</p>
+        <div class="why">独立期核心能力，也是考试与实务的高频失分点。</div>
+      </div>
+      <div class="add">
+        <h3>评估施测演练</h3>
+        <p>模拟对 AI 来访者施测 PHQ-9/GAD-7：怎么引入量表、怎么逐题问、怎么解读分数、怎么反馈结果与转介。</p>
+        <div class="why">把 21 量表从「库存」变成「技能」。</div>
+      </div>
+      <div class="add">
+        <h3>练习成长档案</h3>
+        <p>每次练习/分析沉淀进能力五维（对话技术/概念化/理论/评估/伦理），进度页按五维雷达展示成长曲线——「我今天练了什么、哪一维在长」。</p>
+        <div class="why">让练习效果可见，替换「模块完成度」式激励。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 落地顺序 -->
+  <section id="plan">
+    <div class="sec-head"><span class="sec-no">06</span><h2 class="sec-title">落地顺序：四步，练习器不动</h2></div>
+    <p class="sec-sub">17 流派 41 个文件与危机护栏零改动——只动调度层与入口，随时可回退。</p>
+    <div class="tl">
+      <div class="tl-item">
+        <div class="tl-phase">P0 定位</div>
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <h4>SKILL.md 定位重写 + 入口重构</h4>
+          <ul>
+            <li>角色/原则/Onboarding 改为「咨询师实战训练台」口径</li>
+            <li>practice 入口改三模式；learn/assess/ethics 用途重述</li>
+            <li>README、启动文案同步；组队删除、阶段制等既有成果保留</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-phase">P1 实操</div>
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <h4>实操模式 + 来访者画像库（最大缺口）</h4>
+          <ul>
+            <li>新增来访者画像配置（4 类困扰 × 4 类人格 × 3 档强度）</li>
+            <li>AI 扮来访者的回应规则 + 每轮即时技术反馈（可开关）</li>
+            <li>实操结束沿用个案报告生成（复用 report-template.html）</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-phase">P2 闭环</div>
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <h4>练→析→督自动衔接 + 能力五维追踪</h4>
+          <ul>
+            <li>实操结束自动建议「贴回逐字稿做督导分析」</li>
+            <li>练习/分析记录映射能力五维，progress.json 增加五维字段</li>
+            <li>补交付 学习进度汇总.html（阶段 + 五维雷达 + 练习次数 + 情绪趋势）</li>
+          </ul>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-phase">P3 扩展</div>
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <h4>伦理情境库 + 评估施测 + 收尾清理</h4>
+          <ul>
+            <li>伦理两难情境库 10–15 例；评估施测演练接入 assess</li>
+            <li>reflection-diary 挂 summary；weekly/monthly 归档；打卡闭环</li>
+            <li>回归测试补断言（三模式入口 / 五维字段 / 进度页存在）</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="closing">
+    <h2>一句话结论</h2>
+    <p>这个技能从来不是「自学心理学」，而是<b>咨询师的练功房</b>。它的心脏——17 流派对话练习器——已经在了，缺的是让咨询师「自己上场」：<b>AI 扮来访者让你练手（实操）、AI 当督导师帮你复盘（督导）</b>。补上这两个模式，再用能力五维记录成长，它就是一套完整的咨询师实战训练台。</p>
+    <div class="verdict">重构速览：核心重构 1（practice 三模式）· 新增 5（画像库/即时反馈/伦理情境/施测演练/成长档案）· 重新定位 4（assess/ethics/thought-diary/cases）· 清理 2（模板）· 补交付 1（进度页）· 练习器 41 文件零改动</div>
+  </div>
+
+  <div class="legend">
+    <span><i style="background:var(--core)"></i>核心 · 对话练习</span>
+    <span><i style="background:var(--keep)"></i>保留</span>
+    <span><i style="background:var(--add)"></i>重新定位 / 新增</span>
+    <span><i style="background:var(--out)"></i>归档</span>
+  </div>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>本方案基于对 practice/RUNBOOK.md（17 流派 + 危机护栏 + 个案报告）、modules 全部 11 个文件、21 量表、逐字稿分析框架的逐文件核查。定位修正来自用户明确说明：技能服务心理咨询师提升理论与实践本领，对话练习为核心。</p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -1,76 +1,23 @@
-/**
- * qrcode.js — QR Code Generator for Travel Planner
- *
- * 生成支付二维码，用于行程网页中的扫码支付功能
- *
- * 用法：
- *   node scripts/qrcode.js <url> [outputPath]
- *
- * 示例：
- *   node scripts/qrcode.js "https://example.com/payment" ./output/qr.png
- */
-
+#!/usr/bin/env node
+'use strict';
+// Local QR encoding of approved public homepages only; no fetch or payment flow.
 const QRCode = require('qrcode');
-const path = require('path');
-const fs = require('fs');
-
-async function generateQR(text, outputPath) {
-  try {
-    // 确保输出目录存在
-    const dir = path.dirname(outputPath);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-
-    await QRCode.toFile(outputPath, text, {
-      color: {
-        dark: '#000000',
-        light: '#ffffff'
-      },
-      width: 400,
-      margin: 2,
-      errorCorrectionLevel: 'M'
-    });
-
-    console.log(`✅ 二维码已生成：${outputPath}`);
-    return outputPath;
-  } catch (err) {
-    console.error('❌ 二维码生成失败：', err.message);
-    return null;
-  }
+const { validatePlatformUrl, writeOutput } = require('./safety');
+const OPTIONS = { width: 300, margin: 2, errorCorrectionLevel: 'M' };
+async function generateQRBase64(value) {
+  const url = validatePlatformUrl(value);
+  return QRCode.toDataURL(url, OPTIONS);
 }
-
-async function generateQRBase64(text) {
-  try {
-    const dataUrl = await QRCode.toDataURL(text, {
-      color: { dark: '#000000', light: '#ffffff' },
-      width: 300,
-      margin: 2,
-      errorCorrectionLevel: 'M'
-    });
-    return dataUrl;
-  } catch (err) {
-    console.error('❌ 二维码生成失败：', err.message);
-    return null;
-  }
+async function generateQR(value, filename) {
+  const url = validatePlatformUrl(value);
+  const buffer = await QRCode.toBuffer(url, { ...OPTIONS, type: 'png' });
+  return writeOutput(buffer, 'qr', 'png', filename);
 }
-
-// 命令行模式
 if (require.main === module) {
   const args = process.argv.slice(2);
-  const url = args[0];
-  const outputPath = args[1] || path.join(process.cwd(), 'output', `qr-${Date.now()}.png`);
-
-  if (!url) {
-    console.error('用法：node scripts/qrcode.js <url> [outputPath]');
-    console.error('示例：node scripts/qrcode.js "https://example.com" ./output/qr.png');
-    process.exit(1);
-  }
-
-  generateQR(url, outputPath).then(result => {
-    if (result) process.exit(0);
-    else process.exit(1);
-  });
+  if (!args.length || args.length > 2) {
+    console.error('Usage: node scripts/qrcode.js https://www.tuniu.com/ [safe-name.png]'); process.exitCode = 1;
+  } else generateQR(args[0], args[1]).then(file => console.log('QR saved:', file))
+    .catch(e => { console.error(e.message); process.exitCode = 1; });
 }
-
 module.exports = { generateQR, generateQRBase64 };

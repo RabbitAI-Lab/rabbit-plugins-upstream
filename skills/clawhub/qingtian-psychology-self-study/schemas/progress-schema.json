@@ -1,0 +1,277 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Psychology Self-Study Progress",
+  "type": "object",
+  "required": [
+    "version",
+    "userConfig",
+    "currentStage",
+    "modules",
+    "stats"
+  ],
+  "properties": {
+    "version": {
+      "type": "string"
+    },
+    "userConfig": {
+      "type": "object",
+      "required": [
+        "level",
+        "goal",
+        "timeBudget"
+      ],
+      "properties": {
+        "level": {
+          "enum": [
+            "beginner",
+            "intermediate",
+            "advanced"
+          ]
+        },
+        "goal": {
+          "enum": [
+            "interest",
+            "counselor",
+            "academic"
+          ]
+        },
+        "timeBudget": {
+          "enum": [
+            "light",
+            "standard",
+            "intensive"
+          ]
+        },
+        "startDate": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        }
+      }
+    },
+    "currentStage": {
+      "type": "string",
+      "enum": [
+        "enlightenment",
+        "schools",
+        "schools_domains",
+        "integration",
+        "specialization",
+        "mastery"
+      ]
+    },
+    "stageCompleted": {
+      "type": "boolean"
+    },
+    "stageSummary": {
+      "type": "string"
+    },
+    "lastDialogueAt": {
+      "type": "string"
+    },
+    "modules": {
+      "type": "object",
+      "properties": {
+        "theory": {
+          "$ref": "#/definitions/module"
+        },
+        "counseling": {
+          "$ref": "#/definitions/module"
+        },
+        "assessment": {
+          "$ref": "#/definitions/module"
+        },
+        "reading": {
+          "$ref": "#/definitions/module"
+        },
+        "cases": {
+          "$ref": "#/definitions/module"
+        },
+        "methods": {
+          "$ref": "#/definitions/module"
+        },
+        "support": {
+          "$ref": "#/definitions/module"
+        }
+      }
+    },
+    "stats": {
+      "type": "object",
+      "properties": {
+        "totalHours": {
+          "type": "number"
+        },
+        "totalDays": {
+          "type": "integer"
+        },
+        "practiceCount": {
+          "type": "integer"
+        },
+        "analyses": {
+          "type": "integer"
+        },
+        "dialogues": {
+          "type": "integer"
+        },
+        "booksRead": {
+          "type": "integer"
+        },
+        "assessments": {
+          "type": "integer"
+        },
+        "reflections": {
+          "type": "integer"
+        },
+        "feynmanOutputs": {
+          "type": "integer"
+        }
+      }
+    },
+    "readings": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "assessments": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "logs": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "moodLog": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "mood": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "energy": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 5
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "learnerProfile": {
+      "type": "object",
+      "properties": {
+        "learningStyle": {
+          "type": "string"
+        },
+        "recurringStuck": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "motivationState": {
+          "type": "string"
+        },
+        "preferredTherapies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "lastUpdated": {
+          "type": "string"
+        }
+      }
+    },
+    "xp": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "level": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "badges": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "milestones": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "reached": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "dialogueState": {
+      "type": "object",
+      "properties": {
+        "context": {
+          "type": "string"
+        },
+        "step": {
+          "type": "integer"
+        },
+        "pendingQuestion": {
+          "type": "string"
+        },
+        "tempData": {
+          "type": "object"
+        },
+        "lastTopic": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "definitions": {
+    "module": {
+      "type": "object",
+      "required": [
+        "completed",
+        "total",
+        "items"
+      ],
+      "properties": {
+        "completed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Omni Reader 多模态解析",
+  "name_zh": "Omni Reader 多模态解析",
+  "name_en": "Omni Reader",
+  "description": "将任意文档解析为 Markdown（不限格式）：视频解析（ASR+画面分析+关键帧）、扫描件/图片 OCR、PDF/Word/Excel/PPT、网页、音频转文字、压缩包全覆盖。",
+  "description_zh": "将任意文档解析为 Markdown（不限格式）：视频解析（ASR 语音识别+画面视觉分析+关键帧提取）、扫描件/图片 OCR、PDF/Word/Excel/PPT、网页解析、音频转文字、压缩包解析全覆盖。上传本地文件或输入 URL 即可。",
+  "description_en": "Parse any document into Markdown: video understanding (ASR + vision + keyframes), OCR for scans/images, PDF/Office, web pages, audio transcription, and archives. Provide a local file or URL.",
+  "source": "cue-omni-reader",
+  "type": "mcp",
+  "version": "1.0.1",
+  "auth_mode": "token",
+  "minWorkbuddyVersion": "5.0.0",
+  "examples_zh": [
+    "把这份 PDF 解析成文字",
+    "总结这个视频里的要点",
+    "提取这张扫描件里的表格",
+    "把这个网页链接转成 Markdown"
+  ],
+  "examples_en": [
+    "Convert this PDF to text",
+    "Summarize the key points of this video",
+    "Extract the table from this scanned document",
+    "Turn this web page into Markdown"
+  ]
+}

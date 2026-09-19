@@ -1,43 +1,60 @@
-## Description: <br>
-Operate Hex through an OOMOL-connected account using the oo CLI for project discovery, run inspection, and run control. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Hex projects through an OOMOL-connected account using the oo CLI to inspect schemas, list and retrieve projects and runs, trigger published runs, and cancel in-progress runs.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and analysts use this skill to inspect Hex projects, list and check project runs, trigger published project runs, and cancel in-progress runs through the OOMOL connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Installing or using the oo CLI brokers access to the user's Hex account through OOMOL. <br>
-Mitigation: Install only when OOMOL is trusted, review the CLI install command before running it, and use the documented first-time setup flow only after command failures. <br>
-Risk: Running or canceling Hex project runs can consume credits or affect downstream data workflows. <br>
-Mitigation: Confirm write-action payloads and expected effects with the user before invoking run_project or cancel_run. <br>
+## Use Case:
 
+Developers and operators use this skill to work with Hex projects and project runs from an agent session through an OOMOL-managed Hex connection. It supports read workflows, published project execution, run cancellation, setup guidance, and billing or connection troubleshooting.
 
-## Reference(s): <br>
-- [ClawHub Hex skill](https://clawhub.ai/oomol/skills/oo-hex) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Hex homepage](https://hex.tech) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown instructions with oo CLI shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands rely on an installed, authenticated oo CLI and live connector schemas.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: The setup path includes pipe-to-shell installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified or package-managed oo CLI install, or review the installer before running it.
+
+Risk: The skill relies on OOMOL as an intermediary for Hex account access.
+
+Mitigation: Review Hex connection scopes before use and keep credentials limited to the access needed for the task.
+
+Risk: Triggering or canceling Hex project runs can change state or consume account resources.
+
+Mitigation: Require explicit user confirmation for the exact project, payload, and intended effect before triggering or canceling runs.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-hex)
+- [Hex Homepage](https://hex.tech)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include oo CLI commands, JSON request payloads, setup guidance, and JSON connector responses.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

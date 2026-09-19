@@ -1,46 +1,66 @@
-## Description: <br>
-Helps agents work with Temu US fulfillment workflows, including Buy-Shipping labels, cooperative warehouse fulfillment, self-fulfilled shipments, tracking, scan forms, shipment documents, and related Partner US API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Temu US fulfillment skill for Buy-Shipping labels, cooperative warehouse fulfillment, self-fulfilled shipments, logistics tracking, scan forms, shipment creation, and related order-shipping workflows.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, operators, and developers use this skill to prepare and execute Temu US fulfillment tasks such as buying labels, confirming shipments, managing pickup reservations, downloading labels or scan forms, coordinating cooperative warehouse fulfillment, and checking tracking data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform live fulfillment actions that affect Temu shipping and order records. <br>
-Mitigation: Use only with authorized Temu accounts, prefer test data first, and require explicit user confirmation before shipment creation, confirmation, cancellation, pickup changes, warehouse authorization, or label purchase/download. <br>
-Risk: Access tokens and saved API responses may contain sensitive account, order, address, tracking, or label data. <br>
-Mitigation: Treat tokens like passwords, avoid pasting them into logs or chat, restrict local file access, and delete saved response files when they are no longer needed. <br>
+## Use Case:
 
+External Temu sellers, fulfillment operators, and developers use this skill to run US order-shipping workflows, including buying labels, retrieving shipping documents, creating scan forms, confirming shipments, managing cooperative warehouse fulfillment, and checking tracking data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-fulfillment-us) <br>
-- [API reference](references/api.md) <br>
-- [Partner US fulfillment catalog](references/partner-us-catalog.md) <br>
-- [Access token guide](references/access-token.md) <br>
-- [Authorization flow](references/authorization-flow.md) <br>
-- [Fulfillment API index](references/apis/README.md) <br>
-- [Temu Partner US documentation](https://partner-us.temu.com/documentation) <br>
+### Deployment Geography for Use:
 
+United States
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Files, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance, shell commands, and JSON responses or saved JSON files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are saved as local JSON files; small responses may also be printed to stdout, while larger responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The skill sends Temu merchant tokens and fulfillment data through LinkFox-hosted gateway endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only when the user trusts LinkFox with that data, and keep gateway or login endpoint override environment variables unset unless they point to known LinkFox HTTPS hosts.
+
+Risk: The skill can perform state-changing fulfillment actions such as buying labels, updating shipments, confirming shipped packages, canceling pickup reservations, or submitting cooperative warehouse fulfillment.
+
+Mitigation: Confirm every state-changing shipping action with the user before running the corresponding script or API call.
+
+Risk: Temu access tokens and API responses may be stored locally and can contain sensitive merchant or fulfillment data.
+
+Mitigation: Protect the local token store and saved response files, and delete or rotate them when they are no longer needed.
+
+Risk: The generic proxy can be pointed at Temu API types beyond the intended fulfillment workflow.
+
+Mitigation: Limit use to the documented Temu US fulfillment, shipping, scan form, cooperative warehouse, and tracking API types for this skill.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-fulfillment-us)
+- [API Reference](references/api.md)
+- [Access Token Guide](references/access-token.md)
+- [Onboarding Guide](references/onboarding.md)
+- [Partner US Catalog](references/partner-us-catalog.md)
+- [Fulfillment API Index](references/apis/README.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, plus JSON API responses and saved response files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts save full responses under a linkfox session data directory; small responses are printed in full, while larger responses print summaries unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

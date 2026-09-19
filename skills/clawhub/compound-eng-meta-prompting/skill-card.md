@@ -1,40 +1,53 @@
-## Description: <br>
-Structured reasoning modifiers (/think, /verify, /adversarial, /edge, /confidence, /assumptions, etc.) to stress-test decisions, surface assumptions, or enumerate edge cases. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Structured decision modifiers (/think, /verify, /adversarial, /edge, /confidence, /assumptions, etc.) stress-test conclusions, evidence, assumptions, alternatives, and edge cases when validating an important design, architecture decision, or ambiguous plan before committing.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers, architects, reviewers, and other agent users use this skill to request structured reasoning patterns before committing to important designs, architecture decisions, security-sensitive reviews, or ambiguous plans. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation language may change the agent's response style or reasoning structure when the user did not explicitly request a modifier. <br>
-Mitigation: Use or enable the skill only when automatic structured reasoning is desired; otherwise disable it or invoke comparable reasoning patterns explicitly. <br>
-Risk: Structured reasoning outputs can still contain incorrect assumptions, incomplete verification, or misleading confidence labels. <br>
-Mitigation: Review outputs before relying on them for critical design, architecture, security, or production decisions. <br>
+## Use Case:
 
+Developers, architects, and decision makers use this skill to apply structured prompt modifiers that validate design choices, compare alternatives, expose assumptions, and flag edge cases before committing to a plan.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-meta-prompting) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, guidance] <br>
-**Output Format:** [Markdown or JSON depending on the requested reasoning pattern] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include marked answer sections such as VERIFIED ANSWER, REVISED ANSWER, confidence tiers, assumptions, comparisons, edge cases, or counterarguments.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server-resolved release metadata) <br>
+Risk: Ordinary phrases such as asking whether an answer is right or requesting a code review may trigger a more structured verification format than expected.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill for important decisions, architecture choices, code reviews, security-sensitive validation, and ambiguous planning where the additional structure is useful.
+
+Risk: Structured analysis can still be misleading if the underlying evidence is incomplete or the assumptions are wrong.
+
+Mitigation: Check that outputs distinguish observed evidence, inference, assumptions, and uncertainty before relying on the recommendation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-meta-prompting)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Guidance]
+
+**Output Format:** [Markdown or JSON response structures with decision records, comparison tables, confidence tiers, and verification markers.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May auto-trigger for architecture decisions, code reviews, security-sensitive validation, and ambiguous planning; combined modifiers compose left-to-right.]
+
+## Skill Version(s):
+
+4.6.0 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

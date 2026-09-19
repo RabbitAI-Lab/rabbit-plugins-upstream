@@ -16,6 +16,7 @@ from pathlib import Path
 os.environ["POLYMARKET_AGENT_HOME"] = tempfile.mkdtemp(prefix="polytest-")
 
 from polymarket_agent import guardrails, journal  # noqa: E402
+from polymarket_agent import config  # noqa: E402
 from polymarket_agent.config import Settings  # noqa: E402
 
 
@@ -259,7 +260,7 @@ class ConfigValidationTest(unittest.TestCase):
     def test_unknown_keys_are_rejected(self):
         from polymarket_agent.config import ConfigError, _coerce
 
-        for bad in ("../../etc/passwd", "gateway.token", "__proto__"):
+        for bad in ("../../secrets.env", "gateway.token", "__proto__"):
             with self.assertRaises(ConfigError):
                 _coerce(bad, "x")
 
@@ -327,3 +328,29 @@ class MarketParsingTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+
+
+class AutonomyConfigBypassTest(unittest.TestCase):
+    """The `poly auto` gate — `--i-understand-the-risk` plus an expiry clamped
+    to 24h — is worth nothing if the same two fields can be written straight
+    through `poly config`, which reads as a harmless settings command.
+    """
+
+    def setUp(self) -> None:
+        home = Path(os.environ["POLYMARKET_AGENT_HOME"])
+        (home / "config.json").unlink(missing_ok=True)
+
+    def test_autonomous_mode_is_not_writable_through_config(self):
+        with self.assertRaises(config.ConfigError):
+            config.set_value("autonomous_mode", "true")
+        self.assertFalse(config.load_settings().autonomous_mode)
+
+    def test_expiry_is_not_writable_through_config(self):
+        with self.assertRaises(config.ConfigError):
+            config.set_value("autonomous_expires_at", time.time() + 86400 * 3650)
+        self.assertEqual(config.load_settings().autonomous_expires_at, 0.0)
+
+    def test_the_gated_command_path_still_works(self):
+        """Locking the keys must not stop `poly auto` from persisting them."""
+        config.save_settings(guardrails.enable_autonomous(Settings(), 2))
+        self.assertTrue(guardrails.autonomous_active(config.load_settings()))

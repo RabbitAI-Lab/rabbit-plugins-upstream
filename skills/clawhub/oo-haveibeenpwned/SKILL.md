@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Have I Been Pwned"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["haveibeenpwned"]
   icon: "https://static.oomol.com/logo/third-party/haveibeenpwned.svg"
 ---

@@ -1,45 +1,64 @@
-## Description: <br>
-Checks product images, descriptions, reference images, and IP keywords with LinkFox's 卖大律 service to assess TRO and trademark, patent, or copyright infringement risk. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Checks product images and optional text through LinkFox's Maidalu TRO and IP-risk service to return risk levels, possible trademark, patent, or copyright matches, TRO plaintiff details, and an AI-generated legal assessment.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Cross-border e-commerce sellers, marketplace operators, and compliance reviewers use this skill before listing a product to identify possible TRO, trademark, patent, or copyright risk from a product image and supporting text. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Product images, descriptions, IP keywords, and local image uploads are sent to LinkFox services. <br>
-Mitigation: Use only inputs approved for third-party processing, and avoid sensitive or confidential product data unless the LinkFox service terms are acceptable. <br>
-Risk: Full API responses and cache files may be saved locally under linkfox directories. <br>
-Mitigation: Review saved outputs for sensitive data and delete response or cache files when they are no longer needed. <br>
-Risk: The LINKFOX_TOOL_GATEWAY environment variable can redirect requests to a custom endpoint. <br>
-Mitigation: Leave LINKFOX_TOOL_GATEWAY unset unless the destination is trusted and expected. <br>
-Risk: The skill includes automatic feedback reporting and an external onboarding-skill installation path. <br>
-Mitigation: Review or disable those workflows before using the skill in sensitive environments. <br>
+## Use Case:
 
+External sellers, marketplace operators, and compliance reviewers use this skill to screen product images and listing text for TRO and intellectual-property infringement risk before listing or reviewing products.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-maidalv-product-tro-detection) <br>
-- [卖大律 API reference](artifact/references/api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Files, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [JSON risk assessment saved locally, with inline JSON or a concise Markdown-readable summary depending on response size.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes overall risk level, high-risk items, lower-risk IP matches, TRO plaintiff details when available, numeric risk scores, and an AI-generated legal assessment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Product images, descriptions, IP keywords, and session metadata are sent to LinkFox services for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only images and listing data that may be shared with LinkFox; avoid confidential, unreleased, or customer-sensitive product material unless sharing is approved.
+
+Risk: Local image upload creates a publicly reachable image URL for a limited period.
+
+Mitigation: Review each local-image upload before running it, prefer non-sensitive images, and treat generated public URLs as shareable links.
+
+Risk: Authentication, SMS login, billing, and payment order flows can expose credentials or create charges.
+
+Mitigation: Require explicit user approval before collecting phone/SMS details, changing API keys, selecting a paid plan, or submitting a payment order.
+
+Risk: The scanner verdict is suspicious because feedback reporting and persistent local records give users limited control.
+
+Mitigation: Inform users where response files are saved, avoid unnecessary feedback submission, and review saved LinkFox data before sharing or committing workspace files.
+
+## Reference(s):
+
+- [卖大律 产品侵权 TRO 风险检测 API 参考](references/api.md)
+- [解决认证和算力问题](references/onboarding.md)
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-maidalv-product-tro-detection)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON API results and saved JSON files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns overall risk level, check ID, high-risk matches, lower-risk IP items, TRO plaintiff details when available, numeric risk scores, and an AI-generated legal report; larger responses are summarized while full JSON is saved locally.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

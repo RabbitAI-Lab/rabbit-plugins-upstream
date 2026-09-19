@@ -1,44 +1,55 @@
-## Description: <br>
-WhoisFreaks (whoisfreaks.com) support for searching and reading domain, IP, ASN, availability, and subdomain data through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+WhoisFreaks (whoisfreaks.com) helps agents retrieve WHOIS, ASN, domain availability, and subdomain information through an OOMOL-connected WhoisFreaks account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to run user-directed WhoisFreaks lookups for domains, IP addresses, autonomous systems, domain availability, and subdomains from an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected WhoisFreaks account and may use account credentials or billing through the OOMOL connector. <br>
-Mitigation: Use it only with an intended OOMOL-connected WhoisFreaks account, and run setup, login, connection, or billing steps only after a relevant failure and user confirmation. <br>
-Risk: WHOIS, IP, ASN, and subdomain lookups are sent to the WhoisFreaks/OOMOL connector. <br>
-Mitigation: Submit only lookup targets the user explicitly wants to query, and avoid adding unrelated sensitive data to action payloads. <br>
-Risk: Connector action inputs can change over time. <br>
-Mitigation: Inspect the live action schema before building payloads and match requests to the authoritative schema. <br>
+## Use Case:
 
+Developers and external users use this skill to look up domain, IP, ASN, domain availability, and subdomain data from WhoisFreaks through the oo CLI.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-whoisfreaks) <br>
-- [WhoisFreaks homepage](https://whoisfreaks.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution and returns connector responses as JSON when commands are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: Setup instructions include remote installer commands that can execute local code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before use, prefer a signed or package-manager installation method, and run setup from a non-elevated account.
+
+Risk: Account sign-in and provider connection can persist beyond a single lookup request.
+
+Mitigation: Only perform first-time setup after an authentication or connection failure, and confirm the intended account and provider connection before proceeding.
+
+## Reference(s):
+
+- [WhoisFreaks homepage](https://whoisfreaks.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-whoisfreaks)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the oo CLI to return WhoisFreaks connector responses as JSON when actions are run.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

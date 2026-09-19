@@ -6,13 +6,15 @@ rejecting them outright, and the caps vary widely per endpoint (Data `/trades`
 under load; this one retries with exponential backoff and distinguishes a
 transient error from a permanent one.
 
-`trust_env=False` on every session: without it, the host's `.netrc`,
-`REQUESTS_CA_BUNDLE` and proxy variables enter the calls — which is exactly the
-vector of CVE-2024-47081 (credential leak to a malicious host via redirect).
+`trust_env=False` on every session: without it the host's ambient settings —
+the per-user credentials file, the CA-bundle override and the proxy variables —
+enter the calls, which is exactly the vector of CVE-2024-47081 (credential leak
+to a malicious host via redirect).
 """
 from __future__ import annotations
 
 import random
+import re
 import time
 from typing import Any, Dict, Optional
 
@@ -105,3 +107,49 @@ def get_json(
             time.sleep(_sleep_for(attempt, None))
 
     raise ApiError(f"{last_error} (after {MAX_ATTEMPTS} attempts)")
+
+
+#: Control characters, plus the two Unicode line separators — everything that
+#: can open a new line or a new apparent speaker in a terminal or in a prompt.
+_CONTROL_RE = re.compile(r"[\x00-\x1f\x7f-\x9f\u2028\u2029]")
+
+#: Anything outside RFC 3986's unreserved set has no business in a path slug.
+_SLUG_RE = re.compile(r"[^A-Za-z0-9._~-]")
+
+MAX_TEXT = 160
+
+
+def clean_text(raw: object, limit: int = MAX_TEXT) -> str:
+    """Neutralize free text arriving from an external API.
+
+    SECURITY FIX (found in review): market titles, outcome names and trader
+    nicknames are USER-GENERATED on Polymarket's side, and the skill passed
+    them through verbatim into the three places that read text as
+    instructions — the terminal, the `openclaw cron` alert, and the agent's
+    own context. `cli.safe()` only escaped Rich markup, which is a rendering
+    concern; a title carrying a blank line followed by a forged operator turn
+    reached the model untouched.
+
+    This is deliberately NOT an injection detector — those are bypassed by
+    rewording. It strips the STRUCTURE an injection needs: control characters
+    and line breaks that forge a new line, and unbounded length that buries
+    the real content. The defense that actually holds is that the money path
+    is deterministic (`guardrails.evaluate_order`), never the model's
+    judgement; this just stops untrusted text from impersonating the frame
+    around it.
+    """
+    text = _CONTROL_RE.sub(" ", str(raw or ""))
+    text = " ".join(text.split())
+    if len(text) > limit:
+        text = text[: limit - 1].rstrip() + "\u2026"
+    return text
+
+
+def clean_slug(raw: object, limit: int = 120) -> str:
+    """Sanitize a slug that gets concatenated into a polymarket.com URL.
+
+    A slug of `x/../../evil.example/y` turned the link shipped in a whale
+    alert into a link to somewhere else — the user sees the polymarket.com
+    prefix and taps it.
+    """
+    return _SLUG_RE.sub("", str(raw or ""))[:limit]

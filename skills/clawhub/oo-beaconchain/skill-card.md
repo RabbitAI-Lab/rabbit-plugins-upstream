@@ -1,45 +1,57 @@
-## Description: <br>
-Beaconcha.in helps agents use the Beaconcha.in connector through the OOMOL oo CLI for read-only Ethereum validator and network lookups. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Beaconcha.in (beaconcha.in). Use this skill for ANY Beaconcha.in request — searching and reading data. Whenever a task involves Beaconcha.in, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and external users use this skill to retrieve Beaconcha.in network performance, staking queue, validator snapshot, and finalized-epoch consensus reward data through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected Beaconcha.in account and sends lookup inputs such as validator identifiers, chain names, and epochs through the connector. <br>
-Mitigation: Use only intended lookup inputs, confirm the connected account is appropriate for the task, and avoid submitting unnecessary sensitive data. <br>
-Risk: First-time setup may require installing the oo CLI before the skill can run connector commands. <br>
-Mitigation: Review the installer source before running the one-time setup command, as recommended by the security guidance. <br>
-Risk: Incorrect action payloads can produce failed or misleading lookup results if they do not match the live connector schema. <br>
-Mitigation: Inspect the action schema with oo connector schema before constructing command payloads. <br>
+## Use Case:
 
+Developers and external users use this skill to query Beaconcha.in through an OOMOL-connected account for Ethereum beacon chain network performance, staking queue metrics, validator snapshots, validator lists, and finalized-epoch consensus reward details.
 
-## Reference(s): <br>
-- [Beaconcha.in homepage](https://beaconcha.in) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-beaconchain) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text guidance, Markdown, Shell commands, Configuration guidance, JSON API responses] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector actions are intended for read-only Beaconcha.in lookups; command responses can be returned as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The fallback setup path includes a pipe-to-shell installer for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI from a trusted, reviewable, version-pinned source when possible, and review the installer before execution.
+
+Risk: Connector requests are routed through OOMOL infrastructure.
+
+Mitigation: Use an appropriate OOMOL account and Beaconcha.in connection, and avoid sending data that should not be processed by that service path.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/oomol/skills/oo-beaconchain)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Beaconcha.in homepage](https://beaconcha.in)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON responses from the oo CLI]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-oriented connector actions return JSON data with execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

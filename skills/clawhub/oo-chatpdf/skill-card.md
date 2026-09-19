@@ -1,44 +1,56 @@
-## Description: <br>
-ChatPDF lets agents import PDF URLs, ask stateless questions about imported PDFs, and delete ChatPDF sources through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ChatPDF lets an agent inspect ChatPDF connector schemas, import public PDF URLs, ask stateless questions about imported sources, and delete sources through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to operate ChatPDF through an OOMOL-connected account: importing publicly reachable PDF URLs, asking questions against imported PDFs, and deleting sources when explicitly approved. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can add ChatPDF sources through a connected OOMOL account. <br>
-Mitigation: Confirm the exact PDF URL payload and expected effect with the user before running write actions. <br>
-Risk: The skill can delete one or more ChatPDF sources. <br>
-Mitigation: Confirm the target source IDs and obtain explicit user approval before running destructive actions. <br>
-Risk: First-time setup, connection, or billing errors may require account actions. <br>
-Mitigation: Run setup steps only after a matching command failure and use the documented OOMOL setup, connection, or billing paths. <br>
+## Use Case:
 
+External users and developers use ChatPDF to import publicly reachable PDFs, ask questions about imported sources, and remove sources from a ChatPDF account through an OOMOL-connected CLI workflow.
 
-## Reference(s): <br>
-- [ChatPDF homepage](https://www.chatpdf.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands inspect live connector schemas before action execution; write and destructive actions require explicit approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: First-time setup includes pipe-to-shell installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path, prefer a trusted package manager or verified release, and avoid running installer commands in an elevated shell.
+
+Risk: The skill can import PDFs into ChatPDF and delete existing ChatPDF sources.
+
+Mitigation: Inspect the live action schema, confirm the exact payload and effect with the user before imports, and require explicit approval before deletions.
+
+## Reference(s):
+
+- [ChatPDF homepage](https://www.chatpdf.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-chatpdf)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown instructions with bash and PowerShell command examples and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [When connector actions run, responses are JSON objects containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

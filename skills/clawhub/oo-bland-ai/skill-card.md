@@ -1,40 +1,56 @@
-## Description: <br>
-Use this skill to search and read Bland AI account, call, transcript, and voice data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an agent inspect Bland AI account, call, transcript, and voice data through the OOMOL `oo` CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Bland AI account status, billing balance, calls, transcripts, and available voices through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read account-scoped Bland AI data, including billing status, call details, and transcripts. <br>
-Mitigation: Install only when that access is acceptable, and review specific call or transcript requests before running them when the data is sensitive. <br>
+## Use Case:
 
+Developers and operators use this skill to retrieve Bland AI account status, billing balance, call details, transcript phrases, and voice information through an authenticated OOMOL connection.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-bland-ai) <br>
-- [Bland AI Homepage](https://www.bland.ai/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Bland AI account, call, transcript, and voice lookup through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: Setup guidance includes remote installer commands that execute directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official package manager or a pinned release when possible, or download and verify the installer before executing it.
+
+Risk: The connector can read Bland AI account status, billing balance, call details, transcript phrases, and voice data.
+
+Mitigation: Review the connected account scope before use and run only the requested read actions; confirm payloads and targets before any action marked write or destructive.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-bland-ai)
+- [Bland AI Homepage](https://www.bland.ai/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON-oriented connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

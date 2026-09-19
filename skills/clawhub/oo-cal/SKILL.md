@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Cal.com"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.4"
   services: ["cal"]
   icon: "https://static.oomol.com/logo/third-party/Cal.svg"
 ---

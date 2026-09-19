@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/determinability-checker",
   "slug": "determinability-checker",
   "ownerHandle": null,
-  "version": "1.0.2",
-  "updatedAt": 1778492758205,
-  "contentHash": "57f3c4727a9c296f35fb4fe54116eec0d14403b648f58ff1e8bff7d513cafed4",
-  "fetchedAt": "2026-07-26T19:20:22.305Z"
+  "version": "2.0.0",
+  "updatedAt": 1789608017233,
+  "contentHash": "02665c4ee09fb0977da4136a86dfa8ad858179c112c944ce75c292be48e585da",
+  "fetchedAt": "2026-09-19T12:11:25.959Z"
 }

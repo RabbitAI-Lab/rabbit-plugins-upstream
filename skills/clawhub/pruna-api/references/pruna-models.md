@@ -8,14 +8,18 @@ Pricing and limits change; confirm on the official page: [Available models](http
 
 | Model ID | Type | Tool skill | QA checklist (install guide) |
 |----------|------|------------|------------------------------|
-| `p-image` | Text-to-image (good quality, extremely fast) | `p-image` | `p-image-quality-checklist.md` in `image-prompting` |
+| `p-image` | Text-to-image (good quality, extremely fast; use when user asks cheap/fast) | `p-image` | `p-image-quality-checklist.md` in `image-prompting` |
+| `p-image-ideogram` | Text-to-image with control knobs (photoreal photos, in-image text, JSON/hex/bbox; thinking + upsampling) | `p-image-ideogram` | `p-image-quality-checklist.md` in `image-prompting` |
 | `p-image-edit` | Image edit / compose (1–5 images) | `p-image-edit` | `p-image-edit-quality-checklist.md` in `image-prompting` |
 | `p-image-upscale` | Upscale (target MP 1–128, optional enhance) | `p-image-upscale` | `p-image-upscale-quality-checklist.md` in `image-prompting` |
 | `p-image-try-on` | Virtual try-on (person + up to 11 garments, ≤6 finals / 7–8 reliable; optional pose ref, turbo ~4) | `p-image-try-on` | `p-image-try-on-quality-checklist.md` in `image-prompting` |
-| `p-video` | Text / image / audio video; **first frame** (`image`) + **last frame** (`last_frame_image`) chaining | `p-video` | `p-video-quality-checklist.md` in `video-prompting` |
+| `p-video-2-pro` | Cinematic text / first-last-frame video with **generated audio** (no audio upload); 480p / 768p; 5–15s; `mode` speed/quality. Built on MiniMax H3. | `p-video-2-pro` | `p-video-2-pro-quality-checklist.md` in `video-prompting` |
+| `p-video-2` | 1080p / imported-audio / draft video; **first frame** (`image`) + **last frame** (`last_frame_image`); omit `duration` to let the model choose length | `p-video-2` | `p-video-2-quality-checklist.md` in `video-prompting` |
+| `p-video` | Simpler / quicker text / image / audio video; same payload as `p-video-2` | `p-video` | `p-video-quality-checklist.md` in `video-prompting` |
 | `p-video-avatar` | Talking avatar from portrait + script or audio | `p-video-avatar` | `p-video-avatar-quality-checklist.md` in `video-prompting` |
 | `p-video-animate` | Animate a still using source video motion (motion transfer) | `p-video-animate` | `p-video-animate-quality-checklist.md` in `video-prompting` |
 | `p-video-replace` | Replace people in source video using 1–4 identity images | `p-video-replace` | `p-video-replace-quality-checklist.md` in `video-prompting` |
+| `p-video-edit` | Instruction video edit (source ≤15s + prompt; optional 0–4 refs) | `p-video-edit` | `p-video-edit-quality-checklist.md` in `video-prompting` |
 
 ## External tools (Replicate)
 
@@ -23,7 +27,7 @@ Pricing and limits change; confirm on the official page: [Available models](http
 |------|------|------------|-------|
 | `stable-audio-2.5` | Text-to-music bed | `stable-audio-2.5` | Requires `REPLICATE_API_TOKEN`; mix via ffmpeg bed mix |
 | `music-2.5` | Full song with vocals (lyrics + style) | `music-2.5` | Requires `REPLICATE_API_TOKEN`; `music-video` workflow |
-| `gemini-3.1-flash-tts` | Narration / voiceover TTS | `gemini-3.1-flash-tts` | Requires `REPLICATE_API_TOKEN`; mux or drive `p-video` via uploaded audio — `audio-prompting` |
+| `gemini-3.1-flash-tts` | Narration / voiceover TTS | `gemini-3.1-flash-tts` | Requires `REPLICATE_API_TOKEN`; mux or drive `p-video-2` via uploaded audio — `audio-prompting` |
 
 ## Related models (not duplicated as skills here)
 
@@ -36,11 +40,11 @@ Documented on the same models page: `p-image-lora`, trainers, `flux-*`, `wan-*`,
 | Full suite install | `pruna` |
 | Single-scene avatar (`p-video-avatar`, intake first) | `avatar-single-scene` |
 | Multi-scene avatar (stills + `p-video-avatar` / animate rows) | `avatar-multi-scene` |
-| Single-scene cinematic (`p-video`, intake first) | `image-to-video` |
-| Multi-scene cinematic (`p-video` + scene anchor triple) | `narrated-multi-scene` |
-| Multi-scene visual transitions (stills → `p-video` pair) | `visual-transition-reel` |
+| Single-scene cinematic (`p-video-2-pro` visual / `p-video-2` audio-led, intake first) | `image-to-video` |
+| Multi-scene cinematic (`p-video-2` + scene anchor triple) | `narrated-multi-scene` |
+| Multi-scene visual transitions (stills → `p-video-2-pro` pair) | `visual-transition-reel` |
 | Educational explainer (narrator + character) | `interactive-explainer` |
-| Illustrated story reel (Ken Burns / gentle `p-video`) | `illustrated-story-reel` |
+| Illustrated story reel (Ken Burns / gentle `p-video-2`) | `illustrated-story-reel` |
 | AI music video (lyrics → Music 2.5 → avatar + B-roll) | `music-video` |
 | Virtual try-on + persona bar | `p-image-try-on` + `image-prompting` |
 | Human recipe map | repo `docs/WORKFLOW-RECIPES.md` (not a skill) |

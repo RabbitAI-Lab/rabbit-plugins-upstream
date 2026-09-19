@@ -1,42 +1,60 @@
-## Description: <br>
-Certn (certn.co). Use this skill for Certn requests that search and read data through the OOMOL Certn connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Certn helps agents read Certn background-check cases, groups, users, packages, questionnaires, tags, and events through an OOMOL-connected oo CLI workflow.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to retrieve and list Certn background-check cases, events, groups, packages, questionnaires, tags, and Client Portal users through an OOMOL-connected Certn account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Certn background-check data can contain sensitive personal information. <br>
-Mitigation: Use only the intended OOMOL-connected Certn account, review case and user identifiers before execution, and avoid sharing returned data beyond the authorized task. <br>
-Risk: First-time setup or connection steps can link the agent environment to a Certn account. <br>
-Mitigation: Run authentication or account-connection steps only after an auth or connection failure and only when the user intends to connect that account. <br>
+## Use Case:
 
+Developers and operations users use this skill to retrieve Certn background-check and account resources through an existing OOMOL connection. It is designed for read-only case, group, user, event, package, questionnaire, and tag lookup workflows.
 
-## Reference(s): <br>
-- [ClawHub Certn skill page](https://clawhub.ai/oomol/skills/oo-certn) <br>
-- [Certn homepage](https://certn.co) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects returned by the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: The first-time setup guidance includes remote installer commands that execute changing code on the local machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only through a verified, pinned, or signed method, and do not allow an agent to run curl|bash or irm|iex setup commands automatically.
+
+Risk: The skill can read background-check and user-related Certn data available through the connected OOMOL account.
+
+Mitigation: Confirm the connected Certn account and scopes before use, and apply least-privilege access for users who can invoke the skill.
+
+Risk: Certn data is accessed through OOMOL as an intermediary.
+
+Mitigation: Install only when the organization is comfortable with OOMOL mediating access to Certn data and can control the setup process.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-certn)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Certn Homepage](https://certn.co)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return JSON data from Certn connector actions when commands are executed.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence release.version and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

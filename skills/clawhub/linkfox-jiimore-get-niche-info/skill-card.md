@@ -1,43 +1,64 @@
-## Description: <br>
-Queries Jiimore data for Amazon niche market intelligence, including market metrics, reviews, competition, pricing, inventory, and growth trends for a supplied niche ID. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries and summarizes Jiimore Amazon niche market intelligence for a single niche ID, including market metrics, buyer review insights, competitive landscape, price trends, and growth trends.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Amazon marketplace sellers and ecommerce analysts use this skill to retrieve and summarize Jiimore niche-market intelligence for a known nicheId in the US, Japan, or Germany marketplaces. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a LinkFox API key and may make paid Jiimore API calls. <br>
-Mitigation: Confirm credential use and expected credit cost before running; avoid repeated calls without user approval and use the built-in cache where appropriate. <br>
-Risk: Full market-data responses are persisted to local linkfox session and cache files. <br>
-Mitigation: Run the skill only in an appropriate workspace and periodically delete generated linkfox data or cache files when the market data is sensitive. <br>
-Risk: Security evidence flags remote onboarding installation behavior and automatic feedback reporting for review. <br>
-Mitigation: Review or remove the onboarding download path and feedback-reporting behavior before deploying the skill in controlled environments. <br>
+## Use Case:
 
+External sellers, analysts, and commerce operators use this skill to retrieve and interpret Amazon niche market data from Jiimore by known niche ID. It supports market overview, pricing, demand, competition, product launch, inventory, review, advertising, and profitability analysis for the US, JP, and DE marketplaces.
 
-## Reference(s): <br>
-- [Jiimore niche market API reference](references/api.md) <br>
-- [ClawHub skill listing](https://clawhub.ai/linkfox-ai/skills/linkfox-jiimore-get-niche-info) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON API responses or saved JSON files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a LinkFox API key; full responses are persisted under linkfox session data, and responses over 8 KB are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Niche IDs and related market context are sent to LinkFox/Jiimore.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when the user accepts sharing that market context with the provider, and avoid submitting confidential or unnecessary data.
+
+Risk: The skill includes an automatic feedback path that can report user intent or result quality.
+
+Mitigation: Avoid feedback reporting unless the user has given explicit consent and sensitive content has been redacted.
+
+Risk: Authentication, phone verification, payment handling, and API key setup are part of the onboarding flow.
+
+Mitigation: Use onboarding only with a trusted provider relationship, keep OTPs and API keys protected, and prefer a secure secret store for credentials.
+
+Risk: Full API responses and request cache entries are written to local LinkFox data directories.
+
+Mitigation: Review local storage expectations before use, limit sensitive queries, and clear saved response or cache files when retention is not needed.
+
+## Reference(s):
+
+- [Jiimore Niche Market Info API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-jiimore-get-niche-info)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries and tables, JSON API responses, local JSON data files, and setup or onboarding shell commands.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Queries one niche ID per call, supports US, JP, and DE marketplaces, caches matching requests for 24 hours, and writes full API responses under the local linkfox session data directory.]
+
+## Skill Version(s):
+
+1.0.7 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

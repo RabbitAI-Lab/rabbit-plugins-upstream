@@ -1,42 +1,55 @@
-## Description: <br>
-World News API (worldnewsapi.com). Use this skill for World News API requests that search, retrieve, or read news data through the OOMOL connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+World News API (worldnewsapi.com). Use this skill for ANY World News API request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to query World News API through OOMOL for top news, article search, article retrieval, source search, and location coordinate lookup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The package is flagged suspicious by the authoritative ClawHub security evidence. <br>
-Mitigation: Install only after reviewing the ClawHub security summary and confirming the local tools and credentials this package may use are acceptable. <br>
-Risk: The skill depends on the local oo CLI and OOMOL-managed World News API credentials. <br>
-Mitigation: Use normal connector actions only after the user has installed and signed in to the oo CLI; run setup or connection commands only after an auth or connection failure. <br>
+## Use Case:
 
+External users and developers use this skill to query World News API through an OOMOL-connected account for article search, article retrieval, top-news discovery, source search, and location lookup.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-world-news-api) <br>
-- [World News API Homepage](https://worldnewsapi.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses OOMOL-managed credentials through the oo CLI and returns connector JSON responses when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The setup path includes piping a remote installer directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a signed or package-manager installation for the oo CLI; if using the installer, review it first and pin or verify the downloaded content where possible.
+
+Risk: The skill routes World News API access through an OOMOL-connected account.
+
+Mitigation: Connect only the account and scopes intended for agent use, and review authentication or connection prompts before proceeding.
+
+## Reference(s):
+
+- [World News API Homepage](https://worldnewsapi.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-world-news-api)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas and returns World News API response data through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

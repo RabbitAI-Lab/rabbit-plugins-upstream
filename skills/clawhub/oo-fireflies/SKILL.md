@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Fireflies"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["fireflies"]
   icon: "https://static.oomol.com/logo/third-party/Fireflies.svg"
 ---

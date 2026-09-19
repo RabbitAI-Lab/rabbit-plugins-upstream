@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "TiDB Cloud"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["tidb"]
   icon: "https://static.oomol.com/logo/third-party/tidb.svg"
 ---

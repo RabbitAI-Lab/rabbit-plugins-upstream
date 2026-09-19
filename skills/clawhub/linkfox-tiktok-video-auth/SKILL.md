@@ -1,6 +1,6 @@
 ---
 name: linkfox-tiktok-video-auth
-description: TikTok 达人体系授权与管理技能，经 /tiktokVideo 路由提供达人/视频号 OAuth 授权、已授权账号列表、令牌查询与 access_token 刷新。固定 creator 达人端，region 支持 global / us。当用户提到 TikTok 达人授权、TikTok 视频号授权、绑定视频号、视频号带货授权、TikTok 视频上传授权、TikTok creator authorization、Authorize TikTok creator、刷新 TikTok 视频号令牌、查询 TikTok 达人令牌、已授权 TikTok 视频账号、/tiktokVideo 授权 时触发此技能。只要需求涉及达人/视频号账号授权或访问令牌管理，也应触发。**不要**使用 linkfox-tiktok-auth（/tiktokShop）做达人授权。
+description: TikTok 达人体系授权与管理技能，经 /tiktokVideo 路由提供达人/视频号 OAuth 授权、已授权账号列表、令牌查询与 access_token 刷新。固定 creator 达人端，region 支持 global / us。当用户提到 TikTok 达人授权、TikTok 视频号授权、绑定视频号、视频号带货授权、TikTok 视频上传授权、TikTok creator authorization、Authorize TikTok creator、刷新 TikTok 视频号令牌、查询 TikTok 达人令牌、已授权 TikTok 视频账号、/tiktokVideo 授权 时触发此技能。只要需求涉及达人/视频号账号授权或访问令牌管理，也应触发。**不要**使用 linkfox-tiktok-shop-auth（/tiktokShop）做达人授权。
 ---
 
 # TikTok 视频上传 API — 授权与管理
@@ -9,7 +9,7 @@ description: TikTok 达人体系授权与管理技能，经 /tiktokVideo 路由�
 
 > 📌 **模块边界**
 > - **本 skill**（`/tiktokVideo`）：**达人体系授权的唯一入口** — 视频号 OAuth、令牌管理，独立数据表，无需传 `appType`。
-> - **`linkfox-tiktok-auth`**（`/tiktokShop`）：仅 TikTok Shop **卖家**授权（`erp` / `affiliate`），**不处理达人/视频号授权**。
+> - **`linkfox-tiktok-shop-auth`**（`/tiktokShop`）：仅 TikTok Shop **ERP 小店**授权（固定 `appType=erp`），**不处理达人/视频号授权**。
 > - 两者授权数据**不互通**；业务调用须使用对应模块取得的 `accessToken`。
 
 > 📌 视频上传等业务调用通过 **`/tiktokVideo/developerProxy`**（传入本 skill 取得的 `accessToken` 作为 `ttsAccessToken`）完成，由 **`linkfox-tiktok-video`** 负责。
@@ -147,7 +147,7 @@ description: TikTok 达人体系授权与管理技能，经 /tiktokVideo 路由�
 
 **Not applicable** — 超出本 skill 的业务：
 
-- **TikTok Shop 小店授权**（`appType=erp`）→ 用 `linkfox-tiktok-auth`
+- **TikTok Shop 小店授权**（`appType=erp`）→ 用 `linkfox-tiktok-shop-auth`
 - **TikTok Shop 可购物视频 / affiliate_creator 达人接口** → 用 `linkfox-tiktok-creator`（业务 skill；授权仍走本 skill）
 - **TikTok 视频上传具体业务**（上传、发布等）→ 用 **`linkfox-tiktok-video`**（经 `/tiktokVideo/developerProxy`）
 - TikTok 选品 / 达人带货数据分析 → 由 EchoTik 等其他 skill 负责
@@ -169,24 +169,6 @@ description: TikTok 达人体系授权与管理技能，经 /tiktokVideo 路由�
 
 详细请求参数、响应结构、错误码，见 `references/api.md`。
 
-## 解决认证和积分问题
-发生以下异常情况时，采用以下措施来处理：
-
-### 异常情况
-- **未配置API Key**：环境变量未配置 `LINKFOX_AGENT_API_KEY`，也未配置 `LINKFOXAGENT_API_KEY`。
-- **响应401或402状态码**
-- **响应提示积分或余额不足**：消息含"积分余额不足/计费不足/余额不足/quota exceeded/insufficient balance/套餐到期/需充值/请充值"，或类似含义的内容。
-
-### 措施
-- 优先采用skill内的 onboarding.md 引导解决问题。
-- 如找不到 onboarding.md 文件，则加载 /linkfox-onboarding 这个skill并根据它的引导来处理。如未安装请先安装：
-    - 下载 https://agent-files.linkfox.com/skills/linkfox-onboarding/release.zip，解压后安装这个skill。如需用户授权才可下载，要询问用户获得授权，你不能自己放弃下载。
-- 兜底措施：仅当前面两个措施经过所有努力都走不通时，才提示用户依据 https://skill.linkfox.com/linkfoxskills/guide.htm 指引获取API Key，或去 https://os.linkfox.com/ 补充积分。
-
-## 积分消耗规则
-
-不消耗积分。
-
 **Feedback**：
 
 当出现以下任一情况时，自动通过 Feedback API 上报反馈：
@@ -196,6 +178,33 @@ description: TikTok 达人体系授权与管理技能，经 /tiktokVideo 路由�
 4. 任何你认为可以改进的点
 
 按 `references/api.md` 中的规范调用 Feedback API，不要打断用户的主流程。
+
+<!-- LF_LARGE_RESPONSE_BLOCK -->
+## Handling Large Responses
+
+To avoid overflowing the agent context, persist the response to disk and extract only the fields you need:
+
+```
+python scripts/response_io.py run --script scripts/authorize_url.py --out-dir <DIR> '<params>'
+python scripts/response_io.py read <file> --fields "<paths>"   # or --path "<JMESPath>"
+```
+
+> Pick `--out-dir` outside any git working tree (e.g. `/tmp/...` on Unix, `%TEMP%/...` on Windows). Persisted responses may contain PII, pricing, or auth-sensitive data — do not commit them. Files are not auto-deleted; clean up when the task is done.
+
+> This skill exposes multiple entry scripts: `authorize_url.py`, `authorized_accounts.py`, `account_tokens.py`, `refresh_token.py`. Pass `--script scripts/<name>.py` to choose the one you need.
+
+`run` writes the full response to a file and emits only a schema preview + file path. `read` projects specific fields, with `--limit/--offset` for slicing and `--format json|jsonl|csv|table` for output.
+
+**When to prefer this pattern** — apply your judgment based on the response characteristics, e.g.:
+- High field count per record, or fields you don't need
+- Batch/paginated results (multiple items per call)
+- Long-text fields (descriptions, reviews, HTML, time series)
+- Output reused across later steps rather than consumed immediately
+
+For small, single-use responses, calling the main script directly is fine.
+
+⚠️ The preview is a truncated schema + sample, not the full data. Any field-level decision must read from the persisted file via `read`.
+<!-- /LF_LARGE_RESPONSE_BLOCK -->
 
 ---
 *For more high-quality, professional cross-border e-commerce skills, visit [LinkFox Skills](https://skill.linkfox.com/).*
