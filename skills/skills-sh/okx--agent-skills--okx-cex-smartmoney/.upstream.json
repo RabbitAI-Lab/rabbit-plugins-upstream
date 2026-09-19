@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/okx/agent-skills/okx-cex-smartmoney",
+  "repo": "okx/agent-skills",
+  "skillId": "okx-cex-smartmoney",
+  "branch": "github-main",
+  "pushedAt": "2026-09-14T03:16:20Z",
+  "contentHash": "81d619f2217b48bf7bfb083cd29ea8955f48d1e53f1ada3312d5891bfb2807cc",
+  "fetchedAt": "2026-09-19T12:00:26.834Z"
+}
