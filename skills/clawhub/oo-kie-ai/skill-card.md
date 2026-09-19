@@ -1,44 +1,56 @@
-## Description: <br>
-KIE.AI helps an agent check account credits and convert generated file URLs through an OOMOL-connected KIE.AI account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+KIE.AI lets agents operate the KIE.AI connector through an OOMOL-connected account to check account credits and convert generated file URLs into temporary direct download URLs.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill when they want an agent to operate KIE.AI through an OOMOL-connected account for read-oriented account and generated-file URL tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Account credit details and generated file download URLs can be sensitive. <br>
-Mitigation: Treat account balances and temporary download URLs as private user data and disclose them only when needed for the user's task. <br>
-Risk: First-time setup or login commands can initiate OOMOL account access setup. <br>
-Mitigation: Run install, login, or connection steps only when the user expects setup or when an action fails with the matching authentication or connection error. <br>
-Risk: Connector action payloads can drift if the service contract changes. <br>
-Mitigation: Inspect the live connector schema before running an action and build payloads from that schema. <br>
+## Use Case:
 
+External developers and agents use this skill to run KIE.AI connector actions through the oo CLI on an intended OOMOL-connected account. It is primarily useful for checking remaining KIE.AI credits and converting generated KIE.AI file URLs into temporary direct download URLs.
 
-## Reference(s): <br>
-- [KIE.AI homepage](https://kie.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [KIE.AI skill on ClawHub](https://clawhub.ai/oomol/skills/oo-kie-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions return JSON from the oo CLI; inspect the live connector schema before constructing payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: skill frontmatter and release evidence) <br>
+Risk: The setup path includes remote installer commands that run downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before installation, prefer an official verified package or separately downloaded installer with integrity checks, and avoid running installers in an administrator shell unless required.
+
+Risk: Connector commands operate on the connected KIE.AI account.
+
+Mitigation: Use the skill only for explicit KIE.AI connector tasks on the intended account, and confirm payloads and effects before running any action that changes or deletes data.
+
+## Reference(s):
+
+- [KIE.AI homepage](https://kie.ai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-kie-ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action payloads; action responses are JSON from the oo CLI.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

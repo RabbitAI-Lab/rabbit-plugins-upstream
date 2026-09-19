@@ -86,6 +86,27 @@ The PRIVATE+Free row explains why cloud output may be walkthrough-only — but t
 **Fallback procedure:**
 
 1. **Call `Skill("superpowers:requesting-code-review")` (MANDATORY)** — this skill loads the review framework and includes code-reviewer agent dispatch. When the skill returns the review result, proceed to the "Check existing review comment" and "Post/update review comment" sub-steps below (still within Step 3.5).
+2. **In-session agent path unavailable → dispatch to a clawo session (do NOT abandon the review)**: if the `code-reviewer` agent path does not run in this session (Agent tool unregistered, the dispatch stalls, or repeated attempts fail), do not drop the Internal Review — dispatch the entire consolidate to a fresh **clawo session** (the `clawo` skill `launch` topic: `session-start` in the repo cwd + `session-send "consolidate <PR-URL>"`), which runs consolidate autonomously with the project's `.claude/` rules. Pre-bake the verdict/medium gates in the dispatch message (autonomous sessions cannot `AskUserQuestion` — see `clawo/launch.md` Step 5a). Abandoning the review because the in-session agent stalled — and pivoting to unrelated work — is the exact drift this fallback prevents.
+3. **Dispatch succeeded but the agent reported nothing → escalate on a bound (HARD STOP)**: the failure mode that stalls this step most quietly is not an unavailable agent — it is a *successful* dispatch whose agent ends idle with no result. There is no error to catch, so a caller waiting on the report simply stops and the consolidate never reaches Step 4, with no trace of why. Treat all of these as the same condition: the dispatch returns an agent id but no completion notification arrives; the agent reaches a terminal state with an empty final message; the agent's transcript exists but carries no review body.
+
+   Escalation ladder — take the next rung as soon as the current one yields no review body, and never let the sequence exit without a posted comment:
+
+   | Rung | Action | Leaves this rung when |
+   |------|--------|-----------------------|
+   | 1 | Re-dispatch **once**, restating the worktree path and the `gh pr diff <N>` command in the prompt | A review body is returned |
+   | 2 | Dispatch the whole consolidate to a fresh clawo session (item 2 above) | A review body is returned |
+   | 3 | Self-analyse inline and post under the same title template, per Don't `#4` below | Always — this rung cannot fail |
+
+   Whichever rung produces the body, **name the engine that produced it in the body's opening line** (e.g. "the superpowers code-reviewer dispatch went idle twice without reporting, so per Don't `#4` this is a self-analysed review"). A reader must be able to tell a subagent review from a self-analysed one; presenting rung 3 output as rung 1 output misrepresents the review's independence — the second perspective is the whole reason Step 3.5 exists.
+
+   | # | Don't | Do |
+   |---|-------|-----|
+   | 1 | Keep waiting on a dispatched agent that has already gone idle, or re-dispatch repeatedly hoping for a different outcome | One re-dispatch, then move down the ladder. Repeated identical dispatches are the stall, not a recovery from it |
+   | 2 | Read "the agent returned nothing" as "there was nothing to report" | An empty result is a failed dispatch, not a clean review. A clean review still has a body — "no actionable findings" plus what was verified and how |
+   | 3 | Pivot to other work while the review is "waiting on the agent" | Rung 3 always terminates. There is no state in which this step legitimately stays open |
+   | 4 | Post rung 3 output without disclosing the substitution | State the engine and the reason in the body's opening line, and record it in the Summary's reviewer matrix |
+
+**Prevention tooling never substitutes for the POST (HARD STOP)**: if a non-compliant / garbage review comment is discovered on the PR, correcting the *process* (building a guard hook, adding a lint, filing a prevention task) does NOT complete this consolidate. The compliant `## AI Review Summary — [receiving-code-review](...)` must still be posted for this PR. A prevention effort spawned from a consolidate gap is additive work, never a substitute for the object deliverable — do not treat the consolidate as done until the Summary is on the PR.
 
 | # | Don't | Do (correct alternative) |
 |---|-------|-------------------------|
@@ -155,8 +176,9 @@ If `--interactive` is off, proceed directly to the medium-decided POST (determin
 **Title template (MANDATORY — first line of the review body / comment body)**:
 ```markdown
 ## Internal Code Review — [requesting-code-review](https://skills.sh/obra/superpowers/requesting-code-review)
+<!-- consolidate:verified -->
 ```
-Do not write `code-reviewer` as plain text; use the link format above.
+Do not write `code-reviewer` as plain text; use the link format above. The `<!-- consolidate:verified -->` HTML comment on the second line is an invisible machine-readable provenance marker: it renders as nothing on GitHub but lets the `block-noncompliant-review-comment` guard (client hook + server Action) confirm the comment came through consolidate even if the `requesting-code-review` link text is ever reworded.
 
 #### Caller-supplied custom title contract (HARD STOP)
 
@@ -315,6 +337,20 @@ If 0, capture is absent.
 Right after Step 4 Classify, before Step 5 Summary posting. If the classification result contains a "UI capture missing" actionable, include it in the Summary body so the author can follow up with attachment.
 
 Detailed rule: see `skills/github-flow/pr.md` Step 8 "UI Change PR — MANDATORY" section (in this repo; installed locally as `~/.claude/skills/github-flow/pr.md`).
+
+## Pre-Merge Code Review Existence Verification & Dual Fallback Gate (HARD STOP)
+
+1. **Prohibit Merge Proposals Without Substantive Review**: CI checks passing (green) or external bot (CodeRabbit, etc.) rate-limit/offline skips must NEVER be treated as completed code review.
+2. **Mandatory Pre-Merge Review Verification**: Before proposing PR merge via `AskUserQuestion` or executing `gh pr merge`, verify that real review evidence exists (`reviews` list, `reviewDecision: "APPROVED"`, or AI Review Summary comment).
+3. **Mandatory Dual Fallback (superpowers + coderabbit CLI) & Consolidate Execution**: When external bot review is 0 findings or offline, executing BOTH (1) **superpowers review** (`requesting-code-review` / `code-reviewer` subagent dispatch) and (2) **coderabbit CLI review** (`code-review` / `coderabbit review --plain`) is MANDATORY. Then, execute the official `consolidate` skill (`/consolidate pr`, `consolidate:internal`) to aggregate and classify findings.
+4. **Prohibit Verbal/Ad-hoc Review Fabrication**: Fabricating self-review tables or verbal claims in chat text without physically running `consolidate` is strictly prohibited.
+
+| # | Don't | Do |
+|---|-------|----|
+| 1 | Proposing `(Recommended) Merge ...` based solely on green CI or CodeRabbit rate-limit skip without review | Verify physical presence of `reviews` and `reviewDecision`, executing internal reviews first if absent |
+| 2 | Presenting merge confirmation ask when review findings or AI Review Summary comment are missing | Complete independent code reviews, post the summary comment, and propose merge based on findings |
+| 3 | Claiming "thorough post-review complete" verbally in chat after inspecting `git show` without running `consolidate` | Physically execute the `consolidate` skill (or `clawo consolidate`) to complete formal review triage |
+| 4 | Running only one of superpowers or coderabbit CLI when external bot review is absent | Execute BOTH superpowers subagents and coderabbit CLI reviews to thoroughly synthesize findings |
 
 ## Next
 

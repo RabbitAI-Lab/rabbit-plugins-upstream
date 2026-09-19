@@ -1,43 +1,56 @@
-## Description: <br>
-Operate Dropbox through an OOMOL-connected account for reading, creating, updating, sharing, moving, restoring, uploading, downloading, and deleting Dropbox data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Dropbox (dropbox.com). Use this skill for any Dropbox request, including reading, creating, updating, and deleting data through the OOMOL-connected oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent manage Dropbox files, folders, shared links, revisions, tags, and account metadata through the OOMOL Dropbox connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can make sensitive Dropbox account changes, including uploads, moves, shared-link changes, restores, and deletes. <br>
-Mitigation: Require explicit user confirmation for uploads, moves, edits, sharing changes, destructive actions, and bulk operations before running connector commands. <br>
-Risk: Overly broad activation wording may route casual Dropbox mentions into this skill. <br>
-Mitigation: Narrow activation wording so the skill is used only when the user clearly asks the agent to operate Dropbox. <br>
+## Use Case:
 
+External users and developers use this skill to operate Dropbox through the OOMOL-connected oo CLI for file, folder, sharing, revision, metadata, and search workflows.
 
-## Reference(s): <br>
-- [Dropbox homepage](https://www.dropbox.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-dropbox) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands use the OOMOL oo CLI and return connector responses as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata and skill frontmatter) <br>
+Risk: Remote installer commands can execute downloaded shell or PowerShell content during setup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a trusted installer channel and prefer pinned, signed, or checksum-verified installers before running setup commands.
+
+Risk: Write and destructive Dropbox actions can change, revoke, restore, or delete user data and sharing links.
+
+Mitigation: Review payloads carefully and require explicit approval before write, sharing, restore, revoke, or delete operations.
+
+## Reference(s):
+
+- [ClawHub Dropbox skill page](https://clawhub.ai/oomol/skills/oo-dropbox)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Dropbox homepage](https://www.dropbox.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands inspect live oo connector schemas before running Dropbox actions and may return JSON responses with execution IDs.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

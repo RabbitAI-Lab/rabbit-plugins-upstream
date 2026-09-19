@@ -67,11 +67,11 @@ draft body file is the persistence medium.
 
 A plan-draft follows three stages.
 
-| Stage | Action | Owner |
-|-------|--------|-------|
+| Stage | Action | Owner (role) |
+|-------|--------|---------------|
 | 1. Write | Add a `- [BLOCKED:P*:selfable]` entry to `## Plan Drafts` (optionally a `plan-drafts/<slug>.md` body file) | This topic, when the user defers |
-| 2. Promote | When the resume trigger fires, hand the stub to the planning workflow (research → plan) and convert the entry into active work | This topic → `code-workflow` |
-| 3. Archive | When a stub is superseded / abandoned, move any body file to `plan-drafts/.bak/` and remove the entry | This topic |
+| 2. Promote | When the resume trigger fires, re-verify the stub's premises against first sources, then hand the stub to the planning workflow (research → plan) and convert the entry into active work | `impl` (default) → `code-workflow`. Architecture-scale output (model-triage Category I/III fit) is registered for `deep` audit after promote — see "Role ownership" below |
+| 3. Archive | When a stub is superseded / abandoned, move any body file to `.ralph/.bak/` and remove the entry | This topic |
 
 ### 1. Write
 
@@ -82,19 +82,33 @@ A plan-draft follows three stages.
 
 ### 2. Promote
 
-When the resume trigger is met:
+When the resume trigger is met or the user requests promotion:
 
-1. Dispatch the stub to the planning workflow: `Skill("code-workflow", "steps")` (research → plan → user review) using the stub's Purpose + Expected deliverable as the seed.
-2. After the real research/plan artifact exists, **remove the stub entry** from `## Plan Drafts` (its job is done — the artifact supersedes it).
-3. If a `plan-drafts/<slug>.md` body file existed, archive it: `mkdir -p plan-drafts/.bak && mv plan-drafts/<slug>.md plan-drafts/.bak/`.
+1. **Re-verify the stub's premises against first sources before planning.** A stub is a defer-time snapshot; by promote time its premises drift — the config it targets may already be fixed, the question it poses may already be answered, or its proposed flag/approach may now conflict with a changed contract. Check each premise at a first source (grep the code/config, `gh`/`git`/`npm`/registry state, the tracker's `## Completed`). If any premise is invalidated, record it at the head of the research seed (passed to `code-workflow`) so the plan starts from current reality, not the stale stub.
+2. **Draft-to-Plan Mandatory Authoring Gate (HARD STOP)**: When the user requests draft promotion ("promote draft", "promote remaining drafts", etc.), **skipping `code-workflow` plan authoring or leaving draft stubs unauthored in `## Plan Drafts` is STRICTLY FORBIDDEN**. You MUST immediately dispatch the stub to `code-workflow` (Research → Plan → User Review) and produce the formal `plan-*.md` document.
+3. After the real research/plan artifact exists and user review is completed, move the entry to `## Fable Target Tasks` (with `audit_status: pending_opus_fable_audit` / `[BLOCKED:P*:selfable]`) for Fable/Opus+ model deep audit before implementation. Leaving `[PROMOTED]` stubs in `## Plan Drafts` is strictly prohibited.
+4. If a `plan-drafts/<slug>.md` body file existed, add valid YAML frontmatter (`title`, `status: superseded`, `created`, `share_eligibility: public|private`, `relates_to`, `archived: true`, `archived_at`, `archive_reason`) and move it to the unified `.ralph/` backup directory (`mkdir -p .ralph/.bak && mv plan-drafts/<slug>.md .ralph/.bak/draft-<slug>.md`). All `.ralph/` sub-document backups MUST be unified in `.ralph/.bak/` (never create sub-folder `.bak/` directories like `plan-drafts/.bak/` or `docs/generated/.bak/`).
+
+### Role ownership (promote execution)
+
+Which role profile (see `SKILL.md` "Role-based execution") executes Stage 2:
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | `deep` authors architecture-scale drafts from scratch, `impl` limited to "lightweight" drafts only | `impl` executes Stage 2 by default for **all** complexity tiers — the same premise-reverify → `code-workflow` dispatch procedure |
+| 2 | `pm` executes any part of Stage 2 (premise re-verify, dispatch, authoring) | `pm` only surfaces drafts whose resume trigger has fired, during its default-pipeline scan of `## Plan Drafts` — it never authors |
+| 3 | `deep` waits idle for drafts to author, or drafts are pre-classified by scope before promote to route some to `deep` | After `impl` produces the plan artifact, if it fits [model-triage.md](./model-triage.md) Category I (greenfield architecture) or III (stale plan↔reality resync), register it into `## <Model> Target Tasks` via that topic's existing Discovery Procedure — `deep` audits/strengthens the artifact `impl` already produced, it does not draft from zero |
+
+This reuses model-triage's existing dedicated-section queue as the sole hand-off mechanism between `impl` and `deep` — no new state field or separate audit queue is introduced.
 
 ### 3. Archive (superseded / abandoned)
 
 When a draft is no longer wanted (duplicated by another plan, scope dropped):
 
 ```bash
-mkdir -p plan-drafts/.bak
-mv plan-drafts/<slug>.md plan-drafts/.bak/   # only if a body file exists
+# Add YAML frontmatter (title, status: superseded, share_eligibility, relates_to, archived: true, archive_reason)
+mkdir -p .ralph/.bak
+mv plan-drafts/<slug>.md .ralph/.bak/draft-<slug>.md   # only if a body file exists (all .ralph backups unify under .ralph/.bak/)
 ```
 
 Then remove the `## Plan Drafts` entry. **Order**: archive the file first, remove the entry second (same rule as `issue-drafts` — reverse order leaves an orphan file mis-read as pending).
@@ -111,6 +125,7 @@ Then remove the `## Plan Drafts` entry. **Order**: archive the file first, remov
 | 6 | Record only the inline 3-field stub when this session has already gathered substantive research/measurements (the chat contains numbers/tables/classified findings) | **Inline + body file mode** — write the findings to `plan-drafts/<slug>.md` first, then cite the file from the entry. Inline-only here loses the research when chat is compressed |
 | 7 | Use `- [ ]` for Plan Draft entries | Use `- [BLOCKED:P*:selfable]`. `[ ]` lets autonomous loops (e.g. Ralph) try to act on the entry — but a deferred plan cannot be promoted by an agent on its own. `[BLOCKED]` ensures the entry is skipped until the user signals promote |
 | 8 | Use `:external` reason on Plan Draft entries | Always `:selfable`. The body file / stub is prepared — the wait-state is on a user signal, not on a third party. `:external` is reserved for true external dependencies (`priority.md`) |
+| 9 | Promote a stub straight into `code-workflow` on its defer-time premises | Re-verify each premise at a first source first (Stage 2 step 1); note any invalidated premise at the head of the research seed — a deferred stub drifts and its assumptions may already be resolved or contradicted |
 
 ## Self-check (before recording a draft)
 
@@ -127,3 +142,26 @@ Then remove the `## Plan Drafts` entry. **Order**: archive the file first, remov
 - [priority.md](./priority.md) — `[BLOCKED]` for external-blocked items
 - [issue-drafts.md](./issue-drafts.md) — parallel draft-file lifecycle
 - `code-workflow` (`steps` topic) — promote target: research → plan → user review
+
+## Plan Artifact CollabMD Sync & Plane Comment Linkage (HARD STOP)
+
+When authoring or updating architecture and planning artifacts (`plan-*.md`), stopping after writing to local workspace directories (`.agents/docs/generated/`) is strictly prohibited.
+1. **Security Isolation & CollabMD Sync Path Compliance**: Because `.agents/docs/generated/` is reserved for raw AI generation isolation, authoritative deliverables intended for CollabMD (`plan-*.md`, etc.) MUST be copied or placed in the secure sharing path **`.agents/docs/shared/`** so they are synchronized via Syncthing to the collaborative editor/viewer (CollabMD, `https://collabmd.dgs.ai.kr`), and the frontmatter must declare `collabmd_url` (`https://collabmd.dgs.ai.kr/#file=daegunsoftdev-agents-docs/<filename>`).
+2. **Parent Plane Issue Comment Linkage**: Prompt instructions prohibiting Plane issue mutations ("read-only research/planning") forbid modifying issue state or description, NOT posting reference comments. Agents MUST use `plane_create_comment.py` to post a comment to the corresponding parent Plane issue containing the CollabMD viewer link, local artifact path, executive summary, and audit status, ensuring end-to-end traceability in Plane SSOT.
+
+| # | Don't | Do |
+|---|-------|----|
+| 1 | Leave plan artifacts only in `.agents/docs/generated/` causing CollabMD `file not found` | Place in `.agents/docs/shared/` per security isolation policy, verify CollabMD URL, and link in Plane comment |
+| 2 | Conflate "prohibit Plane issue mutations" with posting artifact reference links | Distinguish state/body mutations from reference comment posting, completing comment linkage |
+
+## Plan & Research Artifact Mandatory Frontmatter Schema & Creation Date (HARD STOP)
+
+When authoring or revising architecture, plan, or research artifacts (`plan-*.md`, `research-*.md`), omitting mandatory YAML frontmatter metadata or using non-standard keys (such as bare `date:`) is strictly forbidden.
+1. **Canonical Frontmatter Schema Compliance**: Every plan and research artifact MUST begin with standard YAML frontmatter containing the mandatory field **`created: <YYYY-MM-DD>`** (initial creation date). Replacing `created` with arbitrary keys like `date` is prohibited.
+2. **Revision & Modification Tracking**: When modifying or augmenting an existing plan or research document, agents MUST preserve the original `created` date, update **`last_modified: <YYYY-MM-DD>`**, and prepend a document metadata banner (`> **Document Metadata**: Initial created date / Last modified date / Status`) at the top of the body.
+3. **Proactive Creation Date Declaration in Reports**: When presenting, quoting, or reporting plan/research deliverables in chat or checklists, agents MUST explicitly declare whether the document is newly authored or an existing document along with its initial creation date, preventing ambiguity over document history and provenance.
+
+| # | Don't | Do |
+|---|-------|----|
+| 1 | Use non-standard `date:` key or omit creation timestamp | Mandate `created: <YYYY-MM-DD>` in frontmatter, appending `last_modified` upon revision |
+| 2 | Present existing plans ambiguously without stating age/creation date | Proactively declare document provenance (new vs existing with original creation date) in chat reports |

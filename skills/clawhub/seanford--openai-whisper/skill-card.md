@@ -1,41 +1,59 @@
-## Description: <br>
-Local speech-to-text with the Whisper CLI (no API key). <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Local speech-to-text with the Whisper CLI (no API key).
 
-## Publisher: <br>
-[seanford](https://clawhub.ai/user/seanford) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[seanford](https://clawhub.ai/user/seanford)
 
-## Use Case: <br>
-Developers and agent users use this skill to transcribe or translate local audio files through the Whisper command-line tool without an API key. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Installing the skill may require installing the Homebrew openai-whisper package and allowing Whisper to download model files into the local cache. <br>
-Mitigation: Install only in environments where the local Whisper package and model downloads are approved. <br>
-Risk: Generated transcript files may contain sensitive speech content. <br>
-Mitigation: Transcribe only audio intended for local processing and choose output directories deliberately. <br>
+## Use Case:
 
+Developers and users use this skill to install and run the local Whisper CLI for transcribing or translating audio files without an API key.
 
-## Reference(s): <br>
-- [OpenAI Whisper](https://openai.com/research/whisper) <br>
-- [ClawHub skill page](https://clawhub.ai/seanford/skills/openai-whisper) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and local transcript output guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the local whisper binary; transcript files are written to the selected output directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact _meta.json) <br>
+Risk: Installing the skill's dependency adds the local Whisper CLI through Homebrew.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the Homebrew install action before installation and confirm the target environment should receive the whisper binary.
+
+Risk: First model use may download model files into the local cache.
+
+Mitigation: Plan for local model storage before first use and allow downloads only in environments where cached model files are acceptable.
+
+Risk: Audio files may contain sensitive content.
+
+Mitigation: Run the CLI only on audio files the user intends to transcribe or translate.
+
+## Reference(s):
+
+- [OpenAI Whisper](https://openai.com/research/whisper)
+- [Openai Whisper on ClawHub](https://clawhub.ai/seanford/skills/openai-whisper)
+- [seanford publisher profile](https://clawhub.ai/user/seanford)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires the local whisper binary; first model use may download model files into a local cache.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata and artifact _meta.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

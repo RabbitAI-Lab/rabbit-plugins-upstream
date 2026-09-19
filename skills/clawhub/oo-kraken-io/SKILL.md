@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Kraken.io"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["kraken_io"]
   icon: "https://static.oomol.com/logo/third-party/Kraken.io.svg"
 ---

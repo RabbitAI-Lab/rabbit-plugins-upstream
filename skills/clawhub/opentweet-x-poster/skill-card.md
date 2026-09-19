@@ -1,46 +1,67 @@
-## Description: <br>
-Post to X (Twitter) using the OpenTweet API to create tweets, schedule posts, publish threads and articles, upload media, manage evergreen queues, search and repurpose inspiration, run human-approved DM outreach, and read analytics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Post to X (Twitter), Bluesky and LinkedIn using the OpenTweet API, including cross-posting, scheduling, threads, X Articles from markdown, media upload, evergreen queues, inspiration search, AI repurposing, human-approved DM outreach campaigns, and engagement analytics.
 
-## Publisher: <br>
-[petricbranko](https://clawhub.ai/user/petricbranko) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[petricbranko](https://clawhub.ai/user/petricbranko)
 
-## Use Case: <br>
-External users and operators use this skill to manage connected X accounts through OpenTweet, including drafting, scheduling, publishing, article workflows, media generation, evergreen queues, analytics, and lead outreach. It requires an OpenTweet API key and should be used with review before irreversible publishing or outreach actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The OpenTweet API key can manage a connected X account, including publishing, scheduling, deleting, analytics access, media handling, and campaign workflows. <br>
-Mitigation: Install only for accounts where this level of access is acceptable, verify the connection and limits before actions, and review posts, articles, media, schedules, analytics, evergreen settings, and campaign data before approval. <br>
-Risk: Published posts and articles can be difficult or impossible to fully undo, and batch actions can affect many posts at once. <br>
-Mitigation: Ask for explicit user confirmation before publishing, bulk scheduling, or looping publish calls; create drafts or scheduled posts first when practical and report real API response IDs and statuses. <br>
-Risk: AI-generated or repurposed content and DM outreach can create reputational, compliance, or platform-policy risk if sent without review. <br>
-Mitigation: Keep generated content in draft until reviewed, require human approval for each DM lead, respect opt-outs, and avoid attempts to bypass pacing or outreach caps. <br>
-Risk: Uploaded or generated media, drafts, schedules, analytics, and campaign data may be stored or processed by OpenTweet. <br>
-Mitigation: Avoid sending sensitive content unless OpenTweet processing is acceptable for the account and organization. <br>
+## Use Case:
 
+External users and developers use this skill to let an agent create, schedule, publish, and analyze social content through OpenTweet for connected X, Bluesky, and LinkedIn accounts. It is most relevant for agent-assisted social posting workflows where public publishing, deletion, bulk scheduling, evergreen posting, and DM outreach require careful user review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/petricbranko/skills/opentweet-x-poster) <br>
-- [OpenTweet OpenClaw feature page](https://opentweet.io/features/openclaw-twitter-posting) <br>
-- [OpenTweet API documentation](https://opentweet.io/api/v1/docs) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [api calls, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with HTTP request examples and JSON response handling.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires OPENTWEET_API_KEY and user review for publishing, bulk scheduling, AI-generated content, and DM lead approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release metadata) <br>
+Risk: The skill can create public posts, schedule bulk content, delete posts, manage evergreen queues, and queue DM outreach through connected social accounts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the user trusts OpenTweet with the connected accounts and API key, and require review before publishing, bulk scheduling, evergreen setup, deletion, or DM campaign approval.
+
+Risk: Omitting a platform list can publish according to the account's auto cross-post setting rather than only to X.
+
+Mitigation: Check cross-posting state before ambiguous posts and specify the intended platform list when the user asks for a particular network.
+
+Risk: Cross-posted content can partially succeed, fail, or be skipped on individual networks.
+
+Mitigation: Read and report the per-network results from OpenTweet instead of describing the overall operation as a single success.
+
+Risk: AI-qualified DM outreach can create compliance and reputation risk if leads are approved without human review.
+
+Mitigation: Show qualified leads and drafted messages to the user, approve only specific selected leads, keep pacing conservative, and respect opt-outs.
+
+Risk: AI-generated or repurposed content may be inaccurate, inappropriate, or misaligned with the user's voice.
+
+Mitigation: Keep generated content in draft or review state until the user has inspected and approved it.
+
+## Reference(s):
+
+- [OpenTweet X Poster on ClawHub](https://clawhub.ai/petricbranko/skills/opentweet-x-poster)
+- [OpenTweet OpenClaw Twitter Posting](https://opentweet.io/features/openclaw-twitter-posting)
+- [OpenTweet API Documentation](https://opentweet.io/api/v1/docs)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, API calls]
+
+**Output Format:** [Markdown with HTTP requests, JSON request bodies, shell commands, configuration notes, and human-facing status summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include OpenTweet API response summaries, published post URLs, scheduled post IDs, per-network posting results, and review prompts before sensitive actions.]
+
+## Skill Version(s):
+
+1.7.0 (source: release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

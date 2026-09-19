@@ -1,43 +1,55 @@
-## Description: <br>
-Loop engineering CLI v0.4.4 with project intake, adaptive queues, progress reports, and human gates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Durable explicit task/project loops with verification, revisions, live progress, and governed completion.
 
-## Publisher: <br>
-[ambitioncn](https://clawhub.ai/user/ambitioncn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ambitioncn](https://clawhub.ai/user/ambitioncn)
 
-## Use Case: <br>
-Developers and engineers use this skill to manage explicit loop-engineering workflows for project intake, queue setup, adaptive queue execution, progress reporting, and review-gated code worktree handoffs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queue dispatcher commands and cron entries can run local workflows in the target workspace. <br>
-Mitigation: Review queue configs, dispatcher commands, and cron entries before execution; start with manual ticks and inspect generated run artifacts before scheduling recurring runs. <br>
-Risk: Commands using `--confirm-apply` or `--confirm-cleanup` can change local files or remove reviewed worktrees. <br>
-Mitigation: Use the read-only planning, status, review bundle, patch verification, and cleanup-plan commands first, and supply confirmation flags only after human review. <br>
-Risk: High-risk process-control, live instrumentation, publishing, destructive, credential, or production configuration actions may exceed ordinary loop automation expectations. <br>
-Mitigation: Keep those actions separately gated and stop at artifacts for human review unless the user explicitly approves execution. <br>
+## Use Case:
 
+Developers and agent operators use this skill to route explicit loop requests into durable task or project workflows with queueing, verification, revision handling, progress notifications, and governed completion criteria.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/ambitioncn/skills/loop-engineering) <br>
-- [NPM Package Reference](references/npm-package.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Markdown, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands, JSON configuration examples, and artifact paths] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce local loop configuration, queue state, status ledgers, review bundles, patches, and closeout artifacts when the user explicitly runs the corresponding CLI commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.4 (source: server release evidence and package reference, released 2026-07-23) <br>
+Risk: The skill can lead an agent to install or execute an external CLI package without a pinned version.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the package and repository first, prefer a pinned package version or audited commit, and avoid global or npx execution in sensitive environments.
+
+Risk: Queue workers, schedulers, notifications, or workspace-changing commands may affect the wrong workspace or route results to the wrong destination.
+
+Mitigation: Use plan-only installation, confirm workspace, queue, worker identity, and routing destination, then run doctor and smoke checks before enabling writes or schedulers.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ambitioncn/skills/loop-engineering)
+- [npm package reference](references/npm-package.md)
+- [Taskforce Loop Engineering repository](https://github.com/ambitioncn/taskforce-loop-engineering)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command blocks and structured status or verification references.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides agents through deployment checks, queue operations, project intake, verification, revision handling, and completion reporting.]
+
+## Skill Version(s):
+
+0.15.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

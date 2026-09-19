@@ -1,44 +1,56 @@
-## Description: <br>
-Operates NocoDB through OOMOL's oo CLI connector for reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+NocoDB (nocodb.com) skill for reading, creating, updating, and deleting NocoDB data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect NocoDB action schemas and run read, write, and destructive table or record operations through a connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access connected NocoDB data through sensitive credentials managed by the OOMOL connector. <br>
-Mitigation: Install only if you trust OOMOL's oo CLI and connector to access the NocoDB account. <br>
-Risk: Write and destructive actions can create, update, upsert, or permanently delete NocoDB data. <br>
-Mitigation: Before approving writes or deletes, verify the exact base, table, record IDs, payload, and intended effect. <br>
-Risk: Incorrect payloads or targets could affect the wrong NocoDB records or metadata. <br>
-Mitigation: Inspect the live action contract before building payloads and confirm state-changing commands with the user. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect live NocoDB connector schemas and run read, write, and destructive NocoDB actions through OOMOL-managed credentials.
 
-## Reference(s): <br>
-- [ClawHub NocoDB skill page](https://clawhub.ai/oomol/oo-nocodb) <br>
-- [NocoDB homepage](https://nocodb.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API calls, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses may include JSON data and meta.executionId values.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup instructions include running a remote installer directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source and prefer a signed, pinned, or package-manager installation path before use.
+
+Risk: Write and destructive actions can change or remove real NocoDB data.
+
+Mitigation: Confirm exact payloads, target bases or tables, and expected effects with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [NocoDB homepage](https://nocodb.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub NocoDB skill page](https://clawhub.ai/oomol/skills/oo-nocodb)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Fetches the live connector schema before constructing action payloads; command results are returned as JSON by the oo CLI.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

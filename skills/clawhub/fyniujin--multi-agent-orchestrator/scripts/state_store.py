@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-状态持久化管理器 - 多Agent协作编排引擎 v4.0
+状态持久化管理器 - 多Agent协作编排引擎 v5.2
 
 功能：pipeline_state.json 的创建、读取、更新、查询 + 断点续传支持
 新增：执行历史追踪（.execution_history.json）+ 控制流节点专有字段持久化
+新增：节点完成后自动保存快照（供执行回放 / Time Travel 使用）
+新增：节点级成本追踪（token/cost 聚合，对接 cn-llm-router）
 零第三方依赖，仅使用 Python 标准库
 
 ★★★ 安全说明 ★★★
@@ -46,6 +48,28 @@ MAX_STATE_SIZE = 50 * 1024 * 1024
 def get_timestamp():
     """获取当前时间戳（ISO 8601 格式）"""
     return datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
+
+
+def get_retry_config(node):
+    """
+    获取节点的重试配置。
+
+    优先级：
+    1. 节点级 retry_config 块（v5.3 新增）
+    2. 旧全局字段（retry/fallback）向后兼容
+
+    返回 dict: {'count': int, 'backoff_base': float, 'fallback_chain': list}
+    """
+    retry_config = node.get('retry_config')
+    if retry_config:
+        return retry_config
+
+    # 旧全局策略降级
+    return {
+        'count': node.get('max_retry', 3),
+        'backoff_base': 2,
+        'fallback_chain': ['retry', node.get('fallback', 'abort')],
+    }
 
 
 def validate_path(filepath, must_exist=False):
@@ -149,7 +173,7 @@ def init_state(pipeline, state_path=None):
         node_state = {
             "name": agent.get('name', aid),
             "role": agent.get('role', ''),
-            "type": agent.get('type', 'task'),  # task/approval/condition/switch/for-each/while-loop
+            "type": agent.get('type', 'task'),  # task/approval/condition/switch/for-each/while-loop/evaluate
             "status": "pending",       # pending → running → completed / failed / skipped
             "depends_on": agent.get('depends_on', []),
             "retry_count": 0,
@@ -163,16 +187,34 @@ def init_state(pipeline, state_path=None):
             "started_at": None,
             "completed_at": None
         }
+        # 任务级重试策略块（可选，未配置时走旧全局策略）
+        # 格式: {"count": 3, "backoff_base": 2, "fallback_chain": ["retry", "reparam", "skip"]}
+        retry_block = agent.get('retry')
+        if isinstance(retry_block, dict):
+            node_state['retry_config'] = {
+                'count': int(retry_block.get('count', 3)),
+                'backoff_base': float(retry_block.get('backoff_base', 2)),
+                'fallback_chain': retry_block.get('fallback_chain', ['retry', 'skip']),
+            }
         # 保留控制流节点的专有字段（否则动态路由时会丢失配置）
         for ctrl_field in ('condition', 'on_true', 'on_false',
                            'switch', 'cases', 'default',
                            'items', 'template', 'join',
-                           'loop_body', 'max_iterations'):
+                           'loop_body', 'max_iterations',
+                           'pipeline_ref', 'params', 'outputs',
+                           'quality_expr', 'retry_targets', 'max_eval_rounds'):
             if ctrl_field in agent:
                 node_state[ctrl_field] = agent[ctrl_field]
         # while-loop 迭代计数初始化
         if agent.get('type') == 'while-loop':
             node_state['iteration'] = 0
+        # evaluate 评估轮次计数初始化
+        if agent.get('type') == 'evaluate':
+            node_state['eval_round'] = 0
+        # approval 节点超时策略字段
+        if agent.get('type') == 'approval':
+            node_state['timeout_seconds'] = agent.get('timeout_seconds', 0)
+            node_state['timeout_action'] = agent.get('timeout_action', 'reject')
         state['nodes'][aid] = node_state
 
     safe_write(state, state_path)
@@ -216,6 +258,9 @@ def complete_node(state_path, node_id, output_json=None):
             # 不是合法 JSON → 降级保存原始字符串
             output_data = {"raw_output": output_json}
         node['output_data'] = output_data
+        # 提取成本数据（如果有 _cost 字段）
+        if isinstance(output_data, dict) and '_cost' in output_data:
+            node['cost_data'] = output_data.pop('_cost')
     else:
         node['output_data'] = {"result": "completed"}
 
@@ -230,6 +275,13 @@ def complete_node(state_path, node_id, output_json=None):
     if output_json:
         print(f"  输出数据已保存")
     print(f"  完成时间：{node['completed_at']}")
+
+    # 自动保存快照（供执行回放 / Time Travel 使用）
+    try:
+        import snapshot_store
+        snapshot_store.save_snapshot(state_path, node_id)
+    except Exception as e:
+        pass  # 快照保存失败不应阻塞主流程
 
     if all_done:
         print(f"\n🎉 流水线 [{state['pipeline_name']}] 全部节点已完成！")
@@ -699,7 +751,7 @@ def compare_history(state_path):
 
 if __name__ == '__main__':
     if len(sys.argv) < 2 or sys.argv[1] in ('-h', '--help'):
-        print("状态持久化管理器 - 多Agent协作编排引擎 v3.0")
+        print("状态持久化管理器 - 多Agent协作编排引擎 v5.0")
         print("=" * 50)
         print("命令列表：")
         print("  python state_store.py init <pipeline.json> [state_path]")
@@ -725,6 +777,10 @@ if __name__ == '__main__':
         print("")
         print("  python state_store.py compare <state.json>")
         print("      → 对比最近5次执行（耗时/成功率/重试次数）")
+        print("")
+        print("★★★ 快照功能（v5.0 新增）★★★")
+        print("  节点完成后自动保存快照，用于执行回放 / Time Travel")
+        print("  快照管理命令：python orchestrator.py snapshot list/show/restore/diff")
         print("")
         print("★★★ 重要：错误处理流程 ★★★")
         print("  1. 执行失败时，先运行 fail 标记失败")

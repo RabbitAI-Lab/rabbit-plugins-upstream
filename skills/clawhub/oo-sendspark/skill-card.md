@@ -1,44 +1,56 @@
-## Description: <br>
-Sendspark connector skill for reading, creating, and updating Sendspark data through an OOMOL-connected account instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Sendspark lets agents read, create, and update Sendspark data through an OOMOL-connected oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to work with Sendspark dynamic video campaigns and prospects through the oo CLI. It supports listing and retrieving campaign or prospect data, creating dynamic campaigns, and adding prospects when the user confirms the write action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create dynamic campaigns or add prospects in the connected Sendspark account. <br>
-Mitigation: Confirm the exact action, target workspace or campaign, and JSON payload with the user before running any write action. <br>
-Risk: Setup, authentication, connection, or billing recovery steps can affect the user's OOMOL/Sendspark account state. <br>
-Mitigation: Run setup or recovery steps only after a command fails with the matching auth, connection, scope, credential, app, or billing error. <br>
+## Use Case:
 
+External users and developers use this skill to manage Sendspark dynamic video campaigns and prospects from an agent, including creating campaigns, adding prospects, listing campaigns, and retrieving generated video URLs.
 
-## Reference(s): <br>
-- [Sendspark homepage](https://sendspark.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [OOMOL Sendspark connection](https://console.oomol.com/app-connections?provider=sendspark) <br>
-- [ClawHub Sendspark skill page](https://clawhub.ai/oomol/skills/oo-sendspark) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [oo connector command responses are JSON objects with data and meta.executionId when commands are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill metadata) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before use and prefer a verified, pinned, or package-manager install method for first-time setup.
+
+Risk: Sendspark write actions can change campaign or prospect data.
+
+Mitigation: Confirm the exact action, target, payload, and expected effect with the user before execution.
+
+## Reference(s):
+
+- [ClawHub Sendspark skill page](https://clawhub.ai/oomol/skills/oo-sendspark)
+- [Sendspark homepage](https://sendspark.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live oo connector schemas before action execution; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

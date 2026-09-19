@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "MaintainX"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["maintainx"]
   icon: "https://static.oomol.com/logo/third-party/maintainx.svg"
 ---

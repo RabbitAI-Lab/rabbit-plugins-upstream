@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/musicbrainz-mcp",
   "slug": "musicbrainz-mcp",
   "ownerHandle": null,
-  "version": "0.2.5",
-  "updatedAt": 1784465312313,
-  "contentHash": "751de3bbaaad93152c30f60965350dcf698b4d030d2efe8f3dc1b2439449d2b6",
-  "fetchedAt": "2026-07-26T18:10:34.919Z"
+  "version": "1.0.0",
+  "updatedAt": 1789744361533,
+  "contentHash": "388beaf007464d3cf58e75795e7ee106c2eb2048e79085c5caa9b06b1f9ed9c1",
+  "fetchedAt": "2026-09-19T12:05:22.359Z"
 }

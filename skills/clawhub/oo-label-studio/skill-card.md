@@ -1,43 +1,55 @@
-## Description: <br>
-Label Studio (labelstud.io). Use this skill for ANY Label Studio request — reading, creating, and updating data. Whenever a task involves Label Studio, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Label Studio support for reading, creating, and updating Label Studio data through the OOMOL Label Studio connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and data annotation teams use this skill to inspect Label Studio schemas, read project and task data, and create projects or tasks through an OOMOL-connected Label Studio account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Label Studio data visible to the connected API key. <br>
-Mitigation: Install and use it only for workspaces where agent access to that Label Studio data is acceptable. <br>
-Risk: Write actions can create Label Studio projects or tasks. <br>
-Mitigation: Review the exact payload and user-visible effect before approving any create action. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Label Studio account, project, and task data and to create projects or individual tasks through a connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-label-studio) <br>
-- [Label Studio homepage](https://labelstud.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill directs agents to fetch live connector schemas before constructing Label Studio action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and frontmatter) <br>
+Risk: First-time setup includes unverified remote installer commands that can execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing and prefer a pinned, verified oo CLI release or trusted package manager.
+
+Risk: Write actions can modify Label Studio projects or tasks.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running create or other write actions.
+
+## Reference(s):
+
+- [Label Studio homepage](https://labelstud.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Label Studio skill page](https://clawhub.ai/oomol/skills/oo-label-studio)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return connector JSON responses when Label Studio actions are executed.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

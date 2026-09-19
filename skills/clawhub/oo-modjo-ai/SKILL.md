@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Modjo AI"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["modjo_ai"]
   icon: "https://static.oomol.com/logo/third-party/modjo_ai.png"
 ---

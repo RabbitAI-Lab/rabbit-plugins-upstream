@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "channel": "aplus-writer",
+  "workflow": "listing",
+  "focus": "aplus",
+  "outputTemplate": "ops_listing",
+  "requiredCapabilities": [
+    "product-detail",
+    "reviews"
+  ],
+  "allowedCommands": [
+    "setup",
+    "configure",
+    "check",
+    "version",
+    "collect",
+    "status",
+    "operations"
+  ]
+}

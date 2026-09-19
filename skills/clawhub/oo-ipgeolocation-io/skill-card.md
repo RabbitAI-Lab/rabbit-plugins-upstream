@@ -1,44 +1,51 @@
-## Description: <br>
-IPGeolocation.io (ipgeolocation.io). Use this skill for ANY IPGeolocation.io request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to inspect OOMOL connector schemas and run IPGeolocation.io lookup, timezone, and astronomy actions through the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to run IPGeolocation.io lookup, astronomy, and timezone actions through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive IPGeolocation.io credentials through the OOMOL connection. <br>
-Mitigation: Use it only with a trusted OOMOL account and connected IPGeolocation.io API key, and avoid exposing raw credentials in prompts or files. <br>
-Risk: First-time setup can install or authenticate the OOMOL oo CLI. <br>
-Mitigation: Run installer or login commands only when setup errors require them and only after trusting the OOMOL CLI source. <br>
-Risk: Live connector schemas can change over time. <br>
-Mitigation: Inspect the action schema with the oo CLI before building each payload. <br>
+## Use Case:
 
+External users and developers use this skill to query IP geolocation, timezone, and astronomy data through an OOMOL-connected IPGeolocation.io account while relying on live action schemas before requests.
 
-## Reference(s): <br>
-- [IPGeolocation.io homepage](https://ipgeolocation.io/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the OOMOL oo CLI connector and returns action responses as JSON with data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Fallback setup includes unverified remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only through a trusted OOMOL CLI distribution path, or replace the remote installer with a pinned and verified manual installation process; avoid agent-run installation from elevated shells.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-ipgeolocation-io)
+- [IPGeolocation.io homepage](https://ipgeolocation.io/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON service responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses depend on live IPGeolocation.io connector schemas and the user's OOMOL account connection state.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

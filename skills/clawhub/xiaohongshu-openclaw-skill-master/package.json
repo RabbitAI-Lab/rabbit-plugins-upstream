@@ -1,0 +1,36 @@
+{
+  "name": "xiaohongshu-yunying-zhushou",
+  "version": "1.1.4",
+  "description": "一站式小红书运营工具，融合选题灵感、数据分析模块。支持爆款标题、热点选题、粉丝分析等，覆盖小红书运营数据获取场景。",
+  "keywords": [
+    "小红书",
+    "爆款笔记",
+    "市场调研",
+    "数据挖掘",
+    "趋势监控",
+    "竞品分析",
+    "KOL营销",
+    "流量增长",
+    "用户画像"
+  ],
+  "homepage": "https://github.com/um-why/xiaohongshu-openclaw-skill#readme",
+  "bugs": {
+    "url": "https://github.com/um-why/xiaohongshu-openclaw-skill/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/um-why/xiaohongshu-openclaw-skill.git"
+  },
+  "license": "MIT",
+  "author": "um-why",
+  "engines": {
+    "node": ">=16"
+  },
+  "main": "src/xiaohongshu/search-cli.js",
+  "scripts": {
+    "search": "node src/xiaohongshu/search-cli.js",
+    "detail": "node src/xiaohongshu/detail-cli.js",
+    "post": "node src/xiaohongshu/post-cli.js",
+    "comment": "node src/xiaohongshu/comment-cli.js"
+  }
+}

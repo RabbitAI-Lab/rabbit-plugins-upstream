@@ -1,46 +1,64 @@
-## Description: <br>
-Routes prompts across 12 Chinese LLM providers through one command-line interface, with task-aware model selection, cost tracking, local caching, hardware-aware limits, streaming output, and offline mock routing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Routes prompts and multimodal tasks across Chinese LLM providers with task-aware model selection, streaming calls, cost reporting, local cache/session features, and offline mock workflows.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Developers and technical users use this skill to choose, call, and compare Chinese LLM providers from a single CLI while tracking cost and avoiding unnecessary local resource use. It supports route planning without API keys and real chat calls when users configure provider credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Provider API keys are read from environment variables, and chat prompts are sent to the selected model provider during real calls. <br>
-Mitigation: Configure only trusted providers, protect shell environments and terminal history, and avoid sending sensitive prompts unless the selected provider is approved for that data. <br>
-Risk: Local semantic caching can retain prompt and response text and may return a stale or overly similar cached answer. <br>
-Mitigation: Use --no-cache for sensitive, real-time, financial, code-generation, or other high-impact prompts, and clear the cache when retained local text is no longer needed. <br>
-Risk: Optional webhook and update URLs can send data to user-configured destinations. <br>
-Mitigation: Leave webhook and update URLs unset unless the destination is trusted and reviewed. <br>
+## Use Case:
 
+Developers and engineers use this skill to choose, call, compare, and monitor multiple Chinese LLM providers from one CLI entry point. It supports routing for chat, code, reasoning, summarization, translation, extraction, embeddings, reranking, long-document workflows, and multimodal description.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/cn-llm-router) <br>
-- [Routing rules](references/routing-rules.md) <br>
-- [Model registry](references/models.yaml) <br>
-- [Configuration example](config.example.json) <br>
-- [Version metadata](version.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [CLI text, JSON, Markdown reports, shell commands, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May stream model responses and may write local SQLite cost and cache data when used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.0 (source: frontmatter, release evidence, version.json) <br>
+Risk: Prompts and task content may be sent to configured model providers during live calls.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Configure only trusted providers, use offline route or mock modes for planning, and avoid sending confidential prompts unless the selected provider is approved for that data.
+
+Risk: Prompt and response history may be retained locally by cache, session, and arena features.
+
+Mitigation: Use --no-cache for confidential or critical work, avoid --session unless needed, and periodically clear local cache and session data.
+
+Risk: Configured update_url or webhook destinations can disclose usage or operational metadata.
+
+Mitigation: Leave optional destinations unset unless needed, and configure only trusted update and webhook endpoints.
+
+Risk: Local semantic cache matching may return stale or incorrect results for similar but different prompts.
+
+Mitigation: Use --no-cache for production, financial, code-generation, and real-time information tasks that require a fresh model call.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/cn-llm-router)
+- [models.yaml](artifact/references/models.yaml)
+- [routing-rules.md](artifact/references/routing-rules.md)
+- [version.json homepage](https://skillhub.cn/skill/cn-llm-router)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, JSON, Guidance]
+
+**Output Format:** [Markdown and terminal-oriented text, with optional JSON outputs for supported commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include routed provider/model choices, generated model responses, token and cost estimates, local reports, configuration guidance, and mock outputs.]
+
+## Skill Version(s):
+
+2.6.0 (source: SKILL.md frontmatter, artifact/version.json, and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

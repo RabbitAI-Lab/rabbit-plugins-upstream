@@ -1,45 +1,55 @@
-## Description: <br>
-Stormboard lets an agent search and read Stormboard data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Stormboard connector skill for searching and reading Stormboard data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and Stormboard users use this skill to let an agent inspect Stormboard profile, board, access, idea, user, tag, connector, and template data from a connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Stormboard data available to the user's connected OOMOL/Stormboard account. <br>
-Mitigation: Install only when agent access to that Stormboard data is intended, and keep use to the documented get and list actions. <br>
-Risk: First-time setup may ask the user to install or sign in to the oo CLI when a command fails. <br>
-Mitigation: Review any requested installation or login step before allowing it, and do not run connection steps unless the matching error occurs. <br>
-Risk: Future connector actions could claim to change or delete Stormboard data. <br>
-Mitigation: Require explicit user confirmation before any action that writes, overwrites, or deletes Stormboard data. <br>
+## Use Case:
 
+External users and developers use this skill to inspect Stormboard profiles, Storms, access levels, participants, tags, ideas, connectors, templates, and template categories through the oo CLI.
 
-## Reference(s): <br>
-- [ClawHub Stormboard Skill](https://clawhub.ai/oomol/skills/oo-stormboard) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Stormboard](https://stormboard.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI commands and JSON connector responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-oriented get/list actions; requires an installed, signed-in oo CLI and a connected Stormboard account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and skill frontmatter) <br>
+Risk: Setup instructions include unverified pipe-to-shell installer commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing, and prefer a pinned, verifiable oo CLI release or package manager when available.
+
+Risk: The skill can read Stormboard content visible to the connected account.
+
+Mitigation: Confirm the intended OOMOL and Stormboard accounts before running connector actions.
+
+## Reference(s):
+
+- [Stormboard Homepage](https://stormboard.com)
+- [oo CLI Repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live Stormboard action schemas before connector calls; credentials remain server-side through OOMOL.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

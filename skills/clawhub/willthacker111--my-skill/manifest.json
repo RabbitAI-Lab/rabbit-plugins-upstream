@@ -1,0 +1,8 @@
+{
+  "name": "meeting-minutes-assistant",
+  "slug": "my-skill",
+  "version": "1.0.1",
+  "description": "将杂乱的会议记录整理为结构化会议纪要，自动提取议题、决策、待办事项与责任人。",
+  "author": "WillThacker111",
+  "tags": ["productivity", "meeting", "markdown", "notes"]
+}

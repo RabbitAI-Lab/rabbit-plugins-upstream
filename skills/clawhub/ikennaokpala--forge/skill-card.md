@@ -1,46 +1,65 @@
-## Description: <br>
-Forge is an autonomous quality engineering swarm for behavioral verification, end-to-end testing, quality gates, and self-healing fix loops across multiple software architectures. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Autonomous quality engineering swarm for continuous behavioral verification, exhaustive E2E testing, self-healing fix loops, DDD/ADR/TDD workflows, BDD/Gherkin specifications, quality gates, defect prediction, chaos testing, and cross-context dependency awareness across common application architectures.
 
-## Publisher: <br>
-[ikennaokpala](https://clawhub.ai/user/ikennaokpala) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[ikennaokpala](https://clawhub.ai/user/ikennaokpala)
 
-## Use Case: <br>
-Developers and engineering teams use Forge to coordinate automated behavioral verification, E2E testing, failure analysis, code fixes, quality gate checks, and learning workflows for software projects. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Forge gives agents broad local authority to run project commands, start services, run migrations, seed data, edit files, and create commits. <br>
-Mitigation: Start with verify-only mode, use a disposable branch or worktree with non-production data, review forge.config.yaml and discovered commands, and inspect diffs, commits, logs, and memory state after each run. <br>
-Risk: Automated fixes and commits can introduce incorrect code changes or misleading test confidence. <br>
-Mitigation: Review all generated diffs and commits before merging, require the relevant quality gates to pass, and keep rollback available for failed fix loops. <br>
-Risk: Real-backend testing and data seeding can affect the wrong environment if project configuration points at shared or production resources. <br>
-Mitigation: Run against an isolated local or test environment with non-production credentials and data, and confirm backend, migration, and seed commands before autonomous execution. <br>
+## Use Case:
 
+Developers and quality engineers use Forge to run autonomous behavioral verification, end-to-end testing, quality gates, and self-healing fix loops across application architectures such as monoliths, microservices, monorepos, and mobile-backend systems.
 
-## Reference(s): <br>
-- [Forge on ClawHub](https://clawhub.ai/ikennaokpala/skills/forge) <br>
-- [Continuous Behavioral Verification: Ongoing Path to Done](https://www.linkedin.com/pulse/continuous-behavioral-verification-ongoing-path-done-ikenna-okpala) <br>
-- [Build with Quality Skill: How I Build Software 10x Faster](https://www.linkedin.com/pulse/build-quality-skill-how-i-build-software-10x-faster-mondweep-chakravorty) <br>
-- [claude-code-v3-qe-skill](https://github.com/mondweep/vibe-cast) <br>
-- [agentic-qe](https://github.com/proffesor-for-testing/agentic-qe) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown instructions with inline code, shell commands, JSON, and YAML examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose file edits, commands, tests, commits, and local configuration based on the target project.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact CHANGELOG.md, released 2026-02-07) <br>
+Risk: The skill can run project commands, start background services, modify code, and create commits during autonomous workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a disposable branch or isolated test environment, and supervise auto-fix and auto-commit modes before accepting changes.
+
+Risk: Project configuration can direct the agent toward migrations, seeding, backend targets, and other environment-sensitive actions.
+
+Mitigation: Review forge.config.yaml, .env files, and backend targets before execution, and verify they point only to non-production systems.
+
+Risk: External tooling invoked with floating versions can change behavior between runs.
+
+Mitigation: Pin or preinstall required external tooling instead of relying on @latest during execution.
+
+Risk: Persistent memory reuse can carry learned fix patterns or project state across runs.
+
+Mitigation: Disable or closely supervise persistent memory reuse when testing untrusted codebases or sensitive projects.
+
+## Reference(s):
+
+- [Forge ClawHub skill page](https://clawhub.ai/ikennaokpala/skills/forge)
+- [Continuous Behavioral Verification: Ongoing Path to Done](https://www.linkedin.com/pulse/continuous-behavioral-verification-ongoing-path-done-ikenna-okpala)
+- [Build with Quality Skill: How I Build Software 10x Faster](https://www.linkedin.com/pulse/build-quality-skill-how-i-build-software-10x-faster-mondweep-chakravorty)
+- [claude-code-v3-qe-skill](https://github.com/mondweep/vibe-cast)
+- [agentic-qe](https://github.com/proffesor-for-testing/agentic-qe)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, code snippets, configuration snippets, and structured status summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May modify project files, run tests, launch local services, persist learned patterns, and create local commits when invoked in autonomous modes.]
+
+## Skill Version(s):
+
+1.0.0 (source: release evidence and CHANGELOG, released 2026-02-07)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

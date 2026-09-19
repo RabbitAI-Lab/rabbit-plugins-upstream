@@ -1,0 +1,558 @@
+{
+  "id": "CES-D",
+  "name": "流调中心抑郁量表（CES-D）",
+  "short_name": "CES-D 抑郁（社区）",
+  "category": "抑郁",
+  "target_population": "普通人群（≥18岁）",
+  "estimated_time": "约 3 分钟",
+  "item_count": 20,
+  "description": "用于社区人群抑郁症状筛查，20 题，4 道反向计分题（q4, q8, q12, q16）。总分 ≥16 提示抑郁风险。",
+  "source": "Radloff, 1977",
+  "license": "公共领域",
+  "scoring_type": "sum",
+  "items": [
+    {
+      "id": "q1",
+      "text": "我因一些小事而烦恼。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很少或没有",
+          "score": 0
+        },
+        {
+          "label": "有时",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "几乎一直",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "我不想吃东西，胃口不好。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很少或没有",
+          "score": 0
+        },
+        {
+          "label": "有时",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "几乎一直",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "我觉得即使有家人和朋友在身边也无法摆脱低落。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很少或没有",
+          "score": 0
+        },
+        {
+          "label": "有时",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "几乎一直",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "我觉得我和别人一样好。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很少或没有",
+          "score": 0
+        },
+        {
+          "label": "有时",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "几乎一直",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q5",
+      "text": "我很难集中精力做事。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很少或没有",
+          "score": 0
+        },
+        {
+          "label": "有时",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "几乎一直",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q6",
+      "text": "我感到消沉。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很少或没有",
+          "score": 0
+        },
+        {
+          "label": "有时",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "几乎一直",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q7",
+      "text": "我感到做什么都费力。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很少或没有",
+          "score": 0
+        },
+        {
+          "label": "有时",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "几乎一直",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q8",
+      "text": "我对未来充满希望。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很少或没有",
+          "score": 0
+        },
+        {
+          "label": "有时",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "几乎一直",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q9",
+      "text": "我觉得我的生活是失败的。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很少或没有",
+          "score": 0
+        },
+        {
+          "label": "有时",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "几乎一直",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "text": "我感到害怕。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很少或没有",
+          "score": 0
+        },
+        {
+          "label": "有时",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "几乎一直",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "text": "我睡眠不好。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很少或没有",
+          "score": 0
+        },
+        {
+          "label": "有时",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "几乎一直",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "text": "我感到快乐。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很少或没有",
+          "score": 0
+        },
+        {
+          "label": "有时",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "几乎一直",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "text": "我说话比平时少。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很少或没有",
+          "score": 0
+        },
+        {
+          "label": "有时",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "几乎一直",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "text": "我感到孤独。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很少或没有",
+          "score": 0
+        },
+        {
+          "label": "有时",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "几乎一直",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "text": "人们对我不友好。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很少或没有",
+          "score": 0
+        },
+        {
+          "label": "有时",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "几乎一直",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "text": "我生活愉快。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很少或没有",
+          "score": 0
+        },
+        {
+          "label": "有时",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "几乎一直",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "text": "我曾经放声大哭或想哭。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很少或没有",
+          "score": 0
+        },
+        {
+          "label": "有时",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "几乎一直",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "text": "我感到悲伤。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很少或没有",
+          "score": 0
+        },
+        {
+          "label": "有时",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "几乎一直",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "text": "我觉得别人不喜欢我。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很少或没有",
+          "score": 0
+        },
+        {
+          "label": "有时",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "几乎一直",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q20",
+      "text": "我无法继续我的生活。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "很少或没有",
+          "score": 0
+        },
+        {
+          "label": "有时",
+          "score": 1
+        },
+        {
+          "label": "经常",
+          "score": 2
+        },
+        {
+          "label": "几乎一直",
+          "score": 3
+        }
+      ]
+    }
+  ],
+  "dimensions": [
+    {
+      "name": "抑郁总分",
+      "items": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7",
+        "q8",
+        "q9",
+        "q10",
+        "q11",
+        "q12",
+        "q13",
+        "q14",
+        "q15",
+        "q16",
+        "q17",
+        "q18",
+        "q19",
+        "q20"
+      ],
+      "max": 60,
+      "min": 0
+    }
+  ],
+  "standard_score": null,
+  "interpretation": {
+    "bands": [
+      {
+        "dimension": "抑郁总分",
+        "min": 0,
+        "max": 15,
+        "level": "低风险",
+        "summary": "过去一周抑郁症状较少。",
+        "advice": "保持。"
+      },
+      {
+        "dimension": "抑郁总分",
+        "min": 16,
+        "max": 26,
+        "level": "中度风险",
+        "summary": "存在一定抑郁症状，达到社区筛查的预警线。",
+        "advice": "关注情绪变化，增加支持；持续两周以上建议咨询。"
+      },
+      {
+        "dimension": "抑郁总分",
+        "min": 27,
+        "max": 60,
+        "level": "高度风险",
+        "summary": "抑郁症状较多，建议专业评估。",
+        "advice": "建议到精神科/心理科评估。"
+      }
+    ]
+  },
+  "safety": {
+    "crisis_items": [],
+    "crisis_rule": "",
+    "high_risk_rule": ""
+  }
+}

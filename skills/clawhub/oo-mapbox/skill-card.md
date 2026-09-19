@@ -1,45 +1,61 @@
-## Description: <br>
-Mapbox (mapbox.com). Use this skill for Mapbox requests including geocoding, routing, and travel matrix tasks through the OOMOL-connected Mapbox connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mapbox (mapbox.com). Use this skill for ANY Mapbox request: reading, creating, and updating data through an OOMOL-connected Mapbox account instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to operate Mapbox through an OOMOL-connected account for forward, reverse, and batch geocoding, directions, and travel time or distance matrices. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires connecting Mapbox through OOMOL, so prompts and action requests are sent to the OOMOL connector for Mapbox API actions. <br>
-Mitigation: Install only when that connection model is acceptable and confirm the connected Mapbox account before use. <br>
-Risk: First-time setup may involve running a CLI installer command. <br>
-Mitigation: Review installer commands before execution and run setup steps only when an auth, connection, or missing-command error requires them. <br>
-Risk: Write, destructive, billing-impacting, or bulk requests can change data or incur cost. <br>
-Mitigation: Require explicit user confirmation for the exact payload and intended effect before running those requests. <br>
+## Use Case:
 
+External users, developers, and agents use this skill to geocode addresses, reverse geocode coordinates, compute directions, and calculate travel-time or distance matrices through Mapbox via the OOMOL connector.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-mapbox) <br>
-- [Mapbox homepage](https://www.mapbox.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Mapbox icon](https://static.oomol.com/logo/third-party/Mapbox.svg) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce oo CLI commands and JSON request payloads based on the live connector schema.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: Mapbox request payloads, including addresses, coordinates, and route details, are routed through OOMOL.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when that data flow is acceptable for the task and organization.
+
+Risk: First-time setup includes shell installer commands that pipe remote scripts directly to an interpreter.
+
+Mitigation: Prefer a reviewed, signed, or package-manager installation path, and do not run installer commands blindly.
+
+Risk: Some actions can change Mapbox state.
+
+Mitigation: Inspect the live action schema first and confirm the exact payload and expected effect before executing write actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-mapbox)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+- [Mapbox homepage](https://www.mapbox.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can return Mapbox connector JSON responses containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

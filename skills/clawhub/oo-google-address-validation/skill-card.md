@@ -1,42 +1,56 @@
-## Description: <br>
-This skill lets an agent validate and standardize postal addresses through an OOMOL-connected Google Address Validation account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Google Address Validation through an OOMOL-connected oo CLI account to validate, standardize, and return details for postal addresses.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to validate and standardize postal addresses through an OOMOL-connected Google Address Validation account, including verdicts, parsed address details, and geocode data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The feedback-sending action can submit the final outcome of a completed validation sequence and is not clearly labeled as state-changing in the artifact. <br>
-Mitigation: Review and explicitly approve any provide_validation_feedback payload before execution. <br>
-Risk: First-time setup may require optional remote installer commands for the oo CLI. <br>
-Mitigation: Review installer commands before approving them, and use an already installed oo CLI when available. <br>
+## Use Case:
 
+Developers and external users use this skill to validate and standardize postal addresses with Google Address Validation through OOMOL's oo CLI, inspect live action schemas, and submit validation feedback after reviewing the payload.
 
-## Reference(s): <br>
-- [Google Address Validation documentation](https://developers.google.com/maps/documentation/address-validation) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-google-address-validation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Markdown, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs depend on live Google Address Validation connector schemas and may include validation verdicts, parsed address details, geocode data, response metadata, or setup guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and frontmatter) <br>
+Risk: A state-changing validation feedback action may be run with the wrong responseId, payload, or intended effect.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the exact responseId, payload, and intended effect with the user before running provide_validation_feedback.
+
+Risk: The setup guidance includes remote installer commands that may not be independently verified.
+
+Mitigation: Prefer a verified or package-manager installation path for the oo CLI before running installer scripts.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-google-address-validation)
+- [Google Address Validation documentation](https://developers.google.com/maps/documentation/address-validation)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, JSON, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live action schemas before constructing connector requests; action responses are JSON with data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

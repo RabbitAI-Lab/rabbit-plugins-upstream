@@ -64,6 +64,11 @@ class BaiduDocUnlimitedOCRParser:
         file_data: Optional[str] = None,
         file_url: Optional[str] = None,
         file_name: Optional[str] = None,
+        angle_adjust: Optional[bool] = None,
+        angle_mode: Optional[str] = None,
+        erase_seal: Optional[bool] = None,
+        erase_watermark: Optional[bool] = None,
+        unwarp: Optional[bool] = None,
     ) -> Dict[str, Any]:
         url = f"{self.SUBMIT_URL}?access_token={self.access_token}"
 
@@ -81,6 +86,17 @@ class BaiduDocUnlimitedOCRParser:
             params["file_data"] = file_data
         elif file_url:
             params["file_url"] = file_url
+
+        if angle_adjust is not None:
+            params["angle_adjust"] = str(angle_adjust)
+        if angle_mode is not None:
+            params["angle_mode"] = angle_mode
+        if erase_seal is not None:
+            params["erase_seal"] = str(erase_seal)
+        if erase_watermark is not None:
+            params["erase_watermark"] = str(erase_watermark)
+        if unwarp is not None:
+            params["unwarp"] = str(unwarp)
 
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
         response = requests.post(url, headers=headers, data=params, timeout=120)
@@ -107,11 +123,13 @@ class BaiduDocUnlimitedOCRParser:
         poll_interval: int = DEFAULT_POLL_INTERVAL,
         max_poll_time: int = DEFAULT_MAX_POLL_TIME,
         download_result: bool = True,
+        **kwargs
     ) -> Dict[str, Any]:
         submit_result = self.submit_task(
             file_url=file_url,
             file_data=file_data,
             file_name=file_name,
+            **kwargs
         )
         task_id = submit_result["result"]["task_id"]
         print(f"Task submitted: {task_id}")
@@ -172,6 +190,11 @@ def main():
     parser.add_argument("--file_name", help="File name with extension")
     parser.add_argument("--api_key", help="API Key (defaults to env BAIDU_DOC_AI_API_KEY)")
     parser.add_argument("--secret_key", help="Secret Key (defaults to env BAIDU_DOC_AI_SECRET_KEY)")
+    parser.add_argument("--angle_adjust", type=_str_to_bool, help="Angle correction (True/False, default True)")
+    parser.add_argument("--angle_mode", choices=["direction", "arbitrary"], help="Angle correction mode")
+    parser.add_argument("--erase_seal", type=_str_to_bool, help="Erase seals (True/False)")
+    parser.add_argument("--erase_watermark", type=_str_to_bool, help="Erase watermarks (True/False)")
+    parser.add_argument("--unwarp", type=_str_to_bool, help="Image dewarping (True/False)")
     parser.add_argument("--poll_interval", type=int, default=5, help="Polling interval (seconds)")
     parser.add_argument("--max_poll_time", type=int, default=300, help="Max polling time (seconds)")
     parser.add_argument("--no_download", action="store_true", help="Do not download markdown/parse_result content")
@@ -190,6 +213,18 @@ def main():
             if args.file_data and not args.file_name:
                 parser.error("Must provide --file_name when using --file_data")
 
+            preprocess = {}
+            if args.angle_adjust is not None:
+                preprocess["angle_adjust"] = args.angle_adjust
+            if args.angle_mode is not None:
+                preprocess["angle_mode"] = args.angle_mode
+            if args.erase_seal is not None:
+                preprocess["erase_seal"] = args.erase_seal
+            if args.erase_watermark is not None:
+                preprocess["erase_watermark"] = args.erase_watermark
+            if args.unwarp is not None:
+                preprocess["unwarp"] = args.unwarp
+
             result = client.parse(
                 file_url=args.file_url,
                 file_data=args.file_data,
@@ -197,6 +232,7 @@ def main():
                 poll_interval=args.poll_interval,
                 max_poll_time=args.max_poll_time,
                 download_result=not args.no_download,
+                **preprocess,
             )
 
         print(json.dumps(result, ensure_ascii=False, indent=2))

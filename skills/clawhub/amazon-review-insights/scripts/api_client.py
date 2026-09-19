@@ -96,32 +96,27 @@ class CustomerInsightsClient:
     # ==================== Download Management ====================
 
     def get_download_links(self) -> Dict[str, Any]:
-        """Get desktop client download links
+        """Get browser extension download links
 
-        Get latest download links for each platform from official website config.
+        Get the latest download link from official website config.
+        Note: the website no longer offers the desktop client for download;
+        `downloads` now contains only the `extension` entry.
 
         Returns:
-            Dict[str, Any]: Contains download info for macos and windows
+            Dict[str, Any]: Contains download info for extension (empty url if absent)
         """
         config_url = f"{_WEBSITE_URL}/download-config.json"
         config = self._get(config_url)
 
         downloads = config.get("downloads", {}) or {}
-        macos_info = downloads.get("macos") or {}
-        windows_info = downloads.get("windows") or {}
+        extension_info = downloads.get("extension") or {}
 
         return {
-            "macos": {
-                "name": macos_info.get("name_en") or "macOS Version",
-                "url": macos_info.get("url") or "",
-                "version": macos_info.get("version") or "",
-                "size": macos_info.get("size") or "",
-            },
-            "windows": {
-                "name": windows_info.get("name_en") or "Windows Version",
-                "url": windows_info.get("url") or "",
-                "version": windows_info.get("version") or "",
-                "size": windows_info.get("size") or "",
+            "extension": {
+                "name": extension_info.get("name_en") or "Chrome Extension",
+                "url": extension_info.get("url") or "",
+                "version": extension_info.get("version") or "",
+                "size": extension_info.get("size") or "",
             },
         }
 
@@ -605,7 +600,7 @@ def check_device_online(api_key: Optional[str] = None) -> Dict[str, Any]:
 
 
 def get_download_links(api_key: Optional[str] = None) -> Dict[str, Any]:
-    """Convenience function: Get desktop client download links (no API Key required)"""
+    """Convenience function: Get browser extension download links (no API Key required)"""
     return execute({"api_key": api_key or "", "action": "get_download_links"})
 
 

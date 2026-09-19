@@ -28,7 +28,7 @@ None.
 | `README.md` | author or `pull` | `build` title resolution | No; directory name is the fallback title. |
 | `course-description.md` | author, `pull`, or `update-meta` | `build`, directory import, `status`, `update-meta` | No; missing means an empty description unless a CLI flag supplies one. |
 | `course-prompt.md` | author or `pull` | `build` and directory import | No; missing means an empty Course Prompt. |
-| `course-config.json` | `pull` or `set-tts --course-dir` | reference only; `build` and `import` ignore it | No. |
+| `course-config.json` | `pull`, `set-tts --course-dir`, or `set-avatar --course-dir` | reference only; `build` and `import` ignore it | No. |
 | `structure.json` | author, `pull`, or `set-access --course-dir` | `build` chapter and lesson mapping | No; missing selects single-chapter discovery. |
 | `shifu-import.json` | `build` | JSON import | Generated output. |
 | `.shifu-sync.json` | `pull` and version-aware writes | `status` and version-aware writes | Required only for full conflict protection. |
@@ -36,7 +36,7 @@ None.
 | `assets/image-manifest.json` | `upload-image --course-dir` | asset lookup | No. |
 | `assets/raw/` | user | no direct build consumer | No; conventional storage only. |
 
-The directory contract above is the complete set of recognized and managed course-directory paths. An author-only run writes only the relevant author-owned inputs; it must not synthesize CLI-managed outputs. Do not add an `authoring-manifest.json` or another root-level file to persist Segmentation or Orchestration handoffs; retain that phase data in the active handoff or report instead. New directory artifacts require an explicit CLI specification update.
+The directory contract above is the complete set of recognized and managed course-directory paths. When writing only author-owned inputs, write only the relevant author-owned files; those writes must not synthesize CLI-managed outputs. Do not add an `authoring-manifest.json` or another root-level file to persist Segmentation or Orchestration handoffs; retain that phase data in the active handoff or report instead. New directory artifacts require an explicit CLI specification update.
 
 ## Build Precedence
 
@@ -134,7 +134,7 @@ Fields:
 
 `model`, `llm`, `ask_model`, `ask_llm`, and their related keys are stable machine-facing fields for the underlying models and settings used by the Teaching Agent. Keep those keys unchanged in files and payloads; human-facing explanations identify AI-Shifu ownership on the first Teaching Agent mention and use Teaching Agent thereafter for both course delivery and learner follow-up answers.
 
-`build` and `import` do not read or send this file. `set-tts --course-dir` refreshes it after a successful Listen Mode update.
+`build` and `import` do not read or send this file. `set-tts --course-dir` refreshes it after a successful Listen Mode update, and `set-avatar --course-dir` refreshes it after the uploaded avatar URL is read back successfully.
 
 ## .shifu-sync.json
 
@@ -187,7 +187,7 @@ The course and lesson revisions are cloud baselines. `content_sha256` is the las
   "images": [
     {
       "local": "assets/raw/gradient-descent.heic",
-      "remote": "https://res.ai-shifu.cn/abcd",
+      "remote": "https://assets.example.com/abcd",
       "alt": "Image description",
       "uploaded_at": "2026-05-23T08:42:31Z",
       "bytes": 612345,
@@ -197,7 +197,7 @@ The course and lesson revisions are cloud baselines. `content_sha256` is the las
     },
     {
       "source_url": "https://example.com/diagram.png",
-      "remote": "https://res.ai-shifu.cn/efgh",
+      "remote": "https://assets.example.com/efgh",
       "alt": "Image description",
       "uploaded_at": "2026-05-23T08:45:02Z"
     }
@@ -221,7 +221,7 @@ The course and lesson revisions are cloud baselines. `content_sha256` is the las
 ```json
 {
   "version": "1.0",
-  "exported_at": "2026-01-01T00:00:00",
+  "exported_at": "2026-01-01T00:00:00Z",
   "shifu": {
     "shifu_bid": "generated_uuid",
     "title": "Course Title",

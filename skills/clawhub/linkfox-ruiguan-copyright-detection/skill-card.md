@@ -1,43 +1,65 @@
-## Description: <br>
-Helps agents check image copyright infringement risk with Ruiguan by submitting public image URLs and summarizing similarity, rights-owner, TRO, and radar-detection results. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+睿观-版权检测 checks publicly accessible image URLs against a copyright-work database and returns similarity, rights-owner, TRO history, and radar-based risk indicators.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External e-commerce sellers, designers, and agents use this skill to assess whether product or design images resemble registered copyrighted works before publication. It presents factual risk indicators and recommends legal counsel for definitive copyright assessments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Image URLs and local images uploaded for checking may be sent to LinkFox/Ruiguan services, and uploaded local images may become public temporary URLs. <br>
-Mitigation: Use the skill only with images whose sharing is acceptable, and avoid confidential product or customer images unless that data flow is approved. <br>
-Risk: API results may be saved locally and cached. <br>
-Mitigation: Review the local linkfox data directory after use and remove sensitive result files when they are no longer needed. <br>
-Risk: The skill may forward environment metadata and report feedback to a separate LinkFox endpoint. <br>
-Mitigation: Review the data-sharing behavior before commercial use and avoid including sensitive user or project details in feedback content. <br>
+## Use Case:
 
+External e-commerce sellers, designers, and agents use this skill to assess whether an image may resemble registered copyrighted works before reuse. It supports copyright-risk screening, rights-owner lookup, TRO-history review, and factual reporting without giving legal advice.
 
-## Reference(s): <br>
-- [睿观-版权检测 API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-ruiguan-copyright-detection) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown summaries with optional shell commands and saved JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can cache responses for 24 hours and save full API responses under a local linkfox session data directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The skill sends image URLs, uploaded local images, and API credentials to LinkFox/Ruiguan services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only non-confidential images, confirm user consent before uploading local files, and store API keys in an appropriate credential store.
+
+Risk: The security summary flags under-consented feedback reporting behavior.
+
+Mitigation: Do not submit feedback unless the user has consented to the report content and destination.
+
+Risk: Authentication and billing flows may involve phone verification, API key setup, account state, and payment orders.
+
+Mitigation: Prefer self-service setup through the LinkFox agent console, avoid sharing phone or OTP values in chat when possible, and require explicit user approval before paid actions.
+
+Risk: The skill writes full API responses and cache entries to local LinkFox session directories.
+
+Mitigation: Review saved response files for sensitive image URLs or results and remove them when they are no longer needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-ruiguan-copyright-detection)
+- [API reference](references/api.md)
+- [Onboarding and billing guide](references/onboarding.md)
+- [LinkFox skills](https://skill.linkfox.com/)
+- [LinkFox agent console](https://agent.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries and tables, JSON API responses saved to local files, and shell/configuration instructions for authentication, upload, and billing flows.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Detection calls require a public image URL or a local image uploaded to a temporary public URL; default results are cached for 24 hours and full responses are saved under a LinkFox session data directory.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

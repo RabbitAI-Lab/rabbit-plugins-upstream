@@ -49,7 +49,7 @@ real-money order execution.
 | Read the user's balance, positions and orders | yes | financial read |
 | **Custody a Polygon wallet private key** | yes | **high** |
 | **Place buy/sell orders with real USDC** | yes | **high, irreversible** |
-| **Autonomous mode (orders without confirmation)** | yes | **high, time-boxed and capped** |
+| **Autonomous mode (orders placed unattended)** | yes | **high, time-boxed and capped** |
 
 **Losses are irreversible.** An on-chain transaction has no chargeback and no
 support desk. Use a dedicated wallet holding only what the user accepts losing.
@@ -66,7 +66,8 @@ These are not style preferences — breaking any of them is a serious defect.
 1. **Never run `poly buy`/`poly sell` unless the user asked for that specific
    order in this session**, with market, side, price and size. "Invest wherever
    you think is best" authorizes **nothing**.
-2. **Never pass `--yes`** unless the user explicitly said to skip confirmation.
+2. **Never pass `--yes`** unless the user explicitly told you, in this session,
+   to send that specific order without the prompt.
 3. **Never enable autonomous mode**, **never disable dry-run**, and **never
    raise risk limits** on your own. If a guard-rail blocked an order, report
    it — do not route around it.

@@ -1,44 +1,59 @@
-## Description: <br>
-Searches locally synchronized Etsy category data by keyword to retrieve category names, ids, parent ids, and parentIds for product or shop filtering workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches synchronized Etsy category data by keyword and returns matching category names, ids, and parentIds for product or shop filtering.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and developers use this skill to find Etsy category identifiers from synchronized LinkFox category data before passing those ids into Etsy product or shop search tools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a LinkFox API key and can send lookup requests to the LinkFox tool gateway. <br>
-Mitigation: Install only when LinkFox is trusted, scope the API key to the needed use, and review or constrain the configured gateway before use. <br>
-Risk: The helper script writes full responses and cache data to local linkfox folders, which may expose lookup results in the workspace or fallback locations. <br>
-Mitigation: Run it only in appropriate workspaces, inspect generated linkfox folders, and remove cached or response files that should not persist. <br>
-Risk: The authentication fallback can guide the agent to install a separate onboarding skill from a remote ZIP. <br>
-Mitigation: Require explicit manual approval and review the remote onboarding package before installing any additional skill. <br>
+## Use Case:
 
+External users and developers use this skill to look up Etsy category identifiers from a synchronized LinkFox category dataset for product and shop filtering workflows.
 
-## Reference(s): <br>
-- [API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-etsy-category-search) <br>
-- [LinkFox Tool Gateway](https://tool-gateway.linkfox.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with optional shell commands and JSON API responses or summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The helper script writes full lookup responses and cache files under local linkfox folders and prints either the full JSON response or a compact summary.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence) <br>
+Risk: The skill uses LinkFox network services and handles API keys.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if comfortable using LinkFox services; obtain keys through the official LinkFox UI or a secret manager and avoid pasting keys into shared transcripts or shell profiles.
+
+Risk: The onboarding flow can guide phone-based login and payment order creation.
+
+Mitigation: Run login or payment commands only when explicitly intended, and confirm the selected plan and payment method before creating an order.
+
+Risk: The category search script saves full API responses as local JSON files.
+
+Mitigation: Review the saved output location and avoid running the script in workspaces where persisted response data should not be retained.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-etsy-category-search)
+- [_ehunt_etsyCategorySearch API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Files, Shell commands, Configuration guidance]
+
+**Output Format:** [JSON responses, saved JSON result files, and concise Markdown guidance with command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Large API responses are summarized in stdout while full responses are saved to local session data files.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

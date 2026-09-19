@@ -1,45 +1,60 @@
-## Description: <br>
-HQ skill: Cross-agent coordination, conflict resolution, knowledge base management, audit logging, strategic scheduling, task orchestration, IMA sync hub. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HQ skill: Cross-agent coordination, conflict resolution, knowledge base management, audit logging, strategic scheduling, task orchestration, IMA sync hub.
 
-## Publisher: <br>
-[johnsmithfan](https://clawhub.ai/user/johnsmithfan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[johnsmithfan](https://clawhub.ai/user/johnsmithfan)
 
-## Use Case: <br>
-Developers and operators use this agent skill as a central coordination hub for AI-company workflows, including cross-agent routing, conflict resolution, knowledge-base management, audit logging, scheduling, and task orchestration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad cross-agent, state, logging, and knowledge-capture authority may exceed the user's intended scope. <br>
-Mitigation: Restrict allowed file paths, API destinations, MCP recipients, and subagent use before installing or invoking the skill. <br>
-Risk: Broadcasts, shared-state changes, and knowledge-base publication can affect multiple agents or workflows. <br>
-Mitigation: Require explicit confirmation for broadcasts, shared-state changes, and KB publication. <br>
-Risk: Audit logging and knowledge capture can retain sensitive or unnecessary information. <br>
-Mitigation: Define privacy, redaction, retention, and deletion rules before use. <br>
+## Use Case:
 
+Developers and operators use this skill to coordinate agent routing, shared state, knowledge-base updates, conflict resolution, audit logging, and workflow scheduling for an AI Company system.
 
-## Reference(s): <br>
-- [AI Company HQ ClawHub release](https://clawhub.ai/johnsmithfan/ai-company-hq) <br>
-- [AI Company HQ homepage](https://clawhub.com/skills/ai-company-hq) <br>
-- [Method Patterns & Detailed Specifications](references/method-patterns.md) <br>
-- [Department Integration Process](references/department-integration-process.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and structured text with optional code, shell command, configuration, and report content] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce implementation plans, robustness findings, test cases, documentation, workflow results, audit-trail summaries, and quality metrics.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1-en2 (source: ClawHub release metadata; artifact frontmatter lists 3.0.0) <br>
+Risk: Broad state and messaging authority could expose or modify information beyond the intended agent or department scope.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require administrator approval before installation, restrict the skill to scoped state namespaces, and enforce least-privilege access controls for routing and state changes.
+
+Risk: Conversation monitoring and knowledge extraction could capture secrets, personal data, or sensitive operational context.
+
+Mitigation: Keep monitoring disabled by default, redact secrets and personal data before storage, and document clear user-control and consent boundaries.
+
+Risk: Permanent or long-retention audit logging can create privacy, retention, and deletion obligations.
+
+Mitigation: Define retention and deletion rules before deployment, separate sensitive audit categories, and review logs for data minimization.
+
+## Reference(s):
+
+- [Method Patterns & Detailed Specifications](references/method-patterns.md)
+- [Department Integration Process](references/department-integration-process.md)
+- [ClawHub skill page](https://clawhub.ai/johnsmithfan/skills/ai-company-hq)
+- [Clawdis homepage](https://clawhub.com/skills/ai-company-hq)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, configuration, guidance]
+
+**Output Format:** [Markdown and structured guidance with example schemas, prompts, and workflow steps]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include coordination results, reports, audit-trail guidance, test cases, documentation, and implementation instructions.]
+
+## Skill Version(s):
+
+3.0.1-en2 (source: server release evidence; artifact frontmatter lists 3.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

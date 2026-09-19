@@ -4,6 +4,42 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [v1.5.0] - 2026-09-18
+
+### Added
+- Account Balance section: reports Futures wallet balance, unrealized PnL, and margin balance, plus non-zero Spot balances, fetched best-effort so a key scoped to only one product still shows what it can access.
+- Proactive rate-limit backoff: tracks Binance's `x-mbx-used-weight-1m` response header and automatically pauses before request weight nears the account's per-minute budget, instead of only reacting after a 429/418.
+- Mocked-network regression test for `getFuturesIncome()`'s window + sub-page pagination (previously only Spot pagination had test coverage).
+
+### Fixed
+- `testConnection()` no longer fails outright for API keys scoped to only Futures (or only Spot) — it now tries both and succeeds if either is reachable.
+- Spot report no longer prints a literal `null` for "Fees Paid" when commissions were paid in more than one asset; it now shows a per-asset breakdown.
+- Spot trade volume/notional is no longer summed across symbols with different quote assets (e.g. a USDT-quoted pair and a BTC-quoted pair) into one misleading number. Volume is now grouped by quote asset, with an explicit breakdown when a single total wouldn't make sense.
+
+### Removed
+- `analyzer.analyzeBehavior()` — fully superseded by `coach.identifyProblems()` / `coach.generateRecommendations()`, which now also cover its one previously-unique check (overtrading, trades/day over threshold).
+
+---
+
+## [v1.4.1] - 2026-09-18
+
+### Fixed — Data Integrity & Reliability
+- Fixed Spot `/api/v3/myTrades` pagination to walk backwards using `endTime` instead of incorrectly advancing from the newest trade ID.
+- Regenerate signed Binance requests on retry so timestamps/signatures are fresh.
+- Honor Binance `Retry-After` on HTTP 429/418 responses when present.
+- Detect malformed income/trade records instead of allowing `NaN` to poison aggregates.
+- Added explicit completeness metadata for multi-symbol Spot fetches and Futures/Spot data quality.
+- Prevent Spot commissions in different assets from being summed as if they were one currency.
+- Corrected Reduced Trading commission-savings sign.
+- Shadow coach no longer ranks heuristic/hindsight scenarios by illustrative PnL.
+- Corrected SKILL.md frontmatter, version, and optional `SPOT_SYMBOLS` metadata.
+
+### Analytics Integrity
+- Futures analysis now labels its unit as `realized_pnl_event`; the repository does not pretend that income events are reconstructed round-trip trades.
+- Risk/reward coaching language now describes 1:3 as a heuristic rather than a universal profitability rule.
+
+---
+
 ## [v1.3.3] - 2026-04-06
 
 ### Fixed — Registry Metadata Integrity (Final)

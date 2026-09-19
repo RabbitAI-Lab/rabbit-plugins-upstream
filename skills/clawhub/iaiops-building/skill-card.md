@@ -1,42 +1,59 @@
-## Description: <br>
-Building edition of iaiops for facility, HVAC, BMS, and building automation work over BACnet/IP, Modbus-TCP/RTU, IO-Link, MQTT, and supervisory BAS controller REST layers with read-first workflows and MOC-gated writes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Building edition of iaiops for facility automation over BACnet/IP, Modbus, IO-Link, MQTT, and BAS supervisory-controller APIs, with read-first workflows and approval-gated writes.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, facility engineers, and building automation operators use this skill to discover, inspect, diagnose, and plan controlled actions across HVAC, BMS, meter, sensor, alarm, trend, and cross-protocol facility data. Write-capable actions are framed as dry-run and MOC-gated operator workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Unauthorized or poorly controlled write actions could affect active building automation equipment. <br>
-Mitigation: Install only when authorized for the target systems, keep write tools in dry-run unless a real MOC approval process is in place, and require explicit operator approval before writes. <br>
-Risk: Life-safety, fire, smoke, egress, or pressurization points could be harmed if treated as ordinary control points. <br>
-Mitigation: Keep those point classes out of scope and verify they remain excluded before connecting to live systems. <br>
-Risk: Live HVAC write, COV, trend, physical RS-485, live IO-Link master, and some BAS controller behaviors may not be fully verified in every environment. <br>
-Mitigation: Use read-first discovery and snapshots, validate behavior on non-production or mock systems where possible, and treat unverified live operations as requiring human review. <br>
+## Use Case:
 
+Developers, facility engineers, and authorized building-automation operators use this skill to discover and read building systems, inspect HVAC and BAS data, diagnose data quality or alarm patterns, and prepare tightly controlled changes. It is intended for authorized environments where write-capable tools remain dry-run unless change approval and rollback are in place.
 
-## Reference(s): <br>
-- [Iaiops Building ClawHub release](https://clawhub.ai/zw008/skills/iaiops-building) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, API Calls, Configuration instructions] <br>
-**Output Format:** [Markdown with tool names, command examples, structured findings, and operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-first building automation workflows with explicit dry-run and approval gating for high-impact write operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.19.0 (source: server release evidence) <br>
+Risk: The skill can interact with live building automation and HVAC systems, including high-impact write paths.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only on authorized facility systems and keep write tools in dry-run mode unless a real MOC approval and rollback path are in place.
+
+Risk: Installing the `iaiops[building]` package is a supply-chain trust decision.
+
+Mitigation: Install in an isolated, least-privileged environment and pin and verify the package before use.
+
+Risk: Live HVAC or BAS commands may affect operating equipment if change controls are bypassed.
+
+Mitigation: Require explicit approval, preserve rollback or undo information, and avoid safety-critical points unless the site authorization and procedure explicitly permit the action.
+
+## Reference(s):
+
+- [Packaged skill source](artifact/SKILL.md)
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-building)
+- [ClawHub publisher profile](https://clawhub.ai/user/zw008)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline commands, configuration snippets, and structured tool recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include read-only diagnostics, point snapshots, trend summaries, change-control recommendations, and dry-run write plans.]
+
+## Skill Version(s):
+
+0.28.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Rocket.Chat"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["rocket_chat"]
   icon: "https://static.oomol.com/logo/third-party/rocket_chat.png"
 ---

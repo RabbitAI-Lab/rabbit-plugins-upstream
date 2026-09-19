@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "github": {
+    "owner": "你的GitHub用户名",
+    "repo": "skill-distributor",
+    "private": true,
+    "default_branch": "main"
+  },
+  "identity": {
+    "name": "git 提交显示名",
+    "email": "git 提交邮箱"
+  },
+  "platforms": {
+    "clawhub": { "enabled": true },
+    "mcp_registry": { "enabled": true },
+    "skillhub": { "enabled": true, "command": "skillhub publish" },
+    "mirrors": {
+      "enabled": false,
+      "repos": [
+        "https://gitee.com/你的用户名/技能仓库.git",
+        "https://gitcode.com/你的用户名/技能仓库.git"
+      ]
+    }
+  }
+}

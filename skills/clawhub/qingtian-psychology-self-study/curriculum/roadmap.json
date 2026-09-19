@@ -1,0 +1,200 @@
+{
+  "version": "2.0",
+  "description": "心理学自学六阶段路径数据（阶段制，无周数概念）。Onboarding 后由 SKILL.md 依据 userConfig 确定起点阶段，阶段任务由各 stage 的 input/output/practice/ethics 组成；阶段完成唯一标志是用户写入阶段总结（stageCompleted）。",
+  "stages": {
+    "enlightenment": {
+      "name": "入门启蒙",
+      "goal": "建立学科全景，点燃兴趣，建立伦理红线意识",
+      "input": "读《心理学与生活》前6章；看3-5部心理学纪录片/公开课（Crash Course Psychology、哈佛幸福课）",
+      "output": "写1篇学习笔记；画一张『心理学学科地图』；完成2次基础量表自测",
+      "practice": "用TPR练习器体验3个不同流派的基础对话",
+      "ethics": "通读《中国心理学会临床与咨询心理学工作伦理守则》全文；精读保密例外/知情同意/双重关系；定位《精神卫生法》第23、76条；思考『朋友请你免费咨询怎么办』",
+      "prerequisites": "无（起点阶段）",
+      "summaryPrompt": "这个阶段你建立了学科全景与伦理红线：地图上最吸引你的分支是什么？你对心理咨询的第一印象有了什么变化？"
+    },
+    "schools": {
+      "name": "主要流派",
+      "goal": "掌握7大流派的核心假设与技术差异",
+      "input": "精读各流派经典入门材料；对比表（人性观/改变机制/适用问题）",
+      "output": "为每个流派写1张『一句话立场+核心技术+代表人物』卡片；用费曼讲1个流派",
+      "practice": "TPR各练1次（CBT/精神动力/人本/叙事/ACT至少4个）",
+      "ethics": "理解各流派的伦理共通点（知情同意、边界）",
+      "prerequisites": "完成入门启蒙：读《心理学与生活》前6章，能画出心理学学科地图",
+      "summaryPrompt": "七个流派里哪个最合你气质？哪个最难认同？费曼讲流派时你卡在哪里？"
+    },
+    "schools_domains": {
+      "name": "基础领域",
+      "goal": "搭建认知/发展/社会/人格/生理/变态六大领域框架",
+      "input": "每个领域1周；教材+视频；脑科学速通（杏仁核/前额叶/HPA轴/自主神经）",
+      "output": "每领域20张闪卡；写一篇该领域概念地图",
+      "practice": "每周2次TPR；尝试用领域知识解释生活现象",
+      "ethics": "变态心理学中区分『症状科普』与『诊断』的边界",
+      "prerequisites": "掌握七大流派核心假设：能说出每个流派的一句话立场与代表人物",
+      "summaryPrompt": "六大领域框架搭好了吗？哪个领域和你之前的生活经验联结最深？"
+    },
+    "integration": {
+      "name": "深化整合",
+      "goal": "把流派与领域整合，开始案例思维",
+      "input": "开始阅读进阶级书单；精读论文摘要；影视分析1部",
+      "output": "完成3篇案例分析报告；录制1次费曼讲解；写1篇跨流派整合笔记",
+      "practice": "TPR练习+逐字稿分析；尝试角色扮演",
+      "ethics": "案例讨论中的匿名化与保密演练",
+      "prerequisites": "完成六大领域框架，累计≥8次TPR练习与≥2次基础量表自测",
+      "summaryPrompt": "你开始用案例思维看人了：整合期最大的收获是什么？哪次逐字稿分析让你最受触动？"
+    },
+    "specialization": {
+      "name": "专项精进",
+      "goal": "按目标深耕：咨询技术/研究方法/应用方向",
+      "input": "选定1-2个主修方向深度阅读；学术方向加统计与实验设计",
+      "output": "完成1份长篇个案概念化；写1篇文献综述草稿",
+      "practice": "督导模拟、长程个案概念化",
+      "ethics": "胜任力边界与转介判断专项练习",
+      "prerequisites": "完成深化整合：3篇案例分析报告 + 逐字稿分析 ≥3 次",
+      "summaryPrompt": "你的主修方向定了吗？个案概念化写到第几版开始觉得'通了'？"
+    },
+    "mastery": {
+      "name": "持续精进",
+      "goal": "形成个人风格，反哺社群",
+      "input": "跟踪APA年度趋势；原著精读；跨学科联结",
+      "output": "输出科普/教学作品；带新人",
+      "practice": "参与读书会主持",
+      "ethics": "伦理守门意识与伦理自查",
+      "prerequisites": "完成专项精进：1份个案概念化 + 1篇文献综述草稿",
+      "summaryPrompt": "你的个人风格是什么？你开始把什么教给别人？"
+    }
+  },
+  "levelOffset": {
+    "beginner": 0,
+    "intermediate": 1,
+    "advanced": 3
+  },
+  "stageOrder": [
+    "enlightenment",
+    "schools",
+    "schools_domains",
+    "integration",
+    "specialization",
+    "mastery"
+  ],
+  "modules": {
+    "theory": {
+      "completed": 0,
+      "total": 4,
+      "items": [
+        "心理学史",
+        "七大流派",
+        "六大领域",
+        "脑科学与生理心理学"
+      ]
+    },
+    "counseling": {
+      "completed": 0,
+      "total": 5,
+      "items": [
+        "基础咨询技术",
+        "伦理与法律",
+        "TPR练习",
+        "对话分析",
+        "认知记录"
+      ]
+    },
+    "assessment": {
+      "completed": 0,
+      "total": 3,
+      "items": [
+        "量表体验",
+        "反思日记",
+        "成长追踪"
+      ]
+    },
+    "reading": {
+      "completed": 0,
+      "total": 3,
+      "items": [
+        "分级书单",
+        "论文阅读",
+        "学术写作"
+      ]
+    },
+    "cases": {
+      "completed": 0,
+      "total": 3,
+      "items": [
+        "经典案例",
+        "影视分析",
+        "日常观察"
+      ]
+    },
+    "methods": {
+      "completed": 0,
+      "total": 4,
+      "items": [
+        "间隔重复",
+        "概念地图",
+        "费曼输出",
+        "主动回忆"
+      ]
+    },
+    "support": {
+      "completed": 0,
+      "total": 3,
+      "items": [
+        "进度追踪",
+        "定期自评",
+        "方向指引"
+      ]
+    }
+  },
+  "milestones": [
+    {
+      "id": "m1",
+      "text": "学完第一个流派（CBT/精神分析/人本主义任选）",
+      "condition": "modules.counseling.completed>=1"
+    },
+    {
+      "id": "m2",
+      "text": "完成第一次 TPR 咨询练习",
+      "condition": "stats.practiceCount>=1"
+    },
+    {
+      "id": "m3",
+      "text": "读完第一本心理学教材",
+      "condition": "stats.booksRead>=1"
+    },
+    {
+      "id": "m4",
+      "text": "完成第一次对话分析",
+      "condition": "stats.analyses>=1"
+    },
+    {
+      "id": "m5",
+      "text": "累计学习 50 小时",
+      "condition": "stats.totalHours>=50"
+    },
+    {
+      "id": "m6",
+      "text": "累计学习 100 小时",
+      "condition": "stats.totalHours>=100"
+    },
+    {
+      "id": "m7",
+      "text": "完成第一次费曼输出",
+      "condition": "stats.feynmanOutputs>=1"
+    },
+    {
+      "id": "m8",
+      "text": "完成第一篇案例分析报告",
+      "condition": "modules.cases.completed>=1"
+    },
+    {
+      "id": "m9",
+      "text": "累计 20 次 TPR 练习",
+      "condition": "stats.practiceCount>=20"
+    },
+    {
+      "id": "m10",
+      "text": "读完 10 本心理学书",
+      "condition": "stats.booksRead>=10"
+    }
+  ]
+}

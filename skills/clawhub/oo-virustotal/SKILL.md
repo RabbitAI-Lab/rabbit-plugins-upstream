@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "VirusTotal"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["virustotal"]
   icon: "https://static.oomol.com/logo/third-party/Virustotal.webp"
 ---

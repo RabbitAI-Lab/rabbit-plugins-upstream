@@ -1,11 +1,10 @@
----
 name: skill-design-guide
 display_name: "Skill 设计指南"
 description: >
   用经过验证的架构模式设计更好的 AI Skill。帮你判断该用 Workflow 还是 Agent，
   从 5 种工作流模式中选出最合适的，用 25 项检查清单审查质量，避开常见反模式。
   基于 Anthropic、OpenAI、LangChain 的设计原则。中文版，英文版见 SKILL.md。
-version: "1.4.0"
+version: "1.6.0"
 agent_created: true
 category: "Architecture / Design Patterns"
 license: "MIT"
@@ -215,6 +214,7 @@ read_when:
 
 | 需要 | 加载 |
 |------|------|
+| **完整设计与实践指南**（全生命周期：设计/编写/审计/发布/安全对抗/维护） | `GUIDE_zh.md` |
 | 25 项检查清单 | `references/quality-checklist.md` |
 | 模式详解 | `references/pattern-details.md` |
 | 平台配置 | `references/platform-compatibility.md` |

@@ -2,7 +2,7 @@
  * Unit tests for analyzer.cjs
  */
 
-const { analyzeFuturesIncome, analyzeBehavior, analyzeSpotTrades } = require('../src/analyzer.cjs');
+const { analyzeFuturesIncome, analyzeSpotTrades, inferQuoteAsset } = require('../src/analyzer.cjs');
 
 const MOCK_INCOME_HISTORY = [
   { incomeType: 'REALIZED_PNL', income: '100.50', time: 1710000000000 },
@@ -40,8 +40,6 @@ assert(result.trades.winRate === '60.0', `Win rate should be 60.0, got ${result.
 const realized = parseFloat(result.pnl.realized);
 assert(realized > 334 && realized < 335, `Realized PnL should be ~334.50, got ${realized}`);
 
-const commissions = parseFloat(result.trades.commissions);
-// Commission: -0.50 (FUNDING_FEE) + -1.50 (COMMISSION) = -2.00
 assert(parseFloat(result.trades.commissions) === -1.5, `Commissions should be -1.50, got ${result.trades.commissions}`);
 
 const avgWin = parseFloat(result.averages.avgWin);
@@ -57,6 +55,19 @@ assert(result.streaks.maxWinStreak === 1, `Max win streak should be 1, got ${res
 assert(result.streaks.maxLossStreak >= 1, `Max loss streak should be >= 1, got ${result.streaks.maxLossStreak}`);
 
 assert(result.period.days === 1, `Period days should be 1, got ${result.period.days}`);
+
+// ISO date format
+assert(/^\d{4}-\d{2}-\d{2}$/.test(result.period.start), `period.start should be ISO date, got ${result.period.start}`);
+assert(/^\d{4}-\d{2}-\d{2}$/.test(result.period.end), `period.end should be ISO date, got ${result.period.end}`);
+
+// Empty input
+const empty = analyzeFuturesIncome([]);
+assert(empty.trades.total === 0, 'Empty history should yield 0 trades');
+assert(empty.pnl.realized === '0.0000', 'Empty realized should be 0');
+
+// Nullish input
+const nullish = analyzeFuturesIncome(null);
+assert(nullish.trades.total === 0, 'Null history should be treated as empty');
 
 // Test: analyzeByHour (via hourly field)
 const hourlyKeys = Object.keys(result.hourly);
@@ -82,29 +93,68 @@ assert(spotResult.symbols.BTCUSDT.buys === 2, 'BTCUSDT should have 2 buys');
 assert(spotResult.symbols.BTCUSDT.sells === 1, 'BTCUSDT should have 1 sell');
 
 const avgSize = parseFloat(spotResult.avgTradeSize);
-// (0.5*50000 + 0.3*51000 + 0.2*49000) / 3 = 49700/3 = 16566.67
 assert(avgSize > 16000 && avgSize < 17000, `Avg trade size should be ~16567, got ${avgSize}`);
 
-// Test: analyzeBehavior
-const badBehavior = analyzeBehavior({
-  trades: { winRate: '20', total: 30 },
-  averages: { riskReward: '1.5' },
-  streaks: { maxLossStreak: 15 },
-  period: { days: 10 },
-  hourly: {}
+// { trades, errors } shape
+const withErrors = analyzeSpotTrades({
+  trades: MOCK_SPOT_TRADES,
+  errors: [{ symbol: 'FAKE', error: 'Invalid' }]
 });
+assert(withErrors.fetchErrors.length === 1, 'Should surface fetchErrors');
+assert(withErrors.totalTrades === 3, 'Should still count trades from trades map');
 
-const lowWR = badBehavior.find(i => i.message.includes('Win rate'));
-assert(lowWR !== undefined, 'Should flag low win rate');
+// Daily PnL uses ISO dates
+assert(result.daily.bestDay.date === result.daily.worstDay.date || true, 'daily best/worst present');
+assert(/^\d{4}-\d{2}-\d{2}$/.test(result.daily.bestDay.date) || result.daily.bestDay.date === 'N/A',
+  `bestDay date should be ISO or N/A, got ${result.daily.bestDay.date}`);
 
-const lowRR = badBehavior.find(i => i.message.includes('Risk:Reward'));
-assert(lowRR !== undefined, 'Should flag low risk:reward');
+// Data-quality and commission-asset regression tests
+const mixedFees = analyzeSpotTrades({
+  BTCUSDT: [
+    { id: 1, qty: '1', price: '100', commission: '0.01', commissionAsset: 'BNB', isBuyer: true },
+    { id: 2, qty: '1', price: '100', commission: '2', commissionAsset: 'USDT', isBuyer: false },
+    { id: 3, qty: 'bad', price: '100', commission: '1', commissionAsset: 'USDT', isBuyer: true }
+  ]
+});
+assert(mixedFees.commissionComparable === false, 'Mixed commission assets must not be treated as one comparable currency');
+assert(mixedFees.totalCommission === null, 'Mixed commission assets should not expose a misleading single total');
+assert(mixedFees.commissionByAsset.BNB === '0.01000000', 'BNB commission should be tracked separately');
+assert(mixedFees.commissionByAsset.USDT === '2.00000000', 'USDT commission should be tracked separately');
+assert(mixedFees.invalidTrades === 1, 'Malformed Spot trade should be counted as invalid');
 
-const tilt = badBehavior.find(i => i.message.includes('15'));
-assert(tilt !== undefined, 'Should flag loss streak > 10');
+const invalidIncome = analyzeFuturesIncome([
+  { incomeType: 'REALIZED_PNL', income: '100', time: 1710000000000 },
+  { incomeType: 'REALIZED_PNL', income: 'not-a-number', time: 1710000001000 }
+]);
+assert(invalidIncome.dataQuality.invalidRecords === 1, 'Malformed Futures income should be counted as invalid');
+assert(invalidIncome.dataQuality.complete === false, 'Analysis with invalid input should be marked incomplete');
+assert(invalidIncome.trades.unit === 'realized_pnl_event', 'Futures trade count must disclose its event-based unit');
+
+// Quote-asset inference and volume-mixing regression tests
+assert(inferQuoteAsset('BTCUSDT') === 'USDT', 'BTCUSDT should infer USDT quote asset');
+assert(inferQuoteAsset('ETHBTC') === 'BTC', 'ETHBTC should infer BTC quote asset');
+assert(inferQuoteAsset('BNBETH') === 'ETH', 'BNBETH should infer ETH quote asset');
+assert(inferQuoteAsset('XYZFOO') === 'UNKNOWN', 'Unrecognized quote asset should be UNKNOWN, not guessed');
+
+const mixedQuoteAssets = analyzeSpotTrades({
+  BTCUSDT: [{ id: 1, qty: '1', price: '60000', commission: '0', commissionAsset: 'USDT', isBuyer: true }],
+  ETHBTC: [{ id: 1, qty: '10', price: '0.05', commission: '0', commissionAsset: 'ETH', isBuyer: true }]
+});
+assert(mixedQuoteAssets.volumeComparable === false, 'Volume across different quote assets must not be treated as comparable');
+assert(mixedQuoteAssets.totalVolume === null, 'Mixed-quote-asset volume must not expose a misleading single total (e.g. USDT + BTC summed)');
+assert(mixedQuoteAssets.avgTradeSize === null, 'Avg trade size must not be derived from a mixed-currency total');
+assert(mixedQuoteAssets.volumeByQuoteAsset.USDT === '60000.00', 'USDT-quoted volume should be tracked separately');
+assert(mixedQuoteAssets.volumeByQuoteAsset.BTC === '0.50', 'BTC-quoted volume should be tracked separately');
+
+const singleQuoteAsset = analyzeSpotTrades({
+  BTCUSDT: [{ id: 1, qty: '1', price: '60000', commission: '0', commissionAsset: 'USDT', isBuyer: true }],
+  ETHUSDT: [{ id: 1, qty: '2', price: '3000', commission: '0', commissionAsset: 'USDT', isBuyer: true }]
+});
+assert(singleQuoteAsset.volumeComparable === true, 'Single quote asset across symbols should remain comparable');
+assert(singleQuoteAsset.totalVolume === '66000.00', 'Single-quote-asset volume should sum normally (regression check against the fix)');
+assert(singleQuoteAsset.avgTradeSize === '33000.00', 'Avg trade size should compute normally when comparable');
 
 console.log(`\n${'='.repeat(40)}`);
 console.log(`Results: ${testsPassed} passed, ${testsFailed} failed`);
 console.log(`${'='.repeat(40)}`);
-
 process.exit(testsFailed > 0 ? 1 : 0);

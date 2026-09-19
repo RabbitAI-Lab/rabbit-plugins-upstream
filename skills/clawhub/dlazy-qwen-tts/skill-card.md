@@ -1,43 +1,60 @@
-## Description: <br>
-Alibaba Bailian qwen3-tts text-to-speech that lets agents choose curated system voices, including dialects, or design a custom voice from a natural-language description. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Alibaba Bailian qwen3-tts text-to-speech with curated system voices, dialect options, and custom voice design from natural-language descriptions.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to request qwen3-tts speech generation through the dLazy CLI, selecting a preset voice or describing a custom voice for text-to-speech output. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: TTS prompts and any explicitly provided media inputs are sent to dLazy's hosted service. <br>
-Mitigation: Use the skill only when sending those inputs to dLazy is acceptable for the user's data handling requirements. <br>
-Risk: The dLazy API key can authorize paid SaaS usage if exposed. <br>
-Mitigation: Prefer DLAZY_API_KEY for temporary sessions on shared machines, verify permissions on ~/.dlazy/config.json, and rotate or revoke keys from the dLazy dashboard after suspected exposure. <br>
+## Use Case:
 
+External users and developers use this skill to invoke dLazy's hosted Qwen TTS service, generating speech from text with either curated voices or a natural-language voice description.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-qwen-tts) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The generated speech result is returned through dLazy-hosted output URLs; asynchronous runs may return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and selected local file paths may be sent to dLazy's hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when cloud processing is acceptable and choose input paths carefully.
+
+Risk: Authentication can store a dLazy API key in the local CLI configuration.
+
+Mitigation: Use per-invocation DLAZY_API_KEY or review local config storage if persistent credentials are not desired.
+
+Risk: Generated files may be hosted on files.dlazy.com.
+
+Mitigation: Avoid submitting sensitive prompts or media unless the hosted-output behavior is acceptable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-qwen-tts)
+- [dLazy CLI homepage](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Files]
+
+**Output Format:** [JSON response with generated media URLs, with optional saved output files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires dLazy authentication; supports dry-run, asynchronous task polling, timeout, and optional save path.]
+
+## Skill Version(s):
+
+1.3.17 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

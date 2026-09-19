@@ -1,41 +1,54 @@
-## Description: <br>
-AI Company KB (EN) helps agents manage shared operations records, strategy documents, audit logs, cross-agent knowledge sharing, state sync, and task handoffs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI Company shared knowledge base interface for unified management of operations records, strategy documents, audit logs, cross-agent knowledge sharing, state sync, and IMA real-time sync for zero-handoff protocol.
 
-## Publisher: <br>
-[johnsmithfan](https://clawhub.ai/user/johnsmithfan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[johnsmithfan](https://clawhub.ai/user/johnsmithfan)
 
-## Use Case: <br>
-Employees and agents in an AI-company workspace use this skill to read and write shared state, audit logs, strategy records, and handoff documents across operational domains. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad read and write access to operational records can expose or alter sensitive financial, legal, HR, security, or audit data. <br>
-Mitigation: Install only in workspaces where this access is intended, restrict the skill to narrow folders and resources, and avoid secrets or regulated records unless explicitly approved. <br>
-Risk: Cloud sync, deletion, or record writes could change shared operational state without sufficient review. <br>
-Mitigation: Require explicit confirmation before writes, cloud sync, deletion, or access to financial, legal, HR, security, or audit records. <br>
+## Use Case:
 
+Employees and agent operators use this skill to save, read, and synchronize shared company knowledge such as audit logs, shared state, strategy documents, financial records, compliance reports, and task handoff records across AI Company agents.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/johnsmithfan/ai-company-kb) <br>
-- [Skill homepage](https://clawhub.com/skills/ai-company-kb) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown and structured records] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update shared-state, audit-log, strategy, and handoff records when an agent is granted file access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1-en2 (source: server release metadata) <br>
+Risk: Persistent audit logs and shared-state files may retain sensitive company records, prompts, credentials, personal data, legal material, or financial records.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only in governed workspaces with explicit retention, access-control, redaction, and deletion policies for knowledge-base and audit data.
+
+Risk: IMA or cross-agent synchronization may network-sync sensitive records beyond the local workspace without clear opt-in in the artifact.
+
+Mitigation: Enable synchronization only after confirming intended destinations, authorization, and data handling controls; keep local-only operation for sensitive records when those controls are absent.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/johnsmithfan/skills/ai-company-kb)
+- [ClawHub homepage metadata](https://clawhub.com/skills/ai-company-kb)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, JSON, Configuration]
+
+**Output Format:** [Markdown and structured knowledge-base records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write persistent audit logs, shared-state files, and handoff documents, with optional API synchronization.]
+
+## Skill Version(s):
+
+1.0.1-en2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

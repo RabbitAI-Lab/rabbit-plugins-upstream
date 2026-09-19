@@ -1,42 +1,56 @@
-## Description: <br>
-Helps an agent search and read Linux DO content through OOMOL's linux_do connector and oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Linux DO lets agents search and read Linux DO public topics, posts, tags, categories, groups, users, badges, and trending content through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to discover and read Linux DO topics, posts, category feeds, tag feeds, group activity, badge grants, and user activity through read-only CLI actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on the third-party OOMOL oo CLI and includes installer commands for first-time setup. <br>
-Mitigation: Install or authenticate the CLI only when needed, and use the installer only after deciding to trust OOMOL's distribution path. <br>
-Risk: Linux DO feeds can return rate limits or 404 responses for private or anonymously inaccessible resources. <br>
-Mitigation: Treat 404 responses as access ambiguity, retry rate-limited requests later, and avoid over-interpreting unavailable feed data. <br>
+## Use Case:
 
+Developers and agent operators use this skill to answer Linux DO requests by inspecting live action schemas and fetching public forum data through OOMOL's linux_do connector.
 
-## Reference(s): <br>
-- [ClawHub Linux DO Skill](https://clawhub.ai/oomol/oo-linux-do) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Linux DO](https://linux.do) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions are documented as read-only; the skill directs agents to inspect the live connector schema before sending JSON payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: Setup instructions include remote shell installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install oo only from a trusted, verified, versioned release or package manager, or inspect the installer before execution.
+
+Risk: Linux DO requests can encounter private resources, rate limits, authentication failures, CLI errors, or billing stops.
+
+Mitigation: Inspect the live action schema before requests, handle 404, 429, authentication, CLI, and HTTP 402 errors distinctly, and avoid treating inaccessible resources as definitely nonexistent.
+
+## Reference(s):
+
+- [ClawHub Linux DO skill page](https://clawhub.ai/oomol/skills/oo-linux-do)
+- [Linux DO homepage](https://linux.do)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include Linux DO connector responses returned as JSON data with execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

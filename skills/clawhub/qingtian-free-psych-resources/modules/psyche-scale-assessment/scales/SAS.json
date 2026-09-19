@@ -1,0 +1,570 @@
+{
+  "id": "SAS",
+  "name": "焦虑自评量表（SAS，Zung）",
+  "short_name": "SAS 焦虑自评（中国常模）",
+  "category": "焦虑",
+  "target_population": "成年人",
+  "estimated_time": "约 4 分钟",
+  "item_count": 20,
+  "description": "Zung 焦虑自评量表中文版，20 题，5 道反向计分题（q5, q9, q13, q17, q19）。原始分 ×1.25 得标准分，按标准分判级。",
+  "source": "Zung, 1971；中文版王征宇 1984",
+  "license": "学术使用，商业需授权",
+  "scoring_type": "sum",
+  "items": [
+    {
+      "id": "q1",
+      "text": "我觉得比平时容易紧张和着急。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "我无缘无故感到害怕。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "我容易心里烦乱或觉得惊恐。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "我觉得我可能将要发疯。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q5",
+      "text": "我觉得一切都很好，也不会发生什么不幸。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q6",
+      "text": "我手脚发抖打颤。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q7",
+      "text": "我因为头痛、颈痛和背痛而苦恼。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q8",
+      "text": "我感觉容易衰弱和疲乏。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q9",
+      "text": "我觉得心平气和，并且容易安静坐着。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "text": "我觉得心跳得很快。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "text": "我因为一阵阵头晕而苦恼。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "text": "我有晕倒发作，或觉得要晕倒似的。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "text": "我吸气呼气都感到很容易。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "text": "我的手脚麻木和刺痛。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "text": "我因为胃痛和消化不良而苦恼。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "text": "我常常要小便。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "text": "我的手常常是干燥温暖的。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "text": "我脸红发热。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "text": "我容易入睡并且一夜睡得很好。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q20",
+      "text": "我做恶梦。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有或很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "几乎总是",
+          "score": 4
+        }
+      ]
+    }
+  ],
+  "dimensions": [
+    {
+      "name": "原始总分",
+      "items": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7",
+        "q8",
+        "q9",
+        "q10",
+        "q11",
+        "q12",
+        "q13",
+        "q14",
+        "q15",
+        "q16",
+        "q17",
+        "q18",
+        "q19",
+        "q20"
+      ],
+      "max": 80,
+      "min": 20
+    }
+  ],
+  "standard_score": {
+    "slope": 1.25,
+    "intercept": 0,
+    "dimension": "原始总分"
+  },
+  "interpretation": {
+    "bands": [
+      {
+        "dimension": "原始总分",
+        "min": 25,
+        "max": 49.99,
+        "level": "正常",
+        "summary": "标准分在正常范围，无明显焦虑倾向。",
+        "advice": "保持即可。"
+      },
+      {
+        "dimension": "原始总分",
+        "min": 50,
+        "max": 59.99,
+        "level": "轻度焦虑",
+        "summary": "标准分提示轻度焦虑。",
+        "advice": "关注压力源与睡眠，尝试放松训练；持续则建议心理咨询。"
+      },
+      {
+        "dimension": "原始总分",
+        "min": 60,
+        "max": 69.99,
+        "level": "中度焦虑",
+        "summary": "标准分提示中度焦虑，症状较明显。",
+        "advice": "建议心理咨询或就诊评估。"
+      },
+      {
+        "dimension": "原始总分",
+        "min": 70,
+        "max": 100,
+        "level": "重度焦虑",
+        "summary": "标准分提示重度焦虑。",
+        "advice": "建议尽快到精神科/心理科规范评估与治疗。"
+      }
+    ]
+  },
+  "safety": {
+    "crisis_items": [],
+    "crisis_rule": "",
+    "high_risk_rule": ""
+  }
+}

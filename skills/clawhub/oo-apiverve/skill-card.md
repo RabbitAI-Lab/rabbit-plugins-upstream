@@ -1,42 +1,55 @@
-## Description: <br>
-APIVerve (apiverve.com). Use this skill for APIVerve requests that search or read data through the OOMOL APIVerve connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+APIVerve lets agents search and read APIVerve data through the OOMOL APIVerve connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect APIVerve action schemas and run read-oriented APIVerve lookups such as age calculation, currency conversion, dictionary queries, aviation lookups, and air quality retrieval through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an APIVerve connection through OOMOL, which involves account credentials and may consume service credits. <br>
-Mitigation: Use it only with an intended OOMOL-connected APIVerve account, and confirm billing or credit constraints before repeated API use. <br>
-Risk: The setup path can install the oo CLI from a remote installer if the CLI is missing. <br>
-Mitigation: Review the oo CLI installer source before running setup commands, as recommended by the security guidance. <br>
+## Use Case:
 
+External users and developers use this skill to run APIVerve utility, language, location, and travel-data actions through an OOMOL-connected account. It guides agents to inspect each live connector schema before sending JSON payloads.
 
-## Reference(s): <br>
-- [ClawHub APIVerve skill](https://clawhub.ai/oomol/oo-apiverve) <br>
-- [APIVerve homepage](https://apiverve.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill guides schema inspection and connector execution; command responses are returned as JSON by the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: Fallback setup instructions include remote installer commands that execute downloaded scripts in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from trusted OOMOL sources and prefer package-manager or installer flows with checksum or signature verification before running setup commands.
+
+Risk: APIVerve connector calls depend on account credentials and billing state managed outside the skill.
+
+Mitigation: Use the documented auth, connection, scope, and credit recovery steps only when connector commands fail for those specific reasons.
+
+## Reference(s):
+
+- [APIVerve homepage](https://apiverve.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-apiverve)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash and JSON command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill directs agents to use oo connector schema and run commands; connector responses are JSON.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

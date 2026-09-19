@@ -1,46 +1,68 @@
-## Description: <br>
-Helps agents manage TikTok creator shoppable-video workflows through LinkFox, including creator profile lookup, video precheck, publishing, and publish-status checks for authorized accounts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents work with TikTok creator video workflows through LinkFox, including creator profile lookup, product selection, shoppable video precheck, publishing, status checks, and documented upload paths.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External commerce operators and developers use this skill to manage TikTok creator video tasks for authorized accounts, including profile lookup, shoppable-video precheck, posting, and status review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can publish or check TikTok creator video content through authorized accounts. <br>
-Mitigation: Confirm the account, video, product, and publish intent before running post actions. <br>
-Risk: API keys and creator access tokens may be present during use. <br>
-Mitigation: Do not expose full tokens in prompts, logs, or summaries; prefer account identifiers where supported. <br>
-Risk: Saved API responses may contain sensitive business or account data. <br>
-Mitigation: Use response persistence only in controlled output directories with appropriate retention. <br>
+## Use Case:
 
+External developers and commerce operators use this skill to guide authenticated TikTok creator video operations, including selecting products, preparing shoppable videos, running prechecks, publishing, and checking publishing status. Authorization is handled by the separate linkfox-tiktok-video-auth skill.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-tiktok-video) <br>
-- [TikTok Video API Reference](references/api.md) <br>
-- [Shoppable Video Large File Upload Solution](references/large-file-upload.md) <br>
-- [TikTok Partner Center large file upload documentation](https://partner.tiktokshop.com/docv2/page/shoppable-video-large-file-upload) <br>
-- [TikTok Partner Center creator profile documentation](https://partner.tiktokshop.com/docv2/page/get-creator-profile-202508) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires LinkFox API credentials and TikTok creator authorization; can post content externally and can optionally save API responses to local files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill requires access to LinkFox and TikTok creator credentials and can perform authenticated creator/video operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that access is acceptable, keep tokens out of user-facing summaries, and verify the auth dependency source and version before use.
+
+Risk: A configurable API base URL could route credential-bearing requests to an unintended service.
+
+Mitigation: Use the default LinkFox gateway or set TIKTOK_VIDEO_API_BASE_URL only to a trusted HTTPS LinkFox gateway.
+
+Risk: Publishing videos or sending external feedback can create side effects outside the agent session.
+
+Mitigation: Require explicit user confirmation before publishing a video or sending feedback.
+
+Risk: Saved API responses may contain PII or auth-sensitive data.
+
+Mitigation: Keep response_io.py output outside repositories, delete saved responses promptly, and do not commit response files.
+
+## Reference(s):
+
+- [TikTok Video API Reference](references/api.md)
+- [Shoppable Video Large File Upload Solution](references/large-file-upload.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-tiktok-video)
+- [TikTok Shop Partner Center: Large File Upload](https://partner.tiktokshop.com/docv2/page/shoppable-video-large-file-upload)
+- [TikTok Shop Partner Center: Get Creator Profile](https://partner.tiktokshop.com/docv2/page/get-creator-profile-202508)
+- [TikTok Shop Partner Center: Get Shop Products](https://partner.tiktokshop.com/docv2/page/get-shop-products-202509)
+- [TikTok Shop Partner Center: Get Showcase Products](https://partner.tiktokshop.com/docv2/page/get-showcase-products-202405)
+- [TikTok Shop Partner Center: Upload Shoppable Video File](https://partner.tiktokshop.com/docv2/page/upload-shoppable-video-file-202505)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API Calls, Configuration, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON request or response data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write local response files for large API responses when the agent uses response_io.py.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

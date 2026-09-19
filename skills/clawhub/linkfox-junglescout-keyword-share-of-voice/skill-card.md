@@ -1,43 +1,55 @@
-## Description: <br>
-Jungle Scout keyword Share of Voice analysis returns brand visibility share across the first three pages of Amazon search results, split by organic, sponsored, and combined presence, along with 30-day exact search volume, median PPC bid, and top-three ASIN click and conversion data across 10 marketplaces. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes Amazon keyword Share of Voice using Jungle Scout data, returning brand visibility across organic, sponsored, and combined search results, plus 30-day search volume, PPC bid median, and top ASIN click and conversion metrics.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and e-commerce operators use this skill to analyze Amazon keyword competitive structure, brand Share of Voice, sponsored versus organic visibility, PPC bid context, and top ASIN click and conversion performance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Jungle Scout query parameters and API credentials are shared with LinkFox's gateway. <br>
-Mitigation: Install only when this data sharing is acceptable, keep API keys appropriately scoped and rotated, and avoid setting LINKFOX_TOOL_GATEWAY to an untrusted host. <br>
-Risk: Full API responses and cached data can be stored locally in linkfox output and cache directories. <br>
-Mitigation: Clean the linkfox output and cache directories when data is sensitive, and avoid running the skill in shared workspaces without reviewing stored files. <br>
-Risk: The release includes feedback reporting behavior and remote onboarding installation guidance that deserve review before deployment. <br>
-Mitigation: Review or disable feedback behavior as appropriate and inspect any remote onboarding or installation steps before use. <br>
+## Use Case:
 
+External e-commerce operators, analysts, and agents use this skill to assess which brands occupy Amazon keyword search results and compare organic visibility, sponsored visibility, PPC cost signals, and top ASIN conversion performance.
 
-## Reference(s): <br>
-- [Jungle Scout Share of Voice API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-junglescout-keyword-share-of-voice) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration guidance] <br>
-**Output Format:** [Markdown summaries with saved JSON response files and optional inline JSON output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The script writes full responses to a linkfox session data directory, uses a 24-hour local cache by default, and prints a compact summary when responses exceed 8 KB unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: The security summary says the skill includes LinkFox account onboarding, API-key creation, billing order actions, local data retention, and feedback reporting in addition to the advertised analytics workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review LinkFox account and billing steps before use, prefer managing API keys through the official LinkFox site, avoid storing secrets permanently in shell startup files when possible, and confirm paid actions before execution.
+
+Risk: The security guidance warns against use where untrusted variables can set LINKFOX_* endpoint URLs or SESSION_ID.
+
+Mitigation: Run the skill only in trusted environments with reviewed LINKFOX_* and SESSION_ID values.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-junglescout-keyword-share-of-voice)
+- [Jungle Scout Share of Voice API Reference](artifact/references/api.md)
+- [LinkFox account and billing onboarding](artifact/references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown analysis with tables and summaries; JSON API responses and saved JSON data files when the helper script is used.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [One keyword per API call; helper script caches responses for 24 hours and writes full responses under a LinkFox session data directory.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

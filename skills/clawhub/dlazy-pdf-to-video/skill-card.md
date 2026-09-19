@@ -1,45 +1,60 @@
-## Description: <br>
-Converts PDFs and other documents into explainer, report, courseware, or training videos by using the dLazy hosted sandbox agent to parse, outline, storyboard, voice, build, and validate the result. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PDF 转视频 PDF to Video helps an agent use dLazy's hosted file-to-video workflow to turn PDFs or other documents into explainer, report, courseware, or training videos.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, content teams, educators, and business users can use this skill to start or continue dLazy file-to-video projects from PDFs and other documents. It is intended for document explainer videos, report broadcasts, courseware, and training video workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and attached documents are sent to dLazy API and media storage endpoints. <br>
-Mitigation: Confirm the user is comfortable sending the content to dLazy before use, and avoid attaching sensitive documents unless that transfer is approved. <br>
-Risk: The dLazy API key can be saved in the local CLI configuration. <br>
-Mitigation: Use per-run DLAZY_API_KEY when persistent local storage is not desired, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: The skill installs or runs a pinned third-party npm CLI package. <br>
-Mitigation: Review the pinned @dlazy/cli package and declared source before installing it in sensitive environments. <br>
+## Use Case:
 
+External users and developers use this skill when they want an agent to run dLazy's PDF or document-to-video workflow for explainers, report broadcasts, courseware, or training videos.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-pdf-to-video) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown instructions with bash command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses project-scoped chat sessions and may attach local files through the dLazy CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and attached documents may be sent to dLazy's API and media storage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with files approved for dLazy hosted processing, and avoid attaching confidential documents unless that upload is acceptable.
+
+Risk: Authentication requires a dLazy API key that may be stored in local CLI configuration.
+
+Mitigation: Use a revocable API key, protect the local configuration file, and rotate the key if exposure is suspected.
+
+Risk: A global CLI install persists the pinned dLazy CLI on the user's system.
+
+Mitigation: Prefer the pinned npx invocation when a temporary install is more appropriate, and review the pinned package or source before installation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-pdf-to-video)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill guides an agent to authenticate with dLazy, start or continue dLazy projects, attach files, and handle CLI/API error states.]
+
+## Skill Version(s):
+
+1.0.15 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

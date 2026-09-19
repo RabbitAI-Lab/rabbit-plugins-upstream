@@ -1,42 +1,57 @@
-## Description: <br>
-Unipile helps agents inspect live Unipile connector schemas and run OOMOL oo CLI actions to read Unipile accounts, chats, and messages through a connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses OOMOL's oo CLI to search and read Unipile accounts, chats, and messages through a connected Unipile account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to retrieve Unipile account, chat, and message data through an OOMOL-connected account. It is intended for read-oriented workflows that need live schema inspection before each connector action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Unipile account, chat, and message data through a connected account. <br>
-Mitigation: Install and run it only when the user trusts OOMOL and intends to grant read access to the connected Unipile data. <br>
-Risk: First-time setup may require a remote oo CLI installer, sign-in, account connection, or billing action. <br>
-Mitigation: Run setup steps only after a matching command failure and only when the user intentionally needs that setup. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Unipile account, chat, and message data through the OOMOL-connected oo CLI. The skill guides agents to inspect live action schemas before constructing JSON payloads.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-unipile) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Unipile Homepage](https://www.unipile.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reads Unipile data through OOMOL; action payloads should be based on the live connector schema.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup includes remote installer commands that pipe downloaded scripts into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official pinned or manually reviewed installation path, avoid elevated shells, and run setup commands only after an authentication or connection failure requires them.
+
+Risk: Future or unlisted Unipile actions may be state-changing even though the currently listed actions are read-oriented.
+
+Mitigation: Inspect the live action schema and confirm any state-changing payload and effect with the user before execution.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-unipile)
+- [Publisher Profile](https://clawhub.ai/user/oomol)
+- [Unipile Homepage](https://www.unipile.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses OOMOL-connected credentials and recommends live action schema inspection before payload construction.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

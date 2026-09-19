@@ -1,11 +1,12 @@
 # APIv3 接口动态排障
 
+> **定位**：本流程是 `SKILL.md` 核心工作流的**下游动作**（实时查单），不是一条知识检索路径。仅在检索作答后仍需验证交易状态、且用户明确同意时进入；不要用 `knowledge search` 把查单登记成知识检索。
+
 ## 前置依赖
 
 进入本流程前，须确认 **`wechatpay-dev-cli` 已安装且可用**（安装详见 [wechatpay-dev-cli使用说明](./wechatpay-dev-cli使用说明.md)）。
 
-1. **校验 CLI**：执行 `wechatpay-dev-cli --version`，能正常输出版本号（如 `1.0.0`）再继续。
-2. **未安装时**：按使用说明安装（公网 `npm install -g @tenpay/wechatpay-dev-cli`），安装后再次执行 `--version` 确认。
+**未安装时**：按使用说明安装（公网 `npm install -g @tenpay/wechatpay-dev-cli`），安装后再次执行 `--version` 确认。
 
 校验通过后再执行后续的流程。
 
@@ -24,7 +25,7 @@ flowchart LR
 ### 核心约定（流程编排，勿写入脚本输出）
 
 | 步骤 | 职责 |
-|------|------|
+| ------ | ------ |
 | **Step 1 `api list`** | 确认 `mode`（merchant/partner）、接口ID 与查单参数，组装 `--params` JSON |
 | **Step 2 `api build`** | 用 Step 1 的 `--params` 生成 `signMessage`；缺参会报错，补全后重试；**Agent 从 CLI 输出的 JSON 中保存 `signMessage` 原文（禁止篡改）** |
 | **Step 3 方式 A** | 开发者回传 `Authorization` 头，或 `serial_no` + `timestamp` + `nonce_str` + `signature` |
@@ -160,7 +161,7 @@ Step 3：获取签名值
 拼接规则：
 
 | 参数 | Agent 如何填写 |
-|------|----------------|
+| ------ | ---------------- |
 | `--signString` / `-SignString` | Step 2 保存的 `signMessage` 原文（单引号包裹） |
 | `--filePath` / `-FilePath` | 占位路径 `/path/to/apiclient_cert.p12` 或 `C:\path\to\apiclient_cert.p12` |
 | `--password` / `-Password` | Step 1 的 `mchid`（merchant）或 `sp_mchid`（partner） |
@@ -186,7 +187,7 @@ powershell -ExecutionPolicy Bypass -File "<SKILL目录>\scripts\powershell\extra
 Agent 从开发者回传内容中，在 **「签名结果开始」与「签名结果结束」** 标识之间提取下列字段，供 Step 4 使用：
 
 | 终端行前缀 | 用途 |
-|------------|------|
+| ------------ | ------ |
 | `API 证书序列号（serial_no）:` | Step 4 `--serial_no` |
 | `时间戳（timestamp）:` | Step 4 `--timestamp` |
 | `随机串（nonce_str）:` | Step 4 `--nonce_str` |

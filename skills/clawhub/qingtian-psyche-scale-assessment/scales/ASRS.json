@@ -1,0 +1,224 @@
+{
+  "id": "ASRS",
+  "name": "成人 ADHD 自评量表（ASRS v1.1 筛查部分）",
+  "short_name": "ASRS 注意缺陷筛查",
+  "category": "注意缺陷",
+  "target_population": "成年人（18岁+）",
+  "estimated_time": "约 1 分钟",
+  "item_count": 6,
+  "description": "WHO 成人 ADHD 自评量表的 6 题筛查部分（Part A）。统计得分≥3（经常/非常经常）的题数，≥4 题提示需进一步评估。",
+  "source": "Kessler et al., 2005（WHO ASRS v1.1）",
+  "license": "公共领域（WHO）",
+  "scoring_type": "sum",
+  "items": [
+    {
+      "id": "q1",
+      "text": "你怎么经常在做事情或活动时犯粗心错误、不注意细节？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "非常经常",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "你怎么经常难以把注意力维持在需要完成的任务上？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "非常经常",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "你怎么经常在别人直接对你说话时，显得没在听？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "非常经常",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "你怎么经常不按指示把事情做到底？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "非常经常",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q5",
+      "text": "你怎么经常难以组织需要完成的任务？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "非常经常",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q6",
+      "text": "你怎么经常回避或不喜欢需要持续脑力劳动的任务？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "非常经常",
+          "score": 4
+        }
+      ]
+    }
+  ],
+  "dimensions": [
+    {
+      "name": "筛查总分",
+      "items": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6"
+      ],
+      "max": 24,
+      "min": 0
+    }
+  ],
+  "standard_score": null,
+  "interpretation": {
+    "bands": [
+      {
+        "dimension": "筛查总分",
+        "min": 0,
+        "max": 11,
+        "level": "阴性（低风险）",
+        "summary": "筛查阳性题数不足，暂无明显 ADHD 倾向。",
+        "advice": "如仍有困扰可观察；本筛查不能替代诊断。"
+      },
+      {
+        "dimension": "筛查总分",
+        "min": 12,
+        "max": 24,
+        "level": "阳性提示",
+        "summary": "较多题目达到「经常/非常经常」，提示可能存在注意缺陷/多动倾向。",
+        "advice": "建议到精神科/心理科做专业 ADHD 评估，本筛查仅作初筛。"
+      }
+    ]
+  },
+  "safety": {
+    "crisis_items": [],
+    "crisis_rule": "",
+    "high_risk_rule": ""
+  }
+}

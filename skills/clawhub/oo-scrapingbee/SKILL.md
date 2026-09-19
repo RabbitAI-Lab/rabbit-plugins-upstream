@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "ScrapingBee"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["scrapingbee"]
   icon: "https://static.oomol.com/logo/third-party/Scrapingbee.svg"
 ---

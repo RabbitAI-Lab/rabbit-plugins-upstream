@@ -1,45 +1,59 @@
-## Description: <br>
-Svix helps agents read, create, update, and delete Svix data through an OOMOL-connected account using the oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Svix through an OOMOL-connected account to inspect schemas and manage applications, endpoints, event types, and messages with the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Svix applications, endpoints, event types, and messages from an agent workflow. It supports read operations as well as confirmed write and destructive actions against a connected Svix account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected account and sensitive credentials are injected server-side. <br>
-Mitigation: Use it only in environments where the OOMOL account and Svix connection are approved, and avoid exposing raw credentials in prompts, files, or logs. <br>
-Risk: Write actions can create or update Svix applications, endpoints, event types, and messages. <br>
-Mitigation: Fetch the live action schema first, review the exact JSON payload and expected effect, and obtain user confirmation before running write actions. <br>
-Risk: Destructive actions can delete Svix applications or endpoints. <br>
-Mitigation: Confirm the target application or endpoint identifier explicitly with the user before running destructive commands. <br>
+## Use Case:
 
+Developers and operators use this skill to work with Svix webhook infrastructure from an agent session, including reading account data, creating or updating resources, and dispatching messages after inspecting live action schemas.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-svix) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Svix Homepage](https://www.svix.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before running actions and returns connector responses as JSON when commands are executed with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup may encourage piping a remote installer response directly into Bash or PowerShell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path first and prefer a verified, versioned package or inspected installer before installing the oo CLI.
+
+Risk: Write and destructive Svix actions can create, update, dispatch, or delete webhook resources.
+
+Mitigation: Require the agent to show the exact action, target, and JSON payload, then get explicit user approval before write or destructive execution.
+
+## Reference(s):
+
+- [ClawHub Svix skill page](https://clawhub.ai/oomol/skills/oo-svix)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Svix homepage](https://www.svix.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Svix connection setup](https://console.oomol.com/app-connections?provider=svix)
+- [OOMOL billing recharge](https://console.oomol.com/billing/token-recharge)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill directs the agent to inspect live connector schemas before constructing request payloads and to confirm write or destructive actions with the user.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

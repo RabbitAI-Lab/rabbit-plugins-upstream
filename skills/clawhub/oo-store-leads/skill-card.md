@@ -1,43 +1,56 @@
-## Description: <br>
-Store Leads helps agents search and read Store Leads data for ecommerce apps, domains, and detected technologies through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Store Leads helps agents search and read Store Leads ecommerce app, domain, and technology data through the OOMOL Store Leads connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to retrieve Store Leads intelligence for ecommerce apps, domains, and technologies without handling raw Store Leads API tokens directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may rely on OOMOL as a broker for Store Leads access without intending that setup. <br>
-Mitigation: Confirm comfort with OOMOL-brokered Store Leads access before installing the CLI or connecting an account. <br>
-Risk: Future connector actions could modify data if write or destructive capabilities are added. <br>
-Mitigation: Review connector action payloads and confirm user intent before running any action that changes Store Leads state. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve Store Leads details for ecommerce apps, domains, and technologies, and to list those resources with supported filters and pagination.
 
-## Reference(s): <br>
-- [Store Leads homepage](https://storeleads.app) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Store Leads skill on ClawHub](https://clawhub.ai/oomol/skills/oo-store-leads) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution; Store Leads responses are returned as JSON by the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Remote installer commands can execute code on the user's machine during first-time setup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the official installer instructions, prefer a package manager or verified release when available, and avoid running remote install commands automatically or from an elevated shell.
+
+Risk: The skill depends on OOMOL account authentication and an active Store Leads connection.
+
+Mitigation: Run authentication or connection setup only after a command fails for that reason, and rely on the OOMOL connection flow rather than handling raw Store Leads credentials.
+
+## Reference(s):
+
+- [ClawHub Store Leads skill page](https://clawhub.ai/oomol/skills/oo-store-leads)
+- [Store Leads homepage](https://storeleads.app)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON response guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId when actions run successfully.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence and SKILL.md frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

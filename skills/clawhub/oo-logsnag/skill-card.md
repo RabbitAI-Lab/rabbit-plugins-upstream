@@ -1,43 +1,59 @@
-## Description: <br>
-LogSnag helps agents operate LogSnag through an OOMOL-connected account using the oo CLI for events, insights, and user profile updates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+LogSnag (logsnag.com). Use this skill for ANY LogSnag request - reading, creating, and updating data. Whenever a task involves LogSnag, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and teams managing LogSnag use this skill to publish project events and insight values, update user profiles, and mutate numeric insights through schema-checked oo CLI actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Some state-changing LogSnag actions may not be clearly labeled as requiring confirmation. <br>
-Mitigation: Require explicit user confirmation for identify_user, mutate_insight, publish_event, and publish_insight after reviewing the exact payload and expected effect. <br>
-Risk: First-time setup may install or authenticate the oo CLI before the user actually needs it. <br>
-Mitigation: Only run first-time setup after an auth, connection, or missing-command failure, and verify the oo CLI installer before use. <br>
+## Use Case:
 
+Developers and external users use this skill to operate LogSnag through an OOMOL-connected account, including inspecting live action schemas, updating user properties, publishing project events, and publishing or mutating real-time insight values.
 
-## Reference(s): <br>
-- [LogSnag homepage](https://logsnag.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub LogSnag skill page](https://clawhub.ai/oomol/skills/oo-logsnag) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance with inline bash commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId; state-changing actions should be confirmed with the user before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill can change LogSnag data, including user properties, project events, and insight values.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact payload and effect with the user before running identify_user, mutate_insight, publish_event, or publish_insight.
+
+Risk: The setup guidance includes remote installer commands that could be unsafe if run blindly.
+
+Mitigation: Install the oo CLI through a verified method and avoid executing shell-piped installers without review.
+
+Risk: The agent operates a connected LogSnag account through OOMOL.
+
+Mitigation: Use a least-privilege LogSnag connection where possible and install only when account-level access through OOMOL is acceptable.
+
+## Reference(s):
+
+- [LogSnag homepage](https://logsnag.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing LogSnag requests.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

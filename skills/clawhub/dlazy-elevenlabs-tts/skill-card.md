@@ -1,45 +1,63 @@
-## Description: <br>
-Generates ElevenLabs eleven_v3 text-to-speech through the dLazy CLI with curated multilingual voices and stability, similarity, and style controls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+语音合成 ElevenLabs TTS helps agents call the dLazy ElevenLabs TTS CLI to generate speech from prompts with curated multilingual voices and stability, similarity, and style controls.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and content creators use this skill to ask an agent to run dLazy's ElevenLabs text-to-speech command, select a supported voice, and receive a generated output URL or asynchronous task result. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompt text and selected parameters are sent to dLazy's hosted API for generation. <br>
-Mitigation: Avoid sending sensitive or regulated content unless the user is comfortable with dLazy handling it. <br>
-Risk: The default login flow stores a dLazy API key in the local CLI configuration. <br>
-Mitigation: Use npx @dlazy/cli@1.2.3 or the DLAZY_API_KEY environment variable when less local persistence is preferred. <br>
-Risk: Generated files are hosted by dLazy and returned as external URLs. <br>
-Mitigation: Review sharing, retention, and access expectations before using generated outputs in sensitive workflows. <br>
+## Use Case:
 
+External users, developers, and agents use this skill to create multilingual text-to-speech audio for dubbing, audiobooks, and character dialogue through the dLazy-hosted ElevenLabs TTS service.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-tts) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; results may include hosted file URLs or asynchronous task IDs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: release metadata and SKILL.md frontmatter) <br>
+Risk: Prompts and selected TTS options are sent to a third-party cloud API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review prompt sensitivity before use and avoid submitting confidential or regulated content unless the dLazy service is approved for that data.
+
+Risk: Authentication stores a dLazy API key in local CLI configuration or accepts it through an environment variable.
+
+Mitigation: Protect the local config file, prefer scoped keys, and rotate or revoke keys from the dLazy dashboard when access changes.
+
+Risk: The skill depends on a third-party npm CLI and hosted service endpoints.
+
+Mitigation: Review the pinned @dlazy/cli package before installation and confirm expected communication with api.dlazy.com and files.dlazy.com.
+
+Risk: The documentation includes a copied media-output example that shows image output for a speech tool.
+
+Mitigation: Validate actual dlazy elevenlabs-tts help and runtime output before integrating the skill into automated workflows.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-tts)
+- [dLazy CLI metadata link](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, JSON, Files, Guidance]
+
+**Output Format:** [CLI JSON result with generated asset URLs or async task status; the --save option can write the generated asset to a local file.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a dLazy API key and network access to dLazy API and file-hosting endpoints.]
+
+## Skill Version(s):
+
+1.3.16 (source: server release metadata; artifact frontmatter says 1.3.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

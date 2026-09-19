@@ -1,44 +1,57 @@
-## Description: <br>
-Smartsheet lets agents read, create, update, and delete Smartsheet data through an OOMOL-connected account instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for Smartsheet requests to read, create, update, and delete data through an OOMOL-connected Smartsheet account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate sheets available to an OOMOL-connected Smartsheet account, including listing sheets, retrieving sheet data, and adding, updating, or deleting rows after confirming write or destructive payloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access Smartsheet data available to the connected OOMOL account. <br>
-Mitigation: Install and use it only when that account's Smartsheet access is appropriate for the task. <br>
-Risk: Add, update, and delete actions can change or remove sheet data. <br>
-Mitigation: Review the exact payload and expected effect, and get explicit approval before write or destructive actions. <br>
-Risk: First-time setup or login steps can change authentication or connection state. <br>
-Mitigation: Run install, login, or connection steps only when a command fails for the matching setup reason. <br>
+## Use Case:
 
+Employees, external users, and developers use this skill to let an agent operate Smartsheet sheets through an OOMOL-connected account, including listing sheets, reading sheet data, and adding, updating, or deleting rows with confirmation safeguards.
 
-## Reference(s): <br>
-- [ClawHub Smartsheet Skill Page](https://clawhub.ai/oomol/skills/oo-smartsheet) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Smartsheet](https://www.smartsheet.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline oo CLI commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce Smartsheet row and column data, execution metadata, and proposed write or delete payloads for review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata, skill metadata) <br>
+Risk: First-time setup includes remote installer commands that pipe downloaded scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run those installer commands automatically; install the oo CLI through a verified, pinned, or otherwise trusted method.
+
+Risk: The skill can add, update, and delete Smartsheet rows through an authenticated account.
+
+Mitigation: Confirm every write or delete operation against the exact sheet, row target, and JSON payload before execution.
+
+## Reference(s):
+
+- [ClawHub Smartsheet skill page](https://clawhub.ai/oomol/skills/oo-smartsheet)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Smartsheet homepage](https://www.smartsheet.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the oo CLI and JSON action payloads; state-changing Smartsheet actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

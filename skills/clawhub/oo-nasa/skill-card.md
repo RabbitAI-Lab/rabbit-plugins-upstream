@@ -1,45 +1,60 @@
-## Description: <br>
-NASA (nasa.gov). Use this skill for ANY NASA request — searching and reading data. Whenever a task involves NASA, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+NASA (nasa.gov). Use this skill for any NASA request involving searching, reading, or retrieving NASA data through the OOMOL NASA connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to query NASA data through the OOMOL-connected NASA service, including Astronomy Picture of the Day, near-Earth object data, EPIC imagery metadata, and DONKI space weather datasets. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive credentials through the OOMOL-connected NASA service. <br>
-Mitigation: Use the server-side credential flow and avoid exposing raw tokens in prompts, shell history, or generated files. <br>
-Risk: The security summary notes that scanner and telemetry evidence are clean but deeper validation was limited by artifact availability. <br>
-Mitigation: Review the visible skill instructions and requested permissions before installation or production use. <br>
-Risk: Connector schemas can change over time, which may make stale payloads fail or produce unexpected results. <br>
-Mitigation: Inspect the live action schema with `oo connector schema` before constructing each action payload. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve NASA data through OOMOL, including Astronomy Picture of the Day metadata, near-Earth object data, DONKI space-weather events, and EPIC imagery metadata.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-nasa) <br>
-- [NASA homepage](https://www.nasa.gov) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return JSON data from NASA connector actions via the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill frontmatter) <br>
+Risk: NASA-related requests are handled through OOMOL rather than only by NASA.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when routing NASA query payloads through OOMOL is acceptable for the user and organization.
+
+Risk: The artifact documents one-line installer commands that execute network-fetched scripts.
+
+Mitigation: Prefer a verifiable installation method and review installer contents before execution.
+
+Risk: Connector payloads can be malformed or out of date if the live action contract is skipped.
+
+Mitigation: Inspect the live action schema before constructing each connector payload.
+
+## Reference(s):
+
+- [ClawHub NASA skill page](https://clawhub.ai/oomol/skills/oo-nasa)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [NASA homepage](https://www.nasa.gov)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live action schemas before running connector actions; responses include data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

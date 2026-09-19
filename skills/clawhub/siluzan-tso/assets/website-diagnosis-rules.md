@@ -104,4 +104,4 @@
 2. **推荐**先跑 `website-diagnosis prepare --collect …`，在脚手架上只改 `needsAgent=true` 项。
 3. `dataAvailability.unavailableItemIds`（常见：`m2i1`、`m5i1`）→ `status=Absent`、`score=0`，**禁止**编造 Lighthouse 分；**禁止**无证据勾选 `ci4`。
 4. 每条 `issue` 尽量引用 signals 字段（如「signals.hasForm=false」）；`suggestion` 须含可执行动作与页面位置，禁止空话「建议优化体验」。
-5. 默认仅 `htmlPreview`（8KB）时信号可能不全 → collect 加 `--include-html`。
+5. 表单/导航等结构信号来自 collect 的完整 HTML；`htmlPreview`（8KB）仅供人眼扫一眼，**禁止**用 preview 判断有无表单。`--include-html` 只影响落盘体积。

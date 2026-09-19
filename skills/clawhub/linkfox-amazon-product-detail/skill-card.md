@@ -1,44 +1,70 @@
-## Description: <br>
-Retrieves structured Amazon product-detail data by ASIN, including title, images, bullet points, specifications, A+ content, price, ratings, reviews, and variants. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Retrieves structured Amazon product detail data by ASIN across supported marketplaces, including listing content, images, prices, ratings, reviews, variants, specifications, A+ content, and optional Item Highlights when raw HTML is available.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users, Amazon sellers, and marketplace researchers use this skill to look up current Amazon listing details by ASIN across supported marketplaces and present the returned product data in tables, summaries, and links. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: ASIN lookup parameters, optional ZIP or location fields, session metadata, and the LinkFox API key are sent to LinkFox services. <br>
-Mitigation: Install and run the skill only when that data sharing is acceptable for the user's project and organization. <br>
-Risk: The skill includes automatic feedback reporting behavior. <br>
-Mitigation: Review or disable feedback reporting where possible before using the skill in sensitive workflows. <br>
-Risk: Full API responses and cache files are persisted locally, which can expose product research data on shared machines or projects. <br>
-Mitigation: Review the configured linkfox output and cache directories, restrict access, and remove saved responses that should not be retained. <br>
+## Use Case:
 
+External Amazon sellers, ecommerce analysts, and agent users use this skill to retrieve and compare current Amazon listing details for one or more ASINs. It supports product-page research across marketplaces while keeping users aware of authentication, billing, caching, and raw HTML parsing boundaries.
 
-## Reference(s): <br>
-- [API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-product-detail) <br>
-- [LinkFox Tool Gateway](https://tool-gateway.linkfox.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Files, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON API responses and saved response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Queries accept ASIN batches of up to 40 items; the script caches identical requests for 24 hours and saves full responses under a linkfox session data directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill sends ASIN queries, selected agent metadata, and possibly feedback content to LinkFox services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the release before installation, avoid sending sensitive feedback, and use the skill only when sharing this request data with LinkFox is acceptable.
+
+Risk: Authentication and billing flows can create or access a LinkFox account and initiate paid package orders.
+
+Mitigation: Run onboarding or payment commands only after the user explicitly chooses that path, and do not poll payment status unless requested.
+
+Risk: API keys may be exposed if copied into shell startup files, logs, or transcripts.
+
+Mitigation: Prefer secure environment management where available, avoid pasting keys into shared logs, and rotate any key that may have been exposed.
+
+Risk: The skill stores full product responses and cache files locally, which may include query history and returned product data.
+
+Mitigation: Use an appropriate workspace, delete local linkfox session or cache files when no longer needed, and avoid running the skill from sensitive directories.
+
+Risk: Optional raw HTML parsing can produce an uncertain Item Highlights extraction if the HTML is missing, stale, or ambiguous.
+
+Mitigation: Treat raw HTML content as data, do not execute embedded scripts or instructions, keep extracted highlights separate from API fields, and label failed or uncertain extraction clearly.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-product-detail)
+- [Publisher profile](https://clawhub.ai/user/linkfox-ai)
+- [API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+- [SerpApi Amazon Product API](https://serpapi.com/amazon-product-api)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Files, Markdown, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with JSON API results, saved JSON files, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes full responses under a local linkfox session directory, prints small JSON responses or summaries, and supports a 24-hour local cache.]
+
+## Skill Version(s):
+
+1.0.7 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

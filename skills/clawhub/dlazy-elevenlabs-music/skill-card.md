@@ -1,46 +1,65 @@
-## Description: <br>
-ElevenLabs music_v1 generates 10-300 second original music from a natural-language prompt for background music, ads, and short-video soundtracks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ElevenLabs music_v1 generates 10-300 second original music from a natural-language prompt for background music, ads, and short-video soundtracks.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to invoke the dLazy ElevenLabs music generator from an agent workflow and receive generated media URLs or asynchronous task identifiers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and explicitly referenced media files are sent to the dLazy hosted service and generated outputs are hosted on files.dlazy.com. <br>
-Mitigation: Use only prompts and media appropriate for third-party cloud processing, and review dLazy service terms before use. <br>
-Risk: The CLI can persist a dLazy API key in a local config file. <br>
-Mitigation: Use npx or DLAZY_API_KEY for less persistent setup when appropriate, and rotate or revoke keys from the dLazy dashboard if exposure is suspected. <br>
-Risk: Generation consumes dLazy account credits and may fail when the account has insufficient balance. <br>
-Mitigation: Use the dry-run option for cost estimates where possible and confirm available credits before long or repeated generations. <br>
+## Use Case:
 
+Creators, developers, and agents use this skill to request original music from the ElevenLabs music_v1 model through the dLazy CLI and retrieve generated results for media workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-music) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy API key dashboard](https://dlazy.com/dashboard/organization/api-key) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Shell command guidance and JSON responses containing generated media URLs or async task metadata] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires npm or npx, a dLazy API key, and a pinned @dlazy/cli version 1.2.3; generated outputs are hosted on files.dlazy.com.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: SKILL.md frontmatter and release evidence) <br>
+Risk: The skill installs and invokes a third-party npm CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the package source and pin before installing or run it on demand with npx where appropriate.
+
+Risk: Prompts and generation parameters are sent to dLazy cloud services and generated files are hosted on files.dlazy.com.
+
+Mitigation: Avoid submitting sensitive prompts or media unless that data handling is acceptable for the intended use.
+
+Risk: The dLazy API key may be saved in local CLI configuration.
+
+Mitigation: Use OS account protections, rotate or revoke keys from the dLazy dashboard, or pass DLAZY_API_KEY per invocation when persistent storage is not desired.
+
+Risk: The artifact examples describe image/png output even though the skill is for music generation.
+
+Mitigation: Treat media examples as documentation issues and verify actual audio outputs during acceptance testing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-music)
+- [Publisher profile](https://clawhub.ai/user/dlazyai)
+- [dLazy CLI homepage](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON, Files]
+
+**Output Format:** [Markdown instructions with CLI commands and JSON result examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can return a generated result URL, an asynchronous task identifier, or save the generated asset to a local path when requested.]
+
+## Skill Version(s):
+
+1.3.16 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

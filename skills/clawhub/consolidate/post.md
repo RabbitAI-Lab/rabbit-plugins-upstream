@@ -27,9 +27,10 @@ If `--interactive` is off, proceed directly to medium decision + POST (determini
 
 ```markdown
 ## AI Review Summary — [receiving-code-review](https://skills.sh/obra/superpowers/receiving-code-review)
+<!-- consolidate:verified -->
 ```
 
-Plain `## AI Review Summary` is forbidden. The link form above is required.
+Plain `## AI Review Summary` is forbidden. The link form above is required. The `<!-- consolidate:verified -->` HTML comment on the second line is an invisible machine-readable provenance marker: it renders as nothing on GitHub but lets the `block-noncompliant-review-comment` guard (client hook + server Action) confirm the comment came through consolidate even if the `receiving-code-review` link text is ever reworded.
 
 **Caller retitle does NOT touch this Summary title (HARD STOP)**: a caller "rename the review → X" instruction scopes to the **Code Review comment** (Step 3.5.3 / `internal.md` "Caller-supplied custom title contract") — NEVER this Summary. The Summary heading stays `## AI Review Summary — [receiving-code-review](...)`. The two comments must not share the "Summary" token: the Code Review comment's heading must contain **no** "Summary" (e.g. `## Code Review — [requesting-code-review](...)`), this Summary comment owns "Summary" exclusively.
 
@@ -102,7 +103,26 @@ Self-check (before posting a new Step 7 Summary comment):
 2. If yes, does an Internal Code Review also already exist? — same query for `## Internal Code Review`
 3. If both exist and the Summary's `created_at` precedes the Internal Review's `created_at` → **order is reversed**. Apply the PATCH-swap damage control. Do not create a third comment
 
+### Mechanical Verification Gate (HARD STOP — verify_consolidate.py)
+
+**After posting or updating consolidation comments (or before marking consolidation complete), running `python3 skills/consolidate/scripts/verify_consolidate.py --pr <NUMBER>` is MANDATORY.**
+
+This script deterministically verifies:
+1. **Chronological order**: Internal Code Review comment created_at precedes AI Review Summary.
+2. **Reviewer count accuracy**: Every active reviewer in `pulls/<N>/comments` (Copilot, CodeRabbit) has exact matching comment counts in the Reviewer Matrix.
+3. **Table row completeness (1:1)**: Total table rows in `Consolidated Findings` equals sum of external inline comments + superpowers internal findings (no dropped or compressed rows).
+4. **Superpowers inclusion**: Internal Code Review findings are physically included in the Consolidated Findings table.
+5. **SHA validation**: Every commit SHA referenced is verified with `git cat-file -e <sha>` (zero SHA hallucinations).
+6. **Role isolation**: Internal Code Review contains zero echoes/reviews of external tools.
+7. **Merge format**: Recommendation specifies `/github-flow merge <N>` (never raw `gh pr merge`).
+
+```bash
+python3 skills/consolidate/scripts/verify_consolidate.py --pr <NUMBER>
+```
+If the script exits with non-zero, the consolidation is **INVALID and INCOMPLETE**. All errors must be corrected via PATCH before proceeding.
+
 ### Medium selection — Mergeable + Formal Review action → unified POST (HARD STOP — 2026-05-22 reinforcement)
+
 
 The Summary body and the Formal Review body carry the **same verdict information** for Mergeable PRs. Posting them as separate media (issue comment + Formal Review) duplicates content. **When all of the following hold, Summary is posted as the Formal Review body (single POST). Issue comment Summary is forbidden:**
 
@@ -212,6 +232,22 @@ Full conditions:
 
 **Resolving deployment-required verification items**: If the Test Plan has "post-deployment verification" items, pre-verify on a legacy/staging environment using the feature branch image. Since this is verifiable without master merge, do not record "post-deployment verification required" as a merge-blocking reason.
 
+### Fact-verification before POST — no fabricated SHA / inflated reviewer count (HARD STOP)
+
+Every verifiable specific written into a Summary or Internal Code Review is an audit-trail claim a merge is read against. Confirm each against a primary source before POST — never invent precise-looking detail:
+
+1. **Cited commit SHAs must exist.** For every `commit <sha>` in the body, run `git cat-file -e <sha>^{commit}` (in a checkout of the target repo) or `gh api repos/<owner>/<repo>/commits/<sha>`. Remove or correct any that 404.
+2. **External-reviewer finding counts must reconcile with the source.** A "Copilot: N findings" claim must equal `gh api repos/<owner>/<repo>/pulls/<PR>/comments --jq '[.[] | select(.user.login | test("copilot"; "i"))] | length'` (a case-insensitive contains-match is robust across the inline-comment surface login `Copilot` and the review-author `copilot-pull-request-reviewer[bot]`). Never label an internal-reviewer finding as `copilot`; internal output is sourced `Internal Code Review`.
+3. **Line numbers and test counts come from real output, not memory.** If a count is unconfirmable, write a verifiable level ("CI green") instead of a fabricated number.
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Cite `commit <sha>` from memory or a plausible guess | Resolve each SHA (`git cat-file -e` / `gh api commits`) before writing it; drop any that 404 |
+| 2 | Label a finding `copilot` when Copilot did not raise it, or claim more Copilot findings than exist | Reconcile the count against `pulls/<PR>/comments`; source internal-only findings as `Internal Code Review` |
+| 3 | Invent line numbers or "N/N tests" precision | Copy line numbers and test counts from the actual review/run output; otherwise write "CI green" |
+
+The `block-summary-fabricated-claims` guard (PreToolUse hook) enforces 1 and 2 mechanically: a consolidate-provenance POST citing a nonexistent SHA, or claiming more Copilot findings than the PR actually has, is denied at source. It fails open on any ambiguity (no `gh` / offline / unreadable body / a SHA on an unfetched branch — use `ALLOW_SUMMARY_FABRICATED_CLAIMS=1` per-command in the last case), so the discipline above is the primary defense and the hook is the backstop.
+
 When unmet, write `Actionable Items PENDING fix.` in the Summary + state the unmet conditions. **Do not ask "shall we merge?"**
 
 If all conditions met, evaluate the PR's commit history (`gh pr view NUMBER --commits`) **AND the PR's stated intent (description/body, checklist referenced)** to recommend a merge strategy:
@@ -277,6 +313,8 @@ If all conditions met, evaluate the PR's commit history (`gh pr view NUMBER --co
 
 > [!IMPORTANT]
 > **Prohibit Using Verified Status (HARD STOP)**: Never use `Verified` as a status for valid findings. Valid findings must be marked as `🔴 Pending` from the beginning if they are inside the diff (awaiting fix), or `🟡 Deferred (author follow-up)` if they are outside the diff (postponed).
+>
+> Enforced mechanically by `resources/block-summary-status-vocab.py` (PreToolUse:Bash, blocks the POST) and by `scripts/verify_consolidate.py` check 11 (blocks completion). Prose alone did not hold — this rule was violated four times while it already existed.
 
 **The fix_plan tracking tags are for Step 7.6 deferred registration only (when writing entries inside fix_plan.md's Hold section)**. Carrying the same tag into the Summary body Status column leaves the GitHub reader with no meaning (zero readability).
 
@@ -287,6 +325,8 @@ If all conditions met, evaluate the PR's commit history (`gh pr view NUMBER --co
 | 3 | "Same tag is convenient since it's registered in fix_plan anyway" reasoning | fix_plan deferred entry (Step 7.6) ≠ Summary Status (Step 7). Different medium → separate notation |
 | 4 | Mirroring the same tag in both Summary and fix_plan as a cross-link attempt | Cross-link by citing the fix_plan section URL / entry from the Summary body (when needed). Do not mirror the tag |
 | 5 | Realizing only after the user points out the readability issue that a fix_plan tag like "[REVIEW_FEEDBACK]" appeared in the response | Run the self-check below every time before drafting the Summary |
+| 6 | Promoting `classify.md` Step 4-0's **validity verdict** (`✅ VALID` / `⚪ REJECTED`) — or the `receiving-code-review` accept/reject frame it comes from — into this Status column | They are separate axes. Validity asks *is this finding correct*; Status encodes *does it block merge*. A finding can be perfectly valid and still be `🔴 Pending`. Keep the validity judgement in an evidence/verification column, never in Status |
+| 7 | Renaming the column itself (`Verdict`, `Verdict + verification`, `Assessment`, …) so a non-contract value "fits" | The column name is fixed to `Status`. Renaming it is how the judgement frame leaks in — and because the merge recommendation is derived FROM this column, a renamed column silently zeroes the `🔴 Pending` count and flips the conclusion to "no merge blocker" |
 
 **Self-check (every time before POSTing the Summary)**:
 
@@ -296,6 +336,9 @@ If all conditions met, evaluate the PR's commit history (`gh pr view NUMBER --co
    - `[BLOCKED]` → `🔴 Pending — <blocker reason>` or `🟡 Deferred — <reason>`
    - `[DEFERRED]` → `🟢 Deferred (no action)` or `🟡 Deferred (author follow-up)`
 3. Re-grep after replacement — confirm zero matches before POST
+4. Confirm the column is literally named `Status` — not `Verdict` or any variant
+5. Confirm every Status cell matches one of the five allowed values above. Words carried over from the validity axis (`VALID`, `Accept`, `Verified`, `Unverified`, `Out of scope`) are the recurring failure — this class has shipped four times
+6. Cross-check the conclusion against the column: any `🔴 Pending` present ⇒ the recommendation must be Hold. If you wrote "no merge blocker" while Pending rows exist, one of the two is wrong
 
 ### Conclusion line emoji rule (HARD STOP)
 
@@ -751,6 +794,13 @@ Among all actionable items from Step 4 classification:
 | Neither exists + no collaboration medium | AskUserQuestion | "Where to register?" options (new `.ralph/fix_plan.md` / new `checklist.md` / Issue / skip registration) |
 
 **Environment detection is workspace (CWD) based** — Do not confuse the project-subdirectory `.ralph/` with the workspace `.ralph/`.
+
+**Workspace ≠ the reviewed PR's own repo (HARD STOP)**: the tracking medium is always the **session's own workspace** file — the workspace consolidate is currently running in, not a directory inside the repo that owns the PR under review. When the PR belongs to a different repo than the current session's workspace (a common case for cross-repo consolidate runs), do NOT look for `checklist.md`/`fix_plan.md` inside a checkout of that repo — check the session workspace's own root first, even if it requires a separate `cd`/path lookup outside the PR's repo tree.
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | PR under review lives in repo A; look for `checklist.md`/`fix_plan.md` inside a local checkout of repo A, find none, and conclude "no tracking medium exists" | Check the session's own workspace root (e.g. `~/.agents/checklist.md` if that's where the session is running from) first — it applies regardless of which repo's PR is being reviewed |
+| 2 | Ask the user "GitHub Issue vs no tracking vs hold" as if no medium existed, when the session workspace already has a `checklist.md`/`fix_plan.md` | Register directly to the session workspace's existing medium — no ask needed once one exists |
 
 ### Registration procedure
 

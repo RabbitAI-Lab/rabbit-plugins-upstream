@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/flightaware-mcp",
   "slug": "flightaware-mcp",
   "ownerHandle": null,
-  "version": "0.3.2",
-  "updatedAt": 1784026594288,
-  "contentHash": "b6e7427a73b5cc88b663703dd8e82e6b908fb57b36060f8176a701dd5255aa79",
-  "fetchedAt": "2026-07-26T18:14:43.399Z"
+  "version": "1.0.0",
+  "updatedAt": 1789688245433,
+  "contentHash": "b66ecc052e2acc2b45b7ccb6e1158ce28e6f13d54ff810924aeb5929ef037dfe",
+  "fetchedAt": "2026-09-19T12:08:09.984Z"
 }

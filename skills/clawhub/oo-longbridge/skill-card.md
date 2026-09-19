@@ -1,45 +1,60 @@
-## Description: <br>
-Operates Longbridge through an OOMOL-connected account for market data, account data, rankings, news, filings, valuation, analyst ratings, financial reports, and related Longbridge connector actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Longbridge (longbridge.com) skill for reading, creating, and updating Longbridge data through the OOMOL-connected oo CLI instead of direct API calls.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to retrieve Longbridge market data, account balances, positions, orders, executions, cash flow, watchlists, portfolio analytics, news, filings, corporate actions, valuation data, analyst ratings, and financial reports through an OOMOL-connected Longbridge account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Longbridge account balances, positions, orders, executions, cash flow, and portfolio analytics can contain private financial data. <br>
-Mitigation: Retrieve only the specific records needed for the user's task and treat returned account data as private financial information. <br>
-Risk: One-time CLI installation, sign-in, or Longbridge connection steps may affect the user's local environment or account session. <br>
-Mitigation: Review the setup commands before allowing them and only run setup recovery after an auth, connection, scope, credential, or missing-command failure. <br>
-Risk: Actions tagged as write or destructive may change Longbridge state if invoked with an incorrect payload. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions, and require explicit approval for destructive actions. <br>
+## Use Case:
 
+Developers and agents supporting Longbridge users use this skill to inspect action schemas, retrieve market and account data, and run supported Longbridge connector actions with confirmation for state-changing operations.
 
-## Reference(s): <br>
-- [ClawHub Longbridge skill page](https://clawhub.ai/oomol/skills/oo-longbridge) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Longbridge homepage](https://longbridge.com) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before building action payloads and returns connector responses as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: skill metadata and server release metadata) <br>
+Risk: The first-time setup path includes shell and PowerShell commands that directly execute remote installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified installer when available, or inspect and verify the downloaded script before executing it.
+
+Risk: Longbridge account data is accessed through OOMOL as an intermediary.
+
+Mitigation: Install only when the user accepts OOMOL's role in handling connected Longbridge account access.
+
+Risk: Tagged write or destructive actions can change Longbridge state.
+
+Mitigation: Fetch the live schema, present the exact payload and expected effect, and obtain explicit user confirmation before execution.
+
+## Reference(s):
+
+- [ClawHub Longbridge skill page](https://clawhub.ai/oomol/skills/oo-longbridge)
+- [Longbridge homepage](https://longbridge.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads/responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live action schemas before constructing Longbridge connector payloads.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

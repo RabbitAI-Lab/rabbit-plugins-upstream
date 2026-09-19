@@ -1,54 +1,92 @@
-## Description: <br>
-LinkFox Amazon Product Selection helps agents research Amazon product opportunities across competitor lookup, keyword analysis, reviews, niche trends, historical product data, and market opportunity reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+亚马逊选品一站式 AI 工具集，整合竞品查询、ABA、前台、Keepa、Sorftime、Jungle Scout、卖家精灵、SIF、极目和商业洞察等工具，覆盖选品、关键词、竞品、评论、利基与趋势。
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and e-commerce researchers use this skill to investigate Amazon product selection, market demand, competitor positioning, keyword traffic, review themes, and niche opportunities. Agents can call the bundled scripts to retrieve LinkFox-backed research data and summarize it for product decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Authenticated network calls may send Amazon research queries, ASINs, keywords, uploaded images, and session metadata to the LinkFox gateway. <br>
-Mitigation: Use only in approved environments, keep API keys scoped, and avoid sending confidential product plans or sensitive media unless that data sharing is permitted. <br>
-Risk: The skill stores full API responses and cache files locally, which may include product research results or user-provided query details. <br>
-Mitigation: Run it from an approved workspace, review the generated linkfox output and cache directories, and clean or exclude them before sharing the workspace. <br>
-Risk: Artifact documentation references installing an external LinkFox onboarding companion skill. <br>
-Mitigation: Do not install or run the companion skill unless it has been separately reviewed and approved. <br>
-Risk: Market, keyword, review, and product data may be incomplete, stale, or source-dependent. <br>
-Mitigation: Treat outputs as decision support and verify important findings against source marketplaces or approved business data before acting commercially. <br>
+## Use Case:
 
+External sellers, e-commerce analysts, and agent users use this skill to gather Amazon product, keyword, competitor, review, niche, and trend data across supported marketplaces. It helps agents choose an appropriate LinkFox sub-capability, run the matching script, and summarize sourced product research results.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-product-selection) <br>
-- [Skill Definition](SKILL.md) <br>
-- [Amazon Search Reference](references/linkfox-amazon-search.md) <br>
-- [Amazon Product Detail Reference](references/linkfox-amazon-product-detail.md) <br>
-- [Amazon Reviews Reference](references/linkfox-amazon-reviews-list.md) <br>
-- [Amazon Opportunity Report Reference](references/linkfox-amazon-opportunity-report-by-keyword.md) <br>
-- [Keepa Product Request Reference](references/linkfox-keepa-product-request.md) <br>
-- [Jungle Scout Product Database Reference](references/linkfox-junglescout-product-database.md) <br>
-- [SellerSprite Product Search Reference](references/linkfox-sellersprite-product-search.md) <br>
-- [SIF Keyword Overview Reference](references/linkfox-sif-keyword-overview.md) <br>
-- [Jiimore Niche Info Reference](references/linkfox-jiimore-get-niche-info-by-keyword.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown summaries, shell commands, and JSON data files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts can write full API responses and cached results under a local linkfox workspace directory while printing either full JSON or a compact summary.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence) <br>
+Risk: The skill handles account credentials and configurable remote endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installation, keep LinkFox endpoint variables controlled by trusted users, and avoid custom gateway URLs unless the endpoint is trusted.
+
+Risk: Generated API keys and billing artifacts may expose account or payment information.
+
+Mitigation: Treat API keys as secrets, prefer a secret manager over shell-profile storage, and review payment or order QR files before sharing the workspace.
+
+Risk: Full API responses may be written under a local linkfox directory.
+
+Mitigation: Run the skill in a workspace with appropriate access controls and handle saved response files as potentially sensitive research data.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-product-selection)
+- [Main skill definition](artifact/SKILL.md)
+- [ABA Intelligent Query](artifact/references/linkfox-aba-intelligent-query.md)
+- [Amazon Alexa Shopping Assistant](artifact/references/linkfox-amazon-alexa-search.md)
+- [Amazon Market Opportunity Report](artifact/references/linkfox-amazon-opportunity-report-by-keyword.md)
+- [Amazon Opportunity Screener by Metrics](artifact/references/linkfox-amazon-opportunity-search-by-metrics.md)
+- [Amazon Product Detail Lookup](artifact/references/linkfox-amazon-product-detail.md)
+- [Amazon Product Reviews](artifact/references/linkfox-amazon-reviews-list.md)
+- [Amazon Search by Image](artifact/references/linkfox-amazon-search-by-image.md)
+- [Amazon Product Search](artifact/references/linkfox-amazon-search.md)
+- [Jiimore Niche Info by Keyword](artifact/references/linkfox-jiimore-get-niche-info-by-keyword.md)
+- [Jiimore Niche Market Info](artifact/references/linkfox-jiimore-get-niche-info.md)
+- [Jiimore Niche Review from Keyword](artifact/references/linkfox-jiimore-get-niche-review-from-keyword.md)
+- [Jiimore Page Asins By Asin](artifact/references/linkfox-jiimore-page-asins-by-asin.md)
+- [Jiimore Product Discovery](artifact/references/linkfox-jiimore-product-discovery.md)
+- [Jungle Scout Keyword by ASIN](artifact/references/linkfox-junglescout-keyword-by-asin.md)
+- [Jungle Scout Keyword by Keyword](artifact/references/linkfox-junglescout-keyword-by-keyword.md)
+- [Jungle Scout Keyword History](artifact/references/linkfox-junglescout-keyword-history.md)
+- [Jungle Scout Keyword Share of Voice](artifact/references/linkfox-junglescout-keyword-share-of-voice.md)
+- [Jungle Scout Product Database](artifact/references/linkfox-junglescout-product-database.md)
+- [Jungle Scout Sales Estimates](artifact/references/linkfox-junglescout-sales-estimates.md)
+- [Keepa Product Request](artifact/references/linkfox-keepa-product-request.md)
+- [Keepa Product Search](artifact/references/linkfox-keepa-product-search.md)
+- [Keepa Product Time-Series Data Explorer](artifact/references/linkfox-keepa-product-series.md)
+- [SellerSprite Competitor Lookup](artifact/references/linkfox-sellersprite-competitor-lookup.md)
+- [SellerSprite Market Research](artifact/references/linkfox-sellersprite-market-research.md)
+- [SellerSprite Market Statistics](artifact/references/linkfox-sellersprite-market-statistics.md)
+- [SellerSprite Product Search](artifact/references/linkfox-sellersprite-product-search.md)
+- [SellerSprite Traffic Keyword](artifact/references/linkfox-sellersprite-traffic-keyword.md)
+- [SIF ASIN Keyword Analysis](artifact/references/linkfox-sif-asin-keywords.md)
+- [SIF ASIN Summary](artifact/references/linkfox-sif-asin-summary.md)
+- [SIF Keyword Overview](artifact/references/linkfox-sif-keyword-overview.md)
+- [SIF Keyword Traffic Source Summary](artifact/references/linkfox-sif-keyword-summary.md)
+- [Sorftime Amazon Product Detail](artifact/references/linkfox-sorftime-amazon-product-detail.md)
+- [Sorftime Product Search](artifact/references/linkfox-sorftime-amazon-product-query.md)
+- [Authentication and billing onboarding](artifact/references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, JSON files, guidance]
+
+**Output Format:** [Markdown summaries with script commands and local JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts save full API responses under a local linkfox session data directory; small responses may print inline, while larger responses print summaries unless inline output is requested.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release metadata; artifact frontmatter says 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

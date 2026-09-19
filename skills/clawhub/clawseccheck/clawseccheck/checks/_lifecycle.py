@@ -7,8 +7,11 @@ from __future__ import annotations
 import os
 import re
 from pathlib import Path
+from typing import Callable
 from .. import attest as _attest
-from .. import trajectory as _trajectory  # B-294/B189: session pivot for erased cron jobs
+from .. import openclawdist as _openclawdist  # B-502: C4 single-run version-rollback signal
+from .. import trajectory as _trajectory  # B-294/B189: session pivot for erased cron jobs (JSONL sidecar)
+from .. import trajectorystore as _trajectorystore  # B-813: session pivot for erased cron jobs (SQLite store)
 from ..catalog import (
     BY_ID,
     FAIL,
@@ -19,15 +22,26 @@ from ..catalog import (
     Finding,
 )
 from ..collector import (
+    LIMIT_DOMAIN_APPROVALS,
+    LIMIT_DOMAIN_BOOTSTRAP,
+    LIMIT_DOMAIN_CONFIG,
     Context,
+    agent_roster,
     dig,
+    limit_hits_for,
 )
 from ..safeio import walk_dir_safely
+from .. import deptree as _deptree  # B349: bounded, read-only dependency-tree enumeration
+from ..skillast import analyze_javascript as _analyze_javascript
 from ..textnorm import (
+    confusable_in_ascii_context,  # B349: benign i18n vs homoglyph substitution
+    has_naked_bidi_override,  # C-515/B-766: Trojan-Source-style override, B58's sibling signal
     normalize_for_scan,
+    obfuscation_signals,
 )
 
 from ._content import (
+    _HOOK_MINIFIED_LINE,  # B349: B97's own "minified — unreadable" threshold, reused
     _B58_HTML_COMMENT_RE,
     _B64_HIGH_CONFIDENCE_RE,
     _b64_classify,
@@ -40,44 +54,30 @@ from ._content import (
 from . import _shared
 from ._shared import (
     INJECTION_PATTERNS,
+    NPM_DEPTREE_HOOK_COVERAGE_NOTE,
     OUTBOUND_TOOL_HINTS,
     SECRET_KEY_RE,
     _DESTRUCTIVE_HINTS,
     _HOOK_EXEC_RE,
+    _agents_without_exec_gate,
     _config_unreadable,
     _custom,
+    _detail_path,
     _enabled_tools,
+    _key_advice,
+    _openclaw_generation,
     _finding,
     _has_approval_gate,
     _hint,
     _mcp_servers,
     _read_jsonl_tail,
     _safe_mtime,
+    _skill_corpus_complete,
     _skill_frontmatter_block,
+    _surface_absent,
+    _workshop_symlink_knob,
 )
-
-
-def _detail_path(value, home) -> str:
-    """Render *value* for a ``Finding.detail``: relative to the audited home when it lies
-    inside it, with a single ``..`` segment when it lies under the home's parent (the
-    ``~`` slot of a real OpenClaw home, where ``.config/...`` lives). Anything else is
-    returned unchanged. A composite string that merely *starts* with such a path is
-    rewritten the same way, so a source label like ``<unit> (Environment=)`` still works.
-
-    ``baseline.fingerprint()`` hashes ``Finding.detail``, and a user's
-    ``.clawseccheckignore`` keys a per-finding suppression on that hash — so an absolute
-    scan-root path baked into a detail silently orphans that suppression the moment the
-    workspace or the scanned skill moves, and it leaks the reporter's directory layout
-    into any report they share. The audited root is printed once in the report header
-    instead. A path the CONFIG itself declares in absolute form is deliberately left
-    verbatim: that string is a function of the audited subject, so it belongs in the
-    finding's identity (and in the text, since it is what the owner has to go fix).
-    """
-    text = str(value)
-    for base, prefix in ((str(home), ""), (str(Path(home).parent), ".." + os.sep)):
-        if base and base != os.sep and text.startswith(base + os.sep):
-            return prefix + text[len(base) + 1:]
-    return text
+from ..invocation import command_prefix
 
 
 # ---------- B23: approval-bypass directives in bootstrap ----------
@@ -155,7 +155,31 @@ _IDENTITY_TARGETS = ("SOUL.md",)  # minimal — the single file that defines the
 #       (2026, 7, 0) instead PASSes the vulnerable "2026.7.1-2" (false negative).
 # Neither direction is expressible here: a correction-release boundary needs a comparator
 # change (e.g. a (base_tuple, correction_int) pair), not a new table row.
-_KNOWN_ADVISORIES: list[tuple[str, tuple[int, ...], str, str]] = [
+#
+# C-414: a row is 4 elements (id, max_vulnerable_version_tuple, fixed_version_str, title) —
+# version-only, matching on `parsed <= max_vuln` alone, exactly as every row below already
+# does — OR 5 elements, with a `condition: Callable[[dict], bool]` appended that takes
+# `ctx.config` and returns whether THIS host's config shape can actually reach the
+# defect. `check_known_vulns` treats a 4-tuple as `condition=None` (version-only,
+# unchanged), so EVERY EXISTING ROW BELOW IS LEFT AS A PLAIN 4-TUPLE — a config-
+# conditioned advisory only ever adds a 5th element to its OWN row, never pads the rest
+# of the table. A condition that raises is treated as unproven (the row does not match) —
+# never let a broken predicate manufacture a FAIL (Golden Rule #5).
+#
+# ⚠️ HARD SEQUENCING GATE — do not add a row (4- or 5-element) for an UNFIXED defect.
+# This repo is PUBLIC (GitHub + ClawHub). A row fingerprints a specific, already-PATCHED
+# version boundary; shipping one for a defect OpenClaw has not fixed yet publishes a
+# 0-day with a config-level PoC attached, and breaks the coordinated-disclosure process
+# this project committed to (epic E-073). Golden Rule #4 also forbids inventing an
+# advisory id — an undisclosed defect has none to cite. Order is mandatory every time:
+# privately disclose -> maintainer ships a fix -> a real version boundary + advisory id
+# exists -> THEN a row (with or without a condition) may be added. A config-conditioned
+# row is not exempt from this gate merely because it is more precise than a version-only
+# one — precision does not change what it discloses.
+_KNOWN_ADVISORIES: list[
+    tuple[str, tuple[int, ...], str, str]
+    | tuple[str, tuple[int, ...], str, str, Callable[[dict], bool]]
+] = [
     (
         "GHSA-g8p2-7wf7-98mq",
         (2026, 1, 28),
@@ -195,6 +219,14 @@ _KNOWN_ADVISORIES: list[tuple[str, tuple[int, ...], str, str]] = [
         "2026.2.14",
         "Unauthenticated discovery-beacon TXT records trusted for routing/TLS "
         "pinning, enabling LAN redirect + Gateway credential theft (CVE-2026-26327)",
+    ),
+    (
+        "CVE-2026-27488",
+        (2026, 2, 17),
+        "2026.2.19",
+        "Cron webhook delivery (server-cron.ts) called fetch() directly with no "
+        "SSRF policy checks (GHSA-w45g-5746-x9fp) — version-only, no config-field "
+        "surface to audit",
     ),
     (
         "CVE-2026-32045",
@@ -296,6 +328,13 @@ _KNOWN_ADVISORIES: list[tuple[str, tuple[int, ...], str, str]] = [
         "2026.5.18",
         "Paired nodes could forge exec lifecycle events without system.run "
         "provenance (CVE-2026-53816)",
+    ),
+    (
+        "CVE-2026-62223",
+        (2026, 5, 17),
+        "2026.5.18",
+        "device.pair approval feature allowed lower-trust callers to bypass "
+        "authorization checks (GHSA-hx85-fgcw-9vrc)",
     ),
     (
         "CVE-2026-62218",
@@ -419,12 +458,55 @@ def _writable_identity_files(ctx: Context) -> list[str]:
     and openclaw.json — so a user-private-group / umask-002 box never false-FAILs.
     """
     writable: list[str] = []
-    from ..collector import SKILL_DIRS, WORKSPACE_DIRS
+    from ..collector import (
+        SKILL_DIRS, WORKSPACE_DIRS, _config_workspace_dirs, _safe_is_dir,
+    )
+
+    # B-564: keep this re-scan in sync with B20's. B20 (check_bootstrap_write_protection)
+    # scans the hardcoded WORKSPACE_DIRS *plus* any `agents.defaults.workspace` /
+    # `agents.list[].workspace` the config declares *plus* the paths the agent attested,
+    # and its own B-161 comment states the rule: "Using the same helper keeps the two
+    # scans in sync." This function was never brought into sync with either extra source,
+    # so one run could report B20 FAIL on a world-writable SOUL.md and, about the same
+    # file, B22 "no group/world-writable identity/skill targets found" -- a check
+    # asserting a negative about a file its sibling had just convicted. B22 is HIGH and
+    # scored, so the contradiction reached the grade, not just the text.
+    # Label convention is B20's: the workspace dir's basename, never an absolute path.
+    scan_dirs = [(ws, ctx.home / ws) for ws in WORKSPACE_DIRS]
+    scan_dirs += [
+        (cw.name or "workspace", cw)
+        for cw in _config_workspace_dirs(ctx.home, ctx.config)
+    ]
+
+    # ONE resolved-path ledger for BOTH loops below (dirs and attested files). B20 keeps
+    # its own `seen` set for exactly this reason; the first cut of B-564 copied B20's
+    # attested loop and left its de-dup behind, which is not cosmetic: the rendered
+    # evidence is `"; ".join(writable[:6])`, so repeated entries push real ones out of
+    # the report. Attesting one SOUL.md eight times evicted a 777 skills/ dir and a 666
+    # openclaw.json -- the two most actionable items -- from a finding that still said
+    # WARN. `attestation.paths.bootstrap` is authored by the agent, so a prompt-injected
+    # one could aim that eviction; a symlink or attesting a file already inside a scanned
+    # workspace reaches the same state with no adversary at all.
+    seen: set = set()
+
+    def _first_time(path: Path) -> bool:
+        try:
+            key = path.resolve()
+        except OSError:
+            key = path
+        if key in seen:
+            return False
+        seen.add(key)
+        return True
 
     # Check SOUL.md (and the workspace dir that contains it)
-    for ws in WORKSPACE_DIRS:
-        ws_dir = ctx.home / ws
-        if not ws_dir.is_dir():
+    for ws, ws_dir in scan_dirs:
+        # B-303 via _safe_is_dir: a bare is_dir() raises PermissionError when the parent
+        # is non-traversable, and run_all would turn this HIGH scored check into a silent
+        # UNKNOWN -- a clean-looking degrade on a config we simply could not walk.
+        if not _safe_is_dir(ws_dir):
+            continue
+        if not _first_time(ws_dir):
             continue
         # Workspace dir itself writable-by-others gives write to all files inside
         try:
@@ -442,10 +524,33 @@ def _writable_identity_files(ctx: Context) -> list[str]:
                 continue
             try:
                 st = f.stat()
-                if _writable_by_others(st):
+                if _writable_by_others(st) and _first_time(f):
                     writable.append(f"{ws}/{fname} (mode {oct(st.st_mode & 0o777)[-3:]})")
             except OSError:
                 pass
+
+    # B-564: the paths the agent itself attested (`--ask` invites it to say where its
+    # identity/memory files REALLY live, at any path and any name). B20 already stat()s
+    # these; B22 did not, which is the reported half of this bug -- plant a world-writable
+    # SOUL.md outside every known workspace, attest it, and B20 named the file while B22
+    # said no such target existed. The engine still stat()s the file itself, so this stays
+    # an authoritative permission check rather than a self-report. Labelled by BASENAME,
+    # not the absolute path the attestation supplied: this string is rendered, and an
+    # absolute path carries the user's login name (§8).
+    for raw in _attest.attested_paths(ctx.attestation)["bootstrap"]:
+        f = Path(raw).expanduser()
+        if f.name not in _IDENTITY_TARGETS:
+            continue
+        try:
+            if not f.is_file():
+                continue
+            st = f.stat()
+        except OSError:
+            continue
+        if _writable_by_others(st) and _first_time(f):
+            writable.append(
+                f"{f.name} [attested] (mode {oct(st.st_mode & 0o777)[-3:]})"
+            )
 
     # Check the skills directories (writing here installs new skills)
     for rel in SKILL_DIRS:
@@ -638,11 +743,8 @@ def check_autonomy(ctx: Context) -> Finding:
     # heartbeat (top-level) and schedule do NOT exist in OpenClaw schema — removed
     has_heartbeat_cfg = bool(
         dig(cfg, "agents.defaults.heartbeat")
-        or any(
-            dig(agent, "heartbeat")
-            for agent in (dig(cfg, "agents.list") or [])
-            if isinstance(agent, dict)
-        )
+        # B-699: agents.entries as well as agents.list
+        or any(dig(agent.entry, "heartbeat") for agent in agent_roster(cfg))
         or dig(cfg, "cron")
     )
     autonomous = has_heartbeat_file or has_heartbeat_cfg
@@ -672,9 +774,9 @@ def check_autonomy(ctx: Context) -> Finding:
             WARN,
             "Agent runs autonomously (heartbeat) and can take outbound actions — "
             "ensure it cannot act on untrusted input without approval.",
-            "Add an approval gate (tools.exec.mode='ask' or tools.exec.security='ask') "
-            "for all outbound/exec actions triggered by heartbeat tasks; validate any "
-            "external content before acting on it.",
+            "Add an approval gate (tools.exec.mode='ask', or tools.exec.ask='always' to "
+            "be asked before every one) for all outbound/exec actions triggered by "
+            "heartbeat tasks; validate any external content before acting on it.",
         )
     return _finding(
         "B17",
@@ -686,12 +788,144 @@ def check_autonomy(ctx: Context) -> Finding:
 
 
 # ---------- C3: backups of SOUL.md / memory (advisory) ----------
+# B-517: the credit rule below is deliberately narrow. Before this fix ANY file ending
+# `.bak`/`.backup`, or any file whose parent dir *name* merely contained "backup", credited
+# the check — so a plain config backup (openclaw.json.bak) PASSed a question that is
+# actually about SOUL.md/MEMORY.md/AGENTS.md. That was a lying PASS.
+#
+# STEMS: identity-file name stems this check cares about.
+_C3_IDENTITY_STEMS = {"soul", "memory", "agents"}
+
+# COPY signal #1: filenames ending in one of these are backup/archive/snapshot-shaped.
+_C3_COPY_SUFFIXES = (
+    ".bak", ".backup", ".old", ".orig", ".save", ".copy",
+    ".gz", ".tgz", ".tar", ".zip", ".zst",
+)
+# The subset of the above that are opaque containers — never opened, see OPAQUE below.
+_C3_ARCHIVE_SUFFIXES = (".gz", ".tgz", ".tar", ".zip", ".zst")
+# COPY signal #2: a trailing ".<digits>" (e.g. "SOUL.md.1").
+_C3_TRAILING_DIGITS_RE = re.compile(r"\.\d+$")
+# COPY signal #3: one of the filename's tokens is a backup/archive word.
+_C3_COPY_TOKENS = {"bak", "backup", "backups", "old", "orig", "archive", "snapshot", "copy"}
+# COPY signal #4: an 8-digit run (e.g. 20260801) or an ISO date (YYYY-MM-DD) anywhere in the
+# filename. Checked against the raw (lowercased) name, not the split tokens — tokenizing
+# on non-alphanumeric characters would break a hyphenated ISO date into three tokens.
+_C3_EIGHT_DIGIT_RUN_RE = re.compile(r"(?<!\d)\d{8}(?!\d)")
+_C3_ISO_DATE_RE = re.compile(r"\d{4}-\d{2}-\d{2}")
+# COPY signal #5: ANY ancestor directory component (not just the immediate parent) is one
+# of these — e.g. "backups/2026-08-01/SOUL.md".
+_C3_COPY_DIR_NAMES = {"backup", "backups", ".backups", "snapshot", "archive"}
+_C3_TOKEN_SPLIT_RE = re.compile(r"[^a-z0-9]+")
+# Bound the walk (B-517): the tighter identity-tied credit rule short-circuits far less
+# often than the old "5 matches total" cutoff, so an unbounded rglob() over ctx.home could
+# do a lot of stat() work on a huge home directory. 2000 regular files per search root is
+# generous for any real agent home (config + a handful of workspaces + backups) while
+# still bounding a pathological/huge tree — same order of magnitude as the walk itself
+# (os.walk) rather than a tiny convention-sized cap like the 100-file state-dir walks
+# elsewhere, because here the file we care about could be genuinely anywhere in the tree.
+_C3_MAX_WALK_FILES = 2000
+
+
+def _c3_tokens(name_lower: str) -> set:
+    return {t for t in _C3_TOKEN_SPLIT_RE.split(name_lower) if t}
+
+
+def _c3_is_identity(path: Path) -> bool:
+    """True if the filename tokenizes to include soul/memory/agents."""
+    return bool(_c3_tokens(path.name.lower()) & _C3_IDENTITY_STEMS)
+
+
+def _c3_is_copy(path: Path) -> bool:
+    """True if the filename or its ancestry looks like a backup/archive/snapshot copy."""
+    name = path.name.lower()
+    if name.endswith(_C3_COPY_SUFFIXES):
+        return True
+    if _C3_TRAILING_DIGITS_RE.search(name):
+        return True
+    if _c3_tokens(name) & _C3_COPY_TOKENS:
+        return True
+    if _C3_EIGHT_DIGIT_RUN_RE.search(name) or _C3_ISO_DATE_RE.search(name):
+        return True
+    for ancestor in path.parents:
+        if ancestor.name.lower() in _C3_COPY_DIR_NAMES:
+            return True
+    return False
+
+
+def _c3_is_backup_archive(path: Path) -> bool:
+    """An opaque container that is plausibly a BACKUP, not merely a file that is zipped.
+
+    The OPAQUE arm grants a (reduced-confidence) PASS without opening the container, so
+    its trigger has to be narrow. Keying on the archive suffix alone reintroduced exactly
+    the defect this task removes: measured, a stray `holiday-photos.zip` or a
+    `node_modules/leftpad-1.0.0.tgz` sitting anywhere under the home flipped C3 from WARN
+    to PASS — a lying PASS with a quieter voice. An archive now has to *say* it is a
+    backup: a backup word or a date in its name, or a backup-ish directory above it.
+    """
+    if not path.name.lower().endswith(_C3_ARCHIVE_SUFFIXES):
+        return False
+    name = path.name.lower()
+    if _c3_tokens(name) & _C3_COPY_TOKENS:
+        return True
+    if _C3_EIGHT_DIGIT_RUN_RE.search(name) or _C3_ISO_DATE_RE.search(name):
+        return True
+    return any(a.name.lower() in _C3_COPY_DIR_NAMES for a in path.parents)
+
+
+def _c3_git_covers(directory: Path, boundary: Path) -> bool:
+    """True if `directory`, or an ancestor of it, holds a `.git` dir — the identity file
+    living there is version-controlled, which is its own recovery mechanism.
+
+    The climb is bounded at `boundary` (``ctx.home``, resolved): without a bound, this
+    walk up `directory.parents` doesn't stop at the filesystem root, so a simulated agent
+    home that happens to sit *inside* some unrelated OUTER git checkout (this very skill
+    repo's own fixtures/ tree is exactly that case — every fixture home lives under
+    clawseccheck's own `.git`) gets spuriously credited for a repo it has nothing to do
+    with. Real OpenClaw homes (``~/.openclaw``) are not normally nested inside another
+    project's checkout, but nothing should depend on that being true.
+    """
+    if not directory.is_relative_to(boundary):
+        candidates = [directory]  # not under the simulated home at all — no climb
+    else:
+        candidates = [directory, *(p for p in directory.parents if p.is_relative_to(boundary))]
+    for candidate in candidates:
+        try:
+            if (candidate / ".git").is_dir():
+                return True
+        except OSError:
+            continue
+    return False
+
+
 def check_backups(ctx: Context) -> Finding:
     """Are the agent's identity/memory files backed up (recoverable after drift/poisoning)?"""
     has_bootstrap = any(n.endswith(("SOUL.md", "MEMORY.md", "AGENTS.md")) for n in ctx.bootstrap)
     if not has_bootstrap:
         return _finding("C3", UNKNOWN, "No bootstrap/memory files found to back up.", "—")
-    found = []
+
+    # Which collected bootstrap files are the identity triple, and where they live — used
+    # both to exclude an identity file from crediting as its own backup, and to grant VCS
+    # credit when its directory is version-controlled.
+    _identity_keys = [k for k in ctx.bootstrap if k.endswith(("SOUL.md", "MEMORY.md", "AGENTS.md"))]
+    _identity_paths = []
+    for _key in _identity_keys:
+        _p = ctx.home / _key
+        try:
+            _identity_paths.append(_p.resolve())
+        except OSError:
+            _identity_paths.append(_p)
+    _identity_path_set = set(_identity_paths)
+
+    try:
+        _home_resolved = ctx.home.resolve()
+    except OSError:
+        _home_resolved = ctx.home
+
+    vcs_names: list = []
+    for _p in _identity_paths:
+        if _c3_git_covers(_p.parent, _home_resolved) and _p.name not in vcs_names:
+            vcs_names.append(_p.name)
+
     _backup_search_roots = [ctx.home]
     for _candidate in (
         ctx.home.parent / "backups",
@@ -700,27 +934,75 @@ def check_backups(ctx: Context) -> Finding:
     ):
         if _candidate != ctx.home and _candidate not in _backup_search_roots:
             _backup_search_roots.append(_candidate)
+
+    credited: list = []      # IDENTITY & COPY, name-tied to SOUL/MEMORY/AGENTS
+    backup_like_count = 0    # COPY but not identity-tied (or excluded as the file itself)
+    archive_seen = False     # any archive-suffixed file — OPAQUE fallback, never opened
+
     for _root in _backup_search_roots:
         try:
-            for entry in _root.rglob("*"):
-                n = entry.name.lower()
-                if entry.is_file() and (
-                    n.endswith((".bak", ".backup")) or "backup" in entry.parent.name.lower()
-                ):
-                    found.append(entry.name)
-                    if len(found) >= 5:
-                        break
+            entries = walk_dir_safely(_root, exclude_vcs=True, max_files=_C3_MAX_WALK_FILES)
         except OSError:
-            pass
-        if len(found) >= 5:
-            break
-    if found:
+            continue
+        for entry in entries:
+            if _c3_is_backup_archive(entry):
+                archive_seen = True
+            is_identity = _c3_is_identity(entry)
+            is_copy = _c3_is_copy(entry)
+            if is_identity and is_copy:
+                try:
+                    resolved = entry.resolve()
+                except OSError:
+                    resolved = entry
+                if resolved in _identity_path_set:
+                    continue  # the identity file itself, not a backup of it
+                if entry.name not in credited:
+                    credited.append(entry.name)
+            elif is_copy:
+                backup_like_count += 1
+
+    if credited or vcs_names:
+        if credited:
+            detail = (
+                "Backup(s) tied to the agent's identity files present "
+                f"({', '.join(credited[:3])}{'…' if len(credited) > 3 else ''})."
+            )
+        else:
+            detail = (
+                "Identity file(s) live in a git-tracked directory "
+                f"({', '.join(vcs_names[:3])}{'…' if len(vcs_names) > 3 else ''}) — "
+                "version history provides recovery."
+            )
         return _finding(
             "C3",
             PASS,
-            f"Backups present ({', '.join(found[:3])}{'…' if len(found) > 3 else ''}).",
+            detail,
             "Keep backups owner-only and outside the agent's writable workspace.",
+            pass_confidence="verified",
         )
+
+    if archive_seen:
+        return _finding(
+            "C3",
+            PASS,
+            "An archive file was found in the backup search paths but was not opened "
+            "(archives are never inspected) — verify by hand that it actually holds "
+            "SOUL.md/MEMORY.md.",
+            "Keep backups owner-only and outside the agent's writable workspace.",
+            pass_confidence="no_signal",
+        )
+
+    if backup_like_count:
+        return _finding(
+            "C3",
+            WARN,
+            f"Found {backup_like_count} backup-like file(s), none corresponding to "
+            "SOUL.md/MEMORY.md/AGENTS.md — the agent's identity/memory files still have "
+            "nothing to restore from.",
+            "Keep versioned, owner-only backups of SOUL.md/AGENTS.md/MEMORY.md outside the "
+            "agent's writable workspace.",
+        )
+
     return _finding(
         "C3",
         WARN,
@@ -742,6 +1024,24 @@ def check_bootstrap_injection(ctx: Context) -> Finding:
         )
     ev = []
     for fname, text in ctx.bootstrap.items():
+        # C-515/B-766: a bidi OVERRIDE (U+202D/U+202E, Trojan-Source-style) conceals
+        # text order from every pattern the loop below can run — that is exactly what
+        # the attack defeats, so it is checked on the RAW text, unconditionally on
+        # whether any INJECTION_PATTERNS match the (still-reversed) normalized text.
+        # Mirrors B58's identical B-766 wiring in checks/_content.py exactly, MINUS
+        # that check's `_whole_text_is_defensive` dampening — B6 has no such concept
+        # for its existing INJECTION_PATTERNS signal either (a plain, undampened FAIL
+        # on any match, by design), so adding dampening only for this new signal would
+        # make B6 MORE lenient here than it already is everywhere else. Do not widen
+        # `has_naked_bidi_override` to the embedding/isolate/mark class — see its own
+        # docstring in textnorm.py for why that would re-punish genuine Hebrew/Arabic
+        # bootstrap prose.
+        if has_naked_bidi_override(text):
+            ev.append(
+                f"{fname}: bidi override (Trojan-Source-style) conceals text order "
+                "from byte-level pattern matching — cannot be verified safe"
+            )
+            continue
         norm = normalize_for_scan(text)
         for pat in INJECTION_PATTERNS:
             if pat.search(norm):
@@ -756,6 +1056,33 @@ def check_bootstrap_injection(ctx: Context) -> Finding:
             "from SOUL.md/AGENTS.md/TOOLS.md. Add an explicit rule: treat content from "
             "channels/web/email as untrusted data, never as instructions.",
             ev,
+        )
+    # B-657: a claim of "no directive found" is a claim about a COMPLETED read of every
+    # bootstrap file. `ctx.bootstrap` can be non-empty (so the UNKNOWN branch above
+    # never fires) while still missing content -- a workspace dir this process could not
+    # even stat, a specific file it could not open, or a file that exceeded the
+    # collector's byte cap (the bootstrap-scanning loop inline in collector.collect(),
+    # LIMIT_DOMAIN_BOOTSTRAP) all leave SOME bootstrap text scanned and SOME silently
+    # absent. A FAIL above is a positive observation about text that really was read and
+    # really does carry a directive -- it stands regardless (same ordering B168 already
+    # established for the identical shape). Only the verdict-by-ABSENCE is unsound, so
+    # only PASS degrades.
+    if limit_hits_for(ctx, LIMIT_DOMAIN_BOOTSTRAP):
+        return _finding(
+            "B6",
+            UNKNOWN,
+            "No injection-prone directive found in the bootstrap text that WAS read, "
+            "but at least one bootstrap file or workspace directory could not be fully "
+            "read (unreadable, or exceeded the size cap) — a clean bill of health "
+            "cannot be given over content that was never scanned.",
+            "Ensure every SOUL.md/AGENTS.md/TOOLS.md and its containing workspace "
+            "directory is owner-readable and under the collector's size cap, then "
+            "re-run the audit.",
+            # C-135: present-but-unread content (a real file the collector's own cap
+            # cut short), not genuinely absent -- catalog.py's Finding.engine_degraded
+            # doc names this exact contrast and this exact consequence (the
+            # DEGRADED_CHECK_CAP "cannot rule out a CRITICAL" treatment).
+            engine_degraded=True,
         )
     return _finding(
         "B6",
@@ -776,6 +1103,18 @@ def check_bootstrap_write_protection(ctx: Context) -> Finding:
             on MEMORY.md / HEARTBEAT.md.
     UNKNOWN — non-POSIX platform, or no relevant files found.
     PASS  — files found, all perms are tight.
+
+    Scope, decided deliberately (B-495): this answers the MULTI-USER question only —
+    can some identity OTHER than the file's own owner write it. The agent itself runs
+    AS that owner, so a 0600 file it owns is fully writable by the agent regardless of
+    this check's verdict; that is a universal, always-true condition — and the
+    product's own documented workflow (docs/concepts/soul.md tells users to let the
+    agent rewrite its own SOUL.md) — not a permission weakness, so it is deliberately
+    not scored here. The evidence-based version of "was this file actually rewritten
+    with an injected directive" is B6/B161 (content scan of ctx.bootstrap), and
+    RISK-07/RISK-13 (B-494) already open their chain on either signal: this check's
+    FAIL OR a B6/B161 FAIL. So PASS/UNKNOWN below mean "no OTHER local identity can
+    write this," never "the file cannot be rewritten."
 
     Only stat() is called — no file contents are read.
     """
@@ -899,7 +1238,12 @@ def check_bootstrap_write_protection(ctx: Context) -> Finding:
         # Classify by filename: a known identity file gets the critical (FAIL-on-world)
         # rule; anything else is treated as soft (memory) -> WARN only.
         soft = p.name not in _CRITICAL_BOOTSTRAP
-        if _classify_file(p, f"{p} [attested]", soft=soft):
+        # B-652 (FU-3): labelled by BASENAME, not the absolute path the attestation
+        # supplied -- this string is rendered Finding evidence (world_write/
+        # group_write via _classify_file), and an absolute path carries the user's
+        # login name (§8). Mirrors B22's identical fix for the same attested-path
+        # label, a few hundred lines up in this same file.
+        if _classify_file(p, f"{p.name} [attested]", soft=soft):
             found_any = True
 
     if not found_any:
@@ -909,7 +1253,7 @@ def check_bootstrap_write_protection(ctx: Context) -> Finding:
             "No workspace bootstrap files (SOUL.md/AGENTS.md/TOOLS.md/MEMORY.md) found "
             "under the audited home or known workspace dirs — they may live elsewhere.",
             "Point the audit at the directory holding these files with "
-            "`clawseccheck --home <workspace>`, or declare their real paths via "
+            f"`{command_prefix()} --home <workspace>`, or declare their real paths via "
             "`--attest` (paths.bootstrap) so the engine can stat them.",
         )
 
@@ -958,7 +1302,10 @@ def check_bootstrap_write_protection(ctx: Context) -> Finding:
     return _finding(
         "B20",
         PASS,
-        "Bootstrap identity and memory files have tight write permissions.",
+        "Bootstrap identity and memory files have tight write permissions — no other "
+        "local user or group can write them. This does not cover the agent's own write "
+        "access to files it owns (always possible, and not itself a weakness); see "
+        "B6/B161 for whether an injected directive was actually found in their content.",
         "Keep workspace dirs at chmod 700 and bootstrap files at chmod 600.",
     )
 
@@ -969,10 +1316,35 @@ def check_cron_scheduler(ctx: Context) -> Finding:
     The presence of `cron` confirms a recurring scheduler surface, but static config
     cannot tell legitimate schedules from attacker-planted persistence. This check is
     therefore UNKNOWN-only on presence and PASS when the field is absent.
+
+    B-496: this check ONLY reads OpenClaw's own internal scheduler
+    (``dig(ctx.config, "cron")`` / the cron job store B168/B189 read). It has no
+    visibility into the HOST's scheduler — a user crontab, a systemd (user or
+    system) timer, or a Windows Scheduled Task — which is a different subject
+    (the host, not the agent's own config) and is genuinely out of scope for a
+    config-only static check. The one publicly demonstrated OpenClaw persistence
+    attack (Zenity Labs, 2026-02-04) used exactly that host path: a cron entry
+    outside `openclaw.json` re-wrote SOUL.md every two minutes. So a PASS here
+    must not read as "no scheduled persistence" — it only means OpenClaw's own
+    `cron` field is empty; the text below says so explicitly rather than staying
+    silent about the gap (the false-clean shape Golden Rule #4 exists to prevent).
     """
     unreadable = _config_unreadable("C048", ctx)
     if unreadable is not None:
         return unreadable
+    # B-661: `_config_unreadable` only covers "openclaw.json present but unparseable" —
+    # on a host with NO openclaw.json at all, config_parse_error is False and
+    # ctx.config is `{}`, so `dig(ctx.config, "cron")` would silently resolve to None
+    # and fall through to the PASS below about a config nobody read.
+    if (not isinstance(ctx.config, dict) or not ctx.config) and not ctx.config_found:
+        return _finding(
+            "C048",
+            UNKNOWN,
+            "No config was read, so whether a top-level `cron` scheduler is configured "
+            "could not be determined.",
+            "Run the audit on the host where ~/.openclaw lives.",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
+        )
     cron = dig(ctx.config, "cron")
     if cron:
         return _finding(
@@ -980,22 +1352,39 @@ def check_cron_scheduler(ctx: Context) -> Finding:
             UNKNOWN,
             "Top-level `cron` scheduler is configured. Recurring scheduled tasks can "
             "become a persistence surface, but static config cannot distinguish a "
-            "legitimate schedule from attacker-planted automation — manual review required.",
+            "legitimate schedule from attacker-planted automation — manual review required. "
+            "This only covers OpenClaw's own scheduler; host-level schedulers (crontab, "
+            "systemd timers, Windows Task Scheduler) are a separate surface this check "
+            "does not read.",
             "Review each scheduled cron task and confirm it was intentionally configured. "
             "Treat cron as a persistence surface and verify scheduled actions cannot run "
-            "untrusted instructions unattended.",
+            "untrusted instructions unattended. Separately, check the host's own scheduler "
+            "(crontab -l, systemd timers, Task Scheduler) for entries referencing this agent.",
             evidence=["top-level `cron` field is present"],
         )
     return _finding(
         "C048",
         PASS,
-        "No top-level `cron` scheduler is configured.",
-        "Keep recurring schedules disabled unless they are explicitly required and reviewed.",
+        "No top-level `cron` scheduler is configured in OpenClaw itself. This check "
+        "covers OpenClaw's own scheduler only — host-level scheduled persistence "
+        "(crontab, systemd timers, Windows Task Scheduler) is a different subject and "
+        "is out of scope here, so this PASS says nothing about it.",
+        "Keep recurring schedules disabled unless they are explicitly required and "
+        "reviewed. Separately, check the host's own scheduler (crontab -l, systemd "
+        "timers, Task Scheduler) for entries referencing this agent — persistence "
+        "installed there is invisible to this check.",
     )
 
 
 def check_cron_job_content(ctx: Context) -> Finding:
     """B168 (B-231 sub-item 1) — cron JOB STORE content scan.
+
+    C-476: also scans a `command`-kind payload's `argv` vector (joined space-separated,
+    the way a shell would see the words) and a `script`-kind payload's `script` body —
+    the collector already read these (`_cron_payload_extras`) but this check never
+    looked at their content, only at whether the job WAS a command/script (the
+    `is_exec` self-erasure heuristic below). Same detectors, same evidence shape as
+    payload.message/trigger.script.
 
     C048 (above) only sees the top-level `cron` config *key*; the actual scheduled job
     payloads live in a separate store the collector now reads read-only (B-231):
@@ -1024,13 +1413,31 @@ def check_cron_job_content(ctx: Context) -> Finding:
               trail shows jobs did run — the definitions that ran are gone, so there is
               nothing left to scan and a PASS would be a lie; or (W-DB2 round-3) the
               definitions came from a legacy jobs.json that the live SQLite cron_jobs table
-              SHADOWS, so the scanned set is provably not the set that executes. All three
-              suppress only a clean verdict — a FAIL/WARN found in what WAS read still
-              stands, so none of them can hide a payload the scan actually caught.
-    PASS    — a cron store was read and no job triggers any signal. B-294: when the store
-              was read but held zero jobs and there is no execution trail either, the PASS
-              carries pass_confidence="no_signal" rather than "verified" — nothing was
-              actually inspected, so the clean verdict is by absence, not by evidence.
+              SHADOWS, so the scanned set is provably not the set that executes; or the
+              job-definition read hit the collector's row cap (``ctx.cron_jobs_truncated``)
+              — unlike B189's identical-looking flag, this has no subset argument to lean
+              on: an unread job past the cap can only ADD a directive this scan would have
+              caught, never remove one, so a clean verdict over a truncated read is unsound
+              regardless of whether anything suspicious turned up among the jobs that WERE
+              read. All causes above suppress only a clean verdict — a FAIL/WARN found in
+              what WAS read still stands, so none of them can hide a payload the scan
+              actually caught.
+    PASS    — a cron store was read and no job triggers any signal, with the row cap not
+              hit and no legacy-store shadowing. B-294: when the store was read but held
+              zero jobs and there is no execution trail either, the PASS carries
+              pass_confidence="no_signal" rather than "verified" — nothing was actually
+              inspected, so the clean verdict is by absence, not by evidence. (This PASS
+              does not cover a separate, narrower gap: a per-job ``job_json`` blob in the
+              modern SQLite schema that fails to parse enters ``ctx.cron_jobs`` with empty
+              content and is counted as "scanned" without content-scanning it — that hole
+              predates this gate and is not something ``ctx.cron_jobs_truncated`` catches.)
+
+    C-135 follow-up (B-657 review; row-cap gate added in a later pass):
+    ``Finding.engine_degraded`` is True for "found but could not be parsed/read", the
+    SHADOWED-store case, and the row-cap-truncation case — all three are a real, present
+    store this process deliberately or accidentally never fully read. It stays False for
+    "no cron store found at all" and the "read and EMPTY" case: both are read to
+    completion with genuinely nothing there, not present-but-unread.
     """
     if not ctx.cron_found:
         return _finding(
@@ -1048,6 +1455,10 @@ def check_cron_job_content(ctx: Context) -> Finding:
             "A cron job store was found but could not be parsed/read — cannot determine.",
             "Fix the cron store (jobs.json or the state SQLite database) so it is valid "
             "and owner-readable, then re-run the audit.",
+            # C-135 follow-up (B-657 review): present-but-unread (a real
+            # store this process could not parse), not genuinely absent — same
+            # Finding.engine_degraded contract as B6/B172's identical shape.
+            engine_degraded=True,
         )
     # B-294 (DISK-3): the store was read successfully but holds ZERO job definitions, while
     # the run-log table shows jobs DID execute. Every definition that ran is gone -- which is
@@ -1059,6 +1470,12 @@ def check_cron_job_content(ctx: Context) -> Finding:
     # execution history the audit had never opened. B189 carries the advisory detail and the
     # session pivot; B168 just stops claiming a verified clean bill of health.
     if ctx.cron_store_empty and ctx.cron_run_logs:
+        # C-135 follow-up: engine_degraded stays at its False default here. The store was
+        # read to completion and genuinely holds zero definitions -- no cap, parse error,
+        # or unreadable input cut this read short. The erased jobs are GENUINELY ABSENT
+        # (deleted by the runtime itself, the product default for one-shot jobs), not
+        # present-but-unread -- the exact contrast catalog.py's Finding.engine_degraded
+        # docstring draws, on the "no openclaw.json at all" side of it.
         return _finding(
             "B168",
             UNKNOWN,
@@ -1127,12 +1544,60 @@ def check_cron_job_content(ctx: Context) -> Finding:
     for job in ctx.cron_jobs:
         job_label = f"cron job '{job.get('id') or job.get('name') or '?'}'"
         _scan_field(f"{job_label}.payload.message", job.get("payload_message"))
+        # B-819: a dormant/legacy-shaped payload in the JSON-file cron store -- wrong-
+        # case kind, a systemEvent's content parked in `.message` instead of `.text`,
+        # or a missing `payload.kind`/`payload` object entirely. Nothing today reads
+        # this file to execute jobs, but a future `openclaw doctor` run silently
+        # reactivates it with content intact (collector._dormant_cron_payload_text).
+        # The label discloses that explicitly, same disclosure idiom as B-555's
+        # advice-text carve-out -- this is a positive observation about a file that
+        # really is on disk (B189/shadow-store precedent), not a live-execution claim.
+        _scan_field(
+            f"{job_label}.payload (dormant legacy shape — would be reactivated by "
+            "`openclaw doctor`)",
+            job.get("payload_message_dormant"),
+        )
         _scan_field(f"{job_label}.trigger.script", job.get("trigger_script"))
+        # C-476: a `command`-kind payload's argv vector and a `script`-kind payload's
+        # body were collected (collector._cron_payload_extras) but never content-scanned
+        # -- `is_exec` below already treated `payload_kind == "command"` as an execution
+        # surface for the self-erasing-job heuristic, but the actual argv/script TEXT
+        # itself was invisible to every detector this function already runs against
+        # payload.message/trigger.script. argv is a list, joined the same way a shell
+        # would see the words (space-separated) so the content-ring regexes (a
+        # curl|bash pipe-to-shell pattern, a base64 instruction-override) can match
+        # across argv element boundaries the way they already match across a sentence.
+        argv = job.get("payload_argv")
+        if isinstance(argv, list):
+            _scan_field(f"{job_label}.payload.argv", " ".join(str(a) for a in argv))
+        _scan_field(f"{job_label}.payload.script", job.get("payload_script"))
+        # C-135 (adversarial pass): argv alone can look innocuous (["bash"],
+        # ["python3", "-"]) while the actual payload rides in `input` — the spawned
+        # process's stdin. Same content-injection risk as argv/script; scanned the
+        # same way.
+        _scan_field(f"{job_label}.payload.input", job.get("payload_input"))
+        # C-135 (independent, post-commit): `payload_cwd`/`payload_env` are collected
+        # by collector._cron_payload_extras (same call as argv/script/input above) but
+        # deliberately NOT content-scanned here yet, unlike toolsAllow/agentTurn's
+        # allowUnsafeExternalContent/externalContentSource, whose deferral this task
+        # already states explicitly. Making that the same here: a poisoned env value
+        # (an injected LD_PRELOAD path, an attacker-controlled interpreter flag riding
+        # in an env var a spawned process trusts) is a real, distinct execution-time
+        # risk from argv/script/input content, but widening this FAIL-capable check's
+        # scan surface needs its own C-135 pass and fixtures, not a same-commit
+        # add-on — tracked separately (internal task tracker) rather than left
+        # silently unscanned.
 
-        is_exec = bool(job.get("trigger_script")) or job.get("payload_kind") == "command"
+        # C-476: `script`-kind is an execution surface exactly like `command`-kind (an
+        # arbitrary script body vs. an argv vector) and was missing from this flag —
+        # widened alongside the new content-scanning above, not left half-covered.
+        is_exec = (
+            bool(job.get("trigger_script"))
+            or job.get("payload_kind") in ("command", "script")
+        )
         if job.get("delete_after_run") and is_exec:
             warn_ev.append(
-                f"{job_label}: deleteAfterRun + exec trigger/command payload "
+                f"{job_label}: deleteAfterRun + exec trigger/command/script payload "
                 "(self-erasing job)"
             )
 
@@ -1198,6 +1663,36 @@ def check_cron_job_content(ctx: Context) -> Finding:
             "If ~/.openclaw/cron/jobs.json is a leftover from an older OpenClaw that no "
             "longer reads it, move it aside so the audit scans the live SQLite cron_jobs "
             "table instead, then re-run the audit.",
+            # C-135 follow-up: the live SQLite rows are present, readable, real job
+            # definitions this check deliberately never opened because the (stale)
+            # JSON store took priority -- present-but-unread, not absent, same
+            # Finding.engine_degraded contract as a byte-cap truncation.
+            engine_degraded=True,
+        )
+    # Row-cap truncation gate. Deliberately AFTER the FAIL/WARN returns above (same
+    # ordering discipline as cron_store_shadowed immediately above it) and deliberately
+    # UNCONDITIONAL, unlike B189's identical-looking ctx.cron_jobs_truncated branch: B189
+    # can stay a sound PASS under truncation because "no orphan" is a claim about a
+    # SUBSET relationship (more definitions read can only shrink the orphan set, never
+    # grow it), but this check's PASS is "no directive found ANYWHERE in the store", and
+    # an unread job past the cap can only ADD to fail_ev/warn_ev, never remove from it --
+    # so there is no subset argument here to make a truncated PASS sound. Same "lying
+    # PASS over unread content" shape f748869 closed for B6/B172.
+    if ctx.cron_jobs_truncated:
+        return _finding(
+            "B168",
+            UNKNOWN,
+            f"Scanned {len(ctx.cron_jobs)} cron job(s) and found no embedded "
+            "instruction-override or install directive — but the job-definition read hit "
+            "its row cap, so definitions past the cap were never seen. A clean bill of "
+            "health cannot be given over job payloads that were never scanned.",
+            "Reduce the number of scheduled jobs so the whole store can be read, or "
+            "review the unscanned jobs directly.",
+            # C-135 follow-up: the job definitions past the row cap are present in the
+            # store, just never read -- present-but-unread, same Finding.engine_degraded
+            # contract as this check's cron_store_shadowed branch and B189's identical
+            # truncation shape.
+            engine_degraded=True,
         )
     return _finding(
         "B168",
@@ -1263,18 +1758,28 @@ def check_cron_run_log_orphans(ctx: Context) -> Finding:
               Also emitted when the definition read was truncated but still covered every
               job id that appears in the run log (see the subset argument above).
     UNKNOWN — no state DB / no cron_run_logs table / table present but empty (pruning can
-              empty it, so "no rows" is not evidence nothing ran); the job definitions could
-              not be read at all; a legacy JSON store shadows the live SQLite table; or the
-              definition read was truncated AND an apparent orphan turned up — each of which
-              makes orphan-ness uncomputable.
+              empty it, so "no rows" is not evidence nothing ran); no job store found at
+              all; the job store was found but could not be parsed/read; a legacy JSON
+              store shadows the live SQLite table; or the definition read was truncated
+              AND an apparent orphan turned up — each of which makes orphan-ness
+              uncomputable.
+
+    C-135 follow-up (B-657 review): ``Finding.engine_degraded`` is set True
+    only on the UNKNOWN branches whose cause is a real, present store this process could
+    not fully read (a parse/read error, a legacy-store shadow, or a row-cap truncation —
+    the run-log table's own PARSE error, the job store's own PARSE error, shadowing, and
+    truncation). It stays False on the "genuinely nothing here" branches — no state DB,
+    no run-log table, an empty (successfully read) run-log table, or no job store found
+    at all — matching ``not ctx.cron_found or ctx.cron_parse_error``'s two former causes
+    now split into separate branches below, since only the latter is present-but-unread.
     """
     if not ctx.cron_run_logs_found:
         return _finding(
             "B189",
             UNKNOWN,
-            "No cron run-log table found (the state SQLite database or its cron_run_logs "
-            "table is absent) — cannot determine whether any scheduled job ran and erased "
-            "itself.",
+            "No cron run-log table found (the state SQLite database is absent, or it holds "
+            "neither the task_runs table nor the older cron_run_logs it replaced) — cannot "
+            "determine whether any scheduled job ran and erased itself.",
             "No action needed if cron is unused. If cron jobs are configured, keep "
             "~/.openclaw/state/openclaw.sqlite owner-readable so a future audit can inspect "
             "the execution trail.",
@@ -1286,28 +1791,63 @@ def check_cron_run_log_orphans(ctx: Context) -> Finding:
             "The cron run-log table was found but could not be read — cannot determine.",
             "Ensure ~/.openclaw/state/openclaw.sqlite is owner-readable and not locked by a "
             "running agent, then re-run the audit.",
+            # C-135 follow-up: present-but-unread (a real table this process could not
+            # read), not genuinely absent -- same Finding.engine_degraded contract as
+            # B168's identical cron_parse_error branch.
+            engine_degraded=True,
         )
+    # C-488: from here on ctx.cron_run_logs_found is True and cron_run_logs_parse_error is
+    # False, so the collector DID resolve a shape -- ctx.cron_run_logs_table is guaranteed
+    # set to "cron_run_logs" or "task_runs". Name that ONE table instead of the generic
+    # "cron run-log table" every branch below used to say, which is exactly the wording
+    # gap this task exists to close (at most one table is ever the relevant fact once we
+    # get this far -- the "genuinely neither exists" case already returned above).
+    table_label = ctx.cron_run_logs_table or "cron run-log"
     if not ctx.cron_run_logs:
+        # engine_degraded stays False: the table was read to completion and genuinely
+        # holds zero rows -- pruning is normal product behaviour, not an unread cap or
+        # a read error. Same "read fully, genuinely empty" reasoning as B168's
+        # cron_store_empty branch.
         return _finding(
             "B189",
             UNKNOWN,
-            "The cron run-log table is present but empty — no execution history to examine. "
-            "OpenClaw prunes this table on its own, so an empty table is not evidence that "
-            "nothing ever ran.",
+            f"The `{table_label}` table is present but empty — no execution history to "
+            "examine. OpenClaw prunes this table on its own, so an empty table is not "
+            "evidence that nothing ever ran.",
             "No action needed. Re-run the audit after scheduled jobs have executed if you "
             "want the execution trail reviewed.",
         )
-    if not ctx.cron_found or ctx.cron_parse_error:
+    if not ctx.cron_found:
+        # Run history exists but NO job store (JSON or SQLite) was ever found -- genuinely
+        # absent, not present-but-unread, so engine_degraded stays False. (cron_parse_error
+        # always implies cron_found=True in every collector._collect_cron code path, so
+        # this branch and the next are mutually exclusive, not a fallthrough.)
+        return _finding(
+            "B189",
+            UNKNOWN,
+            f"The `{table_label}` table records {len(ctx.cron_run_logs)} past execution(s), but "
+            "no cron job store (~/.openclaw/cron/jobs.json or the state SQLite cron_jobs "
+            "table) was found at all — without any surviving definitions there is no way to "
+            "tell which runs belong to jobs that no longer exist.",
+            "If cron jobs are configured, ensure the job store is present and owner-readable "
+            "so a future audit can inspect it, then re-run the audit.",
+        )
+    if ctx.cron_parse_error:
         # Run history exists but the DEFINITION set is unknown, so every row would look
         # "orphaned" for a reason that has nothing to do with erasure. Refuse to guess.
         return _finding(
             "B189",
             UNKNOWN,
-            f"The cron run-log table records {len(ctx.cron_run_logs)} past execution(s), but "
-            "the cron job store could not be read — without the surviving definitions there "
-            "is no way to tell which runs belong to jobs that no longer exist.",
+            f"The `{table_label}` table records {len(ctx.cron_run_logs)} past execution(s), but "
+            "the cron job store was found and could not be parsed/read — without the "
+            "surviving definitions there is no way to tell which runs belong to jobs that no "
+            "longer exist.",
             "Fix the cron job store (~/.openclaw/cron/jobs.json or the state SQLite "
             "cron_jobs table) so it is valid and owner-readable, then re-run the audit.",
+            # C-135 follow-up: present-but-unread (a real store this process could not
+            # parse), not genuinely absent -- same Finding.engine_degraded contract as
+            # B168's identical cron_parse_error branch.
+            engine_degraded=True,
         )
     if ctx.cron_store_shadowed:
         # A legacy jobs.json shadowing the live SQLite table is not a SUBSET of the truth —
@@ -1318,7 +1858,7 @@ def check_cron_run_log_orphans(ctx: Context) -> Finding:
         return _finding(
             "B189",
             UNKNOWN,
-            f"The cron run-log table records {len(ctx.cron_run_logs)} past execution(s), but "
+            f"The `{table_label}` table records {len(ctx.cron_run_logs)} past execution(s), but "
             "the job definitions were read from a legacy ~/.openclaw/cron/jobs.json while "
             "the state SQLite cron_jobs table also holds rows — so the definitions read are "
             "not the ones the runtime actually uses. Comparing the execution trail against "
@@ -1327,6 +1867,11 @@ def check_cron_run_log_orphans(ctx: Context) -> Finding:
             "If ~/.openclaw/cron/jobs.json is a leftover from an older OpenClaw that no "
             "longer reads it, move it aside so the audit reads the live SQLite cron_jobs "
             "table instead, then re-run the audit.",
+            # C-135 follow-up: the live SQLite rows are present, readable, real job
+            # definitions this check never opened because the stale JSON store took
+            # priority -- present-but-unread, same Finding.engine_degraded contract as
+            # B168's identical cron_store_shadowed branch.
+            engine_degraded=True,
         )
 
     live = {j.get("id") for j in ctx.cron_jobs if j.get("id")}
@@ -1354,13 +1899,17 @@ def check_cron_run_log_orphans(ctx: Context) -> Finding:
         return _finding(
             "B189",
             UNKNOWN,
-            f"The cron run-log table records {len(ctx.cron_run_logs)} past execution(s) that "
+            f"The `{table_label}` table records {len(ctx.cron_run_logs)} past execution(s) that "
             "include job id(s) with no definition in what was read — but the job-definition "
             "read hit its row cap, so definitions past the cap were never seen. Those job "
             "id(s) may simply be among the ones not read, so this check declines to report "
             "them as erased.",
             "Reduce the number of scheduled jobs so the whole store can be read, or review "
             "the execution trail directly with `--analyze-trajectory`.",
+            # C-135 follow-up: the job definitions past the row cap are present in the
+            # store, just never read -- present-but-unread, same Finding.engine_degraded
+            # contract as B168's byte-cap truncation shape.
+            engine_degraded=True,
         )
 
     orphan_ids = sorted({r["job_id"] for r in orphan_runs})
@@ -1376,7 +1925,27 @@ def check_cron_run_log_orphans(ctx: Context) -> Finding:
         }
     except (OSError, ValueError):
         on_disk = set()
+    # B-813: on a SQLite-era install (~9.x+) find_trajectory_files() always returns [] --
+    # the runtime's own trajectory recorder now defaults to trajectory_runtime_events in
+    # each agent's openclaw-agent.sqlite, and the classic JSONL glob it feeds `on_disk` is
+    # silently empty. Without a second lookup here, every such session fell into the
+    # "no transcript on disk" bucket below -- which is FALSE: there is real evidence, just
+    # not in the container that bucket's wording describes. `sqlite_session_ids` only ever
+    # proves a session id EXISTS in that store (never opens `event_json` -- see
+    # trajectorystore.py's module docstring, §8), so a third bucket is added rather than
+    # folding this into either existing one.
+    sqlite_sessions = (
+        _trajectorystore.sqlite_session_ids(ctx.home)
+        if isinstance(ctx.home, Path)
+        else frozenset()
+    )
     readable = [s for s in sessions if s in on_disk]
+    # JSONL takes priority when a session id happens to show up in both containers (the
+    # vendor's own migration doctor can leave a live sidecar behind alongside imported
+    # SQLite rows) -- it is the one `--analyze-trajectory` can actually read today, so a
+    # session already counted as "still on disk" is never also counted as sqlite-only.
+    sqlite_only = [s for s in sessions if s not in on_disk and s in sqlite_sessions]
+    unreadable = [s for s in sessions if s not in on_disk and s not in sqlite_sessions]
 
     ev = [
         f"cron job '{jid}': {sum(1 for r in orphan_runs if r['job_id'] == jid)} run(s) "
@@ -1387,13 +1956,39 @@ def check_cron_run_log_orphans(ctx: Context) -> Finding:
         ev.append(f"(+{len(orphan_ids) - 10} more erased job id(s))")
     for s in readable[:10]:
         ev.append(f"pivot: session transcript '{s}' is still on disk — review it directly")
-    for s in [s for s in sessions if s not in on_disk][:10]:
+    for s in sqlite_only[:10]:
+        ev.append(
+            f"pivot: session '{s}' has trajectory evidence in the SQLite store "
+            "(agents/*/agent/openclaw-agent.sqlite), not the classic JSONL sidecar — direct "
+            "review tooling for this container is not yet available"
+        )
+    for s in unreadable[:10]:
         ev.append(f"pivot: session '{s}' referenced by an erased job's run log (no transcript on disk)")
 
-    pivot_note = (
-        f" {len(readable)} of these session(s) still have a transcript on disk."
-        if readable else ""
-    )
+    # B-813/B-555: `pivot_note` folds session counts into `detail`, which baseline.fingerprint()
+    # hashes -- that coupling already existed for the JSONL `readable` count before this change,
+    # so extending it to the new, honestly-distinct SQLite count does not newly orphan any
+    # `.clawseccheckignore` entry; it keeps the same field carrying the same KIND of fact
+    # (a count derived from the machine's own disk state, already true of `readable`) rather
+    # than moving anything new into a hashed field. The wording keeps the two counts textually
+    # separate so "on disk" (JSONL) is never conflated with "in the SQLite store".
+    if readable and sqlite_only:
+        pivot_note = (
+            f" {len(readable)} of these session(s) still have a transcript on disk, and "
+            f"{len(sqlite_only)} more have evidence in the SQLite trajectory store (not a "
+            "JSONL transcript)."
+        )
+    elif readable:
+        pivot_note = (
+            f" {len(readable)} of these session(s) still have a transcript on disk."
+        )
+    elif sqlite_only:
+        pivot_note = (
+            f" {len(sqlite_only)} of these session(s) have evidence in the SQLite "
+            "trajectory store (not a JSONL transcript)."
+        )
+    else:
+        pivot_note = ""
     return _finding(
         "B189",
         WARN,
@@ -1438,7 +2033,37 @@ def check_exec_approvals_grants(ctx: Context) -> Finding:
     PASS    — the store was read and no agent has an "allow-always" entry (the common
               case -- e.g. freshly-provisioned defaults/agents are both empty `{}`).
     UNKNOWN — exec-approvals.json is absent (or a symlink, never followed), or was
-              found but could not be parsed/read.
+              found but could not be parsed/read; OR (B-657) the store parsed fine but
+              exceeded the collector's byte cap or its agent-count cap
+              (``_MAX_EXEC_APPROVALS_AGENTS``) -- some agents/content were never
+              scanned, so "no agent has a grant" cannot be said of the whole store. A
+              WARN found among the agents that WERE scanned still stands (checked
+              first, same ordering as B6/B168).
+
+    C-430: an "allow-always" entry with no `argPattern` is not the same standing grant
+    as one that carries one. Grounded against the installed dist: on every non-Windows
+    platform, OpenClaw's own argPattern builders return `undefined` BY DESIGN, so a
+    POSIX "always allow" click persists a path-only entry -- and the runtime's own
+    matcher (exec-command-resolution*.js) treats a missing `argPattern` as a wildcard
+    over argv. One click on a POSIX host therefore grants the binary with ANY
+    arguments, durably -- for an argument-weaponizable binary (`git`, `tar`, `ssh`,
+    `find`, `awk`, ...) that is a standing arbitrary-execution grant, not merely "this
+    binary is trusted". `collector._collect_exec_approvals` now splits each agent's
+    tally into `binary_wide_count` (no `argPattern`) and `arg_restricted_count` (a real
+    `argPattern`) so this check's evidence can say which kind a reader is looking at,
+    instead of a bare number that reads the same either way. This is a pure disclosure
+    change on already-collected data: still WARN-only, `scored=False`, no FAIL and no
+    new tuning surface -- the OpenClaw-side defect itself (the matcher's own
+    interpretation of a missing argPattern) is out of scope for this project.
+
+    Disclosed limitation (found on the adversarial pass): "argument-restricted" means
+    only that SOME `argPattern` string is present -- this check does not, and per its
+    own scope is not meant to, evaluate whether that pattern is actually narrow (an
+    OpenClaw-persisted `argPattern` of e.g. `.*` would match any argv and count as
+    "restricted" here while granting exactly as much as a path-only entry). Evaluating a
+    persisted regex's own permissiveness is a materially different, much larger check
+    than "does this entry structurally carry the field the runtime keys on" -- the
+    question this one answers, matching the task's own two-shape framing.
     """
     if not ctx.exec_approvals_found:
         return _finding(
@@ -1462,6 +2087,28 @@ def check_exec_approvals_grants(ctx: Context) -> Finding:
 
     grants = [g for g in ctx.exec_approvals_grants if g.get("allow_always_count")]
     if not grants:
+        # B-657: "no agent has a standing grant" is a claim about every agent the store
+        # holds. exec_approvals_parse_error only catches a store that failed to parse at
+        # all -- it does not catch a store that parsed FINE but exceeded the
+        # collector's byte cap or agent-count cap (collector._collect_exec_approvals,
+        # LIMIT_DOMAIN_APPROVALS), where the agents/content past the cap were never
+        # scanned. Same ordering as B6/B168: a WARN above (a grant found in what WAS
+        # scanned) stands regardless; only this verdict-by-absence degrades.
+        if limit_hits_for(ctx, LIMIT_DOMAIN_APPROVALS):
+            return _finding(
+                "B172",
+                UNKNOWN,
+                "No standing 'allow-always' exec grant found among the agents that WERE "
+                "scanned, but exec-approvals.json exceeded a collector size/count cap — "
+                "some agents or content were never read, so a clean bill of health "
+                "cannot be given.",
+                "Keep exec-approvals.json under the collector's size cap, or prune "
+                "stale agent entries, then re-run the audit.",
+                # C-135: present-but-unread agents (a real store the collector's own
+                # cap cut short), not a genuinely empty/absent store -- same
+                # Finding.engine_degraded contract as B6's identical branch above.
+                engine_degraded=True,
+            )
         return _finding(
             "B172",
             PASS,
@@ -1473,12 +2120,27 @@ def check_exec_approvals_grants(ctx: Context) -> Finding:
             pass_confidence="verified",
         )
 
-    evidence = [
-        f"agent '{g['agent_id']}': {g['allow_always_count']} allow-always pattern(s)"
-        + (f", security={g['security']}" if g.get("security") else "")
-        + (f", ask={g['ask']}" if g.get("ask") else "")
-        for g in grants
-    ]
+    evidence = []
+    for g in grants:
+        line = f"agent '{g['agent_id']}': {g['allow_always_count']} allow-always pattern(s)"
+        # C-430: name which SHAPE each grant is, not just how many. `.get(..., 0)`
+        # defensively -- these two keys exist on every grant `collector.py` builds, but
+        # a hand-built ctx in a test must not KeyError rather than degrade to "unknown
+        # shape" (which then simply adds no parenthetical, same as before this change).
+        binary_wide = g.get("binary_wide_count", 0)
+        arg_restricted = g.get("arg_restricted_count", 0)
+        shapes = []
+        if binary_wide:
+            shapes.append(f"{binary_wide} binary-wide: any arguments")
+        if arg_restricted:
+            shapes.append(f"{arg_restricted} argument-restricted")
+        if shapes:
+            line += " (" + "; ".join(shapes) + ")"
+        if g.get("security"):
+            line += f", security={g['security']}"
+        if g.get("ask"):
+            line += f", ask={g['ask']}"
+        evidence.append(line)
     ev_summary = "; ".join(evidence[:4])
     extra = f" (+{len(evidence) - 4} more)" if len(evidence) > 4 else ""
     return _finding(
@@ -1510,6 +2172,19 @@ def check_hook_policy_bypass(ctx: Context) -> Finding:
     unreadable = _config_unreadable("C6", ctx)
     if unreadable is not None:
         return unreadable
+    # B-661: `_config_unreadable` only covers "present but unparseable" — on a host
+    # with no openclaw.json at all, config_parse_error is False and ctx.config is
+    # `{}`, so every dig() below would silently degrade to None/absent and fall
+    # through to the PASS about a config nobody read.
+    if (not isinstance(ctx.config, dict) or not ctx.config) and not ctx.config_found:
+        return _finding(
+            "C6",
+            UNKNOWN,
+            "No config was read, so whether a pre-v2026.6.10 hook-composition "
+            "tool-policy-drop exposure applies could not be determined.",
+            "Run the audit on the host where ~/.openclaw lives.",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
+        )
     cfg = ctx.config
     raw = dig(cfg, "meta.lastTouchedVersion") or dig(cfg, "lastTouchedVersion")
     parsed = _parse_version(str(raw)) if raw else None
@@ -1542,19 +2217,48 @@ def check_human_approval(ctx: Context) -> Finding:
     destructive = _hint(tools, OUTBOUND_TOOL_HINTS)
     if not destructive:
         return _finding("B8", UNKNOWN, "No destructive/outbound tools detected.", "—")
-    if _has_approval_gate(cfg):
+    # B-644: pass `tools` so an exec-scoped gate is never read as covering a non-exec
+    # write tool (fs_write/write/edit/elevated) — see `_has_approval_gate`'s docstring.
+    if not _has_approval_gate(cfg, tools):
         return _finding(
             "B8",
-            PASS,
-            "Destructive actions require human approval.",
-            "Keep approval gating on all high-impact tools.",
+            WARN,
+            "Destructive tools (exec/send/write) present with no clear approval gate.",
+            "Set tools.exec.mode to 'ask' (a command that is not on the allow list is put "
+            "to you) or 'allowlist' (it is refused outright) — not 'full'. Use "
+            "tools.exec.ask='always' to be asked before every command.",
+        )
+    # B-663: the global layer is gated, but `agents.list[]`/`agents.entries`
+    # can override `tools.exec` PER AGENT, and that override REPLACES the global for that
+    # agent rather than merging under it — so the global gate above proves nothing about
+    # what a specific named agent can actually run unattended.
+    ungated_agents = _agents_without_exec_gate(cfg)
+    if ungated_agents:
+        return _finding(
+            "B8",
+            WARN,
+            "The global exec policy requires approval, but " +
+            (
+                f"agent '{ungated_agents[0]}' overrides it with no gate at all."
+                if len(ungated_agents) == 1
+                else "these agents override it with no gate at all: "
+                + ", ".join(f"'{a}'" for a in ungated_agents) + "."
+            ),
+            "Remove or tighten the per-agent tools.exec override (set its mode to "
+            "'ask'/'allowlist'/'deny', or drop it so the agent inherits the gated global "
+            "policy) for " + (
+                f"agent '{ungated_agents[0]}'."
+                if len(ungated_agents) == 1
+                else "each named agent above."
+            ),
+            evidence=[f"agents.*.tools.exec resolves to 'full' (no gate) for '{a}'"
+                      for a in ungated_agents],
         )
     return _finding(
         "B8",
-        WARN,
-        "Destructive tools (exec/send/write) present with no clear approval gate.",
-        "Set tools.exec.mode to 'ask' or 'allowlist' (not 'full') and "
-        "tools.exec.security='ask' to gate exec actions.",
+        PASS,
+        "Destructive actions require human approval.",
+        "Keep approval gating on all high-impact tools.",
     )
 
 
@@ -1570,6 +2274,9 @@ def check_install_policy(ctx: Context) -> Finding:
             "Run on the host where skills live (~/.openclaw/skills, workspace/skills).",
         )
     warns: list[str] = []
+    # C-358: coverage disclosure only — never gates the WARN branch below (that is
+    # `warns`' job alone), so this can never move B42's verdict.
+    notes: list[str] = [NPM_DEPTREE_HOOK_COVERAGE_NOTE]
     # install/postinstall hooks that execute code on install or auto-update
     for name, blob in skills.items():
         for m in _POSTINSTALL_RE.finditer(blob):
@@ -1591,7 +2298,7 @@ def check_install_policy(ctx: Context) -> Finding:
             "Review/disable any install hook you haven't read; pin skills to a reviewed "
             "commit; `chmod 700` skill dirs so only you can add skills; turn off skill "
             "auto-update until each hook is trusted.",
-            warns,
+            warns + notes,
         )
     return _finding(
         "B42",
@@ -1599,6 +2306,343 @@ def check_install_policy(ctx: Context) -> Finding:
         f"Scanned {len(skills)} installed skill(s): no risky install hooks, and skill "
         "dirs are not writable by other local users.",
         "Keep skill dirs owner-only and read any install/postinstall hook before trusting a skill.",
+        evidence=notes,
+    )
+
+
+# ---------- B349 (F-167, B-447): obfuscated install-time target in the dependency tree ----------
+# B42 above already recognises a pre/postinstall hook -- in a SKILL's own manifest. This is its
+# sibling for the one directory nothing in this engine reasons about: the installed npm
+# dependency tree, where a compromised TRANSITIVE package lives. The threat shape is a
+# widely-depended package republished with `"preinstall": "node setup.mjs"` and an obfuscated
+# setup.mjs shipped in the tarball; the consuming project's own source contains nothing.
+#
+# TWO SURFACES, NOT ONE (B-447). The first cut enumerated `scripts` only, and that was a false
+# negative rather than a scoping choice: the node-gyp worm's tarballs declare NO lifecycle
+# script at all and execute from a `<!(node index.js ...)` command-expansion in `binding.gyp`,
+# which npm triggers automatically on the file's mere presence. A `scripts`-only check is the
+# script-focused monitoring that shape exists to walk past. `deptree` now surfaces both; they
+# are assessed by the same `_b349_assess_target`, so the crit/warn calibration below governs
+# both and neither surface gets a second, unreviewed threshold of its own.
+#
+# MEASURED FOR THE SECOND SURFACE, and measured TWICE on purpose. Across every real dependency
+# tree on a live box (163 trees, 28,350 packages) 11 packages ship a root binding.gyp carrying
+# 27 command expansions, and ZERO resolve to an in-package file -- every one is an inline
+# `node -e`/`node -p` expression or a `pkg-config` probe. That is a comfortable number and a
+# useless one on its own: nothing exercised the resolving branch, so "no false positive" would
+# have meant "no sample". So the branch was measured separately against 6,067 cached package
+# tarballs -- 8 ship a root binding.gyp and exactly one, canvas@2.11.2 (node-canvas), really
+# does resolve, running `util/has_lib.js` and `util/win_jpeg_lookup.js` from its build config.
+# It produces zero signals of any grade. The branch is live on a real, honest, widely-installed
+# package and stays silent on it.
+#
+# WHY A CONJUNCTION, MEASURED (2026-08-04, real trees on a live box):
+#   openclaw: 380 packages, 3 install-lifecycle hooks -- ALL benign
+#   clawhub:   39 packages, 0
+# So "a hook exists" would have started life with three false-positive FAILs, which is three
+# more than Golden Rule #5 permits. The gate is the hook's TARGET tripping the obfuscation
+# detectors we already ship (textnorm + skillast) -- 0 hits across those same real trees.
+#
+# WHY THE OPENCLAW INSTALL TREE AND NOT SKILL/PLUGIN DIRS: measured on the same box, no skill
+# and no plugin has a node_modules at all, while every real tree sits under the npm global
+# root. A check scoped to skill/plugin dirs would scan nothing and report clean -- the exact
+# lying-PASS this project exists to prevent. When a skill DOES ship a tree, the skill content
+# scan already walks it as ordinary files (see NPM_DEPTREE_SKILL_COVERAGE_NOTE); what it does
+# not do -- and what this check adds -- is reason about it AS a dependency tree.
+# NO COUNT MAY ENTER `detail` HERE. baseline.fingerprint() hashes `finding.detail` alone,
+# and EVERY number this check can quote (packages walked, hooks found, targets read) is a
+# property of the MACHINE's OpenClaw install, not of the audited config's content. Quoting
+# one would mean a user's `.clawseccheckignore` fingerprint suppression silently orphans
+# the moment they `npm install` anything -- the exact self-orphaning defect
+# tests/test_finding_fingerprint_manifest.py exists to prevent, and which B176's age fix
+# already had to undo once. The counts live in `evidence=`, which is not hashed.
+_B349_FIX = (
+    "Do not run the install. Inspect the named package's hook target by hand, then reinstall "
+    "from a lockfile you trust (npm ci) so the resolved version is the one you reviewed."
+)
+
+
+def _b349_assess_target(source: str, filename: str) -> "tuple[list, str | None]":
+    """Assess one hook target. Returns (fail_signals, unreadable_reason).
+
+    THE CORRECTION THAT SHAPED THIS (F-167). The brief assumed an obfuscation detector
+    already existed to reuse. It does not, for this shape: `textnorm.obfuscation_signals`
+    detects UNICODE trickery (zero-width, bidi, Tag-block, confusables), and against
+    machine-mangled JavaScript -- hex identifiers, a hex string table, index arithmetic --
+    it correctly returns nothing, because none of that is a Unicode trick. Verified by
+    running both detectors against a synthesised obfuscator-shaped file: no signal from
+    either. Writing a bespoke "looks obfuscated" heuristic instead was rejected: its whole
+    false-positive surface is honest minified bundles, which are everywhere in a real
+    dependency tree, and establishing that boundary is a project of its own.
+
+    So the split follows the precedent this repo already set for unreadable hook content
+    (B97, `_content.py`'s `_HOOK_MINIFIED_LINE` -> "minified — unreadable" UNKNOWN):
+
+      * a **crit-grade** rule from the ALREADY-VALIDATED detectors -> FAIL-eligible;
+      * a **warn-grade** rule -> `noted`: disclosed in the PASS evidence, never a verdict;
+      * a **confusable** signal with no ASCII-Latin word to hide in -> `noted` too; see
+        the loop below for the false-positive FAIL on non-English comments that forced it;
+      * source we could not read (one long machine-generated line, or a parse failure) ->
+        UNKNOWN naming the package, never FAIL. We did not read it, so we claim nothing
+        about it -- and "I could not read this package's installer" is itself actionable;
+      * anything else -> nothing.
+
+    THE CRIT/WARN SPLIT IS NOT COSMETIC -- it is a C-135 blocker fix (2026-08-04). The
+    first cut treated every non-`AST_UNANALYZABLE` rule as FAIL-eligible, collapsing a
+    distinction `analyze_javascript` deliberately makes: it grades `JS_EVAL_DECODED` and
+    `JS_EVAL_REMOTE` "crit" but `JS_CHILD_PROCESS_DYNAMIC` / `JS_DYNAMIC_REQUIRE` /
+    `JS_NATIVE_DLOPEN` "warn", documented in its own docstring as "often legit".
+    An independent adversarial sweep over 124 real dependency trees (25,834 packages)
+    plus 2,906 cached package tarballs found 8 FAILs, ALL of them `esbuild` and ALL of
+    them false: esbuild's official `postinstall` installer legitimately shells out with
+    an interpolated version string, and it has done so across at least six releases
+    (0.21.5 -> 0.28.1). Not hypothetical for this project -- **OpenClaw pins
+    `esbuild@0.28.1` in its own devDependencies**, so any source or contributor install
+    would have earned a CRITICAL FAIL. Reading severity off the detector rather than
+    re-deciding it here means B349 inherits a calibration that already survived its own
+    adversarial review, instead of substituting a fresh guess for it.
+
+    `AST_UNANALYZABLE` is deliberately routed to the unreadable bucket rather than the
+    signal bucket: it means the parse failed, which is an absence of evidence.
+
+    KNOWN FALSE NEGATIVE, stated rather than papered over. This check's FAIL inherits the
+    shipped JS detector's recall exactly. `_JS_EVAL_DECODED_RE` requires the decode to sit
+    INSIDE the eval/Function call (an `eval` call wrapping `atob(x)`); a STAGED form that decodes into a
+    variable first and evals it a line later is deliberately silent there, and its own
+    docstring says so ("base64 decode without eval — stays silent"). So a readable,
+    staged decode-then-exec installer reaches no verdict here. The UNKNOWN path above is
+    what covers the common real case, since a staged loader shipped by this campaign
+    arrives minified; a readable staged one does not. Widening the JS detector is its own
+    change with its own adversarial pass -- not something to smuggle in behind this check.
+    """
+    signals: list = []
+    noted: list = []
+    unreadable = None
+    for signal in obfuscation_signals(source):
+        # A confusable ALONE is not evidence in source code. `obfuscation_signals` reports
+        # "confusable characters folded to ASCII" for any Cyrillic or Greek text at all, so
+        # an installer whose only unusual property is a non-English comment earned a
+        # CRITICAL FAIL -- reproduced end-to-end on `// Определяем платформу` (C-135,
+        # 2026-08-04), and a false-positive FAIL on an entirely honest build script is a
+        # Golden-Rule-#5 blocker. The discriminator is not a new one: `textnorm` already
+        # ships `confusable_in_ascii_context` for exactly this, and its docstring records
+        # that it is what keeps B58 from firing on multilingual prose. A whole non-Latin
+        # token (`Привет`) is i18n; a lookalike swapped INTO a Latin word (`іgnore`,
+        # `requіre`) is the attack. Same principle as the crit/warn split below: inherit a
+        # calibration that already survived review rather than substitute a fresh guess.
+        # The discriminator's own limit, found by the same pass and recorded rather than
+        # hidden: identifiers of languages that genuinely MIX scripts inside one word do
+        # trip it -- highlight.js@11.11.1 ships `lib/languages/1c.js` with 152 such tokens
+        # (`httpзапрос`, `base64значение`) and `isbl.js` with `ВыборSQL`. Neither is an
+        # install-time target, so neither is reachable from this check's population; if a
+        # build script ever legitimately carries such identifiers, this is where it breaks.
+        #
+        # THE ZERO-WIDTH SIGNAL IS DELIBERATELY *NOT* GIVEN THE SAME TREATMENT. Every
+        # invisible character in an install-time target stays FAIL-eligible, and this is
+        # the retracted-fix note §2.5 asks for -- written after the narrowing was BUILT,
+        # measured, adversarially reviewed and then withdrawn (B-448), not merely imagined.
+        #
+        # THE PULL. `obfuscation_signals` fires on any invisible character, and ZWNJ
+        # (U+200C) is REQUIRED Persian orthography and is used in Khmer -- so an honest
+        # installer can carry one. Measured over 112,421 published .js/.cjs/.mjs files from
+        # the real npm cache: 231 trip the raw signal. NOTE: that figure was taken against
+        # the THEN-6-MEMBER class (ZWSP/ZWNJ/ZWJ, BOM, soft hyphen, word joiner) -- textnorm's
+        # `_ZERO_WIDTH_CLASS_SRC` has since grown to 61 code points across 18 ranges (B-450
+        # Tier 1), so the raw-signal denominator above is stale, not current.
+        #
+        # RE-MEASURED FOR THE 61-MEMBER CLASS (B-450, 2026-09-03). Different corpus proxy --
+        # a developer machine's installed `node_modules` (37,068 published .js/.cjs/.mjs
+        # files under the global npm prefix), not the 112,421-file npm cache the figure
+        # above used, so the two counts are not directly comparable -- but the delta is what
+        # matters here: the old 6-member class hits 110 of those files; the widened 61-member
+        # class adds exactly 2 NEW-ONLY files, both driven solely by U+00AD SOFT HYPHEN
+        # (`@shikijs/langs/dist/gherkin.mjs`, `openclaw/dist/dist-izmUtNsp.js`), and neither is
+        # an install-time target. Re-run against THIS check's actual population -- packages
+        # declaring `scripts.{pre,,post}install` with a resolvable `node <file>` target (9
+        # packages, 6 resolved targets) plus `binding.gyp` command expansions (3 files) --
+        # found ZERO zero-width hits under either class size. So the widening is measured
+        # benign here: it costs nothing observed in this check's population and only adds an
+        # unreachable 0.005%-of-corpus proxy hit elsewhere. Narrowing the class to buy those 2
+        # files back is exactly the B-448 trade above (U+00AD can split a keyword inside a
+        # literal/comment same as ZWJ) and is refused for the same C-135 / GR#5 reason --
+        # see tests/test_b448_invisible_fn_guards.py::test_fn4_soft_hyphen_reachable_member_still_fails.
+        #
+        # THE NARROWING THAT WAS TRIED. Inherit C-038's invisible-channel discriminator
+        # (`_mcp.py`: a channel is a consecutive RUN >= 4, or a TOTAL >= 32 the attacker
+        # cannot lower) and grade the halves apart -- run spends the FAIL, total-without-run
+        # degrades to UNKNOWN, an isolated invisible reads as typography. The corpus looked
+        # decisive: the run half is clean at 0 of 112,421, and all 27 survivors of
+        # `run OR total` are honest Persian locale and media bundles passing on the total
+        # alone. It was implemented, tested and measured before it was thrown away.
+        #
+        # WHY IT WAS WITHDRAWN -- two false negatives, each reproduced end-to-end against
+        # both the old and new trees, in a CRITICAL check:
+        #
+        #   * TROJAN SOURCE, cost TWO code points. U+200C/U+200D are valid ECMAScript
+        #     IdentifierPart (verified on node v22.23.2), so `HOST` and `HO<ZWJ>ST` are two
+        #     DIFFERENT bindings that render identically. An installer that resolves its
+        #     download host through the second one went FAIL -> PASS. The invisible signal
+        #     was the only leg holding that file: the AST leg sees a literal first argument
+        #     to execFileSync and says nothing.
+        #   * THE COUNTED FLOOR IS UNBOUNDED-EVADABLE. `INVISIBLE_COUNTED_RE` excludes ZWJ,
+        #     so a PRESENCE/ABSENCE encoding -- one ZWJ after a carrier character means 1,
+        #     none means 0 -- keeps every run at 1 and the counted total at 0 for a payload
+        #     of ANY length. 185 ZWJ carrying a 52-character directive: FAIL -> PASS.
+        #     C-038's own rationale ("a ZWJ-carrying payload still contributes non-ZWJ code
+        #     points at roughly half its length") assumes a two-SYMBOL alphabet; here the
+        #     second symbol is the ABSENCE of a character and costs nothing. That is where
+        #     the inherited reasoning breaks, and it is inherited verbatim -- see B-449.
+        #
+        # So the trade was an FP that has never been observed on this check's own population
+        # (0 of 35 resolved install targets across 3,033 real packages; 0 across 163 real
+        # dependency trees) for two demonstrated FNs. That is exactly the trade §2.5 forbids,
+        # and it does not become acceptable because the FP class is real -- an unrealised FP
+        # and a working bypass are not the same currency.
+        #
+        # WHAT WOULD CHANGE THE ANSWER: a real install target observed carrying an invisible
+        # character, AND a discriminator that closes the presence/absence channel rather than
+        # only the run. Both FNs above are pinned by tests/test_b448_invisible_fn_guards.py
+        # so a future narrowing has to keep catching them. Do not re-narrow without that.
+        if signal.startswith("confusable") and not confusable_in_ascii_context(source):
+            noted.append(f"{signal} (non-Latin script only — reads as i18n)")
+        else:
+            signals.append(signal)
+    longest = max((len(line) for line in source.splitlines()), default=0)
+    if longest >= _HOOK_MINIFIED_LINE:
+        unreadable = "minified — unreadable"
+    try:
+        for finding in _analyze_javascript(source, filename):
+            if finding.rule == "AST_UNANALYZABLE":
+                unreadable = unreadable or "could not be parsed"
+            elif finding.severity == "crit":
+                signals.append(finding.rule)
+            else:
+                noted.append(finding.rule)
+    except (RecursionError, ValueError):
+        unreadable = unreadable or "could not be parsed"
+    return signals, noted, unreadable
+
+
+def check_dependency_tree_hooks(ctx: Context) -> Finding:
+    """B349 (F-167, B-447): a dependency-tree package whose install-time target is obfuscated.
+
+    "Install-time" covers both ways npm runs a dependency's own code during an install:
+    a declared lifecycle hook, and a `binding.gyp` command-expansion that node-gyp runs
+    while configuring. The second needs no lifecycle script at all.
+    """
+    # Reads ctx ONLY -- audit(include_deptree=True) does the single walk. This check must
+    # never traverse the filesystem itself: doing so cost 2.4s per invocation (102% of a
+    # whole audit) and reached into the machine's real global npm install from any Context,
+    # including ones a test had built over a fixture home. Same hermetic-by-default shape
+    # as `ctx.sockets`/`include_sockets` (B340).
+    scan = getattr(ctx, "dep_tree", None)
+    if scan is None:
+        return _finding(
+            "B349",
+            UNKNOWN,
+            "The OpenClaw dependency tree was not walked this run, so it is unexamined — "
+            "not clean. It is scanned when the audit is run with the dependency-tree pass "
+            "enabled and an OpenClaw installation is locatable on PATH.",
+            "Run the audit on the host where OpenClaw is installed, with its bin directory "
+            "on PATH.",
+        )
+    if not scan.scanned:
+        return _finding(
+            "B349",
+            UNKNOWN,
+            "The OpenClaw installation carries no node_modules directory, so no dependency "
+            "tree could be examined.",
+            "If dependencies live elsewhere for this install layout, inspect that tree by hand.",
+        )
+
+    # Both install-time execution surfaces, flattened into one shape and assessed by one
+    # code path. `origin` is the npm phase for a lifecycle hook and the build-config
+    # filename for a GYP expansion, so the evidence still says which one fired -- they
+    # differ in where the reader has to look, not in how dangerous they are.
+    sites = [(h.package, h.relpath, h.phase, h.command, h.targets) for h in scan.hooks]
+    sites += [
+        (d.package, d.relpath, _deptree.GYP_FILENAME, d.command, d.targets)
+        for d in scan.build_directives
+    ]
+
+    hits: list = []
+    # A build config the walk could not fully examine is seeded here, not dropped: the
+    # package author writes that file, so an oversized or decoy-padded one would otherwise
+    # buy a clean PASS by exhausting a budget. Same GR#4 discipline as `scan.truncated`.
+    unreadable: list = list(getattr(scan, "gyp_capped", ()) or ())
+    noted: list = []
+    examined = 0
+    for package, relpath, origin, command, targets in sites:
+        for target in targets:
+            source = _deptree.read_target(target)
+            if source is None:
+                unreadable.append(
+                    f"{package} ({relpath}) {origin}: {target.name} (too large to read)"
+                )
+                continue
+            examined += 1
+            signals, noted_rules, why = _b349_assess_target(source, target.name)
+            where = f"{package} ({relpath}) {origin}: {command} -> {target.name}"
+            if signals:
+                hits.append(f"{where} [{', '.join(sorted(set(signals))[:4])}]")
+            elif why:
+                unreadable.append(f"{where} ({why})")
+            elif noted_rules:
+                # Disclosed, never a verdict: a platform-binary installer shelling out with
+                # an interpolated version is the shape here, and it is ordinary.
+                noted.append(f"{where} [{', '.join(sorted(set(noted_rules)))} — not a verdict]")
+    if hits:
+        return _finding(
+            "B349",
+            FAIL,
+            "A package in the OpenClaw dependency tree runs a target carrying a "
+            "code-execution or obfuscation signal at install time, allowing code you "
+            "never chose to run the next time this package is installed or updated.",
+            _B349_FIX,
+            hits,
+        )
+
+    # Unreadable is not clean. A machine-generated installer we could not parse is exactly
+    # the shape the campaign ships, and claiming a PASS over bytes we never read would be
+    # the silent lying-PASS this project exists to prevent (B97 sets the same precedent).
+    if unreadable:
+        return _finding(
+            "B349",
+            UNKNOWN,
+            "An install-time execution target in the OpenClaw dependency tree could not be "
+            "read, so whether it is safe is undetermined — not clean.",
+            "Beautify or manually inspect each named installer before the next install or "
+            "update; reinstall from a lockfile you trust (npm ci) once reviewed.",
+            unreadable,
+        )
+
+    # A truncated walk is not a clean tree. Say so rather than let a partial scan read as
+    # coverage (GR#4) -- the same discipline the skill scanner's own cap-hit UNKNOWN applies.
+    if scan.truncated:
+        return _finding(
+            "B349",
+            UNKNOWN,
+            "The OpenClaw dependency tree exceeded this check's package budget, so the "
+            "remainder was never examined.",
+            "Inspect the tree by hand, or re-run with a wider budget once one is available.",
+            [f"packages walked before the budget was hit: {scan.packages}"],
+        )
+    return _finding(
+        "B349",
+        PASS,
+        "Scanned the OpenClaw dependency tree: no package runs an install-time target "
+        "carrying a code-execution or obfuscation signal.",
+        "Reinstall from a lockfile you trust (npm ci) so a republished version cannot "
+        "silently replace a reviewed one.",
+        [
+            f"packages walked: {scan.packages}; install-lifecycle hooks: {len(scan.hooks)}; "
+            f"build-config command expansions: {len(scan.build_directives)}; "
+            f"targets read: {examined}",
+            "coverage: an install-time command whose target is not an in-package "
+            "`node <file>` invocation (a bin from another package, a shell builtin, an "
+            "inline `node -e` expression) has no bytes here to read and is not assessed",
+        ]
+        + noted,
     )
 
 
@@ -1801,6 +2845,24 @@ def check_secrets_provider_exec(ctx: Context) -> Finding:
               alone; or a secret-shaped name in passEnv.
     PASS    — exec-source provider(s) configured with none of the above escape flags.
     UNKNOWN — no secrets.providers block, or no provider uses source:"exec".
+
+    F-140 — BOTH UNKNOWN branches are genuine surface absence, and both are migrated,
+    because they are two successive narrowings of the same single locus
+    (``secrets.providers`` in ``ctx.config``), not one real branch plus one fallback:
+
+    1. no ``secrets.providers`` block at all — nothing declares a secret provider, so no
+       command can run on secret resolve;
+    2. providers declared, but none is the command-based ``source:"exec"`` shape — the
+       schema's ``source:"exec"`` + ``pluginIntegration`` variant has no ``command``
+       field, so it carries none of the writable-path/symlink escape surface this check
+       models, and a config holding only those has no assessable object either.
+
+    Both set ``not_applicable`` only when the config locus was read COMPLETELY. The
+    earlier ``_config_unreadable`` guard already returns for a parse error, so
+    ``_surface_absent`` is not redundant here — it additionally covers ``config_found``
+    being False (openclaw.json absent entirely, where ``config_parse_error`` is False and
+    ``ctx.config`` is ``{}``, so both branches would otherwise fire on a machine nobody
+    audited) and a LIMIT_DOMAIN_CONFIG truncation.
     """
     unreadable = _config_unreadable("B194", ctx)
     if unreadable is not None:
@@ -1816,6 +2878,8 @@ def check_secrets_provider_exec(ctx: Context) -> Finding:
             "If you configure a secrets.providers.<name> with source:\"exec\", scope "
             "it with a non-empty trustedDirs and avoid allowInsecurePath/"
             "allowSymlinkCommand.",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
+            config_field_paths={"secrets.providers"},
         )
 
     # The schema also has a source:"exec" + pluginIntegration variant with no `command`
@@ -1833,6 +2897,8 @@ def check_secrets_provider_exec(ctx: Context) -> Finding:
             "secrets.providers configured but none use a command-based "
             "source:\"exec\" -- nothing to assess for exec-source command execution.",
             "—",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
+            config_field_paths={"secrets.providers"},
         )
 
     fail_ev: list[str] = []
@@ -1921,7 +2987,10 @@ _B33_EVIDENCE_CAP = 20
 def check_known_vulns(ctx: Context) -> Finding:
     """B33 — Known-vulnerable OpenClaw version gate.
 
-    FAIL    — installed version <= one or more known advisories' max_vulnerable_version_tuple.
+    FAIL    — installed version <= one or more known advisories' max_vulnerable_version_tuple,
+              AND — for a config-conditioned row (C-414) — that row's `condition(ctx.config)`
+              also holds. A version-only row (still the vast majority of the table) has no
+              condition to satisfy, matching on version alone exactly as before this task.
               Reports EVERY matching advisory (B-332) — not just the first row in table
               order — and the `fix` targets the HIGHEST fixed_version across all matches,
               since that is the only version that actually clears the finding. Returning on
@@ -1929,7 +2998,11 @@ def check_known_vulns(ctx: Context) -> Finding:
               as remediation: a version still vulnerable to every later advisory in the
               table, turning the fix into a multi-step upgrade treadmill instead of a single
               correct jump.
-    PASS    — installed version is past all known advisory fixes.
+    PASS    — installed version is past all known advisory fixes, OR every version-matched
+              config-conditioned row's condition came back False (this host's config shape
+              cannot reach that particular defect) or raised (C-414: an unproven condition
+              never manufactures a FAIL — Golden Rule #5 — so it is treated the same as
+              "condition did not hold", not surfaced as its own UNKNOWN).
     UNKNOWN — meta.lastTouchedVersion is missing or cannot be parsed.
     """
     raw_ver = dig(ctx.config, "meta.lastTouchedVersion") or dig(ctx.config, "lastTouchedVersion")
@@ -1956,7 +3029,23 @@ def check_known_vulns(ctx: Context) -> Finding:
 
     # Collect EVERY matching row (table order is oldest-first, so this is already a
     # deterministic, stable ordering across runs) rather than returning on the first.
-    matched = [row for row in _KNOWN_ADVISORIES if parsed <= row[1]]
+    #
+    # C-414: version match alone is not enough for a config-conditioned (5-element) row —
+    # its condition(ctx.config) must also hold. `row[4]` is only ever present on a 5-tuple
+    # (a plain 4-tuple version-only row indexes nothing past row[3]), so `len(row) < 5` is
+    # checked first and short-circuits `row[4]` for every existing row untouched by this
+    # task. A condition that raises is caught and treated as "did not hold" — never let a
+    # broken predicate manufacture a FAIL (Golden Rule #5); it degrades to silently not
+    # matching this one row, not to a crash or a finding of its own.
+    def _condition_holds(row: tuple) -> bool:
+        if len(row) < 5:
+            return True
+        try:
+            return bool(row[4](ctx.config))
+        except Exception:
+            return False
+
+    matched = [row for row in _KNOWN_ADVISORIES if parsed <= row[1] and _condition_holds(row)]
     if not matched:
         return _finding(
             "B33",
@@ -1965,11 +3054,11 @@ def check_known_vulns(ctx: Context) -> Finding:
             "Keep OpenClaw updated and re-check after new advisories are published.",
         )
 
-    matched_ids = [ghsa_id for ghsa_id, _max_vuln, _fixed_ver, _desc in matched]
+    matched_ids = [row[0] for row in matched]
     # The only version that actually clears the finding is the HIGHEST fixed_version
     # across every matched advisory — a lower fixed_version leaves later advisories open.
     highest_fixed_ver = max(
-        (fixed_ver for _ghsa_id, _max_vuln, fixed_ver, _desc in matched),
+        (row[2] for row in matched),
         key=lambda v: _parse_version(v) or (),
     )
 
@@ -2123,7 +3212,7 @@ def check_memory_reconsumption_injection(ctx: Context) -> Finding:
     # `check_log_threat_hunt` (B164, checks/_egress.py) imports it lazily too.
     from ..logdiscovery import discover_log_sinks  # noqa: PLC0415
     from ..logscan import scan_log_file, summarize_truncation  # noqa: PLC0415
-    from ..scanbudget import audit_deadline  # noqa: PLC0415
+    from ..scanbudget import audit_deadline, limits_for  # noqa: PLC0415
 
     memory_sinks = [s for s in discover_log_sinks(ctx) if s.kind == "memory"]
     if not memory_sinks:
@@ -2142,9 +3231,12 @@ def check_memory_reconsumption_injection(ctx: Context) -> Finding:
     any_scanned = False
     isolated_hits = 0
 
+    # F-164: --exhaustive widens the per-sink budget and full-line coverage via
+    # limits_for(ctx); DEFAULT_LIMITS reproduces _B180_PER_FILE_BUDGET_S exactly.
+    lim = limits_for(ctx)
     for sink in memory_sinks:
-        deadline = audit_deadline(_B180_PER_FILE_BUDGET_S)
-        result = scan_log_file(sink, deadline)
+        deadline = audit_deadline(lim.log_per_file_budget_s)
+        result = scan_log_file(sink, deadline, limits=lim)
         all_results.append(result)
         if result.bytes_scanned == 0:
             continue
@@ -2251,7 +3343,9 @@ def check_offboarding_hygiene(ctx: Context) -> Finding:
     container-safe; only an absolute path that is absent is a dead-entry signal.
     """
     # local import: avoid a module-load cycle
-    from ..collector import SKILL_TIER_ORDER, skill_load_roots
+    from ..collector import (
+        LIMIT_DOMAIN_SKILL, SKILL_TIER_ORDER, _safe_is_dir, _safe_is_file, skill_load_roots,
+    )
 
     home = getattr(ctx, "home", None)
     if not isinstance(home, Path) or not home.exists():
@@ -2269,7 +3363,7 @@ def check_offboarding_hygiene(ctx: Context) -> Finding:
     # stale copies. name -> [(tier, rel_dir), ...].
     name_hits: dict[str, list[tuple[str, str]]] = {}
     for base, tier in skill_load_roots(home, ctx.config, user_home=_b104_user_home(home)):
-        if not base.is_dir():
+        if not _safe_is_dir(base, ctx, what=f"skill root '{base}'", domain=LIMIT_DOMAIN_SKILL):
             continue
         try:
             entries = sorted(base.iterdir())
@@ -2279,7 +3373,12 @@ def check_offboarding_hygiene(ctx: Context) -> Finding:
             if sd.is_symlink() or not sd.is_dir():
                 continue
             skill_md = sd / "SKILL.md"
-            if not skill_md.is_file():
+            # B-767: stat'ing an entry INSIDE `sd` needs traverse permission on `sd`
+            # itself, which a chmod-000 skill dir (unlike the checks above, which only
+            # stat `sd` from its already-traversable parent) denies -- and
+            # Path.is_file() does NOT swallow EACCES. _safe_is_file degrades this one
+            # directory to "skip it" and records the gap instead of crashing the check.
+            if not _safe_is_file(skill_md, ctx, what=f"'{skill_md.name}' in a skill dir"):
                 continue
             try:
                 blob = skill_md.read_text(encoding="utf-8", errors="replace")
@@ -2344,6 +3443,23 @@ def check_offboarding_hygiene(ctx: Context) -> Finding:
             "missing command path there before removing it.",
             warns,
         )
+    # B-661: unlike the duplicate-skill scan above (which walks disk load roots
+    # directly), the "no dead MCP command paths" half is read ENTIRELY from
+    # `ctx.config` (`_mcp_servers(ctx.config or {})`), and `skill_load_roots` also
+    # takes `ctx.config` to find any CUSTOM grouped skill roots beyond the standard
+    # ones. On a host where openclaw.json was never found, both legs silently see
+    # "nothing configured" rather than "not checked" — the same fail-open shape as
+    # every other check in this audit, just partial rather than total. A clean
+    # PASS here is honest only when the config locus was actually read.
+    if (not isinstance(ctx.config, dict) or not ctx.config) and not ctx.config_found:
+        return _custom(
+            "B104", LOW, UNKNOWN,
+            "No duplicate skill installs found in the standard load roots, but no config "
+            "was read — any custom skill load roots and any configured MCP server dead "
+            "command paths could not be checked.",
+            "Run the audit on the host where ~/.openclaw lives so config-declared skill "
+            "roots and MCP servers can be reconciled too.",
+        )
     return _custom(
         "B104", LOW, PASS,
         "No duplicate skill installs or dead MCP command paths found.",
@@ -2358,12 +3474,24 @@ def check_self_modification(ctx: Context) -> Finding:
     FAIL   — ALL three conditions hold:
                (a) fs_write/exec/elevated tools are enabled,
                (b) on POSIX, an identity target (SOUL.md) or skills dir is
-                   group/world-writable (the agent process can rewrite its own
-                   identity/skills without needing special escalation),
+                   group/world-writable — some identity OTHER than the file's
+                   own owner can write it,
                (c) no approval gate is configured.
     WARN   — (a) + (b) hold but (c) — approval IS present.
     UNKNOWN — tools absent (condition a false), or not POSIX, or no writable
               identity files found.
+
+    Scope, decided deliberately (B-495): condition (b) is the MULTI-USER question —
+    group/world write access — not "can the agent write its own files." The agent
+    runs AS the owner of these files, so a 0600 file it owns is always writable by
+    the agent regardless of (b); that is universal (also the product's documented
+    self-rewrite workflow for SOUL.md), not a permission weakness, so it is
+    deliberately not scored here. UNKNOWN on (b) alone means "no OTHER local
+    identity can write these files," never "self-modification risk is ruled out."
+    The evidence-based signal for an actual self-modification event is B6/B161 (did
+    a content scan find an injected directive actually written into the file), and
+    RISK-07/RISK-13 (B-494) already open their chain on either this check's FAIL OR
+    a B6/B161 FAIL.
     """
     cfg = ctx.config
     tools = _enabled_tools(cfg)
@@ -2396,12 +3524,24 @@ def check_self_modification(ctx: Context) -> Finding:
         return _finding(
             "B22",
             UNKNOWN,
-            "Dangerous tools present but no writable identity/skill targets found — "
-            "self-modification risk could not be confirmed.",
-            "Verify workspace SOUL.md and skills dirs are chmod 700/600.",
+            "Dangerous tools present but no group/world-writable identity/skill "
+            "targets found — the MULTI-USER self-modification risk could not be "
+            "confirmed. This does not rule out the agent rewriting files it already "
+            "owns (always possible, not itself a weakness); see B6/B161 for whether "
+            "an injected directive was actually found in their content.",
+            "Verify workspace SOUL.md and skills dirs are chmod 700/600. A B6/B161 "
+            "FAIL on these files is the actionable signal this check cannot see.",
         )
 
     # Condition (c): approval gate (real OpenClaw field: tools.exec.mode/security/ask)
+    # B-644 considered, deliberately NOT applied here: unlike B8/B46/B18 (which claim
+    # a gate fully covers the action), this check's own WARN text already discloses
+    # the gate as partial ("risk is reduced but not eliminated") rather than claiming
+    # full coverage -- downgrading FAIL to WARN on ANY real tools.exec.* gate,
+    # regardless of exact tool-family match, is this check's deliberate, heavily
+    # regression-tested calibration (see BLK-01 tests in tests/test_b22.py). Making
+    # this tool-aware would flip WARN->FAIL for `_cfg_with_tools()`'s own
+    # fs_write+shell+exec.mode='ask' shape and contradict that calibration.
     has_approval = _has_approval_gate(cfg)
 
     joined = "; ".join(writable[:6])
@@ -2437,7 +3577,9 @@ def check_self_modification(ctx: Context) -> Finding:
 # Real OpenClaw schema (grounded 2026-07-18, dist config-XlfFMqhc.js
 # resolveSkillWorkshopConfig + zod-schema-O9ml_nmo.js:1510-1516):
 #   skills.workshop.autonomous.enabled        bool,              default false
-#   skills.workshop.approvalPolicy            "pending" | "auto", default "pending"
+#   skills.workshop.approvalPolicy            "pending" | "auto"
+#     default "pending" on 2026.7.x, "auto" from 2026.8.1 (B-702 — measured in each
+#     build's own src/skills/workshop/config.ts DEFAULT_CONFIG)
 #   skills.workshop.allowSymlinkTargetWrites  bool,              default false
 #
 # Spec correction: the originating bug report assumed approvalPolicy
@@ -2530,51 +3672,278 @@ def _skill_workshop_reachable(cfg: dict) -> bool:
     if isinstance(profile, str) and profile.strip().lower() in _WORKSHOP_SAFE_PROFILES:
         return False
 
-    agents_list = dig(cfg, "agents.list")
-    # Only trust a per-agent deny/allow when it is the SOLE declared agent — with
-    # multiple agents a single agent's restriction doesn't prove the tool is
-    # unreachable fleet-wide, so stay conservative and leave it reachable (FAIL).
-    if isinstance(agents_list, list) and len(agents_list) == 1:
-        agent = agents_list[0]
-        if isinstance(agent, dict):
-            if "skill_workshop" in _names(dig(agent, "tools.deny")):
-                return False
-            agent_allow = _names(dig(agent, "tools.allow"))
-            if agent_allow and "*" not in agent_allow and "skill_workshop" not in agent_allow:
-                return False
+    # B-699: agents.entries as well as agents.list.
+    # A per-agent deny/allow proves the tool unreachable only when EVERY declared agent
+    # carries one: the runtime resolves the capability profile per session and per agent
+    # (`resolveConversationCapabilityProfile(..., agentId)`), so one agent's restriction
+    # says nothing about the others, while all of them together do.
+    #
+    # B-702 widened this from "the SOLE declared agent" to "every declared agent". The
+    # original form was conservative in the safe direction while this check only fired on
+    # an EXPLICIT opt-in; now that it also fires on the 2026.8.1 defaults, a fleet whose
+    # agents all deny `skill_workshop` would have been a false FAIL — and Golden Rule #5
+    # makes that a blocker, not a rounding error.
+    roster = agent_roster(cfg)
+    if roster and all(_agent_blocks_workshop(a.entry, _names) for a in roster):
+        return False
 
     return True
 
 
+def _agent_blocks_workshop(agent: dict, _names) -> bool:
+    """True when this agent's own tool policy removes `skill_workshop`."""
+    if "skill_workshop" in _names(dig(agent, "tools.deny")):
+        return True
+    agent_allow = _names(dig(agent, "tools.allow"))
+    return bool(agent_allow) and "*" not in agent_allow and "skill_workshop" not in agent_allow
+
+
 def check_skill_workshop_autonomy(ctx: Context) -> Finding:
+    # B-702 gave this check a leg that reasons from the INSTALLED BUILD'S DEFAULT when the
+    # keys are absent. On a home with no `openclaw.json` at all, every key is absent, so
+    # that leg fired and produced a HIGH FAIL about a config this run never saw -- the
+    # fabricated verdict `tests/test_b585_sarif_layer_state.py` exists to forbid.
+    #
+    # `scoring._config_blind_signal` already settles the principle: present-but-unparseable
+    # (B-306) and genuinely absent (B-363) are "the same real-world fact", and both fire
+    # CONFIG_BLIND_CAP. `_config_unreadable` covers only the first, so this covers the
+    # second rather than inventing a new rule. Structural collector state, never a string
+    # match on ctx.errors.
+    #
+    # Deliberately NOT silence: the 2026.8.1 default is stated in the text, so a reader with
+    # no config still learns the fact -- they just are not told it as a verdict about a
+    # setup that was never read.
+    #
+    # And deliberately NOT `engine_degraded=True`, unlike the `_config_unreadable` case just
+    # below. That flag means the ENGINE could not do its job; here it did, and there was
+    # nothing to read. The grade is capped either way -- `scoring._config_blind_signal`
+    # fires CONFIG_BLIND_CAP off `ctx.config_found` (B-363) without any help from a finding.
+    # Setting it here instead double-counts, and it moved `_degraded_signal` from (False, 0)
+    # to (True, 1) on three of tests/test_b455_degraded_scoring.py's cases, which are about
+    # B13 and have nothing to do with this.
+    # Both halves are required. `config_found` is COLLECTOR state, so it is False on a
+    # hand-built `Context` that was handed a real config dict directly -- reading it alone
+    # made 28 tests answer UNKNOWN about configs they had explicitly supplied. And
+    # `not ctx.config` alone is not enough either: a home with a literal `{}` on disk was
+    # genuinely read, and must keep its verdict.
+    if not ctx.config and not getattr(ctx, "config_found", True):
+        return _finding(
+            "B175",
+            UNKNOWN,
+            "No openclaw.json was found for this home, so which Skill Workshop settings "
+            "are in force cannot be read. On OpenClaw 2026.8.1 and later the defaults are "
+            "autonomous.mode=\"auto\" and approvalPolicy=\"auto\" -- the agent authors AND "
+            "installs new skill code unattended; on 2026.7.x they are disabled and "
+            "review-gated.",
+            "Point --home at the OpenClaw home you mean to audit, then re-run. If this IS "
+            "the right home and OpenClaw has never written a config here, it is running on "
+            "those defaults.",
+        )
     if (f := _config_unreadable("B175", ctx)) is not None:
         return f
 
     cfg = ctx.config
-    enabled = dig(cfg, "skills.workshop.autonomous.enabled") is True
-    is_auto = dig(cfg, "skills.workshop.approvalPolicy") == "auto"
-    symlink_writes = dig(cfg, "skills.workshop.allowSymlinkTargetWrites") is True
+    # B-700 / B-702: this check's two inputs both changed shape AND default in OpenClaw
+    # 2026.8.1, and the second half is the dangerous one.
+    #
+    # SHAPE. The boolean `skills.workshop.autonomous.enabled` became the enum `.mode`
+    # ("off" | "propose" | "auto"). Both are read; the enum wins where present.
+    #
+    #   "off"      keeps only the suggestion nudge          -> not enabled
+    #   "propose"  creates pending proposals                -> enabled
+    #   "auto"     APPLIES captured proposals and runs a daily cleanup that "can rewrite
+    #              or drop eligible writable skills"        -> enabled
+    #
+    # DEFAULT. Measured in each build's own runtime bundle (`src/skills/workshop/config.ts`,
+    # DEFAULT_CONFIG) — not read off a description, because this is what the verdict rests on:
+    #
+    #     2026.7.1-2   autonomous {enabled: false}   approvalPolicy "pending"
+    #     2026.8.1     autonomous {mode: "auto"}     approvalPolicy "auto"
+    #
+    # BOTH flipped to the dangerous value, and this check's FAIL condition is exactly their
+    # conjunction. So on 2026.8.1 a config with no `skills.workshop` block at all is running
+    # unattended authoring AND unattended install — and this check used to answer PASS
+    # "autonomous authoring is disabled" about it. That is a positive assertion about a
+    # state the runtime is not in.
+    #
+    # An ABSENT setting therefore means different things on the two builds, which is why the
+    # generation has to be consulted for that case and only that case. An EXPLICIT value
+    # settles itself: `.mode` does not parse on 2026.7.x and `.enabled` does not parse on
+    # 2026.8.1, so the spelling the user wrote already names their build.
+    _node = cfg
+    for _key in ("skills", "workshop", "autonomous", "mode"):
+        _node = _node.get(_key) if isinstance(_node, dict) else None
+    workshop_mode = _node
+    legacy_enabled = dig(cfg, "skills.workshop.autonomous.enabled")
+    approval = dig(cfg, "skills.workshop.approvalPolicy")
+    generation = _openclaw_generation(ctx)
+
+    # WHICH SPELLING IS IN EFFECT. The INSTALLED build decides, whenever we can see it: a
+    # key belonging to the other generation is rejected by that build's schema, so it is on
+    # disk but not in effect, and the build's DEFAULT applies instead.
+    #
+    # That is not a technicality — it is the sharpest case this check has. A user who set
+    # `autonomous.enabled: false` on 2026.7.x and then upgraded has silently LOST that
+    # protection: 2026.8.1 does not read the key, and its default is "auto". Reading the
+    # stale key as if it still worked would report exactly the safety they no longer have.
+    #
+    # The spelling only decides when the installed version is undeterminable, where it is
+    # the single piece of evidence available: `.mode` does not parse on 2026.7.x and
+    # `.enabled` does not parse on 2026.8.1.
+    if generation == "unknown":
+        if isinstance(workshop_mode, str):
+            generation = "modern"
+        elif isinstance(legacy_enabled, bool):
+            generation = "legacy"
+
+    # `readAutonomousMode(value, fallback)` keeps ONLY the three enum members and falls back
+    # otherwise, exactly as `readApprovalPolicy` does. So `mode: "zzz"` resolves to the
+    # build default, not to "off" — reading an unrecognised string as "not enabled" was a
+    # false negative in the first version of this fix, caught by the type-confusion pass.
+    in_effect_mode = (workshop_mode
+                      if generation == "modern"
+                      and workshop_mode in ("off", "propose", "auto")
+                      else None)
+    in_effect_enabled = legacy_enabled if generation == "legacy" else None
+    stale_key = None
+    if generation == "modern" and isinstance(legacy_enabled, bool):
+        stale_key = "skills.workshop.autonomous.enabled"
+    elif generation == "legacy" and isinstance(workshop_mode, str):
+        stale_key = "skills.workshop.autonomous.mode"
+
+    autonomy_default = False
+    if isinstance(in_effect_mode, str):
+        enabled = in_effect_mode in ("propose", "auto")
+        autonomy_key = "skills.workshop.autonomous.mode"
+        autonomy_value = in_effect_mode
+    elif isinstance(in_effect_enabled, bool):
+        enabled = in_effect_enabled is True
+        autonomy_key = "skills.workshop.autonomous.enabled"
+        autonomy_value = None
+    elif generation == "modern":
+        enabled = True                       # DEFAULT_CONFIG.autonomous.mode == "auto"
+        autonomy_key = "skills.workshop.autonomous.mode"
+        autonomy_value = "auto"
+        autonomy_default = True
+    else:
+        # legacy default is false; on an undeterminable build we assert nothing here and
+        # let the `undecidable` branch below speak instead.
+        enabled = False
+        autonomy_key = ("skills.workshop.autonomous.enabled" if generation == "legacy"
+                        else _key_advice(ctx, "skills.workshop.autonomous.enabled",
+                                         "skills.workshop.autonomous.mode"))
+        autonomy_value = None
+
+    # `readApprovalPolicy(value, fallback)` keeps only "pending"/"auto" and falls back
+    # otherwise, so an invalid value resolves to the build's default exactly like an absent
+    # one — mirrored here rather than treated as its own state.
+    if approval in ("pending", "auto"):
+        is_auto = approval == "auto"
+        approval_default = False
+    else:
+        approval_default = True
+        is_auto = generation == "modern"     # 8.1 default "auto"; 7.x default "pending"
+
+    # The honest third answer: the config sets NOTHING this check reads, and we cannot see
+    # which build's default applies. PASS would assert a state we did not read; FAIL would
+    # assert a build we did not identify.
+    #
+    # NOT gated on _workshop_symlink_knob(ctx) == "retired": that state IMPLIES
+    # generation == "modern" (both read installed_dist_version first and
+    # meta.lastTouchedVersion second, and 2026.9.3 >= _SCHEMA_MODERN_MIN), so this
+    # conjunct's generation == "unknown" already rules retired out. A control on an
+    # unreachable branch would be a guard that cannot fail; the invariant is pinned
+    # instead, in tests/test_b783_symlink_knob_retired.py.
+    undecidable = (
+        generation == "unknown"
+        and workshop_mode is None
+        and legacy_enabled is None
+        and approval is None
+        and dig(cfg, "skills.workshop.allowSymlinkTargetWrites") is None
+    )
+
+    # A key the installed build ignores is worth saying out loud wherever this check
+    # speaks, because its whole point is that the user believes it is working.
+    stale_note = ("" if stale_key is None else
+                  f" NOTE: {stale_key} is present in the config but this OpenClaw build "
+                  "does not read it, so its value is NOT in effect — the build default "
+                  "applies instead.")
+
+    # B-783: OpenClaw 2026.9.3 REMOVED skills.workshop.allowSymlinkTargetWrites from the
+    # schema outright (not merely defaulted it off) — vendor hardening, not a widening.
+    # dig() reads raw JSON regardless of schema validity, so a line `openclaw doctor
+    # --fix` has not yet deleted still arrives here; on a build that retired the key it
+    # is never live, and reporting it as an active risk would describe a state the
+    # runtime cannot be in. `!= "retired"`, not `== "honoured"`: a build we could not
+    # identify keeps the finding rather than losing it.
+    symlink_state = _workshop_symlink_knob(ctx)
+    symlink_present = dig(cfg, "skills.workshop.allowSymlinkTargetWrites") is True
+    symlink_writes = symlink_present and symlink_state != "retired"
+    retired_note = ("" if not (symlink_present and symlink_state == "retired") else
+                    " NOTE: skills.workshop.allowSymlinkTargetWrites is still on disk, "
+                    "but OpenClaw 2026.9.3 removed the setting — Skill Workshop now "
+                    "writes only inside its own directory, so the line grants nothing. "
+                    "`openclaw doctor --fix` deletes it.")
 
     if not (enabled or is_auto or symlink_writes):
+        if undecidable:
+            # B-702: nothing explicit, and the two builds disagree about what that means.
+            # PASS here would assert a state we did not read; FAIL would assert a build we
+            # did not identify. Golden Rule #4 — say so, and say what would settle it.
+            return _finding(
+                "B175",
+                UNKNOWN,
+                "No Skill Workshop settings are configured, and the installed OpenClaw "
+                "version could not be determined — so which default applies cannot be "
+                "read. On 2026.8.1 and later the defaults are autonomous.mode=\"auto\" "
+                "and approvalPolicy=\"auto\", i.e. the agent authors AND installs new "
+                "skill code unattended; on earlier releases they are off and \"pending\".",
+                "Set the values explicitly rather than inheriting them: on OpenClaw "
+                "2026.8.1 and later, skills.workshop.autonomous.mode=\"off\" and "
+                "skills.workshop.approvalPolicy=\"pending\"; before it, "
+                "skills.workshop.autonomous.enabled=false and the same approvalPolicy.",
+            )
+        if stale_key is not None and retired_note:
+            pass_fix = (f"Remove {stale_key} and set the key this build actually reads; "
+                        "`openclaw doctor --fix` also deletes the retired "
+                        "skills.workshop.allowSymlinkTargetWrites line.")
+        elif stale_key is not None:
+            pass_fix = f"Remove {stale_key} and set the key this build actually reads."
+        elif retired_note:
+            pass_fix = ("Delete the retired skills.workshop.allowSymlinkTargetWrites "
+                        "line (`openclaw doctor --fix` removes it). Nothing else to "
+                        "change.")
+        else:
+            pass_fix = "—"
         return _finding(
             "B175",
             PASS,
             "Skill Workshop autonomous authoring is disabled and lifecycle actions "
             "(propose/apply/reject/quarantine) require review — approvalPolicy is not "
-            '"auto".',
-            "—",
+            '"auto".' + stale_note + retired_note,
+            pass_fix,
         )
 
     reasons = []
     if enabled:
         reasons.append(
-            "skills.workshop.autonomous.enabled=true (agent auto-authors skill "
-            "proposals from conversation signals with no user request)"
+            (f"skills.workshop.autonomous.mode={autonomy_value!r}"
+             if autonomy_value is not None
+             else "skills.workshop.autonomous.enabled=true")
+            + (" — the OpenClaw 2026.8.1 DEFAULT, not something set here"
+               if autonomy_default else "")
+            + " (agent auto-authors skill proposals from conversation signals with no "
+            "user request"
+            + (" AND applies them" if autonomy_value == "auto" else "")
+            + ")"
         )
     if is_auto:
         reasons.append(
-            'skills.workshop.approvalPolicy="auto" (no human confirmation before a '
-            "skill_workshop proposal is applied/installed)"
+            'skills.workshop.approvalPolicy="auto"'
+            + (" — the OpenClaw 2026.8.1 DEFAULT, not something set here"
+               if approval_default else "")
+            + " (no human confirmation before a skill_workshop proposal is "
+            "applied/installed)"
         )
     if symlink_writes:
         reasons.append(
@@ -2590,12 +3959,14 @@ def check_skill_workshop_autonomy(ctx: Context) -> Finding:
                 "Skill Workshop can autonomously AUTHOR new executable skill code from "
                 "conversation signals AND install it with no human review step: "
                 + "; ".join(reasons)
-                + ".",
-                'Set skills.workshop.approvalPolicy to the default "pending" so every '
-                "generated proposal needs an explicit `openclaw skills workshop apply` "
-                "decision before it installs; also consider disabling "
-                "skills.workshop.autonomous.enabled if unattended skill authoring is not "
-                "intended.",
+                + "." + stale_note + retired_note,
+                'Set skills.workshop.approvalPolicy to "pending" so every generated '
+                "proposal needs an explicit `openclaw skills workshop apply` decision "
+                f"before it installs, and set {autonomy_key} to "
+                + ('"off"' if generation == "modern" else "false")
+                + " unless unattended skill authoring is genuinely intended."
+                + (" Both are OpenClaw 2026.8.1 defaults, so leaving them unset is not "
+                   "the safe choice on this build." if generation == "modern" else ""),
                 evidence=reasons,
             )
         # B-239: enabled+auto is set, but a separate tool-policy/sandbox control
@@ -2614,27 +3985,279 @@ def check_skill_workshop_autonomy(ctx: Context) -> Finding:
             WARN,
             "Skill Workshop autonomy is fully configured for unattended authoring + "
             "install, but the skill_workshop tool is not currently reachable: "
-            + "; ".join(reasons)
+            + stale_note + retired_note + "; ".join(reasons)
             + ". One tool-policy edit (removing the deny/allow restriction, dropping "
             "out of sandbox.mode=all, or widening tools.profile) re-arms the full "
             "unattended pipeline.",
-            'Keep skills.workshop.approvalPolicy at the default "pending" (never '
-            '"auto") and disable skills.workshop.autonomous.enabled unless unattended '
-            "authoring is genuinely intended — don't rely on tool-policy/sandboxing "
-            "alone to contain it, since either can be loosened independently later.",
+            'Set skills.workshop.approvalPolicy to "pending" (never "auto") and turn off '
+            f"{autonomy_key} unless unattended authoring is genuinely intended — don't "
+            "rely on tool-policy/sandboxing alone to contain it, since either can be "
+            "loosened independently later.",
             evidence=reasons,
         )
 
+    # B-783: the advice used to name the bare "allowSymlinkTargetWrites" unconditionally
+    # — on every partial-gap WARN, including one that never set it — which is the same
+    # shape B-700 exists to catch (advice to write a key a build rejects). The full
+    # dotted path makes the advice self-identifying; the three states decide whether it
+    # is said at all, and whether it is version-qualified.
+    if symlink_state == "retired":
+        symlink_advice = ""
+    elif symlink_state == "honoured":
+        symlink_advice = (", and leave skills.workshop.allowSymlinkTargetWrites at its "
+                          "default false unless a shared/trusted skill root genuinely "
+                          "needs it")
+    else:
+        symlink_advice = (", and — on OpenClaw releases before 2026.9.3 — leave "
+                          "skills.workshop.allowSymlinkTargetWrites at its default "
+                          "false unless a shared/trusted skill root genuinely needs it "
+                          "(2026.9.3 removed the setting; Skill Workshop writes only "
+                          "inside its own directory)")
     return _finding(
         "B175",
         WARN,
-        "Skill Workshop autonomy posture has a partial gap: " + "; ".join(reasons) + ".",
-        'Keep skills.workshop.approvalPolicy at the default "pending" (never "auto"), '
-        "disable skills.workshop.autonomous.enabled unless unattended authoring is "
-        "intended, and leave allowSymlinkTargetWrites at its default false unless a "
-        "shared/trusted skill root genuinely needs it.",
+        "Skill Workshop autonomy posture has a partial gap: " + "; ".join(reasons)
+        + "." + stale_note + retired_note,
+        'Set skills.workshop.approvalPolicy to "pending" (never "auto"), turn off '
+        f"{autonomy_key} unless unattended authoring is intended"
+        + symlink_advice + ".",
         evidence=reasons,
     )
+
+
+def check_skill_symlink_target_writability(ctx: Context) -> Finding:
+    """B367 (C-413) — skills.load.allowSymlinkTargets widens where executable skill code
+    may load from via a symlink.
+
+    Grounded against the INSTALLED dist (openclaw@2026.9.3): ``skills.load`` is a
+    strictObject with ``extraDirs``/``allowSymlinkTargets``/``watch``
+    (zod-schema-Q1KXOooO.mjs:1502-1508) — this is the LOAD side, a live, distinct field
+    from ``skills.workshop.allowSymlinkTargetWrites`` (the WRITE side B175 already
+    covers, and which OpenClaw 2026.9.3 removed from the schema entirely — see B175's
+    own B-783 note). ``allowSymlinkTargets`` is genuinely consumed:
+    ``resolveAllowedSkillSymlinkTargetRealPaths`` (symlink-targets-*.mjs) resolves each
+    entry to a real path, and ``findContainingAllowedSkillSymlinkTarget`` lets a skill
+    directory that is a symlink resolving OUTSIDE its normal source root load anyway,
+    as long as the symlink's real target sits inside one of these roots.
+
+    The classifier is NOT "is this path a well-known broad root" (``/``, ``/tmp``,
+    ``~``) — that shape was tried for the analogous B186 (bundled-root-override) check
+    and explicitly RETRACTED there (see checks/_host.py's B186 comment block, point 3):
+    a 0700 directory under ``/tmp`` is as private as one in the user's home, so keying a
+    verdict on the path STRING rather than on an actual privilege is unsound, and the
+    task that filed C-413 proposed exactly that retracted shape ("FAIL if any entry is a
+    broad/writable/non-narrow root"). This check reuses the discriminator B186 replaced
+    it with instead: ``_shared._dir_replaceable_by_others`` — sticky-bit-aware,
+    singleton-group-aware, POSIX-only — the same helper, so the two checks agree on what
+    "someone else could plant code here" means.
+
+    FAIL    — at least one configured target directory exists locally and is
+              group/world-writable by another real account (mirrors B186's FAIL bar
+              exactly).
+    WARN    — allowSymlinkTargets is a non-empty list, but no entry triggers FAIL —
+              disclosure only: the symlink-resolution trust boundary is genuinely
+              widened beyond the skill source root, which is legitimate for a
+              source-checkout/monorepo developer (same framing as B186's own WARN).
+              Includes an entry this audit could not resolve locally (a path that does
+              not exist on THIS machine, e.g. auditing someone else's exported config,
+              or a bare RELATIVE entry — the real resolveHomeRelativePath resolves a
+              non-``~`` entry via ``path.resolve()`` against the OpenClaw process's own
+              cwd at agent start, a value this offline audit has no way to know; guessing
+              a base and statting whatever that guess resolves to would risk a fabricated
+              verdict against an unrelated real directory, so a relative entry is treated
+              exactly like an unresolvable one rather than resolved against any guessed
+              root) — Golden Rule #4 forbids asserting it is safe just because it could
+              not be read.
+    PASS    — absent or an empty list.
+    UNKNOWN — unread config, or the value present but not a list of strings (the schema
+              is a ``.strict()`` object; a malformed shape means the config does not
+              load as written).
+    """
+    unreadable = _config_unreadable("B367", ctx)
+    if unreadable is not None:
+        return unreadable
+    # B-661: `_config_unreadable` only covers "present but unparseable" — on a host
+    # with no openclaw.json at all, config_parse_error is False and ctx.config is
+    # `{}`, so the coercion below would silently treat an UNREAD config the same as
+    # one that explicitly leaves allowSymlinkTargets unset and fall through to a
+    # PASS about a config nobody read.
+    if (not isinstance(ctx.config, dict) or not ctx.config) and not ctx.config_found:
+        return _finding(
+            "B367", UNKNOWN,
+            "No config was read, so whether skills.load.allowSymlinkTargets widens "
+            "symlink resolution for skill code could not be determined.",
+            "Run the audit on the host where ~/.openclaw lives.",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
+        )
+    cfg = ctx.config
+    targets = dig(cfg, "skills.load.allowSymlinkTargets")
+    if targets is None:
+        return _finding(
+            "B367", PASS,
+            "skills.load.allowSymlinkTargets is not configured — skill directories that "
+            "are symlinks may only resolve inside their normal configured source root.",
+            "Nothing to do.",
+        )
+    if not isinstance(targets, list) or not all(isinstance(t, str) for t in targets):
+        return _finding(
+            "B367", UNKNOWN,
+            "skills.load.allowSymlinkTargets is present but is not a list of strings, "
+            "so which extra symlink-resolution roots (if any) are trusted cannot be "
+            "determined. OpenClaw declares skills.load as a strict schema and rejects "
+            "the whole config at load time when the shape is wrong.",
+            "Set skills.load.allowSymlinkTargets to a list of path strings, or remove "
+            "it entirely, then re-run the audit.",
+            evidence=[f"skills.load.allowSymlinkTargets={targets!r}"],
+        )
+    if not targets:
+        return _finding(
+            "B367", PASS,
+            "skills.load.allowSymlinkTargets is an empty list — no extra symlink-"
+            "resolution roots are trusted.",
+            "Nothing to do.",
+        )
+
+    from ..collector import _expand_user_path  # noqa: PLC0415
+
+    fails: list[str] = []
+    warns: list[str] = []
+    for raw in targets:
+        # _expand_user_path mirrors resolveUserPath -> resolveHomeRelativePath exactly
+        # (collector.py, itself grounded against paths-BMBAvkNf.js:68-73): a leading ~
+        # expands against ctx.home (the EFFECTIVE OpenClaw home, which OPENCLAW_HOME may
+        # itself have moved — never the audit process's own OS home), and a bare
+        # relative entry is left AS-IS rather than resolved against any guessed base.
+        p = _expand_user_path(raw, ctx.home)
+        if not p.is_absolute():
+            # The real runtime resolves a relative entry via path.resolve(trimmed) —
+            # i.e. against the OpenClaw process's own cwd AT AGENT START, not this
+            # audit's cwd, ctx.home, or any other value this offline read can know.
+            # Golden Rule #4: do not guess a base and stat whatever that guess happens
+            # to resolve to — a wrong guess could land on an unrelated real directory
+            # and manufacture a false FAIL/PASS. Treated like "could not be resolved".
+            warns.append(
+                f"skills.load.allowSymlinkTargets entry {raw!r} is a relative path — "
+                "it resolves against the OpenClaw process's own working directory at "
+                "agent start, which this audit cannot know, so its permissions cannot "
+                "be verified from here"
+            )
+            continue
+        why = _shared._dir_replaceable_by_others(p)
+        if why is not None:
+            fails.append(
+                f"skills.load.allowSymlinkTargets entry {raw!r} is {why} — another "
+                "local account could plant a symlink target there for the agent to "
+                "load as skill code"
+            )
+        elif not p.exists():
+            warns.append(
+                f"skills.load.allowSymlinkTargets entry {raw!r} could not be resolved "
+                "on this machine — its permissions cannot be verified from here"
+            )
+        else:
+            warns.append(
+                f"skills.load.allowSymlinkTargets trusts {raw!r} as an extra "
+                "symlink-resolution root outside the normal skill source root"
+            )
+
+    if fails:
+        return _finding(
+            "B367", FAIL, "; ".join(fails),
+            "Remove the writable-by-others target from skills.load.allowSymlinkTargets, "
+            "or lock down its permissions (chmod g-w,o-w) so only the agent's own "
+            "account can write there — a symlink resolving into a writable root lets "
+            "another local account substitute the skill code the agent runs.",
+            evidence=fails + warns,
+        )
+    return _finding(
+        "B367", WARN, "; ".join(warns),
+        "This is a real widening of where skill code may load from via a symlink — "
+        "legitimate for a source-checkout/monorepo developer. Keep every trusted root "
+        "locked to the agent's own account.",
+        evidence=warns,
+    )
+
+
+def check_skill_load_hot_reload(ctx: Context) -> Finding:
+    """B368 (C-413) — skills.load.watch hot-reloads skill definitions with no restart.
+
+    Grounded against the INSTALLED dist (openclaw@2026.9.3): ``skills.load.watch`` is a
+    plain boolean (zod-schema-Q1KXOooO.mjs:1507), a sibling of ``allowSymlinkTargets``
+    checked by B367 above. When true, a planted or mutated skill file is loaded and run
+    live — it defeats the restart boundary B158 (extraDirs inventory) and B21/B22
+    (install-time review) implicitly assume, but only where there is somewhere for a
+    planted file to land: ``skills.load.extraDirs`` names any root outside the normal
+    managed install tree.
+
+    WARN    — watch is true AND at least one extraDir is configured — a live-reloadable
+              root exists outside the managed skill tree.
+    PASS    — watch is false/absent, OR watch is true but no extraDirs are configured
+              (hot-reload has nothing unusual to pick up from).
+    UNKNOWN — unread config, or watch present but not a boolean.
+    """
+    unreadable = _config_unreadable("B368", ctx)
+    if unreadable is not None:
+        return unreadable
+    # B-661: `_config_unreadable` only covers "present but unparseable" — on a host
+    # with no openclaw.json at all, config_parse_error is False and ctx.config is
+    # `{}`, so the coercion below would silently treat an UNREAD config the same as
+    # one that explicitly sets watch=false and fall through to a PASS about a config
+    # nobody read.
+    if (not isinstance(ctx.config, dict) or not ctx.config) and not ctx.config_found:
+        return _finding(
+            "B368", UNKNOWN,
+            "No config was read, so whether skills.load.watch hot-reloads skill "
+            "definitions could not be determined.",
+            "Run the audit on the host where ~/.openclaw lives.",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
+        )
+    cfg = ctx.config
+    watch = dig(cfg, "skills.load.watch")
+    if watch is not None and not isinstance(watch, bool):
+        return _finding(
+            "B368", UNKNOWN,
+            "skills.load.watch is present but is not a boolean, so whether skill "
+            "definitions hot-reload cannot be determined. OpenClaw declares skills.load "
+            "as a strict schema and rejects the whole config at load time when the "
+            "shape is wrong.",
+            "Set skills.load.watch to true or false, or remove it entirely, then "
+            "re-run the audit.",
+            evidence=[f"skills.load.watch={watch!r}"],
+        )
+    if watch is not True:
+        return _finding(
+            "B368", PASS,
+            "skills.load.watch is not enabled — skill definitions only reload on a "
+            "gateway restart.",
+            "Nothing to do.",
+        )
+    extra_dirs = dig(cfg, "skills.load.extraDirs")
+    if not isinstance(extra_dirs, list) or not extra_dirs:
+        return _finding(
+            "B368", PASS,
+            "skills.load.watch is enabled, but no skills.load.extraDirs are configured "
+            "— there is no root outside the managed skill tree for hot-reload to pick "
+            "up a planted or mutated file from.",
+            "Nothing to do.",
+        )
+    return _finding(
+        "B368", WARN,
+        f"skills.load.watch is enabled with {len(extra_dirs)} skills.load.extraDirs "
+        "root(s) configured — a planted or mutated skill file in one of those roots is "
+        "loaded and run live, with no gateway restart to interrupt it.",
+        "If skills.load.watch is only needed for local development, disable it in any "
+        "environment where skills.load.extraDirs points at a root you do not fully "
+        "control.",
+        evidence=[str(d) for d in extra_dirs[:8]],
+    )
+
+
+# B-727: appended when a sampled session file exceeded the 1 MB scan budget. Wording is
+# deliberately narrower than B77's: this check already says "sampled", so the note names
+# the extra bound rather than retracting the verdict.
+_B79_WINDOW_NOTE = (
+    " Some session files exceeded the scan budget, so only their most recent 1 MB was read."
+)
 
 
 def check_session_approval_policy(ctx: Context) -> Finding:
@@ -2667,6 +4290,20 @@ def check_session_approval_policy(ctx: Context) -> Finding:
     # Grand totals used only for the PASS finding message.
     grand_total = 0
     grand_never = 0
+    # B-727: `_read_jsonl_tail` is bounded at 1 MB and this loop used to discard the flag
+    # it returns. Unlike B77 — whose PASS said "all N recorded config write(s)" and was
+    # therefore false on an over-cap file — every verdict below already scopes itself to
+    # what it read ("sampled", three times), so truncation costs PRECISION here, not
+    # truth. The flag is captured and disclosed rather than left on the floor.
+    #
+    # Deliberately NOT a verdict change. Turning a truncated read into UNKNOWN would be a
+    # real behavioural change to a check that samples by design (last 5 session files by
+    # mtime), and it can hide a WARN: if the tail window happens to hold gated turns while
+    # the unread head was all approval=never, `a_never == a_total` fails and the finding
+    # does not fire. That is a genuine gap, it is the same class as the existing 5-file
+    # sampling bound, and it needs its own C-135 rather than riding along with a wording
+    # fix. Filed with B-727.
+    any_truncated = False
 
     for agent_dir in agent_dirs:
         sessions_dir = agent_dir / "agent" / "codex-home" / "sessions"
@@ -2684,9 +4321,10 @@ def check_session_approval_policy(ctx: Context) -> Finding:
         a_never = 0
         for fp in recent:
             try:
-                raw, _ = _read_jsonl_tail(fp)
+                raw, fp_truncated = _read_jsonl_tail(fp)
             except OSError:
                 continue
+            any_truncated = any_truncated or fp_truncated
             for ln in raw.splitlines():
                 ln = ln.strip()
                 if not ln:
@@ -2735,7 +4373,7 @@ def check_session_approval_policy(ctx: Context) -> Finding:
             WARN,
             f"all {worst_total} recent Codex turn(s) sampled (across {worst_files} session "
             f'file(s)) for agent "{worst_agent}" ran with approval_policy="never" — '
-            "human approval was never required.",
+            "human approval was never required." + (_B79_WINDOW_NOTE if any_truncated else ""),
             "If this agent performs sensitive or destructive actions, run at least some "
             'sessions with a human approval gate (approval_policy other than "never"). '
             "Fully unattended approval=never removes the human checkpoint before tool execution.",
@@ -2750,7 +4388,8 @@ def check_session_approval_policy(ctx: Context) -> Finding:
         "B79",
         PASS,
         f"recent Codex sessions include human-approval gates "
-        f"({grand_never}/{grand_total} sampled turns were approval=never).",
+        f"({grand_never}/{grand_total} sampled turns were approval=never)."
+        + (_B79_WINDOW_NOTE if any_truncated else ""),
         "Keep requiring human approval for sensitive actions; avoid defaulting all sessions "
         'to approval_policy="never".',
     )
@@ -2828,7 +4467,12 @@ def check_codex_project_trust(ctx: Context) -> Finding:
         except OSError:
             continue
         for project_path in _codex_trusted_projects(text):
-            trusted_ev.append(f"agent {agent_dir.name}: project {project_path!r}")
+            # B-757: the codex-home config stores the project's absolute path;
+            # collapse the OS account home before it reaches rendered evidence.
+            trusted_ev.append(
+                f"agent {agent_dir.name}: project "
+                f"{_shared._username_safe_path(project_path)!r}"
+            )
 
     if not any_config:
         return _finding(
@@ -2879,6 +4523,11 @@ def check_pending_device_pairing_scope(ctx: Context) -> Finding:
               operator.write), especially combined with isRepair=true — this is a
               pending pairing awaiting human approval, not proof of compromise.
     UNKNOWN — devices/pending.json exists but is unreadable or not valid JSON.
+
+    B-661: exempt from the "23 checks PASS on an unread config" audit. This check
+    never reads ``ctx.config`` — the locus is ``devices/pending.json`` under
+    ``ctx.home``, checked by presence/content alone regardless of whether
+    openclaw.json was found or parsed.
     """
     import json as _json
 
@@ -3009,6 +4658,11 @@ def check_paired_device_operator_authority(ctx: Context) -> Finding:
               authority via a live (non-revoked) token -- an inventory advisory (count +
               age), never proof of compromise.
     UNKNOWN -- devices/paired.json exists but is unreadable or not valid JSON.
+
+    B-661: exempt from the "23 checks PASS on an unread config" audit. This check
+    never reads ``ctx.config`` -- the locus is ``devices/paired.json`` under
+    ``ctx.home``, checked by presence/content alone regardless of whether
+    openclaw.json was found or parsed.
     """
     import json as _json
     import time as _time
@@ -3279,6 +4933,13 @@ def check_clawhub_lock_verification(ctx: Context) -> Finding:
               (B-258) the only failed verifications are ones whose every recorded
               reason is inconclusive (an unfinished security audit / a missing skill
               card), which is "the registry has not answered yet", not a rejection.
+
+    B-661: the PASS above is NOT a config-derived fact and is exempt from the
+    "23 checks PASS on an unread config" audit. This check never reads
+    ``ctx.config`` at all — the locus is ``.clawhub/lock.json`` on disk under each
+    workspace dir, walked unconditionally regardless of whether openclaw.json was
+    found or parsed. "No lock file" is a real, directly-observed disk fact on any
+    host, config-readable or not.
     """
     import json as _json
 
@@ -3564,9 +5225,15 @@ def _b181_skill_dir(slug: str, lock_parent: Path):
         return None
 
 
-def _b181_provenance_records(home: Path):
-    """[(slug, skill_dir | None, record, source_label)] from every lock + origin.json found."""
-    from ..collector import SKILL_DIRS, WORKSPACE_DIRS
+def _b181_provenance_records(home: Path, ctx: "Context | None" = None):
+    """[(slug, skill_dir | None, record, source_label)] from every lock + origin.json found.
+
+    *ctx*, when given, routes an unreadable lock/origin path through `_safe_is_file` so a
+    permission-denied entry (e.g. a chmod-000 skill dir) is skipped and recorded rather
+    than raising -- B-767, shared by both `check_skill_install_tamper` (B181) and
+    `check_clawhub_registry_provenance` (B184), the two callers of this helper.
+    """
+    from ..collector import SKILL_DIRS, WORKSPACE_DIRS, _safe_is_file
 
     records = []
     seen_dirs: set = set()
@@ -3581,7 +5248,7 @@ def _b181_provenance_records(home: Path):
         # was legitimately updated (Golden Rule #5). Mirror the CLI: first parse wins.
         for dot in _B181_DOT_DIRS:
             lock_path = home / rel / dot / "lock.json"
-            if not lock_path.is_file():
+            if not _safe_is_file(lock_path, ctx, what=f"'{lock_path.name}'"):
                 continue
             data = _b181_read_json(lock_path)
             skills = data.get("skills") if data else None
@@ -3615,7 +5282,11 @@ def _b181_provenance_records(home: Path):
                 continue
             for dot in _B181_DOT_DIRS:
                 origin = skill_dir / dot / "origin.json"
-                if not origin.is_file():
+                # B-767: unlike lock_path above (stat'd from an already-traversable
+                # parent), `origin` is stat'd from INSIDE `skill_dir`, which needs
+                # traverse permission on `skill_dir` itself -- the chmod-000 case
+                # Path.is_file() does not swallow (EACCES).
+                if not _safe_is_file(origin, ctx, what=f"'{dot}/origin.json' in a skill dir"):
                     continue
                 data = _b181_read_json(origin)
                 if data is None:
@@ -3642,7 +5313,7 @@ def check_skill_install_tamper(ctx: Context) -> Finding:
               unreadable / too large to hash, or a record's skill directory could not be
               located. Never a fake PASS (Golden Rule #4).
     """
-    records = _b181_provenance_records(ctx.home)
+    records = _b181_provenance_records(ctx.home, ctx)
     if not records:
         return _finding(
             "B181",
@@ -3894,7 +5565,12 @@ def check_clawhub_registry_provenance(ctx: Context) -> Finding:
               enterprise mirror is legitimate and disclosed.
     PASS    — every endpoint observed is the public ClawHub.
     UNKNOWN — nothing recorded the endpoint and no override was observable, so the issuer of
-              those verdicts cannot be determined either way (Golden Rule #4).
+              those verdicts cannot be determined either way (Golden Rule #4). Also
+              UNKNOWN, ``engine_degraded=True`` (B-657), when a global dotenv file WAS
+              read but exceeded the collector's byte cap (``ctx.dotenv_truncated``) — a
+              registry/codeload override past the cut would not have been seen, so a PASS
+              built only from lock.json's settled, past-tense provenance would overclaim
+              that the NEXT install/update is safe from repointing too.
 
     Evidence is taken in the order of how well it describes the AUDITED subject:
 
@@ -3919,7 +5595,7 @@ def check_clawhub_registry_provenance(ctx: Context) -> Finding:
     env_bad: "list[str]" = []
     observed_canonical = 0
 
-    for slug, _skill_dir, record, source in _b181_provenance_records(ctx.home):
+    for slug, _skill_dir, record, source in _b181_provenance_records(ctx.home, ctx):
         if not isinstance(record, dict):
             continue
         verdict = _b184_is_canonical(record.get("registry"), _B184_CANONICAL_REGISTRY_HOST)
@@ -3981,6 +5657,35 @@ def check_clawhub_registry_provenance(ctx: Context) -> Finding:
             "host served anything malicious, which would need a network lookup this tool "
             "deliberately never makes.",
             evidence=items[:6],
+        )
+
+    if ctx.dotenv_truncated:
+        # B-657 (C-135 round 2, adversarial review): `observed_canonical` mixes lock.json
+        # records (settled, past-tense provenance for ALREADY-installed skills) with
+        # THIS run's env-var check (whether a CURRENT override would repoint the NEXT
+        # install/update). A global dotenv file the collector read but truncated at its
+        # byte cap can hide a non-canonical OPENCLAW_REGISTRY_URL/_CODELOAD_URL past the
+        # cut while lock.json records alone still make `observed_canonical` truthy — so a
+        # PASS below would claim the registry question is settled when the env leg was
+        # never actually resolved, present-but-unread rather than genuinely clean.
+        return _finding(
+            "B184",
+            UNKNOWN,
+            "A persistent endpoint override could not be fully checked: a global dotenv "
+            "file OpenClaw loads at startup was read but exceeded the collector's byte "
+            "cap, so a ClawHub registry or GitHub codeload override past the cut would "
+            "not have been seen. Whether the next skill install/update would be repointed "
+            "away from the public registry cannot be determined"
+            + (
+                f" (recorded provenance for {observed_canonical} existing "
+                "record(s)/setting(s) is still the public registry)"
+                if observed_canonical else ""
+            )
+            + ".",
+            "Keep OpenClaw's global dotenv files (~/.openclaw/.env, "
+            "~/.config/openclaw/gateway.env) under the collector's size cap, then "
+            "re-run the audit.",
+            engine_degraded=True,
         )
 
     if observed_canonical:
@@ -4282,6 +5987,225 @@ def check_clawhub_token_store(ctx: Context) -> Finding:
     )
 
 
+#: OpenClaw's OWN migration-doctor marker for a legacy per-channel allow-sender store
+#: (dist-grounded: state-migrations.doctor's `ALLOW_FROM_SUFFIX`, C-409).
+_LEGACY_ALLOWFROM_SUFFIX = "-allowFrom.json"
+
+
+def check_legacy_state_migration_pending(ctx: Context) -> Finding:
+    """B356 (C-409) — unmigrated legacy runtime-state files OpenClaw's own doctor still
+    checks the presence of.
+
+    Grounded against the installed dist (openclaw@2026.9.3, not the recon notes, which
+    predate both of these moves): `credentials/<channel>-allowFrom.json` and
+    `identity/device-auth.json` are BOTH legacy-only presence markers now —
+    `state-migrations.doctor` and `device-auth-store` read them only to detect an
+    unmigrated install, never as live-authoritative state. The modern allow-sender
+    mechanism lives entirely in `openclaw.json` (`channels.<name>.allowFrom` and its
+    nested `groupAllowFrom`/per-group/per-topic variants — see `checks/_agents.py`'s
+    `groupAllowFrom`-wins-for-groups handling and `checks/_capability.py`'s `dmPolicy`/
+    `groupPolicy` reading, which already model that shape); device-auth tokens now live
+    in the state SQLite DB (`device_auth_tokens`/`gateway_origin_device_tokens`).
+
+    So this is not "an attacker added a sender ID" — it is "this install has not run
+    `openclaw doctor --fix`", and for the device-auth file specifically that carries an
+    unusually sharp consequence: OpenClaw's own `assertNoLegacyDeviceAuth` makes the
+    GATEWAY ITSELF refuse to start while that file is present.
+
+    Filename presence only (§8) — this never opens either file. An allow-sender list or
+    a device-auth token is exactly the kind of content this tool must never read, and
+    doesn't need to: the file's mere existence is the whole signal.
+
+    WARN    — a legacy file is present.
+    PASS    — neither is present.
+    UNKNOWN — the credentials/ directory exists but could not be listed.
+
+    B-661: exempt from the "23 checks PASS on an unread config" audit. This check
+    never reads ``ctx.config`` — both loci are filenames under ``ctx.home``
+    (``credentials/*-allowFrom.json``, ``identity/device-auth.json``), checked by
+    presence alone regardless of whether openclaw.json was found or parsed.
+    """
+    found: list[str] = []
+    unreadable: list[str] = []
+
+    cred_dir = ctx.home / "credentials"
+    if cred_dir.is_dir():
+        try:
+            entries = list(cred_dir.iterdir())
+        except OSError:
+            unreadable.append("credentials/ is present but could not be listed")
+            entries = []
+        for entry in entries:
+            if entry.name.endswith(_LEGACY_ALLOWFROM_SUFFIX) and entry.is_file():
+                channel = entry.name[: -len(_LEGACY_ALLOWFROM_SUFFIX)]
+                found.append(
+                    f"credentials/{channel}{_LEGACY_ALLOWFROM_SUFFIX} "
+                    "(legacy per-channel allow-sender store)"
+                )
+
+    device_auth = ctx.home / "identity" / "device-auth.json"
+    if device_auth.is_file():
+        found.append("identity/device-auth.json (legacy device-auth store)")
+
+    if found:
+        found.sort()
+        return _finding(
+            "B356",
+            WARN,
+            "Legacy pre-migration runtime-state file(s) present, which OpenClaw's own "
+            "migration checks still look for: " + "; ".join(found) + ". Their presence "
+            "means `openclaw doctor --fix` has not migrated this install onto "
+            "current-generation state — for the device-auth file specifically, the "
+            "gateway refuses to start at all until it is migrated away.",
+            "Stop the OpenClaw gateway and run `openclaw doctor --fix` to migrate this "
+            "legacy state, then confirm the file(s) above are gone.",
+            evidence=found,
+        )
+    if unreadable:
+        return _finding(
+            "B356",
+            UNKNOWN,
+            "Could not fully check for legacy pre-migration runtime-state files: "
+            + "; ".join(unreadable) + ".",
+            "Ensure ~/.openclaw/credentials/ is owner-readable, or check manually for "
+            "*-allowFrom.json files there and for identity/device-auth.json.",
+        )
+    return _finding(
+        "B356",
+        PASS,
+        "No legacy pre-migration runtime-state files found (checked for "
+        "credentials/*-allowFrom.json and identity/device-auth.json).",
+        "No action needed.",
+    )
+
+
+def check_restart_handoff_stale(ctx: Context) -> Finding:
+    """B357 (C-409) — a supervisor restart-handoff blob that outlived its own expiry.
+
+    `~/.openclaw/gateway-supervisor-restart-handoff.json` is a short-lived IPC blob a
+    restarting/crashed gateway supervisor writes — confirmed shape on a real install:
+    `kind, version, intentId, pid, processInstanceId, createdAt, expiresAt, reason,
+    source, restartKind, supervisorMode`. It should be consumed and removed by the
+    supervisor well before its own `expiresAt`; one still present past that time means
+    the restart it describes either never completed or the supervisor crashed before
+    cleaning it up.
+
+    Staleness is judged purely from the blob's own declared `expiresAt` timestamp —
+    never a live process check (no subprocess, no /proc read of `pid`), matching this
+    tool's read-only-from-state-files-only doctrine. `expiresAt`/`createdAt` are epoch
+    MILLISECONDS (ints), not ISO strings — measured by hand-reading a real file, not
+    assumed from the field name.
+
+    The "now" side of the comparison is `time.time()`, never `datetime.now()` — the
+    same discipline `check_paired_device_operator_authority` (B176) already established
+    for this exact reason: `tests/test_finding_fingerprint_manifest.py`'s
+    ``test_no_finding_detail_is_clock_dependent`` patches `time.time` (only) and
+    re-audits the whole fixture corpus with the clock frozen 45 days ahead, asserting no
+    fingerprint drifts — `datetime.now()` would silently evade that patch and could
+    still pass today's corpus (no fixture currently ships this file) while remaining
+    wrong for the next one that does. `datetime.fromtimestamp()` on the file's own,
+    already-read `expiresAt` value is a pure format transform, not a second clock read.
+
+    WARN    — present and its own expiresAt has already passed.
+    PASS    — present and not yet expired (a normal, still-open handoff window), or
+              absent entirely.
+    UNKNOWN — present but unreadable/unparseable, or missing/malformed expiresAt.
+
+    B-661: exempt from the "23 checks PASS on an unread config" audit. This check
+    never reads ``ctx.config`` — the locus is
+    ``gateway-supervisor-restart-handoff.json`` under ``ctx.home``, checked by
+    presence/content alone regardless of whether openclaw.json was found or parsed.
+    """
+    import json as _json
+    import time as _time
+    from datetime import datetime
+
+    path = ctx.home / "gateway-supervisor-restart-handoff.json"
+    if not path.is_file():
+        return _finding(
+            "B357",
+            PASS,
+            "No gateway-supervisor-restart-handoff.json found.",
+            "No action needed.",
+        )
+
+    try:
+        data = _json.loads(path.read_text(encoding="utf-8", errors="replace"))
+    except OSError:
+        return _finding(
+            "B357",
+            UNKNOWN,
+            "gateway-supervisor-restart-handoff.json present but unreadable — cannot "
+            "determine whether it is stale.",
+            "Ensure it is owner-readable, or review it manually.",
+        )
+    except ValueError:
+        return _finding(
+            "B357",
+            UNKNOWN,
+            "gateway-supervisor-restart-handoff.json present but not valid JSON — "
+            "cannot determine whether it is stale.",
+            "Review it manually.",
+        )
+
+    if not isinstance(data, dict):
+        return _finding(
+            "B357",
+            UNKNOWN,
+            "gateway-supervisor-restart-handoff.json present but not in the expected "
+            "format — cannot determine whether it is stale.",
+            "Review it manually.",
+        )
+
+    # Measured on a real install: expiresAt/createdAt are epoch MILLISECONDS (ints), not
+    # ISO strings — confirmed by hand-reading the real file before trusting the dist's
+    # field-name-only citation of it.
+    expires_raw = data.get("expiresAt")
+    if isinstance(expires_raw, bool) or not isinstance(expires_raw, (int, float)):
+        return _finding(
+            "B357",
+            UNKNOWN,
+            "gateway-supervisor-restart-handoff.json present but has no readable "
+            "expiresAt field — cannot determine whether it is stale.",
+            "Review it manually.",
+        )
+
+    try:
+        expires_label = datetime.fromtimestamp(expires_raw / 1000.0).isoformat(
+            timespec="seconds"
+        )
+    except (ValueError, OSError, OverflowError):
+        return _finding(
+            "B357",
+            UNKNOWN,
+            f"gateway-supervisor-restart-handoff.json present but its expiresAt "
+            f"({expires_raw!r}) is not a parseable timestamp — cannot determine whether "
+            "it is stale.",
+            "Review it manually.",
+        )
+
+    now_ms = _time.time() * 1000.0
+    if now_ms > expires_raw:
+        return _finding(
+            "B357",
+            WARN,
+            "gateway-supervisor-restart-handoff.json is present and its own expiresAt "
+            f"({expires_label}) has already passed — the restart it describes did not "
+            "complete and get cleaned up as expected (a crashed supervisor, most "
+            "likely).",
+            "Restart the OpenClaw gateway supervisor cleanly; if this file persists "
+            "after a clean restart, remove it manually and investigate why the "
+            "supervisor did not clean it up.",
+        )
+    return _finding(
+        "B357",
+        PASS,
+        "gateway-supervisor-restart-handoff.json present but still within its own "
+        f"expiresAt window ({expires_label}) — a normal, in-progress restart handoff.",
+        "No action needed.",
+    )
+
+
 def check_declared_skill_reconciliation(ctx: Context) -> Finding:
     """B158 (F-119) — a config declares a skill/plugin LOAD SOURCE that resolves to nothing on
     disk right now. The audit can only scan what is present, so a declared-but-absent source is
@@ -4379,14 +6303,140 @@ def check_declared_skill_reconciliation(ctx: Context) -> Finding:
     )
 
 
+def check_skill_library_reachability(ctx: Context) -> Finding:
+    """B354 (B-725) — OpenClaw's shared skill-library / upload surface in the state DB
+    (``skill_library_entries``, ``skill_uploads``) is a skill install/enable channel
+    this tool's filesystem-based skill discovery never sees at all: confirmed by grep,
+    neither ``skill_library`` nor ``skill_uploads`` appears anywhere else in
+    ``clawseccheck/``. A skill published there with ``enabled AND NOT removed`` is live
+    to OpenClaw and was never on the path ``_read_installed_skills`` walks, so every
+    content-security check this tool has (skill-malware, prompt-injection, the whole
+    ``SKILL_CONTENT_RING``) is BLIND to it.
+
+    WARN, not FAIL: this check can prove a live, unscanned skill EXISTS, never that its
+    content is malicious -- it never reads ``files_json``/``archive_blob`` (CONTENT,
+    §8). It also flags a COMMITTED ``skill_uploads`` row whose received-bytes digest
+    (``actual_sha256``) disagrees with its declared one (``sha256``) -- a real tamper
+    signal sitting in the schema, gated on ``committed`` because an in-progress upload
+    legitimately has a partial/absent ``actual_sha256`` while chunks are still arriving.
+    Grounded against the installed dist's commit path (``skills-6ygwYcmZ.mjs``): the
+    server computes ``actualSha256 = sha256Hex(archive)`` and, when the client declared
+    one, refuses to commit unless it matches (``"upload sha256 mismatch"``) -- so a
+    COMMITTED row where they disagree is not a race or a normal in-flight state, only a
+    write to the row after that check already passed.
+
+    UNKNOWN, never a fake PASS, when the surface could not be examined at all -- the
+    real machine this was grounded against has ``skill_library_entries`` ABSENT while
+    ``skill_uploads`` is present (0 rows), so "the table is not here" is evidence this
+    database never created it, never evidence the library is unused (Golden Rule #4).
+    The two tables are tracked, and reported as unread, INDEPENDENTLY for exactly that
+    reason -- inferring one table's state from the other would silently launder a real
+    blind spot into a clean verdict. A run where only ONE of the two was read and found
+    nothing stays UNKNOWN too: a PASS here is a claim about the WHOLE surface, and half
+    of it was never looked at.
+    """
+    problems: list = []
+    if ctx.skill_library_live_count:
+        sample = ", ".join(f"'{s}'" for s in ctx.skill_library_live_sample[:5])
+        more = ctx.skill_library_live_count - min(len(ctx.skill_library_live_sample), 5)
+        problems.append(
+            f"{ctx.skill_library_live_count} skill(s) published to the shared skill "
+            f"library are enabled ({sample}{f', +{more} more' if more > 0 else ''}) -- "
+            "reachable to OpenClaw but never on the filesystem path this tool's skill "
+            "scanners walk, so their content was never checked"
+        )
+    if ctx.skill_uploads_digest_mismatch_count:
+        problems.append(
+            f"{ctx.skill_uploads_digest_mismatch_count} committed upload(s) in "
+            "skill_uploads have a received-bytes digest that disagrees with their "
+            "declared sha256 -- the bytes OpenClaw accepted are not the bytes that "
+            "were meant to arrive"
+        )
+
+    if problems:
+        return _finding(
+            "B354",
+            WARN,
+            "; ".join(problems) + ".",
+            "Review the shared skill library (openclaw skills library list, or your "
+            "workspace's skill-sharing UI) for entries you did not knowingly publish, "
+            "and disable/remove anything unexpected. A digest mismatch on a committed "
+            "upload warrants re-uploading from a trusted copy and checking who committed "
+            "it.",
+            evidence=problems,
+        )
+
+    read_any = ctx.skill_library_entries_read or ctx.skill_uploads_read
+    if not read_any:
+        return _finding(
+            "B354",
+            UNKNOWN,
+            "The state database's shared skill-library tables (skill_library_entries, "
+            "skill_uploads) were not found or could not be read, so whether any skill "
+            "reaches this OpenClaw install through that channel cannot be determined.",
+            "No action needed if you do not use the shared skill library. If you do, "
+            "confirm ~/.openclaw/state/openclaw.sqlite is readable and re-run.",
+        )
+
+    if ctx.skill_library_entries_read and ctx.skill_uploads_read:
+        return _finding(
+            "B354",
+            PASS,
+            "The shared skill-library tables were read: no enabled, non-removed library "
+            "entry and no committed upload with a digest mismatch.",
+            "No action needed. Re-check after publishing or removing a shared skill.",
+        )
+
+    unread = "skill_uploads" if ctx.skill_library_entries_read else "skill_library_entries"
+    return _finding(
+        "B354",
+        UNKNOWN,
+        f"One half of the shared skill-library surface was read and found nothing, but "
+        f"'{unread}' could not be confirmed -- a PASS here would be a claim about the "
+        "whole surface, and half of it was never examined.",
+        "No action needed if you do not use the shared skill library. If you do, "
+        "confirm ~/.openclaw/state/openclaw.sqlite is readable and re-run.",
+    )
+
+
 def check_supply_chain(ctx: Context) -> Finding:
+    """B5 — supply-chain integrity of installed plugins/skills.
+
+    B-362: the first UNKNOWN branch (``cfg.get("plugins")`` and ``cfg.get("skills")``
+    both falsy) sets ``not_applicable`` only when BOTH loci were read completely:
+    ``plugins.*`` is config-only (``_plugins()``/this check's own ``cfg.get("plugins")``
+    read has no disk counterpart), but "skills" here is only the openclaw.json
+    ``skills.*`` settings block, NOT the actual installed-skill corpus — that is
+    discovered by an independent disk walk into ``ctx.installed_skills``
+    (``collector._read_installed_skills``), so a host can have real installed skills
+    with zero ``skills`` key in openclaw.json. ``_surface_absent`` alone would wrongly
+    mark this not_applicable on exactly that host; requiring ``not ctx.installed_skills``
+    AND ``_skill_corpus_complete(ctx)`` (the disk-locus completeness counterpart, see its
+    own docstring in ``checks/_shared.py``) closes that gap.
+
+    The second UNKNOWN branch below is deliberately NOT migrated: pinning/integrity
+    metadata is per-manifest, not stored in openclaw.json at all (see the comment
+    below), so that branch fires when plugins/skills genuinely ARE present but this
+    config-only check structurally cannot read their state — a real capability gap of
+    this locus, not a "no such surface" case.
+    """
     cfg = ctx.config
     # plugins.installs_unpinned_npm_specs / plugins.installs_missing_integrity do NOT exist
     # in the OpenClaw schema — install metadata is per-manifest, not stored in config.
     # Pinning is checked by B25; MCP npx specs by B24.
     # plugins.tools_reachable_policy also does NOT exist in the OpenClaw schema.
     if not (cfg.get("plugins") or cfg.get("skills")):
-        return _finding("B5", UNKNOWN, "No plugins/skills declared in config.", "—")
+        return _finding(
+            "B5",
+            UNKNOWN,
+            "No plugins/skills declared in config.",
+            "—",
+            not_applicable=(
+                _surface_absent(ctx, LIMIT_DOMAIN_CONFIG)
+                and not ctx.installed_skills
+                and _skill_corpus_complete(ctx)
+            ),
+        )
     # Pinning & integrity are not recorded in openclaw.json (per-manifest metadata), so B5
     # cannot assess supply-chain integrity from config alone — be honest (UNKNOWN) rather than
     # falsely reassure. Real coverage: B13 (content scan), B24 (MCP), B25 (update pinning).
@@ -4405,10 +6455,21 @@ def check_update_pinning(ctx: Context) -> Finding:
 
     A malicious skill UPDATE is a supply-chain risk (runs with agent permissions).
 
-    WARN  — auto-update for skills/plugins is enabled (blind trust in upstream);
+    WARN  — the config REQUESTS auto-update for skills/plugins (update.auto.enabled /
+            update.auto / autoUpdate / auto_update) — worded as configured intent, not
+            effective behaviour (C-376): OpenClaw's own
+            runtime also gates auto-update on OPENCLAW_NO_AUTO_UPDATE in the gateway's
+            own environment, which this config-only, offline audit cannot observe, so a
+            host with that variable set gets this WARN even though auto-update will not
+            actually run there — a disclosed, sound limitation (reading THIS process's
+            own environment instead would answer a different question and was rejected,
+            see the code comment at the call site);
+            OR update.channel is "dev"/"beta" (C-413 — the same blind-trust risk
+            applied to OpenClaw's own build, not just skills/plugins);
             OR a plugin/skill entry records a floating ref (branch name / 'latest').
     PASS  — at least one entry is present and all have a pinned tag/commit or an
-            integrity hash; no auto-update enabled.
+            integrity hash; no auto-update requested; update.channel is unset,
+            "stable", or "extended-stable".
     UNKNOWN — no plugin/skill config from which pinning can be determined.
     """
     cfg = ctx.config
@@ -4428,8 +6489,39 @@ def check_update_pinning(ctx: Context) -> Finding:
     if auto_update is True or (
         isinstance(auto_update, str) and auto_update.lower() in ("true", "yes", "1", "on")
     ):
+        # C-376: worded as configured INTENT, not effective behaviour. Grounded against
+        # the installed dist (update-startup*.js): OpenClaw's own runtime ANDs
+        # `update.auto.enabled` with `!isTruthyEnvValue(process.env.OPENCLAW_NO_AUTO_
+        # UPDATE)` before auto-update actually runs — a variable set in the GATEWAY's
+        # own environment, which this config-only, offline audit has no way to observe
+        # (reading THIS process's os.environ would answer a different, wrong question —
+        # whichever shell happened to run the audit — not the gateway's; C-303 exists to
+        # stop exactly that kind of unsound-but-plausible move). The old wording asserted
+        # "is enabled" (effective behaviour) over a config-only observation; this states
+        # only what was actually read.
         warn_ev.append(
-            "auto-update for skills/plugins is enabled — blind trust in upstream is a supply-chain risk"
+            "the config requests auto-update for skills/plugins (update.auto.enabled / "
+            "update.auto / autoUpdate / auto_update) — blind trust in upstream is a "
+            "supply-chain risk if it actually runs. OpenClaw's own runtime also gates "
+            "this on the OPENCLAW_NO_AUTO_UPDATE environment variable in the gateway's "
+            "own environment, which this config-only audit cannot observe — this "
+            "reports what the config requests, not necessarily what is running."
+        )
+
+    # ---- signal 1b (C-413): update.channel on a pre-release tier ----
+    # Grounded against the INSTALLED dist (openclaw@2026.9.3): update.channel is a
+    # strictObject sibling of update.auto.enabled (zod-schema-Q1KXOooO.mjs:1299-1308),
+    # union(["stable","extended-stable","beta","dev"]).optional() — four literals, not
+    # the stub's assumed two ("dev"/"beta"); "extended-stable" is a real, safe tier and
+    # must not be swept in as if it were a pre-release channel. dev/beta pull
+    # bleeding-edge git+npm installs the same way an unpinned skill/plugin ref does —
+    # same signal family as signal 1, so it is folded into this check rather than a new
+    # one, per the stub's own "extend B25" framing.
+    channel = dig(cfg, "update.channel")
+    if isinstance(channel, str) and channel.strip().lower() in ("dev", "beta"):
+        warn_ev.append(
+            f"update.channel={channel!r} pulls pre-release builds — the same "
+            "blind-trust-in-upstream risk as auto-update, applied to OpenClaw itself"
         )
 
     # ---- signal 2: per-entry pinning ----
@@ -4525,23 +6617,128 @@ def check_update_pinning(ctx: Context) -> Finding:
 
 
 # ---------- C4: version / update hygiene (advisory) ----------
+#
+# B-502: the previous version of this check printed `meta.lastTouchedVersion` and PASSed
+# UNCONDITIONALLY whenever it was present -- so a rollback onto an older, potentially
+# vulnerable build (2026.7.1 -> 2026.3.0) stayed PASS. Fixed WITHOUT any cross-run memory:
+# `meta.lastTouchedVersion` is which build last WROTE the config, and comparing it against
+# which build is INSTALLED NOW, in the SAME run, already reveals a rollback --
+# openclawdist.self_reported_version's own docstring: "a downgrade leaves the config
+# stamped with the newer version -- and neither one alone can show it, which is the whole
+# reason both are recorded." No monitor snapshot / prior audit run is needed.
+#
+# Deliberately calls `deptree.find_package_root` + the private `openclawdist._read_version`
+# rather than `openclawdist.describe_install` -- the latter also digests the installed
+# package's whole executable surface (~0.3s on a real install) for an integrity check this
+# advisory does not need; the two calls used here cost ~0.005s combined (measured).
+#
+# C-135: a "down" result here is NOT proof of tampering. Two benign, real-world causes
+# produce it and neither is distinguishable from a genuine rollback by a single read-only,
+# offline pass: (1) two OpenClaw installs on one machine (e.g. a project-local install
+# alongside a global npm one) -- PATH resolves whichever comes first, which need not be the
+# one that last wrote this config; (2) a config synced from another machine (dotfiles-style)
+# that ran a newer build than this one has installed. The WARN text below states the fact
+# and asks for confirmation; it never asserts an attack, and it is LOW/advisory (scored=
+# False), same as every other verdict this check has ever produced.
 def check_version(ctx: Context) -> Finding:
+    """C4 -- OpenClaw version / update hygiene.
+
+    PASS    -- self-reported and installed versions agree, or the installed build is
+               newer than the self-reported one (a normal upgrade) -- no rollback signal.
+    WARN    -- the installed build is OLDER than the version that last wrote the config --
+               a rollback signature (see the C-135 note above this function). Never a
+               vulnerability claim -- B33 is the grounded gate against real advisories.
+    UNKNOWN -- the self-reported version is absent, the installed package could not be
+               located on PATH, or the two version strings cannot be reliably ordered
+               (non-numeric / pre-release build) -- never guessed as PASS.
+
+    The installed version comes from ``ctx.installed_dist_version``, which ``audit()``
+    populates only under ``include_dist=True`` (the CLI passes it; ``--no-dist`` opts
+    out). A test drives every branch by setting that field, so no verdict here depends on
+    whatever OpenClaw happens to be installed on the machine running the suite.
+    """
     ver = dig(ctx.config, "meta.lastTouchedVersion") or dig(ctx.config, "lastTouchedVersion")
     if not ver:
         return _custom(
             "C4", BY_ID["C4"].severity, UNKNOWN, "OpenClaw version not recorded in config.", "—"
         )
+    ver = str(ver)
+
+    # Read the installed version from the Context, never from the host directly. That is
+    # what keeps this check hermetic: `audit()` resolves it once behind `include_dist`
+    # (default False), exactly as `sockets`/`dep_tree` are gated. A check that walked PATH
+    # itself would make C4's detail a function of whatever OpenClaw happens to be on the
+    # machine running the scan -- and since the fixture corpus goes through `audit()`, that
+    # would move committed finding fingerprints between a dev box and CI.
+    installed = getattr(ctx, "installed_dist_version", None) or ""
+    if not installed:
+        # Hermetic default, and also "the lookup ran but PATH did not resolve openclaw".
+        # Both fall back to the ORIGINAL presence-only verdict, byte-identical, so no
+        # pre-existing test or manifest entry moves. Deliberately not UNKNOWN: this branch
+        # is the normal state for every hermetic caller, and turning the common case into
+        # UNKNOWN would be a louder lie than the quiet PASS it replaced.
+        return _custom(
+            "C4",
+            BY_ID["C4"].severity,
+            PASS,
+            f"OpenClaw config last touched by version {ver}. Known-vulnerable releases "
+            "are gated by B33; this is an update-hygiene reminder, not a vulnerability claim.",
+            "Keep OpenClaw updated and re-run the checks after upgrading.",
+        )
+
     # Advisory only — do NOT claim a vulnerability here. The grounded known-vulnerable
     # version gate is B33 (check_known_vulns), which compares against real advisories.
     # C4 stays a neutral update-hygiene reminder; it must not name a CVE it can't ground
     # or imply a current/patched version is outdated (it has no offline "latest" to judge).
+    if ver == installed:
+        return _custom(
+            "C4",
+            BY_ID["C4"].severity,
+            PASS,
+            f"OpenClaw config last touched by version {ver}, matching the installed "
+            "build. Known-vulnerable releases are gated by B33; this is an "
+            "update-hygiene reminder, not a vulnerability claim.",
+            "Keep OpenClaw updated and re-run the checks after upgrading.",
+        )
+
+    order = _openclawdist.compare_versions(ver, installed)
+    if order == "down":
+        return _custom(
+            "C4",
+            BY_ID["C4"].severity,
+            WARN,
+            f"The installed OpenClaw build ({installed}) is OLDER than the version that "
+            f"last wrote this config ({ver}) — a version-rollback signature. Not "
+            "necessarily tampering: a deliberate pin-back after a bad release, a dev "
+            "switching branches, two OpenClaw installs on this machine (PATH resolving a "
+            "different one than whichever last wrote the config), or a config synced from "
+            "another machine that ran a newer build can all produce this. This is not a "
+            "vulnerability claim — B33 checks the installed version against real "
+            "advisories.",
+            "Confirm this rollback was intentional; if not, reinstall the OpenClaw "
+            "version you expect and re-run the checks.",
+        )
+    if order == "up":
+        return _custom(
+            "C4",
+            BY_ID["C4"].severity,
+            PASS,
+            f"OpenClaw config last touched by version {ver}; the installed build "
+            f"({installed}) is newer. Known-vulnerable releases are gated by B33; this "
+            "is an update-hygiene reminder, not a vulnerability claim.",
+            "Keep OpenClaw updated and re-run the checks after upgrading.",
+        )
+    # order == "unknown": the two strings differ but cannot be reliably ordered (a
+    # non-numeric or pre-release build on either side) — reporting PASS here would be the
+    # same fabricated-confidence bug this check existed to fix, just moved one level down.
     return _custom(
         "C4",
         BY_ID["C4"].severity,
-        PASS,
-        f"OpenClaw config last touched by version {ver}. Known-vulnerable releases "
-        "are gated by B33; this is an update-hygiene reminder, not a vulnerability claim.",
-        "Keep OpenClaw updated and re-run the checks after upgrading.",
+        UNKNOWN,
+        f"OpenClaw config last touched by version {ver} and the installed build is "
+        f"{installed}, but the two could not be reliably ordered (non-numeric or "
+        "pre-release version string), so a version rollback cannot be checked.",
+        "—",
     )
 
 
@@ -4716,11 +6913,27 @@ def check_marketplace_feed_provenance(ctx: Context) -> Finding:
         return _finding(
             "B325",
             PASS,
-            "marketplaces.feeds is not configured -- only the built-in public "
-            "https://clawhub.ai feed profile is in effect.",
-            "No action needed. If you add a custom marketplaces.feeds profile, keep "
-            "its url on https://clawhub.ai unless you deliberately run your own "
-            "self-hosted or enterprise feed mirror.",
+            # B-714: the FIX below was already version-aware; this DETAIL was not, and
+            # "is not configured" reads as "you have not set this yet" about a key the
+            # reader's build does not have. The guard missed it for the same reason it
+            # missed RISK-15: `_names_key` could not see a key that ends a sentence.
+            ("Custom marketplace feed profiles (marketplaces.feeds) do not exist on "
+             "OpenClaw 2026.8.1 and later -- only the built-in public https://clawhub.ai "
+             "feed profile is in effect."
+             if _openclaw_generation(ctx) == "modern" else
+             "marketplaces.feeds is not configured -- only the built-in public "
+             "https://clawhub.ai feed profile is in effect."),
+            # B-700: the PASS branch is the one place this check tells the user to ADD the
+            # key, and OpenClaw 2026.8.1 removed `marketplaces` outright -- `doctor --fix`
+            # deletes a stale block rather than erroring on it. Whether the CHECK still has
+            # a subject on that build is C-471's question; this only stops the advice from
+            # recommending a key the reader's build rejects.
+            ("No action needed. Custom marketplace feed profiles were removed in "
+             "OpenClaw 2026.8.1, so there is nothing to add on this build."
+             if _openclaw_generation(ctx) == "modern" else
+             "No action needed. If you add a custom marketplaces.feeds profile, keep "
+             "its url on https://clawhub.ai unless you deliberately run your own "
+             "self-hosted or enterprise feed mirror."),
         )
 
     canonical = 0
@@ -4739,6 +6952,37 @@ def check_marketplace_feed_provenance(ctx: Context) -> Finding:
             if name == _B325_DEFAULT_FEED_PROFILE_NAME:
                 bad_default_profile = True
 
+    if bad and _openclaw_generation(ctx) == "modern":
+        # C-471: `marketplaces` was REMOVED in OpenClaw 2026.8.1 — it is entry #2 in the
+        # vendor's own `RETIRED_TUNING_PATHS`, and `doctor --fix` deletes a stale block
+        # rather than erroring on it. So on a build we can see is newer, a configured feed
+        # profile is not a dormant supply-chain source; it is not a source at all. The hole
+        # this check was written for — a named config profile whose host joins the
+        # trusted-fetch allowlist with no vetting — cannot exist, because config can no
+        # longer name a profile. What remains is the `--feed-url` CLI override, which IS
+        # gated against OFFICIAL_EXTERNAL_PLUGIN_CATALOG_FEED_HOSTNAME_ALLOWLIST.
+        #
+        # PASS rather than an inert-worded WARN, deliberately: RISK-25 in `risk.py` is
+        # gated on `_finding_status(findings, "B325") == WARN`, so keeping the WARN would
+        # keep asserting a chain whose first leg no longer exists. Measured: with this
+        # branch the rule stops firing on a modern build and still fires on 2026.7.x, so
+        # the leg retires itself with no change needed in `risk.py`.
+        return _finding(
+            "B325",
+            PASS,
+            f"{len(bad)} marketplaces.feeds profile(s) are configured, but OpenClaw "
+            "2026.8.1 removed the marketplaces block entirely — the key is not part of "
+            "its config schema any more, so these profiles are not a supply-chain source "
+            "on this build: " + "; ".join(bad),
+            "Delete the marketplaces block (`openclaw doctor --fix` removes it). Custom "
+            "feed profiles no longer exist; the remaining override is the --feed-url flag, "
+            "which OpenClaw gates against its own clawhub.ai hostname allowlist.",
+            evidence=list(bad),
+            # `verified`, not `no_signal`: this PASS is not "we saw nothing". The profiles
+            # were read and named, and the build was identified as one whose schema has no
+            # `marketplaces` key at all. That is positive evidence that they cannot act.
+            pass_confidence="verified",
+        )
     if bad:
         sources = dig(ctx.config, "marketplaces.sources")
         evidence = list(bad)
@@ -5039,7 +7283,8 @@ def check_exec_safe_bin_trusted_dirs(ctx: Context) -> Finding:
                 "the global tools.exec.safeBins is explicitly set to an empty list, "
                 "which disables safe-bin authorization outright (no bin name can "
                 "ever match). It stays a disclosure, not a silent PASS, because a "
-                "per-agent agents.list.<id>.tools.exec.safeBins override -- not read "
+                f"per-agent {_key_advice(ctx, 'agents.list', 'agents.entries')}"
+                ".<id>.tools.exec.safeBins override -- not read "
                 "by this audit -- can independently re-enable the fast path for that "
                 "one agent while this writable directory stays configured.",
                 "If tools.exec.safeBins is meant to stay empty everywhere, this "

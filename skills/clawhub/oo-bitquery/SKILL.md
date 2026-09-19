@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Bitquery"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["bitquery"]
   icon: "https://static.oomol.com/logo/third-party/bitquery.svg"
 ---

@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/single-gpu-passthrough",
+  "slug": "single-gpu-passthrough",
+  "ownerHandle": null,
+  "version": "1.0.0",
+  "updatedAt": 1789765533614,
+  "contentHash": "97a0b6e8ddac8fb22ee1d8a7679a6c6f12582660b2155ece699965801c6bac3d",
+  "fetchedAt": "2026-09-19T12:04:36.283Z"
+}

@@ -8,7 +8,7 @@ Use the **full** checklist here for every generation.
 
 - [Random seed ritual](#random-seed-ritual-mandatory-before-every-generation)
 - [Three steps (every job)](#three-steps-every-job)
-- [Still-image prompt flow](./still-image-prompt-flow.md) — `p-image` / `p-image-edit` agent pipeline (brief lock → ritual → POST)
+- [Still-image prompt flow](./still-image-prompt-flow.md) — `p-image-ideogram` / `p-image` / `p-image-edit` agent pipeline (brief lock → ritual → POST)
 - [Explicit prompt structure](#explicit-prompt-structure-required)
 - [Text & typography by model](#text--typography-by-model)
 - [SSoT axis derivation](#ssot-axis-derivation-sum-mod)
@@ -80,8 +80,8 @@ Character continuity = approved plate URL + cast descriptor — **not** the ritu
 
 ### Example (internal plan / optional user-visible)
 
-Manifest: `"ritual_seed": "k7Qm2xP9"`. Derived: aspect_ratio 16:9, camera_tag fish-eye, render_category_tag cartoon_anime_fantasy.  
-Prompt: Disco ball reflections on an otter DJ scratching vinyl at a packed 1970s roller rink, fish-eye lens, glitter confetti mid-air, funky energy.  
+Manifest: `"ritual_seed": "k7Qm2xP9"`. Derived: aspect_ratio 16:9, camera_tag fish-eye, render_category_tag cartoon_anime_fantasy.
+Prompt: Disco ball reflections on an otter DJ scratching vinyl at a packed 1970s roller rink, fish-eye lens, glitter confetti mid-air, funky energy.
 …then curl / runner **without** `"seed"` in `input`.
 
 ### Manifest snippet
@@ -147,17 +147,18 @@ pulp western poster energy, dynamic diagonal composition
 
 | Model | Prompt upsampling | Typography in prompt |
 |-------|-------------------|----------------------|
-| **`p-image`** | **No** effective prompt upsampling | **Avoid** dense readable-type requests unless user explicitly wants `text_rendering`. Short prompts; skip `readable`, `legible`, `headline`, multi-sign lists — they drift to gibberish. Collage triggers still apply: `interactive-explainer` (`flat lay`, `grid`, `collage`, …). |
+| **`p-image-ideogram`** | **`thinking: high`** + **`prompt_upsampling: true`** by default; **`false`** for JSON or locked text | **Controlled photo generation** — in-image text, hex/JSON/bbox, high-detail photoreal. Speed path: **`thinking: low`**, **`prompt_upsampling: false`**, nuanced explicit prompt. |
+| **`p-image`** | **No** effective prompt upsampling | **Simple, quick** photo generation from a short prompt. Avoid dense in-image text — route to **`p-image-ideogram`**. Collage triggers still apply: `interactive-explainer` (`flat lay`, `grid`, `collage`, …). |
 
-**`p-image` text hygiene:** prefer scenes without copy. If a screen appears: `monitor soft colorful blur glow only` — not legible UI unless the user explicitly asked for readable text (then simplify the brief or drop copy).
+**`p-image` text hygiene:** prefer scenes without copy. If a screen appears: `monitor soft colorful blur glow only` — not legible UI unless the user explicitly asked for readable text (route to **`p-image-ideogram`** or simplify the brief).
 
 **Channel split (quotes vs tags):**
 
 - **`text_spec` (stills):** `"[exact string]"` + `[surface]` + `[placement]` → `image-prompting` §5
-- **Native clip dialogue:** `p-video` Mode A only (`[subject] says "[LINE]"` + mouth + gesture) → `video-prompting` — not `p-image`
+- **Native clip dialogue:** `p-video-2` for quality (or `p-video` for a simpler clip) Mode A only (`[subject] says "[LINE]"` + mouth + gesture) → `video-prompting` — not `p-image`
 - **`[tags]`:** Gemini TTS `text` performance only — not still typography, not `p-video` motion prompt → `audio-prompting`
 
-**Collage triggers (all T2I models):** still avoid `flat lay`, `packshot`, `grid`, `collage`, `montage`, `contact sheet`, `split`, `before and after` — use `single frame`, `one camera angle` instead. Full table: `interactive-explainer`.
+**Collage triggers (photo generation models):** still avoid `flat lay`, `packshot`, `grid`, `collage`, `montage`, `contact sheet`, `split`, `before and after` — use `single frame`, `one camera angle` instead. Full table: `interactive-explainer`.
 
 ## SSoT axis derivation (sum-mod)
 
@@ -183,7 +184,7 @@ render_tag    ← render_tags[ sum(codes(ritual_seed[4:8])) % len(render_tags) ]
 | **Setting** | unique `setting_tag` — specific room/street/venue/era, not repeat adjacent rows | stills + video plates |
 | **Camera** | `camera_tag` — rotate across [framing ladder](#framing--camera); never default MC facing lens | stills, `video_prompt` |
 | **Lighting** | `lighting_tag` — golden hour · neon · overcast · practical | stills, video mood |
-| **Motion** | unique `video_prompt` per clip | `p-video`, `p-video-avatar`, animate |
+| **Motion** | unique `video_prompt` per clip | `p-video-2`, `p-video`, `p-video-avatar`, animate |
 | **Voice** | natural `voice_script`; one `voice` preset per character | avatar, TTS-led video |
 | **Seed** | new ritual string per **independent** job; reuse only on same-brief slop retry | all generation skills |
 | **Aspect ratio** | different `aspect_ratio` per independent still in a batch — see [below](#aspect-ratio-multi-example-sets) | `p-image`, `p-image-edit` |
@@ -197,7 +198,7 @@ Rotate **`render_category_tag`** (and log it) so diversity batches cover more th
 
 **Random seed ritual still applies** to every generation in [step 1](#three-steps-every-job); categories describe *what* to vary, not *when* to pick `seed`.
 
-### Text-to-image — `p-image`
+### Text-to-image — `p-image-ideogram` / `p-image`
 
 Sources: [Arena text-to-image](https://arena.ai/leaderboard/text-to-image) · [AA text-to-image](https://artificialanalysis.ai/image/leaderboard/text-to-image)
 
@@ -229,7 +230,7 @@ Edit diversity tags: `background_swap` · `relight` · `wardrobe_on_plate` · `p
 
 Vary **instruction** and **what changes** while identity URL stays fixed on character arcs.
 
-### Text-to-video — `p-video`
+### Text-to-video — `p-video-2` (quality) / `p-video` (simpler)
 
 Sources: [Arena text-to-video](https://arena.ai/leaderboard/text-to-video) · [AA text-to-video](https://artificialanalysis.ai/video/leaderboard/text-to-video)
 
@@ -237,7 +238,7 @@ Motion/scene tags: `character_performance` · `landscape_broll` · `urban_street
 
 Rotate `video_prompt` grammar, start plate world, and `camera_tag` per clip.
 
-### Image-to-video — `p-video` (+ plate upload)
+### Image-to-video — `p-video-2` (quality) / `p-video` (simpler) (+ plate upload)
 
 Sources: [Arena image-to-video](https://arena.ai/leaderboard/image-to-video) · [AA image-to-video](https://artificialanalysis.ai/video/leaderboard/image-to-video)
 
@@ -245,11 +246,13 @@ Plate-driven tags: `animate_hero_still` · `camera_move_on_plate` · `environmen
 
 Match motion to what the **still** already shows — do not contradict the plate.
 
-### Video edit — `p-video-replace` (and edit-style video)
+### Video edit — `p-video-replace` / `p-video-edit`
 
 Source: [Arena video edit](https://arena.ai/leaderboard/video-edit)
 
-Edit tags: `face_recast` · `wardrobe_swap` · `accessory_swap` · `background_replace` · `object_in_hand_swap` · `style_transfer_on_subject`
+Edit tags: `face_recast` · `wardrobe_swap` · `accessory_swap` · `background_replace` · `object_in_hand_swap` · `style_transfer_on_subject` · `attribute_recolor` · `object_remove` · `environment_restyle` · `relight` · `on_screen_text`
+
+**`p-video-replace`:** character swap from required refs. **`p-video-edit`:** one principal instruction change per run — lock the keep-list; do not invent a new scene.
 
 Same-gender / identity rules for talking-head beats still apply — see [Cast diversity](#cast-diversity) below.
 
@@ -394,14 +397,17 @@ Match prompt framing to ratio (e.g. `16:9 horizontal wide shot`, `9:16 vertical 
 
 | Model | Besides ritual seed, always vary |
 |-------|-----------------------------------|
+| **`p-image-ideogram`** | same axes as `p-image` — photoreal / text / JSON control path |
 | **`p-image`** | cast/creature + objects + action + setting + camera + **`render_category_tag`** + **aspect_ratio**; [explicit structure](#explicit-prompt-structure-required); [text hygiene](#text--typography-by-model) (no upsampling) |
 | **`p-image-edit`** | edit tag + setting/angle delta; same identity URL |
 | **`p-image-try-on`** | person plate world + garment complexity; preserve scene |
 | **`p-image-upscale`** | N/A on prompt — diversify **source** stills |
-| **`p-video`** | motion/scene tag + `video_prompt`; differ start plates per scene |
+| **`p-video-2`** | motion/scene tag + `video_prompt`; differ start plates per scene (quality path) |
+| **`p-video`** | same axes — simpler / quicker clips |
 | **`p-video-avatar`** | `video_prompt` + still world per scene; lock voice per character |
 | **`p-video-animate`** | persona still style/setting per slider ref |
 | **`p-video-replace`** | video-edit tag + full cast spread on showcase reels |
+| **`p-video-edit`** | video-edit tag + one-change lock (keep camera / motion / unmentioned subjects) |
 
 ## When **not** to maximize diversity
 
@@ -435,7 +441,7 @@ Match prompt framing to ratio (e.g. `16:9 horizontal wide shot`, `9:16 vertical 
 
 ## Visual variety
 
-Use this whenever you plan **`p-image`**, **`p-image-edit`**, **`p-video-avatar`**, **`p-video-animate`**, or **`p-video-replace`** rows. Run the **Variety checklist** at the bottom before the first API call.
+Use this whenever you plan **`p-image-ideogram`**, **`p-image`**, **`p-image-edit`**, **`p-video-2`**, **`p-video`**, **`p-video-avatar`**, **`p-video-animate`**, **`p-video-replace`**, or **`p-video-edit`** rows. Run the **Variety checklist** at the bottom before the first API call.
 
 ### Goal
 
@@ -454,11 +460,11 @@ Showcase and multi-scene work should feel **art-directed**, not like the same ta
 
 Every still prompt should feel **art-directed and thumb-stopping**, not generic stock. Build in order:
 
-1. **Style + subject** — who they are + one statement wardrobe piece  
-2. **World** — 2–3 concrete environment cues (city bokeh, mirror panels, miniature teal lamp, twin moons)  
-3. **Lighting name** — in **`p-image` / reference stills**: bright environment (sunny window, cheerful daylight, golden afternoon). **Avoid** ring light, studio lighting, key/rim/gel light **wording** in still prompts — those belong in plan `lighting_tag` + `video_prompt`, not `p-image`.  
-4. **Shot framing** — in still prompts: slight angle from the side, wide shot, slight high angle — **not** “facing camera”, “three-quarter”, or “3/4”. Record angle in plan `camera_tag`.  
-5. **`swap_visual_bible`** (plan) — amplify contrast on persona-ladder refs  
+1. **Style + subject** — who they are + one statement wardrobe piece
+2. **World** — 2–3 concrete environment cues (city bokeh, mirror panels, miniature teal lamp, twin moons)
+3. **Lighting name** — in **`p-image` / reference stills**: bright environment (sunny window, cheerful daylight, golden afternoon). **Avoid** ring light, studio lighting, key/rim/gel light **wording** in still prompts — those belong in plan `lighting_tag` + `video_prompt`, not `p-image`.
+4. **Shot framing** — in still prompts: slight angle from the side, wide shot, slight high angle — **not** “facing camera”, “three-quarter”, or “3/4”. Record angle in plan `camera_tag`.
+5. **`swap_visual_bible`** (plan) — amplify contrast on persona-ladder refs
 
 **Anti-pattern:** flat “neutral wall, soft natural light” on **every row in a scene** — especially UGC/install beats with three grey-wall refs. **Fix:** distinct location family per ref (loft · rooftop · cafe · LED studio) + named gel rim + varied **`camera_tag`** (low angle, side angle, slight high angle).
 
@@ -493,16 +499,16 @@ Scene 3 already stacks texture beats (fur, holo, pearl/gold); reuse that pattern
 
 ### Composition & depth
 
-- **Shallow DOF** + gel reflections (single-subject neon boutique) or city window bokeh (studio) — separates subject from background  
-- **Foreground anchor** — mug, **closed hardcover notebook**, tumbler at chest gives replace sliders a readable swap target  
-- **Single subject one frame** — always; negative space on one side reads cleaner in inset thumbnails  
+- **Shallow DOF** + gel reflections (single-subject neon boutique) or city window bokeh (studio) — separates subject from background
+- **Foreground anchor** — mug, **closed hardcover notebook**, tumbler at chest gives replace sliders a readable swap target
+- **Single subject one frame** — always; negative space on one side reads cleaner in inset thumbnails
 
 ### Age & profession spread
 
 Not every scene needs “tech founder early 30s.” Rotate:
 
-- Gen-Z UGC creator · mid-30s creative director · late-20s advocate · **40s+ expert/trainer** for one VO row  
-- Archetypes beyond tech: stylist, chef, fitness creator, museum docent — when the narrative allows  
+- Gen-Z UGC creator · mid-30s creative director · late-20s advocate · **40s+ expert/trainer** for one VO row
+- Archetypes beyond tech: stylist, chef, fitness creator, museum docent — when the narrative allows
 
 ### Camera & motion (reel-level)
 
@@ -525,9 +531,9 @@ Long persona ladders (7–9 refs) need tighter **`slider_seconds`** (1.25–1.5)
 
 ### Quality gates before Phase B
 
-- Ref still readable at **256px wide** (identity + accent color)  
-- Adjacent refs differ in **medium + palette + setting**, not just hair color  
-- `instruction_prompt` colors/materials **match** reference prompt (lime crew ≠ forest green; copper ≠ silver)  
+- Ref still readable at **256px wide** (identity + accent color)
+- Adjacent refs differ in **medium + palette + setting**, not just hair color
+- `instruction_prompt` colors/materials **match** reference prompt (lime crew ≠ forest green; copper ≠ silver)
 - Source `video_prompt` props **match** `still_edit` (no mug glance if no mug in plate)
 
 ## Cast diversity
@@ -723,7 +729,7 @@ Public examples across **`p-image`**, **`p-image-try-on`**, and **`p-video-avata
 | Rule | Guidance |
 |------|----------|
 | **Unified bar** | this document · `image-prompting`
-| **Person plate** | Photoreal **`p-image`** editorial prompts → slop gate |
+| **Person plate** | Photoreal **`p-image-ideogram`** editorial prompts → slop gate |
 | **Try-on** | Garment tiers + preservation — `image-prompting` |
 | **Avatar motion** | Unique **`video_prompt`** per clip; natural **`voice_script`** |
 | **Cast** | Diversity ledger — gender, age, ethnicity spread |
@@ -737,6 +743,7 @@ Public examples across **`p-image`**, **`p-image-try-on`**, and **`p-video-avata
 |----------|-------------------|
 | `p-image-try-on` | Editorial plates + complex garment refs; preservation checklist; diversity across playground set |
 | `p-video-replace` | Scene 1 **persona ladder** + per-scene distinct `still_edit` backgrounds; optional **light bed** after concat |
+| `p-video-edit` | One-change lock + video-edit tag; keep camera/motion; optional refs mapped in `prompt` |
 | `p-video-animate` | 3–4 **style tags** per animate slider row |
 | `avatar-multi-scene` | Every avatar row: new `setting_tag` + `camera_tag` via `p-image-edit` |
 | WORKFLOW-RECIPES | Intake must capture variety plan before recipe execution |

@@ -52,8 +52,48 @@ FIREWALL = "firewall"
 # egress policy, which is exactly the gap this class targets (consumed by
 # check B101).
 EGRESS_POSTURE = "egress_posture"
+# E-065/C-324: a covert tunnel / mesh-VPN transport binary or artifact present on the
+# HOST — tailscale/tailscaled, cloudflared, ngrok, frpc, bore. Distinct in KIND from
+# every class above: those all ask "is something watching/filtering"; this asks
+# "does an outbound-tunnel-capable transport already exist here". `present` on its own
+# is NEVER a finding (a large share of developers legitimately run tailscale) — RISK-24
+# is the only consumer, and it only fires on the full combination of this class PLUS an
+# agent holding exec+egress PLUS a hardened egress-posture grade (see risk.py).
+# B-434 (C-135 adversarial review of RISK-24): a bare `shutil.which()` PATH hit is not
+# enough to justify RISK-24's severity by itself — an installed-but-never-enrolled
+# binary (downloaded once, never used) is indistinguishable from a live tunnel at that
+# level. On Linux, `active` is corroborated per-binary with a signal that needs more
+# than mere installation:
+#   - cloudflared: a systemd-enabled cloudflared.service. That unit is created only
+#     by the explicit `cloudflared service install` action (Cloudflare's own
+#     documented path to run a persistent tunnel) — installing the `cloudflared`
+#     binary alone never creates it, so "enabled" here really does mean "someone
+#     deliberately set this up to run".
+#   - tailscale: a persisted var/lib/tailscale/tailscaled.state file — NOT a
+#     systemd-enabled tailscaled.service. B-434 FOLLOW-UP (second adversarial
+#     pass): the original fix used the systemd-enabled signal for
+#     tailscale too, but that is unsound — Debian/Ubuntu's official tailscale .deb
+#     postinst (release/deb/debian.postinst.sh) both enables AND restarts
+#     tailscaled.service on a bare `apt install tailscale`, independent of whether
+#     the host was ever authenticated. Real repro: tailscaled.service enabled-at-
+#     boot, `tailscale up` never run, no tailscaled.state, no firewall exception for
+#     it at all — RISK-24 fired anyway. tailscaled.state is the sound signal instead:
+#     tailscaled lazily generates and persists its machine key only once it actually
+#     attempts to connect to control (upstream fix "ipn/ipnlocal: lazily connect to
+#     control, lazily generate machine key", tailscale/tailscale#1759) — a daemon
+#     merely started by the postinst script and never told to connect leaves no
+#     state file at all, so its presence is evidence `tailscale up` / `--auth-key`
+#     actually ran.
+# ngrok/frpc/bore have no single, authoritative systemd-unit convention (nor a state
+# file) to ground this against without fabricating one, so `active` stays
+# uncorroborated (None) for them — honest "can't confirm" beats a guessed signal.
+# macOS/Windows are unchanged (still uncorroborated) for the same reason.
+TUNNEL_TRANSPORT = "tunnel_transport"
 
-CLASSES = (NETWORK_IDS, HOST_AUDIT, FILE_INTEGRITY, EDR_AV, FIREWALL, EGRESS_POSTURE)
+CLASSES = (
+    NETWORK_IDS, HOST_AUDIT, FILE_INTEGRITY, EDR_AV, FIREWALL, EGRESS_POSTURE,
+    TUNNEL_TRANSPORT,
+)
 
 # The four *detection/visibility* classes (a firewall is prevention, not detection).
 # RISK-10 ("a breach would be invisible") keys off these only.
@@ -116,14 +156,19 @@ def _ufw_enabled(root: Path) -> bool | None:
 
 
 def _ufw_outgoing_policy(root: Path) -> str | None:
-    """DEFAULT_OUTGOING_POLICY from /etc/ufw/ufw.conf, lowercased ('deny'/'reject'/
-    'allow'/...), or None if the key or file is absent/unreadable."""
-    txt = _read_text(root / "etc/ufw/ufw.conf")
+    """DEFAULT_OUTPUT_POLICY from /etc/default/ufw, lowercased ('drop'/'reject'/
+    'accept'/...; ufw itself writes 'drop', not 'deny' — see B-437 follow-up on
+    the caller), or None if the key or file is absent/unreadable.
+
+    B-437: the key does NOT live in /etc/ufw/ufw.conf (that file only holds
+    ENABLED/LOGLEVEL-style toggles) — it is DEFAULT_OUTPUT_POLICY in
+    /etc/default/ufw, verified directly against a real Ubuntu host."""
+    txt = _read_text(root / "etc/default/ufw")
     if txt is None:
         return None
     for line in txt.splitlines():
         s = line.strip()
-        if s.lower().startswith("default_outgoing_policy"):
+        if s.lower().startswith("default_output_policy"):
             _, _, val = s.partition("=")
             return val.strip().strip('"').strip("'").lower() or None
     return None
@@ -337,9 +382,19 @@ def _detect_linux(root: Path, which) -> dict:
         found.append(f"nftables OUTPUT policy={nft_policy}")
         deny = nft_policy in ("drop", "reject")
     ufw_policy = _ufw_outgoing_policy(root)
-    if ufw_policy is not None:
-        found.append(f"ufw DEFAULT_OUTGOING_POLICY={ufw_policy}")
-        policy_deny = ufw_policy in ("deny", "reject")
+    # B-437: a DEFAULT_OUTPUT_POLICY left on disk for a DISABLED ufw is not an
+    # active egress posture — gate on _ufw_enabled() also being True, or a
+    # `ufw disable` that never touched /etc/default/ufw would still be
+    # credited as enforcing a deny-outbound policy it isn't actually applying.
+    if ufw_policy is not None and _ufw_enabled(root) is True:
+        found.append(f"ufw DEFAULT_OUTPUT_POLICY={ufw_policy}")
+        # B-437 follow-up: real ufw never writes the literal "deny" to this file.
+        # `ufw default deny outgoing` (the exact hardening command this check's
+        # own remediation recommends) writes DEFAULT_OUTPUT_POLICY="DROP" —
+        # verified against backend_iptables.py's set_default_policy(). "deny" is
+        # kept for defense-in-depth (e.g. a hand-edited file) but "drop" is the
+        # value that actually occurs on real hosts.
+        policy_deny = ufw_policy in ("deny", "drop", "reject")
         # multiple confirmed sources: any confirmed default-allow is a real gap,
         # so let a False win over an earlier True rather than silently hiding it.
         deny = policy_deny if deny is None else (deny and policy_deny)
@@ -355,6 +410,32 @@ def _detect_linux(root: Path, which) -> dict:
         weak.append("proxychains config present")
 
     classes[EGRESS_POSTURE] = _egress_cls(found, deny, weak)
+
+    # Tunnel / mesh-VPN transport (E-065/C-324) --------------------------------
+    found, active = [], None
+    tailscale_state = _exists(root, "var/lib/tailscale/tailscaled.state")
+    if which("tailscale") or which("tailscaled") or tailscale_state:
+        found.append("Tailscale")
+        # B-434 follow-up: tailscaled.state is the enrollment signal, deliberately
+        # NOT a systemd-enabled tailscaled.service (see the TUNNEL_TRANSPORT comment
+        # above for why the unit signal was retracted — it fires on a bare `apt
+        # install tailscale` with no authentication at all).
+        if tailscale_state:
+            active = True
+    if which("cloudflared"):
+        found.append("cloudflared")
+        # B-434: `cloudflared service install` (Cloudflare's own documented path to
+        # run a persistent tunnel) enables this exact unit; installing the binary
+        # alone never does, so this signal is unaffected by the follow-up above.
+        if _systemd_enabled(root, "cloudflared.service"):
+            active = True
+    if which("ngrok"):
+        found.append("ngrok")
+    if which("frpc"):
+        found.append("frp")
+    if which("bore"):
+        found.append("bore")
+    classes[TUNNEL_TRANSPORT] = _detection_cls(found, active)
 
     return {"system": "Linux", "supported": True, "classes": classes}
 
@@ -438,6 +519,25 @@ def _detect_macos(root: Path, which) -> dict:
     if _proxychains_present(root):
         weak.append("proxychains config present")
     classes[EGRESS_POSTURE] = _egress_cls([], None, weak)
+
+    # Tunnel / mesh-VPN transport (E-065/C-324) --------------------------------
+    # B-434: no grounded, read-only "is it actually enrolled/running" signal on
+    # macOS (no equivalent of Linux's systemd-enabled unit check here) — `active`
+    # stays uncorroborated (None), same as before. RISK-24 (risk.py) requires
+    # `active is True`, so it simply cannot fire from macOS host data yet.
+    found = []
+    if (which("tailscale") or which("tailscaled")
+            or _exists(root, "Applications/Tailscale.app")):
+        found.append("Tailscale")
+    if which("cloudflared"):
+        found.append("cloudflared")
+    if which("ngrok"):
+        found.append("ngrok")
+    if which("frpc"):
+        found.append("frp")
+    if which("bore"):
+        found.append("bore")
+    classes[TUNNEL_TRANSPORT] = _detection_cls(found)
 
     return {"system": "Darwin", "supported": True, "classes": classes}
 
@@ -524,12 +624,77 @@ def _detect_windows(root: Path, which) -> dict:
     else:
         classes[FIREWALL] = _cls(["Windows Firewall"], active=fw)
 
+    # Tunnel / mesh-VPN transport (E-065/C-324) --------------------------------
+    # B-434: `active` stays uncorroborated (None) here for now, same as before —
+    # see the Linux block's B-434 comment. RISK-24 (risk.py) requires
+    # `active is True`, so it simply cannot fire from Windows host data yet.
+    found = []
+    if which("tailscale") or which("tailscaled") or _win_service_exists("Tailscale") is True:
+        found.append("Tailscale")
+    if which("cloudflared"):
+        found.append("cloudflared")
+    if which("ngrok"):
+        found.append("ngrok")
+    if which("frpc"):
+        found.append("frp")
+    if which("bore"):
+        found.append("bore")
+    classes[TUNNEL_TRANSPORT] = _detection_cls(found)
+
     return {"system": "Windows", "supported": True, "classes": classes}
 
 
 # ──────────────────────────────────────────────────────────────────────────────
 # Public API
 # ──────────────────────────────────────────────────────────────────────────────
+
+# B-707: the conventional system locations, consulted when PATH resolution comes up empty.
+#
+# Every monitor above is located with `shutil.which`, and `shutil.which` answers a question
+# about the CURRENT PROCESS'S PATH -- not about the host. Those are different questions, and
+# for a scheduled run they give different answers: a classic user crontab runs with
+# `PATH=/usr/bin:/bin`, which excludes `/usr/sbin` and `/usr/local/bin`, and a `systemd`
+# timer inherits whatever its unit specifies, which is often nothing at all.
+#
+# Measured on this machine (openclaw 2026.8.2, monitors as actually installed):
+#     real shell PATH        tunnel_transport present ["Tailscale", "ngrok"]
+#     PATH=/usr/bin:/bin     tunnel_transport present ["Tailscale"]          <- ngrok lost
+#     PATH unset             tunnel_transport present ["Tailscale"]
+#     PATH=""                tunnel_transport unknown []                     <- class lost
+# `ngrok` lives at /usr/local/bin/ngrok and `ufw`/`nft`/`iptables` at /usr/sbin -- exactly the
+# directories a cron PATH drops. The host did not change between those runs; only the
+# question we asked did.
+#
+# This does NOT weaken any verdict. B-434's rule stands untouched: a bare `which` hit never
+# justifies RISK-24 on its own, and `active` is still corroborated per-binary by a signal that
+# needs more than mere installation (an enabled cloudflared.service, a persisted
+# tailscaled.state). What changes is only whether we can SEE the binary that corroboration is
+# then applied to.
+_SYSTEM_PATH_FALLBACK = (
+    "/usr/local/sbin", "/usr/local/bin", "/usr/sbin", "/usr/bin", "/sbin", "/bin",
+)
+
+
+def _default_path_resolver(system: str):
+    """`shutil.which`, falling back to the conventional system directories.
+
+    POSIX only: the fallback list is meaningless on Windows, where `_detect_windows` also
+    corroborates through `winreg` rather than PATH alone, so there it stays exactly
+    `shutil.which`.
+    """
+    if system == "Windows":
+        return shutil.which
+
+    fallback = os.pathsep.join(_SYSTEM_PATH_FALLBACK)
+
+    def resolve(name):
+        # PATH first, always: an operator who put a monitor earlier on PATH than the system
+        # copy means that one, and this must not silently prefer a different binary.
+        hit = shutil.which(name)
+        return hit if hit else shutil.which(name, path=fallback)
+
+    return resolve
+
 
 def detect(root: str | Path = "/", system: str | None = None, which=None) -> dict:
     """Detect host defensive monitors, read-only.
@@ -546,7 +711,7 @@ def detect(root: str | Path = "/", system: str | None = None, which=None) -> dic
     """
     system = system or platform.system()
     rootp = Path(root)
-    resolver = which if which is not None else shutil.which
+    resolver = which if which is not None else _default_path_resolver(system)
     if system == "Linux":
         return _detect_linux(rootp, resolver)
     if system == "Darwin":

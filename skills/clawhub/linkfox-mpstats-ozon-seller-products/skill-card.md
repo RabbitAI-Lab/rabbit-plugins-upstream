@@ -1,46 +1,68 @@
-## Description: <br>
-Retrieves seller-scoped Ozon Russia product metrics from MPSTATS, including per-SKU sales, revenue, price, ratings, stock, turnover, lost-profit, filtering, sorting, and currency conversion. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Drills into all Ozon Russia products for a numeric seller ID and returns per-SKU sales, revenue, price, rating, stock, turnover, lost-profit, filtering, sorting, and currency-conversion data for store audits and competitor benchmarking.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External marketplace analysts, sellers, and agents use this skill to audit a numeric Ozon seller ID, inspect the seller's SKU mix, identify bestsellers and stockout losses, and compare seller-level product performance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Ozon seller-analysis requests and the LinkFox API key are sent to the configured LinkFox gateway. <br>
-Mitigation: Use only in environments where sending those requests to LinkFox is acceptable, and verify the configured gateway before use. <br>
-Risk: Full API responses may be saved locally, including cached responses and session data files. <br>
-Mitigation: Run the skill in an appropriate workspace, review generated linkfox data and cache files, and avoid sensitive workspaces unless local storage is acceptable. <br>
-Risk: The feedback workflow can report broad user feedback or observed behavior to the LinkFox feedback API. <br>
-Mitigation: Review or disable feedback reporting in sensitive workflows before deploying the skill. <br>
-Risk: Queries consume LinkFox credits and repeated exploratory calls can increase cost. <br>
-Mitigation: Inform users before extra calls, rely on the built-in cache for identical parameters, and prefer tighter filters before deep pagination. <br>
+## Use Case:
 
+External users, analysts, and e-commerce operators use this skill to inspect the product table under a specific Ozon seller ID, identify seller bestsellers, review inventory and lost-sales signals, and compare competitor store structures.
 
-## Reference(s): <br>
-- [MPSTATS Ozon Seller Products API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-mpstats-ozon-seller-products) <br>
-- [LinkFox Publisher Profile](https://clawhub.ai/user/linkfox-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API parameters, shell command examples, compact tables, and saved JSON response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes full API responses to local JSON files, prints small responses inline, summarizes large responses, and uses a 24-hour local cache for repeated parameter sets.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The security review flags account onboarding, SMS-code login, billing and paid-credit purchase flows, credential handling, endpoint overrides, local response retention, and automatic feedback reporting as behaviors requiring review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run the skill only after reviewing the publisher, endpoint configuration, and security guidance; do not enter SMS codes, payment choices, or API keys unless the LinkFox publisher and endpoints are trusted.
+
+Risk: The skill consumes paid compute credits and the artifact states one seller-products call costs compute units unless the returned list is empty.
+
+Mitigation: Confirm the user wants to spend credits before calls, avoid automatic retries or exploratory paging, and narrow filters before additional paid requests.
+
+Risk: The scripts read LinkFox API keys from environment variables and onboarding material suggests persistent shell-profile configuration.
+
+Mitigation: Prefer temporary environment variables or a secure secret manager, avoid writing API keys into shell startup files, and rotate exposed keys.
+
+Risk: Full API responses are retained locally in a linkfox session data directory and cached for 24 hours.
+
+Mitigation: Treat saved response files as potentially sensitive business data, store them only in approved workspaces, and delete cached or session data when no longer needed.
+
+Risk: Feedback may be reported to a separate LinkFox feedback endpoint.
+
+Mitigation: Avoid including confidential seller data, credentials, payment details, or private user context in feedback content.
+
+## Reference(s):
+
+- [API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-mpstats-ozon-seller-products)
+- [Publisher Profile](https://clawhub.ai/user/linkfox-ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance, shell commands, and JSON API responses or saved response-file summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The script saves full API responses under a local linkfox session data directory and may print either full JSON or a compact summary depending on response size.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

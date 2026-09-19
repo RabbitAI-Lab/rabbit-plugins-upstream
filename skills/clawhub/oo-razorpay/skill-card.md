@@ -1,46 +1,61 @@
-## Description: <br>
-Razorpay helps agents operate Razorpay through an OOMOL-connected account for reading, creating, and updating payment, order, and refund data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents inspect Razorpay action schemas and run order, payment, and refund operations through an OOMOL-connected Razorpay account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect Razorpay schemas and run Razorpay connector actions through the oo CLI for orders, payments, and refunds. The skill is intended for accounts where Razorpay has already been connected through OOMOL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create Razorpay orders and refunds, which are real payment-related write operations. <br>
-Mitigation: Review the exact payload and get explicit user approval before running write actions such as order or refund creation. <br>
-Risk: The skill requires an OOMOL-connected Razorpay account and therefore depends on sensitive account credentials managed outside the skill. <br>
-Mitigation: Install only when OOMOL's oo CLI should access the user's Razorpay account, and reconnect only when an auth or connection failure requires it. <br>
-Risk: Incorrect action payloads can produce unintended financial or operational effects. <br>
-Mitigation: Fetch the live connector schema before building payloads and compare the request with the user's intended order, payment, or refund operation. <br>
+## Use Case:
 
+Developers and operations teams use this skill to read Razorpay orders and payments, create orders, and issue refunds from an agent workflow after confirming financial write actions.
 
-## Reference(s): <br>
-- [ClawHub Razorpay skill](https://clawhub.ai/oomol/oo-razorpay) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Razorpay homepage](https://razorpay.com) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands run through the oo CLI and return JSON responses that include data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified, signed, or separately reviewed oo CLI installation path and avoid elevated privileges.
+
+Risk: The skill can create Razorpay orders and refunds.
+
+Mitigation: Confirm the exact Razorpay account, amount, payment or order identifier, and payload before allowing write actions.
+
+Risk: Connector-mediated Razorpay access requires trusting OOMOL's connector and credential handling.
+
+Mitigation: Install only when the publisher and OOMOL connector model are acceptable for the intended account.
+
+## Reference(s):
+
+- [ClawHub Razorpay Skill](https://clawhub.ai/oomol/skills/oo-razorpay)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Installation Guide](https://cli.oomol.com/install-guide.md)
+- [Razorpay](https://razorpay.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Prompts the agent to inspect live action schemas before execution and to confirm financial write payloads before running them.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

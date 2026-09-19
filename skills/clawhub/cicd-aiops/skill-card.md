@@ -1,49 +1,61 @@
-## Description: <br>
-Cicd Aiops helps agents operate self-managed GitLab and self-hosted Gitea CI/CD servers for pipeline, runner, artifact, release, branch-protection, and RCA workflows with governed read and write actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CICD AIops helps agents inspect and operate self-managed GitLab and self-hosted Gitea CI/CD servers, including pipelines, jobs, runners, artifacts, branch protection, releases, root-cause analyses, and governed write actions.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, platform engineers, and SREs use this skill to inspect self-managed GitLab/Gitea CI/CD state, triage failed pipelines and runner queues, assess artifact bloat and stale work, and prepare governed actions such as retrying pipelines, pausing runners, updating branch protection, or deleting old artifacts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact CI/CD writes using configured GitLab or Gitea access tokens. <br>
-Mitigation: Start with read-only or tightly scoped tokens, require separate human approval before write actions, and widen token scopes only after validating the target setup. <br>
-Risk: Artifact deletion is irreversible even when audit records capture destroyed counts and bytes. <br>
-Mitigation: Use dry runs first, set an explicit age threshold, and review the deletion scope before confirming any artifact deletion. <br>
-Risk: Governance depends on token scope, local audit logs, and agent/operator behavior rather than an enforced approval gate or read-only mode. <br>
-Mitigation: Use server-side permissions as the primary control, review the audit log for write activity, and configure agent policy to avoid write tools during observe-only sessions. <br>
-Risk: The artifact states the REST paths are mock-validated and not yet recorded as end-to-end tested against a live server. <br>
-Mitigation: Run `cicd-aiops doctor` and verify representative read and write dry-run workflows against a non-production self-managed GitLab or Gitea instance before production use. <br>
+## Use Case:
 
+Developers, DevOps engineers, and CI/CD operators use this skill to query self-managed GitLab or self-hosted Gitea environments, investigate failing pipelines, runner capacity, artifact storage, and stale repository work, and perform controlled maintenance actions when their token permits it.
 
-## Reference(s): <br>
-- [CICD-AIops homepage](https://github.com/AIops-tools/CICD-AIops) <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/cicd-aiops) <br>
-- [Capabilities reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and structured operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include API-derived CI/CD summaries, RCA classifications, dry-run write plans, and configuration steps.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.0 (source: server release evidence) <br>
+Risk: The skill can perform write-capable GitLab or Gitea operations when connected with a token that has write or admin scopes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated least-privilege token by default, keep observe-only sessions on read-only credentials, and enable write or admin scopes only for deliberate maintenance sessions.
+
+Risk: The master password and local audit database may expose sensitive CI/CD access or operational history if handled carelessly.
+
+Mitigation: Avoid storing the master password in plaintext MCP configuration, protect the local configuration directory, and assume the audit database may contain sensitive CI/CD data.
+
+Risk: Destructive maintenance actions such as artifact deletion or branch protection changes can remove data or disrupt workflows.
+
+Mitigation: Review dry-run output before destructive actions, use explicit maintenance intent, and preserve undo or audit context where the tool provides it.
+
+## Reference(s):
+
+- [CICD-AIops GitHub repository](https://github.com/AIops-tools/CICD-AIops)
+- [Capabilities reference](references/capabilities.md)
+- [CLI reference](references/cli-reference.md)
+- [Setup guide](references/setup-guide.md)
+- [Agent guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and structured CI/CD findings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include API-result summaries, RCA findings, dry-run recommendations, audit context, and undo guidance.]
+
+## Skill Version(s):
+
+0.10.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

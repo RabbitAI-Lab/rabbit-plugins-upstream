@@ -65,7 +65,7 @@ def ensure_auth_skill_available(caller: str = "feeds script") -> None:
 def get_api_key() -> str:
     """
 获取配置在环境变量的API Key。
-如果获取不到，按 SKILL.md 的 **## 解决认证和积分问题** 处理。
+如果获取不到，按 SKILL.md 的 **## 解决认证和算力问题** 处理。
 """
     key = os.environ.get("LINKFOX_AGENT_API_KEY") or os.environ.get("LINKFOXAGENT_API_KEY")
     if not key:
@@ -77,7 +77,7 @@ def get_api_key() -> str:
     return key
 
 
-def call_api(endpoint: str, params: dict, timeout: int = 120) -> dict:
+def call_api(endpoint: str, params: dict, timeout: int = 150) -> dict:
     api_key = get_api_key()
     data = json.dumps(params).encode("utf-8")
     req = Request(
@@ -87,6 +87,10 @@ def call_api(endpoint: str, params: dict, timeout: int = 120) -> dict:
             "Authorization": api_key,
             "Content-Type": "application/json",
             "User-Agent": "LinkFox-Skill/1.0",
+            "SESSION_ID": os.environ.get("SESSION_ID", ""),
+            "MESSAGE_ID": os.environ.get("MESSAGE_ID", ""),
+            "MODE_ID": os.environ.get("MODE_ID", ""),
+            "APP_NAME": os.environ.get("APP_NAME", ""),
         },
         method="POST",
     )
@@ -108,18 +112,18 @@ def developer_proxy_call(
     region: str,
     path: str,
     method: str,
-    access_token: str,
+    seller_id: str,
     *,
     query_string: Optional[str] = None,
     body: Optional[str] = None,
     content_type: str = "application/json",
-    timeout: int = 120,
+    timeout: int = 150,
 ) -> dict:
     params: dict[str, Any] = {
         "region": region,
         "path": path,
         "method": method,
-        "amzAccessToken": access_token,
+        "sellerId": seller_id,
     }
     if query_string:
         params["queryString"] = query_string

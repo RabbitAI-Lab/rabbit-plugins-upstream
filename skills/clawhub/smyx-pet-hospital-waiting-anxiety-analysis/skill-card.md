@@ -1,47 +1,56 @@
-## Description: <br>
-Analyzes pet hospital waiting-area video or image inputs through server-side APIs to identify anxiety-related behavior signals, assign a 1-5 anxiety level, and return a structured report without diagnosing disease or recommending treatment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet hospital waiting-area video files or URLs through server-side APIs to report anxiety-related behavior signals and a standardized 1-5 anxiety level, without diagnosing disease or prescribing treatment.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External veterinary clinic staff and pet care operators use this skill to screen waiting-area media for pet anxiety indicators, prioritize high-stress pets for care or comfort, and review generated assessment reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Waiting-area media is uploaded to lifeemergence.com services and may include pets, owners, staff, or bystanders. <br>
-Mitigation: Use only media that the clinic is authorized to share, avoid unnecessary bystander footage, and confirm provider retention and endpoint trust before deployment. <br>
-Risk: The skill automatically creates or reuses an internal user identity and ties cloud history/report records to that identity. <br>
-Mitigation: Deploy with clear account ownership expectations and review cloud report access controls before enabling history queries. <br>
-Risk: Service tokens are stored in a local workspace SQLite database. <br>
-Mitigation: Restrict workspace access, avoid sharing generated local state, and rotate or clear tokens according to the provider's operational guidance. <br>
-Risk: Anxiety scoring may be affected by video quality, occlusion, camera angle, breed traits, or individual pet differences. <br>
-Mitigation: Treat the output as workflow support only and require staff to combine results with direct observation and clinical judgment. <br>
+## Use Case:
 
+Veterinary clinic staff, pet care organizations, and agents supporting them use this skill to analyze waiting-area pet media for visible stress signals, produce a structured anxiety level report, and query prior cloud reports. Results are for workflow triage and comfort prioritization, not medical diagnosis or treatment.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-hospital-waiting-anxiety-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, guidance] <br>
-**Output Format:** [Markdown or JSON structured analysis report with observed signals, anxiety level, recommendations, and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can list cloud history reports and can write the analysis output to a local file when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence) <br>
+Risk: The server security review reports silent creation and reuse of cloud identities, local token storage, cloud history queries, and cleartext development endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and document what media, URLs, identities, reports, and tokens are sent or stored before installation; require explicit controls for cloud history access and account creation.
+
+Risk: The skill sends sensitive pet media and report queries to remote services.
+
+Mitigation: Use only approved service endpoints and avoid sensitive deployments until data handling, retention, and access controls are confirmed by the publisher.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-hospital-waiting-anxiety-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [API Documentation](references/api_doc.md)
+- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and JSON-oriented structured analysis reports, with shell command examples and optional saved text output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local media paths, media URLs, pet type selection, cloud history listing, output detail selection, and optional result file output.]
+
+## Skill Version(s):
+
+1.0.13 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

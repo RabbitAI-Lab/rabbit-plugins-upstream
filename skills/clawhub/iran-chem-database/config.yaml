@@ -1,0 +1,185 @@
+# Iran Chemical Database — central configuration
+# Values are overridable via environment variables (see .env.example).
+
+httrack:
+  base_mirror_dir: "/home/user/out/icdb/mirrors"
+  default_depth: 5
+  default_ext_depth: 0
+  default_connections_per_second: 2.0
+  default_sockets: 4
+  default_max_rate: 50000      # bytes/sec (50 KB/s)
+  default_max_time: 7200       # 2 hours per supplier
+  default_robots_txt: 2        # 0=ignore, 1=follow, 2=follow but test forbidden
+  user_agent: "IranChemDB/2.5 (Research Chemical Database crawler; +https://clawhub.ai/orionshaowswmw/skills/iran-chem-database)"
+  # Supplier-specific overrides (keyed by project name)
+  supplier_overrides: {}
+
+# v2.8 — multi-tool HTTP fetch fallback (src/crawler/http_fetch_engine.py).
+# When HTTrack is missing/blocked or a catalog needs only a few pages, fetch the
+# homepage + catalog entry points with python-urllib -> curl -> wget (whichever
+# is installed and succeeds first). Saved under <mirror>/fetch-fallback/<tool>/.
+http_fetch:
+  enabled: true
+  timeout_seconds: 40
+  request_delay_seconds: 0.3
+  # Optional last-resort full-site download via `wget -r -k -p` (light mirror).
+  wget_recursive: false
+  wget_recursive_depth: 3
+
+# v2.5 — WooCommerce/WordPress REST + sitemap engine (src/crawler/woo_rest_engine.py).
+# The majority of catalog-carrying Iranian supplier sites are WordPress/WooCommerce
+# storefronts. Their PUBLIC, unauthenticated product API (/wp-json/wc/store/v1/products)
+# and sitemap.xml yield structured product data far more cheaply than a full mirror.
+woo_rest:
+  enabled: true
+  timeout_seconds: 30
+  request_delay_seconds: 0.4
+  max_pages: 200              # 200 pages x 100 products = 20k product budget per supplier
+  per_page: 100
+  # A request through an Iranian proxy can bypass the geo-blocking that many
+  # .ir hosts apply to foreign datacenter IPs. Leave empty unless you have one.
+  proxy_url: ""
+
+# v2.6 — free-access fallback engine (src/crawler/free_access_engine.py).
+# Geo-blocked Iranian hosts (TLS-handshake rejection of foreign IPs) remain
+# reachable through free third-party fetchers whose IPs are not blocklisted.
+# Field-verified 2026-08-21 on the blocked seed sites:
+#   jina      https://r.jina.ai/<url>                  (markdown text)
+#   wayback   https://web.archive.org/web/<ts>id_/<url>  (archived HTML; CDX enumerates)
+#   translate https://translate.google.com/translate?u=<url>
+# Fetched files are stored in the supplier mirror dir and parsed like any mirror.
+free_access:
+  enabled: true
+  # v2.7: default order for unknown domains. Geo-blocked seed sites use their
+  # per-site preference from src/discovery/seed_list.py (free_access_preference).
+  # "commoncrawl" returns recent full-HTML captures (S3, not geo-blocked).
+  # "screenshot" is image-only (visual evidence); enable it explicitly.
+  methods: ["jina", "wayback", "commoncrawl", "spn2", "translate", "archivetoday"]
+  timeout_seconds: 40
+  request_delay_seconds: 0.5
+  max_wayback_pages: 25
+  max_commoncrawl_pages: 25
+
+# v2.10 — social catalogue engine (src/crawler/telegram_engine.py).
+# Iranian suppliers publish live catalogue/price data on PUBLIC Telegram
+# channels. The web preview t.me/s/<channel> is server-rendered, needs no
+# login/API key, and is NOT geo-blocked from foreign IPs — the one social
+# source that is genuinely automatable for free. Instagram/Facebook/X are
+# login-walled and WhatsApp is contact-only: those are vendor LEADS, not feeds.
+social:
+  enabled: true
+  timeout_seconds: 40
+  # Politeness: bounded fan-out per channel (hard-capped at 8 in code).
+  concurrency: 6
+  request_delay_seconds: 0.2
+  # Safety stop for very long channels; raise for a full historical sweep.
+  max_pages_per_channel: 700
+  # Re-runs only fetch pages newer than the cached state (seconds, not minutes).
+  incremental: false
+  # PubChem enrichment during parse. Off keeps parsing strictly local-file-only.
+  # Results are cached on disk (ICDB_PUBCHEM_CACHE), so enabling this costs one
+  # network round-trip per NEW name and nothing on re-parses.
+  pubchem_enrichment: false
+  # v2.12 — every channel must publish Persian/Farsi, not merely be Iranian.
+  persian_language_policy:
+    enabled: true
+    required_language: "fa"
+    # Minimum share of a channel's text posts that must be Persian.
+    min_channel_persian_ratio: 0.30
+    # Latin-only catalogue lines inside a verified Persian channel are KEPT:
+    # they carry the SKU/brand/purity/pack data this release exists to capture.
+    enforce_at: "channel"
+  # v2.12 — resolve posts by catalogue-line SHAPE, not only via the alias dict.
+  structured_extraction:
+    enabled: true
+    min_structured_fields: 3
+
+playwright:
+  enabled: true
+  headless: true
+  timeout_ms: 30000
+  max_scroll_iterations: 50
+
+# Inclusion policy for catalogue entries (remediation §5):
+#   research_only               — only explicit research/analytical-grade signals
+#   lab_or_research             — strict entries + ambiguous items from lab suppliers
+#   all_identifiable_catalogue  — every identifiable chemical entry (default);
+#                                 grade/confidence retained as data; exclusions
+#                                 preserved in the rejection audit table
+parsing:
+  inclusion_mode: "all_identifiable_catalogue"
+  retain_rejections: true
+  reparse_failure_threshold: 0.05
+  resolve_cas_structures: true    # CAS-only records -> PubChem structure (dedup)
+
+database:
+  host: postgres
+  port: 5432
+  name: iran_chem_db
+  user: chemdb
+  password: "${DB_PASSWORD}"
+
+redis:
+  url: "redis://redis:6379/0"
+
+# v2.11 — HARD SCOPE RULE: only Iranian suppliers may enter the database.
+# Enforced by src/discovery/country_gate.py at every ingestion point.
+supplier_country_policy:
+  enabled: true
+  allowed_countries: ["IR"]
+  # Admission needs >= min_signal_families INDEPENDENT evidence families and a
+  # total weight >= min_score. Anything less is DENIED (never "probably fine").
+  min_signal_families: 2
+  min_score: 60
+  # Foreign brand names / "Made in Germany" describe the GOODS, not the vendor.
+  # Iranian importers resell foreign brands and must NOT be excluded for it.
+  allow_foreign_brands_from_iranian_suppliers: true
+
+discovery:
+  search_api_key: "${SEARCH_API_KEY}"
+  auto_discover_interval_hours: 168     # weekly discovery sweep
+  min_verification_score: 60
+  # Directory discovery is SLOW and optional; keep it disabled by default so
+  # seed crawling is never delayed (remediation §2).
+  initial_directory_# v2.11 — HARD SCOPE RULE: only Iranian suppliers may enter the database.
+# Enforced by src/discovery/country_gate.py at every ingestion point.
+supplier_country_policy:
+  enabled: true
+  allowed_countries: ["IR"]
+  # Admission needs >= min_signal_families INDEPENDENT evidence families and a
+  # total weight >= min_score. Anything less is DENIED (never "probably fine").
+  min_signal_families: 2
+  min_score: 60
+  # Foreign brand names / "Made in Germany" describe the GOODS, not the vendor.
+  # Iranian importers resell foreign brands and must NOT be excluded for it.
+  allow_foreign_brands_from_iranian_suppliers: true
+
+discovery:
+  search_api_key: "${SEARCH_API_KEY}"
+  auto_discover_interval_hours: 168     # weekly discovery sweep
+  min_verification_score: 60
+  # Directory discovery is SLOW and optional; keep it disabled by default so
+  # seed crawling is never delayed (remediation section 2).
+  initial_directory_discovery: false
+  directory_timeout_seconds: 120        # per-directory mirror budget
+  max_directories_per_run: 3
+  max_new_candidates_per_run: 100
+
+sync:
+  high_priority_interval_hours: 6
+  medium_priority_interval_hours: 24
+  low_priority_interval_hours: 72
+  force_full_remirror_after_days: 30
+  mark_discontinued_after_missing: 3
+  alert_unreachable_after_days: 7
+
+logging:
+  level: INFO
+  file: "/var/log/iran_chem_db/app.log"
+  max_size_mb: 100
+  backup_count: 10
+
+storage:
+  max_mirror_storage_gb: 500
+  compress_old_mirrors: true
+  compression_after_days: 30

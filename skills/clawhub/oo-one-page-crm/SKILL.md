@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "OnePageCRM"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["one_page_crm"]
   icon: "https://static.oomol.com/logo/third-party/one_page_crm.svg"
 ---

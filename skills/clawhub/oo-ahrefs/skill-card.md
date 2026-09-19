@@ -1,44 +1,55 @@
-## Description: <br>
-Ahrefs (ahrefs.com). Use this skill for ANY Ahrefs request - searching and reading data. Whenever a task involves Ahrefs, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agent guidance for using the OOMOL oo CLI to inspect Ahrefs connector schemas and retrieve keyword, usage, and Site Explorer data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to retrieve Ahrefs keyword, usage, and site metrics through an OOMOL-connected account without handling raw credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent may act on the wrong Ahrefs target or request shape if it skips schema inspection. <br>
-Mitigation: Inspect the connector action schema before constructing payloads and confirm ambiguous domains, URLs, keywords, or countries with the user. <br>
-Risk: The skill depends on an authenticated OOMOL-connected Ahrefs account and may fail when credentials, scopes, or billing are unavailable. <br>
-Mitigation: Use the documented first-time setup and connection recovery steps only after an auth, scope, credential, app, or billing error occurs. <br>
-Risk: Security evidence advises installing this package only in an intended operational environment. <br>
-Mitigation: Deploy it only where the agent is expected to use connected operational services, and review targets before any sensitive or administrative action. <br>
+## Use Case:
 
+External users and developers use this skill to query Ahrefs data through an OOMOL-connected account, including keyword overview rows, usage limits, and Site Explorer metrics.
 
-## Reference(s): <br>
-- [Ahrefs homepage](https://ahrefs.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-ahrefs) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides the agent to inspect live connector schemas before running read-only Ahrefs actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The setup instructions include an unverified remote installer executed directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use official installation documentation, pinned releases, and checksum or signature verification before running an installer.
+
+Risk: The skill depends on OOMOL and the oo CLI to handle Ahrefs access.
+
+Mitigation: Install only when the user trusts OOMOL and is comfortable with the oo CLI mediating Ahrefs credentials and actions.
+
+## Reference(s):
+
+- [Ahrefs homepage](https://ahrefs.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Ahrefs skill page](https://clawhub.ai/oomol/skills/oo-ahrefs)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill directs the agent to fetch live connector schemas before constructing Ahrefs action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
