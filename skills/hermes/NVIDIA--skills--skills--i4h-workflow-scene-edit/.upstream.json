@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/i4h-workflow-scene-edit",
+  "identifier": "NVIDIA/skills/skills/i4h-workflow-scene-edit",
+  "repo": "NVIDIA/skills",
+  "path": "skills/i4h-workflow-scene-edit",
+  "branch": "main",
+  "pushedAt": "2026-09-19T00:31:39Z",
+  "contentHash": "ad272ff9bd4ef8422fb9232e1091dce9e4cbec475a46eb00d340b1cc0fa4b29f",
+  "fetchedAt": "2026-09-19T11:58:19.688Z"
+}

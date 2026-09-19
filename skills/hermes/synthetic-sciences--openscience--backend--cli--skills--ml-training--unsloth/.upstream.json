@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/unsloth",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/unsloth",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/unsloth",
+  "branch": "main",
+  "pushedAt": "2026-09-19T11:45:58Z",
+  "contentHash": "e75c2118a79fac116e4efd9a27f05bc91dbbdfdb8c29fc4e65ea7c1cb82a9c0c",
+  "fetchedAt": "2026-09-19T11:58:21.400Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/data-science/jupyter-notebook",
+  "identifier": "official/data-science/jupyter-notebook",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/data-science/jupyter-notebook",
+  "branch": "main",
+  "pushedAt": "2026-09-19T11:45:10Z",
+  "contentHash": "94e3311f2647312ecdbd0a788be56c1e23805819c4cd21165991885701addbda",
+  "fetchedAt": "2026-09-19T11:58:28.488Z"
+}

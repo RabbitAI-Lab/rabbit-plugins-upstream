@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/document-parsing/docx",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/document-parsing/docx",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/document-parsing/docx",
+  "branch": "main",
+  "pushedAt": "2026-09-19T11:45:58Z",
+  "contentHash": "c8871e34a89e88bfa04e410849dfcd73fac5e4e7c97e8e105c6de3dbb88a1334",
+  "fetchedAt": "2026-09-19T11:58:21.292Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/writing/analysis-report",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/writing/analysis-report",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/writing/analysis-report",
+  "branch": "main",
+  "pushedAt": "2026-09-19T11:45:58Z",
+  "contentHash": "d7be7694598339a80a50c4d505c47fff3306cf767ea1089196ba151d658fdf53",
+  "fetchedAt": "2026-09-19T11:58:21.250Z"
+}

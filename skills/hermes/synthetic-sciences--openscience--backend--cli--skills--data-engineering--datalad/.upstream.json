@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/data-engineering/datalad",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/data-engineering/datalad",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/data-engineering/datalad",
+  "branch": "main",
+  "pushedAt": "2026-09-19T11:45:58Z",
+  "contentHash": "665308ba2a5bcb84a8d57a753f513d7e6107944a92095e3d017b710674108b1c",
+  "fetchedAt": "2026-09-19T11:58:21.283Z"
+}

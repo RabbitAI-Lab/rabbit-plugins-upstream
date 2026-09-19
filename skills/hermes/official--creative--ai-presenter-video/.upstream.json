@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/ai-presenter-video",
+  "identifier": "official/creative/ai-presenter-video",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/ai-presenter-video",
+  "branch": "main",
+  "pushedAt": "2026-09-19T11:45:10Z",
+  "contentHash": "fa180411de57cab7ac18c1af4489704dd0f5310abdaab615488aaf64d8cb3105",
+  "fetchedAt": "2026-09-19T11:58:28.459Z"
+}

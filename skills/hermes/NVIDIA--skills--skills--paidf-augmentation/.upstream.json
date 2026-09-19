@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/paidf-augmentation",
+  "identifier": "NVIDIA/skills/skills/paidf-augmentation",
+  "repo": "NVIDIA/skills",
+  "path": "skills/paidf-augmentation",
+  "branch": "main",
+  "pushedAt": "2026-09-19T00:31:39Z",
+  "contentHash": "9e8ff541a31be6a46ca091675772815a0c5eb4807bc0871080f8b7f02d6c17ec",
+  "fetchedAt": "2026-09-19T11:58:19.789Z"
+}

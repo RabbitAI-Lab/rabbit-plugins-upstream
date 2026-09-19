@@ -22,7 +22,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/12306.cn/find-trains-ixv391/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 144
+      "install_count": 150
     }
   },
   {
@@ -49,7 +49,33 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/1688.com/search-wholesale-l33zbe/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 73
+      "install_count": 77
+    }
+  },
+  {
+    "name": "get-traffic-alerts",
+    "description": "Retrieve active San Francisco Bay Area traffic alerts (incidents, construction, road closures, special events) via 511.org's unauthenticated map-UI proxy endpoint as structured Open511 JSON.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/511.org/get-traffic-alerts-r0bd2b",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "traffic",
+      "alerts",
+      "incidents",
+      "construction",
+      "bay-area",
+      "511"
+    ],
+    "extra": {
+      "slug": "511.org/get-traffic-alerts-r0bd2b",
+      "hostname": "511.org",
+      "category": "transportation",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/511.org/get-traffic-alerts-r0bd2b/SKILL.md",
+      "recommended_method": "fetch",
+      "proxies": false,
+      "install_count": 0
     }
   },
   {
@@ -76,7 +102,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/abc7news.com/cali-highway-traffic-tdjcyt/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 70
+      "install_count": 73
     }
   },
   {
@@ -102,7 +128,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/adadiamonds.com/explore-jewelry-contact-concierge-89qzpr/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 9
+      "install_count": 13
     }
   },
   {
@@ -129,7 +155,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/adenineapartments.com/building-amenities-floor-plans-xkt9or/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": false,
-      "install_count": 10
+      "install_count": 13
     }
   },
   {
@@ -184,7 +210,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/agentpowers.ai/search-skills-plugins-subagents-1at6ii/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 27
+      "install_count": 30
     }
   },
   {
@@ -210,7 +236,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/airbnb.com/search-listings-ddgioa/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 215
+      "install_count": 232
     }
   },
   {
@@ -236,7 +262,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/aivaclaims.com/claims-search-39p4hf/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 31
+      "install_count": 34
     }
   },
   {
@@ -262,7 +288,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/algolia.com/search-documentation-kd312d/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 51
+      "install_count": 54
     }
   },
   {
@@ -287,7 +313,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/aliexpress.com/search-product-p0h8a7/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 85
+      "install_count": 92
     }
   },
   {
@@ -313,7 +339,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/allrecipes.com/search-recipes-p29w5t/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 71
+      "install_count": 76
     }
   },
   {
@@ -339,7 +365,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/alltrails.com/search-trails-dsqvnx/SKILL.md",
       "recommended_method": "browser",
       "proxies": false,
-      "install_count": 129
+      "install_count": 137
     }
   },
   {
@@ -366,7 +392,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/allurehermannpark.com/building-amenities-floor-plans-en6mof/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 10
+      "install_count": 13
     }
   },
   {
@@ -392,7 +418,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/alohacare.nationsbenefits.com/find-products-1su7b4/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 9
+      "install_count": 12
     }
   },
   {
@@ -419,7 +445,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/amazon.com/amazon-global-prices-nf9q4d/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 50
+      "install_count": 73
     }
   },
   {
@@ -445,7 +471,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/amazon.com/kdp-niche-finder-9sbl9q/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 8
+      "install_count": 32
     }
   },
   {
@@ -470,7 +496,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/amazon.com/search-products-5170mf/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 474
+      "install_count": 605
     }
   },
   {
@@ -496,7 +522,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/amazon.in/browse-products-bbcv7y/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 53
+      "install_count": 88
     }
   },
   {
@@ -522,7 +548,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/americanairlines.com/search-tickets-yj09ak/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 34
+      "install_count": 43
     }
   },
   {
@@ -549,7 +575,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/americanreindustrialization.com/discover-industrial-opportunities-tdvqp0/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 37
+      "install_count": 41
     }
   },
   {
@@ -603,7 +629,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/apartments.com/search-rentals-33icwz/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 68
+      "install_count": 72
     }
   },
   {
@@ -629,7 +655,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/apod.nasa.gov/picture-of-the-day-cfmvdu/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 110
+      "install_count": 116
     }
   },
   {
@@ -656,7 +682,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/app.ompractice.com/find-yoga-meditation-class-em9j5e/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 34
+      "install_count": 38
     }
   },
   {
@@ -682,7 +708,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/app.utrsports.net/search-tennis-utr-fev3t1/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 35
+      "install_count": 39
     }
   },
   {
@@ -709,7 +735,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/apple.com/apple-pdf-reducto-extract-385j2s/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 21
+      "install_count": 28
     }
   },
   {
@@ -736,7 +762,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/apple.com/apple-pdf-reducto-extract-8cbngf/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": false,
-      "install_count": 24
+      "install_count": 31
     }
   },
   {
@@ -761,7 +787,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/apple.com/apple-quarterly-filings-gnrcel/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 21
+      "install_count": 28
     }
   },
   {
@@ -788,7 +814,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/apps.fas.usda.gov/query-product-37tluc/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 23
+      "install_count": 26
     }
   },
   {
@@ -814,7 +840,59 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/apps.ilsos.gov/business-search-wk944z/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 27
+      "install_count": 32
+    }
+  },
+  {
+    "name": "extract-designer-leads",
+    "description": "Extract contact leads for interior designers listed in the Architectural Digest AD PRO Directory — firm name, contact person (when named), email, phone, and website — by paginating the Interior Design & Decor category and parsing each server-rendered profile page.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/architecturaldigest.com/extract-designer-leads-fwvplz",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "leads",
+      "interior-design",
+      "directory",
+      "contacts",
+      "architectural-digest",
+      "scraping"
+    ],
+    "extra": {
+      "slug": "architecturaldigest.com/extract-designer-leads-fwvplz",
+      "hostname": "architecturaldigest.com",
+      "category": "lead-generation",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/architecturaldigest.com/extract-designer-leads-fwvplz/SKILL.md",
+      "recommended_method": "fetch",
+      "proxies": false,
+      "install_count": 2
+    }
+  },
+  {
+    "name": "extract-firm-details",
+    "description": "Extract firm name, email, phone, website, address, social links, and category for design firms in the Architectural Digest AD PRO Directory by fetching pages and parsing their embedded JSON.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/architecturaldigest.com/extract-firm-details-zcw914",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "directory",
+      "firms",
+      "contact-details",
+      "architecture",
+      "interior-design",
+      "lead-generation"
+    ],
+    "extra": {
+      "slug": "architecturaldigest.com/extract-firm-details-zcw914",
+      "hostname": "architecturaldigest.com",
+      "category": "directory",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/architecturaldigest.com/extract-firm-details-zcw914/SKILL.md",
+      "recommended_method": "fetch",
+      "proxies": false,
+      "install_count": 1
     }
   },
   {
@@ -840,7 +918,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/archive.org/find-snapshot-e3fnxh/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 74
+      "install_count": 84
     }
   },
   {
@@ -865,7 +943,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/artificialintelligencecompanies.com/ai-company-search-gi1q7c/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 42
+      "install_count": 45
     }
   },
   {
@@ -891,7 +969,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/arxiv.org/search-papers-zv05w6/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 100
+      "install_count": 106
     }
   },
   {
@@ -918,7 +996,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/ashbyhq.com/manage-candidate-profile-e0m4bl/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 30
+      "install_count": 34
     }
   },
   {
@@ -944,7 +1022,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/atlys.com/apply-thailand-visa-dwl0xi/SKILL.md",
       "recommended_method": "browser",
       "proxies": false,
-      "install_count": 6
+      "install_count": 9
     }
   },
   {
@@ -971,7 +1049,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/auto.dev/cli-setup-4j68kq/SKILL.md",
       "recommended_method": "cli",
       "proxies": false,
-      "install_count": 35
+      "install_count": 38
     }
   },
   {
@@ -997,7 +1075,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/avis.com/longterm-a3k8ng/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 33
+      "install_count": 37
     }
   },
   {
@@ -1024,7 +1102,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/azgfd.com/azgfd-hunting-intel-extraction-3h15t2/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 9
+      "install_count": 12
     }
   },
   {
@@ -1050,7 +1128,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/bagazhnikpro.store/nophoto-2fn8tc/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 7
+      "install_count": 11
     }
   },
   {
@@ -1077,7 +1155,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/bankrate.com/compare-savings-rates-5kxzox/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 50
+      "install_count": 54
     }
   },
   {
@@ -1103,7 +1181,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/baseball-reference.com/get-player-stats-c3483e/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 15
+      "install_count": 19
     }
   },
   {
@@ -1129,7 +1207,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/baseball.yahoo.co.jp/get-npb-game-results-oa66vq/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 21
+      "install_count": 25
     }
   },
   {
@@ -1155,7 +1233,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/bayclubs.com/bay-clubs-info-4zbre5/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 8
+      "install_count": 11
     }
   },
   {
@@ -1180,7 +1258,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/bbc.co.uk/news-homepage-sqnkv0/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 76
+      "install_count": 82
     }
   },
   {
@@ -1206,7 +1284,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/bccourts.ca/search-supreme-court-judgments-23e2la/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 19
+      "install_count": 23
     }
   },
   {
@@ -1232,7 +1310,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/beatport.com/search-music-afd83h/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 10
+      "install_count": 13
     }
   },
   {
@@ -1258,7 +1336,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/beno.com/size-filter-wo29k8/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 10
+      "install_count": 13
     }
   },
   {
@@ -1284,7 +1362,32 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/beno.com/skillfilter-gejbma/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 7
+      "install_count": 10
+    }
+  },
+  {
+    "name": "search-browse-products",
+    "description": "Search bestbuy.ca by keyword or browse a category, with sorting and facet filtering, returning structured product results (name, price, rating, availability, URL) via the site's public JSON search API.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/bestbuy.ca/search-browse-products-o7tjol",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "e-commerce",
+      "shopping",
+      "product-search",
+      "catalog",
+      "retail"
+    ],
+    "extra": {
+      "slug": "bestbuy.ca/search-browse-products-o7tjol",
+      "hostname": "bestbuy.ca",
+      "category": "e-commerce",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/bestbuy.ca/search-browse-products-o7tjol/SKILL.md",
+      "recommended_method": "api",
+      "proxies": true,
+      "install_count": 2
     }
   },
   {
@@ -1310,7 +1413,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/bestbuy.com/check-stock-muk8to/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 45
+      "install_count": 51
     }
   },
   {
@@ -1335,7 +1438,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/betternews.app/discover-hhilm2/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 8
+      "install_count": 12
     }
   },
   {
@@ -1362,7 +1465,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/biomacoffee.com/search-specialty-coffee-7o23nx/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 28
+      "install_count": 32
     }
   },
   {
@@ -1389,7 +1492,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/bissafety.ca/explore-full-site-cx1046/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 9
+      "install_count": 12
     }
   },
   {
@@ -1415,7 +1518,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/bitcoinsapi.com/get-bitcoin-fees-ahpurb/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 44
+      "install_count": 48
     }
   },
   {
@@ -1441,7 +1544,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/bizfileonline.sos.ca.gov/find-california-business-izbvm2/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 37
+      "install_count": 42
     }
   },
   {
@@ -1468,7 +1571,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/bja.ojp.gov/find-funding-crrr3b/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 33
+      "install_count": 37
     }
   },
   {
@@ -1493,7 +1596,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/blockchaintelligence.com/scrape-team-data-8ofq1k/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": false,
-      "install_count": 6
+      "install_count": 9
     }
   },
   {
@@ -1519,7 +1622,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/blocket.se/search-cars-by-filters-we89jq/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 17
+      "install_count": 21
     }
   },
   {
@@ -1546,7 +1649,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/bookbarker.com/request-author-interview-iggp1b/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 9
+      "install_count": 12
     }
   },
   {
@@ -1572,7 +1675,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/booking.com/search-hotels-asq6cc/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 142
+      "install_count": 169
     }
   },
   {
@@ -1598,7 +1701,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/booksearanchescape.escapia.com/find-sea-ranch-house-sffj18/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 31
+      "install_count": 35
     }
   },
   {
@@ -1624,7 +1727,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/booksmandala.com/find-product-9iiu37/SKILL.md",
       "recommended_method": "mcp",
       "proxies": true,
-      "install_count": 22
+      "install_count": 25
     }
   },
   {
@@ -1650,7 +1753,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/boonemanoraptshouston.com/view-amenities-and-floor-plans-pjzu84/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 10
+      "install_count": 13
     }
   },
   {
@@ -1677,7 +1780,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/bountybook.ai/bounty-frycsy/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 30
+      "install_count": 34
     }
   },
   {
@@ -1704,7 +1807,34 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/bountybook.ai/moneymaxx-qops8y/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 35
+      "install_count": 38
+    }
+  },
+  {
+    "name": "check-fiber-availability",
+    "description": "Check whether Brightspeed fiber/internet service is available at a U.S. street address and return offered plans. Read-only. The serviceability verdict is gated behind reCAPTCHA Enterprise, which blocks automated sessions today.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/brightspeed.com/check-fiber-availability-qr3tft",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "brightspeed",
+      "fiber",
+      "internet",
+      "availability",
+      "serviceability",
+      "recaptcha",
+      "read-only"
+    ],
+    "extra": {
+      "slug": "brightspeed.com/check-fiber-availability-qr3tft",
+      "hostname": "brightspeed.com",
+      "category": "telecom",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/brightspeed.com/check-fiber-availability-qr3tft/SKILL.md",
+      "recommended_method": "browser",
+      "proxies": true,
+      "install_count": 2
     }
   },
   {
@@ -1730,7 +1860,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/bringatrailer.com/find-cars-kl0fva/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 3
+      "install_count": 7
     }
   },
   {
@@ -1907,7 +2037,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/browserbase.com/find-templates-lyrzye/SKILL.md",
       "recommended_method": "cli",
       "proxies": false,
-      "install_count": 36
+      "install_count": 40
     }
   },
   {
@@ -2010,7 +2140,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/bulkpublish.com/adjust-copy-for-platforms-2etpla/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 38
+      "install_count": 43
     }
   },
   {
@@ -2037,7 +2167,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/businessdataguide.com/search-by-jurisdiction-ssmky3/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 30
+      "install_count": 34
     }
   },
   {
@@ -2063,7 +2193,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/calcareers.ca.gov/search-california-state-jobs-dgl84s/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 25
+      "install_count": 28
     }
   },
   {
@@ -2090,7 +2220,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/caravangroup.com/cross-border-trucking-quote-cbsb4e/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 22
+      "install_count": 25
     }
   },
   {
@@ -2116,7 +2246,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/cargurus.com/search-listings-3jv4hk/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 38
+      "install_count": 47
     }
   },
   {
@@ -2142,7 +2272,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/carnival.com.au/find-deals-1mt2hu/SKILL.md",
       "recommended_method": "browser",
       "proxies": false,
-      "install_count": 9
+      "install_count": 13
     }
   },
   {
@@ -2168,7 +2298,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/cars.com/search-listings-dvyzez/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 37
+      "install_count": 42
     }
   },
   {
@@ -2195,7 +2325,33 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/chanel.com/browse-all-products-cq9sq4/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 16
+      "install_count": 19
+    }
+  },
+  {
+    "name": "crawl-full",
+    "description": "Read-only full crawl of Chefkoch via the unauthenticated api.chefkoch.de/v2 JSON API: discover recipes by tag/search, fetch full recipe detail, then enumerate and build downloadable image URLs.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/chefkoch.de/crawl-full-10lk4z",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "recipes",
+      "crawler",
+      "api",
+      "chefkoch",
+      "food",
+      "images"
+    ],
+    "extra": {
+      "slug": "chefkoch.de/crawl-full-10lk4z",
+      "hostname": "chefkoch.de",
+      "category": "food-recipes",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/chefkoch.de/crawl-full-10lk4z/SKILL.md",
+      "recommended_method": "api",
+      "proxies": false,
+      "install_count": 4
     }
   },
   {
@@ -2222,7 +2378,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/chefkoch.de/search-recipes-by-diet-0d8cvd/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 25
+      "install_count": 29
     }
   },
   {
@@ -2247,7 +2403,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/chess.com/pull-game-pgn-kcgg4l/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 9
+      "install_count": 14
     }
   },
   {
@@ -2274,7 +2430,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/christianpicks.com/search-christian-products-7xg4fk/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 30
+      "install_count": 33
     }
   },
   {
@@ -2300,7 +2456,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/cis.scc.virginia.gov/business-search-pg5zpn/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 25
+      "install_count": 29
     }
   },
   {
@@ -2327,7 +2483,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/citymall.com.mm/citymall-myanmar-au419j/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 26
+      "install_count": 29
     }
   },
   {
@@ -2353,7 +2509,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/claimit.ca.gov/claim-money-x9z0wr/SKILL.md",
       "recommended_method": "browser",
       "proxies": false,
-      "install_count": 6
+      "install_count": 11
     }
   },
   {
@@ -2379,7 +2535,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/classpass.com/find-class-uoiq0m/SKILL.md",
       "recommended_method": "browser",
       "proxies": false,
-      "install_count": 35
+      "install_count": 38
     }
   },
   {
@@ -2404,7 +2560,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/cleardarksky.com/stargazing-seeing-condition-5hqn4a/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 6
+      "install_count": 11
     }
   },
   {
@@ -2431,7 +2587,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/clirank.dev/find-agent-ready-apis-c9ocm0/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 29
+      "install_count": 32
     }
   },
   {
@@ -2458,7 +2614,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/cnyes.com/search-financial-news-5m6h9i/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 39
+      "install_count": 42
     }
   },
   {
@@ -2484,7 +2640,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/coinmarketcap.com/fetch-crypto-data-1bggc3/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 13
+      "install_count": 16
     }
   },
   {
@@ -2510,7 +2666,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/comprasparaguai.com.br/extract-product-offers-5k74dp/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 24
+      "install_count": 27
     }
   },
   {
@@ -2536,7 +2692,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/costco.ca/find-rare-grocery-deals-pv70um/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 17
+      "install_count": 21
     }
   },
   {
@@ -2562,7 +2718,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/costcotravel.com/get-rental-car-price-47wjed/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 22
+      "install_count": 26
     }
   },
   {
@@ -2588,7 +2744,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/coupa.com/companyregistry-y0chx9/SKILL.md",
       "recommended_method": "browser",
       "proxies": false,
-      "install_count": 25
+      "install_count": 28
     }
   },
   {
@@ -2613,7 +2769,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/craigslist.org/search-listings-hw5qri/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 109
+      "install_count": 119
     }
   },
   {
@@ -2638,7 +2794,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/craigslist.org/search-listings-xurro5/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 11
+      "install_count": 14
     }
   },
   {
@@ -2664,7 +2820,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/crawlproof.com/aeo-report-m4mma3/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 29
+      "install_count": 32
     }
   },
   {
@@ -2690,7 +2846,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/cruisecritic.com/extract-reviews-8r7ocj/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 28
+      "install_count": 32
     }
   },
   {
@@ -2716,7 +2872,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/cse.lk/scrape-all-data-hsepra/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 23
+      "install_count": 26
     }
   },
   {
@@ -2743,7 +2899,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/data.sfgov.org/sf-business-registry-lookup-ozd0ut/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 22
+      "install_count": 26
     }
   },
   {
@@ -2770,7 +2926,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/data.sfgov.org/sf-business-registry-lookup-vzlhtr/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 17
+      "install_count": 20
     }
   },
   {
@@ -2796,7 +2952,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/data.sfgov.org/sf-business-registry-lookup-xxyihl/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 17
+      "install_count": 20
     }
   },
   {
@@ -2823,7 +2979,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/data.sfgov.org/sf-business-registry-lookup-xzbldj/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 8
+      "install_count": 12
     }
   },
   {
@@ -2849,7 +3005,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/data.transportation.gov/query-safer-data-e7fhxx/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 7
+      "install_count": 10
     }
   },
   {
@@ -2874,7 +3030,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/ddsmatch.com/findingffspractices-s6ssjj/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 6
+      "install_count": 9
     }
   },
   {
@@ -2901,7 +3057,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/dedeman.ro/catalog-discount-review-4l8y2t/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 9
+      "install_count": 13
     }
   },
   {
@@ -2928,7 +3084,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/dell.com/find-repair-guides-q4h1h4/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 22
+      "install_count": 25
     }
   },
   {
@@ -2955,7 +3111,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/deltacomputer.com/find-product-pricing-246gp3/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 21
+      "install_count": 24
     }
   },
   {
@@ -2982,7 +3138,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/depop.com/search-listings-p8xawn/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 30
+      "install_count": 34
     }
   },
   {
@@ -3008,7 +3164,33 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/derekmeegan.com/meet-derek-n1xdkp/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 24
+      "install_count": 30
+    }
+  },
+  {
+    "name": "scrape-designer-firm-data",
+    "description": "Enumerate the ASID Design Finder Designers & Firms directory and extract each listing's name, contact person, email, phone (when published), and website.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/designfinder.asid.org/scrape-designer-firm-data-quktyw",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "directory",
+      "scraping",
+      "contact-data",
+      "interior-design",
+      "asid",
+      "lead-generation"
+    ],
+    "extra": {
+      "slug": "designfinder.asid.org/scrape-designer-firm-data-quktyw",
+      "hostname": "designfinder.asid.org",
+      "category": "data-scraping",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/designfinder.asid.org/scrape-designer-firm-data-quktyw/SKILL.md",
+      "recommended_method": "hybrid",
+      "proxies": false,
+      "install_count": 2
     }
   },
   {
@@ -3034,7 +3216,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/dhl.com/track-shipment-18m2jq/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 28
+      "install_count": 32
     }
   },
   {
@@ -3060,7 +3242,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/digitec.ch/browse-products-xiarho/SKILL.md",
       "recommended_method": "browser",
       "proxies": false,
-      "install_count": 10
+      "install_count": 15
     }
   },
   {
@@ -3087,7 +3269,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/dior.com/find-all-products-qxm8lj/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 20
+      "install_count": 23
     }
   },
   {
@@ -3114,7 +3296,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/discogs.com/get-marketplace-price-8xouh1/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 31
+      "install_count": 35
     }
   },
   {
@@ -3141,7 +3323,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/dmv.ca.gov/check-if-a-vehicle-is-registered-zgg414/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 32
+      "install_count": 42
     }
   },
   {
@@ -3167,7 +3349,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/docs.obsidian.md/create-custom-theme-qa3oop/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 4
+      "install_count": 7
     }
   },
   {
@@ -3192,7 +3374,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/docs.scoutos.com/lookup-scout-docs-ee1wgb/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 25
+      "install_count": 30
     }
   },
   {
@@ -3219,7 +3401,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/docs.stagehand.dev/docs-vs-code-auditor-567pp9/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 25
+      "install_count": 28
     }
   },
   {
@@ -3246,7 +3428,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/docs.stagehand.dev/docs-vs-code-auditor-kkiqtm/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 23
+      "install_count": 27
     }
   },
   {
@@ -3271,7 +3453,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/domain.com.au/find-properties-for-sale-cwmq95/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 15
+      "install_count": 18
     }
   },
   {
@@ -3297,7 +3479,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/doordash.com/extract-menu-5uzqvc/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 52
+      "install_count": 64
     }
   },
   {
@@ -3324,7 +3506,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/dos.fl.gov/automate-bank-workflows-3asnwn/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 25
+      "install_count": 30
     }
   },
   {
@@ -3350,7 +3532,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/drugs.com/check-interactions-0hqfnn/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 39
+      "install_count": 42
     }
   },
   {
@@ -3376,7 +3558,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/ebay.com/find-a-product-ef49sf/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 81
+      "install_count": 92
     }
   },
   {
@@ -3402,7 +3584,34 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/ebay.com/search-products-i9m1v2/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 75
+      "install_count": 88
+    }
+  },
+  {
+    "name": "retrieve-shipping-data",
+    "description": "Retrieve EconDB's global maritime/container-shipping time series (global trade in TEU, Shanghai freight index, port throughput, operator revenue, congestion) directly from the site's public /widgets/<name>/data/ JSON endpoints — no browser, auth, or proxy required.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/econdb.com/retrieve-shipping-data-y2o0xc",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "shipping",
+      "maritime",
+      "time-series",
+      "trade",
+      "econdb",
+      "logistics",
+      "api"
+    ],
+    "extra": {
+      "slug": "econdb.com/retrieve-shipping-data-y2o0xc",
+      "hostname": "econdb.com",
+      "category": "economic-data",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/econdb.com/retrieve-shipping-data-y2o0xc/SKILL.md",
+      "recommended_method": "fetch",
+      "proxies": false,
+      "install_count": 2
     }
   },
   {
@@ -3428,7 +3637,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/edgeprop.my/find-agent-contact-details-hvhaqj/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 22
+      "install_count": 25
     }
   },
   {
@@ -3455,7 +3664,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/efaa.sa/find-violation-details-ri8sqk/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 23
+      "install_count": 26
     }
   },
   {
@@ -3482,7 +3691,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/elanmedcenter.com/building-amenities-floorplans-d2z67a/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 10
+      "install_count": 13
     }
   },
   {
@@ -3509,7 +3718,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/elektrik220.km.ua/book-electrician-service-1f97c5/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 24
+      "install_count": 27
     }
   },
   {
@@ -3534,7 +3743,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/emojis.directory/compose-email-with-emojis-uk7ipo/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 23
+      "install_count": 27
     }
   },
   {
@@ -3561,7 +3770,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/esfera.ai/understand-esfera-ai-973kqs/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 6
+      "install_count": 9
     }
   },
   {
@@ -3587,7 +3796,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/etsy.com/search-products-t1kplk/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 46
+      "install_count": 52
     }
   },
   {
@@ -3639,7 +3848,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/example.com/fetch-homepage-content-3h5vgl/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 40
+      "install_count": 46
     }
   },
   {
@@ -3664,7 +3873,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/example.com/pr-47-ai-gateway-smoke-6wh3lw/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 30
+      "install_count": 35
     }
   },
   {
@@ -3687,7 +3896,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/example.com/replay-demo-r3p1ay/SKILL.md",
       "recommended_method": "browser",
       "proxies": false,
-      "install_count": 17
+      "install_count": 23
     }
   },
   {
@@ -3714,7 +3923,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/expedia.com/compare-travel-options-v05jqc/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 16
+      "install_count": 24
     }
   },
   {
@@ -3740,7 +3949,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/expediacruises.com/book-and-browse-cruise-deals-9cgn27/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 6
+      "install_count": 10
     }
   },
   {
@@ -3766,7 +3975,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/ezcater.com/place-catering-order-mv0rkz/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 6
+      "install_count": 10
     }
   },
   {
@@ -3793,7 +4002,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/faa.gov/lookup-aircraft-8xuamw/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 27
+      "install_count": 31
     }
   },
   {
@@ -3820,7 +4029,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/facebook.com/search-marketplace-m9gyrc/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 102
+      "install_count": 137
     }
   },
   {
@@ -3846,7 +4055,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/fangraphs.com/read-player-stats-27lcib/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 26
+      "install_count": 29
     }
   },
   {
@@ -3872,7 +4081,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/farfetch.com/browse-listings-j1zpwy/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 9
+      "install_count": 12
     }
   },
   {
@@ -3899,7 +4108,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/fedex.com/track-package-7fxxv5/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 147
+      "install_count": 269
     }
   },
   {
@@ -3926,7 +4135,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/fgk.chinatax.gov.cn/lookup-tax-regulation-90wo3h/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 17
+      "install_count": 23
     }
   },
   {
@@ -3953,7 +4162,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/finance.naver.com/fetch-financial-data-hdip9e/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 6
+      "install_count": 9
     }
   },
   {
@@ -3979,7 +4188,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/finance.yahoo.com/search-stock-news-dnf5k3/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 106
+      "install_count": 111
     }
   },
   {
@@ -4005,7 +4214,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/findadoc.healthplan.org/provider-search-ykncm6/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 27
+      "install_count": 30
     }
   },
   {
@@ -4032,7 +4241,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/finelysourced.com/filter-clean-label-products-7xpu9m/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": false,
-      "install_count": 27
+      "install_count": 30
     }
   },
   {
@@ -4059,7 +4268,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/finn.no/search-listings-75gq7i/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 14
+      "install_count": 19
     }
   },
   {
@@ -4084,7 +4293,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/firebox.eu/firebox-gift-recommender-wxeg65/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 23
+      "install_count": 27
     }
   },
   {
@@ -4110,7 +4319,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/fiscaldata.treasury.gov/retrieve-latest-dts-wr2uxw/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 24
+      "install_count": 28
     }
   },
   {
@@ -4135,7 +4344,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/flightaware.com/track-flight-72knwj/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 81
+      "install_count": 90
     }
   },
   {
@@ -4161,7 +4370,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/flipkart.com/search-and-browse-k7f4nm/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 9
+      "install_count": 29
     }
   },
   {
@@ -4186,7 +4395,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/formula1.com/find-f1-schedule-jldxp4/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 6
+      "install_count": 10
     }
   },
   {
@@ -4212,7 +4421,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/fotmob.com/find-stats-y2yyf7/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": false,
-      "install_count": 9
+      "install_count": 15
     }
   },
   {
@@ -4238,7 +4447,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/framer.com/navigate-community-ixor9n/SKILL.md",
       "recommended_method": "browser",
       "proxies": false,
-      "install_count": 6
+      "install_count": 9
     }
   },
   {
@@ -4264,7 +4473,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/freecampsites.net/browse-campsites-qyj28m/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 30
+      "install_count": 36
     }
   },
   {
@@ -4290,7 +4499,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/french-property.com/find-listing-sujpf1/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 26
+      "install_count": 29
     }
   },
   {
@@ -4316,7 +4525,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/funda.nl/extract-listings-4klc7j/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 31
+      "install_count": 34
     }
   },
   {
@@ -4342,7 +4551,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/funda.nl/find-property-by-address-dsciyv/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 10
+      "install_count": 13
     }
   },
   {
@@ -4368,7 +4577,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/gasbuddy.com/find-cheapest-gas-weju5k/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 31
+      "install_count": 35
     }
   },
   {
@@ -4395,7 +4604,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/gathershot.com/collect-share-event-media-t8rj96/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 25
+      "install_count": 28
     }
   },
   {
@@ -4421,7 +4630,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/github.com/get-pr-review-st0euo/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 81
+      "install_count": 107
     }
   },
   {
@@ -4448,7 +4657,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/github.com/get-repo-metadata-iglddk/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 136
+      "install_count": 161
     }
   },
   {
@@ -4473,7 +4682,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/github.com/trending-repos-search-gbjpu7/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 71
+      "install_count": 93
     }
   },
   {
@@ -4500,7 +4709,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/glassdoor.com/get-company-reviews-qknrhf/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 51
+      "install_count": 56
     }
   },
   {
@@ -4527,7 +4736,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/goodreads.com/find-book-nycdz1/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": false,
-      "install_count": 40
+      "install_count": 43
     }
   },
   {
@@ -4553,7 +4762,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/goodrx.com/compare-drug-prices-c8d87y/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 36
+      "install_count": 39
     }
   },
   {
@@ -4580,7 +4789,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/google.com/company-legal-address-finder-o5en7s/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 41
+      "install_count": 257
     }
   },
   {
@@ -4606,7 +4815,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/google.com/search-flights-ts4g1f/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 462
+      "install_count": 881
     }
   },
   {
@@ -4633,7 +4842,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/gopay.kg/generate-payment-link-tdj3me/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 21
+      "install_count": 24
     }
   },
   {
@@ -4659,7 +4868,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/grants.illinois.gov/search-csfa-jewu3k/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 31
+      "install_count": 34
     }
   },
   {
@@ -4685,7 +4894,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/greenhouse.com/apply-to-jobs-dsmal1/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 25
+      "install_count": 29
     }
   },
   {
@@ -4712,7 +4921,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/gumroad.com/upload-track-analyze-product-1ho735/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 6
+      "install_count": 9
     }
   },
   {
@@ -4738,7 +4947,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/ha.com/search-auctions-6fgrko/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 31
+      "install_count": 34
     }
   },
   {
@@ -4765,7 +4974,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/happycow.net/search-vegan-ei6wpc/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 35
+      "install_count": 38
     }
   },
   {
@@ -4792,7 +5001,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/health.com/find-viral-articles-owlkuu/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 10
+      "install_count": 13
     }
   },
   {
@@ -4818,7 +5027,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/healthcare.gov/compare-plans-ruai96/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 33
+      "install_count": 36
     }
   },
   {
@@ -4843,7 +5052,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/healthgrades.com/find-specialist-4ekjm6/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 34
+      "install_count": 38
     }
   },
   {
@@ -4869,7 +5078,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/hellowork.com/export-job-listings-csv-3tciz8/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 10
+      "install_count": 13
     }
   },
   {
@@ -4896,7 +5105,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/hiive.com/private-market-verified-search-rhqej1/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 30
+      "install_count": 34
     }
   },
   {
@@ -4922,7 +5131,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/hiring.cafe/login-and-view-saved-jobs-wqsflp/SKILL.md",
       "recommended_method": "browser",
       "proxies": false,
-      "install_count": 8
+      "install_count": 11
     }
   },
   {
@@ -4948,7 +5157,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/hiveround.com/search-investment-projects-opszir/SKILL.md",
       "recommended_method": "mcp",
       "proxies": true,
-      "install_count": 32
+      "install_count": 35
     }
   },
   {
@@ -4973,7 +5182,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/homedepot.com/find-a-product-on-home-depot-sognq8/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 45
+      "install_count": 51
     }
   },
   {
@@ -4999,7 +5208,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/hotpads.com/find-a-hotel-7v8ssy/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 41
+      "install_count": 46
     }
   },
   {
@@ -5025,7 +5234,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/housing.com/find-listings-hf4905/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 25
+      "install_count": 29
     }
   },
   {
@@ -5051,7 +5260,33 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/hubermanlab.com/search-health-topics-nc2e41/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 7
+      "install_count": 11
+    }
+  },
+  {
+    "name": "find-program-details",
+    "description": "Retrieve details for University of Huddersfield academic programs — list every course or fetch one course's level, duration, start dates, delivery mode, entry requirements, fees, and modules — via the coursefinder's SearchStax/Solr JSON API, with a prerendered-page and browser fallback.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/hud.ac.uk/find-program-details-lpn0qn",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "education",
+      "university",
+      "courses",
+      "catalog",
+      "higher-education",
+      "search"
+    ],
+    "extra": {
+      "slug": "hud.ac.uk/find-program-details-lpn0qn",
+      "hostname": "hud.ac.uk",
+      "category": "education",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/hud.ac.uk/find-program-details-lpn0qn/SKILL.md",
+      "recommended_method": "api",
+      "proxies": false,
+      "install_count": 4
     }
   },
   {
@@ -5076,7 +5311,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/huggingface.co/browse-latest-models-brgzzx/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 39
+      "install_count": 48
     }
   },
   {
@@ -5102,7 +5337,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/ifixit.com/search-repair-guides-utnh60/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 28
+      "install_count": 31
     }
   },
   {
@@ -5129,7 +5364,33 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/ifm.com/explore-products-specs-s3gvyk/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 9
+      "install_count": 13
+    }
+  },
+  {
+    "name": "list-stores-with-ratings",
+    "description": "Extract a ranked list of iFood stores for a delivery address, with ranking, rating, category, name, region, and store link (review counts are gated behind an Akamai challenge).",
+    "source": "browse-sh",
+    "identifier": "browse-sh/ifood.com.br/list-stores-with-ratings-161c83",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "food-delivery",
+      "restaurants",
+      "ratings",
+      "ifood",
+      "brazil",
+      "listing"
+    ],
+    "extra": {
+      "slug": "ifood.com.br/list-stores-with-ratings-161c83",
+      "hostname": "ifood.com.br",
+      "category": "food-delivery",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/ifood.com.br/list-stores-with-ratings-161c83/SKILL.md",
+      "recommended_method": "browser",
+      "proxies": true,
+      "install_count": 3
     }
   },
   {
@@ -5155,7 +5416,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/ikea.com/check-stock-sff6ln/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 30
+      "install_count": 34
     }
   },
   {
@@ -5182,7 +5443,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/images.nasa.gov/search-image-npltef/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 33
+      "install_count": 36
     }
   },
   {
@@ -5209,7 +5470,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/imdb.com/get-rating-16ss93/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 37
+      "install_count": 40
     }
   },
   {
@@ -5235,7 +5496,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/immobilienscout24.de/suche-njdsyc/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 4
+      "install_count": 8
     }
   },
   {
@@ -5262,7 +5523,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/in.bookmyshow.com/browse-cinema-showtimes-11k149/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 5
+      "install_count": 16
     }
   },
   {
@@ -5288,7 +5549,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/indeed.com/search-jobs-8yxl6y/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 86
+      "install_count": 100
     }
   },
   {
@@ -5314,7 +5575,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/indiamart.com/findsuppliers-xzrhdt/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 22
+      "install_count": 25
     }
   },
   {
@@ -5340,7 +5601,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/instacart.com/browse-add-items-guest-gf4i37/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 43
+      "install_count": 51
     }
   },
   {
@@ -5367,7 +5628,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/inurdu.pk/find-word-meanings-9o4rmv/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 23
+      "install_count": 27
     }
   },
   {
@@ -5394,7 +5655,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/irs.gov/check-refund-status-89r6ko/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 30
+      "install_count": 33
     }
   },
   {
@@ -5420,7 +5681,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/israeli.company/find-tech-companies-ztv3p2/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 25
+      "install_count": 29
     }
   },
   {
@@ -5446,7 +5707,34 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/jd.com/search-products-9s16zo/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 56
+      "install_count": 60
+    }
+  },
+  {
+    "name": "case-document-search-retrieval",
+    "description": "Search Hawai`i State Judiciary (JIMS eCourt Kōkua) public court records by party name/agency/Party ID, license plate/VIN, case ID/citation/OTN/SID, or upcoming hearings, and retrieve the printable PDF report of a case, its schedule, or its documents.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/jimspss1.courts.state.hi.us/case-document-search-retrieval-h86j0t",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "legal",
+      "court-records",
+      "case-search",
+      "hawaii",
+      "recaptcha",
+      "read-only",
+      "icefaces"
+    ],
+    "extra": {
+      "slug": "jimspss1.courts.state.hi.us/case-document-search-retrieval-h86j0t",
+      "hostname": "jimspss1.courts.state.hi.us",
+      "category": "legal",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/jimspss1.courts.state.hi.us/case-document-search-retrieval-h86j0t/SKILL.md",
+      "recommended_method": "browser",
+      "proxies": true,
+      "install_count": 4
     }
   },
   {
@@ -5472,7 +5760,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/justwatch.com/browse-new-content-ratings-cp26tg/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 22
+      "install_count": 25
     }
   },
   {
@@ -5498,7 +5786,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/kayak.com/compare-flights-9xc047/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 176
+      "install_count": 282
     }
   },
   {
@@ -5524,7 +5812,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/kbb.com/get-vehicle-value-i3oobu/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 32
+      "install_count": 35
     }
   },
   {
@@ -5549,7 +5837,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/kijiji.ca/search-listings-by-query-r934xv/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 3
+      "install_count": 7
     }
   },
   {
@@ -5575,7 +5863,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/kineticist.com/explore-pinball-content-w5vgkf/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": false,
-      "install_count": 28
+      "install_count": 31
     }
   },
   {
@@ -5601,7 +5889,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/kingsoopers.com/add-items-to-cart-ljctdp/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 7
+      "install_count": 11
     }
   },
   {
@@ -5627,7 +5915,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/kmart.com.au/kmart-irwsr8/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 26
+      "install_count": 30
     }
   },
   {
@@ -5653,7 +5941,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/lasvegas.jckonline.com/scrape-exhibitor-directory-3uw0f6/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 28
+      "install_count": 32
     }
   },
   {
@@ -5678,7 +5966,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/lazada.com.my/search-products-ancb86/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 30
+      "install_count": 35
     }
   },
   {
@@ -5704,7 +5992,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/leboncoin.fr/find-house-lille-3bed-200k-300k-8iyumd/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 6
+      "install_count": 9
     }
   },
   {
@@ -5730,7 +6018,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/letterboxd.com/add-to-watchlist-k0iqqu/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 8
+      "install_count": 11
     }
   },
   {
@@ -5757,7 +6045,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/lidl.ro/scrape-offers-catalogues-products-fi4d22/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 14
+      "install_count": 17
     }
   },
   {
@@ -5811,7 +6099,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/link.com/create-payment-credential-0nc34a/SKILL.md",
       "recommended_method": "cli",
       "proxies": true,
-      "install_count": 32
+      "install_count": 35
     }
   },
   {
@@ -5836,7 +6124,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/linkedin.com/search-linkedin-jobs-3v1wu7/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 147
+      "install_count": 172
     }
   },
   {
@@ -5862,7 +6150,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/liveblocks.io/view-documentation-mwh109/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 6
+      "install_count": 9
     }
   },
   {
@@ -5888,7 +6176,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/livescore.com/track-live-scores-txxdp5/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 26
+      "install_count": 30
     }
   },
   {
@@ -5941,7 +6229,34 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/luma.com/discover-1zqc5a/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 7
+      "install_count": 11
+    }
+  },
+  {
+    "name": "find-fare-estimate",
+    "description": "Drive m.uber.com to enter a pickup and dropoff and return the route's available Uber ride products (UberX, Comfort, UberXL, Black, etc.) with capacity and descriptions. Read-only. Dollar fares are gated behind an Uber login; anonymous sessions get ride types but no prices.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/m.uber.com/find-fare-estimate-eyeaqq",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "transportation",
+      "rideshare",
+      "uber",
+      "fare-estimate",
+      "read-only",
+      "cloudflare",
+      "login-wall"
+    ],
+    "extra": {
+      "slug": "m.uber.com/find-fare-estimate-eyeaqq",
+      "hostname": "m.uber.com",
+      "category": "transportation",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/m.uber.com/find-fare-estimate-eyeaqq/SKILL.md",
+      "recommended_method": "browser",
+      "proxies": true,
+      "install_count": 3
     }
   },
   {
@@ -5967,7 +6282,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/magiceraser.live/photo-editing-uznn0c/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 1
+      "install_count": 4
     }
   },
   {
@@ -5994,7 +6309,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/marketingmanagerjobs.com/find-job-listings-v4r3lt/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 16
+      "install_count": 20
     }
   },
   {
@@ -6020,7 +6335,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/mcdonalds.order.online/order-for-pickup-il0zeo/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 35
+      "install_count": 39
     }
   },
   {
@@ -6046,7 +6361,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/mcmaster.com/load-cart-qbh8zw/SKILL.md",
       "recommended_method": "browser",
       "proxies": false,
-      "install_count": 7
+      "install_count": 10
     }
   },
   {
@@ -6073,7 +6388,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/mcp.data.gouv.fr/query-extract-structure-datasets-2xs1uy/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 22
+      "install_count": 25
     }
   },
   {
@@ -6100,7 +6415,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/medicare.gov/get-hospital-rating-03perc/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 34
+      "install_count": 37
     }
   },
   {
@@ -6125,7 +6440,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/meetup.com/search-events-8bdsvy/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 33
+      "install_count": 37
     }
   },
   {
@@ -6152,7 +6467,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/mercadolibre.com.ar/search-compare-monitor-n9hgxe/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 26
+      "install_count": 31
     }
   },
   {
@@ -6179,7 +6494,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/mercari.com/search-listings-4ixl7y/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 36
+      "install_count": 39
     }
   },
   {
@@ -6205,7 +6520,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/miapalatincafe.com/place-order-8s1teu/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 16
+      "install_count": 20
     }
   },
   {
@@ -6231,7 +6546,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/michelin.com/michelinstar-kn6uon/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 21
+      "install_count": 24
     }
   },
   {
@@ -6257,7 +6572,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/monocle.com/copenhagen-monocle-search-blusxu/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 25
+      "install_count": 29
     }
   },
   {
@@ -6283,7 +6598,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/mountainproject.com/search-routes-romkbp/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 32
+      "install_count": 35
     }
   },
   {
@@ -6309,7 +6624,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/mvg.de/plan-route-tn9m0v/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 21
+      "install_count": 24
     }
   },
   {
@@ -6335,7 +6650,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/nav.com/get-smb-funding-2s1rpm/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": false,
-      "install_count": 32
+      "install_count": 35
     }
   },
   {
@@ -6361,7 +6676,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/nerdwallet.com/compare-credit-cards-0a4ihq/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 35
+      "install_count": 38
     }
   },
   {
@@ -6386,7 +6701,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/news.ycombinator.com/get-stories-wyej87/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 111
+      "install_count": 117
     }
   },
   {
@@ -6412,7 +6727,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/nonny.beer/find-craft-beer-restaurants-rxs3yr/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 25
+      "install_count": 28
     }
   },
   {
@@ -6438,7 +6753,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/noon.com/search-and-fetch-product-btjdxf/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 10
+      "install_count": 13
     }
   },
   {
@@ -6464,7 +6779,33 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/notion.so/workspace-navigation-guide-ac7f04/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 7
+      "install_count": 11
+    }
+  },
+  {
+    "name": "scrape-healthcare",
+    "description": "Search the CMS NPPES NPI Registry by healthcare niche (taxonomy) and location to extract provider/organization leads: business name, owner (authorized official) name and title, phone, fax, address, specialty, license, and NPI. Note: the dataset contains no email addresses.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/npiregistry.cms.hhs.gov/scrape-healthcare-hf1yty",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "healthcare",
+      "lead-generation",
+      "npi",
+      "cms",
+      "providers",
+      "public-api"
+    ],
+    "extra": {
+      "slug": "npiregistry.cms.hhs.gov/scrape-healthcare-hf1yty",
+      "hostname": "npiregistry.cms.hhs.gov",
+      "category": "lead-generation",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/npiregistry.cms.hhs.gov/scrape-healthcare-hf1yty/SKILL.md",
+      "recommended_method": "api",
+      "proxies": false,
+      "install_count": 6
     }
   },
   {
@@ -6491,7 +6832,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/ns.nl/plan-trip-x5is7w/SKILL.md",
       "recommended_method": "browser",
       "proxies": false,
-      "install_count": 6
+      "install_count": 9
     }
   },
   {
@@ -6518,7 +6859,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/nursys.com/nurse-license-verify-s1yy4f/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 20
+      "install_count": 24
     }
   },
   {
@@ -6544,7 +6885,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/nycourts.gov/search-cases-so6v88/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 33
+      "install_count": 36
     }
   },
   {
@@ -6571,7 +6912,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/octopart.com/electronic-product-details-8vawd0/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 28
+      "install_count": 32
     }
   },
   {
@@ -6598,7 +6939,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/onehermannplace.com/building-amenities-floorplans-b838of/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": false,
-      "install_count": 9
+      "install_count": 12
     }
   },
   {
@@ -6624,7 +6965,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/opencorporates.com/find-company-filings-e9ewrz/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 51
+      "install_count": 56
     }
   },
   {
@@ -6650,7 +6991,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/openpets.sh/search-codex-pets-f0oals/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 32
+      "install_count": 36
     }
   },
   {
@@ -6676,7 +7017,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/openrouter.ai/compare-and-build-llm-model-xr4e8t/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 56
+      "install_count": 64
     }
   },
   {
@@ -6702,7 +7043,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/opensource.iflytek.com/projects-ba5gb8/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 6
+      "install_count": 9
     }
   },
   {
@@ -6727,7 +7068,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/opentable.com/check-availability-f2fwrm/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 93
+      "install_count": 135
     }
   },
   {
@@ -6754,7 +7095,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/operator.fyi/get-business-brain-wdaavu/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 45
+      "install_count": 49
     }
   },
   {
@@ -6780,7 +7121,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/ordercircle.com/gofer-l8netu/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 9
+      "install_count": 12
     }
   },
   {
@@ -6806,7 +7147,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/oregoncabaret.com/extract-show-times-yeyyc1/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 1
+      "install_count": 4
     }
   },
   {
@@ -6831,7 +7172,32 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/outmoreliving.com/search-products-by-filters-6vcvp5/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 30
+      "install_count": 34
+    }
+  },
+  {
+    "name": "search-product-specs",
+    "description": "Search ozoptics.com for fiber-optic products matching a description via the SiteSearch360 JSON API and return each product's name, links (product page + datasheet PDF), and where its full specifications live.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/ozoptics.com/search-pull-product-specs-l7h1yt",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "fiber-optics",
+      "search",
+      "sitesearch360",
+      "datasheets",
+      "products"
+    ],
+    "extra": {
+      "slug": "ozoptics.com/search-pull-product-specs-l7h1yt",
+      "hostname": "ozoptics.com",
+      "category": "product-search",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/ozoptics.com/search-pull-product-specs-l7h1yt/SKILL.md",
+      "recommended_method": "api",
+      "proxies": false,
+      "install_count": 2
     }
   },
   {
@@ -6857,7 +7223,33 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/packrift.com/exact-spec-packaging-procurement-e4ujmy/SKILL.md",
       "recommended_method": "mcp",
       "proxies": true,
-      "install_count": 29
+      "install_count": 33
+    }
+  },
+  {
+    "name": "discover-collections",
+    "description": "Retrieve Paladar Social's public catalog of curated restaurant/bar/café collections via the unauthenticated GET /api/collections endpoint. Deeper discovery and reservations are gated behind Google OAuth.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/paladarsocial.com/tony-y4mwmo",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "restaurants",
+      "discovery",
+      "reservations",
+      "collections",
+      "api",
+      "argentina"
+    ],
+    "extra": {
+      "slug": "paladarsocial.com/tony-y4mwmo",
+      "hostname": "paladarsocial.com",
+      "category": "restaurants",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/paladarsocial.com/tony-y4mwmo/SKILL.md",
+      "recommended_method": "api",
+      "proxies": false,
+      "install_count": 2
     }
   },
   {
@@ -6883,7 +7275,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/parallel.ai/deep-research-47e6x1/SKILL.md",
       "recommended_method": "cli",
       "proxies": true,
-      "install_count": 13
+      "install_count": 16
     }
   },
   {
@@ -6909,7 +7301,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/parallel.ai/monitor-x48ngh/SKILL.md",
       "recommended_method": "cli",
       "proxies": false,
-      "install_count": 9
+      "install_count": 14
     }
   },
   {
@@ -6935,7 +7327,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/parallel.ai/web-search-mcp-4bhml2/SKILL.md",
       "recommended_method": "mcp",
       "proxies": true,
-      "install_count": 11
+      "install_count": 15
     }
   },
   {
@@ -6961,7 +7353,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/patents.google.com/search-patents-369445/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 58
+      "install_count": 199
     }
   },
   {
@@ -6987,7 +7379,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/pepperpong.com/explore-use-cases-fejudo/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 26
+      "install_count": 30
     }
   },
   {
@@ -7013,7 +7405,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/peptideportal.org/peptide-research-to6qkq/SKILL.md",
       "recommended_method": "browser",
       "proxies": false,
-      "install_count": 33
+      "install_count": 36
     }
   },
   {
@@ -7039,7 +7431,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/perchance.org/generate-image-viqw8u/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 4
+      "install_count": 8
     }
   },
   {
@@ -7065,7 +7457,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/petfinder.com/search-pets-mxqo1n/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 30
+      "install_count": 33
     }
   },
   {
@@ -7092,7 +7484,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/phila.legistar.com/philly-council-events-19ew37/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 8
+      "install_count": 12
     }
   },
   {
@@ -7118,7 +7510,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/phila.legistar.com/philly-council-events-9laceb/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 17
+      "install_count": 22
     }
   },
   {
@@ -7144,7 +7536,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/phila.legistar.com/philly-council-events-nr6091/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 15
+      "install_count": 18
     }
   },
   {
@@ -7170,7 +7562,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/phila.legistar.com/philly-council-events-omjf3s/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 23
+      "install_count": 26
     }
   },
   {
@@ -7195,7 +7587,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/pinterest.com/save-pin-q1vg2i/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 7
+      "install_count": 11
     }
   },
   {
@@ -7221,7 +7613,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/platform.claude.com/write-prompt-guide-0j5xu3/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 36
+      "install_count": 40
     }
   },
   {
@@ -7247,7 +7639,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/plazamuseumdistrictapts.com/browse-amenities-and-floor-plans-mp7yef/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 10
+      "install_count": 14
     }
   },
   {
@@ -7274,7 +7666,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/plugandpay.com/account-management-ic4kjh/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 7
+      "install_count": 11
     }
   },
   {
@@ -7300,7 +7692,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/plugshare.com/find-charger-x2ul2f/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 51
+      "install_count": 55
     }
   },
   {
@@ -7351,7 +7743,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/policygenius.com/compare-insurance-g7sogh/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": false,
-      "install_count": 30
+      "install_count": 33
     }
   },
   {
@@ -7377,7 +7769,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/polymarket.com/polymarket-research-0rhj5o/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 85
+      "install_count": 90
     }
   },
   {
@@ -7403,7 +7795,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/poshmark.com/search-listings-vrg59r/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 31
+      "install_count": 34
     }
   },
   {
@@ -7430,7 +7822,32 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/postalform.com/send-mail-vfizjl/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 9
+      "install_count": 12
+    }
+  },
+  {
+    "name": "check-latest-blog-post",
+    "description": "Checks whether Mário's site Prazo Certo (prazocerto.me) has a new/recent blog post and returns the newest post's title, publish date, author, and URL — via the open WordPress REST API.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/prazocerto.me/pzct-blog-i8yyot",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "blog",
+      "wordpress",
+      "rest-api",
+      "content-monitoring",
+      "prazo-certo"
+    ],
+    "extra": {
+      "slug": "prazocerto.me/pzct-blog-i8yyot",
+      "hostname": "prazocerto.me",
+      "category": "content-monitoring",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/prazocerto.me/pzct-blog-i8yyot/SKILL.md",
+      "recommended_method": "api",
+      "proxies": true,
+      "install_count": 4
     }
   },
   {
@@ -7457,7 +7874,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/preicfes-gratis.com/resumen-xzlf6m/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 9
+      "install_count": 12
     }
   },
   {
@@ -7484,7 +7901,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/priceline.com/travel-deal-p8yxwj/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 20
+      "install_count": 24
     }
   },
   {
@@ -7510,7 +7927,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/pro-football-reference.com/get-player-stats-5pitm4/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 30
+      "install_count": 33
     }
   },
   {
@@ -7536,7 +7953,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/producthunt.com/findme-yaqseh/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 18
+      "install_count": 30
     }
   },
   {
@@ -7562,7 +7979,34 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/property24.com/extract-listings-by-neighborhood-ldd0u5/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 19
+      "install_count": 22
+    }
+  },
+  {
+    "name": "find-electronic-components",
+    "description": "Look up electronic components on questcomp.com by manufacturer part number and extract live unit price, stock quantity, datasheet URL, and specs as machine-readable JSON. Uses the site's JSON autocomplete PageMethod for search and the static JSON-LD-bearing /part/ detail pages for extraction.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/questcomp.com/find-electronic-components-zq30te",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "electronics",
+      "components",
+      "distributor",
+      "part-search",
+      "datasheet",
+      "pricing",
+      "obsolete-parts"
+    ],
+    "extra": {
+      "slug": "questcomp.com/find-electronic-components-zq30te",
+      "hostname": "questcomp.com",
+      "category": "electronics-distribution",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/questcomp.com/find-electronic-components-zq30te/SKILL.md",
+      "recommended_method": "hybrid",
+      "proxies": false,
+      "install_count": 2
     }
   },
   {
@@ -7593,6 +8037,32 @@
     }
   },
   {
+    "name": "search-company-data",
+    "description": "Given a company name, resolve it against the eleconomista company ranking directory and return its fiscal ID, activity, address, financials, and ranking positions — read-only.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/ranking-empresas.eleconomista.es/search-company-data-64uxli",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "company-data",
+      "spain",
+      "business-registry",
+      "financials",
+      "ranking",
+      "directory"
+    ],
+    "extra": {
+      "slug": "ranking-empresas.eleconomista.es/search-company-data-64uxli",
+      "hostname": "ranking-empresas.eleconomista.es",
+      "category": "business-data",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/ranking-empresas.eleconomista.es/search-company-data-64uxli/SKILL.md",
+      "recommended_method": "fetch",
+      "proxies": false,
+      "install_count": 3
+    }
+  },
+  {
     "name": "compare-ranked-products",
     "description": "Research and recommend products with RankReason: locate the relevant editorial ranking, compare top-ranked products, explain why each was ranked, weigh pros and cons, and pick the best product for a user's specific requirements.",
     "source": "browse-sh",
@@ -7615,7 +8085,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/rankreason.com/compare-ranked-products-jrg9pn/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 8
+      "install_count": 11
     }
   },
   {
@@ -7641,7 +8111,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/realestate.com.au/extract-property-data-f0o2u7/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 28
+      "install_count": 31
     }
   },
   {
@@ -7667,7 +8137,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/realtor.ca/list-properties-5d4p1l/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 36
+      "install_count": 39
     }
   },
   {
@@ -7692,7 +8162,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/realtor.com/extract-listings-9v0y4r/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 57
+      "install_count": 64
     }
   },
   {
@@ -7719,7 +8189,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/realtor.com/get-school-rating-1f9wah/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 38
+      "install_count": 42
     }
   },
   {
@@ -7746,7 +8216,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/rec.us/sf-court-booking-c8l5z9/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 19
+      "install_count": 22
     }
   },
   {
@@ -7773,7 +8243,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/recipebee.app/recipe-discovery-generator-cdqfi0/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": false,
-      "install_count": 32
+      "install_count": 35
     }
   },
   {
@@ -7799,7 +8269,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/recreation.gov/check-availability-3ldi81/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 59
+      "install_count": 67
     }
   },
   {
@@ -7825,7 +8295,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/recruiterroles.com/recruiting-jobs-search-sf3f31/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 30
+      "install_count": 33
     }
   },
   {
@@ -7851,7 +8321,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/redfin.com/get-comparable-sales-lzph4d/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 53
+      "install_count": 59
     }
   },
   {
@@ -7878,7 +8348,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/redmart.lazada.sg/browse-groceries-d98m64/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 15
+      "install_count": 18
     }
   },
   {
@@ -7933,7 +8403,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/remotedxb.com/search-latest-jobs-x34eml/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 8
+      "install_count": 13
     }
   },
   {
@@ -7960,7 +8430,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/rent.591.com.tw/filter-rental-search-fq54br/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 28
+      "install_count": 35
     }
   },
   {
@@ -7986,7 +8456,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/resortcottagesontario.ca/search-cottages-jnghyi/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": false,
-      "install_count": 31
+      "install_count": 34
     }
   },
   {
@@ -8012,7 +8482,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/resy.com/check-availability-v27zl8/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 218
+      "install_count": 782
     }
   },
   {
@@ -8038,7 +8508,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/rntl.net/is-mount-tam-cloudy-3ite7u/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 29
+      "install_count": 32
     }
   },
   {
@@ -8064,7 +8534,34 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/rottentomatoes.com/get-rating-tr6mq7/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 37
+      "install_count": 41
+    }
+  },
+  {
+    "name": "component-lookup-and-extract",
+    "description": "Look up electronic components on rutronik24.com by exact MPN or keyword and return machine-readable JSON (MPN, manufacturer, public list price, currency, stock qty, datasheet, detail URL), parsing the embedded GA4 dataLayer rather than scraping the grid.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/rutronik24.com/component-lookup-and-extract-kv0dpt",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "electronics",
+      "distributor",
+      "component-search",
+      "datasheet",
+      "pricing",
+      "read-only",
+      "rutronik"
+    ],
+    "extra": {
+      "slug": "rutronik24.com/component-lookup-and-extract-kv0dpt",
+      "hostname": "rutronik24.com",
+      "category": "ecommerce-electronics",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/rutronik24.com/component-lookup-and-extract-kv0dpt/SKILL.md",
+      "recommended_method": "fetch",
+      "proxies": true,
+      "install_count": 2
     }
   },
   {
@@ -8091,7 +8588,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/ruwangi.com/ruwangi-parfum-laki-laki-ko0z5t/SKILL.md",
       "recommended_method": "browser",
       "proxies": false,
-      "install_count": 30
+      "install_count": 33
     }
   },
   {
@@ -8118,7 +8615,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/saintjavelin.com/create-visitor-routing-skill-ukomyn/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 22
+      "install_count": 25
     }
   },
   {
@@ -8144,7 +8641,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/saizeriya.com.sg/query-menu-data-qw4uqo/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 29
+      "install_count": 32
     }
   },
   {
@@ -8170,7 +8667,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/sam.gov/contract-opportunity-search-axgs2u/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 62
+      "install_count": 74
     }
   },
   {
@@ -8196,7 +8693,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/sameday.costco.com/create-cart-1gzg80/SKILL.md",
       "recommended_method": "browser",
       "proxies": false,
-      "install_count": 4
+      "install_count": 7
     }
   },
   {
@@ -8222,7 +8719,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/samsclub.com/browse-memberships-rahcjf/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 26
+      "install_count": 29
     }
   },
   {
@@ -8244,7 +8741,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/saudi.microless.com/search-computer-parts-a3l2a0/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": false,
-      "install_count": 22
+      "install_count": 25
     }
   },
   {
@@ -8271,7 +8768,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/sbab.se/view-rates-apply-mortgage-5s0n2h/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 28
+      "install_count": 31
     }
   },
   {
@@ -8298,7 +8795,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/scoutos.com/lookup-scout-product-info-28kroz/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 24
+      "install_count": 27
     }
   },
   {
@@ -8325,7 +8822,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/search.dca.ca.gov/create-a-skill-for-finding-verifiying-li-bctexq/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 33
+      "install_count": 37
     }
   },
   {
@@ -8351,7 +8848,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/seatgeek.com/find-fifa-tickets-qx7w9c/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 12
+      "install_count": 15
     }
   },
   {
@@ -8376,7 +8873,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/seatguru.com/get-seat-map-dog7jd/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 28
+      "install_count": 31
     }
   },
   {
@@ -8403,7 +8900,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/sec.gov/search-edgar-fulltext-dpk6r2/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 147
+      "install_count": 154
     }
   },
   {
@@ -8429,7 +8926,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/secure.professionals.vermont.gov/verify-license-5bjiug/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 9
+      "install_count": 12
     }
   },
   {
@@ -8456,7 +8953,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/sede.agenciatributaria.gob.es/check-diesel-subsidies-qu3qga/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 23
+      "install_count": 26
     }
   },
   {
@@ -8483,7 +8980,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/selgros.ro/scrape-all-products-w4xdxh/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 13
+      "install_count": 20
     }
   },
   {
@@ -8510,7 +9007,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/sephora.com/skill-yneln4/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 1
+      "install_count": 4
     }
   },
   {
@@ -8536,7 +9033,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/sherdog.com/get-fighter-record-gpkyan/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": false,
-      "install_count": 27
+      "install_count": 30
     }
   },
   {
@@ -8563,7 +9060,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/shopee.com.my/search-products-5epzg0/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 26
+      "install_count": 33
     }
   },
   {
@@ -8589,7 +9086,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/shopee.com/compare-products-instant-delivery-mnolqb/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 30
+      "install_count": 33
     }
   },
   {
@@ -8614,7 +9111,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/sixt.com/search-car-rental-oulz1k/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 29
+      "install_count": 37
     }
   },
   {
@@ -8641,7 +9138,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/skillsfuture.gobusiness.gov.sg/search-competitor-training-providers-57gpw9/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 7
+      "install_count": 10
     }
   },
   {
@@ -8667,7 +9164,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/skool.com/post-content-with-images-and-reply-qthvxe/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 9
+      "install_count": 12
     }
   },
   {
@@ -8693,7 +9190,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/skyscanner.net/search-cheapest-flight-v8nvut/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 74
+      "install_count": 89
     }
   },
   {
@@ -8720,7 +9217,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/sobasearch.com/search-1z4u4v/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 27
+      "install_count": 30
     }
   },
   {
@@ -8745,7 +9242,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/software.nasa.gov/lookup-software-contract-54tcpr/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 37
+      "install_count": 40
     }
   },
   {
@@ -8771,7 +9268,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/sosbiz.idaho.gov/business-search-qw7mkq/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 35
+      "install_count": 39
     }
   },
   {
@@ -8790,7 +9287,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/sothebys.com/search-lots-y2rvig/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 32
+      "install_count": 35
     }
   },
   {
@@ -8817,7 +9314,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/southwest.com/search-flights-jl329m/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 46
+      "install_count": 54
     }
   },
   {
@@ -8843,7 +9340,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/spinach.guide/create-vegan-itinerary-6ztwyn/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 26
+      "install_count": 29
     }
   },
   {
@@ -8868,7 +9365,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/sponsorcal.com/book-newsletter-sponsorship-pefssb/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 26
+      "install_count": 29
     }
   },
   {
@@ -8894,7 +9391,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/sponsorpath.org/analytics-wuiwcq/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 7
+      "install_count": 10
     }
   },
   {
@@ -8921,7 +9418,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/stlouis-mo.gov/browse-stlouis-city-government-i0hlg0/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 9
+      "install_count": 12
     }
   },
   {
@@ -8948,7 +9445,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/stockx.com/get-resale-price-eewaou/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": false,
-      "install_count": 36
+      "install_count": 39
     }
   },
   {
@@ -8974,7 +9471,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/streeteasy.com/extract-listings-1emkts/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 39
+      "install_count": 42
     }
   },
   {
@@ -9000,7 +9497,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/substack.com/search-newsletters-4cecca/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 61
+      "install_count": 66
     }
   },
   {
@@ -9027,7 +9524,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/sueldojusto.pe/calcular-sueldo-neto-jtgbuz/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 29
+      "install_count": 33
     }
   },
   {
@@ -9053,7 +9550,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/sueldojusto.pe/calculate-gratification-4cn2tq/SKILL.md",
       "recommended_method": "browser",
       "proxies": false,
-      "install_count": 0
+      "install_count": 3
     }
   },
   {
@@ -9080,7 +9577,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/support.hp.com/find-repair-guides-ks282r/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 24
+      "install_count": 28
     }
   },
   {
@@ -9107,7 +9604,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/support.lenovo.com/find-repair-guides-eg8mah/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 24
+      "install_count": 28
     }
   },
   {
@@ -9133,7 +9630,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/surfline.com/get-forecast-0ry7ls/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 28
+      "install_count": 31
     }
   },
   {
@@ -9159,7 +9656,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/sweetwater.com/search-browse-gear-f13ku4/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 6
+      "install_count": 9
     }
   },
   {
@@ -9185,7 +9682,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/tabelog.com/jp-restaurant-search-cpy50c/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 28
+      "install_count": 31
     }
   },
   {
@@ -9212,7 +9709,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/taobao.com/search-products-fac5nw/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 78
+      "install_count": 85
     }
   },
   {
@@ -9238,7 +9735,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/target.com/find-a-product-nn7l9g/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 44
+      "install_count": 49
     }
   },
   {
@@ -9265,7 +9762,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/technology.nasa.gov/lookup-patent-g2hr1n/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 30
+      "install_count": 33
     }
   },
   {
@@ -9292,7 +9789,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/telegraph.co.uk/get-front-page-headlines-v8olii/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 9
+      "install_count": 12
     }
   },
   {
@@ -9318,7 +9815,34 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/temu.com/fetch-all-product-details-xj2sb6/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 6
+      "install_count": 11
+    }
+  },
+  {
+    "name": "find-lowest-used-car-price",
+    "description": "Given a ZIP code, search distance in miles, and a model filter (m3/my/ms/mx), return the lowest-priced used Tesla within range — price, year, trim, odometer, location, VIN, and listing URL.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/tesla.com/find-lowest-used-car-price-nidwyt",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "automotive",
+      "tesla",
+      "used-cars",
+      "inventory",
+      "pricing",
+      "akamai",
+      "read-only"
+    ],
+    "extra": {
+      "slug": "tesla.com/find-lowest-used-car-price-nidwyt",
+      "hostname": "tesla.com",
+      "category": "automotive",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/tesla.com/find-lowest-used-car-price-nidwyt/SKILL.md",
+      "recommended_method": "hybrid",
+      "proxies": true,
+      "install_count": 2
     }
   },
   {
@@ -9344,7 +9868,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/tfp.kenyatradenet.go.ke/login-and-edit-document-60clch/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 7
+      "install_count": 10
     }
   },
   {
@@ -9370,7 +9894,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/thecartermuseumdistrict.com/explore-amenities-and-floor-plans-fd85a2/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 9
+      "install_count": 12
     }
   },
   {
@@ -9397,7 +9921,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/thecircleathermannpark.com/property-overview-with-amenities-and-flo-y9xgmo/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 11
+      "install_count": 14
     }
   },
   {
@@ -9422,7 +9946,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/thegoodguys.com.au/get-all-products-yqnslb/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 14
+      "install_count": 17
     }
   },
   {
@@ -9449,7 +9973,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/themagnetbaron.com/find-buy-magnets-70l78w/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 23
+      "install_count": 26
     }
   },
   {
@@ -9475,7 +9999,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/therealreal.com/obsessions-jg1v3v/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 23
+      "install_count": 27
     }
   },
   {
@@ -9500,7 +10024,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/thewikigame.com/play-wikigame-qcezz8/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": false,
-      "install_count": 8
+      "install_count": 13
     }
   },
   {
@@ -9525,7 +10049,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/thewindowsclub.com/tecbrowsersh-c0ksl9/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 26
+      "install_count": 29
     }
   },
   {
@@ -9551,7 +10075,34 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/thinkingmachines.ai/explore-blogs-sx9a4v/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 7
+      "install_count": 11
+    }
+  },
+  {
+    "name": "browse-parts-data",
+    "description": "Look up Thorlabs parts by part number or keyword search and return price (incl. quantity-tier pricing), product info (availability, ECCN, origin, weight, warranty), and datasheet/CAD document download URLs — via the site's GraphQL + Algolia APIs. Read-only.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/thorlabs.com/browse-parts-data-rdd95x",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "thorlabs",
+      "photonics",
+      "optics",
+      "pricing",
+      "datasheets",
+      "graphql",
+      "parts"
+    ],
+    "extra": {
+      "slug": "thorlabs.com/browse-parts-data-rdd95x",
+      "hostname": "thorlabs.com",
+      "category": "photonics",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/thorlabs.com/browse-parts-data-rdd95x/SKILL.md",
+      "recommended_method": "api",
+      "proxies": false,
+      "install_count": 2
     }
   },
   {
@@ -9578,7 +10129,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/ticketmaster.com/find-ticket-i7c0vy/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 47
+      "install_count": 121
     }
   },
   {
@@ -9604,7 +10155,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/tmichot.mof.gov.il/extract-items-with-links-tmanm7/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 4
+      "install_count": 7
     }
   },
   {
@@ -9631,7 +10182,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/tokopedia.com/compare-products-by-price-rating-deliver-b82t29/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 24
+      "install_count": 28
     }
   },
   {
@@ -9657,7 +10208,33 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/tools.usps.com/track-a-package-use-this-number-for-test-49gcl7/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 32
+      "install_count": 35
+    }
+  },
+  {
+    "name": "project-scraper",
+    "description": "Scrape tp bennett's recent architecture/interior-design projects with enriched detail — who is involved (named project lead + client) and what is being done (sector, status, location, size, narrative) — via the site's public Prismic Content API.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/tpbennett.com/project-scraper-r1gikd",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "architecture",
+      "projects",
+      "prismic",
+      "cms-api",
+      "read-only",
+      "scraping"
+    ],
+    "extra": {
+      "slug": "tpbennett.com/project-scraper-r1gikd",
+      "hostname": "tpbennett.com",
+      "category": "architecture",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/tpbennett.com/project-scraper-r1gikd/SKILL.md",
+      "recommended_method": "api",
+      "proxies": false,
+      "install_count": 2
     }
   },
   {
@@ -9684,7 +10261,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/tradingview.com/optimize-strategy-backtest-i3avfe/SKILL.md",
       "recommended_method": "browser",
       "proxies": false,
-      "install_count": 12
+      "install_count": 15
     }
   },
   {
@@ -9710,7 +10287,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/trailforks.com/search-trails-worldwide-f2j6hs/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 7
+      "install_count": 10
     }
   },
   {
@@ -9737,7 +10314,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/trainline.com/find-trains-1qaum7/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 25
+      "install_count": 34
     }
   },
   {
@@ -9764,7 +10341,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/transportnsw.info/find-transport-route-yas5pc/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 23
+      "install_count": 26
     }
   },
   {
@@ -9783,7 +10360,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/tripadvisor.com/extract-reviews-2uvxye/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 47
+      "install_count": 50
     }
   },
   {
@@ -9810,7 +10387,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/trust.scoutos.com/lookup-scout-trust-kuepc9/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 29
+      "install_count": 32
     }
   },
   {
@@ -9837,7 +10414,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/trustmrr.com/search-analytics-metrics-ooeinc/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 16
+      "install_count": 19
     }
   },
   {
@@ -9863,7 +10440,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/trykopi.ai/audit-shopify-store-prj4km/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 30
+      "install_count": 34
     }
   },
   {
@@ -9888,7 +10465,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/tsa.gov/check-wait-time-90hawj/SKILL.md",
       "recommended_method": "browser",
       "proxies": false,
-      "install_count": 32
+      "install_count": 35
     }
   },
   {
@@ -9914,7 +10491,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/turo.com/block-calendar-qy3euh/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 15
+      "install_count": 18
     }
   },
   {
@@ -9940,7 +10517,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/ulta.com/browse-products-by-category-x7ej7h/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 13
+      "install_count": 17
     }
   },
   {
@@ -9966,7 +10543,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/united.com/search-flights-xs5157/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 46
+      "install_count": 54
     }
   },
   {
@@ -9992,7 +10569,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/ups.com/track-package-kmvsdc/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 149
+      "install_count": 239
     }
   },
   {
@@ -10018,7 +10595,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/upwork.com/optimize-proposal-success-rate-4tnak4/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 9
+      "install_count": 16
     }
   },
   {
@@ -10044,7 +10621,33 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/uscis.gov/check-case-status-or94c8/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 39
+      "install_count": 42
+    }
+  },
+  {
+    "name": "fill-i539-application-form",
+    "description": "Programmatically fill the USCIS I-539 (Application to Extend/Change Nonimmigrant Status) fillable PDF by AcroForm field name and save a completed copy. Read-only re the site; does not submit. Browser page.fill() does NOT work on this PDF.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/uscis.gov/fill-i539-application-form-b6dv4f",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "uscis",
+      "immigration",
+      "pdf-form",
+      "acroform",
+      "i-539",
+      "form-filling"
+    ],
+    "extra": {
+      "slug": "uscis.gov/fill-i539-application-form-b6dv4f",
+      "hostname": "uscis.gov",
+      "category": "government-forms",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/uscis.gov/fill-i539-application-form-b6dv4f/SKILL.md",
+      "recommended_method": "hybrid",
+      "proxies": false,
+      "install_count": 2
     }
   },
   {
@@ -10071,7 +10674,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/usdalocalfoodportal.com/find-market-5xvsgb/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 31
+      "install_count": 34
     }
   },
   {
@@ -10098,7 +10701,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/usgs.gov/get-earthquake-feed-luuaup/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 28
+      "install_count": 31
     }
   },
   {
@@ -10124,7 +10727,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/usps.com/track-package-854rdc/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 141
+      "install_count": 231
     }
   },
   {
@@ -10150,7 +10753,33 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/uspto.gov/search-patents-nwh84a/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 46
+      "install_count": 49
+    }
+  },
+  {
+    "name": "buy-asymmetric-upside-hoodie",
+    "description": "Add the V1 @ Michigan Asymmetric Upside Hoodie in size Large (Natural) to the cart and initiate checkout, stopping at the Stripe Checkout page before payment.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/v1michigan.com/buy-asymmetric-upside-hoodie-d7x0ed",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "ecommerce",
+      "merch",
+      "hoodie",
+      "cart",
+      "checkout",
+      "stripe"
+    ],
+    "extra": {
+      "slug": "v1michigan.com/buy-asymmetric-upside-hoodie-d7x0ed",
+      "hostname": "v1michigan.com",
+      "category": "ecommerce",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/v1michigan.com/buy-asymmetric-upside-hoodie-d7x0ed/SKILL.md",
+      "recommended_method": "browser",
+      "proxies": false,
+      "install_count": 0
     }
   },
   {
@@ -10176,7 +10805,33 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/vaccines.gov/find-appointment-55bu87/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 29
+      "install_count": 33
+    }
+  },
+  {
+    "name": "rebook-with-same-provider",
+    "description": "Re-book a past Vagaro appointment with the same service provider for a future date/time. Logs into the customer account, opens appointment history, and uses the Rebook deep-link that pins the original service + provider. Read-only: stops at date/time selection.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/vagaro.com/rebook-with-same-provider-xekrwo",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "appointments",
+      "booking",
+      "beauty-wellness",
+      "rebook",
+      "authenticated",
+      "read-only"
+    ],
+    "extra": {
+      "slug": "vagaro.com/rebook-with-same-provider-xekrwo",
+      "hostname": "vagaro.com",
+      "category": "appointments",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/vagaro.com/rebook-with-same-provider-xekrwo/SKILL.md",
+      "recommended_method": "browser",
+      "proxies": false,
+      "install_count": 2
     }
   },
   {
@@ -10202,7 +10857,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/valet.dev/create-slack-agents-52xlt6/SKILL.md",
       "recommended_method": "cli",
       "proxies": false,
-      "install_count": 30
+      "install_count": 33
     }
   },
   {
@@ -10228,7 +10883,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/vantagemedcenter.com/list-amenities-and-floor-plans-stvgr5/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 10
+      "install_count": 13
     }
   },
   {
@@ -10254,7 +10909,32 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/vecros.com/explore-gps-denied-navigation-bkcj4o/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": false,
-      "install_count": 8
+      "install_count": 11
+    }
+  },
+  {
+    "name": "decode-vin",
+    "description": "Decode a 17-character VIN into normalized vehicle identity (year, make, model, trim, body style, drivetrain, fuel, transmission, cylinders, doors, engine) via the authenticated server-to-server Vehicles.dev GET /v1/vehicles/vin/{vin} API.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/vehicles.dev/decode-vin-00hw15",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "automotive",
+      "vin",
+      "decode",
+      "api",
+      "vehicles"
+    ],
+    "extra": {
+      "slug": "vehicles.dev/decode-vin-00hw15",
+      "hostname": "vehicles.dev",
+      "category": "automotive",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/vehicles.dev/decode-vin-00hw15/SKILL.md",
+      "recommended_method": "api",
+      "proxies": false,
+      "install_count": 2
     }
   },
   {
@@ -10280,7 +10960,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/vergabe.bayern.de/search-tender-winners-6l043d/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 3
+      "install_count": 7
     }
   },
   {
@@ -10307,7 +10987,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/vinted.fr/scrape-products-read-posts-ywkpqh/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 9
+      "install_count": 13
     }
   },
   {
@@ -10334,7 +11014,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/vipnation.com/find-music-tour-55qto9/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": false,
-      "install_count": 27
+      "install_count": 30
     }
   },
   {
@@ -10359,7 +11039,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/vitrocad.ru/news-feed-02y0ef/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 4
+      "install_count": 8
     }
   },
   {
@@ -10385,7 +11065,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/volunteermatch.org/find-opportunities-0ycqah/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 28
+      "install_count": 31
     }
   },
   {
@@ -10411,7 +11091,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/vote.org/find-polling-place-6agtqe/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 27
+      "install_count": 30
     }
   },
   {
@@ -10437,7 +11117,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/vuoriclothing.com/find-and-add-to-cart-m9bi61/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 27
+      "install_count": 32
     }
   },
   {
@@ -10463,7 +11143,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/walkscore.com/get-score-ch768c/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 34
+      "install_count": 37
     }
   },
   {
@@ -10489,7 +11169,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/wander.com/search-and-extract-listings-d6fgrc/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 9
+      "install_count": 14
     }
   },
   {
@@ -10516,7 +11196,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/wanderboat.ai/explore-nearby-attractions-rn56pg/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 13
+      "install_count": 16
     }
   },
   {
@@ -10542,7 +11222,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/war.gov/download-ufo-files-1oqbc9/SKILL.md",
       "recommended_method": "browser",
       "proxies": false,
-      "install_count": 9
+      "install_count": 13
     }
   },
   {
@@ -10568,7 +11248,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/weather.gov/get-forecast-1uezib/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 270
+      "install_count": 374
     }
   },
   {
@@ -10595,7 +11275,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/weather.gov/is-it-cloudy-qhspk1/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 36
+      "install_count": 39
     }
   },
   {
@@ -10621,7 +11301,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/web.dubapp.com/get-top-market-beaters-38pq0g/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 38
+      "install_count": 41
     }
   },
   {
@@ -10648,7 +11328,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/welcometothejungle.com/scrape-job-company-data-yt3gr8/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 12
+      "install_count": 15
     }
   },
   {
@@ -10674,7 +11354,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/wellfound.com/search-startup-jobs-5ek1ik/SKILL.md",
       "recommended_method": "browser",
       "proxies": false,
-      "install_count": 57
+      "install_count": 65
     }
   },
   {
@@ -10700,7 +11380,33 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/wellydiecast.com/find-diecast-model-2atm9j/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 18
+      "install_count": 21
+    }
+  },
+  {
+    "name": "domain-whois-lookup",
+    "description": "Look up an .au domain on the auDA WHOIS service (whois.auda.org.au) to read registrant/business name, registrar name, and eligibility (ABN/ACN) details. Read-only. Access is gated by a two-stage reCAPTCHA Enterprise that reliably steps automated sessions up to an unsolvable image challenge.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/whois.auda.org.au/domain-whois-lookup-bcdtfm",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "whois",
+      "domains",
+      "au",
+      "registrar",
+      "recaptcha",
+      "lookup"
+    ],
+    "extra": {
+      "slug": "whois.auda.org.au/domain-whois-lookup-bcdtfm",
+      "hostname": "whois.auda.org.au",
+      "category": "domains",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/whois.auda.org.au/domain-whois-lookup-bcdtfm/SKILL.md",
+      "recommended_method": "browser",
+      "proxies": true,
+      "install_count": 2
     }
   },
   {
@@ -10727,7 +11433,32 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/wigmore-hall.org.uk/wigmore-hall-imvxsp/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 9
+      "install_count": 13
+    }
+  },
+  {
+    "name": "search-cfp-deadlines",
+    "description": "Search WikiCFP by topic or keyword to return matching calls-for-papers with their submission deadlines, event dates, locations, and canonical WikiCFP URLs; optionally drill into an event for its full deadline breakdown and external site.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/wikicfp.com/search-cfp-deadlines-ocdcpn",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "research",
+      "academic",
+      "call-for-papers",
+      "conferences",
+      "deadlines"
+    ],
+    "extra": {
+      "slug": "wikicfp.com/search-cfp-deadlines-ocdcpn",
+      "hostname": "wikicfp.com",
+      "category": "research",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/wikicfp.com/search-cfp-deadlines-ocdcpn/SKILL.md",
+      "recommended_method": "fetch",
+      "proxies": true,
+      "install_count": 5
     }
   },
   {
@@ -10753,7 +11484,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/wikidata.org/sparql-query-wwu2pk/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 37
+      "install_count": 40
     }
   },
   {
@@ -10779,7 +11510,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/wikipedia.org/find-the-trending-world-news-for-today-hfqs9b/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 69
+      "install_count": 76
     }
   },
   {
@@ -10805,7 +11536,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/wikipedia.org/get-article-4q40tl/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 87
+      "install_count": 94
     }
   },
   {
@@ -10830,7 +11561,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/windy.com/geo-weather-fetch-w3o49h/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 62
+      "install_count": 66
     }
   },
   {
@@ -10856,7 +11587,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/wingfinder.com/find-best-flights-fngfjg/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 6
+      "install_count": 9
     }
   },
   {
@@ -10881,7 +11612,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/wolt.com/wolt-search-5m1plq/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 33
+      "install_count": 37
     }
   },
   {
@@ -10907,7 +11638,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/www2.dre.ca.gov/ca-real-estate-license-verify-6s64rm/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 15
+      "install_count": 18
     }
   },
   {
@@ -10934,7 +11665,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/www2.dre.ca.gov/ca-real-estate-license-verify-i4t329/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 16
+      "install_count": 19
     }
   },
   {
@@ -10960,7 +11691,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/www2.dre.ca.gov/ca-real-estate-license-verify-n7tjq2/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 8
+      "install_count": 11
     }
   },
   {
@@ -10987,7 +11718,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/www2.dre.ca.gov/ca-real-estate-license-verify-yr5aua/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 19
+      "install_count": 22
     }
   },
   {
@@ -11013,7 +11744,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/xcorestudio.com/book-class-vagj66/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": false,
-      "install_count": 12
+      "install_count": 18
     }
   },
   {
@@ -11039,7 +11770,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/xero.com/login-za6riz/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 31
+      "install_count": 34
     }
   },
   {
@@ -11066,7 +11797,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/xiaohongshu.com/get-trending-content-lrb8ax/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 68
+      "install_count": 75
     }
   },
   {
@@ -11093,7 +11824,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/xrpl.to/search-metrics-tokens-nfts-270kqa/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 36
+      "install_count": 40
     }
   },
   {
@@ -11120,7 +11851,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/yahoo.co.jp/homepage-news-trends-weather-e79vav/SKILL.md",
       "recommended_method": "api",
       "proxies": true,
-      "install_count": 40
+      "install_count": 43
     }
   },
   {
@@ -11145,7 +11876,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/yahoofinance.com/find-top-performing-stocks-22erj0/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 15
+      "install_count": 18
     }
   },
   {
@@ -11171,7 +11902,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/yelp.com/extract-reviews-2ikb22/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 65
+      "install_count": 74
     }
   },
   {
@@ -11197,7 +11928,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/yelp.com/find-menu-jhjk4o/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": false,
-      "install_count": 8
+      "install_count": 15
     }
   },
   {
@@ -11223,7 +11954,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/yelp.com/find-pizza-4dq9l8/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 23
+      "install_count": 29
     }
   },
   {
@@ -11249,7 +11980,33 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/yelp.com/get-business-hours-jjy16i/SKILL.md",
       "recommended_method": "hybrid",
       "proxies": true,
-      "install_count": 39
+      "install_count": 43
+    }
+  },
+  {
+    "name": "browse-and-extract-all-courses-details",
+    "description": "Enumerate every University of York course and extract full program details (duration, intakes, fees, curriculum modules, entry requirements, English language and admission-test requirements, scholarships, careers and rankings) as JSON.",
+    "source": "browse-sh",
+    "identifier": "browse-sh/york.ac.uk/browse-and-extract-all-courses-details-45is63",
+    "trust_level": "community",
+    "repo": "",
+    "path": "",
+    "tags": [
+      "education",
+      "university",
+      "courses",
+      "admissions",
+      "scraping",
+      "catalogue"
+    ],
+    "extra": {
+      "slug": "york.ac.uk/browse-and-extract-all-courses-details-45is63",
+      "hostname": "york.ac.uk",
+      "category": "education",
+      "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/york.ac.uk/browse-and-extract-all-courses-details-45is63/SKILL.md",
+      "recommended_method": "fetch",
+      "proxies": false,
+      "install_count": 4
     }
   },
   {
@@ -11275,7 +12032,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/youtube.com/extract-transcript-loeude/SKILL.md",
       "recommended_method": "api",
       "proxies": false,
-      "install_count": 164
+      "install_count": 304
     }
   },
   {
@@ -11301,7 +12058,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/zappos.com/search-shoes-j77j97/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 33
+      "install_count": 36
     }
   },
   {
@@ -11326,7 +12083,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/zepto.com/search-products-wtqzgb/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 29
+      "install_count": 36
     }
   },
   {
@@ -11353,7 +12110,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/zerodha.com/find-indian-stocks-06b5lz/SKILL.md",
       "recommended_method": "fetch",
       "proxies": false,
-      "install_count": 9
+      "install_count": 12
     }
   },
   {
@@ -11379,7 +12136,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/zgarcit.ro/list-all-products-4j9rjd/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 12
+      "install_count": 15
     }
   },
   {
@@ -11405,7 +12162,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/zillow.com/extract-listings-zw43tv/SKILL.md",
       "recommended_method": "fetch",
       "proxies": true,
-      "install_count": 119
+      "install_count": 129
     }
   },
   {
@@ -11431,7 +12188,7 @@
       "source_url": "https://github.com/browserbase/browse.sh/blob/main/skills/zocdoc.com/find-appointment-ekztri/SKILL.md",
       "recommended_method": "browser",
       "proxies": true,
-      "install_count": 29
+      "install_count": 34
     }
   }
 ]
