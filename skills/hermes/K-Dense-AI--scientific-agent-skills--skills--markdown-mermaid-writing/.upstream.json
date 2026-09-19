@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/markdown-mermaid-writing",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/markdown-mermaid-writing",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/markdown-mermaid-writing",
+  "branch": "main",
+  "pushedAt": "2026-09-14T09:27:38Z",
+  "contentHash": "56b9fcc16aec96c90f4956f0b3d704438850c7deb872b1d6894d0cdadac4501a",
+  "fetchedAt": "2026-09-19T11:58:32.701Z"
+}

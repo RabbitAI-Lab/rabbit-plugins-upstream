@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/bulk-rnaseq",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/bulk-rnaseq",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/bulk-rnaseq",
+  "branch": "main",
+  "pushedAt": "2026-09-14T09:27:38Z",
+  "contentHash": "52e72724ce46173ab228d3c7e31fda63ecf943cbef82076701550d90f7b67307",
+  "fetchedAt": "2026-09-19T11:58:32.659Z"
+}

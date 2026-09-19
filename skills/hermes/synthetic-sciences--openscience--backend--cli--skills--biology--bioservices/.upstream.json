@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/bioservices",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/bioservices",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/bioservices",
+  "branch": "main",
+  "pushedAt": "2026-09-19T11:45:58Z",
+  "contentHash": "0e75a5327139a13bc4c4def53249c6b84991af48c7743396f3ff3669925178f1",
+  "fetchedAt": "2026-09-19T11:58:21.262Z"
+}

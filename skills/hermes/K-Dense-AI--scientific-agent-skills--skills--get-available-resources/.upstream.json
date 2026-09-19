@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/get-available-resources",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/get-available-resources",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/get-available-resources",
+  "branch": "main",
+  "pushedAt": "2026-09-14T09:27:38Z",
+  "contentHash": "06479c01e1a40ad65b940b0ff87e3a92a481d279464efc1e1acc99640c2b2bf5",
+  "fetchedAt": "2026-09-19T11:58:32.684Z"
+}
