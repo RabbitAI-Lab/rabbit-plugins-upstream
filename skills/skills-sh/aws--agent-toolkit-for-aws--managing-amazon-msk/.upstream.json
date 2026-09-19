@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/managing-amazon-msk",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "managing-amazon-msk",
+  "branch": "main",
+  "pushedAt": "2026-09-18T13:17:09Z",
+  "contentHash": "9df10d9aa27c77b058a53e0588d9ff989f8065d3bcca3c1143fb017f1be37051",
+  "fetchedAt": "2026-09-19T12:00:40.227Z"
+}
