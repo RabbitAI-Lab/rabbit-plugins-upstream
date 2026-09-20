@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/anndata",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/anndata",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/anndata",
+  "branch": "main",
+  "pushedAt": "2026-09-20T12:23:04Z",
+  "contentHash": "cf28213788a5ea482420f575bf2deb5e8ee65fee0a95d07e55faa352d299b239",
+  "fetchedAt": "2026-09-20T12:27:58.425Z"
+}

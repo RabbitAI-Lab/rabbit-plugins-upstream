@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/i4h-workflow-dataset-teleop",
+  "identifier": "NVIDIA/skills/skills/i4h-workflow-dataset-teleop",
+  "repo": "NVIDIA/skills",
+  "path": "skills/i4h-workflow-dataset-teleop",
+  "branch": "main",
+  "pushedAt": "2026-09-19T00:31:39Z",
+  "contentHash": "882a09cfe36dd8b4ff26e1f891b88ead7cb3596dc6e62e73352c5c70e58d6d4a",
+  "fetchedAt": "2026-09-20T12:27:57.073Z"
+}

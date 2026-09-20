@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/excalidraw",
+  "identifier": "official/creative/excalidraw",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/excalidraw",
+  "branch": "main",
+  "pushedAt": "2026-09-20T12:27:45Z",
+  "contentHash": "b943148cbb4399719ea10c972df262996ba006b07be46586df8dc0365096a32d",
+  "fetchedAt": "2026-09-20T12:28:09.166Z"
+}
