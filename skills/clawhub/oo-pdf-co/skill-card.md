@@ -1,45 +1,56 @@
-## Description: <br>
-PDF.co lets an agent inspect, convert, merge, split, compress, and create PDFs through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PDF.co helps agents inspect, transform, generate, merge, split, compress, and extract text from PDF documents through an OOMOL-connected PDF.co account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to handle PDF.co-backed document workflows from an agent, including PDF inspection, conversion, compression, splitting, merging, and account balance checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a connected PDF.co account through OOMOL and may consume account credits or require sensitive account access. <br>
-Mitigation: Install and use it only for an intended OOMOL-connected PDF.co account; run login or connection setup only after an authentication or connection failure. <br>
-Risk: PDF processing can send document URLs, page content, or generated documents to PDF.co and OOMOL-connected services. <br>
-Mitigation: Review payloads before execution and avoid processing sensitive documents unless the user has approved that data flow. <br>
-Risk: Write-tagged actions such as PDF merging create or modify generated PDF outputs. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write actions. <br>
+## Use Case:
 
+Developers and workflow authors use this skill to operate PDF.co through OOMOL for PDF compression, merging, splitting, metadata inspection, HTML or URL to PDF conversion, text extraction, and account balance checks.
 
-## Reference(s): <br>
-- [PDF.co ClawHub Release](https://clawhub.ai/oomol/oo-pdf-co) <br>
-- [PDF.co Homepage](https://pdf.co) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands use the pdf_co connector and typically return JSON responses containing data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: skill frontmatter and server release metadata) <br>
+Risk: Setup may require installing and trusting OOMOL's CLI distribution before actions can run.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installing, use only trusted OOMOL CLI distribution paths, and require explicit approval before installation or sign-in.
+
+Risk: PDF.co actions can create files, transform or upload documents, and consume credits.
+
+Mitigation: Require explicit approval before file-creating, document-transforming, uploading, or credit-consuming actions, and confirm payload and effect for write-tagged actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-pdf-co)
+- [PDF.co homepage](https://pdf.co)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads; connector actions may return URLs, inline text, account balance data, or generated PDF files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires the oo CLI, OOMOL sign-in, a connected PDF.co account, and explicit approval for file-creating, document-transforming, upload, or credit-consuming actions.]
+
+## Skill Version(s):
+
+1.0.4 (source: server evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

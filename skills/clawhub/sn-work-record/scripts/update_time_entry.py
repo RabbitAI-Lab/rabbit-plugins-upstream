@@ -10,7 +10,7 @@ from runtime_bootstrap import ensure_runtime
 
 ensure_runtime(["requests", "ddddocr", "PIL"])
 
-from oa_utils import build_session, get_time_entry_details, load_credentials, login, resolve_base_url, state_to_text, update_time_entry
+from oa_utils import OAAuth, get_time_entry_details, load_credentials, resolve_base_url, state_to_text, update_time_entry
 
 DEFAULT_CREDS = os.path.expanduser("~/.openclaw/workspace/memory/sn-work-record-credentials.md")
 
@@ -22,6 +22,7 @@ def main():
     parser.add_argument("--delete", action="store_true", help="逻辑删除工时（isDeleted=1）")
     parser.add_argument("--credentials", default=DEFAULT_CREDS)
     parser.add_argument("--base-url", dest="base_url", default=None)
+    parser.add_argument("--token", default=None, help="复用已有 OA token，跳过登录（配合 sn_oa_login.py 的 agent 识别流程）")
     parser.add_argument("--json", action="store_true", help="输出原始 JSON")
     args = parser.parse_args()
 
@@ -32,19 +33,20 @@ def main():
         username, password, base_url = load_credentials(args.credentials)
         base_url = resolve_base_url(base_url, args.base_url)
 
-        print("正在登录 OA 系统...", file=sys.stderr)
-        token = login(username, password, base_url)
-        session = build_session(token)
+        auth = OAAuth(base_url, username, password, args.token)
 
         print(f"正在修改工时 {args.entry_id} ...", file=sys.stderr)
-        result = update_time_entry(
-            session,
-            base_url,
-            args.entry_id,
-            job_desc=args.job_desc,
-            is_deleted=1 if args.delete else None,
+        result = auth.call(
+            lambda s: update_time_entry(
+                s,
+                base_url,
+                args.entry_id,
+                job_desc=args.job_desc,
+                is_deleted=1 if args.delete else None,
+            ),
+            allow_relogin=False,
         )
-        detail, _ = get_time_entry_details(session, base_url, args.entry_id)
+        detail, _ = auth.call(lambda s: get_time_entry_details(s, base_url, args.entry_id))
 
         if args.json:
             print(json.dumps({"update": result, "detail": detail}, ensure_ascii=False, indent=2))

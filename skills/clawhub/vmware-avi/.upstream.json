@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/vmware-avi",
   "slug": "vmware-avi",
   "ownerHandle": null,
-  "version": "1.8.8",
-  "updatedAt": 1784668863122,
-  "contentHash": "5b3fe030199adc1492fa8f5e9d818ed3be154a240a5b204908da6ca4302dfeb7",
-  "fetchedAt": "2026-07-26T18:08:51.846Z"
+  "version": "1.10.0",
+  "updatedAt": 1789790250066,
+  "contentHash": "2d1bda771cc796002ac4bcfba53a5359a89c29f49ab8430005d067cf7b434bad",
+  "fetchedAt": "2026-09-20T12:45:23.358Z"
 }

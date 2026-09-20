@@ -1,48 +1,61 @@
-## Description: <br>
-Use when someone wants the same person hosting several clips - multi-segment UGC, comparison reels, or mixed speaking and animated scenes with continuity. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when someone wants the same person hosting several clips - multi-segment UGC, comparison reels, or mixed speaking and animated scenes with continuity.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-External creators, marketers, and agent operators use this skill to plan and produce coherent multi-scene avatar or motion-transfer reels with a recurring host or character. It guides intake, continuity planning, staged approvals, Pruna image/video generation, and ffmpeg assembly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow can install related Pruna skills and use a Pruna API key. <br>
-Mitigation: Review the required skills and confirm the API key scope before allowing generation. <br>
-Risk: The workflow can upload user-provided media and spend generation credits. <br>
-Mitigation: Confirm media rights and require the documented approval gates before any paid generation. <br>
-Risk: Poorly matched motion templates and reference images can produce visible artifacts in animate rows. <br>
-Mitigation: Use the documented alignment checks, repose with p-image-edit when needed, and review stills before video generation. <br>
-Risk: The workflow can run local ffmpeg commands for sliders and assembly. <br>
-Mitigation: Review generated shell commands and file paths before execution. <br>
+## Use Case:
 
+Developers and creative operators use this skill to plan and generate coherent multi-scene avatar reels, combining talking-head clips, motion-transfer scenes, comparison sliders, and final ffmpeg assembly while preserving character continuity.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/avatar-multi-scene) <br>
-- [Prompt templates](prompt-templates.md) <br>
-- [Animate beats](animate-beats.md) <br>
-- [Examples](examples.md) <br>
-- [Batch template](templates/batch.template.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration, shell commands] <br>
-**Output Format:** [Markdown guidance with JSON manifest patterns and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses staged approval gates before paid generation, PRUNA_API_KEY for Pruna calls, and local ffmpeg commands for comparison clips and final assembly.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Floating install commands can resolve changing third-party tooling.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only from trusted PrunaAI skill sources and prefer pinned or verified tooling where possible.
+
+Risk: Reference images, scripts, approved stills, and generated clips may be saved locally or uploaded to Pruna services during generation.
+
+Mitigation: Confirm rights, sensitivity, and user approval before uploading media or running generation.
+
+Risk: Poor motion-template alignment or repeated scene framing can produce weak or misleading avatar and comparison clips.
+
+Mitigation: Use the skill's approval gates, slop checks, and motion-template alignment review before video generation.
+
+## Reference(s):
+
+- [avatar-multi-scene on ClawHub](https://clawhub.ai/pruna-ai/skills/avatar-multi-scene)
+- [Prompt templates](artifact/prompt-templates.md)
+- [Animate beats](artifact/animate-beats.md)
+- [Examples](artifact/examples.md)
+- [Batch template](artifact/templates/batch.template.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Configuration, Shell commands]
+
+**Output Format:** [Markdown guidance with JSON templates and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses staged approval gates for planning, stills, clips, and assembly before generation proceeds.]
+
+## Skill Version(s):
+
+1.0.13 (source: evidence release.version and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

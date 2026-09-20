@@ -1,44 +1,55 @@
-## Description: <br>
-Use this skill to search and read Intelliprint data from intelliprint.net. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Intelliprint lets agents search and read Intelliprint backgrounds, mailing lists, recipients, and print jobs through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent read Intelliprint backgrounds, mailing lists, recipients, and print jobs through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Mailing lists, recipients, and print jobs may contain business or customer information. <br>
-Mitigation: Use the skill for read-only lookup tasks through an authorized OOMOL-connected account and avoid exposing retrieved data beyond the user's requested task. <br>
-Risk: Future connector actions could write, overwrite, or delete Intelliprint data if added later. <br>
-Mitigation: Require explicit user confirmation before running any action tagged write or destructive. <br>
+## Use Case:
 
+External users and developers use this skill to let an agent retrieve Intelliprint account data, including reusable backgrounds, mailing lists, recipients, and print jobs. The documented actions are read-oriented get and list operations.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-intelliprint) <br>
-- [Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Intelliprint Homepage](https://www.intelliprint.net) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Guidance, Text] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces read-only Intelliprint lookup guidance and oo CLI commands; connector responses are JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence release metadata and artifact frontmatter) <br>
+Risk: The setup path can run a downloaded installer script before the user has independently reviewed or verified it.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an official reviewed installation method or verify the installer before execution, and do not let an agent run the installer blindly.
+
+Risk: The skill accesses data from a connected Intelliprint account through OOMOL.
+
+Mitigation: Install only when the user trusts OOMOL and is comfortable connecting the relevant Intelliprint account.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-intelliprint)
+- [Intelliprint homepage](https://www.intelliprint.net)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses read-oriented Intelliprint get and list actions; live action schemas are checked before payload construction.]
+
+## Skill Version(s):
+
+1.0.3 (source: evidence metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

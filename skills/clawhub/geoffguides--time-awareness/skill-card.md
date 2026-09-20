@@ -1,43 +1,55 @@
-## Description: <br>
-Provides current-time checks, timezone conversion, and market-hours guidance so agents verify time-sensitive claims before answering. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides accurate current time, market hours, timezone conversions, and stale-data prevention for time-sensitive agent responses.
 
-## Publisher: <br>
-[geoffguides](https://clawhub.ai/user/geoffguides) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[geoffguides](https://clawhub.ai/user/geoffguides)
 
-## Use Case: <br>
-Developers and agent users use this skill to keep responses grounded in the current date, time, timezone context, and market-hours status when handling time-sensitive tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Market-hours, holidays, and early-close answers can become stale or incorrect if not checked against an authoritative source. <br>
-Mitigation: Verify critical schedules and market status against an authoritative market calendar before relying on the result. <br>
-Risk: Manual installation from an external repository is outside the reviewed artifact. <br>
-Mitigation: Prefer the reviewed ClawMart package, or inspect the external repository separately before manual installation. <br>
+## Use Case:
 
+Developers and agent users use this skill to answer current-time, timezone-conversion, and market-hours questions while reducing stale or timezone-incorrect responses.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/geoffguides/time-awareness) <br>
-- [Publisher Profile](https://clawhub.ai/user/geoffguides) <br>
-- [README](artifact/README.md) <br>
-- [Skill Documentation](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or plain text guidance with time, timezone, and market-hours results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Instruction-only output; no executable code or external API keys are required by the reviewed artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Future runtime implementations could store timezone preferences.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review preference storage behavior if implementation files are added after this release.
+
+Risk: Market-hours answers may be used for time-sensitive decisions.
+
+Mitigation: Verify current time, exchange holidays, and early closes before acting on market-status guidance.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/geoffguides/skills/time-awareness)
+- [Artifact README](artifact/README.md)
+- [Artifact skill documentation](artifact/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown or plain text responses with timezone, date, market-hours, and configuration guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No external API keys are required by the inspected artifact.]
+
+## Skill Version(s):
+
+1.0.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

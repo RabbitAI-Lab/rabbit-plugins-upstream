@@ -1,0 +1,161 @@
+{
+  "version": "2.0.0",
+  "userConfig": {
+    "mode": "solo",
+    "level": "beginner",
+    "goal": "interest",
+    "timeBudget": "light",
+    "startDate": "2026-08-10",
+    "createdAt": "2026-08-10T12:05:00"
+  },
+  "currentStage": "enlightenment",
+  "stageCompleted": true,
+  "stageSummary": "本阶段完成入门：弄清了『经典条件作用 vs 操作性条件作用』的区别；用 TPR 跑了一次 CBT 练习，发现自己在『共情反映』上容易急着给建议；自测 PHQ-9 结果极轻度，松了口气。下一步想补读书和闪卡。",
+  "lastDialogueAt": "2026-08-10T12:05:00",
+  "modules": {
+    "theory": {
+      "completed": 1,
+      "total": 4,
+      "items": [
+        "经典条件作用"
+      ]
+    },
+    "counseling": {
+      "completed": 2,
+      "total": 4,
+      "items": [
+        "TPR练习-CBT",
+        "对话分析"
+      ]
+    },
+    "assessment": {
+      "completed": 1,
+      "total": 3,
+      "items": [
+        "量表体验-PHQ9"
+      ]
+    },
+    "reading": {
+      "completed": 0,
+      "total": 3,
+      "items": []
+    },
+    "cases": {
+      "completed": 1,
+      "total": 3,
+      "items": [
+        "经典案例"
+      ]
+    },
+    "methods": {
+      "completed": 0,
+      "total": 4,
+      "items": []
+    },
+    "support": {
+      "completed": 1,
+      "total": 3,
+      "items": [
+        "进度追踪"
+      ]
+    }
+  },
+  "stats": {
+    "totalHours": 0,
+    "totalDays": 1,
+    "practiceCount": 1,
+    "analyses": 1,
+    "dialogues": 1,
+    "booksRead": 0,
+    "assessments": 1,
+    "reflections": 1,
+    "feynmanOutputs": 0
+  },
+  "readings": [],
+  "assessments": [
+    {
+      "id": "PHQ-9",
+      "date": "2026-08-10",
+      "total": 3.0,
+      "level": "无/极轻度",
+      "crisis_flag": false,
+      "report": "C:\\Users\\77497\\Desktop\\程序\\青田·心理自习室\\tests\\dryrun\\reports\\assessment\\PHQ-9_report_20260910_224630.html"
+    }
+  ],
+  "logs": [
+    {
+      "type": "理论",
+      "detail": "讲：经典条件作用（巴甫洛夫）",
+      "stage": "enlightenment"
+    },
+    {
+      "type": "练习",
+      "detail": "TPR-CBT 个案报告已存",
+      "stage": "enlightenment"
+    },
+    {
+      "type": "分析",
+      "detail": "对话分析 1 篇（共情反映改进）",
+      "stage": "enlightenment"
+    },
+    {
+      "type": "测评",
+      "detail": "PHQ-9 总分 3.0（无/极轻度）",
+      "stage": "enlightenment"
+    },
+    {
+      "type": "总结",
+      "detail": "stageSummary 已写，stageCompleted=true",
+      "stage": "enlightenment"
+    }
+  ],
+  "milestones": [
+    {
+      "id": "m1",
+      "reached": false
+    },
+    {
+      "id": "m2",
+      "reached": false
+    },
+    {
+      "id": "m3",
+      "reached": false
+    },
+    {
+      "id": "m4",
+      "reached": false
+    },
+    {
+      "id": "m5",
+      "reached": false
+    },
+    {
+      "id": "m6",
+      "reached": false
+    },
+    {
+      "id": "m7",
+      "reached": false
+    },
+    {
+      "id": "m8",
+      "reached": false
+    },
+    {
+      "id": "m9",
+      "reached": false
+    },
+    {
+      "id": "m10",
+      "reached": false
+    }
+  ],
+  "dialogueState": {
+    "context": "daily",
+    "step": 0,
+    "pendingQuestion": "",
+    "tempData": {},
+    "lastTopic": "总结"
+  }
+}

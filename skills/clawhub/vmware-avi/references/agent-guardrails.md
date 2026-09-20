@@ -10,7 +10,7 @@ guardrails below are adapted, with thanks, from the working configuration
 [@juanpf-ha](https://github.com/juanpf-ha) developed while running
 vmware-monitor and vmware-aria against a production vSphere estate with Llama
 3.3 70B FP8 on an on-prem H100
-([VMware-AIops#31](https://github.com/zw008/VMware-AIops/issues/31)). The
+([VMware-AIops#31](https://github.com/vmware-skills/VMware-AIops/issues/31)). The
 cross-skill rules are identical across this family; the parts below marked
 vmware-avi are specific to this skill.
 
@@ -113,10 +113,12 @@ your agent's instruction block.
 
 ## Writes in vmware-avi
 
-- vs_toggle takes a virtual service out of service. Name the VS and its current
-  state, and wait for confirmation.
+- vs_toggle takes a virtual service out of service. Call it without confirm
+  first: that returns blast_radius (the VS, its current state, the pools and
+  members behind it) and changes nothing. Show it and wait for the user's
+  decision before calling again with confirm=true.
 - ako_config_upgrade is a Helm release upgrade against a live cluster. Show
-  ako_config_diff first.
+  ako_config_diff first, then the preview (without confirm) of the upgrade.
 - A pool member that reports "down" straight after being enabled is failing its
   health monitor. Report that, do not re-enable it in a loop.
 ```
@@ -146,4 +148,4 @@ Local-model compatibility is an explicit design constraint for this family, and
 the evidence base is small. If you evaluate a model against this skill —
 Qwen, Mistral, Granite, or anything else — a report of what worked and what did
 not is genuinely useful:
-[github.com/zw008/VMware-AVI/issues](https://github.com/zw008/VMware-AVI/issues).
+[github.com/vmware-skills/VMware-AVI/issues](https://github.com/vmware-skills/VMware-AVI/issues).

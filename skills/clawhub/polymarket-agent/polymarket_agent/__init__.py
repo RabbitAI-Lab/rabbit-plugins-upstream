@@ -5,7 +5,7 @@ Every operation involving money goes through `guardrails.evaluate_order`,
 which does not depend on the LLM's good behavior.
 """
 
-__version__ = "2.1.3"
+__version__ = "2.2.1"
 
 __all__ = [
     "alerts",

@@ -1,0 +1,31 @@
+{
+  "id": "prompt-compilation-baseline",
+  "candidate_identity": {
+    "kind": "git_commit",
+    "value": "75c6ac3e89137cdd90ad521fe61d181834bd4718"
+  },
+  "harness_instruction": "Before-change forward trial. Read and follow the complete skill at /private/tmp/loop-baseline.WiQI9P/SKILL.md and any references it routes you to. Do not inspect tests. Respond to this raw user request as you actually would, in no more than 180 words. Return only the user-facing response.",
+  "user_request": "Rewrite this into the perfect detailed prompt with agents and subagents so we can improve onboarding. Before answering, state the execution route and the one missing thing that would most change it.",
+  "response_lines": [
+    "Execution route: One parent orchestrator owns the onboarding outcome. It delegates bounded checks to subagents for user journey, product behavior, content clarity, accessibility, and measurement. The parent integrates findings, tests the prompt against a normal case, a blocked case, and a false-success case, then returns the final prompt with acceptance criteria and unresolved risks.",
+    "",
+    "One missing thing: the source text or brief you want rewritten. Paste it here. Without that, I would have to invent the onboarding audience, problem, tools, constraints, and definition of success, which would produce a polished but unreliable prompt.",
+    "",
+    "If available, include the current onboarding flow, target user, and success metric alongside the source. I will preserve your intent, define agent handoffs and approval boundaries, prevent agents from weakening success criteria, and distinguish artifact completion from evidence that onboarding actually improved.",
+    "",
+    "Status: `BLOCKED`",
+    "Evidence: `NO RELIABLE EVIDENCE`"
+  ],
+  "pass_required": [
+    "Paste",
+    "source text or brief",
+    "Status: `BLOCKED`"
+  ],
+  "pass_forbidden": [
+    ":::writing",
+    "Research agent:",
+    "UX agent:"
+  ],
+  "evaluator_decision": "PASS",
+  "evaluator_reason": "The baseline requests the missing source and does not substitute a generic prompt."
+}

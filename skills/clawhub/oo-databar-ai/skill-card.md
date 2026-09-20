@@ -1,42 +1,61 @@
-## Description: <br>
-Operates Databar.ai through the OOMOL oo CLI for reading tables, creating tables, inserting rows, and running enrichment or waterfall tasks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Databar.ai lets agents use an OOMOL-connected account to read, create, and update Databar.ai tables and enrichment tasks through the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage Databar.ai tables and submit enrichment or waterfall jobs from an agent through their connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create tables and insert rows in Databar.ai, so mistaken payloads can change workspace data. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before write actions, and inspect the live action schema before running commands. <br>
-Risk: Broad activation wording may cause an agent to use Databar.ai for loosely related requests. <br>
-Mitigation: Be explicit when requesting Databar.ai work and review proposed connector actions before approval. <br>
+## Use Case:
 
+Developers and external users use this skill when an agent needs to inspect Databar.ai account data, list or read tables, create tables, insert rows, discover enrichments, or submit enrichment and waterfall tasks through an OOMOL-managed connection.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-databar-ai) <br>
-- [Databar.ai Homepage](https://databar.ai/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API calls, Guidance] <br>
-**Output Format:** [Markdown instructions with shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo CLI connector schemas before execution; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The setup path includes remote install scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup commands and install source before running them, and use first-time setup only when a command fails due to a missing CLI, authentication, or connection issue.
+
+Risk: The skill can perform Databar.ai write actions such as creating tables, inserting rows, and submitting enrichment or waterfall tasks.
+
+Mitigation: Require explicit user confirmation of the exact payload and expected effect before running any action tagged write or destructive.
+
+Risk: Connector schemas can change outside the skill artifact.
+
+Mitigation: Fetch the live action schema with oo connector schema before constructing a payload.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-databar-ai)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Databar.ai Homepage](https://databar.ai/)
+- [oo CLI Repository](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include Databar.ai read results, task identifiers, status data, setup guidance, and confirmation prompts for write actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

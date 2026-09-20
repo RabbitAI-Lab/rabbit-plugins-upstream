@@ -1,44 +1,56 @@
-## Description: <br>
-Foxit Cloud API (cloudapi.fuxinsoft.cn). Use this skill for ANY Foxit Cloud API request - reading, creating, updating, and deleting data. Whenever a task involves Foxit Cloud API, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Foxit Cloud API (cloudapi.fuxinsoft.cn) supports agent requests for reading, creating, and updating data through the Foxit Cloud API.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to run Foxit Cloud API document workflows through an OOMOL-connected account, including conversion, compression, OCR, upload, download, page operations, protection, and task status checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate Foxit Cloud API through an OOMOL-connected account, including actions that upload, merge, manipulate pages, or remove passwords. <br>
-Mitigation: Install only when this account access is intended, and review every write or destructive action payload before approval. <br>
-Risk: First-time setup may require installing or invoking the oo CLI. <br>
-Mitigation: Verify the oo CLI installer before setup and use authentication or connection steps only when a command fails for that reason. <br>
-Risk: Connector action schemas can change over time. <br>
-Mitigation: Inspect the live action schema before constructing payloads so inputs match the current Foxit connector contract. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Foxit Cloud API through an OOMOL-connected account for PDF conversion, OCR, compression, extraction, protection, watermarking, task tracking, upload, and download workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-fuxin) <br>
-- [Foxit Cloud API homepage](https://cloudapi.fuxinsoft.cn) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include Foxit task data and an execution id under meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: User documents may be sent to Foxit Cloud API processing services for conversion, OCR, comparison, compression, page manipulation, password, merge, split, and related workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with documents approved for cloud processing through the connected OOMOL/Foxit account, and confirm sensitive document operations before execution.
+
+Risk: The skill includes CLI installation commands that fetch and execute remote installer scripts.
+
+Mitigation: Review CLI installation commands manually before running them and prefer an already installed, trusted oo CLI when available.
+
+## Reference(s):
+
+- [Foxit Cloud API homepage](https://cloudapi.fuxinsoft.cn)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-fuxin)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the oo CLI and return connector responses as JSON.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

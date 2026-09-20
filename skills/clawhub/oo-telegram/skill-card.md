@@ -1,45 +1,56 @@
-## Description: <br>
-Telegram Bot (core.telegram.org) enables an agent to read, create, update, and delete Telegram Bot data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Telegram Bot accounts through OOMOL's Telegram connector and oo CLI for reading bot data, sending messages, and administering chats.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Telegram bot state, send and manage messages, configure webhooks, and perform bot administration through approved OOMOL CLI actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Telegram Bot credential managed through OOMOL. <br>
-Mitigation: Install and use it only when the user trusts OOMOL with the Telegram Bot connection, and avoid login or connection setup unless the user intentionally wants this environment connected. <br>
-Risk: Confirmed write and destructive actions can post, edit, configure webhooks, create invite links, or delete bot-accessible messages. <br>
-Mitigation: Review the exact action, target, and JSON payload with the user before approving write or destructive commands. <br>
-Risk: Some history and update polling behavior depends on webhook delivery being disabled. <br>
-Mitigation: Check webhook status and explain the delivery requirement before using polling-based chat history or update actions. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Telegram Bot workflows from an agent, including reading bot and chat data, sending messages or media, managing webhooks, and administering chat membership.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-telegram) <br>
-- [Telegram Bot documentation](https://core.telegram.org/bots) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses from connector runs are JSON objects containing data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: First-time setup can run a remote installer script on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the OOMOL CLI installation path before installing and prefer an official package or a downloaded installer that can be inspected and verified.
+
+Risk: Telegram Bot actions can send messages, delete content, ban or promote users, configure webhooks, or act through business-message permissions.
+
+Mitigation: Connect only a Telegram Bot account whose permissions match the intended delegation, and confirm the exact target, payload, and effect before write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-telegram)
+- [Telegram Bot documentation](https://core.telegram.org/bots)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector executions produce JSON responses with data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

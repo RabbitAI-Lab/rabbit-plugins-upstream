@@ -1,46 +1,58 @@
-## Description: <br>
-Analyzes China Sports Lottery Da Le Tou (DLT) history with frequency, omission, trend, span, and Monte Carlo methods to generate entertainment-only number-selection guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes China Sports Lottery Da Le Tou (DLT) numbers using historical statistics, omission and trend filters, Monte Carlo sampling, and rational betting guidance.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users use this skill to analyze DLT lottery draw history, generate candidate number sets, and receive rational betting reminders. Developers and agent operators can also use the bundled Python examples and templates to support lottery-analysis workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Lottery-analysis output may be treated as gambling advice or a prediction guarantee. <br>
-Mitigation: Present recommendations as entertainment-only statistical references, state that lottery outcomes are random, and avoid any win guarantee or investment framing. <br>
-Risk: Users may overspend, chase losses, or rely on generated number sets beyond their means. <br>
-Mitigation: Include strict budget reminders, encourage rational play, and tell users not to chase losses. <br>
-Risk: Broad lottery-related triggers may activate the skill on general lottery questions. <br>
-Mitigation: Use the skill for explicit DLT lottery-analysis requests and keep responses scoped to analysis, education, and responsible-use guidance. <br>
+## Use Case:
 
+External users use this skill for entertainment-oriented DLT lottery analysis, historical pattern review, candidate number generation, and rational betting reminders. Outputs should be treated as statistical reference material, not financial advice or a reliable prediction.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/gechengling/skills/chance-dlt-predictor) <br>
-- [DLT Algorithm Python Reference](references/dlt_algorithm_python.md) <br>
-- [DLT Data Templates](references/dlt_data_templates.md) <br>
-- [DLT Strategy Guide](references/dlt_strategy_guide.md) <br>
-- [China Sports Lottery History API](https://webapi.sporttery.cn/gateway/lottery/getHistoryPageListV1.qry) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Guidance] <br>
-**Output Format:** [Markdown reports with tables, candidate number sets, Python code snippets, and command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should retain entertainment-only disclaimers, budget reminders, and no-guarantee language.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.1.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Users may treat generated lottery numbers as reliable predictions or financial advice.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Frame outputs as entertainment and statistical reference only, and remind users that lottery draws are random and betting should stay within a preset budget.
+
+Risk: The broad trigger list may invoke the skill during ordinary lottery discussions.
+
+Mitigation: Confirm the user is asking for DLT analysis or number-selection help before producing recommendations.
+
+Risk: The embedded Python Monte Carlo sample may be copied and run manually without review.
+
+Mitigation: Tell users to review the code in their own environment before running it and note that it does not improve winning odds.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/chance-dlt-predictor)
+- [ClawHub publisher profile](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Guidance]
+
+**Output Format:** [Markdown text with tables and optional Python code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No automatic execution; outputs are probabilistic entertainment guidance, not financial advice or prediction guarantees.]
+
+## Skill Version(s):
+
+4.1.1 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

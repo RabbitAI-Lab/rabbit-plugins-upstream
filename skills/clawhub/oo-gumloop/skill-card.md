@@ -1,44 +1,57 @@
-## Description: <br>
-Gumloop (gumloop.com). Use this skill for Gumloop requests that read, create, update, or run Gumloop resources through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gumloop (gumloop.com). Use this skill for Gumloop requests such as reading data, starting saved flow runs, inspecting schemas, polling run details, and killing runs through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Gumloop through the oo CLI with their OOMOL-connected account. It supports discovering connector schemas, listing saved flows and workbooks, reviewing run history and details, starting saved flow runs, and killing active runs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can start saved Gumloop flow runs, which may change Gumloop state or trigger downstream automation. <br>
-Mitigation: Confirm the exact saved flow and JSON payload with the user before running start_flow_run. <br>
-Risk: The skill can kill Gumloop flow runs and subflow runs, interrupting active work. <br>
-Mitigation: Confirm the exact run target and expected effect before allowing kill_flow_run. <br>
+## Use Case:
 
+Developers and operators use this skill to operate Gumloop workbooks, saved flows, and flow runs from an agent session through an OOMOL-connected account. It supports schema discovery before execution and confirmation gates for write or destructive Gumloop actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-gumloop) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Gumloop homepage](https://www.gumloop.com) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector actions return JSON responses with data and execution metadata when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: The optional oo CLI installer is a remote install command.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installer source or use OOMOL's official install guidance before running remote install commands.
+
+Risk: Starting or killing Gumloop flow runs can change Gumloop state or stop active work.
+
+Mitigation: Require explicit user confirmation for the exact payload and target before write or destructive actions.
+
+## Reference(s):
+
+- [Gumloop homepage](https://www.gumloop.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-gumloop)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, code]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector command results may include JSON data, execution IDs, run state, logs, and output node values.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

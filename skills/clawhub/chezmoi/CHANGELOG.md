@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.4.3](https://github.com/es6kr/skills/compare/chezmoi-v0.4.2...chezmoi-v0.4.3) (2026-09-18)
+
+
+### Bug Fixes
+
+* **cleanup:** make the session-end report table self-sufficient ([#487](https://github.com/es6kr/skills/issues/487)) ([c4a0255](https://github.com/es6kr/skills/commit/c4a02557fb8de3b32cf337c549f62535dabf824b))
+
+## [0.4.2](https://github.com/es6kr/skills/compare/chezmoi-v0.4.1...chezmoi-v0.4.2) (2026-08-17)
+
+
+### Bug Fixes
+
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([4982364](https://github.com/es6kr/skills/commit/49823641a7b08123ebd0325273892bee41bc3280))
+
+## [0.4.1](https://github.com/es6kr/skills/compare/chezmoi-v0.4.0...chezmoi-v0.4.1) (2026-08-05)
+
+
+### Bug Fixes
+
+* **chezmoi:** require diff code-block + AskUserQuestion before apply ([#222](https://github.com/es6kr/skills/issues/222)) ([c596333](https://github.com/es6kr/skills/commit/c59633338ad90bc079a4514015639613bbda8d2a))
+* promote next-fix staging (38 fixes across 16 skills) ([94f8c33](https://github.com/es6kr/skills/commit/94f8c33800ce411ae63e22c5259cdae8435508a4))
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([951c1e6](https://github.com/es6kr/skills/commit/951c1e6871e78e226757c6a7ae5ae53efeb7bfb0))
+
 ## [0.4.0](https://github.com/es6kr/skills/compare/chezmoi-v0.3.0...chezmoi-v0.4.0) (2026-07-07)
 
 

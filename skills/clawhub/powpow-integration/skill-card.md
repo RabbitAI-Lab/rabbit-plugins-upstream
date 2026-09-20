@@ -1,43 +1,64 @@
-## Description: <br>
-POWPOW Integration connects OpenClaw agents to POWPOW digital humans for real-time bidirectional chat over WebSocket. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Publishes PowPow travel posts and photo essays, creates map-pinned digital humans, and supports the related login, drafting, image, location, publishing, verification, and test cleanup workflow.
 
-## Publisher: <br>
-[durenzidu](https://clawhub.ai/user/durenzidu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[durenzidu](https://clawhub.ai/user/durenzidu)
 
-## Use Case: <br>
-Developers and OpenClaw users use this skill to connect an agent to a POWPOW digital human, manage connection state, send text, voice, and image messages, and optionally listen for or auto-reply to incoming messages. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Chat content and media URLs can be sent to a POWPOW WebSocket endpoint. <br>
-Mitigation: Use only trusted POWPOW endpoints and avoid sending sensitive chat content or private media URLs. <br>
-Risk: Automatic replies can send outbound messages without manual review when enabled. <br>
-Mitigation: Enable autoReply only in workflows where automatic outbound responses are acceptable. <br>
-Risk: Queued messages may be delivered after a reconnect. <br>
-Mitigation: Review connection state and queued-message behavior before using the skill in workflows where stale messages could cause confusion. <br>
+## Use Case:
 
+External users and agents use this skill to turn travel material, photos, or draft text into PowPow posts and to create digital humans on the public PowPow map. It guides the agent through account login, location selection, image handling, draft review, publishing, verification, and deletion of the user's own test posts.
 
-## Reference(s): <br>
-- [ClawHub POWPOW Integration release page](https://clawhub.ai/durenzidu/powpow-integration) <br>
-- [POWPOW homepage](https://global.powpow.online) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and command responses with connection status, message delivery status, and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands may establish WebSocket sessions, queue messages while disconnected, emit OpenClaw events, and return success or error status objects.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.10 (source: server release evidence and artifact metadata) <br>
+Risk: The skill can publish or delete public PowPow content through the user's stored session.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the account, post content, images, location, and requested publish or delete action before running platform-changing commands.
+
+Risk: Digital-human creation can spend account badges.
+
+Mitigation: Confirm the badge cost and intended digital-human details before creation.
+
+Risk: A short-lived stored session can continue to authorize account actions after setup.
+
+Mitigation: Use the expected POWPOW_STATE_DIR and platformUrl, then clear the stored session after use when reducing the authorization window matters.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/durenzidu/skills/powpow-integration)
+- [PowPow Homepage](https://global.powpow.online)
+- [PowPow Registration](https://global.powpow.online/register)
+- [Security Architecture](references/security.md)
+- [File Structure](references/file-structure.md)
+- [Product Screenshots](references/screenshots.md)
+- [Changelog](references/changelog.md)
+- [PowPow Intro Video](https://www.bilibili.com/video/BV1Wu826UEVz/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [User-facing guidance with inline shell commands, Markdown links, and generated HTML draft files for PowPow posts.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create local draft HTML and manifest files before publishing; platform actions require the user's PowPow account session.]
+
+## Skill Version(s):
+
+2.1.14 (source: ClawHub release metadata; artifact frontmatter reports 5.7.3)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

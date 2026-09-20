@@ -1,43 +1,55 @@
-## Description: <br>
-Use this skill for Mailjet requests involving reading, creating, and updating contact data through the OOMOL connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mailjet (mailjet.com). Use this skill for ANY Mailjet request - reading, creating, and updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage Mailjet contacts through an OOMOL-connected account, including listing, retrieving, creating, and updating contacts. It is intended for agent workflows that need schema-checked Mailjet operations without handling raw Mailjet credentials directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Confirmed write actions can create or update Mailjet contacts. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running create_contact or update_contact. <br>
-Risk: Mailjet access is mediated through OOMOL and depends on the user's connected account. <br>
-Mitigation: Install or reconnect the oo CLI only when commands fail for missing CLI, authentication, connection, scope, credential, app, or billing reasons. <br>
+## Use Case:
 
+External users and developers use this skill to operate Mailjet contacts through an OOMOL-connected account, including creating, retrieving, listing, and updating contacts while confirming state-changing actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-mailjet) <br>
-- [OOMOL CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Mailjet homepage](https://www.mailjet.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill directs agents to inspect live connector schemas before constructing payloads and to obtain confirmation before write actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: Setup instructions include unverified remote installer commands that could execute arbitrary code if followed automatically.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installer instructions before installation and use a safer reviewed installation channel or manually verify the installer before executing it.
+
+Risk: Write actions can change Mailjet contact state.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running create_contact or update_contact.
+
+## Reference(s):
+
+- [Mailjet homepage](https://www.mailjet.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Mailjet skill on ClawHub](https://clawhub.ai/oomol/skills/oo-mailjet)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API calls, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before requests and requires confirmation for write actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

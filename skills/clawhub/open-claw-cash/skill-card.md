@@ -1,45 +1,63 @@
-## Description: <br>
-OpenClawCash crypto wallet API for AI agents (also called openclawcash). Use when an agent needs to send native or token transfers, check balances, list wallets, or interact with EVM and Solana wallets programmatically via OpenClawCash. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OpenclawCash crypto wallet API for AI agents (also called openclawcash). Use when an agent needs to send native or token transfers, check balances, list wallets, or interact with EVM and Solana wallets programmatically via OpenclawCash.
 
-## Publisher: <br>
-[macd2](https://clawhub.ai/user/macd2) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[macd2](https://clawhub.ai/user/macd2)
 
-## Use Case: <br>
-Developers and external agents use this skill to operate OpenClawCash-managed wallets, inspect balances and transactions, and execute EVM or Solana transfers, swaps, checkout escrow flows, and Polymarket actions. It requires an OpenClawCash API key and network access to https://openclawcash.com. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can let an agent move funds, trade, and manage payment infrastructure. <br>
-Mitigation: Use per-action confirmation, low-value or tightly scoped wallets, and limited API-key permissions. <br>
-Risk: Wallet imports and private-key handling can expose sensitive credentials. <br>
-Mitigation: Avoid importing private keys unless managed custody is intended, and prefer input methods that do not place secrets in shell history or process arguments. <br>
-Risk: Checkout webhooks and external MCP package use may expand the trusted surface. <br>
-Mitigation: Review webhook destinations carefully and separately review or pin the external MCP package before using the npx path. <br>
+## Use Case:
 
+Developers and agent operators use this skill to connect agents to OpenClawCash-managed EVM and Solana wallets for balance checks, wallet policy review, token transfers, swaps, checkout escrow, and venue operations. It is intended for environments where the user deliberately grants an agent financial authority through a scoped OpenClawCash API key.
 
-## Reference(s): <br>
-- [OpenClawCash API Endpoint Details](references/api-endpoints.md) <br>
-- [OpenClawCash service](https://openclawcash.com) <br>
-- [ClawHub release page](https://clawhub.ai/macd2/open-claw-cash) <br>
-- [Publisher profile](https://clawhub.ai/user/macd2) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API Calls, JSON] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires AGENTWALLETAPI_KEY, curl, network access to OpenClawCash, and confirmation for write actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.21.0 (source: server evidence and frontmatter) <br>
+Risk: The skill can move funds or make persistent account changes when an API key has sufficient authority.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use per-action confirmation where possible, keep API keys tightly scoped, and review wallet policies before transfer, swap, venue, webhook, or user-tag actions.
+
+Risk: Session-level approval can allow repeated write actions without a fresh prompt.
+
+Mitigation: Use broad approval only for a clearly bounded session and return to confirm-each-write mode when scope, wallet, amount, token, destination, or chain is unclear.
+
+Risk: Wallet import may expose sensitive private-key material to the agent workflow.
+
+Mitigation: Avoid wallet import unless necessary; if used, prefer hidden prompt or stdin and ensure dashboard import permission is intentionally enabled.
+
+Risk: Running an unreviewed MCP package or fallback script can expand the trusted execution surface.
+
+Mitigation: Pin or review the MCP package and inspect the bundled shell scripts before granting wallet API credentials.
+
+## Reference(s):
+
+- [OpenClawCash Agent API](https://openclawcash.com)
+- [API Endpoint Details](references/api-endpoints.md)
+- [ClawHub OpenClawCash Skill Listing](https://clawhub.ai/macd2/skills/open-claw-cash)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, API calls]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an OpenClawCash API key for authenticated wallet operations.]
+
+## Skill Version(s):
+
+1.28.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -21,7 +21,7 @@ fix_encoding.py — 批量转换文件编码为 UTF-8
     python scripts/fix_encoding.py check-replacement <directory>
 
 安全保证：
-    - convert 模式需要 --backup 参数才会创建 .bak 备份
+    - convert 模式默认不写备份；加 --backup 才创建 .bak（无备份时为原地覆盖，不可回滚）
     - 只修改匹配 --ext 的文件
     - preview 模式不做任何写入
 """
@@ -34,19 +34,13 @@ import sys
 from typing import List, Optional, Tuple
 
 
-# -- 安全打印（解决 #6: GBK 控制台 UnicodeEncodeError）--
-_STDOUT_ENCODING = getattr(sys.stdout, 'encoding', 'utf-8') or 'utf-8'
+# ── 安全打印（解决 #6: GBK 控制台 UnicodeEncodeError）──
+# 统一实现见 safe_io.py（ensure_utf8_stdio / safe_print），此处仅复用。
+from safe_io import ensure_utf8_stdio, safe_print
 
+sp = safe_print  # 兼容本文件既有的调用名
 
-def sp(*args, **kwargs) -> None:
-    """safe_print：GBK 环境不崩溃。"""
-    try:
-        print(*args, **kwargs)
-    except UnicodeEncodeError:
-        sa = [a.encode(_STDOUT_ENCODING, errors='replace').decode(
-              _STDOUT_ENCODING, errors='replace')
-              if isinstance(a, str) else str(a) for a in args]
-        print(*sa, **kwargs)
+ensure_utf8_stdio()
 
 
 def detect_encoding(raw: bytes) -> str:
@@ -187,6 +181,9 @@ def convert_to_utf8(directory: str, extensions: Optional[List[str]] = None,
         sp(f"在 {directory} 中未找到匹配的文件")
         return
 
+    if not backup:
+        sp("⚠️ 未启用 --backup：将原地覆盖文件且无法回滚，建议先 preview 或加 --backup。")
+
     converted = 0
     skipped = 0
     errors = 0
@@ -210,7 +207,7 @@ def convert_to_utf8(directory: str, extensions: Optional[List[str]] = None,
                 bak_path = filepath + '.bak'
                 shutil.copy2(filepath, bak_path)
 
-            with open(filepath, 'w', encoding='utf-8') as f:
+            with open(filepath, 'w', encoding='utf-8', newline='\n') as f:
                 f.write(content)
 
             rel = os.path.relpath(filepath, directory)

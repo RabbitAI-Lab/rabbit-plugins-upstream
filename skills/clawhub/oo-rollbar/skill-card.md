@@ -1,45 +1,56 @@
-## Description: <br>
-Operate Rollbar through an OOMOL-connected account for reading, creating, and updating Rollbar data via the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Rollbar (rollbar.com). Use this skill for ANY Rollbar request - searching and reading data. Whenever a task involves Rollbar, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and support teams use this skill to inspect Rollbar projects, items, occurrences, deploys, environments, and item occurrence lists, and to run approved connector actions against a connected Rollbar account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive Rollbar credentials through the OOMOL connector. <br>
-Mitigation: Install only when the user trusts OOMOL as the intermediary for the Rollbar connection. <br>
-Risk: Read actions can expose sensitive Rollbar project, item, occurrence, deploy, and environment data. <br>
-Mitigation: Treat read results as sensitive operational data and share them only with authorized recipients. <br>
-Risk: Connector actions tagged as write or destructive may change or remove Rollbar data. <br>
-Mitigation: Inspect the live action schema and require explicit user confirmation of the target, payload, and expected effect before running those actions. <br>
+## Use Case:
 
+Developers, support engineers, and operations teams use this skill to inspect Rollbar projects, items, occurrences, deploys, and environments through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Rollbar Skill](https://clawhub.ai/oomol/oo-rollbar) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Rollbar Homepage](https://rollbar.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and execution metadata when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Setup guidance includes unverified remote install commands that can execute arbitrary code on a user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing, review the oo CLI installer source and prefer a signed or package-manager installation path if available.
+
+Risk: Rollbar error data can contain sensitive application details even when actions are read-only.
+
+Mitigation: Connect only Rollbar projects and scopes that are appropriate to expose through OOMOL, and review returned data before sharing it.
+
+## Reference(s):
+
+- [ClawHub Rollbar skill page](https://clawhub.ai/oomol/skills/oo-rollbar)
+- [Rollbar homepage](https://rollbar.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API calls, Configuration guidance, Text]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live Rollbar connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

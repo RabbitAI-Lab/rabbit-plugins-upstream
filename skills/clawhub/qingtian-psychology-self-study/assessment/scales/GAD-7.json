@@ -1,0 +1,241 @@
+{
+  "id": "GAD-7",
+  "name": "广泛性焦虑量表（GAD-7）",
+  "short_name": "GAD-7 焦虑自评",
+  "category": "焦虑",
+  "target_population": "成年人",
+  "estimated_time": "约 2 分钟",
+  "item_count": 7,
+  "description": "国际通用的广泛性焦虑筛查工具，7 题评估近两周的焦虑症状严重程度。",
+  "source": "Spitzer et al., 2006",
+  "license": "公共领域（Pfizer 公开授权），可免费使用",
+  "scoring_type": "sum",
+  "items": [
+    {
+      "id": "q1",
+      "text": "在过去两周里，你有多少时候感到紧张、焦虑或心烦？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "完全不会",
+          "score": 0
+        },
+        {
+          "label": "好几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "在过去两周里，你有多少时候不能停止或控制担忧？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "完全不会",
+          "score": 0
+        },
+        {
+          "label": "好几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "在过去两周里，你有多少时候对各种各样的事情担忧过多？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "完全不会",
+          "score": 0
+        },
+        {
+          "label": "好几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "在过去两周里，你有多少时候很难放松下来？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "完全不会",
+          "score": 0
+        },
+        {
+          "label": "好几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q5",
+      "text": "在过去两周里，你有多少时候由于不安而无法静坐？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "完全不会",
+          "score": 0
+        },
+        {
+          "label": "好几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q6",
+      "text": "在过去两周里，你有多少时候变得容易烦恼或急躁？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "完全不会",
+          "score": 0
+        },
+        {
+          "label": "好几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q7",
+      "text": "在过去两周里，你有多少时候感到似乎将有可怕的事情发生而害怕？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "完全不会",
+          "score": 0
+        },
+        {
+          "label": "好几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ]
+    }
+  ],
+  "dimensions": [
+    {
+      "name": "焦虑总分",
+      "items": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7"
+      ],
+      "max": 21,
+      "min": 0
+    }
+  ],
+  "standard_score": null,
+  "interpretation": {
+    "bands": [
+      {
+        "dimension": "焦虑总分",
+        "min": 0,
+        "max": 4,
+        "level": "无/极轻度",
+        "summary": "几乎没有焦虑症状。",
+        "advice": "保持即可。"
+      },
+      {
+        "dimension": "焦虑总分",
+        "min": 5,
+        "max": 9,
+        "level": "轻度焦虑",
+        "summary": "存在轻度焦虑，多为日常可承受范围。",
+        "advice": "尝试放松训练、规律作息；如持续或加重建议心理咨询。"
+      },
+      {
+        "dimension": "焦虑总分",
+        "min": 10,
+        "max": 14,
+        "level": "中度焦虑",
+        "summary": "焦虑已达中度，可能影响睡眠与专注。",
+        "advice": "建议心理咨询；如伴明显功能受损尽早就诊。"
+      },
+      {
+        "dimension": "焦虑总分",
+        "min": 15,
+        "max": 21,
+        "level": "重度焦虑",
+        "summary": "重度焦虑，明显影响日常生活。",
+        "advice": "建议尽快到精神科/心理科评估，考虑专业治疗。"
+      }
+    ]
+  },
+  "safety": {
+    "crisis_items": [],
+    "crisis_rule": "",
+    "high_risk_rule": ""
+  }
+}

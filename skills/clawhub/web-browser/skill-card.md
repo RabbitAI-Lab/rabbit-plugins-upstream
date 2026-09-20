@@ -1,48 +1,67 @@
-## Description: <br>
-Environment-aware browser operations for UI verification, closed shadow DOM cascade diagnosis, and browser-login-assisted credential issuance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Environment-aware browser operations for UI testing, CDP shadow DOM tracing, and browser-login-assisted credential issuance using the appropriate visible or automatable backend.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect browser UIs, verify user-visible flows, diagnose closed shadow DOM styling, and help issue or refresh service credentials after user-controlled login. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can help create, extract, store, and reuse access tokens or secrets. <br>
-Mitigation: Require explicit user confirmation for each credential source, token action, handoff destination, and persistent store, while keeping authentication and MFA entry under user control. <br>
-Risk: Browser automation may access third-party or production logged-in pages. <br>
-Mitigation: Use the skill only on pages the user is authorized to inspect, and prefer visible browser backends so the user can monitor interactions. <br>
-Risk: Persisting credentials in local files can leave reusable secrets outside managed controls. <br>
-Mitigation: Prefer a dedicated secret manager or OS keyring over .env files or local CLI files, and store only the minimum credential needed for the requested handoff. <br>
+## Use Case:
 
+Developers and engineers use this skill to verify browser UI behavior, diagnose page state and closed shadow DOM styling issues, and assist credential issuance or refresh flows that require a visible browser session. It helps route work across wmux, cmux, Playwright MCP, and Chrome DevTools based on the user's environment and task.
 
-## Reference(s): <br>
-- [Web Browser skill page](https://clawhub.ai/drumrobot/skills/web-browser) <br>
-- [UI Test guide](./ui-test.md) <br>
-- [Credential Issue guide](./credential-issue.md) <br>
-- [CDP Trace guide](./cdp-trace.md) <br>
-- [Chrome DevTools Protocol DOM domain](https://chromedevtools.github.io/devtools-protocol/tot/DOM/) <br>
-- [Chrome DevTools Protocol CSS.getMatchedStylesForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getMatchedStylesForNode) <br>
-- [Playwright BrowserContext.newCDPSession](https://playwright.dev/docs/api/class-browsercontext#browser-context-new-cdp-session) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces browser-operation plans, verification summaries, credential handoff steps, and CDP trace commands; raw snapshot data should be summarized.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.4 (source: server release metadata and CHANGELOG, released 2026-07-23) <br>
+Risk: The skill can direct agents through real browser sessions and credential issuance, refresh, extraction, storage, revocation, or publishing handoffs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit confirmation for each credential source searched, token issued or revoked, storage destination, and cloud upload or publishing handoff.
+
+Risk: Credential values could be exposed through chat, shell history, local files, or an unsuitable storage destination.
+
+Mitigation: Prefer reusable secret stores such as Vault, OS keychains, GitHub secrets, or a password manager; avoid command-line passwords and do not leave issued credentials only in chat.
+
+Risk: The bundled CDP trace script supports a login option and creates a browser context that ignores HTTPS certificate errors.
+
+Mitigation: Do not use the login option against non-local HTTPS sites unless certificate validation is fixed, and keep credential entry in an interactive user-controlled browser session.
+
+Risk: Browser automation can act in the wrong account or against an unintended visible session.
+
+Mitigation: Verify the logged-in identity before creating, refreshing, revoking, or storing credentials, and confirm the target backend is visible and connected before continuing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/web-browser)
+- [UI testing topic](artifact/ui-test.md)
+- [CDP trace topic](artifact/cdp-trace.md)
+- [Credential issuance topic](artifact/credential-issue.md)
+- [Chrome DevTools Protocol DOM domain](https://chromedevtools.github.io/devtools-protocol/tot/DOM/)
+- [CDP CSS.getMatchedStylesForNode](https://chromedevtools.github.io/devtools-protocol/tot/CSS/#method-getMatchedStylesForNode)
+- [Playwright browserContext.newCDPSession](https://playwright.dev/docs/api/class-browsercontext#browser-context-new-cdp-session)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown guidance with inline shell, JavaScript, and TypeScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Summarizes browser findings rather than returning raw snapshots; credential workflows may hand off commands for secret storage, revocation, or downstream automation.]
+
+## Skill Version(s):
+
+0.2.9 (source: server release and CHANGELOG, released 2026-09-18)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

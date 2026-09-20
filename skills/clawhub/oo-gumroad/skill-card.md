@@ -1,45 +1,57 @@
-## Description: <br>
-Gumroad (gumroad.com). Use this skill for Gumroad requests that read, create, or update data through the OOMOL-connected Gumroad connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gumroad enables agents to read, create, and update Gumroad account data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate a Gumroad account through the oo CLI, including retrieving user, product, sale, subscriber, and sales data and performing supported sale operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to a connected Gumroad account. <br>
-Mitigation: Install only when the user is comfortable granting the connector access to that account. <br>
-Risk: Refund, shipment update, and receipt resend actions can affect money, fulfillment, or customers. <br>
-Mitigation: Require explicit confirmation of the target sale and exact effect before running those actions. <br>
-Risk: The first-time setup guidance includes one-line CLI installer commands. <br>
-Mitigation: Review the installer source or use a safer installation path before running those commands. <br>
+## Use Case:
 
+External users and developers use this skill to let an agent inspect Gumroad users, products, sales, and subscribers, and to perform confirmed account-changing sales actions such as refunds, shipment updates, and receipt resends.
 
-## Reference(s): <br>
-- [ClawHub Gumroad skill page](https://clawhub.ai/oomol/oo-gumroad) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Gumroad](https://gumroad.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce oo CLI commands that return JSON connector responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill can perform account-changing Gumroad actions, including refunds, shipment updates, and receipt resends.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact action payload and expected effect with the user before running any write action.
+
+Risk: The first-time setup section includes remote installer one-liners.
+
+Mitigation: Prefer a verified installer or inspect the installer script before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-gumroad)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Gumroad homepage](https://gumroad.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, Text]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before action payload construction; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: evidence release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,53 @@
-## Description: <br>
-Loop Engineering guides an agent through explicit planning, execution, observation, evaluation, repair, stopping, and experience-distillation loops for complex multi-step tasks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Loop Engineering helps agents manage complex multi-step work through explicit planning, execution, observation, evaluation, repair, and stopping loops.
 
-## Publisher: <br>
-[jainwong](https://clawhub.ai/user/jainwong) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jainwong](https://clawhub.ai/user/jainwong)
 
-## Use Case: <br>
-Developers, operators, and agent builders use this skill to manage complex tasks that need iterative planning, tool execution, external verification, bounded repair, and clear stopping criteria. It is intended for work such as code generation and debugging, design implementation, content creation, data analysis, and multi-tool orchestration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow can add process overhead on broad multi-step tasks. <br>
-Mitigation: Use it for complex tasks that benefit from external verification and bounded repair, while leaving simple one-off questions outside the loop. <br>
-Risk: Local experience notes may retain task details. <br>
-Mitigation: Avoid using local retention on sensitive projects unless that retention is acceptable, or clear retained notes after the task. <br>
-Risk: Iterative repair and multi-agent coordination can extend tool use. <br>
-Mitigation: Respect the documented limits for iterations, tool calls, and stopping conditions before continuing. <br>
+## Use Case:
 
+Developers, engineers, and agent users use this skill to structure complex work such as code generation, debugging, design implementation, content creation, tool chaining, and data analysis when the task needs iterative verification and correction.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jainwong/skills/loop-engineering) <br>
-- [Publisher profile](https://clawhub.ai/user/jainwong) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Structured Markdown guidance with YAML examples, checklists, and command-oriented execution summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include loop state cards, observation and evaluation objects, repair plans, multi-agent message structures, execution summaries, and local experience-bank notes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Persistent cross-task workflow memory and detailed trace logging may retain sensitive task information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use per-project isolation, redaction, review, and deletion controls before enabling this skill on sensitive work.
+
+Risk: Using the skill in shared workspaces may expose credentials, private customer data, proprietary code, or regulated information through retained traces.
+
+Mitigation: Avoid shared workspaces and sensitive tasks unless clear data-handling controls are in place.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/jainwong/skills/loop-engineering)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with YAML and code block examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include loop state cards, observation and evaluation records, repair steps, trace summaries, and experience-bank entries.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata; artifact frontmatter says 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,61 @@
-## Description: <br>
-Discord lets an agent read and manage Discord data through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an agent operate Discord through an OOMOL-connected account using the oo CLI, including reading account-related data and performing clearly marked write or destructive actions.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Discord account, guild, invite, connection, entitlement, and public key data, and to perform approved Discord account-related updates through the OOMOL connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use a connected Discord account and may perform write or destructive actions. <br>
-Mitigation: Confirm the exact payload and effect before write actions, and get explicit user approval before destructive actions. <br>
-Risk: Connector access depends on OOMOL-managed credentials and first-time oo CLI setup. <br>
-Mitigation: Install only if you trust OOMOL as the connector provider, and run installer, authentication, or connection steps only when a command fails for that setup reason. <br>
+## Use Case:
 
+Developers and agents use this skill to interact with Discord via OOMOL-managed credentials, inspect connector schemas, run supported Discord actions, and handle first-time setup only when authentication or connection errors require it.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-discord) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Discord Homepage](https://discord.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON connector payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Fetch the live connector schema before building payloads; user confirmation is required for write actions and explicit approval is required for destructive actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: evidence.release.version and frontmatter metadata.version) <br>
+Risk: The skill can access Discord account-related data through an OOMOL-connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after confirming that this account connection and data access are acceptable for the intended environment.
+
+Risk: First-time setup includes remote installer commands that pipe scripts into a shell.
+
+Mitigation: Manually review and install the oo CLI through a trusted, verifiable method instead of allowing an agent to run remote installer commands.
+
+Risk: Some actions can write to or delete Discord application role-connection data.
+
+Mitigation: Require explicit user approval and confirm the exact payload and target before any action marked write or destructive.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-discord)
+- [Publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Discord](https://discord.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, API calls, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are expected as JSON with data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

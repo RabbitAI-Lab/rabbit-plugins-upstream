@@ -1,40 +1,64 @@
-## Description: <br>
-Query, install, update, and edit AI agent skills on compatible Skill Hubs, including self-hosted hubs that implement the documented API contract. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Query, install, update, and edit AI agent skills on compatible Skill Hubs, with authenticated support for private skills and unauthenticated support for public discovery and installs.
 
-## Publisher: <br>
-[songhonglei](https://clawhub.ai/user/songhonglei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[songhonglei](https://clawhub.ai/user/songhonglei)
 
-## Use Case: <br>
-Developers and agent users use this skill to search hub catalogs, inspect skill versions, install or update skills, diagnose hub configuration, and edit owned skill card metadata when the target hub supports editing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan reports a local file-handling flaw in edit-backup cleanup that deserves review before installation, especially for users who plan to use card editing. <br>
-Mitigation: Review the skill before installing, use ordinary slug formats, require explicit confirmation before installs or card edits, and prefer a dedicated credentials file with restrictive permissions for long-lived tokens. <br>
+## Use Case:
 
+Developers and agent operators use this skill to search compatible Skill Hubs, inspect versions, install or update skills, manage skill card metadata, and perform team-member administration where the target Hub supports it.
 
-## Reference(s): <br>
-- [Skill Hub Query on ClawHub](https://clawhub.ai/songhonglei/skills/skill-hub-query) <br>
-- [Skill Hub API Reference](references/api.md) <br>
-- [skillhub.cn](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and user-readable tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May run local shell scripts that call compatible Hub APIs and read or write local cache, credentials, backups, and installed skill files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.4 (source: server release evidence, SKILL.md, and changelog released 2026-07-17) <br>
+Risk: The skill can install remote skill packages into directories that may be loaded by future agent sessions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only from trusted Hubs and review downloaded skills before enabling them.
+
+Risk: Hub tokens may grant access to private skills or administrative endpoints.
+
+Mitigation: Use least-privilege tokens and avoid storing broad tokens in shell startup files.
+
+Risk: Edit and team commands can change Hub metadata or membership.
+
+Mitigation: Treat these as administrative actions that require explicit human approval and post-write verification.
+
+Risk: Security evidence notes credential and path-handling weaknesses.
+
+Mitigation: Run the skill's diagnostic checks and keep installs scoped to trusted, least-privilege skill directories.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/songhonglei/skills/skill-hub-query)
+- [Skill Hub API Reference](references/api.md)
+- [README](README.md)
+- [Changelog](CHANGELOG.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown summaries with inline shell commands and JSON when requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May install or modify skill files after explicit human approval; query and administrative commands may emit JSON for machine-readable workflows.]
+
+## Skill Version(s):
+
+1.4.0 (source: server release evidence, SKILL.md, CHANGELOG.md)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

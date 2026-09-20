@@ -1,41 +1,56 @@
-## Description: <br>
-Manages internal financial knowledge bases with document organization, knowledge graph structure, semantic search, and intelligent Q&A guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manages financial knowledge bases with document organization, knowledge graph construction, semantic search, lifecycle governance, and intelligent Q&A for financial institutions' internal knowledge management.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[gechengling](https://clawhub.ai/user/gechengling)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Employees, knowledge managers, business teams, and compliance reviewers at financial institutions use this skill to organize internal policy, product, process, metric, and FAQ knowledge. It helps structure document taxonomies, knowledge graphs, semantic retrieval workflows, lifecycle governance, and answer-review practices.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Users may treat reference guidance or sample snippets as financial, legal, insurance, or compliance advice.
+
+Mitigation: Use the skill as educational reference material only and require responsible business, legal, or compliance review before operational use.
+
+Risk: Internal financial documents may contain customer, account, or other sensitive information.
+
+Mitigation: Use appropriately scoped internal documents, de-identify customer data, maintain access controls, and avoid placing sensitive content in a general knowledge base.
+
+Risk: Knowledge-base answers can become incorrect if they cite outdated, superseded, or unsupported material.
+
+Mitigation: Require source and version attribution, mark obsolete content, maintain lifecycle review records, and prefer refusal when no reliable source is available.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Financial institution employees and knowledge managers use this skill to plan internal knowledge-base organization, retrieval workflows, knowledge graph structure, and Q&A patterns. It provides advisory reference material that requires human review before real-world application. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Text, Markdown, Code, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat generated knowledge-base guidance as financial, legal, or insurance advice. <br>
-Mitigation: Use the output as reference material only and require review by qualified professionals before applying it to real financial workflows. <br>
-Risk: Knowledge-base structure or retrieval guidance could introduce incorrect or misleading information into internal documentation. <br>
-Mitigation: Review proposed structures, search behavior, and Q&A content against authoritative internal policies before deployment. <br>
+**Output Format:** [Markdown guidance with tables, checklists, prompt templates, and illustrative code snippets]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/finance-knowledge-base) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/gechengling) <br>
+**Other Properties Related to Output:** [Advisory outputs require human review and source/version checks before operational use.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with structured guidance and illustrative Python examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory-only reference output; no executable code, network calls, persistent storage, or credential collection are included in the artifact.] <br>
+5.0.3 (source: release evidence and frontmatter)
 
-## Skill Version(s): <br>
-5.0.2 (source: server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

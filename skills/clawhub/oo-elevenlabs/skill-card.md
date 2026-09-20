@@ -1,45 +1,60 @@
-## Description: <br>
-Use this skill for ElevenLabs requests that read, create, update, or delete data through the OOMOL-connected ElevenLabs connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill operates ElevenLabs through the OOMOL-connected connector for reading, creating, updating, and deleting ElevenLabs data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate ElevenLabs through the oo CLI with an OOMOL-connected account. It supports voice and model discovery, user and subscription lookups, history workflows, text-to-speech generation, sound effect generation, and deletion of selected history items. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to a connected ElevenLabs account and sensitive credentials are handled by OOMOL server-side. <br>
-Mitigation: Use only an intended OOMOL account connection, avoid handling raw tokens directly, and reconnect only when an auth or connection error requires it. <br>
-Risk: Write actions can generate audio or sound effects and may consume account credits or change service state. <br>
-Mitigation: Inspect the live action schema first and confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: The delete_history_item action permanently removes an ElevenLabs history item. <br>
-Mitigation: Confirm the specific history item ID and get explicit user approval before running the destructive action. <br>
+## Use Case:
 
+Developers and agent users use this skill to operate an ElevenLabs account through OOMOL's oo CLI, including voice discovery, model lookup, text-to-speech generation, sound-effect generation, and generation-history access.
 
-## Reference(s): <br>
-- [ClawHub ElevenLabs skill page](https://clawhub.ai/oomol/oo-elevenlabs) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ElevenLabs homepage](https://elevenlabs.io) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON request or response payloads.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce connector transit storage references for generated or downloaded binary audio.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill metadata) <br>
+Risk: Write actions can create speech or sound-effect generations and may affect the connected ElevenLabs account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact action payload and expected effect with the user before running write actions.
+
+Risk: The destructive delete_history_item action can remove ElevenLabs generation-history data.
+
+Mitigation: Confirm the target history item ID and obtain explicit approval before deletion.
+
+Risk: First-time setup includes pipe-to-shell installation commands for the oo CLI.
+
+Mitigation: Use official installation instructions and inspect installer commands before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-elevenlabs)
+- [ElevenLabs homepage](https://elevenlabs.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads; connector actions return JSON and may produce audio files in transit storage.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution; write and destructive actions require confirmation before running.]
+
+## Skill Version(s):
+
+1.0.5 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

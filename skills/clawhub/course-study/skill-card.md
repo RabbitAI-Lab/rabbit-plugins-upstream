@@ -1,45 +1,59 @@
-## Description: <br>
-Turns course materials, topic lists, or course names into complete-coverage, Feynman-explained, exam-ready revision notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates Chinese per-lecture study companion notes from course PDFs, follows the lecture order, marks exam angles with evidence levels, and maintains a local course memory bank for follow-up questions and end-of-term summaries.
 
-## Publisher: <br>
-[vincentjiang06](https://clawhub.ai/user/vincentjiang06) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[vincentjiang06](https://clawhub.ai/user/vincentjiang06)
 
-## Use Case: <br>
-Students and educators use this skill to turn course slides, topic lists, or a course name into exam-focused revision notes, with coverage reconciliation and worked examples. It is scoped for study materials and explicitly avoids doing graded homework or exam answers for submission. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Course materials may contain private, unpublished, or proprietary content. <br>
-Mitigation: Provide only materials appropriate for the agent to process, and review generated notes before sharing them outside the course context. <br>
-Risk: Optional web supplementation may introduce sources that do not match the course syllabus or instructor expectations. <br>
-Mitigation: Prefer the supplied course materials as the authority, keep citations attached to supplemental material, and verify uncertain claims before exams. <br>
-Risk: The skill could be misused to answer graded homework or exam questions for submission. <br>
-Mitigation: Use it for revision notes, explanations, and approach guidance; do not use it to produce answers for graded submission. <br>
+## Use Case:
 
+Students and course assistants use this skill to turn official lecture PDFs into Chinese study companion Markdown, store new course concepts under study/, and later answer follow-up questions or produce course summaries from that memory. It is not intended to produce submit-ready homework answers.
 
-## Reference(s): <br>
-- [ClawHub Course Study skill page](https://clawhub.ai/vincentjiang06/skills/course-study) <br>
-- [Publisher profile](https://clawhub.ai/user/vincentjiang06) <br>
-- [Skill specification](SKILL.md) <br>
-- [English README](README.en.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown study notes with optional shell commands and configuration guidance for PDF export.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Primary output is revision-notes.md; optional quick-reference.md and PDF export are produced when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.2 (source: server metadata and SKILL.md frontmatter) <br>
+Risk: The skill may run a course-local 管理/catalog.py script after writing study files, which can execute untrusted local code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only in trusted course folders; review that script and explicitly approve exact commands before allowing it to run.
+
+Risk: The skill creates Chinese study-note output and local course memory files under study/.
+
+Mitigation: Use it only where those local files are expected, and review generated or modified study/ files before relying on them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/vincentjiang06/skills/course-study)
+- [README.en.md](artifact/README.en.md)
+- [SKILL.md](artifact/SKILL.md)
+- [rules/companion.md](artifact/rules/companion.md)
+- [rules/layout.md](artifact/rules/layout.md)
+- [rules/memory.md](artifact/rules/memory.md)
+- [rules/summary.md](artifact/rules/summary.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Chinese Markdown study notes, memory-bank entries, brief answers, and optional PDF-export commands.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes course-study artifacts under study/ and may deliver very long lectures one Part at a time.]
+
+## Skill Version(s):
+
+4.2.0 (source: frontmatter, CHANGELOG, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

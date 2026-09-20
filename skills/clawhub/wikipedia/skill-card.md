@@ -1,42 +1,55 @@
-## Description: <br>
-Access Wikipedia through MCP to search articles, retrieve summaries, random facts, dinosaur facts, featured articles, and multi-language results across 10 wikis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Wikipedia MCP lets agents query Wikipedia and Wikimedia Commons for article summaries, search results, article metadata, media, pageviews, current events, and multilingual public knowledge without an API key.
 
-## Publisher: <br>
-[evanfoglia](https://clawhub.ai/user/evanfoglia) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[evanfoglia](https://clawhub.ai/user/evanfoglia)
 
-## Use Case: <br>
-External users, developers, and content teams use this skill to query Wikipedia from an MCP-compatible agent for research, quick article summaries, trivia, and daily content prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User queries are sent to Wikipedia through the local MCP server. <br>
-Mitigation: Install only if this network behavior is acceptable for the intended use case. <br>
-Risk: The Python dependency is lower-bounded but not pinned or tightly bounded. <br>
-Mitigation: For stronger supply-chain hygiene, prefer a release that pins or tightly bounds the dependency. <br>
+## Use Case:
 
+External users and developers use this MCP server to retrieve public Wikipedia and Wikimedia knowledge, media metadata, edit activity, pageview trends, and discovery links for research, content preparation, and general knowledge workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/evanfoglia/skills/wikipedia) <br>
-- [Wikipedia REST API v1 endpoint](https://en.wikipedia.org/api/rest_v1) <br>
-- [MediaWiki Action API endpoint](https://en.wikipedia.org/w/api.php) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown] <br>
-**Output Format:** [Markdown text returned through MCP tool responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include source article links and summary images; supported languages are en, de, es, fr, ja, zh, pt, it, ru, and nl.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: server release evidence and target metadata; artifact frontmatter reports 1.1.0) <br>
+Risk: Lookup queries and article titles are sent to Wikipedia and Wikimedia services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting confidential or sensitive queries unless that external network disclosure is acceptable.
+
+Risk: The Python dependency declaration allows any requests version greater than or equal to 2.28.0.
+
+Mitigation: Pin and scan dependencies in managed deployments before installation or promotion.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/evanfoglia/skills/wikipedia)
+- [Wikipedia REST API v1 endpoint](https://en.wikipedia.org/api/rest_v1)
+- [MediaWiki Action API endpoint](https://en.wikipedia.org/w/api.php)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Plain text and Markdown-formatted MCP tool responses with source links, tables, summaries, counts, and media URLs.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses are read-only lookup results from public Wikipedia and Wikimedia services; some tools accept language, date, limit, article title, category, media type, or location parameters.]
+
+## Skill Version(s):
+
+1.6.7 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

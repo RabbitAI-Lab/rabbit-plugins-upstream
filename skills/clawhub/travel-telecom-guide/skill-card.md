@@ -1,40 +1,54 @@
-## Description: <br>
-帮旅行者对比漫游、当地SIM、eSIM和WiFi蛋方案，并给出出境上网、通话和省流量建议。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮旅行者对比漫游、当地 SIM、eSIM 和 WiFi 蛋方案，并给出出境上网与通话选择建议。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-Travelers use this skill to compare roaming, local SIM, eSIM, and pocket WiFi options for international trips and receive destination-specific connectivity guidance. It helps choose plans based on destination, trip length, expected data use, and whether voice calls are needed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Telecom prices, roaming terms, and provider availability may change after the skill's built-in data was published. <br>
-Mitigation: Verify current costs and package terms with carriers or eSIM providers before purchasing or relying on a recommendation. <br>
-Risk: The skill provides guidance and comparisons but cannot complete purchases or check real-time usage. <br>
-Mitigation: Use the recommendations as planning support and complete purchases, activation, and usage checks through the relevant provider. <br>
+## Use Case:
 
+External travelers use this skill to compare roaming, local SIM, eSIM, and WiFi hotspot options by destination, trip length, data needs, and calling needs. It helps the agent return Chinese-language guidance, JSON-backed comparisons, activation steps, and data-saving tips.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/travel-telecom-guide) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with command examples and JSON-backed results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local built-in travel telecom data and does not require API keys, credentials, or network access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: Telecom prices, roaming terms, destination coverage, and eSIM provider offers may be outdated because the skill uses static local data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify current carrier, eSIM provider, local SIM, or WiFi rental pricing and terms before purchasing service.
+
+Risk: The skill provides purchase guidance only and cannot complete or validate telecom purchases, activations, or real-time usage checks.
+
+Mitigation: Use official carrier or eSIM provider apps and account portals for buying service, activating plans, and checking live usage.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/travel-telecom-guide)
+- [Publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Chinese-language Markdown or text with JSON-backed travel telecom recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses local static telecom data and does not directly purchase SIM, eSIM, roaming, or WiFi services.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence; artifact frontmatter shows 1.0.1 and artifact _meta.json shows 1.0.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

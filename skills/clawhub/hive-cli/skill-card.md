@@ -1,44 +1,65 @@
-## Description: <br>
-Operate Hive's folder-based coding-agent workflows from OpenClaw: guided CLI setup, reviewed workflow packages, task pipelines, patrols, web/TUI status, and consent-gated administration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Hive CLI helps agents operate Hive task pipelines, inspect current and historical task state, answer waiting brainstorm questions, create project-local workflows, run pre-release QA checks, and diagnose recovery state through Hive's native CLI.
 
-## Publisher: <br>
-[ivankuznetsov](https://clawhub.ai/user/ivankuznetsov) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ivankuznetsov](https://clawhub.ai/user/ivankuznetsov)
 
-## Use Case: <br>
-Developers and engineers use this skill to install, inspect, and operate Hive CLI workflows for repository task pipelines, reviewed workflow packages, status monitoring, patrols, and daemon-backed automation. The skill emphasizes read-only inspection first and consent before installation, project enrollment, workflow mutation, patrol starts, daemon repair, or other persistent host changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Hive setup, project enrollment, workflow installation, daemon repair, patrols, and persistent admin commands can change local state or consume provider subscription capacity. <br>
-Mitigation: Review dry-run or diagnostic output first, restate the exact effect, and obtain explicit approval before running mutating commands or autonomous patrols. <br>
-Risk: Permission growth or high-risk workflow updates can expand what reviewed workflow actors may do. <br>
-Mitigation: Treat permission growth separately from ordinary install or update consent and request separate approval before allowing escalation. <br>
-Risk: Running installer or package-manager commands without review can install the wrong Hive binary or suppress normal transaction safeguards. <br>
-Mitigation: Show the selected install command, keep package-manager confirmations intact, and verify the installed CLI with a strict version check before setup. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Hive-managed work, follow bounded status and watch flows, answer task brainstorm prompts, create local workflow descriptors, run release-candidate QA checks, and diagnose recovery state.
 
-## Reference(s): <br>
-- [Hive CLI ClawHub page](https://clawhub.ai/ivankuznetsov/skills/hive-cli) <br>
-- [Hive homepage](https://github.com/ivankuznetsov/hive) <br>
-- [Homebrew formula ivankuznetsov/hive/hive](https://github.com/ivankuznetsov/hive) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, markdown, text] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON-oriented CLI summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prefers read-only JSON inspection and summarizes status, setup, workflow, daemon, patrol, and recovery results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.3 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill can route agents toward powerful local workflow tooling with broad execution permissions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use read-only inspection where possible, require explicit consent for destructive or administrative actions, and review generated workflows before execution.
+
+Risk: Installation paths and external workflow installs depend on third-party publisher and package sources.
+
+Mitigation: Install only from trusted Hive publisher channels, verify the selected package source, and prefer explicit previews or narrower permissions when workflows do not need unrestricted local execution.
+
+## Reference(s):
+
+- [Hive project homepage](https://github.com/ivankuznetsov/hive)
+- [Hive 0.7.3 release notes](https://github.com/ivankuznetsov/hive/releases/tag/v0.7.3)
+- [Current format migration guide](https://github.com/ivankuznetsov/hive/blob/main/docs/guides/current-format-migration.md)
+- [Daily activity digest](references/daily-digest.md)
+- [Status and watch](references/status-and-watch.md)
+- [Brainstorm answering](references/brainstorm-answering.md)
+- [Natural-language workflow creator](references/workflow-creator.md)
+- [Owner-authored workflow schema](references/workflow-schema.md)
+- [Workflow actions](references/workflow-actions.md)
+- [Recovery](references/recovery.md)
+- [Release candidate QA](references/release-candidate-qa.md)
+- [Setup and platforms](references/setup-and-platforms.md)
+- [Safety](references/safety.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline CLI commands and JSON-oriented inspection routes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should preserve Hive's bounded action and consent boundaries and should not expose credentials.]
+
+## Skill Version(s):
+
+0.1.5 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

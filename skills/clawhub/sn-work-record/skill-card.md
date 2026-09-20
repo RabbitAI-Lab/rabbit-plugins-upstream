@@ -1,43 +1,60 @@
-## Description: <br>
-Helps agents operate 蜀宁 OA timesheet workflows, including login, project lookup, timesheet submission, updates, daily queries, and detail checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an agent manage Shuning OA work records and reimbursement requests, including submitting, updating, querying time entries and checking approval progress.
 
-## Publisher: <br>
-[ithou](https://clawhub.ai/user/ithou) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ithou](https://clawhub.ai/user/ithou)
 
-## Use Case: <br>
-Employees or their delegated agents use this skill to manage 蜀宁 OA work records after authenticated login. It supports submitting daily timesheets, saving drafts, updating or logically deleting records, checking record status, viewing details, and listing projects. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Stored OA credentials, encryption keys, or printed tokens could expose account access. <br>
-Mitigation: Use encrypted credentials, protect OA_ENC_KEY and any local key cache, avoid saving printed tokens, and verify the OA base URL before login. <br>
-Risk: Submit, update, batch, or delete actions can change business timesheet records. <br>
-Mitigation: Require explicit user confirmation before record-changing actions and review the target date, project, record ID, description, and draft versus submit mode. <br>
-Risk: Project IDs, time-entry IDs, and internal configuration values may be sensitive in normal chat responses. <br>
-Mitigation: Return business-readable fields by default and reveal internal IDs only when the user explicitly asks or an operation requires them. <br>
+## Use Case:
 
+Employees or their assisting agents use this skill to interact with a configured Shuning OA system for work-time records, reimbursement status checks, and approval-progress queries.
 
-## Reference(s): <br>
-- [蜀宁 OA 工时系统 API 参考](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/ithou/sn-work-record) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and optional JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May run Python scripts that call OA APIs using local credentials; some commands can submit, update, or logically delete timesheet records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.3 (source: server release evidence) <br>
+Risk: The skill handles saved OA credentials and short-lived OA tokens.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use encrypted credentials with OA_ENC_KEY, avoid plaintext credential files, restrict credential and token files to the current user, and do not expose secrets in logs or responses.
+
+Risk: The skill can submit, update, or delete company work records from natural-language requests.
+
+Mitigation: Require explicit user confirmation before submit, update, or delete operations and review the target date, project, and description before execution.
+
+Risk: The skill calls a configured OA base URL and depends on a local Python runtime.
+
+Mitigation: Install only for the intended OA system and keep the configured base URL and Python virtual environment under user control.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ithou/skills/sn-work-record)
+- [Publisher profile](https://clawhub.ai/user/ithou)
+- [Shuning OA API reference](references/api.md)
+- [Hermes credential storage](references/hermes-credential-storage.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON snippets, and script outputs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include OA record summaries or command invocations; sensitive credentials and tokens should not be displayed.]
+
+## Skill Version(s):
+
+1.13.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

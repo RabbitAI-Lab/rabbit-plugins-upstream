@@ -59,6 +59,8 @@ _无参数_
 | `dailyNetSubscribeLimitPerAccount` | 单个账户当日净申购上限(份) | `1000000` |
 | `dailyNetRedeemLimitPerAccount` | 单个账户当日净赎回上限(份) | `1000000` |
 | `iopvClosePrice` | IOPV收盘价 | `1.2345` |
+| `pageNum` | page number | `1` |
+| `pageSize` | page size | `100` |
 
 ### 接口示例
 
@@ -114,6 +116,9 @@ _无参数_
 | `subscribeSubstituteAmount` | 申购替代金额(元) | `0` |
 | `redeemSubstituteAmount` | 赎回替代金额(元) | `0` |
 | `constituentMarketCapWeight` | 成份股市值占比 | `0.0061` |
+| `pageNum` | page number | `1` |
+| `pageSize` | page size | `100` |
+| `totalCount` | total count | `0` |
 
 ### 接口示例
 

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/asr-hotwords",
   "slug": "asr-hotwords",
   "ownerHandle": null,
-  "version": "2.0.0",
-  "updatedAt": 1779076176330,
-  "contentHash": "c145314436770febdbcb0339994787f8adf0fb75c8f6b78f62c73554ebeb8e6c",
-  "fetchedAt": "2026-07-26T18:57:40.565Z"
+  "version": "1.0.2",
+  "updatedAt": 1789545441368,
+  "contentHash": "34cfa1c080b99544c84730e1fcd3f7db7c9131313da7ed388df5fe441745eeb3",
+  "fetchedAt": "2026-09-20T13:00:22.711Z"
 }

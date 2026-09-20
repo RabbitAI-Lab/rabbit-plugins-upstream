@@ -7,18 +7,41 @@ the user *acts on*: the folder path, the open-the-pptx check, the font/portabili
 forward-looking content you added, open questions (e.g. a missing real brand asset to supply) —
 **plus, when they apply, these REQUIRED-by-their-owning-rule lines (this list is the ONE
 authoritative hand-off checklist; the owning rules point here):** the `provenance: N checked · N
-confirmed · N fixed · N cut` line (research-sourced decks — the PRIMARY-SOURCE GATE's artifact), the
-**`review:` line** (the effort tier that ran, plus its derivation, and the reason whenever it sat
-below the derived default — `standard (derived from purpose)` / `fast (derived default was
-thorough — user chose speed)`) and the **`cost:` line** (subagents · tokens · wall-clock). The
+confirmed · N fixed · N cut` line (research-sourced decks — the PRIMARY-SOURCE GATE's artifact;
+when the user answered `none` at the post-build question it reads
+`provenance: skipped — user declined post-build review`, never a tally that implies it ran), the
+**capability ledger** (the four host lines from Step 0, plus what was LOST wherever a
+capability was absent — a degraded run must be legible as degraded), the
+**`review:` line** (the tier that ran plus HOW it was reached at the post-build question —
+`fast (post-build default — user confirmed)` / `standard (user chose — defense deck)` /
+`fast (post-build default — auto)` / `none (user declined with the deck visible — user-waived)`) and the **`cost:` line** (subagents · tokens · wall-clock · **web searches planned/spent** · **round-trips**). Searches belong on this line because the cap is per SESSION and shared with every subagent: the deck that exhausts it is rarely the deck that suffers, so the only way the number ever becomes visible is if each deck reports what it took. **Round-trips belong on it for the opposite reason — they are the term that multiplies by context and therefore sets the wall clock, and they are the one number nobody can estimate by feel.** 🔴 **Measure them, never recall them: `python3 scripts/roundtrip_budget.py --slides <N>` reads the session transcript and prints the `cost:` line ready to paste**, together with any over-budget notes (a batching ratio near 1.00, slide PNGs read one message at a time). Paste its notes too when it flags something — a run that cost four times its budget and says nothing has taught the user nothing. The script is a reporter and never fails a build; if it cannot find the transcript, write `round-trips: not measured (<reason>)` rather than a guess. The
 cost line is not bookkeeping: a dial the user sets but never sees the bill for builds no
 intuition, so the next deck's choice is as blind as the last one's. Report both even when the
-tier was derived rather than chosen. Then, as before: the
+tier was derived rather than chosen. Then, as before: **`render_deck.py <deck>.pptx --gate-check` run and reported** (every hand-off gate, no render, under a second — run it whether or not the user wants the PDF, because the gates used to ride on `--deliverables` and that is a decline-able offer), the
 **`.deck-gates.json` written at the deck root** (the record `--deliverables` checks: critic verdict,
-the design plan's boldness/signature_move/carried_by/form_ledger, and the provenance pass's per-claim
-`claims` list — or a written `waived` reason for any gate deliberately skipped; the `critic` block
-is written by `validate_review.py … --record <deck-dir>` from the review itself, never typed here), the
-per-slide **click order** (appear-builds opted in), **image licenses/credits** (sourced photos), the
+the design plan's **boldness · signature_move · carried_by · form_ledger · icon_family · palette ·
+type_scale · signature_proof · style_pick** — all nine (on `boldness: conservative` with a recorded
+`deliberately restrained:` move, `signature_proof` drops and the other eight still bind; `style_pick`
+is the TOPIC-adapted look choice — `<preset|bespoke> for <domain> · beat <rival> · anti-pick avoided:
+<cliché>`, or `n/a — <locked look>`, `references/design-by-topic.md`);
+`icon_family` was added because a deck shipped with ZERO icons through every automated gate,
+`palette` after contrast failures inside one deck, and `type_scale`/`signature_proof` because
+they had been gated on the Codex path only — and the provenance pass's
+per-claim `claims` list, never a summary tally — or, for any gate deliberately skipped, a written
+`waived` reason — and for the CRITIC gate specifically, **plus its `waived_category`**
+(`no-dispatch-on-host` — which also requires `inline_ran: true|false` —
+`already-reviewed-minor-edit`, `user-waived`, `external-deck`, and `cap-reached-majors-open` —
+which also requires a non-empty `open: [...]` plus `surfaced_to_user: true|false`, and is the one
+to use whenever the loop RAN and did not converge, since the other four all claim it was skipped);
+an unclassified CRITIC waiver is
+rejected, because it is indistinguishable from never having run the loop. The `design_plan`,
+`provenance` and `density` waivers take a written reason only. The
+`critic` block on the CONSENT path is written by `validate_review.py … --record <deck-dir>` from the
+review itself, never typed here; a waiver is always hand-written, which is why it must be
+classified), the
+per-slide **click order** (appear-builds opted in), **image licenses/credits** (sourced photos —
+`fetch_images.py ledger <assets> --credits` prints them, and `check_image_provenance.py` fails the
+hand-off if an attribution-required photo is credited nowhere on the slides), the
 **GIF plays-in-slideshow** note (embedded GIFs), **accepted advisories** one plain-language line
 each, the **`distinctiveness:` line whenever Step 5's bold/experimental escalation fired**
 (`user waived (bold)` or `resolved in round N` — without it, "they accepted it" and "I never asked"
@@ -29,8 +52,11 @@ further:"* line (the terminal consent's recorded headroom; if the user adopts it
 the normal post-delivery feedback loop). Two taste-ecosystem lines ride the same note when they
 apply (`references/user-taste.md`): **(a) the save-this-look offer** — for a freshly-designed look
 (Q1 branch (c), either sub-path) not yet registered, one line: *"save this look to your registry as
-<name>?"*; on an **explicit yes** persist the deck's `style.py` + a `profile.md` per the existing
-registry conventions, distilling the final round's critic `strengths` and any cross-round recurring
+<name>?"*; on an **explicit yes** run **`python3 scripts/save_register.py <deck-dir>`** — it appends
+the register itself (palette, the hues that reached the pixels, the signature move, what the motif
+generates, which slides carry it) to `<registry root>/registers.md`, reading every field out of
+`.deck-gates.json` so nothing is re-described and nothing is re-decided at hand-off — and persist the
+deck's `style.py` + a `profile.md` per the existing registry conventions, distilling the final round's critic `strengths` and any cross-round recurring
 finding dimensions into the profile's existing **Notes** field (hand-off, after the critic loop, is
 when the profile can carry what the vetted deck *proved* — this is collaborative mode's Gate A 7(b)
 persist, re-timed: one save, one owner); **skip the offer entirely under a per-deck auto directive**

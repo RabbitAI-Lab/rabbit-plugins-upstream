@@ -1,43 +1,54 @@
-## Description: <br>
-Agent Browser provides a browser automation CLI that lets AI agents navigate pages, fill forms, click controls, take screenshots, extract data, test web apps, and automate supported Electron or Slack workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Agent Browser provides CLI-driven browser automation for AI agents to navigate sites, fill forms, click controls, capture screenshots, extract data, test web apps, and automate related Electron, Slack, and cloud-browser tasks.
 
-## Publisher: <br>
-[rez0](https://clawhub.ai/user/rez0) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[rez0](https://clawhub.ai/user/rez0)
 
-## Use Case: <br>
-Developers and agent operators use Agent Browser when an agent needs to automate browser interactions, web app testing, data extraction, Slack workflows, or supported Electron desktop app tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can give an agent broad authority over websites, logged-in browser sessions, desktop apps, Slack, and persisted state. <br>
-Mitigation: Install it only where that level of browser and app automation is intended, and avoid sensitive accounts unless the automation task requires them. <br>
-Risk: Browser automation can submit forms, send messages, or act through stored authentication. <br>
-Mitigation: Require explicit confirmation before sending messages, submitting forms, or using stored authentication. <br>
-Risk: The artifact delegates detailed workflows to CLI-provided content that can affect agent behavior. <br>
-Mitigation: Review the npm package and CLI-provided workflow content before deployment. <br>
+## Use Case:
 
+Developers and AI-agent users use this skill to automate browser workflows, exploratory testing, screenshots, data extraction, form submission, and selected desktop or cloud-browser automation tasks.
 
-## Reference(s): <br>
-- [Agent Browser on ClawHub](https://clawhub.ai/rez0/agent-browser) <br>
-- [Publisher profile: rez0](https://clawhub.ai/user/rez0) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Guidance, Configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct the agent to load version-matched workflow content from the installed agent-browser CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The skill grants broad browser, Slack, and desktop-app automation authority while delegating detailed workflow content to mutable CLI-served content outside the reviewed artifact.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and pin the exact agent-browser package and installed browser components before use.
+
+Risk: Automation could interact with logged-in accounts, private workspaces, forms, messages, or third-party data.
+
+Mitigation: Use an isolated browser profile or sandbox and require explicit confirmation before logging in, sending messages, searching private workspaces, submitting forms, or modifying third-party data.
+
+## Reference(s):
+
+- [Agent Browser ClawHub Release](https://clawhub.ai/rez0/skills/agent-browser)
+- [Artifact SKILL.md](artifact/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May direct the agent to retrieve version-matched workflow content from the installed agent-browser CLI before use.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,64 @@
-## Description: <br>
-Generates 1-22 second sound effects from text prompts using the ElevenLabs text-to-sound model through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ElevenLabs text-to-sound model generates 1-22 second short sound effects from a description for foley, ambience, alerts, and game SFX.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, creators, and game or audio teams use this skill to generate short foley, ambience, alerts, and game sound effects from text descriptions through a cloud generation API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review flagged persistent API-key storage whose promised file-permission protection was not evident in the reviewed CLI package. <br>
-Mitigation: Prefer passing DLAZY_API_KEY per invocation on shared machines, or verify the permissions on ~/.dlazy/config.json after login. <br>
-Risk: Prompts and supported media paths are sent to the dLazy hosted API and generated outputs are hosted by dLazy media storage. <br>
-Mitigation: Avoid sending sensitive prompts or private media unless the user accepts the service and data-handling implications. <br>
-Risk: The documented output example uses image/png for a sound-effect skill, and the security guidance treats that example as unreliable. <br>
-Mitigation: Validate returned output types, MIME types, and URLs before presenting generated media as final audio output. <br>
+## Use Case:
 
+Developers, creators, and external users use this skill to ask an agent to generate short sound effects through the dLazy ElevenLabs SFX CLI from a text prompt.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-sfx) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Files, Guidance] <br>
-**Output Format:** [JSON responses and generated media URLs, with shell-command guidance for setup and error recovery.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key and supports prompt, duration, prompt_influence, dry-run, no-wait, and timeout options.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: server release and frontmatter) <br>
+Risk: The skill depends on an external @dlazy/cli package and hosted dLazy service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and trust the package and service before installation or use, and keep the CLI pinned to the documented version unless deliberately upgrading.
+
+Risk: Prompts and explicitly provided media paths may be sent to dLazy, and generated outputs may be hosted on files.dlazy.com.
+
+Mitigation: Avoid sending sensitive prompts or media unless that data handling is acceptable for the user's organization and use case.
+
+Risk: Using dlazy login or dlazy auth set stores an API key in local configuration.
+
+Mitigation: Protect the local config file, prefer scoped keys, and rotate or revoke keys from the dLazy dashboard when access changes.
+
+Risk: The artifact documentation shows image output examples for an audio sound-effects skill.
+
+Mitigation: Treat the output example as a documentation defect and verify actual returned audio assets during release validation.
+
+## Reference(s):
+
+- [Skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-sfx)
+- [dLazy CLI homepage](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Files, Guidance]
+
+**Output Format:** [JSON responses and generated audio asset URLs, with optional saved files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires npm or npx, a dLazy API key, and network access to dLazy service endpoints.]
+
+## Skill Version(s):
+
+1.3.17 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,301 @@
+{
+  "id": "PHQ-9",
+  "name": "患者健康问卷抑郁量表（PHQ-9）",
+  "short_name": "PHQ-9 抑郁自评",
+  "category": "抑郁",
+  "target_population": "成年人（≥12岁）",
+  "estimated_time": "约 2 分钟",
+  "item_count": 9,
+  "description": "国际通用的抑郁症状筛查工具，9 题覆盖核心抑郁症状，含 1 道自伤意念题。用于自评近两周的抑郁严重程度。",
+  "source": "Spitzer et al., 1999（患者健康问卷）；中文版经信效度验证",
+  "license": "公共领域（Pfizer 公开授权），可免费使用",
+  "scoring_type": "sum",
+  "items": [
+    {
+      "id": "q1",
+      "text": "在过去两周里，你有多少时候做事时提不起劲或没有兴趣？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "完全不会",
+          "score": 0
+        },
+        {
+          "label": "好几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "在过去两周里，你有多少时候感到心情低落、沮丧或绝望？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "完全不会",
+          "score": 0
+        },
+        {
+          "label": "好几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "在过去两周里，你有多少时候入睡困难、睡不安稳或睡眠过多？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "完全不会",
+          "score": 0
+        },
+        {
+          "label": "好几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "在过去两周里，你有多少时候感觉疲倦或没有活力？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "完全不会",
+          "score": 0
+        },
+        {
+          "label": "好几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q5",
+      "text": "在过去两周里，你有多少时候食欲不振或吃太多？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "完全不会",
+          "score": 0
+        },
+        {
+          "label": "好几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q6",
+      "text": "在过去两周里，你有多少时候觉得自己很糟，或觉得自己很失败，或让自己/家人失望？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "完全不会",
+          "score": 0
+        },
+        {
+          "label": "好几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q7",
+      "text": "在过去两周里，你有多少时候对事物专注有困难，例如看报或看电视时？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "完全不会",
+          "score": 0
+        },
+        {
+          "label": "好几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q8",
+      "text": "在过去两周里，你有多少时候行动或说话速度缓慢到别人已经察觉？或正好相反——变得比平时更烦躁或坐立不安？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "完全不会",
+          "score": 0
+        },
+        {
+          "label": "好几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ]
+    },
+    {
+      "id": "q9",
+      "text": "在过去两周里，你有多少时候有不如死掉或用某种方式伤害自己的念头？",
+      "reverse": false,
+      "crisis": true,
+      "options": [
+        {
+          "label": "完全不会",
+          "score": 0
+        },
+        {
+          "label": "好几天",
+          "score": 1
+        },
+        {
+          "label": "一半以上的天数",
+          "score": 2
+        },
+        {
+          "label": "几乎每天",
+          "score": 3
+        }
+      ]
+    }
+  ],
+  "dimensions": [
+    {
+      "name": "抑郁总分",
+      "items": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7",
+        "q8",
+        "q9"
+      ],
+      "max": 27,
+      "min": 0
+    }
+  ],
+  "standard_score": null,
+  "interpretation": {
+    "bands": [
+      {
+        "dimension": "抑郁总分",
+        "min": 0,
+        "max": 4,
+        "level": "无/极轻度",
+        "summary": "过去两周内几乎没有抑郁相关症状，情绪状态基本平稳。",
+        "advice": "保持当前的生活节奏与社交连接即可；如情绪持续走低可关注自我调节。"
+      },
+      {
+        "dimension": "抑郁总分",
+        "min": 5,
+        "max": 9,
+        "level": "轻度抑郁",
+        "summary": "出现一些轻度抑郁症状，可能对日常情绪与精力有轻微影响。",
+        "advice": "建议增加规律运动、睡眠与人际支持；若持续两周以上或加重，考虑心理咨询。"
+      },
+      {
+        "dimension": "抑郁总分",
+        "min": 10,
+        "max": 14,
+        "level": "中度抑郁",
+        "summary": "存在中等程度的抑郁症状，已较明显影响功能或情绪。",
+        "advice": "建议尽快到精神科或心理科评估，并考虑心理治疗；告知信任的人寻求支持。"
+      },
+      {
+        "dimension": "抑郁总分",
+        "min": 15,
+        "max": 19,
+        "level": "中重度抑郁",
+        "summary": "抑郁症状较重，明显影响工作、学习或人际关系。",
+        "advice": "建议尽快寻求专业诊断与治疗；避免独处时间过长，建立支持系统。"
+      },
+      {
+        "dimension": "抑郁总分",
+        "min": 20,
+        "max": 27,
+        "level": "重度抑郁",
+        "summary": "抑郁症状严重，功能受损明显，存在较高风险。",
+        "advice": "请尽快联系精神科医师进行规范治疗；如第 9 题非零，请立即使用求助资源。"
+      }
+    ]
+  },
+  "safety": {
+    "crisis_items": [
+      "q9"
+    ],
+    "crisis_rule": "q9 得分 ≥ 1 即触发",
+    "high_risk_rule": "抑郁总分 ≥ 15 或 q9 ≥ 1"
+  }
+}

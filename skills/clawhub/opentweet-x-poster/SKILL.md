@@ -1,7 +1,7 @@
 ---
 name: x-poster
-description: Post to X (Twitter) using the OpenTweet API. Create tweets, schedule posts, publish threads, write and schedule long-form X Articles from markdown, upload media, run an evergreen queue, search inspiration tweets, repurpose them with AI, run AI-qualified DM outreach campaigns with human-approved sending, and read engagement-weighted analytics, all autonomously.
-version: 1.6.0
+description: Post to X (Twitter), Bluesky and LinkedIn using the OpenTweet API. Create posts, cross-post the same content to all three networks in one call, schedule posts, publish threads, write and schedule long-form X Articles from markdown, upload media, run an evergreen queue, search inspiration tweets, repurpose them with AI, run AI-qualified DM outreach campaigns with human-approved sending, and read engagement-weighted analytics, all autonomously.
+version: 1.7.0
 homepage: https://opentweet.io/features/openclaw-twitter-posting
 user-invocable: true
 metadata: {"openclaw":{"requires":{"env":["OPENTWEET_API_KEY"]},"primaryEnv":"OPENTWEET_API_KEY"}}
@@ -9,7 +9,7 @@ metadata: {"openclaw":{"requires":{"env":["OPENTWEET_API_KEY"]},"primaryEnv":"OP
 
 # OpenTweet X Poster
 
-You can post to X (Twitter) using the OpenTweet REST API. All requests go to `https://opentweet.io` with the user's API key.
+You can post to X (Twitter), Bluesky and LinkedIn using the OpenTweet REST API. All requests go to `https://opentweet.io` with the user's API key.
 
 ## Authentication
 
@@ -50,6 +50,87 @@ Add `x_account_id` to any POST/PUT body or GET query parameter to target a speci
 
 When `x_account_id` is omitted, the primary account is used. Single-account users never need to specify it.
 
+## Cross-Posting (X, Bluesky and LinkedIn)
+
+OpenTweet can publish the same content to X, Bluesky and LinkedIn. Every post-creating endpoint takes an optional `platforms` array, and every post response carries a per-network `results` array.
+
+### Check cross-posting state first
+```
+GET https://opentweet.io/api/v1/cross-posting
+```
+Returns which networks are connected, which can actually publish right now, whether auto cross-post is on, and where a post that omits `platforms` would go:
+```json
+{
+  "auto_cross_post": false,
+  "default_targets": ["x"],
+  "deliverable_targets": ["x"],
+  "platforms": [
+    { "platform": "x", "connected": true, "usable": true,
+      "accounts": [{ "account_id": "...", "handle": "handle", "display_name": "Name", "is_primary": true }],
+      "limits": { "max_text_length": 280, "text_unit": "weighted", "max_images": 4 } },
+    { "platform": "bluesky", "connected": true, "usable": false, "needs_reconnect": true,
+      "accounts": [...], "limits": {...} },
+    { "platform": "linkedin", "connected": true, "usable": true,
+      "accounts": [...],
+      "limits": { "max_text_length": 3000, "text_unit": "codeunit", "max_images": 20, "max_videos": 0 } }
+  ]
+}
+```
+Read these two together before posting whenever the user has not said which network they mean:
+- `default_targets` is what a post that omits `platforms` is ATTEMPTED on.
+- `deliverable_targets` is the subset that will actually LAND, filtered to networks with a usable account.
+
+Anything in `default_targets` but not in `deliverable_targets` is going to fail. That is deliberate: an unusable network stays in the attempt so the failure is recorded in `results`, instead of being quietly dropped and letting the post roll up as a clean success nobody questions. Reading only `default_targets` would have you tell the user their post goes to X and Bluesky while the Bluesky authorisation is dead. Say which networks will land and which are expected to fail.
+
+`connected` and `usable` are DIFFERENT questions and you must not conflate them:
+- `connected` only means an account row exists.
+- `usable` means OpenTweet believes it can publish there right now.
+
+A user whose Bluesky authorisation died is `connected: true, usable: false, needs_reconnect: true`. Telling them "Bluesky is connected" would be misleading. Say it needs reconnecting at https://opentweet.io/settings, and do not promise a publish that is going to fail. Targeting a network with `usable: false` comes back as a `failed` or `skipped` entry in `results`. The same applies to a LinkedIn account whose 60-day sign-in has lapsed.
+
+### Targeting networks explicitly
+```
+POST https://opentweet.io/api/v1/posts
+Body: { "text": "Shipped it.", "publish_now": true, "platforms": ["x", "bluesky", "linkedin"] }
+```
+`platforms` accepts any non-empty subset of `"x"`, `"bluesky"` and `"linkedin"`, so `["bluesky"]` posts to Bluesky only and `["x", "linkedin"]` skips Bluesky. Unknown ids are dropped. An explicit list is ALWAYS honoured exactly, whatever the auto cross-post setting says.
+
+For bulk creates, `platforms` works per post inside the `posts` array and also at the top level as a default for the whole batch.
+
+### What omitting `platforms` means
+Leaving `platforms` out is NOT the same as sending `["x"]`. An unspecified post follows the user's server-side auto cross-post setting:
+- Auto cross-post ON: the post goes to EVERY connected network.
+- Auto cross-post OFF: the post goes to the single default network.
+
+If the user asked for X only, send `"platforms": ["x"]`. Do not rely on the omission, because on an account with auto cross-post on that also posts to Bluesky and LinkedIn.
+
+### Reading per-network results
+Post responses include `results`, one entry per network the post was sent to:
+```json
+"results": [
+  { "platform": "x", "status": "published", "url": "https://x.com/handle/status/123" },
+  { "platform": "bluesky", "status": "skipped", "skip_reason": "No Bluesky account connected" },
+  { "platform": "linkedin", "status": "published", "post_id": "urn:li:share:7300000000000000000",
+    "url": "https://www.linkedin.com/feed/update/urn:li:share:7300000000000000000/" }
+]
+```
+`status` is `"published"`, `"failed"`, or `"skipped"`.
+- `skipped` is NOT a failure. The post went out, one target was dropped, and `skip_reason` says why. Read `skip_reason` under both spellings: `skip_reason` and `skipReason`.
+- `failed` carries `error` with the network's rejection reason.
+- Report the outcome per network. A post that published on X and failed on Bluesky is a partial success, never a clean success. Give the user the `url` from each published entry.
+
+Character limits differ: X allows 280 (up to 25,000 with X Premium), Bluesky caps at 300 graphemes, LinkedIn allows 3,000 characters (an emoji counts as 2). Text that fits X can still be rejected by Bluesky, which comes back as a `failed` entry for Bluesky while X publishes fine.
+
+### LinkedIn
+- Personal profile only. Company Pages are not supported.
+- 3,000 characters, counted in code units, so an emoji counts as 2.
+- A thread goes to LinkedIn as ONE post, with the parts joined by a blank line.
+- Video is not supported. A post with video comes back as a `skipped` LinkedIn entry with a `skip_reason`. Up to 20 images work.
+- Hashtags and mentions publish as plain text.
+- No LinkedIn analytics. Auto-retweet and communities are X only.
+- In `results`, LinkedIn's `post_id` is a URN like `urn:li:share:7300000000000000000` and `url` is `https://www.linkedin.com/feed/update/<urn>/`.
+- The account is connected in the web dashboard (Settings > Accounts > Connect LinkedIn), not through the API. The sign-in lasts 60 days, then needs a one-click reconnect; until then `GET /api/v1/cross-posting` shows LinkedIn as `usable: false, needs_reconnect: true`.
+
 ## Post Management
 
 ### Create a tweet
@@ -57,14 +138,14 @@ When `x_account_id` is omitted, the primary account is used. Single-account user
 POST https://opentweet.io/api/v1/posts
 Body: { "text": "Your tweet text" }
 ```
-Optionally add `"scheduled_date": "2026-05-01T10:00:00Z"` to schedule it (requires active subscription, date must be in the future).
+Optionally add `"scheduled_date": "2026-05-01T10:00:00Z"` to schedule it (requires active subscription, date must be in the future). Add `"platforms": ["x", "bluesky", "linkedin"]` (or any subset) to pin which networks it goes to. See Cross-Posting above for what happens when you leave `platforms` out.
 
 ### Create and publish immediately (one step)
 ```
 POST https://opentweet.io/api/v1/posts
 Body: { "text": "Hello from the API!", "publish_now": true }
 ```
-Creates the post AND publishes to X in one request. Cannot combine with `scheduled_date` or bulk posts. Response includes `status: "posted"`, `x_post_id`, and `url` (the real X post URL) on success.
+Creates the post AND publishes in one request. Cannot combine with `scheduled_date` or bulk posts. Response includes `status: "posted"`, `x_post_id`, and `url` (the real X post URL) on success, plus a `results` array with the outcome for every network it went to. Add `"platforms": ["x", "bluesky", "linkedin"]` to publish to all three at once.
 
 ### Create a tweet with media
 ```
@@ -162,7 +243,7 @@ The date must be in the future. Use ISO 8601 format.
 ```
 POST https://opentweet.io/api/v1/posts/{id}/publish
 ```
-No body needed. Posts to X right now. Response includes `status: "posted"`, `x_post_id`, and `url` (the real X post URL).
+No body needed. Publishes right now to the networks the post was created with, or to whatever auto cross-post resolves to if it was created without `platforms`. Response includes `status: "posted"`, `x_post_id`, `url` (the real X post URL), and a `results` array with the per-network outcome.
 
 ### Batch schedule (up to 50 posts)
 ```
@@ -581,6 +662,13 @@ Pulls the user's recent published tweets from X, computes engagement-weighted wi
 - Post IDs are always 24-character MongoDB ObjectIds (e.g. "507f1f77bcf86cd799439011"), never short strings.
 - Every post response includes a `status` field: "draft", "scheduled", "posted", or "failed".
 - Published posts include a `url` field with the real X post URL. Always use this URL — never construct your own.
+- Omitting `platforms` does NOT mean "X only". It hands targeting to the user's auto cross-post setting. Send `"platforms": ["x"]` when the user asked for X only.
+- An explicit `platforms` list is always honoured exactly, even when auto cross-post is on.
+- Read the `results` array before reporting an outcome. A `skipped` entry is not a failure, a `failed` entry is, and a post can be published on one network and failed on another.
+- Call `GET /api/v1/cross-posting` when you need to know where an unspecified post will land, or when the user asks what they are connected to. `default_targets` is what gets attempted, `deliverable_targets` is what actually lands, and the difference between them is a set of expected failures you should mention up front.
+- On `GET /api/v1/cross-posting`, `connected` and `usable` are different. Never report a `connected: true, usable: false` network as working; it needs reconnecting first.
+- Bluesky caps posts at 300 characters, below X's 280-plus-Premium ceiling on longer text. Check the shortest limit among the targeted networks before sending.
+- LinkedIn allows 3,000 characters (an emoji counts as 2), takes a thread as ONE post, skips posts with video, and has no analytics. See the LinkedIn subsection under Cross-Posting.
 - To verify a post was published, check: `status` is "posted" AND `url` is present.
 - To verify a post was scheduled, check: `status` is "scheduled" AND `scheduled_date` is present in the response.
 - Tweet max length: 280 characters (per tweet in a thread).

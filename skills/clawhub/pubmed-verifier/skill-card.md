@@ -1,41 +1,58 @@
-## Description: <br>
-PubMed citation verifier that detects AI-fabricated PMID references with fuzzy matching against PubMed metadata. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Batch-verifies PMID and DOI citations against PubMed, Europe PMC, and Crossref, producing five-state citation verdicts and HTML, JSON, or text reports.
 
-## Publisher: <br>
-[docsor1212](https://clawhub.ai/user/docsor1212) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[docsor1212](https://clawhub.ai/user/docsor1212)
 
-## Use Case: <br>
-Researchers, medical writers, evidence-based medicine teams, and developers use this skill to batch-verify PMID citations, detect invalid or mismatched references, and produce reports for human review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Private drafts or citation-derived search terms may be sent to PubMed or Crossref when verification, DOI checks, or suggestions are enabled. <br>
-Mitigation: Review the selected source path before running, avoid suggestion or DOI checks for sensitive drafts when appropriate, and sanitize citation text before external lookups. <br>
-Risk: PubMed metadata may be stored in a local SQLite cache. <br>
-Mitigation: Use --no-cache for sensitive projects or clear the local cache after verification. <br>
+## Use Case:
 
+Researchers, medical writers, evidence-based medicine teams, and developers use this skill to audit PubMed citations, detect mismatched or invalid PMIDs, cross-check DOI metadata, and generate reviewable citation-verification reports.
 
-## Reference(s): <br>
-- [PubMed E-utilities API Quick Reference](references/api_examples.md) <br>
-- [ClawHub Pubmed Verifier release](https://clawhub.ai/docsor1212/pubmed-verifier) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, code, guidance, files] <br>
-**Output Format:** [Markdown guidance with CLI commands and optional HTML, JSON, or text report files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May query PubMed and Crossref, may cache PubMed metadata locally, and can generate reports for citation review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.4 (source: server release evidence) <br>
+Risk: Citation text, PMIDs, DOIs, contact email, or an NCBI API key may be sent to NCBI/PubMed, Europe PMC, or Crossref during verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run the verifier only on material whose disclosure to those scholarly APIs is acceptable, and provide --mailto or NCBI_API_KEY only when that contact or credential use is approved.
+
+Risk: Citation metadata is cached locally under ~/.cache/pubmed-verifier.
+
+Mitigation: Use --no-cache for sensitive audits or clear the local cache after use.
+
+Risk: Network or source outages are reported as unknown rather than invalid, so unresolved citations can remain unverified.
+
+Mitigation: Review unknown results before relying on a report, retry when sources are reachable, or choose an alternate metadata source with --meta-source when appropriate.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/docsor1212/skills/pubmed-verifier)
+- [PubMed E-utilities API Quick Reference](references/api_examples.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands; the verifier can produce HTML, JSON, or terminal text reports.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports include correct, mismatch, partial, invalid, and unknown verdicts; optional DOI verification and PMID suggestions may add external API calls.]
+
+## Skill Version(s):
+
+2.2.1 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

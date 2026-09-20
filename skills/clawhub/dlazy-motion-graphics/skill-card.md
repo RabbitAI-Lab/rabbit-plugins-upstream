@@ -1,43 +1,64 @@
-## Description: <br>
-Creates code-driven motion graphics such as kinetic typography, animated text videos, animated infographics, explainers, logos, and transitions using Remotion code through the dLazy hosted sandbox agent. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates code-driven motion graphics, kinetic typography, animated infographics, explainer animations, and related videos using Remotion-style text, shapes, data, logos, and transitions rather than AI-generated footage.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, designers, and content teams use this skill to start or continue dLazy motion-graphics projects that produce code-driven animated graphics rather than AI-generated footage. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, options, and attached files are sent to dLazy hosted services. <br>
-Mitigation: Use the skill only with content that is appropriate for dLazy's hosted service, and avoid attaching sensitive local files unless that transfer is acceptable. <br>
-Risk: The dLazy API key may be stored locally in the user configuration file. <br>
-Mitigation: Prefer the per-invocation DLAZY_API_KEY environment variable when persistent credentials are not desired, check permissions on ~/.dlazy/config.json after login or auth set, and rotate or revoke keys from the dLazy dashboard if exposure is suspected. <br>
+## Use Case:
 
+External users, developers, and content teams use this skill to delegate motion-graphics video creation tasks to the dLazy hosted sandbox agent through a pinned CLI workflow. It is intended for code-driven animated graphics, including text animation, infographics, logo animations, transitions, and explainer-style motion design.
 
-## Reference(s): <br>
-- [Dlazy Motion Graphics on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-motion-graphics) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and code-oriented guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires dLazy API authentication; attached local files are uploaded to dLazy storage before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and frontmatter) <br>
+Risk: Prompts and options are sent to the external dLazy API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for content that can be shared with the dLazy hosted service.
+
+Risk: Attached local files are uploaded to dLazy media storage before the hosted agent uses them.
+
+Mitigation: Review files before attachment and avoid uploading confidential or restricted material.
+
+Risk: The CLI may store an API key in local user configuration.
+
+Mitigation: Prefer per-invocation credentials when needed and rotate or revoke organization API keys from the dLazy dashboard.
+
+Risk: A persistent global CLI install can leave a local executable on the system.
+
+Mitigation: Use the pinned npx command for one-off execution when a persistent install is not desired.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-motion-graphics)
+- [dLazy CLI repository](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with CLI command examples and streamed text responses from the hosted dLazy agent]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference generated Remotion code and project state; attached local files are uploaded to dLazy media storage before use.]
+
+## Skill Version(s):
+
+1.3.18 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

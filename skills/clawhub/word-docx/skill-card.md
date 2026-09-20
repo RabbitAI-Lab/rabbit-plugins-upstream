@@ -1,41 +1,58 @@
-## Description: <br>
-Create, inspect, and edit Microsoft Word documents and DOCX files with reliable styles, numbering, tracked changes, tables, sections, and compatibility checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create, inspect, and edit Microsoft Word documents and DOCX files while preserving styles, numbering, tracked changes, tables, sections, fields, and round-trip compatibility.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-Developers, writers, and business users use this skill when Word or DOCX files need reliable creation, inspection, or edits that preserve styles, tracked changes, comments, fields, tables, sections, and round-trip compatibility. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Important DOCX files may lose formatting, tracked changes, comments, or layout fidelity during automated edits. <br>
-Mitigation: Use copies for important documents and verify round-trip behavior before delivery. <br>
-Risk: Documents can contain sensitive information, and macro-bearing .docm files carry higher risk. <br>
-Mitigation: Avoid giving the agent sensitive documents unless necessary, and treat .docm files as higher-risk inputs before opening or editing. <br>
+## Use Case:
 
+Developers, editors, and document-heavy teams use this skill to create, inspect, review, or modify Microsoft Word and DOCX files while preserving document structure and reducing formatting drift.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ivangdavila/word-docx) <br>
-- [Skill homepage](https://clawic.com/skills/word-docx) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands] <br>
-**Output Format:** [Markdown guidance with inline code or shell command examples when needed] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Focuses on preserving DOCX structure, review metadata, and compatibility across Word, LibreOffice, and Google Docs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and server release metadata) <br>
+Risk: Word documents can contain tracked changes, comments, deleted text, legal text, or sensitive business content that may still exist in document internals.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with documents the user is comfortable letting an agent process, and review document metadata, comments, and revisions before sharing or delivering outputs.
+
+Risk: OOXML edits can disrupt styles, numbering, fields, bookmarks, headers, footers, tables, or layout across Word, LibreOffice, Google Docs, and conversion tools.
+
+Mitigation: Prefer structure-preserving edits, make minimal replacements in review workflows, and perform round-trip compatibility checks when layout or references matter.
+
+Risk: DOCM files may contain macros and legacy DOC files may need conversion before DOCX assumptions are reliable.
+
+Mitigation: Treat macro-bearing and legacy files as higher risk, avoid executing macros, and convert or inspect them with appropriate tooling before making DOCX-specific edits.
+
+## Reference(s):
+
+- [Word / DOCX ClawHub listing](https://clawhub.ai/ivangdavila/skills/word-docx)
+- [Word / DOCX homepage](https://clawic.com/skills/word-docx)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown or text guidance, often with code or shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide creation, inspection, repair, or compatibility checks for Word and DOCX artifacts.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

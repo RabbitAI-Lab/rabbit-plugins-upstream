@@ -1,43 +1,61 @@
-## Description: <br>
-Search Untappd beers, breweries, and venues; read user profiles, check-ins, wishlists, distinct beers, badges, friends, and your friend activity feed; and post check-ins, toasts, and comments to your own Untappd account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Untappd beers, breweries, and venues; read user profiles, check-ins, wishlists, distinct beers, badges, friends, and your friend activity feed; and post check-ins, toasts, and comments to your own Untappd account.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Developers and agents use this skill to answer Untappd questions about beers, breweries, venues, users, check-ins, wishlists, badges, friends, and venue menus. With explicit confirmation, it can also help post check-ins, toasts, and comments to the configured Untappd account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an Untappd username and password plus mobile-app client credentials obtained outside a normal OAuth flow. <br>
-Mitigation: Install only after reviewing the underlying MCP server's credential storage and token transmission behavior, and keep secrets out of logs. <br>
-Risk: Posting tools can affect the user's public Untappd account. <br>
-Mitigation: Use the built-in dry-run preview behavior and require confirm: true before making posting calls. <br>
-Risk: The local or remote cache may contain account activity data and incomplete history coverage. <br>
-Mitigation: Treat cache contents as account activity data, protect the cache location, and rely on freshness and coverage caveats when interpreting not-found results. <br>
+## Use Case:
 
+External users and agents use this skill to query Untappd beer, brewery, venue, user, activity, wishlist, and cache data, and to prepare account actions such as check-ins, toasts, and comments.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/chrischall/skills/untappd-mcp) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/chrischall) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown or plain text guidance with tool names, configuration details, and account-action previews] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Write actions are confirm-gated and cache-backed queries report freshness and coverage caveats.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.0 (source: server release evidence) <br>
+Risk: The skill requires raw Untappd account credentials and mobile app client credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only in an environment where those credentials can be stored securely, limit access to the runtime configuration, and rotate or revoke credentials if exposure is suspected.
+
+Risk: Confirm-gated tools can post check-ins, toasts, and comments to a public Untappd account.
+
+Mitigation: Review each dry-run preview and call write tools with confirmation only when the target account action is intended.
+
+Risk: The skill caches Untappd history locally and cached results may be incomplete until sync finishes.
+
+Mitigation: Protect the local cache location and check freshness or sync progress before relying on negative cache results.
+
+Risk: The security evidence notes inconsistent write-tool documentation.
+
+Mitigation: Review the actual MCP tool registry and available parameters before enabling account-write workflows.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/untappd-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with tool names, configuration notes, and action parameters]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include compact or full Untappd response guidance, confirm-gated write previews, sync progress, and local cache freshness caveats.]
+
+## Skill Version(s):
+
+2.1.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

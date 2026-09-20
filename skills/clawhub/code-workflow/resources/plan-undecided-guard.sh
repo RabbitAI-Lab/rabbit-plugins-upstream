@@ -13,23 +13,82 @@
 
 INPUT="${CLAUDE_TOOL_INPUT:-$(cat)}"
 
+TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty' 2>/dev/null)
 FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty' 2>/dev/null)
 [ -z "$FILE_PATH" ] && exit 0
 
-# Only target plan artifacts: plan-*.md, or paths containing plan + .md
+# Only target one-shot plan ARTIFACTS in their established directories:
+#   docs/generated/plan-*.md, .ralph/docs/generated/plan-*.md, .omc/plans/*.md
+# NOT the fix-plan tracker family (fix_plan.md, checklist.md) — those are a
+# distinct, persistent, multi-session artifact class owned by the fix-plan
+# skill, where [BLOCKED]/deferred markers are the intended long-lived state,
+# not an unresolved decision awaiting this turn's AskUserQuestion. A bare
+# `*plan.md` substring glob previously matched `fix_plan.md` by accident
+# (the `*` absorbs the `fix_` prefix) and re-litigated months of already-
+# resolved history on every unrelated edit.
+# The `*docs/generated/plan-*.md` arm alone already matches any path ending
+# in that suffix regardless of what precedes it (including a `.ralph/` or
+# `.omc/`-style prefix), so a dedicated `.ralph` arm would be unreachable —
+# kept as a single arm instead of a redundant/dead second branch. No leading
+# `/` is required before `docs`/`.omc` so the match still holds even if
+# FILE_PATH is ever a bare relative path with no directory prefix at all
+# (Write/Edit's file_path is documented as always-absolute in practice, so
+# this is defense-in-depth rather than a live bug).
 case "$FILE_PATH" in
-  *plan-*.md|*plan.md|*/plans/*.md|*/generated/*plan*.md) ;;
+  *docs/generated/plan-*.md|*.omc/plans/*.md) ;;
   *) exit 0 ;;
 esac
 
-# Read the saved plan file if available (PostToolUse: the file is already updated)
-if [ -f "$FILE_PATH" ]; then
-  BODY=$(cat "$FILE_PATH")
-else
-  # Fall back to the tool input written/edited chunk
-  BODY=$(echo "$INPUT" | jq -r '(.tool_input.content // .tool_input.new_string) // empty' 2>/dev/null)
-fi
+case "$TOOL_NAME" in
+  Write)
+    # A Write is a fresh full-file replace — whole-file scan is equivalent to
+    # a diff scan (there is no "prior content" distinct from what was written).
+    BODY=$(echo "$INPUT" | jq -r '.tool_input.content // empty' 2>/dev/null)
+    ;;
+  Edit)
+    # An Edit only changes a slice of a file that may span many prior turns
+    # or sessions. Scanning the whole file re-fires on markers that were
+    # already resolved by an earlier ask-cycle. Scope to the new content only.
+    BODY=$(echo "$INPUT" | jq -r '.tool_input.new_string // empty' 2>/dev/null)
+    ;;
+  *)
+    exit 0
+    ;;
+esac
 [ -z "$BODY" ] && exit 0
+
+# Audit-annotation append exemption (Edit only): a diff that adds an audit/
+# review section heading is meta-commentary reviewing already-decided
+# content, not a fresh undecided decision introduced this turn. Such
+# sections routinely discuss trade-offs and prior recommendations in past
+# tense, which the prose patterns below read as live undecided markers,
+# firing 15+ times in one session.
+# Scoped to Edit: a Write is a full-file replace where other genuinely-
+# undecided content could still exist outside the audit section, so it stays
+# subject to the full scan.
+# For Edit, only the lines within the audit section (from the audit heading
+# up to the next Markdown heading) are stripped before undecided-marker detection,
+# so mixed edits adding both an audit section and live undecided markers are
+# still caught.
+# The Korean audit-heading keyword uses printf $'\xea\xb0\x90\xec\x82\xac' (UTF-8 bytes)
+# rather than literal Hangul so this ASCII-only source stays compliant with
+# this repo's English-only convention (block-korean-text pre-commit hook).
+AUDIT_HEADING_KO=$'\xea\xb0\x90\xec\x82\xac'
+SCAN_BODY="$BODY"
+if [ "$TOOL_NAME" = "Edit" ]; then
+  SCAN_BODY=$(printf '%s\n' "$BODY" | awk -v ko="$AUDIT_HEADING_KO" '
+    BEGIN { in_audit = 0 }
+    /^#{2,}[[:space:]]/ {
+      if ($0 ~ ko || $0 ~ /Audit/) {
+        in_audit = 1
+        next
+      } else {
+        in_audit = 0
+      }
+    }
+    !in_audit { print }
+  ')
+fi
 
 # Undecided-marker detection (2 kinds):
 #  (1) prose markers: placeholder / TBD / hold / X vs Y / decision required / recommend
@@ -50,7 +109,14 @@ if [ -z "${PATTERN:-}" ]; then
   PATTERN='___|\bTBD\b|decision required|deferred| vs |recommend|[Tt]rade-?offs?|[Aa]lternatives|\|[[:space:]]*Chosen|Pros[[:space:]]*\|.*Cons'
 fi
 
-MATCHES=$(echo "$BODY" | grep -nEi "$PATTERN" 2>/dev/null | head -8)
+MATCHES=$(printf '%s\n' "$SCAN_BODY" | grep -nEi "$PATTERN" 2>/dev/null | head -8)
+
+# Drop code-reference lines before reporting.
+# A line that cites source locations (`file.ts:120-127`, `L45`) is describing WHERE
+# something lives, not leaving a decision open — " vs " inside such a line compares
+# two code sites, not two options. Without this filter the guard blocks on prose like
+# "uuid set `validation.ts:72-77` vs skip logic `86-88`", which has no decision in it.
+MATCHES=$(printf '%s\n' "$MATCHES" | grep -vE '`[^`]*\.(ts|tsx|js|jsx|py|sh|md|json|ya?ml)[^`]*`|`[^`]*:[0-9]+(-[0-9]+)?`|\bL[0-9]+(-L?[0-9]+)?\b' || true)
 
 [ -z "$MATCHES" ] && exit 0
 

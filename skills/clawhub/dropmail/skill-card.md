@@ -1,45 +1,61 @@
-## Description: <br>
-Manage disposable email addresses using GuerrillaMail. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage disposable email addresses using GuerrillaMail for temporary address creation, disposable inbox checks, and avoiding use of a real email with untrusted services.
 
-## Publisher: <br>
-[cprite](https://clawhub.ai/user/cprite) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cprite](https://clawhub.ai/user/cprite)
 
-## Use Case: <br>
-External users and developers use this skill to create temporary email addresses, refresh disposable inboxes, read received messages, and remove locally tracked disposable mail when finished. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Disposable inbox traffic and message contents are handled by GuerrillaMail and cached locally. <br>
-Mitigation: Use the skill only for low-sensitivity temporary flows and remove tracked addresses and cached messages when they are no longer needed. <br>
-Risk: Mailbox sessions and message contents are stored under the user's home directory. <br>
-Mitigation: Avoid sensitive account recovery, financial, medical, or long-lived login workflows unless local storage controls meet the user's requirements. <br>
-Risk: HTTPS validation may be weakened when certificate support is unavailable. <br>
-Mitigation: Install or configure certificate support before using the skill in workflows where transport integrity matters. <br>
+## Use Case:
 
+External users and developers can create temporary email addresses, refresh and read disposable inboxes, and clean up local mailbox state when testing or interacting with untrusted services.
 
-## Reference(s): <br>
-- [GuerrillaMail API Reference](references/api.md) <br>
-- [GuerrillaMail API endpoint](https://api.guerrillamail.com/ajax.php) <br>
-- [ClawHub skill page](https://clawhub.ai/cprite/dropmail) <br>
-- [Publisher profile](https://clawhub.ai/user/cprite) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and CLI output summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include disposable email addresses, inbox metadata, message bodies, and local cleanup guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Disposable inbox traffic is routed through GuerrillaMail, which can see received messages.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not use the skill for sensitive account recovery, financial, medical, or long-lived login flows.
+
+Risk: Received messages and mailbox session cookies are stored locally under ~/.dropmail/.
+
+Mitigation: Treat the local database and session file as sensitive, remove disposable addresses when done, and rely on the documented private file permissions.
+
+Risk: A system-wide command installed from a mutable symlink could execute later local changes.
+
+Mitigation: Prefer the user-local install path, or install a root-owned copy for system-wide use as documented.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/cprite/skills/dropmail)
+- [Server-resolved source repository](https://github.com/cprite/dropmail)
+- [Server-resolved source commit](https://github.com/cprite/dropmail/commit/c0b2397c417e6348ef5fcd8abc7152657b238472)
+- [GuerrillaMail API reference](references/api.md)
+- [GuerrillaMail API endpoint](https://api.guerrillamail.com/ajax.php)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Guidance, Configuration]
+
+**Output Format:** [Markdown guidance and plain text CLI output with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [CLI execution can create local SQLite and session files under ~/.dropmail/.]
+
+## Skill Version(s):
+
+1.0.3 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

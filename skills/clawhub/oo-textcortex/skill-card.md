@@ -1,45 +1,59 @@
-## Description: <br>
-This skill operates TextCortex through an OOMOL-connected account to create non-streaming chat completions and inspect available models. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TextCortex lets an agent operate TextCortex through an OOMOL-connected account to create non-streaming chat completions and inspect available model metadata.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill when they want an agent to operate TextCortex through an OOMOL-connected account for chat completions and model lookup tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a connected TextCortex account and may incur API usage when creating chat completions. <br>
-Mitigation: Install and run it only when TextCortex access is intended, and confirm cost-sensitive completion requests before execution. <br>
-Risk: The create_chat_completion action changes TextCortex state by submitting a completion request with user-provided payload data. <br>
-Mitigation: Review the exact payload and expected effect with the user before approving the write action. <br>
-Risk: First-time setup may require installing the oo CLI or connecting an OOMOL account. <br>
-Mitigation: Run installer and account connection steps only from trusted OOMOL sources and only after an authentication or connection failure requires setup. <br>
+## Use Case:
 
+Developers and external users can use this skill to route TextCortex tasks through an OOMOL-connected account, including creating chat completions and listing or retrieving model information.
 
-## Reference(s): <br>
-- [TextCortex homepage](https://textcortex.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [TextCortex connection page](https://console.oomol.com/app-connections?provider=textcortex) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI; action responses are JSON when commands run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill may require installing the external OOMOL oo CLI before use.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the OOMOL install guide or installer contents before running the installer, and confirm the source is expected.
+
+Risk: TextCortex access is mediated through OOMOL-managed credentials.
+
+Mitigation: Use the skill only when OOMOL is an acceptable intermediary and avoid storing raw TextCortex tokens locally.
+
+Risk: Write or destructive connector actions could change or remove TextCortex data if added in the future.
+
+Mitigation: Confirm exact payloads and effects with the user before write actions, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [TextCortex homepage](https://textcortex.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-textcortex)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses schema-first action payload guidance and returns TextCortex connector results as JSON when actions are run.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

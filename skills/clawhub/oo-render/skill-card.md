@@ -1,46 +1,60 @@
-## Description: <br>
-Operate Render through an OOMOL-connected account for reading services, workspaces, deploys, and initiating supported service operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for Render (render.com) requests to read, create, update, and delete data through the OOMOL Render connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Render users, workspaces, services, service details, and deploy history, and to request controlled deploy, restart, resume, suspend, or rollback actions through an OOMOL-connected Render account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change Render service state, including deploy, restart, resume, suspend, and rollback operations. <br>
-Mitigation: Require explicit user confirmation of the target service, payload, and expected effect before running any state-changing action. <br>
-Risk: Evidence security guidance notes that suspend_service is not clearly marked with the same state-changing tag as other write actions. <br>
-Mitigation: Treat suspend_service as a write action and require the same confirmation standard used for deploy, restart, resume, and rollback. <br>
-Risk: The skill depends on an installed and authenticated oo CLI connected to a Render account. <br>
-Mitigation: Run installation, login, or Render connection steps only after a command fails with a matching setup or authentication error. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Render services, deploys, workspaces, and user profile information, and to manage Render service lifecycle actions through the oo CLI. It supports read operations directly and requires confirmation before write or destructive actions.
 
-## Reference(s): <br>
-- [ClawHub Render Skill](https://clawhub.ai/oomol/oo-render) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Render Homepage](https://render.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance, Configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; setup guidance is used only after authentication or connection failures.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill frontmatter) <br>
+Risk: The skill operates Render through OOMOL as an intermediary for the user's Render account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only when the user is comfortable authorizing OOMOL for the relevant Render account.
+
+Risk: First-time setup includes remote shell installer commands for the oo CLI.
+
+Mitigation: Review the installer source or use official/manual installation guidance before running remote installer commands.
+
+Risk: Service lifecycle actions can restart, resume, trigger deploys, roll back deploys, or suspend Render services.
+
+Mitigation: Require explicit user confirmation for the target, payload, and effect before write or destructive service actions.
+
+## Reference(s):
+
+- [Render homepage](https://render.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-render)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the oo CLI Render connector and may return JSON responses with execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

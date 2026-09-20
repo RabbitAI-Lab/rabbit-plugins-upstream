@@ -1,47 +1,63 @@
-## Description: <br>
-Remoet helps agents search jobs and discover tech companies that match a user's stack, curate starred company shortlists, and pull developer jobs from those shortlists. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Remoet helps agents search an open tech job board, identify companies that match a user's stack, and maintain an ongoing feed of relevant roles.
 
-## Publisher: <br>
-[remoet](https://clawhub.ai/user/remoet) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[remoet](https://clawhub.ai/user/remoet)
 
-## Use Case: <br>
-Developers and job seekers use Remoet through an agent to build or maintain their career profile, discover companies with matching tech stacks, curate starred shortlists, and retrieve or save jobs from those shortlisted companies. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Using the skill can share career profile details, CV-derived information, job preferences, saved jobs, and application activity with Remoet. <br>
-Mitigation: Install and connect the skill only if the user is comfortable sharing that information with Remoet. <br>
-Risk: Company discovery visibility settings can make a user's profile visible to partner companies. <br>
-Mitigation: Review visibility settings before enabling company discovery and use the narrowest visibility mode that fits the user's intent. <br>
-Risk: The agent can submit internal applications or delete profile items through Remoet tools. <br>
-Mitigation: Require explicit user confirmation before submitting internal applications or deleting profile items. <br>
+## Use Case:
 
+Developers and job seekers use this skill to search Remoet's open tech job catalogue, discover companies that match their stack, and manage a curated job-search feed through an agent.
 
-## Reference(s): <br>
-- [Remoet homepage](https://remoet.dev) <br>
-- [Remoet agent onboarding](https://remoet.dev/onboarding?mode=agent&utm_source=clawhub) <br>
-- [Remoet agent settings](https://remoet.dev/agents) <br>
-- [Remoet MCP API endpoint](https://api.remoet.dev/mcp) <br>
-- [Remoet ClawHub skill page](https://clawhub.ai/remoet/skills/remoet) <br>
-- [Remoet ClawHub publisher profile](https://clawhub.ai/user/remoet) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API calls] <br>
-**Output Format:** [Markdown instructions with YAML, JSON, and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires REMOET_API_KEY and a connected Remoet remote MCP server.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.0 (source: server release metadata; artifact frontmatter reports 1.2.2) <br>
+Risk: The skill connects an agent to Remoet as a hosted job-search service and may involve profile or CV data when account features are used.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start keyless for public search, add an API key or OAuth only for account features, and avoid sending full CV or profile details until comfortable with Remoet handling that data.
+
+Risk: Account actions can change profile visibility, submit internal applications, delete saved profile items, or bulk-star companies.
+
+Mitigation: Confirm with the user before profile visibility changes, internal applications, deletions, or bulk starring.
+
+Risk: Most scraped jobs require the user to apply on the employer's site rather than through Remoet.
+
+Mitigation: For external applications, return the employer application URL and make clear that the user completes the application outside Remoet.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/remoet/skills/remoet)
+- [ClawHub Publisher Profile](https://clawhub.ai/user/remoet)
+- [Remoet Homepage](https://remoet.dev)
+- [Remoet Agent Onboarding](https://remoet.dev/onboarding?mode=agent&utm_source=clawhub)
+- [Remoet Agent Settings](https://remoet.dev/agents)
+- [Remoet MCP Server](https://api.remoet.dev/mcp)
+- [Remoet OAuth MCP Server](https://api.remoet.dev/mcp/oauth)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, text]
+
+**Output Format:** [Markdown with inline shell commands and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May require an optional REMOET_API_KEY for account features; public job search and company lookup can run keyless.]
+
+## Skill Version(s):
+
+1.5.0 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -11,8 +11,13 @@ from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 SLUG = "linkfox-1688-procurement"
-TIMEOUT_SECONDS = 120
+TIMEOUT_SECONDS = 150
 SMALL_THRESHOLD = 8000
 
 ENDPOINTS = {
@@ -28,6 +33,8 @@ ENDPOINTS = {
     "logisticsTrace": "/alibaba1688/logisticsTrace",
     "confirmReceive": "/alibaba1688/confirmReceive",
     "cancelOrder": "/alibaba1688/cancelOrder",
+    "invoiceAmount": "/alibaba1688/invoiceAmount",
+    "invoiceApply": "/alibaba1688/invoiceApply",
 }
 
 CONFIRM_FIELDS = {
@@ -35,7 +42,12 @@ CONFIRM_FIELDS = {
     "paymentUrl": "confirmGetPaymentUrl",
     "confirmReceive": "confirmReceive",
     "cancelOrder": "confirmCancel",
+    "invoiceApply": "confirmApplyInvoice",
 }
+
+ORDER_FLOW_OPERATIONS = {"orderPreview", "createOrder"}
+VALID_ORDER_FLOWS = {"general", "fenxiao", "boutiquefenxiao"}
+VALID_USE_RED_ENVELOPE = {"y", "n"}
 
 AUTH_PRECHECK_EXEMPT_OPERATIONS = {"authorizeUrl", "authorizedStores"}
 
@@ -54,6 +66,10 @@ SENSITIVE_KEYS = {
     "secret",
 }
 
+HIDDEN_OUTPUT_KEYS = {
+    "tokenexpiresat",
+}
+
 _SESSION_CACHE = {}
 
 
@@ -64,7 +80,7 @@ def get_api_base():
 def get_api_key():
     """
     获取配置在环境变量的API Key。
-    如果获取不到，按 SKILL.md 的 **## 解决认证和积分问题** 处理。
+    如果获取不到，按 SKILL.md 的 **## 解决认证和算力问题** 处理。
     """
     key = os.environ.get("LINKFOX_AGENT_API_KEY") or os.environ.get("LINKFOXAGENT_API_KEY")
     if not key:
@@ -81,10 +97,17 @@ def _is_sensitive_key(key):
     return normalized in SENSITIVE_KEYS
 
 
+def _is_hidden_output_key(key):
+    normalized = str(key).replace("-", "").replace("_", "").lower()
+    return normalized in HIDDEN_OUTPUT_KEYS
+
+
 def redact(value):
     if isinstance(value, dict):
         result = {}
         for key, item in value.items():
+            if _is_hidden_output_key(key):
+                continue
             result[key] = "***REDACTED***" if _is_sensitive_key(key) else redact(item)
         return result
     if isinstance(value, list):
@@ -114,6 +137,59 @@ def require_confirmation(operation, params):
     sys.exit(2)
 
 
+def normalize_params(operation, params):
+    if operation == "createOrder":
+        use_red_envelope = params.get("useRedEnvelope")
+        if use_red_envelope is None or (isinstance(use_red_envelope, str) and not use_red_envelope.strip()):
+            params["useRedEnvelope"] = "n"
+        elif isinstance(use_red_envelope, str) and use_red_envelope.strip() in VALID_USE_RED_ENVELOPE:
+            params["useRedEnvelope"] = use_red_envelope.strip()
+        else:
+            print(
+                json.dumps(
+                    {
+                        "error": "invalid_parameter",
+                        "operation": operation,
+                        "field": "useRedEnvelope",
+                        "message": "useRedEnvelope only supports y/n. Omit it to default to n.",
+                    },
+                    ensure_ascii=False,
+                    indent=2,
+                ),
+                file=sys.stderr,
+            )
+            sys.exit(2)
+
+    if operation not in ORDER_FLOW_OPERATIONS:
+        return params
+
+    flow = params.get("flow")
+    if flow is None or (isinstance(flow, str) and not flow.strip()):
+        params["flow"] = "general"
+        return params
+
+    if isinstance(flow, str):
+        normalized_flow = flow.strip()
+        if normalized_flow in VALID_ORDER_FLOWS:
+            params["flow"] = normalized_flow
+            return params
+
+    print(
+        json.dumps(
+            {
+                "error": "invalid_parameter",
+                "operation": operation,
+                "field": "flow",
+                "message": "flow only supports general/fenxiao/boutiquefenxiao. Ordinary procurement should use general.",
+            },
+            ensure_ascii=False,
+            indent=2,
+        ),
+        file=sys.stderr,
+    )
+    sys.exit(2)
+
+
 def _call_gateway_raw(operation, params):
     path = ENDPOINTS[operation]
     data = json.dumps(params, ensure_ascii=False).encode("utf-8")
@@ -122,6 +198,7 @@ def _call_gateway_raw(operation, params):
         "Content-Type": "application/json; charset=utf-8",
         "User-Agent": "LinkFox-Skill/2.0",
         "SESSION_ID": os.environ.get("SESSION_ID", ""),
+        "MESSAGE_ID": os.environ.get("MESSAGE_ID", ""),
         "MODE_ID": os.environ.get("MODE_ID", ""),
         "APP_NAME": os.environ.get("APP_NAME", ""),
     }
@@ -184,7 +261,6 @@ def _summarize_authorized_stores(payload):
                 "accountName": store.get("accountName"),
                 "status": store.get("status"),
                 "expired": store.get("expired"),
-                "tokenExpiresAt": store.get("tokenExpiresAt"),
             }
         )
     return summary
@@ -365,6 +441,7 @@ def run_cli(operation):
         print("Parameters must be a JSON object.", file=sys.stderr)
         sys.exit(1)
 
+    params = normalize_params(operation, params)
     require_confirmation(operation, params)
     result = call_gateway(operation, params)
     sanitized = redact(result)

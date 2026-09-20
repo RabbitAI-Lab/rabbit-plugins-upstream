@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+
+
 # phase-2-tech-research.sh — 技术调研
 # 对 Phase 1 提取的每条命令做 CLI→SDK→API 三级降级验证
 set -uo pipefail
@@ -6,6 +8,12 @@ set -uo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 source "$SCRIPT_DIR/lib/utils.sh"
 source "$SCRIPT_DIR/lib/chain-verify.sh"
+
+# Discover available hcloud CLI services dynamically
+source "$SCRIPT_DIR/lib/config.sh"
+discover_hcloud_services >/dev/null  # populate cache
+SERVICES_CLI_JSON=$(get_cli_services_as_json)
+export SERVICES_CLI_JSON
 
 PHASE_NUM=2
 PHASE_NAME="tech-research"
@@ -47,6 +55,33 @@ cmds_f = sys.argv[1]
 cmds = json.load(open(cmds_f))
 results = []
 
+# #62-004: 纯本地工具检测 — 所有命令均不涉及 hcloud/云 API 时,
+# CLI→SDK→API 三级研究无意义, 直接标记 not_applicable, 不走研究流程。
+_cmd_texts = [c.get('command', '') or '' for c in cmds]
+_any_hcloud = any(t.strip().startswith('hcloud ') for t in _cmd_texts)
+_any_sdk = any(('huaweicloudsdk' in t) or ('client.' in t) for t in _cmd_texts)
+if cmds and not _any_hcloud and not _any_sdk:
+    for c in cmds:
+        results.append({
+            'cmd_id': c.get('id', 'CMD-00'),
+            'command': c.get('command', ''),
+            'description': (c.get('description', '') or '')[:100],
+            'recommended_executor': 'script',
+            'risk_level': 'low',
+            'cli': {'available': False, 'command': None, 'reason': '纯本地工具, 不涉及 hcloud CLI'},
+            'sdk': {'available': False, 'package': None, 'method': None, 'api_path': None, 'error': None, 'reason': '纯本地工具, 不涉及华为云 SDK'},
+            'api': {'available': False, 'endpoint': None, 'source': 'not_found', 'reason': '纯本地工具, 不涉及云 API'},
+            'executor_note': '纯本地工具, CLI→SDK→API 三级研究不适用'
+        })
+    summary = {
+        'cli_available': 0, 'sdk_available': 0, 'api_available': 0,
+        'not_available': 0, 'mode': 'not_applicable',
+        'note': '纯本地工具(无 hcloud/云 API 命令), 研究流程跳过'
+    }
+    output = {'research': results, 'summary': summary, 'not_applicable': True}
+    print(json.dumps(output, indent=2, ensure_ascii=False))
+    sys.exit(0)
+
 cli_avail = 0
 sdk_avail = 0
 api_avail = 0
@@ -77,7 +112,10 @@ for cmd in cmds:
     if bss_only:
         entry['cli'] = {'available': False, 'command': None, 'reason': 'BSS not supported by hcloud CLI'}
     else:
-        for svc in ['ecs', 'vpc', 'evs', 'eip', 'ims', 'as', 'elb', 'rds', 'dns', 'obs']:
+        # Load services dynamically from env (set by config.sh discovery)
+        import json as _json
+        cli_services = _json.loads(os.environ.get('SERVICES_CLI_JSON', '[]'))
+        for svc in cli_services:
             if svc in search_text or svc.upper() in search_text:
                 try:
                     r = subprocess.run(
@@ -111,11 +149,12 @@ for cmd in cmds:
 
     # If CLI not available, try SDK
     if not entry['cli']['available']:
-        for svc_pkg, sdk_cls in [
-            ('bss', 'BssClient'), ('ecs', 'EcsClient'), ('vpc', 'VpcClient'),
-            ('evs', 'EvsClient'), ('eip', 'EipClient'), ('iam', 'IamClient'),
-            ('rds', 'RdsClient'), ('dns', 'DnsClient'), ('obs', 'ObsClient')
-        ]:
+        # Extended SDK service map (service_name -> SDK package, Client class)
+        # Loaded from env or use comprehensive default
+        import json as _json2
+        _sdk_map_env = os.environ.get('SERVICES_SDK_MAP_JSON', '{"bss":"BssClient","ecs":"EcsClient","vpc":"VpcClient","evs":"EvsClient","eip":"EipClient","iam":"IamClient","rds":"RdsClient","dns":"DnsClient","obs":"ObsClient","nat":"NatClient","cdn":"CdnClient","cce":"CceClient","ces":"CesClient","dcs":"DcsClient","dds":"DdsClient","mrs":"MrsClient","dli":"DliClient","rfs":"RfsClient","apig":"ApigClient","functiongraph":"FunctionGraphClient","smn":"SmnClient"}')
+        _sdk_map = _json2.loads(_sdk_map_env)
+        for svc_pkg, sdk_cls in _sdk_map.items():
             try:
                 import_cmd = f'from huaweicloudsdk{svc_pkg}.v2 import {sdk_cls}'
                 r = subprocess.run(
@@ -220,6 +259,7 @@ r = {
 }
 print(json.dumps(r, indent=2, ensure_ascii=False))
 PYEOF
+  ensure_test_files_dir "$skill_dir" > /dev/null
   python3 "$summary_py_tmp" "$tmp_json" "$PHASE_NUM" "$PHASE_NAME" "$skill_name" "$ts" "$duration" "$verdict" "$cli_count" "$na_count" > "$(phase_file "$skill_dir" 2)"
   rm -f "$summary_py_tmp"
   rm -f "$tmp_json"

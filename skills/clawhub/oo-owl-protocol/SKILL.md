@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Owl Protocol"
   author: "OOMOL"
-  version: "1.0.1"
+  version: "1.0.3"
   services: ["owl_protocol"]
   icon: "https://static.oomol.com/logo/third-party/owl_protocol.png"
 ---

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/observability-aiops",
   "slug": "observability-aiops",
   "ownerHandle": null,
-  "version": "0.6.0",
-  "updatedAt": 1784635282968,
-  "contentHash": "34d2c107c9178866081db4e140b955901e1ad5569d0369c9a0cbb8ef3fae4dc1",
-  "fetchedAt": "2026-07-26T18:09:05.948Z"
+  "version": "0.10.4",
+  "updatedAt": 1789601404660,
+  "contentHash": "ac8672c3bb27ed024873f635687186c2c90aca1c49d886064c0f0157e0d602db",
+  "fetchedAt": "2026-09-20T12:53:36.888Z"
 }

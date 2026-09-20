@@ -1,46 +1,61 @@
-## Description: <br>
-Use when someone wants an educational explainer with a host and characters, such as history or science shorts with dialogue rather than voiceover-only B-roll. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when someone wants an educational explainer with a host and characters — history or science shorts with dialogue, not voiceover-only B-roll.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-External creators, educators, and developers use this skill to plan educational short videos that alternate host narration with on-camera expert or character dialogue. It supports history, science, nature, how-it-works, and children's explainer workflows with staged review gates before generation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow depends on prerequisite Pruna media-generation skills that may make paid API calls. <br>
-Mitigation: Confirm the prerequisite skills, expected API usage, and approval gates before generating stills, audio, video, or music. <br>
-Risk: The artifact uses binary persona gender and voice-matching fields for avatar scenes. <br>
-Mitigation: Review cast and voice requirements before use, and adapt the plan manually when nonbinary, unspecified, or user-selected voice handling is needed. <br>
-Risk: Generated educational videos can become misleading if the scene plan lacks factual depth or causal structure. <br>
-Mitigation: Review the scene table and stand-alone test at the plan gate before approving media generation. <br>
+## Use Case:
 
+External creators, educators, and developers use this skill to plan and generate educational shorts that alternate narrator beats with on-camera expert or character dialogue. It provides phase-gated guidance for story structure, prompts, stills, TTS, video clips, and final assembly.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/pruna-ai/skills/interactive-explainer) <br>
-- [Educational Explainer Scenes](artifact/references/interactive-explainer-scenes.md) <br>
-- [Educational Explainer Motion](artifact/references/interactive-explainer-motion.md) <br>
-- [Interactive Explainer Prompts](artifact/references/interactive-explainer-prompts.md) <br>
-- [Explainer Plan Template](artifact/templates/explainer-plan.template.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON plan structure and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides staged media generation with user approval gates before paid calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata and skill frontmatter) <br>
+Risk: The workflow can call external paid media-generation services during still, audio, video, and assembly phases.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Follow the documented approval gates and do not start paid generation until the user has approved the relevant phase.
+
+Risk: The workflow depends on installing and using multiple Pruna skills.
+
+Mitigation: Review the Pruna skills being added and prefer pinned or vetted versions where available.
+
+Risk: Generated educational media can contain inaccurate narration, misleading visuals, or inclusivity issues.
+
+Mitigation: Review plans, stills, audio, and clips before final assembly, and revise prompts or scripts when quality or representation issues appear.
+
+## Reference(s):
+
+- [Educational explainer motion](references/interactive-explainer-motion.md)
+- [Interactive explainer prompts](references/interactive-explainer-prompts.md)
+- [Educational explainer scenes](references/interactive-explainer-scenes.md)
+- [Educational explainer example prompt](example-prompt.md)
+- [Explainer plan template](templates/explainer-plan.template.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Configuration, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance with JSON plan configuration and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Phase-gated workflow with approve plan, approve stills, and approve clips checkpoints; default plan settings are 720p, 24 fps, and 16:9.]
+
+## Skill Version(s):
+
+1.0.13 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,56 @@
-## Description: <br>
-Healthchecks.io lets agents operate Healthchecks.io checks through OOMOL's oo CLI, including reading, creating, updating, pausing, resuming, and deleting checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Healthchecks.io through an OOMOL-connected account using the oo CLI for reading, creating, updating, pausing, resuming, and deleting Healthchecks.io resources.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Healthchecks.io monitoring checks from an OOMOL-connected account. It supports project visibility, check lifecycle operations, notification channel review, status flips, and recent ping inspection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to a connected Healthchecks.io API key through OOMOL. <br>
-Mitigation: Install only after confirming trust in OOMOL and comfort with the Healthchecks.io account connection. <br>
-Risk: Create, update, pause, resume, and delete actions can affect monitoring state or remove checks. <br>
-Mitigation: Confirm the exact target and payload with the user before approving write or destructive actions. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Healthchecks.io checks and project resources through an OOMOL-connected account. It supports status review, project listing, and confirmed lifecycle changes for checks.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-healthchecks-io) <br>
-- [Healthchecks.io Homepage](https://healthchecks.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API Calls, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON with data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill metadata) <br>
+Risk: Setup instructions include running remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if OOMOL and the oo CLI distribution path are trusted; prefer a versioned or package-manager install path and inspect or verify installer contents before running them.
+
+Risk: Write and destructive Healthchecks.io actions can create, update, pause, resume, or delete checks.
+
+Mitigation: Require explicit approval for these actions and confirm the exact payload, target, and expected effect before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-healthchecks-io)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Healthchecks.io homepage](https://healthchecks.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: server evidence release and metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

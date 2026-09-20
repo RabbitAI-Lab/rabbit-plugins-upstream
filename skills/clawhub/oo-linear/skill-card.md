@@ -1,42 +1,55 @@
-## Description: <br>
-Linear (linear.app) lets agents read, create, update, and delete Linear data through the OOMOL Linear connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Linear (linear.app). Use this skill for ANY Linear request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and project teams use this skill to read, create, update, and delete Linear workspace data through a schema-first CLI workflow. It supports common Linear issue, comment, attachment, label, project, milestone, cycle, team, user, and workflow-state operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad Linear workspace access can change business data beyond the curated action list, including through direct GraphQL mutation access. <br>
-Mitigation: Install only if broad Linear access through the OOMOL connection is acceptable; prefer curated actions, review any run_mutation payload carefully, and require explicit approval before writes or deletions. <br>
-Risk: Write and destructive actions can create, update, remove, or overwrite Linear records. <br>
-Mitigation: Confirm the exact target, payload, and expected effect with the user before running write or destructive actions. <br>
+## Use Case:
 
+Developers and operators use this skill to read and manage Linear issues, projects, teams, comments, labels, attachments, milestones, reactions, cycles, states, users, and related workflow data through an OOMOL-connected Linear account.
 
-## Reference(s): <br>
-- [ClawHub Linear skill page](https://clawhub.ai/oomol/oo-linear) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Linear homepage](https://linear.app) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution; command responses are returned as JSON by the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The skill can perform broad state-changing Linear actions, including write and destructive operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require the agent to show the exact payload and expected effect before approving write or destructive Linear actions.
+
+Risk: The setup guidance includes remote installer commands for the oo CLI.
+
+Mitigation: Prefer verified or package-manager installation for the oo CLI when available, and run remote installers only after reviewing the source and trusting OOMOL.
+
+## Reference(s):
+
+- [Linear homepage](https://linear.app)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May call the oo CLI to inspect connector schemas and run Linear actions with JSON input and output.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

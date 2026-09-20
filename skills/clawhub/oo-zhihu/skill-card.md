@@ -1,42 +1,55 @@
-## Description: <br>
-Zhihu (zhihu.com). Use this skill for ANY Zhihu request - searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zhihu (zhihu.com) lets agents read, create, and update Zhihu data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to search Zhihu content, inspect hot-list results, and run non-streaming Zhihu Zhida chat completions through an OOMOL-connected Zhihu account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queries and prompts may be sent through the OOMOL connector to a connected Zhihu account. <br>
-Mitigation: Review prompts before sending sensitive queries and install only if OOMOL oo CLI account connection is acceptable for the deployment. <br>
-Risk: Future connector actions could add write or destructive behavior. <br>
-Mitigation: Require explicit user confirmation for any write or destructive action and confirm the exact payload and effect before execution. <br>
+## Use Case:
 
+External users and developers use this skill to operate Zhihu through an OOMOL-connected account, including search, hot-list discovery, public content lookup, collections, Zhida knowledge-base workflows, PDF parsing, and PPTX generation. The skill instructs agents to inspect live connector schemas before running actions and to confirm payloads before write actions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-zhihu) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Zhihu Homepage](https://www.zhihu.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Fallback setup may lead users to pipe a remote oo CLI installer script directly into a shell without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer before running it, prefer a signed or checksummed release or package-manager install, and manually inspect scripts when possible.
+
+Risk: Write actions can change Zhihu or Zhida account state if an agent submits the wrong payload or targets the wrong account.
+
+Mitigation: Fetch the live connector schema first and confirm the exact payload, intended effect, and target account before running write actions.
+
+## Reference(s):
+
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Zhihu](https://www.zhihu.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance, Configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution; write actions require confirmation of payload and target account.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

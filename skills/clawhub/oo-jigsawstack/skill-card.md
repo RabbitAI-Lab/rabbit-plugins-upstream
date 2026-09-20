@@ -1,43 +1,57 @@
-## Description: <br>
-JigsawStack (jigsawstack.com). Use this skill for JigsawStack requests that search, read, summarize, translate, or check text through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+JigsawStack (jigsawstack.com). Use this skill for ANY JigsawStack request -- searching and reading data. Whenever a task involves JigsawStack, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate JigsawStack through the oo CLI for AI web search, search suggestions, summarization, translation, spam checks, and profanity checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User text, queries, or provider-accessible document references may be sent to the JigsawStack connector. <br>
-Mitigation: Review payloads before running connector actions and avoid sending secrets or sensitive data unless the user has approved that use. <br>
-Risk: First-time oo CLI installation, login, or account connection steps can modify the local environment or require account authorization. <br>
-Mitigation: Run setup commands only after a matching failure and get user approval before installation, login, or connection actions. <br>
+## Use Case:
 
+Developers and external users use this skill to operate JigsawStack through an OOMOL-connected account for web search, search suggestions, summarization, translation, profanity checks, and spam checks.
 
-## Reference(s): <br>
-- [JigsawStack homepage](https://jigsawstack.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-jigsawstack) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId when actions are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release metadata and SKILL.md metadata) <br>
+Risk: The setup instructions include remote installer commands that execute downloaded code directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before use and prefer a verified package manager or a pinned download with checksum or signature verification.
+
+Risk: Task text is sent through OOMOL and JigsawStack as part of the connector workflow.
+
+Mitigation: Avoid sending sensitive content unless the user's data handling requirements allow processing by those services.
+
+## Reference(s):
+
+- [ClawHub JigsawStack Skill Page](https://clawhub.ai/oomol/skills/oo-jigsawstack)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [JigsawStack Homepage](https://jigsawstack.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the OOMOL oo CLI and return connector JSON responses.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

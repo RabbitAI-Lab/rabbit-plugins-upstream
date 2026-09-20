@@ -1,42 +1,52 @@
-## Description: <br>
-Manage Git worktrees for isolated parallel development, including creating, listing, switching, and cleaning up worktrees for concurrent reviews or feature work. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage Git worktrees for isolated parallel development when creating, listing, switching, or cleaning up worktrees, or when using isolated branches for concurrent reviews or feature work.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineers use this skill to manage isolated Git worktrees for parallel implementation, branch review, and cleanup workflows without switching the main working tree in place. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The helper can duplicate local .env files containing secrets into newly created worktrees. <br>
-Mitigation: Review or edit the helper before use on repositories with real credentials, require opt-in or an allowlist for env copying, prefer .env.example, and verify copied env files stay ignored and are cleaned up with discarded worktrees. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to create and manage isolated Git worktrees for parallel feature work, code review, branch switching, and cleanup while preserving session ownership boundaries.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-git-worktree) <br>
-- [Workflow Examples](references/workflow-examples.md) <br>
-- [Troubleshooting & Technical Details](references/troubleshooting.md) <br>
-- [Hooks and Local Excludes](references/hooks-and-excludes.md) <br>
-- [Worktree Manager Script](scripts/worktree-manager.sh) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and command output summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose or run Git worktree helper commands and may summarize branch, worktree, and cleanup status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release metadata) <br>
+Risk: The skill can copy local .env-style files, which may contain secrets, into newly created worktrees and backup files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only where copied environment files are acceptable; verify those files remain ignored, treat copies as secrets, and avoid use with repositories containing production credentials or highly sensitive tokens.
+
+## Reference(s):
+
+- [Workflow Examples](references/workflow-examples.md)
+- [Troubleshooting & Technical Details](references/troubleshooting.md)
+- [Hooks and Local Excludes](references/hooks-and-excludes.md)
+- [Worktree Integration](references/worktree-integration.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline bash commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces worktree management guidance and command invocations for the bundled shell manager.]
+
+## Skill Version(s):
+
+4.6.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

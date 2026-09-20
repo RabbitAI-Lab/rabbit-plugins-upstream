@@ -1,0 +1,16 @@
+{
+  "name": "io.github.YOUR_USERNAME/YOUR_SKILL",
+  "description": "技能功能的一句话描述，将展示在 MCP Registry 列表页",
+  "version": "1.0.0",
+  "author": {
+    "name": "你的名字",
+    "url": "https://github.com/YOUR_USERNAME"
+  },
+  "license": "MIT",
+  "categories": ["automation"],
+  "command": {
+    "type": "python",
+    "command": ["python", "server.py"],
+    "cwd": "."
+  }
+}

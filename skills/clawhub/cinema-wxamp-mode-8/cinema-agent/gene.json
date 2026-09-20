@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "geneId": "wxamp_mode_8",
+  "geneVersion": "1.0.0",
+  "pluginId": "wxamp-mode-8",
+  "mode": "wxamp_mode_8",
+  "businessMode": "",
+  "displayName": "H5",
+  "executionMode": "bridge-only",
+  "requiredIdentity": [
+    "yuanxianCode",
+    "weixinMpLink"
+  ],
+  "allowedOverrides": [
+    "privateParams",
+    "deviceParams",
+    "apiParams",
+    "refererPathVersion"
+  ],
+  "runtimeTemplate": {
+    "mode": "wxamp_mode_8",
+    "captureTransport": "webview",
+    "businessFlow": {
+      "runtimePlugin": "wxamp-mode-8",
+      "executionMode": "bridge-only"
+    }
+  }
+}

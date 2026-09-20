@@ -1,0 +1,1423 @@
+{
+  "id": "ECR",
+  "name": "成人依恋量表（ECR）",
+  "short_name": "ECR 成人依恋",
+  "category": "依恋",
+  "target_population": "成年人",
+  "estimated_time": "约 6 分钟",
+  "item_count": 36,
+  "description": "Brennan 等(1998)成人依恋量表，36 题，两维度：依恋焦虑(前18题)与依恋回避(后18题)。含反向计分题。各维度均分越高表示该倾向越强。",
+  "source": "Brennan, Clark & Shaver, 1998；中文版李同归等",
+  "license": "学术免费使用",
+  "scoring_type": "average",
+  "items": [
+    {
+      "id": "an1",
+      "text": "我担心恋人/重要他人并不真正在乎我。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "an2",
+      "text": "我希望和别人关系亲密，但常发现别人不想那么亲密。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "an3",
+      "text": "我常担心我的恋人/重要他人并不真的爱我。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "an4",
+      "text": "我担心被抛弃。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "an5",
+      "text": "当我和别人关系亲密时，我感到安心。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "an6",
+      "text": "我担心别人不把我当回事。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "an7",
+      "text": "当我和别人不在一起时，我会担心失去他们。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "an8",
+      "text": "我对自己值得被爱感到安心。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "an9",
+      "text": "我常担心别人不想和我在一起。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "an10",
+      "text": "当我和别人亲近时，我能够放松。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "an11",
+      "text": "我担心我会被孤单一人。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "an12",
+      "text": "我渴望亲密却害怕受伤害。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "an13",
+      "text": "当我和别人亲近时，我感到安全。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "an14",
+      "text": "我担心自己不够有吸引力。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "an15",
+      "text": "我对关系的稳定感到安心。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "an16",
+      "text": "我担心重要他人会离开我。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "an17",
+      "text": "我容易吃醋、担心被取代。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "an18",
+      "text": "我对自己在关系中的位置感到不安。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "av1",
+      "text": "我不太愿意向别人袒露内心。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "av2",
+      "text": "我不太喜欢依赖别人。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "av3",
+      "text": "当别人和我太亲密时，我会感到不舒服。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "av4",
+      "text": "我对自己独立处理事情感到自在。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "av5",
+      "text": "我很难完全信任别人。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "av6",
+      "text": "我不太愿意让别人知道我真实的感受。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "av7",
+      "text": "我不喜欢别人太依赖我。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "av8",
+      "text": "和别人建立亲密关系让我感到自在。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "av9",
+      "text": "我更习惯保持距离，不深交。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "av10",
+      "text": "我不太需要别人的情感支持。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "av11",
+      "text": "当别人想更亲近时，我会退缩。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "av12",
+      "text": "我能够舒服地接受别人的关心。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "av13",
+      "text": "我担心太亲密会失去自我。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "av14",
+      "text": "我不喜欢被别人过多关注。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "av15",
+      "text": "我不太愿意对别人敞开心扉。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "av16",
+      "text": "我能自然地和人保持亲密而不紧张。",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "av17",
+      "text": "我倾向于自己解决一切。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    },
+    {
+      "id": "av18",
+      "text": "我不太会在关系里表达需要。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "非常不同意",
+          "score": 1
+        },
+        {
+          "label": "不同意",
+          "score": 2
+        },
+        {
+          "label": "有点不同意",
+          "score": 3
+        },
+        {
+          "label": "中立",
+          "score": 4
+        },
+        {
+          "label": "有点同意",
+          "score": 5
+        },
+        {
+          "label": "同意",
+          "score": 6
+        },
+        {
+          "label": "非常同意",
+          "score": 7
+        }
+      ]
+    }
+  ],
+  "dimensions": [
+    {
+      "name": "依恋焦虑",
+      "items": [
+        "an1",
+        "an2",
+        "an3",
+        "an4",
+        "an5",
+        "an6",
+        "an7",
+        "an8",
+        "an9",
+        "an10",
+        "an11",
+        "an12",
+        "an13",
+        "an14",
+        "an15",
+        "an16",
+        "an17",
+        "an18"
+      ],
+      "method": "average",
+      "max": 7,
+      "min": 1
+    },
+    {
+      "name": "依恋回避",
+      "items": [
+        "av1",
+        "av2",
+        "av3",
+        "av4",
+        "av5",
+        "av6",
+        "av7",
+        "av8",
+        "av9",
+        "av10",
+        "av11",
+        "av12",
+        "av13",
+        "av14",
+        "av15",
+        "av16",
+        "av17",
+        "av18"
+      ],
+      "method": "average",
+      "max": 7,
+      "min": 1
+    }
+  ],
+  "standard_score": null,
+  "interpretation": {
+    "bands": [
+      {
+        "dimension": "依恋焦虑",
+        "min": 1,
+        "max": 2.99,
+        "level": "低焦虑",
+        "summary": "对关系中的被弃/亲密较安心。",
+        "advice": "维持安全的依恋模式。"
+      },
+      {
+        "dimension": "依恋焦虑",
+        "min": 3,
+        "max": 4.49,
+        "level": "中等焦虑",
+        "summary": "有一定对被弃与亲密的不安。",
+        "advice": "觉察关系中的焦虑触发点，练习自我安抚。"
+      },
+      {
+        "dimension": "依恋焦虑",
+        "min": 4.5,
+        "max": 7,
+        "level": "高焦虑",
+        "summary": "较高依恋焦虑，易担心被弃。",
+        "advice": "可考虑依恋取向的心理咨询。"
+      },
+      {
+        "dimension": "依恋回避",
+        "min": 1,
+        "max": 2.99,
+        "level": "低回避",
+        "summary": "能较舒服地建立亲密。",
+        "advice": "维持。"
+      },
+      {
+        "dimension": "依恋回避",
+        "min": 3,
+        "max": 4.49,
+        "level": "中等回避",
+        "summary": "对过度亲密有一定不适。",
+        "advice": "尝试逐步增加关系中的开放度。"
+      },
+      {
+        "dimension": "依恋回避",
+        "min": 4.5,
+        "max": 7,
+        "level": "高回避",
+        "summary": "较高依恋回避，倾向于保持距离。",
+        "advice": "关注回避背后的原因，必要时寻求支持。"
+      }
+    ]
+  },
+  "safety": {
+    "crisis_items": [],
+    "crisis_rule": "",
+    "high_risk_rule": ""
+  }
+}

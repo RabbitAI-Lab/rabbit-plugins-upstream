@@ -4,12 +4,12 @@
 
 ```bash
 # Validate generated skill
-bash scripts/validate-skill.sh {skill-path}
+bash scripts/validate-skill.sh -s {skill-path}
 
 # Test generated skill commands
-bash scripts/test-cli-commands.sh {skill-path} --executor cli
-bash scripts/test-cli-commands.sh {skill-path} --executor sdk
-bash scripts/test-cli-commands.sh {skill-path} --executor api
+bash scripts/test-cli-commands.sh -s {skill-path} -e cli
+bash scripts/test-cli-commands.sh -s {skill-path} -e sdk
+bash scripts/test-cli-commands.sh -s {skill-path} -e api
 ```
 
 ## SDK Methods
@@ -17,10 +17,11 @@ bash scripts/test-cli-commands.sh {skill-path} --executor api
 ```python
 # Check SDK availability
 from huaweicloudsdkbss.v2 import BssClient
-
-# Generate dataflow diagram
-bash scripts/generate-dataflow-diagram.sh {skill-path}
 ```
+
+## Dataflow Diagram
+
+Phase 3 writes the Mermaid dataflow content directly to `references/dataflow-diagram.md`; no separate generation script is required.
 
 ## Phase Summary Helpers
 

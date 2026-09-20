@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
+
+
 # phase-4-execute-tests.sh — 用例执行
-# 只读自动执行，写操作逐条用户确认
-set -uo pipefail
+# 只读自动执行；写操作仅在 ALLOW_WRITES=1 时执行（详见 SKILL.md 边界表）
+set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 source "$SCRIPT_DIR/lib/utils.sh"
@@ -20,9 +22,24 @@ run_phase4() {
 
   # Force AK/SK check before any SDK/CLI execution
   step "检查 AK/SK 凭证..."
-  if ! ensure_ak_sk; then
-    fail "AK/SK 凭证缺失，无法执行 SDK/CLI 测试用例"
-    warn "请设置环境变量后重试: export HUAWEI_ACCESS_KEY=xxx; export HUAWEI_SECRET_KEY=xxx (或任意以 HUAWEI/HW/HWC 开头的 AK/SK 变量)"
+  set +e
+  ensure_ak_sk
+  cred_rc=$?
+  set -e
+  if [ $cred_rc -ne 0 ]; then
+    if [ $cred_rc -eq 77 ]; then
+      # Credentials required but not provided — env-var template has been
+      # emitted to stderr by ensure_ak_sk(). The calling agent (or human)
+      # MUST output that template to the user and ask them to set env vars
+      # out-of-band (shell profile / PowerShell $PROFILE). Do NOT ask the
+      # user to type or paste AK/SK in chat. See SKILL.md "Agent Protocol".
+      fail "AK/SK 凭证缺失（exit 77 — 详见 stderr 中的 env-var 设置模板）"
+      fail "  sentinel: $CRED_REQUEST_SENTINEL"
+      fail "  调用方应将该模板原样输出给用户，让用户带外设置环境变量后重跑"
+      fail "  --phase 4 或 --resume，禁止直接索要 AK/SK 明文"
+      return 77
+    fi
+    fail "AK/SK 凭证检查失败（exit=$cred_rc）"
     return 1
   fi
 
@@ -50,8 +67,13 @@ PYEOF
 
   # Write Python execution script to temp file
   local py_tmp; py_tmp=$(mktemp)
+  # 共享占位符替换模块(phase-3/4 单一维护点)
+  export PLACEHOLDER_UTILS="$SCRIPT_DIR/lib/placeholder-utils.py"
   cat > "$py_tmp" << 'PYEXEC'
 import json, subprocess, sys, time, os, re
+
+# 加载共享占位符替换逻辑(见 lib/placeholder-utils.py)
+exec(open(os.environ.get('PLACEHOLDER_UTILS', '')).read())
 
 cases_f = sys.argv[1]
 skill_root = sys.argv[2] if len(sys.argv) > 2 else os.path.dirname(os.path.dirname(cases_f))
@@ -75,6 +97,7 @@ for tc in cases:
     entry = {
         'tc_id': tc_id,
         'name': name,
+        'type': tc.get('type', ''),
         'command': tc.get('command', ''),
         'status': 'skip',
         'duration_s': 0,
@@ -84,12 +107,50 @@ for tc in cases:
         'user_confirmed': False
     }
 
+    # 兜底: 复用共享 replace_placeholders(与 phase-3 同源, 单一维护点)
+    if tc.get('command'):
+        tc['command'] = replace_placeholders(tc['command'], skill_root)
+        entry['command'] = tc['command']
+
+    # 交互式/模板命令不实际执行 → skip (而非 fail)
+    cmd_chk = tc.get('command', '').strip().lower()
+    _hc = re.match(r'^hcloud\s+(\S+)', cmd_chk)
+    if cmd_chk == 'hcloud' or (_hc and _hc.group(1) in ('configure', 'help', '--help', '-h', '--version')):
+        entry['status'] = 'skip'
+        entry['output_snippet'] = f'交互式/帮助命令 (hcloud {_hc.group(1)}), 非交互模式不可执行, 跳过'
+        skip_count += 1
+        print(f"    ⏭️ SKIP-交互/帮助命令 (hcloud {_hc.group(1)})")
+        exec_results.append(entry)
+        continue
+    if re.search(r'\[\s*--[a-z-]+=\.\.\.', cmd_chk) or re.search(r'\[\s*--key=value', cmd_chk) \
+       or re.search(r'--cli-region=\s*(?:\s|$)', cmd_chk) \
+       or re.search(r'\{endpoint\}|\{url\}|\{host\}|https?://\{', cmd_chk) \
+       or re.search(r'\{[a-z_]+\}', cmd_chk):
+        entry['status'] = 'skip'
+        entry['output_snippet'] = '模板命令(占位符未解析), 跳过'
+        skip_count += 1
+        print(f"    ⏭️ SKIP-模板命令: {tc.get('command', '')[:60]}")
+        exec_results.append(entry)
+        continue
+
     if is_write:
         risk = tc.get('risk_level', 'high')
         print(f"    ⚠️  写操作 [{risk}] — 命令: {tc.get('command', 'N/A')[:80]}")
         print(f"    预期: {tc.get('expected', 'N/A')[:80]}")
-        print(f"    非交互模式: 使用 AK/SK 凭证直接执行写操作")
 
+        # ALLOW_WRITES gate: write cases only execute when explicitly enabled
+        # (ALLOW_WRITES=1), mirroring phase-6 and the SKILL.md boundary table.
+        # Skipped write cases keep status=skip and record no resource_changes.
+        allow_writes = os.environ.get('ALLOW_WRITES', '0') == '1'
+        if not allow_writes:
+            entry['status'] = 'skip'
+            entry['output_snippet'] = '写操作已跳过 (ALLOW_WRITES=0)'
+            skip_count += 1
+            print(f"    ⏭️ SKIP-写操作 (ALLOW_WRITES=0)")
+            exec_results.append(entry)
+            continue
+
+        print(f"    非交互模式: 使用已通过 env var 设定的 AK/SK 凭证执行写操作 (ALLOW_WRITES=1)")
         entry['user_confirmed'] = True
 
     executor_type = executor
@@ -98,12 +159,10 @@ for tc in cases:
     try:
         if executor_type == 'cli':
             cmd_text = tc.get('command', tc.get('description', ''))
-            # Clean up placeholders: {region} → cn-north-4, {id} → etc.
-            _region = os.environ.get('HUAWEI_REGION', 'cn-north-4')
-            cmd_text = re.sub(r'<r>|<region>|\{region\}|\{cli_region\}', _region, cmd_text)
-            cmd_text = re.sub(r'<id>|<server_id>|<vpc_id>|<subnet_id>|<flavor_id>|<image_id>|\{id\}|\{instance_id\}', '', cmd_text)
-            cmd_text = re.sub(r'<[^>]+>|\{[^}]+\}', '', cmd_text)
-            cmd_text = re.sub(r'--cli-region=\{\w+\}', '', cmd_text)
+            # replace_placeholders already ran at the top of the loop (line 108),
+            # handling {region}, <region>, /path/to/xxx, {id}, [--key=value ...], etc.
+            # The redundant regex cleanup below was removed to avoid double-processing
+            # conflicts that corrupt multi-line commands and strip valid params.
             # Remove leading/trailing pipes and whitespace that might leak from table extraction
             cmd_text = cmd_text.strip().lstrip('|').strip()
             if cmd_text and len(cmd_text) > 5:
@@ -115,17 +174,44 @@ for tc in cases:
                 _trunc = int(os.environ.get('OUTPUT_TRUNC_CLI', '1000'))
                 _trunc_err = int(os.environ.get('OUTPUT_TRUNC_ERR', '300'))
                 output = (r.stdout[:_trunc] + r.stderr[:_trunc_err]).strip()
-                status = 'pass' if r.returncode == 0 else 'fail'
-                if r.returncode != 0:
-                    error_detail = (r.stderr[:200] or r.stdout[:200]).strip()
+                if tc.get('type') in ('negative', '负向'):
+                    # 负向用例: CLI 正确拒绝未知参数 = pass; 静默接受 = fail。
+                    # hcloud KooCLI 对 USE_ERROR 等错误返回码为 0 (rc==0 但输出含错误提示),
+                    # 因此增加文本兜底: rc==0 但输出含 [USE_ERROR]/is not supported/format
+                    # 等错误特征时, 同样视为 CLI 已拒绝未知参数 → pass。
+                    if r.returncode != 0:
+                        status = 'pass'
+                        error_detail = None
+                    else:
+                        _neg_out = (output or '').lower()
+                        _neg_reject_pats = ('[use_error]', 'use_error', 'is not supported',
+                                            'not supported', 'unrecognized', 'parameter format',
+                                            'format error', 'format incorrect', 'invalid parameter',
+                                            'invalid option', 'unknown option', 'unknown parameter',
+                                            'invalid value', 'not found', '参数格式', '不支持')
+                        if any(p in _neg_out for p in _neg_reject_pats):
+                            status = 'pass'
+                            error_detail = f'负向用例: hcloud rc=0 但输出含错误提示(已拒绝未知参数): {output[:200]}'
+                        else:
+                            status = 'fail'
+                            error_detail = '负向用例: 命令未拒绝未知参数(--invalid-flag-xyz), 报错质量差'
+                    # 负向用例不做 CLI error pattern 复查
                 else:
-                    error_detail = None
-                    # Even with return code 0, check output for CLI error patterns (e.g. hcloud USE_ERROR)
-                    out_lower = output.lower()
-                    _cli_err_patterns = json.loads(os.environ.get('CLI_ERROR_PATTERNS', '[]'))
-                    if any(kw in out_lower for kw in _cli_err_patterns):
-                        status = 'warn'
-                        error_detail = f'CLI returned error in output (rc=0): {output[:200]}'
+                    status = 'pass' if r.returncode == 0 else 'fail'
+                    if r.returncode != 0:
+                        error_detail = (r.stderr[:200] or r.stdout[:200]).strip()
+                    else:
+                        error_detail = None
+                        # Even with return code 0, check output for CLI error patterns (e.g. hcloud USE_ERROR)
+                        out_lower = output.lower()
+                        _cli_err_patterns = json.loads(os.environ.get('CLI_ERROR_PATTERNS', '[]'))
+                        if any(kw in out_lower for kw in _cli_err_patterns):
+                            status = 'warn'
+                            error_detail = f'CLI returned error in output (rc=0): {output[:200]}'
+                        elif not output.strip():
+                            # 输出质量判定(#62-010): 返回码 0 但无任何输出 → 无法确认用户需求被满足
+                            status = 'warn'
+                            error_detail = '返回码 0 但输出为空, 无法确认需求被满足, 建议人工核实'
             else:
                 output = f"命令为空: {cmd_text}"
                 status = 'fail'
@@ -154,7 +240,7 @@ for tc in cases:
                     sdk_tmp.close()
                     r = subprocess.run(
                         ['python3', sdk_tmp.name],
-                        capture_output=True, text=True, timeout=60,
+                        capture_output=True, text=True, timeout=int(os.environ.get('TIMEOUT_SDK', '60')),
                         env=os.environ
                     )
                     output = (r.stdout[:2000] + '\n' + r.stderr[:500]).strip()
@@ -238,6 +324,12 @@ for tc in cases:
                         status = 'fail'
                 except ImportError as e:
                     output = f"SDK导入失败: {str(e)[:200]}"
+                    # ModuleNotFoundError → 环境依赖缺失(非 skill 逻辑错误),
+                    # 明确标注, 提示在 SKILL.md 声明依赖(#53-002)
+                    if 'No module named' in str(e):
+                        _m = re.search(r"No module named '([\w\.]+)'", str(e))
+                        _dep = _m.group(1) if _m else '未知'
+                        output = f"环境依赖缺失: 需安装 {_dep} (pip install {_dep}) — 建议在 SKILL.md 依赖说明中声明"
                     status = 'fail'
                 except Exception as e:
                     output = f"SDK执行失败: {str(e)[:300]}"
@@ -250,8 +342,11 @@ for tc in cases:
                 script_path = os.path.join(skill_root, script_part.split()[0])
                 script_args = ' '.join(script_part.split()[1:]) if len(script_part.split()) > 1 else ''
                 if os.path.isfile(script_path):
-                    full_cmd = f'python3 {script_path} {script_args}'.strip()
-                    r = subprocess.run(['bash', '-c', full_cmd], capture_output=True, text=True, timeout=60, env=os.environ)
+                    # _posix: bash -c consumes backslashes in unquoted Windows paths
+                    # (C:\Users\x -> C:Usersx); use POSIX form, the python shim
+                    # converts it back to native before the interpreter runs.
+                    full_cmd = f'python3 {_posix(script_path)} {script_args}'.strip()
+                    r = subprocess.run(['bash', '-c', full_cmd], capture_output=True, text=True, timeout=int(os.environ.get('TIMEOUT_SDK', '60')), env=os.environ)
                     output = (r.stdout[:1000] + '\n' + r.stderr[:500]).strip()
                     status = 'pass' if r.returncode == 0 else 'fail'
                 else:
@@ -263,7 +358,7 @@ for tc in cases:
                 if not os.path.isfile(script_path):
                     script_path = os.path.join(skill_root, 'scripts', os.path.basename(script_part))
                 if os.path.isfile(script_path):
-                    r = subprocess.run(['bash', script_path, skill_root], capture_output=True, text=True, timeout=60)
+                    r = subprocess.run(['bash', script_path, skill_root], capture_output=True, text=True, timeout=int(os.environ.get('TIMEOUT_SDK', '60')))
                     output = (r.stdout[:1000] + '\n' + r.stderr[:500]).strip()
                     status = 'pass' if r.returncode == 0 else 'fail'
                 else:
@@ -275,7 +370,7 @@ for tc in cases:
             if cmd_text.strip() and len(cmd_text) > 10:
                 r = subprocess.run(
                     ['bash', '-c', cmd_text],
-                    capture_output=True, text=True, timeout=30,
+                    capture_output=True, text=True, timeout=int(os.environ.get('TIMEOUT_CLI', '30')),
                     env={**__import__('os').environ}
                 )
                 output = (r.stdout[:500] + r.stderr[:200]).strip()
@@ -308,7 +403,7 @@ for tc in cases:
                 missing_params = []
                 for m in re.finditer(r'(\w+)\s+cannot be none|(\w+)\s+cannot be empty|missing\s+(\w+)|field required.*?(\w+)', err_text):
                     missing_params.append(m.group(1) or m.group(2) or m.group(3) or m.group(4))
-                # Also extract from request.XXX = '' pattern in command
+                # Also extract from request.PARAM = '' pattern in command
                 cmd_text = tc.get('command', '')
                 for m in re.finditer(r'request\.(\w+)\s*=\s*[\'\"]{2}', cmd_text):
                     missing_params.append(m.group(1))
@@ -381,6 +476,29 @@ if manual_test_items:
     print(f"{'='*60}")
     print(f"💡 提示: 请提供真实业务数据后手工执行上述命令，或在 templates/test-defaults.json 中配置 request_defaults")
 
+# 文档缺口分析(#007): warn/skip 用例中, SKILL.md 声明了但命令实际不支持的参数
+doc_gap_issues = []
+try:
+    with open(os.path.join(skill_root, 'SKILL.md'), encoding='utf-8') as _md_f:
+        _md_text = _md_f.read()
+except Exception:
+    _md_text = ''
+for r in exec_results:
+    if r.get('status') not in ('warn', 'skip'):
+        continue
+    err = str(r.get('error') or r.get('output_snippet') or '')
+    m = re.search(r'Invalid parameter:?\s*--?([\w-]+)', err) or \
+        re.search(r'Unsupported (?:parameter|option)[^:]*:?\s*--?([\w-]+)', err)
+    if m:
+        flag = '--' + m.group(1).split('=')[0]
+        if flag in _md_text and flag not in [g['param'] for g in doc_gap_issues]:
+            doc_gap_issues.append({
+                'tc_id': r['tc_id'],
+                'param': flag,
+                'detail': f'{flag} 出现在 SKILL.md 中, 但命令执行不被支持 (用例命令: {r.get("command", "")[:80]})'
+            })
+            print(f"    📋 文档缺口: SKILL.md 声明 {flag} 但实际命令不支持 → 建议修正 SKILL.md")
+
 result = {
     'execution_results': exec_results,
     'statistics': {
@@ -392,7 +510,8 @@ result = {
         'pass_rate': pass_rate
     },
     'all_resources_changed': all_resources,
-    'manual_test_items': manual_test_items
+    'manual_test_items': manual_test_items,
+    'doc_gap_issues': doc_gap_issues
 }
 
 print("\n\n---JSON_START---")
@@ -441,6 +560,7 @@ r = {
 }
 print(json.dumps(r, indent=2, ensure_ascii=False))
 PYEOF
+  ensure_test_files_dir "$skill_dir" > /dev/null
   python3 "$summary_py_tmp" "$tmp_json" "$PHASE_NUM" "$PHASE_NAME" "$skill_name" "$ts" "$duration" "$verdict" "$pass_count" "$fail_count" "$skip_count" > "$(phase_file "$skill_dir" 4)"
   rm -f "$summary_py_tmp"
   rm -f "$tmp_json"
@@ -479,8 +599,37 @@ PYEOF
   fi
 }
 
-for skill_dir in "$@"; do
-  run_phase4 "$skill_dir" || exit 1
+# Parse args: getopts for -s, pre-filter --skill (getopts can't handle --long)
+SKILL_DIRS=()
+_rest=()
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --skill) SKILL_DIRS+=("$2"); shift 2 ;;
+    --skill=*) SKILL_DIRS+=("${1#--skill=}"); shift ;;
+    --help|-h) echo "用法: $(basename "$0") [-s <dir>]... [--skill <dir>]... [<dir>...]"; exit 0 ;;
+    *) _rest+=("$1"); shift ;;
+  esac
+done
+set -- ${_rest[@]+"${_rest[@]}"}
+OPTIND=1
+while getopts ":s:h" opt; do
+  case $opt in
+    s) SKILL_DIRS+=("$OPTARG") ;;
+    h) echo "用法: $(basename "$0") [-s <dir>]... [--skill <dir>]... [<dir>...]"; exit 0 ;;
+    \?) ;;
+  esac
+done
+shift $((OPTIND-1))
+for arg in "$@"; do SKILL_DIRS+=("$arg"); done
+
+for skill_dir in "${SKILL_DIRS[@]}"; do
+  set +e
+  run_phase4 "$skill_dir"
+  rc=$?
+  set -e
+  if [ $rc -ne 0 ]; then
+    exit $rc  # propagate exit code (77 for cred request, 1 for other errors)
+  fi
   echo ""
 done
 

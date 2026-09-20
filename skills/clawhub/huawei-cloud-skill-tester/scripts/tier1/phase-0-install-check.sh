@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
+
+
 # phase-0-install-check.sh — 安装验证
 # 检查 skill 目录完整性，模拟安装/卸载/重装状态
-set -uo pipefail
+set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 source "$SCRIPT_DIR/lib/utils.sh"
@@ -35,18 +37,40 @@ r = {
     'references/': os.path.isdir(d+'/references'),
     'references/iam-policies.md': os.path.isfile(d+'/references/iam-policies.md'),
 }
+# 硬性契约仅 SKILL.md + references/ 两项。
+# iam-policies.md 对云 API skill 必需, 但本地工具类 skill 不涉及 IAM,
+# 改为软性检查(报告但不阻断)。scripts/ 已为软性。(ISSUE-002)
+r['_hard_ok'] = bool(r['SKILL.md'] and r['references/'])
 print(json.dumps(r))
 PYEOF
   checks=$(python3 "$checks_py_tmp" "$skill_dir")
   rm -f "$checks_py_tmp"
   local dir_pass
-  dir_pass=$(echo "$checks" | python3 -c "import json,sys; d=json.load(sys.stdin); print(all(d.values()))")
+  dir_pass=$(echo "$checks" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('_hard_ok', all(v for k,v in d.items() if not k.startswith('_'))))")
+  # 纯 CLI skill 提示(无 scripts/ 目录)
+  if echo "$checks" | grep -q '"scripts/": false'; then
+    info "💡 纯 CLI skill(无 scripts/ 目录)，按 CLI 型流程继续（脚本相关校验跳过）"
+  fi
 
   # === Install/Uninstall/Reinstall ===
-  local hermes_skill_dir="${SKILL_PATH_HERMES:-$HOME/.hermes/skills}"
-  local target_dir="$hermes_skill_dir/$skill_name"
+  # install_dir defaults to SKILL_INSTALL_DIR (set in config.sh with auto-detection
+  # of ~/.agents/skills → ~/.hermes/skills → default). Can be overridden via env.
+  local install_dir="${SKILL_INSTALL_DIR:-$HOME/.agents/skills}"
+  local target_dir="$install_dir/$skill_name"
   local is_remote=false
   [[ "$skill_dir" == http://* || "$skill_dir" == https://* ]] && is_remote=true
+
+  # 同路径防护: 当技能已安装在默认安装目录且无独立工作区副本时,
+  # skill_dir 与 target_dir 是同一物理路径, 卸载/重装会删除技能源目录本身。
+  local same_path=false
+  if ! $is_remote; then
+    local rp_skill rp_target
+    rp_skill=$(realpath "$skill_dir" 2>/dev/null || echo "$skill_dir")
+    rp_target=$(realpath "$target_dir" 2>/dev/null || echo "$target_dir")
+    if [ "$rp_skill" = "$rp_target" ]; then
+      same_path=true
+    fi
+  fi
 
   step "执行安装测试..."
   local install_status="pass" install_duration=0
@@ -55,18 +79,23 @@ PYEOF
 
   # --- Install ---
   if $is_remote; then
-    # Remote skill: use hermes skills install
-    local inst_start; inst_start=$(date +%s%N)
-    hermes skills install "$skill_dir" --yes 2>/dev/null && install_status="pass" || install_status="fail"
-    local inst_end; inst_end=$(date +%s%N)
-    install_duration=$(( (inst_end - inst_start) / 1000000 ))
+    # Remote skill: use configurable install command
+    if [ -z "${SKILL_INSTALL_CMD:-}" ]; then
+      info "💡 SKILL_INSTALL_CMD 为空，远程安装已跳过"
+      install_status="skipped"
+    else
+      local inst_start; inst_start=$(date +%s%N)
+      ${SKILL_INSTALL_CMD} install "$skill_dir" --yes 2>/dev/null && install_status="pass" || install_status="fail"
+      local inst_end; inst_end=$(date +%s%N)
+      install_duration=$(( (inst_end - inst_start) / 1000000 ))
+    fi
   elif [ -d "$target_dir" ]; then
-    info "💡 技能已安装于 ~/.hermes/skills/，跳过安装"
+    info "💡 技能已安装于 ${install_dir}，跳过安装"
     install_status="skipped"
   else
     # Local skill: copy directory
     local inst_start; inst_start=$(date +%s%N)
-    mkdir -p "$hermes_skill_dir"
+    mkdir -p "$install_dir"
     cp -r "$skill_dir" "$target_dir" && install_status="pass" || install_status="fail"
     local inst_end; inst_end=$(date +%s%N)
     install_duration=$(( (inst_end - inst_start) / 1000000 ))
@@ -75,9 +104,25 @@ PYEOF
 
   # --- Uninstall ---
   step "执行卸载测试..."
+  local link_target=""   # 符号链接目标(卸载前记录, 重装时恢复)
   if $is_remote; then
+    if [ -z "${SKILL_INSTALL_CMD:-}" ]; then
+      uninstall_status="skipped"
+    else
+      local uninst_start; uninst_start=$(date +%s%N)
+      ${SKILL_INSTALL_CMD} uninstall "$skill_name" --yes 2>/dev/null && uninstall_status="pass" || uninstall_status="fail"
+      local uninst_end; uninst_end=$(date +%s%N)
+      uninstall_duration=$(( (uninst_end - uninst_start) / 1000000 ))
+    fi
+  elif $same_path; then
+    info "💡 skill_dir 与 target_dir 为同一路径，跳过卸载（避免删除技能本身）"
+    uninstall_status="skipped"
+  elif [ -L "$target_dir" ] && [ -n "$target_dir" ] && [ "$target_dir" != "/" ]; then
+    # 符号链接: 只删链接本身, 不删链接目标; 记录目标供重装恢复(#54-004)
+    link_target=$(readlink "$target_dir")
+    info "💡 $target_dir 是符号链接(→ ${link_target:-?})，卸载链接而非真实目录"
     local uninst_start; uninst_start=$(date +%s%N)
-    hermes skills uninstall "$skill_name" --yes 2>/dev/null && uninstall_status="pass" || uninstall_status="fail"
+    rm -f "$target_dir" && uninstall_status="pass" || uninstall_status="fail"
     local uninst_end; uninst_end=$(date +%s%N)
     uninstall_duration=$(( (uninst_end - uninst_start) / 1000000 ))
   elif [ -d "$target_dir" ] && [ -n "$target_dir" ] && [ "$target_dir" != "/" ] && [ "$target_dir" != "$HOME" ]; then
@@ -94,8 +139,22 @@ PYEOF
   # --- Reinstall ---
   step "执行重装测试..."
   if $is_remote; then
+    if [ -z "${SKILL_INSTALL_CMD:-}" ]; then
+      reinstall_status="skipped"
+    else
+      local reinst_start; reinst_start=$(date +%s%N)
+      ${SKILL_INSTALL_CMD} install "$skill_dir" --yes 2>/dev/null && reinstall_status="pass" || reinstall_status="fail"
+      local reinst_end; reinst_end=$(date +%s%N)
+      reinstall_duration=$(( (reinst_end - reinst_start) / 1000000 ))
+    fi
+  elif $same_path; then
+    info "💡 skill_dir 与 target_dir 为同一路径，跳过重装"
+    reinstall_status="skipped"
+  elif [ -n "$link_target" ]; then
+    # 原为符号链接: 恢复链接而非创建真实目录, 保持安装目录结构(#54-004)
+    info "💡 恢复符号链接 $target_dir → $link_target"
     local reinst_start; reinst_start=$(date +%s%N)
-    hermes skills install "$skill_dir" --yes 2>/dev/null && reinstall_status="pass" || reinstall_status="fail"
+    ln -s "$link_target" "$target_dir" && reinstall_status="pass" || reinstall_status="fail"
     local reinst_end; reinst_end=$(date +%s%N)
     reinstall_duration=$(( (reinst_end - reinst_start) / 1000000 ))
   else
@@ -104,7 +163,7 @@ PYEOF
     local reinst_end; reinst_end=$(date +%s%N)
     reinstall_duration=$(( (reinst_end - reinst_start) / 1000000 ))
   fi
-  [ "$reinstall_status" = "pass" ] && pass "重装成功 (${reinstall_duration}ms)" || fail "重装失败"
+  [ "$reinstall_status" = "pass" ] && pass "重装成功 (${reinstall_duration}ms)" || [ "$reinstall_status" = "skipped" ] || fail "重装失败"
 
   # === Build Result ===
   local dir_pass_bool
@@ -179,6 +238,7 @@ r = {
 }
 print(json.dumps(r, indent=2, ensure_ascii=False))
 PYEOF
+  ensure_test_files_dir "$skill_dir" > /dev/null
   python3 "$summary_py_tmp" "$tmp_json" "$PHASE_NUM" "$PHASE_NAME" "$skill_name" "$ts" "$duration" "$verdict" "$pass_checks" "$fail_checks" > "$(phase_file "$skill_dir" 0)"
   rm -f "$summary_py_tmp"
 
@@ -192,8 +252,31 @@ PYEOF
   fi
 }
 
+# Parse args: getopts for -s, pre-filter --skill (getopts can't handle --long)
+SKILL_DIRS=()
+_rest=()
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --skill) SKILL_DIRS+=("$2"); shift 2 ;;
+    --skill=*) SKILL_DIRS+=("${1#--skill=}"); shift ;;
+    --help|-h) echo "用法: $(basename "$0") [-s <dir>]... [--skill <dir>]... [<dir>...]"; exit 0 ;;
+    *) _rest+=("$1"); shift ;;
+  esac
+done
+set -- ${_rest[@]+"${_rest[@]}"}
+OPTIND=1
+while getopts ":s:h" opt; do
+  case $opt in
+    s) SKILL_DIRS+=("$OPTARG") ;;
+    h) echo "用法: $(basename "$0") [-s <dir>]... [--skill <dir>]... [<dir>...]"; exit 0 ;;
+    \?) ;;
+  esac
+done
+shift $((OPTIND-1))
+for arg in "$@"; do SKILL_DIRS+=("$arg"); done
+
 # Run for each skill
-for skill_dir in "$@"; do
+for skill_dir in "${SKILL_DIRS[@]}"; do
   run_phase0 "$skill_dir" || exit 1
   echo ""
 done

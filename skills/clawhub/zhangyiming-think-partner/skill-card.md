@@ -1,42 +1,55 @@
-## Description: <br>
-Provides a Chinese-language strategic reflection framework based on public Zhang Yiming thinking models for entrepreneurship, product direction, team management, and long-term decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Chinese-language strategic decision support using Zhang Yiming and ByteDance-style thinking frameworks for startup, product, strategy, and management questions.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers and end users can use this skill for structured brainstorming around startup decisions, strategic planning, product direction, and team-management questions. It is best suited for reflective analysis, not final decisions in regulated domains. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat strategic brainstorming as qualified financial, legal, medical, or other regulated advice. <br>
-Mitigation: Use the skill for general reflection only and seek qualified advice before acting in regulated or high-stakes domains. <br>
-Risk: The skill defaults to Chinese-language guidance, which may be difficult for some users to review accurately. <br>
-Mitigation: Install it only when Chinese-language output is acceptable or request translation and review before relying on the result. <br>
-Risk: Broad strategy prompts can produce persuasive but incorrect or misleading recommendations. <br>
-Mitigation: Review outputs critically, verify claims against current sources, and treat recommendations as prompts for further analysis. <br>
+## Use Case:
 
+External users and teams use this skill to frame strategic decisions, startup tradeoffs, product direction, and management challenges through a structured Zhang Yiming/ByteDance-inspired lens.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/zhangyiming-think-partner) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style advisory text with structured headings, questions, and scenario templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese is the default language; English terms may be retained where useful.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.1 (source: server release evidence and artifact metadata) <br>
+Risk: Quotes, current-events notes, policy examples, and investment-adjacent examples may be incomplete, outdated, or unverified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill as advisory framing, verify factual claims against current authoritative sources, and do not treat its output as financial advice.
+
+Risk: The activation language is broad enough that the skill could be applied outside its intended strategy, startup, product, and management scope.
+
+Mitigation: Invoke it explicitly for relevant strategic-thinking tasks and avoid relying on it for unrelated personal, legal, medical, or regulated advice.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/zhangyiming-think-partner)
+- [ClawHub market listing](https://clawhub.ai/gechengling/zhangyiming-think-partner)
+- [Publisher profile](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language Markdown analysis with structured prompts, comparison tables, and recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No code execution; advice should be treated as framing rather than verified facts, official policy guidance, or financial advice.]
+
+## Skill Version(s):
+
+2.1.2 (source: server release evidence and artifact SKILL.md)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

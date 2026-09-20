@@ -1,0 +1,20 @@
+{
+  "name": "@cinemaAgent/cinema-wxamp-mode-8",
+  "version": "1.0.0-openclaw.1",
+  "description": "Cinema Agent capability exposed as an OpenClaw Skill",
+  "type": "module",
+  "files": [
+    "SKILL.md",
+    "README.md",
+    "openclaw.plugin.json",
+    "cinema-agent/**"
+  ],
+  "openclaw": {
+    "kind": "skill",
+    "skill": "SKILL.md",
+    "runtimeTargets": [
+      "openclaw",
+      "cinema-agent"
+    ]
+  }
+}

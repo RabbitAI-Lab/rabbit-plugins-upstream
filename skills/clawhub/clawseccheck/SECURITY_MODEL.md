@@ -12,7 +12,8 @@ section and the FAQ's
 
 ## Allowed behavior
 
-ClawSecCheck is a **local, read-only** audit tool. Its permitted operations are:
+ClawSecCheck is a **local, read-only-by-default** audit tool: every default and every
+flag but one only reads and reports. Its permitted operations are:
 
 - **Read** the OpenClaw config file (`~/.openclaw/openclaw.json` or the path given
   with `--home`).
@@ -22,13 +23,51 @@ ClawSecCheck is a **local, read-only** audit tool. Its permitted operations are:
   supply-chain vetting (`--vet`, `--vet-mcp`, B13).
 - **Read** selected memory or log file metadata (path, size, permissions) to assess
   data-at-rest exposure (B19).
+- **Read**, beyond config and bootstrap markdown, a bounded set of other OpenClaw-home
+  artifacts needed for specific checks: the cron job store (JSON and, where present,
+  its SQLite tables), the two global OpenClaw dotenv files, OpenClaw-related systemd
+  user-unit `Environment=`/`EnvironmentFile=` lines, session/audit log files (including,
+  where the runtime has migrated to it, the per-agent SQLite `trajectory_runtime_events`
+  table — opened `mode=ro`, one literal `SELECT session_id, seq ...`, never another
+  column or table in that database file), and the plugin trust index. Also, for the
+  ClawHub credential-hygiene check (B182), the ClawHub CLI's own token-store path
+  **outside** the OpenClaw home. Every domain the *collector* reads from is named
+  explicitly in `collector.py`'s `LIMIT_DOMAIN_*` constants; several reads do not go
+  through the collector at all and are each bounded by their own module: the deptree,
+  host-monitor and socket-scan bullets below and under "It does not scan your entire
+  filesystem", plus two more named here since they are easy to miss precisely because
+  they are not part of the collector's `LIMIT_DOMAIN_*` accounting — OpenClaw's own
+  OAuth credential store (`<home>/credentials/`, `checks/_shared.py`'s
+  `_credential_store_state`, feeding the default-on Lethal Trifecta check A1 — see the
+  bullet on credential-store checks above for exactly what it reads and discards), and
+  the host's own persistence surface (`hostpersist.py`, F-179 — systemd user
+  units/timers, shell startup files, world-readable `/etc/cron.*`, `.pth`/
+  `sitecustomize` on `sys.path` — **digests only, never file content**, and read only
+  under `--monitor`, not the default audit path).
+- **Read the installed npm dependency tree** (B349, default-on, skip with `--no-deptree`),
+  **outside** the OpenClaw home: the OpenClaw package root is resolved from `PATH` without
+  a subprocess, then its `node_modules` is walked to read each package's `package.json`,
+  each package root's `binding.gyp`, and the in-package files those name as install-time
+  targets. Bounded to 2000 packages, symlinks never followed, nothing ever executed —
+  the module is `deptree.py`, which registers no collector domain.
 - **Build findings** from parsed config values and file metadata using deterministic,
   evidence-gated logic.
-- **Print** a structured report to stdout (text, JSON, SARIF, HTML, SVG badge).
+- **Print** a structured report to stdout (text, JSON, SARIF, HTML, SVG badge, PDF).
 - **Write to disk** its own state under `~/.clawseccheck/`: a one-line score-history
   entry **by default** (opt out `--no-history`), and — only when you ask —
-  `--save`, `--badge`, `--html`, `--sarif`, `--monitor` state, `--log`.
-  `--purge` deletes that store. It never writes your OpenClaw config.
+  `--save`, `--badge`, `--html`, `--sarif`, `--pdf`, `--monitor` state, `--log`.
+  `--purge` deletes that store.
+- **Write inside the audited home — two named, opt-in cases, and only these two:**
+  (a) `--apply-ignore-proposals`, confirmation-gated, appends entries to
+  `<home>/.clawseccheckignore` — and only entries a prior `--propose-ignore` run already
+  proposed; it never invents one. (b) `--pdf` **with no PATH argument** resolves to
+  `<home>/media/outbound/clawseccheck-report.pdf`, OpenClaw's own managed attachment
+  directory, so the report can be attached into the conversation rather than pasted
+  (B-606). That resolution is guarded: the directory must already exist and be writable,
+  it is **never created**, and the fallback is `~/.clawseccheck/report.pdf`. Given a PATH,
+  `--pdf` writes exactly there and touches the home not at all. Neither case writes the
+  OpenClaw config, a skill, or a bootstrap file. Every other write stays under
+  `~/.clawseccheck/` or a path named on the command line.
 - **Run one fixed, read-only subprocess** — `openclaw security audit --json` — with
   a timeout, `capture_output=True`, and no `shell=True`, only when `--no-native` is
   not set.
@@ -45,10 +84,17 @@ introduced:
 - **Network access by default.** No HTTP requests, DNS lookups, socket connections, or
   telemetry. Network access is not a planned feature.
 - **Mutating OpenClaw config.** The tool must not write to `~/.openclaw/` or any
-  agent-managed path. The name promises a *check*.
+  agent-managed path, with exactly two named, opt-in exceptions — neither of which is
+  the config: `--apply-ignore-proposals` (confirmation-gated) appends previously-proposed
+  entries to `<home>/.clawseccheckignore`, and a no-PATH `--pdf` writes its own report
+  into `<home>/media/outbound/` when that managed attachment directory already exists —
+  see "Allowed behavior" above. No other command or flag may write inside the audited
+  home, and nothing may write the config, a skill, or a bootstrap file at all. The name
+  promises a *check*.
 - **Printing secret values.** Config values that may contain credentials, tokens, or
   other secrets must be redacted via `logsafe.redact()` before appearing in any
-  output channel (text, JSON, SARIF, HTML, SVG badge, log).
+  output channel (text, JSON, SARIF, HTML, SVG badge, PDF, log). This list is meant to
+  be exhaustive: a new finding-bearing renderer belongs in it the same release it ships.
 - **Trusting external content as instructions.** Finding titles, evidence strings,
   and skill content surfaced in any report are untrusted audit data. They must be
   sanitized and presented as quoted evidence, never as executable instructions —
@@ -109,10 +155,16 @@ This section states, explicitly, everything ClawSecCheck's own process is capabl
 doing — so a reviewer can check the claim against the code rather than take it on faith.
 
 - **Read-only by default.** The default audit path (`collector.py`) opens files for
-  reading only: `~/.openclaw/openclaw.json`, workspace bootstrap markdown, installed
+  reading only — `~/.openclaw/openclaw.json`, workspace bootstrap markdown, installed
   skill/plugin text (including archive members it decompresses in memory to classify),
-  OpenClaw log files, and agent session logs. Nothing under this path is ever opened
-  for writing.
+  OpenClaw log files, agent session logs, the cron job store, the two global OpenClaw
+  dotenv files, OpenClaw-related systemd user-unit environment lines, and (for B182,
+  outside the OpenClaw home) the ClawHub CLI's token-store path. `collector.py`'s
+  `LIMIT_DOMAIN_*` constants name every domain **the collector** reads from; the three
+  default-on read paths that do not go through the collector — host-monitor (`--no-host`),
+  the socket scan (`--no-sockets`), and the npm dependency-tree walk (`--no-deptree`) — are
+  each bounded by their own module and enumerated above. Nothing under any of these paths is
+  ever opened for writing.
 - **Stdlib-only, zero runtime dependencies.** There is no third-party package in the
   import graph of the shipped engine — nothing to audit in a dependency tree, nothing
   that can be substituted by a poisoned transitive package.
@@ -120,22 +172,27 @@ doing — so a reviewer can check the claim against the code rather than take it
   phone-home, no update check over the wire — not for scoring, not for the staleness
   notice (which reads only the local clock and an optional local hint file), not for
   anything. If a feature could exfiltrate, it does not exist in this codebase.
-- **All writes are confined to `~/.clawseccheck/`.** The one place ClawSecCheck writes
-  by default (a one-line score-history entry; opt out with `--no-history`) and the
-  places it writes only on explicit request (`--save`, `--monitor` state/journal,
-  `--badge`, `--html`, `--sarif`, `--log`) all live under that single owner-only
-  directory tree, or an explicit path the user names on the command line. `safeio.py`
-  enforces this at the filesystem-primitive level: directories are created mode `0700`
-  at creation time (no transient world-readable window from umask) and refused if they
-  turn out to be a symlink (`secure_dir`); files are opened with `O_NOFOLLOW` so a
-  planted symlink at the target path fails the open (`ELOOP`) instead of being followed,
-  and are created mode `0600` at creation time (`secure_write_text` / `secure_append_text`).
-  A hostile local process cannot pre-plant a symlink to turn a ClawSecCheck write into an
-  arbitrary-file overwrite.
-- **The native OpenClaw CLI call is off by default and opt-in only by omission of a flag
-  — the flag turns it OFF, not on.** `audit()` accepts `include_native`, and the CLI sets
-  it to `not args.no_native`: the built-in `openclaw security audit --json` subprocess
-  runs unless `--no-native` is passed. It is the single fixed, read-only, argument-list-
+- **Almost all writes are confined to `~/.clawseccheck/`, with one named exception.**
+  The one place ClawSecCheck writes by default (a one-line score-history entry; opt out
+  with `--no-history`) and the places it writes only on explicit request (`--save`,
+  `--monitor` state/journal, `--badge`, `--html`, `--sarif`, `--pdf`, `--log`) all live under
+  that single owner-only directory tree, or an explicit path the user names on the
+  command line. Two opt-in exceptions reach inside the audited OpenClaw home:
+  `--apply-ignore-proposals`, confirmation-gated, appending previously-proposed entries
+  to `<home>/.clawseccheckignore`, and a no-PATH `--pdf` writing its report into the
+  already-existing `<home>/media/outbound/` — see "Allowed behavior" above; no other
+  flag writes there. `safeio.py` enforces the confinement at the filesystem-primitive level
+  for every one of these writes: directories are created mode `0700` at creation time
+  (no transient world-readable window from umask) and refused if they turn out to be a
+  symlink (`secure_dir`); files are opened with `O_NOFOLLOW` so a planted symlink at the
+  target path fails the open (`ELOOP`) instead of being followed, and are created mode
+  `0600` at creation time (`secure_write_text` / `secure_append_text`). A hostile local
+  process cannot pre-plant a symlink to turn a ClawSecCheck write into an arbitrary-file
+  overwrite.
+- **The native OpenClaw CLI call runs by default and is opt-out, not opt-in — the flag
+  turns it OFF.** `audit()` accepts `include_native`, and the CLI sets it to
+  `not args.no_native`: the built-in `openclaw security audit --json` subprocess runs
+  unless `--no-native` is passed. It is the single fixed, read-only, argument-list-
   hardcoded external command ClawSecCheck can ever invoke (no `shell=True`, a timeout,
   captured output) — see `native.py`.
 - **The host-level scan is similarly opt-out, not opt-in by an extra grant:**
@@ -153,18 +210,27 @@ doing — so a reviewer can check the claim against the code rather than take it
 ClawSecCheck does not sit behind a sandbox or policy-engine gate that decides, at
 runtime, whether a given read is allowed. It does not need one: being a **read-only
 auditor by construction** removes the class of risk such a gate would exist to contain.
-There is no code path anywhere in the shipped engine that writes to a file it did not
-open under `~/.clawseccheck/` (or a path the user explicitly named), and no code path
-that executes content it reads (skill/plugin source is parsed with the stdlib `ast`
-module or scanned by regex/lexical passes — never imported, called, or `exec()`'d; see
-"A note for scanners auditing ClawSecCheck's own source" below). Removing the capability
-at the source is a stronger guarantee than gating it at runtime, and is verifiable by
-reading `collector.py`, `safeio.py`, and `native.py` directly.
+Other than `--apply-ignore-proposals` and a no-PATH `--pdf` (see "Allowed behavior"
+above), there is no code path anywhere in the shipped engine that writes to a file it
+did not open under `~/.clawseccheck/` (or a path the user explicitly named), and no code
+path that executes content it reads (skill/plugin source is parsed with the stdlib `ast`
+module
+or scanned by regex/lexical passes — never imported, called, or `exec()`'d; see "A note
+for scanners auditing ClawSecCheck's own source" below). Removing the capability at the
+source is a stronger guarantee than gating it at runtime, and is verifiable by reading
+`collector.py`, `safeio.py`, and `native.py` directly.
 
-**This is a doctrine statement about the future, not a description of a shipped
-feature:** if a fix/apply capability is ever built (there is no such mode today —
-ClawSecCheck reports only, never remediates), it would have to be introduced as a
-capability wholly separate from the audit path, and it would have to be:
+**Both shipped exceptions are deliberately narrow, and neither touches the audited
+OpenClaw config itself.** `--apply-ignore-proposals` only appends, opt-in and
+confirmation-gated, to ClawSecCheck's own suppression bookkeeping file, and only entries
+a prior `--propose-ignore` run already proposed; it invents nothing. A no-PATH `--pdf`
+only places ClawSecCheck's own report in the runtime's managed attachment directory, and
+only when that directory already exists — it creates nothing and reads nothing back. The
+doctrine below is about a DIFFERENT, larger category that remains unshipped: a
+capability that would fix or change the audited OpenClaw setup itself (ClawSecCheck
+reports on that setup, never remediates it). If such a capability is ever built, it
+would have to be introduced wholly separate from the audit path, and it would have to
+be:
 
 - **opt-in** — never invoked as a side effect of running an audit;
 - **confirmation-gated** — the user affirmatively approves each mutating action, not a
@@ -187,9 +253,21 @@ before it belongs in code.
   handler it creates, so redaction is defense-in-depth: even a caller that forgot to
   redact a value before logging it is still covered at the handler level.
 - **No PII or secret value ever appears in logs, reports, fixtures, or output** — by
-  construction, not by policy. Credential-store checks (`.env`, SSH key directories,
-  keychain/keyring, browser cookie stores) inventory **path existence only**; their
-  contents are never opened or read.
+  construction, not by policy. The path-existence credential-store checks (`.env`, SSH
+  key directories, keychain/keyring, browser cookie stores; `report.py`) inventory
+  **path existence only** and never open those files. One check does open and read file
+  *content*: OpenClaw's own OAuth credential store (`<home>/credentials/`,
+  `checks/_shared.py`'s `_credential_store_state`) is read file-by-file so the Lethal
+  Trifecta check (A1) and the `--monitor` credential-store dimension can tell whether a
+  plaintext secret is present and whether a stored credential changed. What survives
+  that read is a boolean, a filename, and a truncated SHA-256 digest — the file's actual
+  bytes, and any secret value detected in them, are discarded in the same function call
+  and never reach a finding, a log, or any output channel. The two global OpenClaw
+  dotenv files (`.env`, `gateway.env`) and OpenClaw-related systemd `EnvironmentFile=`
+  content work the same way: `collector.py` parses every `KEY=VALUE` pair into memory
+  for the run, but only a handful of named toggle/URL keys and length/truthy checks are
+  ever echoed into a finding — never a credential-shaped value (`tests/
+  test_b290_env_supplied_gateway_auth.py` pins this with a leak-marker regression test).
 - **Nothing is ever transmitted anywhere.** There is no code path in this project that
   sends a redacted (or unredacted) value off the machine — see "zero network, forever"
   above.
@@ -213,8 +291,16 @@ clawseccheck --verify-events             # ~/.clawseccheck/events.jsonl (correct
                                           # actually given; --verify-events names it right)
 ```
 
-**C-250: the OK verdict is now per-entry, not whole-file.** An absent or empty file still
-verifies as a bare `OK`. A file that carries LEGACY entries (no `chain_hash` field at all —
+**B-589: three outcomes, never two.** An absent, empty, unreadable, or nothing-parseable
+store is **not** `OK` — it reports `NOT VERIFIED` ("no chain here"), with a non-zero exit
+status, and is neither a pass nor a tamper finding. Until B-589 it verified as a bare `OK`
+with exit 0, which made the crudest possible tampering — deleting the file — pass the check
+that exists to catch deletion, and made `--history /path/that/is/gone` print "OK" about a
+specific file the reader believed held their history. The opposite collapse is refused for
+the same reason `--verify-baseline` refuses it (F-173): reporting absence as BROKEN would
+make a genuine first run look like an intrusion.
+
+**C-250: the OK verdict is per-entry, not whole-file.** A file that carries LEGACY entries (no `chain_hash` field at all —
 graceful backward compatibility) — whether every entry is legacy or only some are, in a
 journal mixing old and new format — verifies `True` but the message now discloses exactly
 how many entries were not chain-verified, e.g. `OK (2 entries not chain-verified (legacy,
@@ -229,7 +315,10 @@ exactly where the chain broke (`False, "broken at entry N"`).
 (HMAC) or externally-anchored one, so it detects *accidental corruption* and *naive edits*
 (editing/reordering/deleting an entry breaks it) — not a knowledgeable attacker who already
 has write access to the file, who can simply recompute the whole chain forward after
-tampering, truncate the tail, or delete the file outright (all three verify "clean"). The
+tampering — that still verifies "clean", and no local chain can do better. Truncating the
+tail is disclosed as an unparseable line, and deleting or emptying the file is reported as
+`NOT VERIFIED` rather than "clean" (B-589); neither is *proof* of tampering, which is why
+both are their own outcome rather than a verdict. The
 chain is therefore a drift/tamper-*evidence* aid, **not** a substitute for filesystem
 permissions on `~/.clawseccheck/`: anyone who can write that file already runs as your
 user and could edit history, patch the engine, or read anything you can. This is the same
@@ -246,6 +335,59 @@ forged baseline is never reported as drift. `read_baseline()` (`monitor.py`) val
 lost baseline rather than mistaken for a first run or silently crashing the run — it does
 not, and structurally cannot, validate *provenance*.
 
+Signing it locally would not change any of that, which is why this tool does not: the key
+would have to live in the same `$HOME` as the baseline, behind the same `0700`, so it would
+only defend against an attacker the filesystem has already excluded. The one thing that
+does help is an anchor **outside** the machine's reach, so every `--monitor` run prints
+`Baseline reference: <16 hex>` and — on the runs where that value actually moved — appends
+it to the (chained) event journal. Kept off-box, it means rewriting the baseline also
+requires rewriting a record this tool cannot be used to reach. `--verify-baseline
+<reference>` re-reads the file and compares.
+
+**Getting it off the machine is your action, not the schedule's.** The cron recipe tells
+your agent to stay silent on exit 0, so a scheduled run delivers this line only when the
+value already moved — the runs where keeping it is worth least. The anchor is only an anchor
+if you copy it somewhere else yourself, from a run you did interactively.
+
+The reference fingerprints the baseline's **contents**, canonicalized, with the run
+timestamp excluded — so it stays constant while nothing the watch records changes *and you
+run the check the same way*. That exclusion is not cosmetic: an earlier version hashed the
+file's raw bytes, `state.json` carries a `ts`, and three runs against an untouched machine
+produced three different values, which would have made every scheduled run look like a
+modification.
+
+This is a **detection aid, not authentication**, and the paragraphs above stay true beside
+it. Five specific things it does not do: it cannot tell a forged baseline from an ordinary
+change (both move the value, and the tool reports only that it moved); it moves when the run
+SHAPE changes — `--no-host` or `--no-sockets` record less ground, so an untouched machine
+fingerprints differently, which is why `--verify-baseline` prints what the stored baseline
+covered; it moves on a ClawSecCheck upgrade that adds checks, with nothing on your machine
+having changed; it says nothing about *which* recorded thing differs (`--watch-log` does);
+and an attacker present when the run happens sees the reference too. `--verify-baseline`
+therefore has three outcomes, never two — match, mismatch, and *cannot check* — and *cannot
+check* further distinguishes an absent baseline from a present-but-unreadable one, because
+telling a user whose `state.json` is unreadable that none was ever saved sends them to
+re-run `--monitor`, which is the one action that overwrites it.
+
+**A second, automatic check needs no off-box copy — and is weaker than the one that
+does.** `--verify-baseline` also compares the current state file against the last
+reference *this tool itself* recorded moving to (in `events.jsonl`) **for that exact
+state path** — tagged by a digest of the resolved `--state` path, the same identity
+scheme `home_digest` uses for `--home` above, so a witness entry that describes a
+different state file (a stale journal, an `--events` pointed elsewhere, a store that
+predates this check) reads as *no witness on record*, never as a disagreement. An
+earlier, untagged version of exactly this comparison was measured against a real,
+untampered machine before shipping and produced a false "reference moved" report: the
+machine's `state.json` and its journaled witness entries simply described two
+different runs, because nothing enforces that `--state` and `--events` name a paired
+set. The tag closes that specific failure mode, not the underlying limit — an
+attacker with write access to `~/.clawseccheck/` can still rewrite both files
+consistently, and a witness write can fail silently on its own (disclosed at the
+`--monitor` call site, never folded into a false all-clear). So this check is
+reported in its own paragraph, never merged into the primary verdict above, and a
+disagreement moves only `--verify-baseline`'s own exit code — never the score or
+grade, and never worded as proof.
+
 **Concurrency locking is POSIX-only.** The advisory lock (`locking.journal_lock`) that
 keeps two racing appends from both reading the same "last" `chain_hash` is a `flock`
 (`fcntl`) on a sidecar file. Without `fcntl` — most notably **Windows**, which this
@@ -261,7 +403,15 @@ of compromise, until corroborated another way.
 **`--home` is not hermetic.** OpenClaw's own config loader applies no home-check to
 `agents.defaults.workspace` (or a per-agent `agents.list[].workspace` override), so an
 absolute path there is followed even when it resolves OUTSIDE the `--home` directory named
-on the command line — by design (rejecting it would be a false-negative skip, not a safety
+on the command line. The workspaces ClawSecCheck **derives** rather than
+reads split on this, and the split is worth stating exactly. A `workspace-<agent id>` under the
+state dir is confined: the id goes through `normalizeAgentId`, which the product's own comment
+calls "the filesystem-safe canonical form" (invalid characters collapse to `-`, capped at 64),
+so that name can never contain a path separator. A `<agents.defaults.workspace>/<agent id>`
+is **not** confined — it inherits whatever that value says, so it points outside `--home`
+exactly as often as the value it is built from does. Measured: with
+`agents.defaults.workspace: "../../../../etc"`, a non-default agent's derived root resolves to
+`/etc/<id>`, and is scanned and disclosed like any other out-of-scope workspace — by design (rejecting it would be a false-negative skip, not a safety
 win; see `collector._config_workspace_dirs`). A test/staging `--home` can therefore still
 read the real workspace if the config says so — `--home` scopes where ClawSecCheck STARTS
 looking, not a sandbox boundary it enforces.
@@ -291,15 +441,28 @@ analysis is stdlib `ast` (parse-only, never executed); the shell and JS/TS analy
 regex passes over text. Nothing this project reads from a third-party skill or plugin is
 ever imported, called, or run.
 
-This is a known, addressed false-positive class: v3.7.1 reworded the call-shaped prose
-and finding-text in `checks.py`, `skillast.py`, and `risk.py` (e.g. `exec (`, `exec()s`,
-`.then(eval)`, `eval(atob(...))`) purely so that a naive word-boundary scanner would stop
-tripping on the tool's own signature vocabulary — the detection regexes, the
-`"child_process" in masked` logic, and every check's label/severity were left completely
-unchanged, and the full test suite stayed green throughout. The project's own `--vet`
-run against its own source (`clawseccheck --vet .`) reports this honestly rather than
+This is a known, addressed false-positive class: the call-shaped prose and
+finding-text in `checks.py`, `skillast.py`, and `risk.py` (e.g. `exec (`, `exec()s`,
+`.then(eval)`, `eval(atob(...))`) has been reworded purely so that a naive word-boundary
+scanner would stop tripping on the tool's own signature vocabulary — the detection
+regexes, the `"child_process" in masked` logic, and every check's label/severity were
+left completely unchanged, and the full test suite stayed green throughout. The
+project's own `--vet` run against its own source (`clawseccheck --vet .`) reports this honestly rather than
 hiding it: a security tool necessarily ships attack signatures as data, and that is
-disclosed as a note, not papered over.
+disclosed as a note, not papered over. That pass is repeated as new detector vocabulary
+is added — it is a rewording sweep, not a one-time fix, so re-flag a specific new
+file:line if this note goes stale rather than assuming the class was never addressed.
+
+The same reasoning covers two more shapes a scanner may key on: (a) `skillast.py`'s
+`ENV_EXFIL_FLOW` taint rule and its `_NET_SOURCE_*`/`_NET_OUT_SINK_*` vocabulary tables
+are plain `set`/`tuple` literals of library and attribute **names** compared against an
+already-`ast.parse()`d **scanned skill's** nodes — this tool imports none of those
+libraries and makes no network call of its own (see "Allowed behavior" above); (b) a
+provider-token-shaped prefix constant (`skillast.py`'s `_PROVIDER_TOKEN_PREFIXES`) is
+assembled from string-literal fragments, the same idiom `tests/test_logsafe.py` uses for
+its own test fixtures, specifically so no contiguous secret-shaped substring sits at rest
+for a byte-level scanner to match — it holds prefixes only, never a full token, real or
+synthetic.
 
 ## Own capability declaration
 
@@ -307,7 +470,14 @@ This is ClawSecCheck's explicit statement of its own permission/capability surfa
 reviewer can check every clause below directly against the cited module:
 
 - It does **not** write outside `~/.clawseccheck/` or a path the user names on the
-  command line (`safeio.py`, `collector.py`).
+  command line (`safeio.py`, `baseline.py`, `cli.py`), except for two named, opt-in
+  cases inside the audited OpenClaw home: `--apply-ignore-proposals`
+  (confirmation-gated) appends previously-proposed entries to
+  `<home>/.clawseccheckignore`, and a no-PATH `--pdf` writes its report to
+  `<home>/media/outbound/` when that directory already exists. Both go through
+  `safeio.secure_write_bytes`, like every other write. No other write reaches there, and
+  neither is the OpenClaw config. (`collector.py` performs no writes at all — it is
+  read-only.)
 - `--purge` deletes ClawSecCheck's own store files (a fixed filename list —
   history.jsonl, events.jsonl, state.json, coverage.json + lock sidecars), never
   recursive/glob, never outside `~/.clawseccheck/`.
@@ -351,6 +521,37 @@ field. There is nothing to add to `SKILL.md`'s frontmatter today that would make
 machine-checkable; this document is the closest artifact available until, and unless,
 OpenClaw's skill schema ships such a field, at which point `SKILL.md` should gain it.
 
+## Unprompted host-agent behavior
+
+Everything above describes what the **Python engine** does. `SKILL.md` — the
+conversational manifest a host agent reads to decide when and how to run this tool —
+also carries one instruction that fires with no user utterance at all, and it belongs in
+this document for the same reason every other capability does: a reviewer should not
+have to find it by reading the conversational manifest separately.
+
+- **`--brief --exit-code` at session start, with no consent prompt.** `SKILL.md`'s Mode
+  map instructs the host agent to run it once, unprompted, before the pre-scan menu that
+  gates every other mode on an explicit user request (see "When to use this skill" /
+  Step 1 there). This is the one exception, and it is scoped narrowly enough to earn it:
+  `--brief` reads only ClawSecCheck's own local store under `~/.clawseccheck/` (the last
+  drift baseline, the event journal, the score history) — never the OpenClaw config,
+  bootstrap files, or session logs the consent gate above is about — and it **writes
+  nothing** (`tests/test_f171_brief.py::test_brief_writes_nothing_at_all` pins this: every
+  file's size and mtime must be unchanged, and no new file may appear).
+- **What it can cause the agent to say, unprompted.** A healthy, recently-checked setup
+  produces no output at all — `--exit-code` returns 0, and the agent says nothing and
+  moves on. A stale or dead monitoring schedule, or a HIGH/CRITICAL journal event
+  recorded since anyone last looked, produces one to five lines that the agent relays
+  verbatim, and `--exit-code` returns non-zero. Nothing here reaches an LLM, a network
+  call, or a write; the only "action" is text appearing in the conversation before the
+  user asked for anything.
+- **Why this does not collide with the consent gate above.** "When to use this skill"
+  protects against implying consent to read *OpenClaw's own* sensitive surface (config,
+  credential-adjacent paths, session logs) from a bare, unqualified request. `--brief`
+  reads none of that — only reports this same tool already produced and already
+  disclosed. Nothing new is being read without asking; a summary of prior,
+  already-consented-to output is being surfaced proactively.
+
 ## Out of scope
 
 - **ClawSecCheck does not prove your agent is safe.** It is a heuristic configuration
@@ -358,22 +559,50 @@ OpenClaw's skill schema ships such a field, at which point `SKILL.md` should gai
 - **It does not replace red-teaming.** Static analysis of configuration files cannot
   detect all attack paths. Adversarial runtime testing against a live agent remains
   necessary.
-- **It does not scan your entire filesystem.** The read surface is bounded: the agent
-  home directory, installed-skill directories, and the paths you explicitly pass.
+- **It does not scan your entire filesystem.** It does not walk arbitrary user files.
+  The read surface is bounded and named: the agent home directory, installed-skill/
+  plugin directories, the bounded set of other OpenClaw-home artifacts listed under
+  "Allowed behavior" above, a handful of explicitly-named locations outside the home
+  (the ClawHub token store for B182, the global gateway dotenv), the fixed set of
+  host-monitor paths `hostwatch.py` checks by default unless `--no-host` (IDS/FIM/EDR/
+  firewall config files, e.g. `/etc/ufw/ufw.conf`), `/proc/net/tcp{,6}` and `/proc/*/fd`
+  for the socket scan by default unless `--no-sockets`, the installed OpenClaw package's
+  own `node_modules` tree for the dependency scan by default unless `--no-deptree`
+  (manifests, `binding.gyp`, and the in-package files those name — never executed), and
+  any paths you explicitly pass.
 - **It cannot detect zero-day vulnerabilities** in OpenClaw itself or in third-party
   MCP servers — it can only flag known risky patterns.
 - **UNKNOWN is not PASS.** When the tool cannot determine a configuration state
   (unreadable file, unparseable config, unsupported OpenClaw version), it reports
-  `UNKNOWN`. An `UNKNOWN` result is excluded from the score and never treated as a
-  safe outcome.
+  `UNKNOWN`, and never treats it as a safe outcome. An ordinary `UNKNOWN` — the surface
+  simply is not there to assess — is excluded from the score. An `UNKNOWN` that exists
+  because the **engine itself was degraded** (an input it expected to read was unreadable
+  or malformed, or a check crashed or hit its budget) is stronger than that: it **caps the
+  grade**, on the reasoning that a check which could not look cannot rule out a CRITICAL.
+  So a run that failed to read things does not score like a run that read them and found
+  nothing.
+- **A capped grade and no grade are different outcomes.** The cap above applies *within* a
+  run that earned a letter: individual checks were degraded, so the letter cannot go above
+  a ceiling. Separately, and at a coarser level, a letter is issued **only when all five
+  check layers ran** — static, installed sweep, logs & trajectories, self-report, live
+  behaviour. A run that is missing a whole layer gets no letter at all rather than a capped
+  one, and names the layers it missed instead. The two mechanisms answer different
+  questions: "how much of what I checked came back undetermined" and "how much did I even
+  attempt".
 
 ## Release validation protocol
 
 A release must pass local validation before merge/tag:
 
 - `python3 -m ruff check .`
-- `python3 -m pytest`
+- `python3 -m pytest` — on the supported Python floor as well as the current
+  interpreter, because a stdlib predicate whose semantics shifted between them can
+  change a *verdict*, not merely crash.
 - targeted checks for the changed modules.
+- the gates that are not part of the test suite: the real-fleet false-positive gate,
+  the monitor detection gate, the dist-citation gate, and the state-DB drift gate.
+  A green suite does not stand in for these — each answers a question the suite
+  structurally cannot ask.
 
 Also verify that release documentation is synchronized:
 

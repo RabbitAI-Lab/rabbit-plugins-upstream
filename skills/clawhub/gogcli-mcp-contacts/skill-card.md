@@ -1,41 +1,59 @@
-## Description: <br>
-Looks up, searches, and manages Google Contacts and broader Google People API profiles through the gogcli Contacts MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to look up, search, and manage Google Contacts and Google People API records through gogcli.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Developers and agent users use this skill to configure an MCP-backed assistant for Google Contacts and Workspace directory lookups, including contact search, profile retrieval, and manager or reports relations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can involve sensitive Google Workspace and Contacts access. <br>
-Mitigation: Install only when the publisher is trusted with Google Workspace access and review enabled scopes with `google-workspace config show`. <br>
-Risk: Write-capable Workspace actions can modify data if enabled. <br>
-Mitigation: Keep Docs, Sheets, Drive, and other write modes off unless needed, and avoid Drive readwrite unless broad Drive-file token access is acceptable. <br>
+## Use Case:
 
+Developers and agent users install this MCP server when they want an assistant to search personal contacts, query Google Workspace directory profiles, inspect manager or report relationships, and perform contact-management tasks through an authenticated gogcli setup.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/gogcli-mcp-contacts) <br>
-- [gogcli dependency](https://github.com/openclaw/gogcli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, shell commands, guidance] <br>
-**Output Format:** [Markdown with JSON configuration blocks and inline command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include MCP server configuration and Google Workspace tool-use guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.8.0 (source: server release metadata) <br>
+Risk: The skill can persist Google credentials through gogcli and expose account or directory data to an agent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only for accounts where agent-mediated contact management is intended, isolate and protect the persistent data directory and keyring, and use GOG_READONLY=1 for lookup-only deployments.
+
+Risk: Contact deletion and dedupe apply operations can make destructive changes without a built-in confirmation step.
+
+Mitigation: Require explicit human review before delete or dedupe apply actions, and preview dedupe plans before applying them.
+
+Risk: Broad contacts_run and auth_run tools can execute arbitrary gog subcommands.
+
+Mitigation: Avoid broad run tools unless the exact gog subcommand has been inspected and approved.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/gogcli-mcp-contacts)
+- [gogcli](https://github.com/openclaw/gogcli)
+- [Model Context Protocol](https://modelcontextprotocol.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, files]
+
+**Output Format:** [MCP tool responses with text, JSON dumps, setup snippets, and vCard file exports when requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Node.js 22 or later, gogcli, and an authenticated Google account.]
+
+## Skill Version(s):
+
+4.1.0 (source: evidence release metadata and package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

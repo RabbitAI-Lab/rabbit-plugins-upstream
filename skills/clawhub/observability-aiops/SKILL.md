@@ -17,7 +17,7 @@ installer:
 argument-hint: "[a PromQL query, an alert/dashboard uid, or describe your observability task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["OBSERVABILITY_AIOPS_CONFIG"],"bins":["observability-aiops"],"config":["~/.observability-aiops/config.yaml","~/.observability-aiops/secrets.enc"]},"optional":{"env":["OBSERVABILITY_AIOPS_MASTER_PASSWORD"]},"primaryEnv":"OBSERVABILITY_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/Observability-AIops","emoji":"📈","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["observability-aiops","uvx"]},"optional":{"env":["OBSERVABILITY_AIOPS_CONFIG","OBSERVABILITY_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/Observability-AIops","emoji":"📈","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed observability operations across Prometheus (HTTP API + PromQL, default port 9090, optional bearer token), a companion Alertmanager (/api/v2, default port 9093), Grafana (HTTP API, default port 3000, required bearer token), and Grafana Loki (HTTP API, default port 3100, optional bearer or basic auth, optional multi-tenant X-Scope-OrgID). Loki is READ-ONLY: bounded LogQL reads only (labels, label values, query_range with a hard lookback + line cap and a stream-selector gate, a canned error-tail), with no write surface. Each target in the config names its own platform, so one config can span the whole stack. The governance harness (audit, policy, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency.
   All write operations are audited to a local SQLite DB under ~/.observability-aiops/ (relocatable via OBSERVABILITY_AIOPS_HOME).
@@ -85,6 +85,15 @@ uv tool install observability-aiops
 observability-aiops init       # wizard: pick platform (prometheus/grafana) + encrypted token
 observability-aiops doctor
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/observability-aiops
+openclaw skills info observability-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 

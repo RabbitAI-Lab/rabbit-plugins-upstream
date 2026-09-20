@@ -1,44 +1,59 @@
-## Description: <br>
-Access Tempo time-tracking, planning, team, account, and timesheet approval data through an MCP server backed by the Tempo API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Access Tempo time-tracking data via MCP for worklogs, plans, teams, accounts, resource allocation, and timesheet approvals.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Developers and Tempo/Jira users use this skill to query worklogs, plans, teams, accounts, and timesheet approvals, and to create or update Tempo records through MCP tools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose broad Tempo/Jira time, team, account, and organizational data. <br>
-Mitigation: Use a least-privilege Tempo token and require explicit confirmation before cross-user, team, or account queries. <br>
-Risk: Create, update, delete, and approval tools can change Tempo records. <br>
-Mitigation: Require the agent to summarize the target record, action, and parameters and obtain user confirmation before any mutating operation. <br>
-Risk: Tempo API tokens can be exposed if stored in shared project configuration or chat transcripts. <br>
-Mitigation: Keep TEMPO_API_TOKEN out of committed files and shared chats, use local secret storage where available, and rotate the token if exposed. <br>
+## Use Case:
 
+Developers and Tempo/Jira users use this skill to query time-tracking data, log or update work, manage resource plans, inspect teams and accounts, and handle timesheet approval workflows through a registered Tempo MCP server.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/chrischall/skills/tempo-api-mcp) <br>
-- [tempo-api-mcp npm Package](https://www.npmjs.com/package/tempo-api-mcp) <br>
-- [Tempo Terms of Use](https://www.tempo.io/terms-of-use) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance, API calls] <br>
-**Output Format:** [Markdown guidance with JSON configuration snippets, shell commands, and MCP tool calls] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a registered tempo-api-mcp server and a TEMPO_API_TOKEN supplied through MCP configuration or environment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.9 (source: server release metadata) <br>
+Risk: Tempo permissions may expose team or colleague data despite the artifact's single-user wording.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a least-privilege Tempo token, confirm the token's accessible scope before use, and avoid sharing or committing the token.
+
+Risk: Write, delete, and approval tools can change worklogs, plans, teams, accounts, or timesheet state.
+
+Mitigation: Confirm every write, delete, submit, approve, reject, reopen, or recall action and verify target IDs, dates, and periods before execution.
+
+Risk: Corporate Tempo or Jira automation may be subject to employer policy or administrative restrictions.
+
+Mitigation: Check applicable IT, Jira, and Tempo policies before automating against an organization-managed workspace.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/tempo-api-mcp)
+- [npm package](https://www.npmjs.com/package/tempo-api-mcp)
+- [Tempo Terms of Use](https://www.tempo.io/terms-of-use)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, API calls, Guidance]
+
+**Output Format:** [Markdown guidance with JSON configuration snippets, shell commands, and MCP tool-call descriptions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a registered Tempo MCP server and a Tempo API token.]
+
+## Skill Version(s):
+
+3.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

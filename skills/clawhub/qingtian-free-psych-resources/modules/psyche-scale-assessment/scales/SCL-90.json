@@ -1,0 +1,3078 @@
+{
+  "id": "SCL-90",
+  "name": "症状自评量表（SCL-90）",
+  "short_name": "SCL-90 综合症状",
+  "category": "综合症状",
+  "target_population": "16岁以上",
+  "estimated_time": "约 10 分钟",
+  "item_count": 90,
+  "description": "Derogatis 症状自评量表，90 题覆盖 9 个心理症状因子加附加项目。各因子取均分（1–5），总分越高症状越多。任一因子均分≥2 或总分≥160 提示筛查阳性。",
+  "source": "Derogatis, 1973；中文版王征宇 1984",
+  "license": "学术使用，商业需授权",
+  "scoring_type": "sum",
+  "items": [
+    {
+      "id": "q1",
+      "text": "最近一周，您有以下不适或感受的程度：头痛。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "最近一周，您有以下不适或感受的程度：神经过敏，心中不踏实。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "最近一周，您有以下不适或感受的程度：头脑中有不必要的想法或字句盘旋。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "最近一周，您有以下不适或感受的程度：头晕或晕倒。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q5",
+      "text": "最近一周，您有以下不适或感受的程度：对异性的兴趣减退。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q6",
+      "text": "最近一周，您有以下不适或感受的程度：对旁人责备求全。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q7",
+      "text": "最近一周，您有以下不适或感受的程度：感到别人能控制您的思想。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q8",
+      "text": "最近一周，您有以下不适或感受的程度：责怪别人制造麻烦。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q9",
+      "text": "最近一周，您有以下不适或感受的程度：忘性大。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "text": "最近一周，您有以下不适或感受的程度：担心自己的衣饰整齐及仪态端正。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "text": "最近一周，您有以下不适或感受的程度：容易烦恼和激动。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "text": "最近一周，您有以下不适或感受的程度：胸痛。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "text": "最近一周，您有以下不适或感受的程度：害怕空旷的场所或街道。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "text": "最近一周，您有以下不适或感受的程度：感到精力下降、活动减慢。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "text": "最近一周，您有以下不适或感受的程度：想结束自己的生命。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "text": "最近一周，您有以下不适或感受的程度：听到旁人听不到的声音。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "text": "最近一周，您有以下不适或感受的程度：发抖。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "text": "最近一周，您有以下不适或感受的程度：感到大多数人都不可信任。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "text": "最近一周，您有以下不适或感受的程度：胃口不好。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q20",
+      "text": "最近一周，您有以下不适或感受的程度：容易哭泣。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q21",
+      "text": "最近一周，您有以下不适或感受的程度：同异性相处时感到害羞不自在。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q22",
+      "text": "最近一周，您有以下不适或感受的程度：感到受骗、中了圈套或有人想抓您。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q23",
+      "text": "最近一周，您有以下不适或感受的程度：无缘无故突然感到害怕。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q24",
+      "text": "最近一周，您有以下不适或感受的程度：不能控制地大发脾气。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q25",
+      "text": "最近一周，您有以下不适或感受的程度：怕单独出门。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q26",
+      "text": "最近一周，您有以下不适或感受的程度：经常责怪自己。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q27",
+      "text": "最近一周，您有以下不适或感受的程度：腰痛。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q28",
+      "text": "最近一周，您有以下不适或感受的程度：感到难以完成任务。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q29",
+      "text": "最近一周，您有以下不适或感受的程度：感到孤独。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q30",
+      "text": "最近一周，您有以下不适或感受的程度：感到苦闷。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q31",
+      "text": "最近一周，您有以下不适或感受的程度：过分担忧。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q32",
+      "text": "最近一周，您有以下不适或感受的程度：对事物不感兴趣。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q33",
+      "text": "最近一周，您有以下不适或感受的程度：感到害怕。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q34",
+      "text": "最近一周，您有以下不适或感受的程度：感情容易受到伤害。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q35",
+      "text": "最近一周，您有以下不适或感受的程度：旁人能知道您的私下想法。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q36",
+      "text": "最近一周，您有以下不适或感受的程度：感到别人不理解您、不同情您。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q37",
+      "text": "最近一周，您有以下不适或感受的程度：感到人们对您不友好、不喜欢您。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q38",
+      "text": "最近一周，您有以下不适或感受的程度：做事必须做得很慢以保证做得正确。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q39",
+      "text": "最近一周，您有以下不适或感受的程度：心跳得很厉害。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q40",
+      "text": "最近一周，您有以下不适或感受的程度：恶心或胃部不舒服。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q41",
+      "text": "最近一周，您有以下不适或感受的程度：感到比不上他人。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q42",
+      "text": "最近一周，您有以下不适或感受的程度：肌肉酸痛。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q43",
+      "text": "最近一周，您有以下不适或感受的程度：感到有人在监视您、谈论您。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q44",
+      "text": "最近一周，您有以下不适或感受的程度：难以入睡。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q45",
+      "text": "最近一周，您有以下不适或感受的程度：做事必须反复检查。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q46",
+      "text": "最近一周，您有以下不适或感受的程度：难以作出决定。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q47",
+      "text": "最近一周，您有以下不适或感受的程度：害怕乘电车/公交/地铁/火车。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q48",
+      "text": "最近一周，您有以下不适或感受的程度：呼吸困难。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q49",
+      "text": "最近一周，您有以下不适或感受的程度：一阵阵发冷或发热。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q50",
+      "text": "最近一周，您有以下不适或感受的程度：因害怕而避开某些东西/场合/活动。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q51",
+      "text": "最近一周，您有以下不适或感受的程度：脑子变空了。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q52",
+      "text": "最近一周，您有以下不适或感受的程度：身体发麻或刺痛。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q53",
+      "text": "最近一周，您有以下不适或感受的程度：喉咙有梗塞感。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q54",
+      "text": "最近一周，您有以下不适或感受的程度：感到对前途没有希望。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q55",
+      "text": "最近一周，您有以下不适或感受的程度：不能集中注意力。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q56",
+      "text": "最近一周，您有以下不适或感受的程度：感到身体某部分软弱无力。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q57",
+      "text": "最近一周，您有以下不适或感受的程度：感到紧张或容易紧张。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q58",
+      "text": "最近一周，您有以下不适或感受的程度：感到手或脚发重。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q59",
+      "text": "最近一周，您有以下不适或感受的程度：想到死亡的事。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q60",
+      "text": "最近一周，您有以下不适或感受的程度：吃得太多。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q61",
+      "text": "最近一周，您有以下不适或感受的程度：别人看着您或谈论您时感到不自在。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q62",
+      "text": "最近一周，您有以下不适或感受的程度：有一些不属于您自己的想法。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q63",
+      "text": "最近一周，您有以下不适或感受的程度：有想打人或伤害他人的冲动。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q64",
+      "text": "最近一周，您有以下不适或感受的程度：醒得太早。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q65",
+      "text": "最近一周，您有以下不适或感受的程度：必须反复洗手/点数/触摸。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q66",
+      "text": "最近一周，您有以下不适或感受的程度：睡得不稳不深。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q67",
+      "text": "最近一周，您有以下不适或感受的程度：有想摔坏或破坏东西的想法。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q68",
+      "text": "最近一周，您有以下不适或感受的程度：有一些别人没有的想法或念头。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q69",
+      "text": "最近一周，您有以下不适或感受的程度：感到对别人神经过敏。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q70",
+      "text": "最近一周，您有以下不适或感受的程度：在商店/影院等人多地方感到不自在。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q71",
+      "text": "最近一周，您有以下不适或感受的程度：感到任何事情都很困难。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q72",
+      "text": "最近一周，您有以下不适或感受的程度：一阵阵恐惧或惊恐。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q73",
+      "text": "最近一周，您有以下不适或感受的程度：在公共场合吃东西很不舒服。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q74",
+      "text": "最近一周，您有以下不适或感受的程度：经常与人争论。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q75",
+      "text": "最近一周，您有以下不适或感受的程度：单独一人时神经很紧张。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q76",
+      "text": "最近一周，您有以下不适或感受的程度：认为别人对自己的成绩没作恰当评价。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q77",
+      "text": "最近一周，您有以下不适或感受的程度：即使和别人在一起也感到孤单。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q78",
+      "text": "最近一周，您有以下不适或感受的程度：感到坐立不安、心神不定。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q79",
+      "text": "最近一周，您有以下不适或感受的程度：感到自己没有什么价值。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q80",
+      "text": "最近一周，您有以下不适或感受的程度：感到熟悉的东西变得陌生或不像是真的。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q81",
+      "text": "最近一周，您有以下不适或感受的程度：大叫或摔东西。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q82",
+      "text": "最近一周，您有以下不适或感受的程度：害怕在公共场合昏倒。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q83",
+      "text": "最近一周，您有以下不适或感受的程度：感到别人想占您的便宜。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q84",
+      "text": "最近一周，您有以下不适或感受的程度：为一些有关'性'的想法而苦恼。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q85",
+      "text": "最近一周，您有以下不适或感受的程度：认为应该因自己的过错受惩罚。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q86",
+      "text": "最近一周，您有以下不适或感受的程度：感到要赶快把事情做完。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q87",
+      "text": "最近一周，您有以下不适或感受的程度：感到身体有严重问题。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q88",
+      "text": "最近一周，您有以下不适或感受的程度：从未感到和其他人很亲近。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q89",
+      "text": "最近一周，您有以下不适或感受的程度：感到自己有罪。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q90",
+      "text": "最近一周，您有以下不适或感受的程度：感到自己的脑子有毛病。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "没有",
+          "score": 1
+        },
+        {
+          "label": "轻度",
+          "score": 2
+        },
+        {
+          "label": "中度",
+          "score": 3
+        },
+        {
+          "label": "偏重",
+          "score": 4
+        },
+        {
+          "label": "严重",
+          "score": 5
+        }
+      ]
+    }
+  ],
+  "dimensions": [
+    {
+      "name": "躯体化",
+      "items": [
+        "q1",
+        "q4",
+        "q12",
+        "q27",
+        "q40",
+        "q42",
+        "q48",
+        "q49",
+        "q52",
+        "q53",
+        "q56",
+        "q58"
+      ],
+      "method": "average",
+      "max": 5,
+      "min": 1
+    },
+    {
+      "name": "强迫症状",
+      "items": [
+        "q3",
+        "q9",
+        "q10",
+        "q28",
+        "q38",
+        "q45",
+        "q46",
+        "q51",
+        "q55",
+        "q65"
+      ],
+      "method": "average",
+      "max": 5,
+      "min": 1
+    },
+    {
+      "name": "人际敏感",
+      "items": [
+        "q6",
+        "q21",
+        "q34",
+        "q36",
+        "q37",
+        "q41",
+        "q61",
+        "q69",
+        "q73"
+      ],
+      "method": "average",
+      "max": 5,
+      "min": 1
+    },
+    {
+      "name": "抑郁",
+      "items": [
+        "q5",
+        "q14",
+        "q15",
+        "q20",
+        "q22",
+        "q26",
+        "q29",
+        "q30",
+        "q31",
+        "q32",
+        "q54",
+        "q71",
+        "q79"
+      ],
+      "method": "average",
+      "max": 5,
+      "min": 1
+    },
+    {
+      "name": "焦虑",
+      "items": [
+        "q2",
+        "q17",
+        "q23",
+        "q33",
+        "q39",
+        "q57",
+        "q72",
+        "q78",
+        "q80",
+        "q86"
+      ],
+      "method": "average",
+      "max": 5,
+      "min": 1
+    },
+    {
+      "name": "敌对",
+      "items": [
+        "q11",
+        "q24",
+        "q63",
+        "q67",
+        "q74",
+        "q81"
+      ],
+      "method": "average",
+      "max": 5,
+      "min": 1
+    },
+    {
+      "name": "恐怖",
+      "items": [
+        "q13",
+        "q25",
+        "q47",
+        "q50",
+        "q70",
+        "q75",
+        "q82"
+      ],
+      "method": "average",
+      "max": 5,
+      "min": 1
+    },
+    {
+      "name": "偏执",
+      "items": [
+        "q8",
+        "q18",
+        "q43",
+        "q68",
+        "q76",
+        "q83"
+      ],
+      "method": "average",
+      "max": 5,
+      "min": 1
+    },
+    {
+      "name": "精神病性",
+      "items": [
+        "q7",
+        "q16",
+        "q35",
+        "q62",
+        "q77",
+        "q84",
+        "q85",
+        "q87",
+        "q88",
+        "q90"
+      ],
+      "method": "average",
+      "max": 5,
+      "min": 1
+    },
+    {
+      "name": "附加项目",
+      "items": [
+        "q19",
+        "q44",
+        "q59",
+        "q60",
+        "q64",
+        "q66",
+        "q89"
+      ],
+      "method": "average",
+      "max": 5,
+      "min": 1
+    },
+    {
+      "name": "总分",
+      "items": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7",
+        "q8",
+        "q9",
+        "q10",
+        "q11",
+        "q12",
+        "q13",
+        "q14",
+        "q15",
+        "q16",
+        "q17",
+        "q18",
+        "q19",
+        "q20",
+        "q21",
+        "q22",
+        "q23",
+        "q24",
+        "q25",
+        "q26",
+        "q27",
+        "q28",
+        "q29",
+        "q30",
+        "q31",
+        "q32",
+        "q33",
+        "q34",
+        "q35",
+        "q36",
+        "q37",
+        "q38",
+        "q39",
+        "q40",
+        "q41",
+        "q42",
+        "q43",
+        "q44",
+        "q45",
+        "q46",
+        "q47",
+        "q48",
+        "q49",
+        "q50",
+        "q51",
+        "q52",
+        "q53",
+        "q54",
+        "q55",
+        "q56",
+        "q57",
+        "q58",
+        "q59",
+        "q60",
+        "q61",
+        "q62",
+        "q63",
+        "q64",
+        "q65",
+        "q66",
+        "q67",
+        "q68",
+        "q69",
+        "q70",
+        "q71",
+        "q72",
+        "q73",
+        "q74",
+        "q75",
+        "q76",
+        "q77",
+        "q78",
+        "q79",
+        "q80",
+        "q81",
+        "q82",
+        "q83",
+        "q84",
+        "q85",
+        "q86",
+        "q87",
+        "q88",
+        "q89",
+        "q90"
+      ],
+      "max": 450,
+      "min": 90
+    }
+  ],
+  "standard_score": null,
+  "interpretation": {
+    "bands": [
+      {
+        "dimension": "躯体化",
+        "min": 1,
+        "max": 1.99,
+        "level": "正常",
+        "summary": "躯体化维度在正常范围。",
+        "advice": "维持。"
+      },
+      {
+        "dimension": "躯体化",
+        "min": 2,
+        "max": 2.99,
+        "level": "轻度",
+        "summary": "躯体化维度轻度升高。",
+        "advice": "关注相关症状，自我调节。"
+      },
+      {
+        "dimension": "躯体化",
+        "min": 3,
+        "max": 5,
+        "level": "中重度",
+        "summary": "躯体化维度明显升高。",
+        "advice": "建议到精神科/心理科评估。"
+      },
+      {
+        "dimension": "强迫症状",
+        "min": 1,
+        "max": 1.99,
+        "level": "正常",
+        "summary": "强迫症状维度在正常范围。",
+        "advice": "维持。"
+      },
+      {
+        "dimension": "强迫症状",
+        "min": 2,
+        "max": 2.99,
+        "level": "轻度",
+        "summary": "强迫症状维度轻度升高。",
+        "advice": "关注相关症状，自我调节。"
+      },
+      {
+        "dimension": "强迫症状",
+        "min": 3,
+        "max": 5,
+        "level": "中重度",
+        "summary": "强迫症状维度明显升高。",
+        "advice": "建议到精神科/心理科评估。"
+      },
+      {
+        "dimension": "人际敏感",
+        "min": 1,
+        "max": 1.99,
+        "level": "正常",
+        "summary": "人际敏感维度在正常范围。",
+        "advice": "维持。"
+      },
+      {
+        "dimension": "人际敏感",
+        "min": 2,
+        "max": 2.99,
+        "level": "轻度",
+        "summary": "人际敏感维度轻度升高。",
+        "advice": "关注相关症状，自我调节。"
+      },
+      {
+        "dimension": "人际敏感",
+        "min": 3,
+        "max": 5,
+        "level": "中重度",
+        "summary": "人际敏感维度明显升高。",
+        "advice": "建议到精神科/心理科评估。"
+      },
+      {
+        "dimension": "抑郁",
+        "min": 1,
+        "max": 1.99,
+        "level": "正常",
+        "summary": "抑郁维度在正常范围。",
+        "advice": "维持。"
+      },
+      {
+        "dimension": "抑郁",
+        "min": 2,
+        "max": 2.99,
+        "level": "轻度",
+        "summary": "抑郁维度轻度升高。",
+        "advice": "关注相关症状，自我调节。"
+      },
+      {
+        "dimension": "抑郁",
+        "min": 3,
+        "max": 5,
+        "level": "中重度",
+        "summary": "抑郁维度明显升高。",
+        "advice": "建议到精神科/心理科评估。"
+      },
+      {
+        "dimension": "焦虑",
+        "min": 1,
+        "max": 1.99,
+        "level": "正常",
+        "summary": "焦虑维度在正常范围。",
+        "advice": "维持。"
+      },
+      {
+        "dimension": "焦虑",
+        "min": 2,
+        "max": 2.99,
+        "level": "轻度",
+        "summary": "焦虑维度轻度升高。",
+        "advice": "关注相关症状，自我调节。"
+      },
+      {
+        "dimension": "焦虑",
+        "min": 3,
+        "max": 5,
+        "level": "中重度",
+        "summary": "焦虑维度明显升高。",
+        "advice": "建议到精神科/心理科评估。"
+      },
+      {
+        "dimension": "敌对",
+        "min": 1,
+        "max": 1.99,
+        "level": "正常",
+        "summary": "敌对维度在正常范围。",
+        "advice": "维持。"
+      },
+      {
+        "dimension": "敌对",
+        "min": 2,
+        "max": 2.99,
+        "level": "轻度",
+        "summary": "敌对维度轻度升高。",
+        "advice": "关注相关症状，自我调节。"
+      },
+      {
+        "dimension": "敌对",
+        "min": 3,
+        "max": 5,
+        "level": "中重度",
+        "summary": "敌对维度明显升高。",
+        "advice": "建议到精神科/心理科评估。"
+      },
+      {
+        "dimension": "恐怖",
+        "min": 1,
+        "max": 1.99,
+        "level": "正常",
+        "summary": "恐怖维度在正常范围。",
+        "advice": "维持。"
+      },
+      {
+        "dimension": "恐怖",
+        "min": 2,
+        "max": 2.99,
+        "level": "轻度",
+        "summary": "恐怖维度轻度升高。",
+        "advice": "关注相关症状，自我调节。"
+      },
+      {
+        "dimension": "恐怖",
+        "min": 3,
+        "max": 5,
+        "level": "中重度",
+        "summary": "恐怖维度明显升高。",
+        "advice": "建议到精神科/心理科评估。"
+      },
+      {
+        "dimension": "偏执",
+        "min": 1,
+        "max": 1.99,
+        "level": "正常",
+        "summary": "偏执维度在正常范围。",
+        "advice": "维持。"
+      },
+      {
+        "dimension": "偏执",
+        "min": 2,
+        "max": 2.99,
+        "level": "轻度",
+        "summary": "偏执维度轻度升高。",
+        "advice": "关注相关症状，自我调节。"
+      },
+      {
+        "dimension": "偏执",
+        "min": 3,
+        "max": 5,
+        "level": "中重度",
+        "summary": "偏执维度明显升高。",
+        "advice": "建议到精神科/心理科评估。"
+      },
+      {
+        "dimension": "精神病性",
+        "min": 1,
+        "max": 1.99,
+        "level": "正常",
+        "summary": "精神病性维度在正常范围。",
+        "advice": "维持。"
+      },
+      {
+        "dimension": "精神病性",
+        "min": 2,
+        "max": 2.99,
+        "level": "轻度",
+        "summary": "精神病性维度轻度升高。",
+        "advice": "关注相关症状，自我调节。"
+      },
+      {
+        "dimension": "精神病性",
+        "min": 3,
+        "max": 5,
+        "level": "中重度",
+        "summary": "精神病性维度明显升高。",
+        "advice": "建议到精神科/心理科评估。"
+      },
+      {
+        "dimension": "附加项目",
+        "min": 1,
+        "max": 1.99,
+        "level": "正常",
+        "summary": "附加项目维度在正常范围。",
+        "advice": "维持。"
+      },
+      {
+        "dimension": "附加项目",
+        "min": 2,
+        "max": 2.99,
+        "level": "轻度",
+        "summary": "附加项目维度轻度升高。",
+        "advice": "关注相关症状，自我调节。"
+      },
+      {
+        "dimension": "附加项目",
+        "min": 3,
+        "max": 5,
+        "level": "中重度",
+        "summary": "附加项目维度明显升高。",
+        "advice": "建议到精神科/心理科评估。"
+      },
+      {
+        "dimension": "总分",
+        "min": 90,
+        "max": 160,
+        "level": "阴性（低风险）",
+        "summary": "总分在临界值以下，未见明显症状群。",
+        "advice": "保持。"
+      },
+      {
+        "dimension": "总分",
+        "min": 161,
+        "max": 250,
+        "level": "阳性（中度）",
+        "summary": "总分达到筛查阳性线，提示存在一定心理症状。",
+        "advice": "关注具体因子，必要时心理咨询。"
+      },
+      {
+        "dimension": "总分",
+        "min": 251,
+        "max": 450,
+        "level": "阳性（明显）",
+        "summary": "总分明显偏高，症状较多。",
+        "advice": "建议尽快到精神科/心理科规范评估。"
+      }
+    ]
+  },
+  "safety": {
+    "crisis_items": [],
+    "crisis_rule": "",
+    "high_risk_rule": ""
+  }
+}

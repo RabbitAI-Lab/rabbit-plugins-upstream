@@ -1,48 +1,64 @@
-## Description: <br>
-Converts Markdown, HWP, DOCX, RTF, and Marp slide files to PDF, PNG, HTML, DOCX, or PPTX using a LibreOffice-first document conversion workflow with internal-only fallbacks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Docxport guides agents through Markdown, HWP, DOCX, RTF, and Marp document conversion to PDF, PNG, HTML, DOCX, or PPTX with a LibreOffice-first workflow for watermark-free external deliverables.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and document authors use Docxport to convert Markdown, Word/HWP/RTF documents, and Marp decks into PDF, PNG, HTML, DOCX, or PPTX deliverables while preserving layout, tables, images, and review artifacts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Confidential slide content may be exposed when the Mermaid CDN and browser-print workflow is used. <br>
-Mitigation: Avoid that workflow for confidential documents or replace it with a local/offline renderer. <br>
-Risk: Large local tool installs such as LibreOffice or Chromium-based converters can affect the user's machine and network usage. <br>
-Mitigation: Review dependency checks and approve any large installs before conversion begins. <br>
-Risk: Official or external PDFs can be unsuitable if an internal-only converter such as Prince adds a non-commercial watermark. <br>
-Mitigation: Classify the delivery medium first, use watermark-clean converters for official outputs, and require explicit approval before using internal-only fallbacks. <br>
-Risk: Text-only HWP fallback can lose images, tables, and document layout. <br>
-Mitigation: Prefer LibreOffice PDF or HTML conversion for rich-format analysis and offer text-only fallback only with a clear loss-of-formatting note. <br>
+## Use Case:
 
+Developers and agents use this skill to choose safe document conversion paths, check required tools, and produce user-facing deliverables while avoiding watermark leakage, layout loss, and silent text-only fallbacks.
 
-## Reference(s): <br>
-- [Docxport on ClawHub](https://clawhub.ai/drumrobot/skills/docxport) <br>
-- [Docxport skill instructions](SKILL.md) <br>
-- [DOCX conversion guide](docx.md) <br>
-- [Marp slide conversion guide](marp.md) <br>
-- [Mermaid CDN module referenced for Marp HTML rendering](https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with bash, PowerShell, HTML, YAML, and CSS snippets; converted document files when executed.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Expected file outputs include PDF, PNG page images, HTML, DOCX, and PPTX depending on input and flags.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: server release evidence, target metadata, and CHANGELOG; released 2026-07-23) <br>
+Risk: Conversion workflows can fetch unpinned remote packages through tools such as npx or uvx.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use pinned or preinstalled converter versions for trusted workflows, especially in environments that handle sensitive documents.
+
+Risk: Private slide decks can load third-party Mermaid scripts from a CDN.
+
+Mitigation: Use local Mermaid assets instead of CDN scripts when converting private or sensitive decks.
+
+Risk: Document conversion can overwrite or misplace generated files if output paths are not checked.
+
+Mitigation: Confirm output paths before running conversions and report the final generated file paths.
+
+Risk: Watermarked or lossy fallback converters can create unsuitable external deliverables.
+
+Mitigation: Prefer LibreOffice for official outputs, reserve internal-only fallbacks for drafts, and make any text-only fallback explicit.
+
+## Reference(s):
+
+- [ClawHub docxport skill page](https://clawhub.ai/drumrobot/skills/docxport)
+- [DOCX conversion guide](docx.md)
+- [Marp slide conversion guide](marp.md)
+- [Dependency check helper](scripts/check-deps.sh)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, markdown]
+
+**Output Format:** [Markdown with inline shell commands and conversion procedures]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance may lead the agent to create PDF, PNG, HTML, DOCX, or PPTX files using local conversion tools.]
+
+## Skill Version(s):
+
+0.2.1 (source: release evidence and CHANGELOG, released 2026-09-18)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

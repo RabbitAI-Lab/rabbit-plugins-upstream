@@ -1,43 +1,60 @@
-## Description: <br>
-Browse AI (browse.ai). Use this skill for ANY Browse AI request - reading, creating, and updating data. Whenever a task involves Browse AI, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Browse AI lets an agent operate Browse AI through OOMOL's browse_ai connector to list robots and tasks, inspect task data, start robot runs, and update robot cookies.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Browse AI robot schemas, list robots and tasks, retrieve captured task data, start robot tasks, and update robot cookies through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill operates Browse AI through an OOMOL-connected account and depends on server-side credential injection. <br>
-Mitigation: Install only when the agent should use the connected Browse AI account, and review account connection status before use. <br>
-Risk: Write actions can update robot cookies or start tasks that may consume Browse AI or OOMOL account resources. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before write actions, especially cookie updates and task starts. <br>
+## Use Case:
 
+Developers and external users use this skill to let an agent manage Browse AI robots and robot tasks through an OOMOL-connected account. It supports read workflows for robots and task data, plus confirmed write actions for starting tasks and updating robot cookies.
 
-## Reference(s): <br>
-- [ClawHub Browse AI Skill](https://clawhub.ai/oomol/oo-browse-ai) <br>
-- [Browse AI Homepage](https://www.browse.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Agent actions return JSON data from the Browse AI connector when executed with the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and frontmatter) <br>
+Risk: Fallback setup instructions execute a remote oo CLI installer directly in the shell without integrity checks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified or manually installed oo CLI, and only run the remote installer after reviewing and trusting the OOMOL installer source.
+
+Risk: run_robot_task can change Browse AI state by starting robot tasks.
+
+Mitigation: Confirm the exact robot, payload, and expected effect with the user before running the action.
+
+Risk: update_robot_cookies can overwrite stored cookies for a Browse AI robot.
+
+Mitigation: Get explicit approval for the target robot and cookie update before executing the destructive action.
+
+## Reference(s):
+
+- [ClawHub Browse AI Skill](https://clawhub.ai/oomol/skills/oo-browse-ai)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Browse AI Homepage](https://www.browse.ai)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

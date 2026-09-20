@@ -1,46 +1,68 @@
-## Description: <br>
-OpenClaw Token Optimizer v3.2.0 is a practical cost-control toolkit for OpenClaw agents, covering lazy context loading, Sonnet/Opus-aware routing, heartbeat scheduling, local token budgets, cache-TTL guidance, and security-audit-safe command behavior for current OpenClaw 2026.6.x installs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Find potential token waste in OpenClaw or Hermes Agent by reviewing model choices, large instructions, recurring tasks, and related evidence, then suggest safe next steps without changing settings.
 
-## Publisher: <br>
-[asif2bd](https://clawhub.ai/user/asif2bd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[asif2bd](https://clawhub.ai/user/asif2bd)
 
-## Use Case: <br>
-Developers and operators use this skill to reduce OpenClaw token usage and API cost by recommending smaller context bundles, routing routine work to less expensive models, planning heartbeats, and checking local token budgets. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Generated AGENTS.md or HEARTBEAT.md content can affect future agent behavior if installed without review. <br>
-Mitigation: Preview generated content first and use the explicit install or output commands only after review. <br>
-Risk: Optional provider configuration examples may require third-party API keys if a user chooses to apply them. <br>
-Mitigation: Treat provider examples as manual configuration guidance and supply credentials only through the user's normal secret-management process. <br>
-Risk: Local token-budget and heartbeat helpers may write workspace state when the relevant write command is explicitly requested. <br>
-Mitigation: Run default preview/check commands for inspection and keep backups enabled for heartbeat installation. <br>
+## Use Case:
 
+Developers and operators use this skill to audit OpenClaw or Hermes Agent setups for likely token waste, costly model choices, oversized context, and recurring automation review candidates. It produces prioritized recommendations and caveats while leaving configuration, schedules, and credentials unchanged.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/asif2bd/skills/openclaw-token-optimizer) <br>
-- [Publisher profile](https://clawhub.ai/user/asif2bd) <br>
-- [GitHub](https://github.com/Asif2BD/OpenClaw-Token-Optimizer) <br>
-- [Security Notes](https://github.com/Asif2BD/OpenClaw-Token-Optimizer/blob/main/SECURITY.md) <br>
-- [PROVIDERS.md](references/PROVIDERS.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and command-line text with optional JSON configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Some commands write local workspace state only when explicitly requested; default preview paths are intended for review before adoption.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.2.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Generated audit reports can disclose model names, agent IDs, file basenames, and findings that reveal private operational details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and sanitize reports before sharing them outside the trusted operational context.
+
+Risk: The skill reads explicitly selected config/profile files and local diagnostics, which may be sensitive even when raw values are not printed.
+
+Mitigation: Run it only in a trusted local agent session, use sanitized exports when practical, and avoid publishing real configs or reports.
+
+Risk: OpenClaw live diagnostics may contact configured services or update native caches through the installed OpenClaw CLI.
+
+Mitigation: Use live mode only when those local read-only side effects are acceptable; otherwise provide offline JSON exports.
+
+Risk: Optimization recommendations are review candidates, not measured savings or automatic fixes.
+
+Mitigation: Validate each proposed change against current policy, model availability, and before/after measurements before changing production settings.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/asif2bd/skills/openclaw-token-optimizer)
+- [Agent quick start](artifact/references/QUICKSTART.md)
+- [Hermes Agent compatibility](artifact/references/HERMES.md)
+- [Provider policy](artifact/references/PROVIDERS.md)
+- [Security policy](artifact/SECURITY.md)
+- [OpenClaw 2026.9.4 release documentation](https://docs.openclaw.ai/releases/2026.9.4)
+- [OpenAI Codex model documentation](https://developers.openai.com/codex/models)
+- [Hermes Agent pinned compatibility source](https://github.com/NousResearch/hermes-agent/tree/d7b836ab1c0cddaafc109ed24c9a83b6191cdc88)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Plain-language Markdown guidance with optional JSON reports and read-only shell command suggestions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports intentionally avoid raw config, prompts, credentials, and environment values; selected model, agent, file, and finding identifiers may still be sensitive.]
+
+## Skill Version(s):
+
+4.1.1 (source: SKILL.md frontmatter, CHANGELOG.md, and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

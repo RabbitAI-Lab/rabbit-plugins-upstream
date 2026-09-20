@@ -14,7 +14,7 @@ description: |
 tags: [huawei-cloud, testing, e2e, orchestration, qa]
 ---
 
-# Huawei Cloud Skill Tester — Three-Track Seven-Phase E2E Testing Pipeline
+# Huawei Cloud Skill Tester — Three-Track Eight-Phase E2E Testing Pipeline
 
 > Independent, repeatable Huawei Cloud Skill testing framework. Does not depend on skill-creator; can test any existing Huawei Cloud Skill.
 > Focuses on **real-environment functional testing** and **multi-skill orchestration scenarios**.
@@ -23,7 +23,8 @@ tags: [huawei-cloud, testing, e2e, orchestration, qa]
 
 ## Overview
 
-This Skill provides a **three-track, seven-phase** standardized testing pipeline:
+This Skill provides a **three-track, eight-phase** standardized testing pipeline
+(three-tier layout × 8 phases total: Phase 0-6 execution + Phase 7 final report):
 
 | Tier | Phases | Goal |
 |------|--------|------|
@@ -37,7 +38,7 @@ This Skill provides a **three-track, seven-phase** standardized testing pipeline
 2. **Agent-proof** — Write operations require user confirmation for each item; automatic gate bypassing is not allowed
 3. **Three-Track Layering** — Clear gates between Tiers; Tier 1 must be completed before entering Tier 2
 4. **Batch Repeatable** — Supports `--skills "skill-a,skill-b"` or `--all-installed`
-5. **Fallback Strategy** — When only 1 skill, Phase 5/6 automatically downgrade to single-skill lifecycle testing
+5. **Fallback Strategy** — When only 1 skill, Phase 5/6 automatically downgrade to single-skill lifecycle testing. **Sibling auto-scan is ON by default** (Phase 5/6 automatically looks for other `huawei-cloud-*` skills in the same directory as the skill under test to run orchestration combos). Use `--no-siblings` to opt-out.
 6. **Standardized JSON Output** — All phases output in a unified schema; Phase 7 merges into a single report
 7. **Real-Environment First** — All Tier 2 orchestrations execute against real Huawei Cloud; no mocks or simulations
 
@@ -61,512 +62,93 @@ User Input (--skills or --all-installed)
 
 ---
 
+**Dependency**: Quality telemetry is collected automatically via `skill-quality-cli` (installed by `scripts/ensure_cli.sh` if absent).
+
 ## Prerequisites
 
 1. **hcloud CLI** installed and authenticated (for Tier 2 CLI mode testing) — Reference: https://support.huaweicloud.com/qs-hcli/hcli_02_003.html
 2. **Python 3.8+** + `huaweicloudsdk` packages (for SDK mode testing) — SDK Reference: https://console.huaweicloud.com/apiexplorer/#/sdkcenter
-3. **Huawei Cloud AK/SK** — 自动扫描所有以 `HUAWEI` / `HW` / `HWC` 开头的环境变量，匹配其中含 `ACCESS_KEY` / `_AK` / `SECRET_KEY` / `_SK` 的键值对。**If missing, must prompt the user to provide them; if the user does not provide, terminate the process. Strictly prohibited from skipping**
-4. **Target Skill** must be under $HOME/.hermes/skills/ or a user-specified path
+3. **Huawei Cloud AK/SK** — auto-scans all environment variables prefixed `HUAWEI` / `HW` / `HWC` (key-value pairs whose keys carry AK/SK markers). **If missing, the framework emits the env-var setup template to stderr and exits 77. NEVER ask the user to type AK/SK in chat; the user must set env vars in their shell profile out-of-band and re-run.** (full protocol: `references/agent-protocol.md`).
+4. **Target Skill** must be under `$SKILL_INSTALL_DIR/` (auto-detected: `~/.agents/skills/` → `~/.hermes/skills/` → default) or a user-specified path
 5. **jq** command (all JSON processing depends on it)
 6. **API Reference**: https://console.huaweicloud.com/apiexplorer/#/openapi
 
 ---
-
-## Workflow — Three-Track Seven-Phase
+- **`skill-quality-cli`** — ensured by `bash scripts/ensure_cli.sh` (idempotent, skips if present)
+  - Upgrade: run `skill-quality-cli upgrade` manually (no auto-upgrade)
+  - Disable telemetry report: set `SKILL_QUALITY_REPORT=0`
+## Workflow — Three-Track Eight-Phase
 
 ```
 Tier 1: Single-Skill Unit Testing
    Phase 0: Installation Verification (install/uninstall/reinstall)
-   Phase 1: Feature Extraction (metadata + commands + resource types)
+   Phase 1: Feature Extraction (metadata + commands + resource types + doc checks)
    Phase 2: Technical Research (CLI→SDK→API three-level availability)
-   Phase 3: Test Case Generation (functional cases TC-F + API cases TC-A)
-   Phase 4: Real-Environment Execution (read-only automatic + write operations require confirmation)
+   Phase 3: Test Case Generation (functional TC-F + boundary + negative + API TC-A)
+   Phase 4: Real-Environment Execution (read-only automatic + write ops require confirmation)
 
 Tier 2: Integration Testing — Real-Environment Orchestration
-   Phase 5: Multi-Skill Orchestration (scenario derivation → step execution → state verification)
+   Phase 5: Multi-Skill Orchestration (conflict scan / scenario derivation / self-check)
    Phase 6: End-to-End Flow (resource lifecycle: create→query→update→delete)
 
 Tier 3: Final Report
-   Phase 7: Consolidated Report (merge phase-0~6 JSON into single report)
+   Phase 7: Consolidated Report (merge phase-0~6 JSON, verdict + issues + reasons)
 ```
+
+> Full per-phase implementation specs (steps, pass criteria, JSON fields) are in `references/phase-details.md`.
 
 ---
 
-### Phase 0: Installation Verification
-
-**Goal:** Verify whether the skill can be installed/uninstalled/reinstalled normally.
-
-**Steps:**
-
-1. Check skill directory structure (SKILL.md exists, references/ exists)
-2. Confirm whether Hermes has the skill installed (check if a directory with the same name exists under $HOME/.hermes/skills/)
-3. Perform installation verification (simulated or actual installation)
-4. Perform uninstallation verification (simulated or actual uninstallation)
-5. Perform reinstallation verification (install → uninstall → install)
-6. Record installation duration, directory integrity, and installation status
-
-```bash
-# Simulated verification (directory structure check)
-[ -f "${skill_path}/SKILL.md" ] && echo "SKILL.md exists"
-[ -d "${skill_path}/scripts" ] && echo "scripts/ exists"
-[ -d "${skill_path}/references" ] && echo "references/ exists"
-
-# Installation status
-hermes skills list | grep "${skill_name}"
-echo $?  # 0=installed, 1=not installed
-```
-
-**Output:** `phase-0-summary.json`
-
-```json
-{
-  "install": {"status": "pass", "existing": true, "duration_s": 1.2},
-  "uninstall": {"status": "skipped", "reason": "not installed"},
-  "reinstall": {"status": "skipped", "reason": "not installed"},
-  "directory_integrity": {"pass": true, "checks": {...}}
-}
-```
-
----
-
-### Phase 1: Feature Extraction
-
-**Goal:** Extract structured feature information from SKILL.md as input for all subsequent phases.
-
-**Steps:**
-
-1. Read YAML frontmatter from SKILL.md → name, description, tags, triggers
-2. Extract core commands table (Core Commands section)
-3. Extract parameter confirmation table
-4. Identify feature types (query/create/modify/delete)
-5. Extract resource types involved (ECS instance, VPC, voucher, etc.)
-6. Note whether there are write operations (Create/Update/Delete)
-7. Read the list of test scripts under scripts/
-8. Read the list of reference files under references/
-
-**Output:** `phase-1-summary.json`
-
-```json
-{
-  "metadata": {
-    "name": "huawei-cloud-bss-voucher-manage",
-    "triggers": ["查代金券", "删除代金券", "list vouchers", ...],
-    "tags": ["huawei-cloud", "bss", "voucher"]
-  },
-  "capabilities": {
-    "list": ["查询代金券", "统计代金券"],
-    "create": [],
-    "update": [],
-    "delete": ["删除代金券"]
-  },
-  "has_write_operations": true,
-  "resource_types": ["bss_voucher"],
-  "commands": [
-    {"id": "CMD-01", "source": "SKILL.md", "description": "查询代金券列表", "executor": "sdk"},
-    {"id": "CMD-02", "source": "SKILL.md", "description": "统计代金券", "executor": "sdk"},
-    {"id": "CMD-03", "source": "SKILL.md", "description": "删除代金券", "executor": "sdk"}
-  ],
-  "scripts": ["scripts/test-cli-commands.sh"],
-  "references": ["references/iam-policies.md", "references/api-paths.md"]
-}
-```
-
----
-
-### Phase 2: Technical Research
-
-**Goal:** Perform CLI→SDK→API three-level fallback verification for each command extracted in Phase 1, determining the actual executable method.
-
-**Dependency:** Phase 1 completed (phase-1-summary.json exists)
-
-**Research order (per command):**
-
-| Priority | Method | Verification |
-|----------|--------|-------------|
-| 1st | **CLI** | `hcloud <Service> <Operation> --cli-region=cn-north-4 --help` |
-| 2nd | **SDK** | `python3 -c "from huaweicloudsdk{service}.v2 import ..."` |
-| 3rd | **API** | Only from SDK source `_http_info` or Huawei Cloud API Explorer |
-
-**Rule:** API endpoints are **strictly prohibited from being inferred**; only allowed from SDK `_http_info.resource_path` or user confirmation from API Explorer.
-
-**Output:** `phase-2-summary.json`
-
-```json
-{
-  "research": [
-    {
-      "cmd_id": "CMD-01",
-      "description": "查询代金券列表",
-      "cli": {"available": false, "reason": "BSS not in hcloud service list"},
-      "sdk": {
-        "available": true,
-        "package": "huaweicloudsdkbss.v2",
-        "method": "list_sub_customer_coupons",
-        "api_path": "/v2/promotions/benefits/coupons"
-      },
-      "api": {"available": true, "endpoint": "/v2/promotions/benefits/coupons"},
-      "recommended_executor": "sdk",
-      "risk_level": "low"
-    }
-  ]
-}
-```
-
----
-
-### Phase 3: Test Case Generation
-
-**Goal:** Generate two types of test cases based on Phase 1+2, present them to the user for confirmation.
-
-**Dependency:** Phase 1+2 completed (phase-1-summary.json + phase-2-summary.json exist)
-
-**Functional case division rules:**
-
-| Operation Type | Case Requirements | Risk Level |
-|---------------|-------------------|------------|
-| Query (List/Show/Get) | 1 positive + 1 boundary (limit=0 or empty filter) | low |
-| Create | 1 standard + 1 parameter variant | high |
-| Update | 1 verification that modification took effect | medium |
-| Delete | 1 pre-deletion confirmation + 1 post-deletion verification | high |
-| Statistics (count/aggregate) | 1 positive + 1 time range boundary | low |
-
-**Case IDs:** `TC-F-01` ~ `TC-F-NN` (functional), `TC-A-01` ~ `TC-A-NN` (API/SDK)
-
-**Output:** `phase-3-summary.json`
-
-```json
-{
-  "functional_cases": [
-    {
-      "id": "TC-F-01",
-      "name": "List vouchers - positive",
-      "command": "list_sub_customer_coupons(limit=10)",
-      "expected": "Return voucher list, no more than 10 items",
-      "is_write": false,
-      "risk_level": "low",
-      "executor": "sdk",
-      "prerequisites": [],
-      "verification": "resp.count >= 0"
-    },
-    {
-      "id": "TC-F-03",
-      "name": "Delete voucher - positive",
-      "command": "reclaim_partner_coupons(coupon_id=...)",
-      "expected": "Voucher status changed to reclaimed",
-      "is_write": true,
-      "risk_level": "high",
-      "executor": "sdk",
-      "prerequisites": ["TC-F-01 (provide valid coupon_id)"],
-      "verification": "Query after delete to confirm status change"
-    }
-  ],
-  "api_cases": [...]
-}
-```
-
----
-
-### Phase 4: Execution
-
-**Goal:** Execute test cases from Phase 3 one by one; read-only runs automatically, write operations require per-case confirmation.
-
-**Dependency:** Phase 3 completed (phase-3-summary.json exists)
-
-**Execution rules:**
-
-```
-Pre-check: Is AK/SK set?
-  if AK/SK not set:
-    Prompt user to provide AK/SK
-    if user does not provide:
-      Terminate process, output "⛔ AK/SK missing, cannot execute tests"
-    else:
-      Set as environment variables, continue execution
-
-Iterate over each test case:
-  if is_write == false:
-    Auto-execute → Record pass/fail
-  if is_write == true:
-    Show command and expected → Wait for user y/N confirmation
-    if confirmed:
-      Execute → Record pass/fail + resource changes
-    else:
-      Skip → Record skipped (user_cancelled)
-```
-
-**Resource change record (key fields):**
-
-```json
-"resource_changes": [
-  {
-    "tc_id": "TC-F-03",
-    "resource_type": "bss_voucher",
-    "resource_id": "VCH-abc123",
-    "change_type": "deleted",
-    "cleanup_method": {"type": "sdk", "command": "already deleted, no cleanup needed"},
-    "cleanup_required": false
-  }
-]
-```
-
-**Output:** `phase-4-summary.json`
-
-```json
-{
-  "execution_results": [
-    {"tc_id": "TC-F-01", "status": "pass", "duration_s": 2.1, "output_snippet": "..."},
-    {"tc_id": "TC-F-03", "status": "pass", "duration_s": 1.5, "output_snippet": "...",
-     "resource_changes": [{"resource_type": "bss_voucher", "change_type": "deleted", ...}]}
-  ],
-  "statistics": {"total": 10, "pass": 9, "fail": 0, "skip": 1},
-  "all_resources_changed": [...]
-}
-```
-
----
-
-### Phase 5: Multi-Skill Orchestration — Real-Environment Scenario Testing
-
-**Goal:** Derive multi-skill business scenarios and execute them against the real Huawei Cloud environment to verify cross-skill integration.
-
-**Dependency:** Phase 4 completed for all tested skills
-
-**Branch logic:**
-
-```
-if skills_count == 1:
-  Downgrade to single-skill orchestration:
-    Extract all feature points from Phase 1
-    Sort by CRUD lifecycle (query → create → update → delete)
-    Execute sequentially against real environment
-    Verify each step's output feeds correctly into the next
-
-if skills_count >= 2:
-  5a: Scenario derivation
-      - Group feature points by resource type from each skill's Phase 1 output
-      - Sort by dependency order (e.g., VPC must exist before ECS)
-      - Auto-generate scenario chains with resource passing between skills
-      - Present scenarios to user for confirmation
-  5b: Real-environment execution
-      - Execute each step in the confirmed scenario chain
-      - Pass resource IDs/outputs between steps as runtime context
-      - Record actual CLI/SDK output for each step
-  5c: Cross-skill data flow verification
-      - Verify output of skill A's operation can be consumed by skill B
-      - Check data format compatibility (JSON field mapping)
-  5d: Rollback on failure
-      - If any step fails, execute rollback steps for already-created resources
-```
-
-**Auto-derivation example (ECS + VPC + EIP):**
-
-```
-Input skills: [ECS-manage, VPC-manage, EIP-manage]
-Derived scenario:
-  Step 1: VPC-manage.CreateVPC → outputs vpc_id
-  Step 2: ECS-manage.CreateECS (in vpc_id) → outputs instance_id
-  Step 3: EIP-manage.CreateEIP → outputs eip_id
-  Step 4: EIP-manage.BindEIP (bind to instance_id) → outputs binding_status
-  Step 5: ECS-manage.ListInstances (verify instance is running)
-  Step 6: EIP-manage.UnbindEIP (unbind from instance_id)
-  Step 7: ECS-manage.DeleteECS (instance_id)
-  Step 8: EIP-manage.ReleaseEIP (eip_id)
-  Step 9: VPC-manage.DeleteVPC (vpc_id)
-```
-
-**Resource passing mechanism:**
-
-```json
-{
-  "runtime_context": {
-    "vpc_id": {"from_step": 1, "skill": "VPC-manage", "output_field": "vpc.id"},
-    "instance_id": {"from_step": 2, "skill": "ECS-manage", "output_field": "server.id"}
-  }
-}
-```
-
-**Execution mode:** All steps run against real Huawei Cloud. Read-only steps (List/Show/Describe) run automatically. Write steps (Create/Delete/Update) require user confirmation for each step.
-
-**Output:** `phase-5-summary.json`
-
-```json
-{
-  "mode": "full" | "downgraded_single",
-  "scenario": {
-    "name": "VPC-ECS-EIP lifecycle",
-    "skills_involved": ["vpc-manage", "ecs-manage", "eip-manage"],
-    "steps": [
-      {"seq": 1, "skill": "vpc-manage", "action": "CreateVPC", "status": "pass", "output": {"vpc_id": "vpc-abc"}},
-      {"seq": 2, "skill": "ecs-manage", "action": "CreateECS", "status": "pass", "output": {"instance_id": "srv-xyz"}},
-      {"seq": 3, "skill": "eip-manage", "action": "CreateEIP", "status": "pass", "output": {"eip_id": "eip-123"}},
-      {"seq": 4, "skill": "eip-manage", "action": "BindEIP", "status": "pass", "output": {}},
-      {"seq": 5, "skill": "ecs-manage", "action": "ListInstances", "status": "pass", "output": {}},
-      {"seq": 6, "skill": "eip-manage", "action": "UnbindEIP", "status": "pass", "output": {}},
-      {"seq": 7, "skill": "ecs-manage", "action": "DeleteECS", "status": "pass", "output": {}},
-      {"seq": 8, "skill": "eip-manage", "action": "ReleaseEIP", "status": "pass", "output": {}},
-      {"seq": 9, "skill": "vpc-manage", "action": "DeleteVPC", "status": "pass", "output": {}}
-    ]
-  },
-  "data_flow_verification": {"pass": true, "mismatches": []},
-  "rollback_required": false
-}
-```
-
----
-
-### Phase 6: End-to-End Flow Testing — Real-Environment Lifecycle
-
-**Goal:** End-to-end verification of complete resource lifecycles against real Huawei Cloud, automatically deriving scenario chains from Phase 1 feature lists and executing them with real API calls.
-
-**Dependency:** Phase 5 completed (phase-5-summary.json exists)
-
-**Branch logic:**
-
-```
-if skills_count == 1:
-  Single-skill closed loop:
-    Sort all feature points by create→list→show→update→delete
-    Chain into a single-skill resource lifecycle
-    Execute each step via real CLI/SDK against production
-    Verify resource state after each mutation
-
-if skills_count >= 2:
-  6a: Scenario derivation (from Phase 5 output)
-      - Use the confirmed scenario chain from Phase 5
-      - Extend with additional verification steps
-  6b: Lifecycle execution
-      - Execute each step against real Huawei Cloud environment
-      - Read-only steps auto-execute; write steps prompt user
-  6c: State consistency verification
-      - After each write operation, verify via read operation
-      - Confirm resource state matches expected
-  6d: Cross-step data validation
-      - Verify output schema compatibility between steps
-      - Detect field name mismatches, type mismatches
-  6e: Cleanup verification
-      - Verify all created resources are properly deleted
-      - Check for orphaned resources
-```
-
-**Single-skill closed loop example (RDS query skill):**
-
-```
-Steps:
-  Step 1: ListInstances (read-only, auto) → get instance count
-  Step 2: ShowInstanceDetail (if instance exists) → get instance config
-  Step 3: ListConfigurations (auto) → get parameter templates
-  Step 4: ShowBackupPolicy (if instance exists) → get backup config
-  Step 5: Analyze slow SQL (read-only, auto) → ListSlowLogs + ListTopSqls
-  Step 6: Parameter tuning recommendation (analysis, no API call)
-  Step 7: Backup strategy assessment (analysis, no API call)
-```
-
-**Multi-skill E2E example (EC2 + EVS):**
-
-```
-Steps:
-  Step 1: Create EVS volume → verify volume exists
-  Step 2: Attach volume to ECS instance → verify attachment
-  Step 3: Query volume metrics → verify I/O
-  Step 4: Detach volume → verify detached
-  Step 5: Delete volume → verify deleted
-```
-
-**Output:** `phase-6-summary.json`
-
-```json
-{
-  "mode": "full" | "downgraded_single_skill_flow",
-  "scenario": {
-    "name": "RDS Intelligent Service Inspection",
-    "skills_involved": ["huawei-cloud-rds-intelligent-service"],
-    "steps": [
-      {"seq": 1, "action": "ListInstances", "status": "pass", "output_summary": "3 instances found"},
-      {"seq": 2, "action": "ShowInstanceDetail", "status": "pass", "output_summary": "instance config retrieved"},
-      {"seq": 3, "action": "ListConfigurations", "status": "pass", "output_summary": "5 templates found"},
-      {"seq": 4, "action": "ListDatastores", "status": "pass", "output_summary": "MySQL 8.0 available"},
-      {"seq": 5, "action": "ShowBackupUsage", "status": "pass", "output_summary": "2.3GB used"},
-      {"seq": 6, "action": "ListInstanceDiagnosis", "status": "pass", "output_summary": "No issues found"}
-    ]
-  },
-  "state_consistency": {"pass": true},
-  "cleanup_verification": {"pass": true, "orphaned": []}
-}
-```
----
-
-### Phase 7: Consolidated Report
-
-**Goal:** Merge Phase 0~6 JSON outputs into a single, comprehensive test report.
-
-**Dependency:** Phase 0~6 all exist
-
-**Output:** `phase-7-summary.json`
-
-```json
-{
-  "test_id": "test-20260716-100300",
-  "phases_summary": [
-    {"phase": 0, "name": "install-check", "verdict": "pass", "duration_s": 3.5},
-    {"phase": 1, "name": "skill-analysis", "verdict": "pass", "duration_s": 12.0},
-    {"phase": 2, "name": "tech-research", "verdict": "pass", "duration_s": 45.0},
-    {"phase": 3, "name": "test-generation", "verdict": "pass", "duration_s": 8.0},
-    {"phase": 4, "name": "execution", "verdict": "pass", "duration_s": 120.0},
-    {"phase": 5, "name": "orchestration", "verdict": "pass", "duration_s": 200.0},
-    {"phase": 6, "name": "e2e-flow", "verdict": "pass", "duration_s": 180.0}
-  ],
-  "overall_statistics": {
-    "total_phases": 7,
-    "pass": 7,
-    "fail": 0,
-    "skipped": 0,
-    "total_duration_s": 583.5,
-    "test_cases_total": 24,
-    "test_cases_pass": 22,
-    "test_cases_fail": 1,
-    "test_cases_skip": 1,
-    "orchestration_scenarios": 2,
-    "e2e_flows_executed": 1
-  },
-  "resources_created": 3,
-  "resources_cleaned": 2,
-  "resources_manual": 1,
-  "manual_interventions": [
-    {
-      "phase": 5,
-      "resource_type": "disk_volume",
-      "resource_id": "vol-xyz789",
-      "steps": ["hcloud EVS DeleteVolume --volume_id=vol-xyz789"]
-    }
-  ],
-  "html_report": "reports/test-20260716-100300.html"
-}
-```
+## Phases at a Glance
+
+| Phase | Name | Key Points | Verdict |
+|-------|------|---------|------|
+| 0 | Install verification | Directory completeness (SKILL.md + references/ + iam-policies.md mandatory; scripts/ soft-required for pure-CLI skills); install/uninstall/reinstall (same-path / symlink protection) | Directory quartet + lifecycle |
+| 1 | Feature extraction | metadata/triggers/commands/capabilities/resource_types + doc_checks (reference consistency, forbidden .bak/.template files) | Commands and triggers non-empty |
+| 2 | Technical research | CLI→SDK→API three-level availability; pure-local tools auto-marked not_applicable | Availability count |
+| 3 | Test case generation | Positive + boundary (limit=1) + negative (unknown param) cases; placeholder replacement (/path/to, ./xxx, {region}); template/interactive command filtering | Cases > 0 |
+| 4 | Execution | Auto execution + output quality verdict (rc=0 empty output → warn); negative-case error quality; doc-gap analysis (doc_gap_issues); missing-dependency marking | pass/fail/warn/skip |
+| 5 | Orchestration | Multi-skill: trigger-conflict scan + data-flow candidates; single skill: downgraded self-check (internal ambiguity + write-op ordering) | conflict scan |
+| 6 | Full flow | Multi-skill: scenario derivation; single skill: downgraded full functional loop (create→query→update→delete) | scenario steps |
+| 7 | Report | Merge phase-0~6; verdict + pass_rate + issues_found + per-phase reason; test-report.json/md | Aggregated verdict |
+
+> Detailed steps, chain-verification rules, and JSON schemas: `references/phase-details.md` and `references/output-schema-spec.md`.
 
 ---
 
 ## KooCLI Command Format Standard
 
-This testing framework uses `bash` scripts as the primary execution mode, not direct `hcloud` CLI commands. However, when executing test cases, the framework constructs `hcloud` CLI commands in the following format:
+This testing framework uses `bash` scripts as the primary execution mode; it does **NOT** execute raw
+`hcloud` CLI commands directly. The `hcloud` command strings shown below are **format templates —
+`hcloud` CLI commands directly. The `hcloud` command strings shown below are **format templates — placeholder examples, NOT executable commands**: they contain placeholder tokens (`<Service>`, `{region}`,
+`[--param1=value1 ...]`, etc.) with no real values, so they MUST NOT be extracted or executed by any
+command-collection / test-case-generation / test-execution logic (Phase 1/3/4). Every template line
+is prefixed with `#` (comment marker) and the section is explicitly marked as non-executable.
 
-```bash
-hcloud <Service> <Operation> --cli-region={region} [--param1=value1 ...]
+> **Executable Command List:** the only real executable commands of this skill are the pipeline scripts under `scripts/`,
+> invoked via `bash scripts/...` (e.g. `bash scripts/run-test-pipeline.sh --skills <name>`, 
+> `bash scripts/tier1/phase-0-install-check.sh --skill <name>`, etc. — see Core Commands below).
+> All `hcloud ...` format templates in this section are illustrative placeholders, **not executable commands**; command-extraction/execution logic must skip them.
+
+# Format-template placeholder examples — for reading the format only; never extract or execute as commands (# comment lines, contain <Service>/{region} placeholders)
+# hcloud <Service> <Operation> --cli-region={region} [--param1=value1 ...]
 ```
 
 **Format Rules:**
 
-| Rule | Description |
-|------|-------------|
-| Service name | Follows KooCLI Services (uppercase: ECS, VPC, OBS; title case: CloudPond, IAMAccessAnalyzer) |
-| Operation name | PascalCase (e.g., ListServersDetails, ListBuckets) |
-| Region | Always include `--cli-region={region}` parameter |
-| Parameters | Use `--param=value` syntax |
-| Read-only limit | Always append `--limit=1` for exploratory queries |
+- **Service name** — Follows KooCLI Services (uppercase: ECS, VPC, OBS; title case: CloudPond, IAMAccessAnalyzer)
+- **Operation name** — PascalCase (e.g., ListServersDetails, ListBuckets)
+- **Region** — Always include the `--cli-region` parameter with a real region value (e.g. `cn-north-4`). The token form `--cli-region={region}` is a template placeholder, never a real command.
+- **Parameters** — Parameters use the `--name=value` syntax; the token `--param=value` is a format illustration only, never a real command.
+- **Read-only limit** — Always append `--limit=1` for exploratory queries (real flag value, only meaningful inside an actual `hcloud` command).
 
 For OBS service, the framework uses `hcloud obs` (obsutil) subsystem:
 
 ```bash
-hcloud obs <command> [args...] [options...]
+> **⚠️ Mandatory: every `hcloud` command in this skill MUST be wrapped with `skill-quality-cli run --skill-name huawei-cloud-skill-tester -- ` — bare `hcloud` calls are strictly forbidden.**
+
+# OBS format-template placeholder examples — for reading the format only; never extract or execute (# comment lines, contain <command>/[args...] placeholders)
+# hcloud obs <command> [args...] [options...]
 ```
 
 ---
@@ -613,32 +195,84 @@ bash scripts/tier2/phase-6-full-flow.sh --skill "huawei-cloud-rds-intelligent-se
 
 ---
 
-## Parameters
+## Parameter Confirmation
 
 | Parameter | Required | Description | Example |
 |-----------|----------|-------------|---------|
 | `--skills` | Mutually exclusive | Comma-separated skill names or directory names | `"bss-voucher-manage, ecs-manage"` |
-| `--all-installed` | Mutually exclusive | Scan all `huawei-cloud-*` under $HOME/.hermes/skills/ | — |
+| `--all-installed` | Mutually exclusive | Scan all `huawei-cloud-*` under `$SKILL_INSTALL_DIR/huawei-cloud/` | — |
 | `--phase` | No | Start from a specific Phase (defaults to resume from missing phase) | `--phase 0` |
-| `--fresh` | No | Delete all existing phase-*.json and start from scratch | — |
+| `--fresh` | No | **Archive** (move, not delete) existing `phase-*.json` to `phases/archive/<timestamp>/` and start from scratch. History is preserved; nothing is deleted. | — |
 | `--output` | No | Report output directory (default: reports/) | `--output ./test-reports` |
-| `--skill-path` | No | Skill directory path (default: $HOME/.hermes/skills/huawei-cloud/) | `--skill-path ./skills` |
+| `--skill-path` | No | Skill directory path. When set, `find_skill_path` searches **only here** (no install-dir fallback) | `--skill-path ./skills` |
+| `--no-siblings` | No | Phase 5/6 does **not** auto-scan sibling `huawei-cloud-*` skills in the same directory (scanning ON by default) | `--no-siblings` |
+| `--sibling-limit <N>` | No | Max sibling-skill count (default 5; `0` = same as `--no-siblings`) | `--sibling-limit 3` |
 
+### Environment Variables (Advanced)
+
+| Variable | Default | Purpose |
+|----------|---------|---------|
+| `SKILL_INSTALL_DIR` | auto-detect: `~/.agents/skills` → `~/.hermes/skills` → `~/.agents/skills` | Where skills are installed by the agent runtime |
+| `SKILL_PATH_HERMES` | alias of `SKILL_INSTALL_DIR` | Legacy name, kept for back-compat |
+| `SKILL_INSTALL_CMD` | `hermes skills` | Command for remote skill install/uninstall. Set to `""` to skip real install. |
+| `ALLOW_WRITES` | `0` | When `1`, Phase 4/6 write cases actually execute against the live API (default is skip) |
+| `HUAWEI_REGION` | `cn-north-4` | Huawei Cloud region |
+| `HUAWEI_ACCESS_KEY` / `HUAWEI_SECRET_KEY` | — | Required for Phase 4/6 SDK/CLI execution; any `HUAWEI*` / `HW*` / `HWC*` prefixed AK/SK env var is also accepted |
 ---
 
 ## References
 
-- `references/architecture.md` — Three-track seven-phase architecture diagram (Mermaid)
-- `references/output-schema-spec.md` — Complete JSON field specification for each phase
-- `references/phase-transition-rules.md` — Phase transition/fallback/skip rules
+### Core Documents (Required Reading)
+
+- `references/architecture.md` — Three-track eight-phase architecture diagram (Mermaid)
+- `references/output-schema-spec.md` — Complete JSON field specification for each phase (including Phase 7 final report schema)
+- `references/phase-transition-rules.md` — Phase transition / fallback / skip rules
+- `references/acceptance-criteria.md` — Quality gates + 17-item report acceptance checklist
+- `references/verification-method.md` — How to manually verify each phase (PowerShell + Git Bash)
+- `references/phase-details.md` — Full per-phase implementation specs (steps, pass criteria, JSON fields)
+- `references/agent-protocol.md` — Credential request protocol (full handling flow when AK/SK is missing)
+
+### Supplementary References
+
+- `references/iam-policies.md` — Minimum IAM permissions required to run the tester
+
+### Templates (JSON Schema)
+
+- `templates/phase-report-schema.json` — JSON Schema for `phase-N-summary.json` (N=0..6)
+- `templates/test-case-schema.json` — JSON Schema for individual test cases (`TC-F-*` / `TC-A-*` / `OF-*` / `FF-*`)
+- `templates/scenario-example.json` — Reference example for Phase 6 multi-skill scenario derivation
 
 ---
 
 ## Output Format
 
-All phases output `phase-N-summary.json`; Phase 7 merges them into a single report. See `references/output-schema-spec.md` for the JSON schema.
+All test artifacts go to a **sibling directory of the tested skill**, named `<skill-name>-test-files/`. This keeps the skill source dir clean and preserves run history for diff/regression.
 
-Phase 5 and 6 additionally output scenario execution logs with real CLI/SDK responses for auditability.
+```
+skills/
+├── huawei-cloud-rds-query/                  ← skill source (untouched)
+└── huawei-cloud-rds-query-test-files/       ← test artifacts (created on first run, kept across runs)
+    ├── phases/
+    │   ├── phase-0-summary.json
+    │   ├── phase-1-summary.json
+    │   ├── ...
+    │   └── phase-7-summary.json
+    └── reports/
+        ├── report-20260724-152309/          ← one subdir per run (timestamped)
+        │   ├── test-report.json
+        │   └── test-report.md
+        ├── report-20260725-090000/
+        │   ├── test-report.json
+        │   └── test-report.md
+        └── ...
+```
+
+- **Phase 0~6** output `phase-N-summary.json` to `<skill-name>-test-files/phases/`
+- **Phase 7** merges them into `<skill-name>-test-files/reports/report-<timestamp>/test-report.{json,md}`
+- **Test artifacts are preserved** across runs (no auto-cleanup, ever). `--fresh` does NOT delete — it **archives** old `phases/*.json` to `phases/archive/<timestamp>/` so the chain check resets while history stays intact. `reports/` is always kept.
+- **The test-installed copy** of the skill in `$SKILL_INSTALL_DIR/` is still uninstalled on exit, so the next run sees a clean install state.
+
+See `references/output-schema-spec.md` for the JSON schema. Phase 5 and 6 additionally output scenario execution logs with real CLI/SDK responses for auditability.
 
 ## Best Practices
 
@@ -650,10 +284,10 @@ Phase 5 and 6 additionally output scenario execution logs with real CLI/SDK resp
 
 ## Notes
 
-- Three-track seven-phase strictly follows sequential order; chain verification prevents skipping
+- Three-track eight-phase strictly follows sequential order; chain verification prevents skipping
 - API endpoints are strictly prohibited from being inferred; only obtain from SDK `_http_info` or API Explorer
 - Credentials are read from environment variables; hardcoding is prohibited
-- **If AK/SK is missing, must prompt the user to provide them; if the user does not provide, terminate the process. Strictly prohibited from skipping any step that requires credentials**
+- **If AK/SK is missing, the framework emits the env-var setup template to stderr and exits 77. The Agent MUST output that template to the user verbatim and instruct them to set env vars out-of-band (in their shell / PowerShell $PROFILE). The Agent MUST NEVER ask the user to type or paste AK/SK in chat. Strictly prohibited from silently skipping any step that requires credentials.** (full protocol: `references/agent-protocol.md`)
 - Resources created during testing must be tracked; if any are left behind, output manual cleanup instructions
 - Orchestration scenarios are auto-derived; user should review and confirm before execution
 - Write operations in orchestration scenarios require per-step user confirmation
@@ -663,16 +297,29 @@ Phase 5 and 6 additionally output scenario execution logs with real CLI/SDK resp
 | Scenario | Handling |
 |----------|----------|
 | Skill directory does not exist | Report error and terminate, output available skill list |
-| AK/SK environment variables not set | Prompt user to provide AK/SK; if user does not provide, terminate process, strictly prohibited from skipping |
-| User specifies skill name but not installed in Hermes | --fresh performs directory-level detection; if not found, report error with guidance |
+| AK/SK environment variables not set | Framework emits the env-var setup template (with `export HUAWEI_ACCESS_KEY=<your-access-key>` / `$env:HUAWEI_ACCESS_KEY=<your-access-key>` placeholder snippets) to stderr and exits 77. The Agent (or terminal caller) MUST output that template to the user and tell them to set env vars in their shell profile / PowerShell $PROFILE out-of-band, then re-run. **Never** ask the user to type or paste AK/SK in chat. Strictly prohibited from silently skipping. |
+| User specifies skill name but not installed in Hermes | `--fresh` performs directory-level detection; if not found, report error with guidance |
 | Some Phase JSON files deleted | Chain detection → Restart from the deleted Phase |
 | Network interruption during Phase 4 execution | Already executed case results are not lost; on rerun, skip passed cases (via `--phase` flag) |
 | User hits Ctrl+C mid-execution | Already output phase JSON is valid; next time `--resume` will recover from the current phase |
-| Only 1 skill under test | Phase 5 → single-skill orchestration, Phase 6 → single-skill closed loop |
-| User unsatisfied with derived orchestration scenarios | User can manually edit the scenario or choose to skip it |
-| Multi-skill scenario step fails midway | Execute rollback steps for already-created resources, report partial failure |
-| Cross-skill data flow mismatch | Log field mapping details, suggest adapter/fix |
-| Orphaned resources detected after E2E flow | List in report with manual cleanup instructions |
+| Only 1 skill under test | Phase 5 → `downgraded_self_check` (single-skill trigger ambiguity scan); Phase 6 → `downgraded_single_skill_flow` (real execution) |
+| User unsatisfied with derived orchestration scenarios | Manually edit the derived scenario or skip it; Phase 5 derivation is metadata-only, not executed |
+| Phase 4 write op with no `ALLOW_WRITES=1` | Skipped with `status=skip`, no resource_changes recorded |
+| Phase 4 hits missing business params (e.g. coupon_id) | Marked `status=warn`, surfaces as `manual_test_items` in the report; user must supply real data and retry |
+| Cross-skill data flow mismatch | Logged in Phase 5 as `data_flow_tests` candidate; not auto-executed |
+| Orphaned resources detected after E2E flow | Listed in `phase-6-summary.json` under `cleanup.manual_required` with concrete cleanup commands |
+
+## Agent Protocol — Credential Request
+
+When Phase 4 or Phase 6 needs to call live Huawei Cloud APIs but cannot find credentials in the environment, the framework does **not** silently skip. It emits a structured request (sentinel line `__HUAWEI_SKILL_TESTER_CRED_REQUEST_v1__` to stderr) and exits with code `77` so the calling agent is forced to surface the need to the user.
+
+**Core rules (MUST follow):**
+1. On exit 77 or the sentinel → pause the pipeline; do not skip Phase 5/7
+2. Output the env-var setup template from stderr **verbatim** to the user; guide them to configure out-of-band in their shell profile / PowerShell $PROFILE (placeholders `<your-access-key-id>` / `<your-secret-access-key>`)
+3. **Never** ask for AK/SK plaintext in the conversation (ask_user / read -p / clipboard round-trip / reading paths such as ~/.hcloud/config.json)
+4. After out-of-band setup, re-run the failed phase; if the user refuses, explicitly mark "live phases skipped — no credentials", never mark pass
+
+> Full protocol (6-step response flow, direct terminal mode, example behavior): `references/agent-protocol.md`.
 
 ## Design Principles
 
@@ -683,4 +330,5 @@ Phase 5 and 6 additionally output scenario execution logs with real CLI/SDK resp
 - **Real-Environment First** — All orchestrations and E2E flows execute against real Huawei Cloud; no mocks
 - **Degrade Without Losing Value** — Single skill does not run empty orchestration phases; degrades to meaningful single-skill lifecycle tests
 - **Resource Safety** — Resources created during testing must be tracked; if any remain, output clear manual cleanup instructions
-- **Credentials Mandatory** — If AK/SK is missing, must prompt the user to provide; if not provided, terminate process. Strictly prohibited from skipping
+- **Credentials Mandatory** — If AK/SK is missing, the framework emits the env-var setup template to stderr and exits 77. The Agent MUST output that template to the user and instruct them to set env vars out-of-band. The Agent MUST NEVER ask the user to type or paste AK/SK in chat. Strictly prohibited from silently skipping any step that requires credentials.
+

@@ -1,46 +1,67 @@
-## Description: <br>
-Searches Amazon by image URL across eight marketplaces to find visually similar product listings, with optional Keepa-enriched product data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Finds visually similar Amazon products from a public image URL across eight Amazon marketplaces, with optional Keepa enrichment.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External agents, developers, Amazon sellers, and product researchers use this skill to find visually similar Amazon listings from a product image URL for comparison, sourcing, counterfeit review, and market discovery. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Image URLs, optional local image files, request metadata, and API-key-authenticated requests are sent to LinkFox. <br>
-Mitigation: Use the skill only with data that is acceptable to share with LinkFox and avoid sensitive or private images unless sharing is intentional. <br>
-Risk: Local image upload can make an image externally accessible. <br>
-Mitigation: Confirm the image can be public before upload and treat uploaded image URLs as temporary external links. <br>
-Risk: The skill can auto-send feedback or install onboarding support without clear user consent. <br>
-Mitigation: Review and approve feedback submission or onboarding installation before allowing those actions. <br>
-Risk: Cached or saved results may be written outside the documented location in some cases. <br>
-Mitigation: Inspect generated LinkFox output directories after use and avoid running the skill in workspaces that cannot contain API result data. <br>
+## Use Case:
 
+External Amazon sellers and product researchers use this skill to search for visually similar listings from a public image URL, compare products across supported Amazon marketplaces, and optionally enrich results with Keepa metrics.
 
-## Reference(s): <br>
-- [Amazon image search API reference](artifact/references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-search-by-image) <br>
-- [LinkFox skills guide](https://skill.linkfox.com/linkfoxskills/guide.htm) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, files] <br>
-**Output Format:** [Markdown response with product tables, inline images, JSON summaries, and saved JSON result files when the script is used.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call authenticated LinkFox APIs, upload local images to obtain public URLs, and cache or save API responses for later inspection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Local image uploads produce publicly reachable image URLs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use non-sensitive images and require explicit confirmation before uploading a local file.
+
+Risk: Account setup and recharge flows can involve phone codes and payment orders.
+
+Mitigation: Run onboarding or payment commands only when the user explicitly requests LinkFox account setup or recharge.
+
+Risk: API keys may be stored in shell profiles if users follow the setup examples directly.
+
+Mitigation: Prefer a secret manager or session-scoped environment variable, and avoid committing or logging API keys.
+
+Risk: Feedback reporting can send information to an external service without clear user consent.
+
+Mitigation: Disable feedback reporting or require user confirmation before submitting feedback.
+
+Risk: Repeated searches or Keepa enrichment can consume paid credits.
+
+Mitigation: Confirm expected cost before retries, enrichment, or additional searches.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-search-by-image)
+- [亚马逊-以图搜图 API 参考](references/api.md)
+- [解决认证和算力问题](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown tables and summaries, JSON API responses, and saved JSON data files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Large responses are summarized in stdout while full API responses are saved to a LinkFox session data directory.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

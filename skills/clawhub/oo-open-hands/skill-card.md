@@ -1,45 +1,60 @@
-## Description: <br>
-OpenHands (all-hands.dev). Use this skill for reading, creating, and updating OpenHands data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OpenHands lets an agent operate OpenHands Cloud through an OOMOL-connected account using the oo CLI for reading conversations, starting repository tasks, and sending follow-up messages.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and engineers use this skill to inspect OpenHands Cloud conversations, start repository tasks, check task status, and send follow-up messages through the OOMOL `oo` CLI. It is intended for agents that need schema-guided OpenHands connector actions without directly handling raw service credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can start conversations or send messages that change OpenHands state. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running actions tagged [write]. <br>
-Risk: First-time setup may require installing or authenticating the oo CLI. <br>
-Mitigation: Run setup steps only after an auth, connection, or command-not-found failure, and inspect installer and authentication steps before proceeding. <br>
-Risk: Connector payloads may be invalid if action schemas change. <br>
-Mitigation: Fetch the live action schema with `oo connector schema` before constructing each JSON payload. <br>
+## Use Case:
 
+Developers and engineers use this skill to manage OpenHands Cloud conversations and repository task workflows from an agent session. It supports read-only conversation inspection and write actions for starting conversations or sending follow-up messages when explicitly approved.
 
-## Reference(s): <br>
-- [OpenHands homepage](https://www.all-hands.dev) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-open-hands) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId when actions run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: The fallback setup path includes remote installer commands that could install the oo CLI without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent run remote installer commands automatically; install the oo CLI only from trusted OOMOL documentation and prefer a pinned or verifiable installer when available.
+
+Risk: The skill can trigger OpenHands write actions such as starting a conversation or sending a follow-up message.
+
+Mitigation: Require explicit user approval for the exact payload and intended effect before running write actions.
+
+Risk: OpenHands access depends on an OOMOL account connection, available scopes, valid credentials, and billing status.
+
+Mitigation: Use the documented setup and recovery steps only after command failures indicate missing authentication, connection scope, expired credentials, app readiness, or insufficient credit.
+
+## Reference(s):
+
+- [OpenHands skill page](https://clawhub.ai/oomol/skills/oo-open-hands)
+- [OpenHands homepage](https://www.all-hands.dev)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write actions require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

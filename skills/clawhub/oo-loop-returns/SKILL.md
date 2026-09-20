@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "Loop Returns"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.2"
   services: ["loop_returns"]
   icon: "https://static.oomol.com/logo/third-party/loop_returns.svg"
 ---

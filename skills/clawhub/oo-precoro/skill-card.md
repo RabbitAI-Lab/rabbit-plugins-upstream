@@ -1,43 +1,56 @@
-## Description: <br>
-Precoro (precoro.com). Use this skill for Precoro requests that read, create, or update data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Precoro (precoro.com). Use this skill for ANY Precoro request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to operate Precoro through the OOMOL CLI, including catalog, supplier, purchase order, user, and warehouse lookups. It also guides schema inspection and payload review before connector actions are run. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Connector actions can access Precoro data through the user's OOMOL account, and future connector schemas may expose create, update, or delete operations. <br>
-Mitigation: Install only when this access is intended, inspect the live connector schema before each action, and review requested payloads before running state-changing actions. <br>
-Risk: The setup path includes installing and running the oo CLI. <br>
-Mitigation: Use trusted OOMOL CLI installation sources and avoid repeating authentication or connection setup unless a command fails with the matching error. <br>
+## Use Case:
 
+Developers and agent users use this skill to read Precoro purchasing data through an OOMOL-connected Precoro account, including catalog items, purchase orders, suppliers, users, and warehouses.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-precoro) <br>
-- [Precoro Homepage](https://precoro.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are expected as JSON containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: The setup path includes remote shell installer commands that users should treat carefully before running.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm OOMOL is trusted and prefer the official install guide or a verified installer before executing installation commands.
+
+Risk: The skill can read Precoro business data visible to the connected account.
+
+Mitigation: Use a connected account with appropriate Precoro permissions and review returned business data before sharing it.
+
+## Reference(s):
+
+- [ClawHub Precoro skill page](https://clawhub.ai/oomol/skills/oo-precoro)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Precoro homepage](https://precoro.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only Precoro connector actions return data and execution metadata from the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

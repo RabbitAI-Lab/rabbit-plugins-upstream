@@ -1,44 +1,57 @@
-## Description: <br>
-APIpie AI (apipie.ai). Use this skill for ANY APIpie AI request: reading, creating, and updating data through the OOMOL `oo` CLI connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+APIpie AI (apipie.ai) skill for running chat completion, embedding, and model-listing actions through the OOMOL apipie_ai connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate APIpie AI through an OOMOL-connected account, including non-streaming chat completions, embedding generation, model listing, and detailed model metadata lookup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Chat completion and embedding payloads can transmit user-provided text to APIpie AI through OOMOL. <br>
-Mitigation: Review and redact payloads before approval, especially when they may contain sensitive, confidential, or regulated information. <br>
-Risk: API calls may consume APIpie or OOMOL credits. <br>
-Mitigation: Confirm the intended action and payload before running write-tagged actions, and check billing or credit errors before retrying. <br>
-Risk: Connector inputs can drift from remembered examples. <br>
-Mitigation: Inspect the live action schema with `oo connector schema` before constructing each JSON payload. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect APIpie AI action schemas and run OOMOL connector actions for chat completions, embeddings, and model listings through an authenticated OOMOL account.
 
-## Reference(s): <br>
-- [APIpie AI homepage](https://apipie.ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-apipie-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md metadata and server release evidence) <br>
+Risk: Remote installer commands in setup instructions could execute arbitrary code if followed without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path and prefer documented package-manager or manually verified installation steps before installing.
+
+Risk: Write or billable APIpie AI actions may create embeddings, consume credits, or otherwise affect the connected account.
+
+Mitigation: Inspect the live action schema and confirm the exact payload and effect before running write or billable operations.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-apipie-ai)
+- [APIpie AI Homepage](https://apipie.ai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [APIpie AI Connection Setup](https://console.oomol.com/app-connections?provider=apipie_ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

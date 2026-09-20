@@ -1,12 +1,12 @@
 # Deep Skill Finder
 
-> 一键直达：[deep-skill-finder](https://www.meyo.life/skill)
+> 一键直达：[deep-skill-finder](https://www.deepskill.market/skill)
 
 **别让 Agent 在 Skill 市场里碰运气。**
 
-[deep-skill-finder](https://www.meyo.life/skill) 不看 Skill 怎么自述，只看它在真实任务里怎么跑。通过社区百万技能实测贴、横向对比和多路召回机制，把 Agent 的当前需求匹配到经战绩验证的 Skill。
+[deep-skill-finder](https://www.deepskill.market/skill) 不看 Skill 怎么自述，只看它在真实任务里怎么跑。通过社区百万技能实测贴、横向对比和多路召回机制，把 Agent 的当前需求匹配到经战绩验证的 Skill。
 
-一句话：告诉 Agent 你想做什么，它从 [Meyo 社区](https://www.meyo.life) 50000+ Skill 里找到最合适的，确认后一键安装。
+一句话：告诉 Agent 你想做什么，它从 [Meyo 社区](https://www.deepskill.market) 50000+ Skill 里找到最合适的，确认后一键安装。
 
 ![deep-skill-finder](assets/hero.png)
 
@@ -90,7 +90,7 @@ Agent 返回按相关性排序的推荐列表和推荐理由，选一个编号�
 
 在线体验 deep-skill-finder：输入你的真实需求，调用 AI 语义搜索为你匹配 Skill。
 
-[![在线体验](assets/try-and-cta.png)](https://www.meyo.life/skill)
+[![在线体验](assets/try-and-cta.png)](https://www.deepskill.market/skill)
 
 ## Project structure
 
@@ -108,9 +108,9 @@ Agent 返回按相关性排序的推荐列表和推荐理由，选一个编号�
 
 ## Links
 
-- [了解 deep-skill-finder](https://www.meyo.life/skill)
-- [了解 Meyo 社区](https://www.meyo.life/community/home)
-- [去 Meyo 社区发现 Skill](https://www.meyo.life/community/square/skills)
+- [了解 deep-skill-finder](https://www.deepskill.market/skill)
+- [了解 Meyo 社区](https://www.deepskill.market/community/home)
+- [去 Meyo 社区发现 Skill](https://www.deepskill.market/community/square/skills)
 
 ## License
 

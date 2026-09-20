@@ -1,43 +1,62 @@
-## Description: <br>
-美团+飞猪+途牛三平台景点门票实时比价，展示价差、可省金额和预订链接，帮你买到最低价门票。支持全国景点搜索含实景图片，含多票型引导提示。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+美团+途牛双平台景点门票实时比价，展示价差、可省金额和预订链接，帮你买到最低价门票。支持全国景点搜索含实景图片，含多票型引导提示。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-Travel shoppers and agents use this skill to search attractions, compare live ticket prices across Meituan, Fliggy, and Tuniu, and receive ticket-buying guidance for a named attraction and city. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Attraction names, cities, and ticket-search parameters are sent to proxy services and downstream travel platforms. <br>
-Mitigation: Use the skill only when sharing those travel search details with the publisher's services and travel platforms is acceptable. <br>
-Risk: The security evidence reports a hardcoded fallback proxy token in the release. <br>
-Mitigation: Publisher should remove and rotate the fallback token; users should provide credentials through the PROXY_TOKEN environment variable where supported. <br>
-Risk: Live ticket data and platform matching can be incomplete or mismatched. <br>
-Mitigation: Review platform warnings, unavailable-platform notices, and booking details before purchase. <br>
+## Use Case:
 
+Travel users and agents use this skill to search attractions by city or keyword, compare Meituan and Tuniu ticket prices, and receive buying guidance with booking links.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/attraction-smart-buy) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, guidance] <br>
-**Output Format:** [JSON objects containing attraction search results, ticket price comparisons, booking links, savings calculations, and buying advice] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include live platform prices, attraction images, available ticket types, match warnings, and unavailable-platform notices.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.3.0 (source: server release evidence; artifact frontmatter reports 2.0.4 and _meta.json reports 3.2.0) <br>
+Risk: Ticket searches and attraction names are sent through publisher-operated proxy services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if that data flow is acceptable, and require clear documentation of the exact external services involved.
+
+Risk: A reusable proxy token is embedded in the artifact while PROXY_TOKEN is declared as the primary environment variable.
+
+Mitigation: Rotate the exposed token and load credentials from the declared environment variable before broad use.
+
+Risk: The skill returns monetized booking or referral links as part of ticket recommendations.
+
+Mitigation: Disclose referral-link behavior to users and verify price, ticket type, and platform availability before purchase.
+
+Risk: The public description includes 3-platform and broad ticket-type claims that the security guidance says need correction.
+
+Mitigation: Correct the platform-count and ticket-type claims so users understand the actual data sources and coverage.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/attraction-smart-buy)
+- [Publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Guidance]
+
+**Output Format:** [JSON from CLI tools and Markdown-style agent summaries with prices, savings, images, booking links, and ticket advice.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include real-time third-party ticket data, referral booking links, and advisory signals based on platform prices and availability.]
+
+## Skill Version(s):
+
+3.3.1 (source: ClawHub release evidence; artifact frontmatter 2.0.4 and artifact _meta.json 3.3.0 differ)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

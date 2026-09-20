@@ -1,43 +1,59 @@
-## Description: <br>
-Retrieves Amazon seller policy and regulation updates with site and date filters, AI-generated Chinese summaries, original URLs, and full Markdown article details by record ID. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+查询亚马逊最新政策法规与资讯，支持按站点和时间区间分页检索含 AI 中文摘要的列表，并按记录 ID 获取完整正文。
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External cross-border sellers, ecommerce operators, and their agents use this skill to monitor Amazon official seller policy and regulation updates, scan Chinese summaries, and retrieve full article text for a selected feed record. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Authenticated requests send the LinkFox API key and session metadata to a gateway selected by LINKFOX_TOOL_GATEWAY. <br>
-Mitigation: Install only if you trust LinkFox, and review or pin LINKFOX_TOOL_GATEWAY before use. <br>
-Risk: The scripts persist full API responses and cache data under local linkfox directories. <br>
-Mitigation: Use the skill in a controlled workspace, avoid shared environments for sensitive lookups, and clean generated linkfox data and cache directories when needed. <br>
-Risk: Authentication or credit recovery may involve a separate onboarding skill download path. <br>
-Mitigation: Accept that path only if you trust LinkFox and review the onboarding source before installation. <br>
+## Use Case:
 
+External sellers, operators, and agents use this skill to retrieve Amazon seller policy and compliance update lists, review Chinese summaries, and fetch the full article body for selected feed records.
 
-## Reference(s): <br>
-- [API reference](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-policy-feed) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files] <br>
-**Output Format:** [JSON feed records for list results and Markdown article bodies for detail results, with full JSON responses saved to local files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Results may be summarized on stdout when payloads exceed 8 KB; scripts use a 24-hour local cache and support paginated list retrieval up to 100 items per page.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill handles account login, API keys, and billing flows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the official LinkFox website for API key setup when possible, do not provide SMS codes unless registration or login is intended, and confirm paid orders outside the agent flow.
+
+Risk: The skill can persist full API responses and submit feedback automatically.
+
+Mitigation: Review local response storage and feedback behavior before use, especially when policy queries or returned content may be sensitive.
+
+Risk: Custom LINKFOX_* API origin variables can redirect requests away from the default service endpoints.
+
+Mitigation: Avoid custom LinkFox endpoint environment variables unless the destination is trusted and expected.
+
+## Reference(s):
+
+- [API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-policy-feed)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [JSON feed records and Markdown article detail, summarized or rendered by the agent]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full responses are saved locally; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

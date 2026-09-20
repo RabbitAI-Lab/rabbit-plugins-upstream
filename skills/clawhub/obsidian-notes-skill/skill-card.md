@@ -1,46 +1,61 @@
-## Description: <br>
-Turns conversations, project materials, meeting records, troubleshooting notes, workflows, and topic discussions into structured Obsidian knowledge-base notes with properties, summaries, reusable content blocks, references, and file links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns conversations, project materials, meeting notes, troubleshooting records, web articles, and local documents into structured Obsidian knowledge-base notes with Properties, key takeaways, summaries, references, and internal note links.
 
-## Publisher: <br>
-[luojiangyong](https://clawhub.ai/user/luojiangyong) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[luojiangyong](https://clawhub.ai/user/luojiangyong)
 
-## Use Case: <br>
-Developers, knowledge workers, and teams use this skill to turn active work context and source materials into reusable Obsidian notes. It is suited for project archives, technical notes, decision records, reference notes, and agent workflow documentation that need traceable references and consistent metadata. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may read source materials and write or patch notes in an Obsidian vault. <br>
-Mitigation: Review target paths and proposed content before writing, read back notes after writes where tooling is available, and require explicit confirmation for destructive changes. <br>
-Risk: Source materials may contain secrets or sensitive credentials. <br>
-Mitigation: Avoid writing API keys, cookies, tokens, auth codes, or bearer values by default unless the user explicitly requests inclusion. <br>
-Risk: Summaries can become misleading if evidence boundaries are lost. <br>
-Mitigation: Preserve source identity, URLs, file paths, page or section details, confidence, and Key references so readers can trace important claims. <br>
+## Use Case:
 
+External users and developers use this skill to convert conversations, project materials, URLs, WeChat articles, and local documents into durable Obsidian Markdown notes that preserve source context, reusable insights, and vault relationships.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/luojiangyong/skills/obsidian-notes-skill) <br>
-- [Obsidian note template](references/note-template.md) <br>
-- [Obsidian note types](references/note-types.md) <br>
-- [Obsidian source types](references/source-types.md) <br>
-- [Obsidian note style guide](references/style-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown notes, structured note sections, configuration snippets, shell commands, and guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write or patch Markdown notes in an Obsidian vault when an Obsidian integration is available; otherwise provides Markdown for manual insertion.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence) <br>
+Risk: Generated notes can persist conversation details, source links, and user-approved sensitive text into an Obsidian vault.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated notes before write-back, especially when the source material contains confidential project or meeting content.
+
+Risk: Notes may accidentally store live API keys, cookies, bearer tokens, private invite links, or tokenized URLs.
+
+Mitigation: Avoid saving these values in notes, particularly when the vault syncs or is shared.
+
+Risk: Vault read/write access can expose or modify personal knowledge-base content.
+
+Mitigation: Grant vault access only when needed and read back generated notes to verify the expected content was written.
+
+## Reference(s):
+
+- [Obsidian Notes ClawHub Skill Page](https://clawhub.ai/luojiangyong/skills/obsidian-notes-skill)
+- [Obsidian Note Template](references/note-template.md)
+- [Obsidian Note Types](references/note-types.md)
+- [Obsidian Source Types](references/source-types.md)
+- [Obsidian Note Style Guide](references/style-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Files, Configuration, Guidance]
+
+**Output Format:** [Obsidian Markdown notes with YAML Properties, callouts, structured sections, Key references, and internal wiki links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write to an Obsidian vault through MCP or Local REST API when available; otherwise provides Markdown for manual insertion.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata and target metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,63 @@
-## Description: <br>
-Network Aiops helps agents inspect and operate NAPALM-supported network devices, run read-only diagnostics, back up and diff configurations, and perform governed configuration changes across Cisco, Arista, Juniper, and optional NetBox environments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Network AIops supports governed multi-vendor network device operations over NAPALM, including device state reads, diagnostics, configuration backup and diff, configuration merge/replace/rollback, and optional NetBox source-of-truth lookups.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Network operators, SREs, and infrastructure engineers use this skill to query live network state, diagnose interface and BGP problems, compare proposed configuration changes, and execute audited device configuration workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform production-impacting network configuration writes and does not provide an internal read-only mode or approval gate. <br>
-Mitigation: Use read-only device and NetBox credentials for routine work, grant write-capable credentials only when intended, and require an external approval process before MCP write tools are used. <br>
-Risk: Configuration backups or diffs may contain sensitive network secrets, especially if raw output is requested. <br>
-Mitigation: Avoid include_secrets=True in agent transcripts, prefer writing raw configs to operator-controlled files when needed, and keep ~/.network-aiops protected with chmod 700. <br>
-Risk: Some device drivers may be unable to arm commit-confirm revert timers, leaving configuration changes permanent on commit. <br>
-Mitigation: Check the returned commit warning and safetyNet fields, arrange out-of-band access for lockout-capable changes, and verify reachability from a new session before confirming changes. <br>
+## Use Case:
 
+Network operators, SREs, and infrastructure engineers use this skill to inspect Cisco, Arista, Juniper, and other NAPALM-supported devices, troubleshoot interface and BGP issues, back up and compare configurations, and perform governed configuration changes. It is also useful for agents that need optional NetBox lookups alongside live device state.
 
-## Reference(s): <br>
-- [Network-AIops homepage](https://github.com/AIops-tools/Network-AIops) <br>
-- [network-aiops Capabilities](references/capabilities.md) <br>
-- [network-aiops Setup Guide](references/setup-guide.md) <br>
-- [network-aiops CLI Reference](references/cli-reference.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, configuration snippets, and structured tool-use recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide agents to invoke CLI or MCP operations that return live device data, diffs, backups, audit records, and configuration-change results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.8.0 (source: server release metadata) <br>
+Risk: The skill can perform high-impact network configuration operations and handles device and NetBox credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before production use, prefer read-only device and NetBox credentials unless writes are explicitly required, and require operators to inspect diffs before merge, replace, rollback, or undo operations.
+
+Risk: Raw device configurations and diffs may contain secrets or sensitive operational data.
+
+Mitigation: Avoid include_secrets=True in agent or MCP workflows, keep enable secrets out of config.yaml, and prefer local file exports when a raw configuration must be reviewed by a human.
+
+Risk: Package supply-chain changes could affect a tool with access to device credentials.
+
+Mitigation: Pin or internally mirror the network-aiops package before granting it production network access.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/network-aiops)
+- [Project homepage](https://github.com/AIops-tools/Network-AIops)
+- [Issue tracker](https://github.com/AIops-tools/Network-AIops/issues)
+- [Agent guardrails](references/agent-guardrails.md)
+- [Capabilities](references/capabilities.md)
+- [CLI reference](references/cli-reference.md)
+- [Setup guide](references/setup-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and structured tool-result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce device facts, diagnostics, diffs, backups, NetBox summaries, and operator-facing remediation guidance; large configuration outputs may be size-bounded or redacted.]
+
+## Skill Version(s):
+
+0.12.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

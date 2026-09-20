@@ -1,41 +1,56 @@
-## Description: <br>
-Geokeo lets an agent run forward and reverse geocoding through the OOMOL oo CLI using a connected Geokeo account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Geokeo (geokeo.com). Use this skill for ANY Geokeo request: searching and reading data through the OOMOL-connected Geokeo connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to geocode addresses or places and reverse-geocode coordinates from a connected Geokeo account without handling raw API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill operates through an OOMOL-connected Geokeo account and may use sensitive credentials for live service actions. <br>
-Mitigation: Use it only in the intended ClawHub/OOMOL connected-account context, inspect the live action schema before building payloads, and avoid exposing raw credentials. <br>
-Risk: Actions marked as write can affect the connected Geokeo service account. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running write or destructive actions. <br>
+## Use Case:
 
+Developers and external agent users use this skill to run Geokeo forward and reverse geocoding through an OOMOL-connected account. It helps agents inspect the live connector schema, build valid JSON payloads, and run read-oriented geocoding actions with the oo CLI.
 
-## Reference(s): <br>
-- [Geokeo homepage](https://geokeo.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runs actions with JSON payloads and returns connector responses containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The first-time setup path includes pipe-to-shell installation commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm trust in OOMOL and Geokeo, and prefer the official oo CLI installation guide or a verifiable release before running installer commands.
+
+Risk: Geocoding lookups use the user's OOMOL-connected Geokeo account and may submit address or coordinate data to the service.
+
+Mitigation: Confirm the user intends to use the connected Geokeo account and avoid submitting sensitive location data unless authorized.
+
+## Reference(s):
+
+- [Geokeo homepage](https://geokeo.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-geokeo)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before execution; credentials are handled through the connected OOMOL account.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

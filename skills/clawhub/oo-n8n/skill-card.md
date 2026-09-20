@@ -1,43 +1,56 @@
-## Description: <br>
-n8n (n8n.io). Use this skill for ANY n8n request -- reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+n8n (n8n.io). Use this skill for ANY n8n request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage connected n8n workspaces through OOMOL, including workflow lifecycle actions, execution inspection, tags, variables, insights, and data table operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform powerful n8n write and destructive actions through the user's connected OOMOL workspace. <br>
-Mitigation: Review exact workflow, table, tag, variable, and execution targets before use, and require explicit user confirmation for write or destructive actions. <br>
-Risk: The skill depends on OOMOL CLI access to a connected n8n account. <br>
-Mitigation: Install and authenticate the oo CLI only when the user intends to manage n8n through OOMOL and trusts that connector path. <br>
+## Use Case:
 
+Developers and operators use this skill to manage n8n workflows, executions, data tables, tags, variables, and insights through an OOMOL-connected account. It supports read actions and gated write or destructive actions that require the agent to check the target and payload before execution.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-n8n) <br>
-- [n8n homepage](https://n8n.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write and destructive actions require confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: Setup instructions include running a remote CLI installer script directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI yourself from trusted OOMOL documentation before using the skill, or review the installer source before execution.
+
+Risk: Write and destructive n8n actions can change, stop, delete, or overwrite workflows, data tables, variables, tags, and execution metadata.
+
+Mitigation: Confirm the exact action, target, and JSON payload before allowing write or destructive commands.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-n8n)
+- [n8n homepage](https://n8n.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce oo CLI connector schema and run commands; command results are JSON when invoked with --json.]
+
+## Skill Version(s):
+
+1.0.3 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

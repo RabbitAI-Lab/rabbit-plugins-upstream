@@ -1,43 +1,56 @@
-## Description: <br>
-Harvest helps agents read and manage Harvest users, clients, projects, tasks, assignments, and time entries through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Harvest enables agents to read, create, update, and delete Harvest data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and teams with connected Harvest and OOMOL accounts use this skill to inspect Harvest records and perform time-entry workflows without handling raw credentials. It supports read actions as well as confirmed create, update, stop, restart, and delete operations for time entries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, stop, restart, or delete Harvest time entries. <br>
-Mitigation: Review the exact payload and user-visible effect before approving write operations, and require explicit approval for destructive actions. <br>
-Risk: The skill operates through the local oo CLI and can depend on installer or account-connection state. <br>
-Mitigation: Verify the CLI installer before running it, use setup commands only after authentication or connection failures, and confirm the Harvest account connection before retrying. <br>
+## Use Case:
 
+External users and developers use this skill to operate Harvest clients, projects, tasks, task assignments, users, and time entries from an agent session through the OOMOL Harvest connector.
 
-## Reference(s): <br>
-- [Harvest on ClawHub](https://clawhub.ai/oomol/oo-harvest) <br>
-- [Harvest homepage](https://www.getharvest.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before actions; state-changing and destructive operations require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and artifact metadata) <br>
+Risk: The first-time setup path includes remote shell installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the installer through OOMOL's official documentation before running it, instead of blindly piping a remote script into a shell.
+
+Risk: Write and destructive Harvest actions can create, update, stop, restart, or delete time entries.
+
+Mitigation: Review the exact payload, target, and expected effect with the user and get explicit approval before running those actions.
+
+## Reference(s):
+
+- [ClawHub Harvest skill page](https://clawhub.ai/oomol/skills/oo-harvest)
+- [Harvest homepage](https://www.getharvest.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with bash commands and JSON CLI responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before execution; write and destructive Harvest actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

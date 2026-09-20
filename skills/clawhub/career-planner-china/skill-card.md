@@ -1,60 +1,80 @@
-## Description: <br>
-AI时代职业规划师技能。专为AI时代职场变化而设计，帮助用户应对AI带来的职业冲击与机遇。当用户询问职业规划、职业建议、选专业、职场转型、未来就业方向时触发。功能包括：收集用户基本信息、霍兰德职业兴趣测评、职业价值观分析、AI时代职业影响评估（高危/中危/低危分级），并输出完整的个性化职业规划报告。关键词：职业规划、选专业、工作建议、做什么工作好、职业转型、AI时代职业、AI替代、哪些工作会被AI取代。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Chinese-language AI-era career planning guidance, including profile collection, Holland/MBTI/career-anchor assessment, AI impact ratings, salary and demand references, and personalized career plans.
 
-## Publisher: <br>
-[mnetfairy](https://clawhub.ai/user/mnetfairy) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mnetfairy](https://clawhub.ai/user/mnetfairy)
 
-## Use Case: <br>
-Students, job seekers, and career changers use this agent to explore China-focused career options, assess interests and work values, evaluate AI impact on occupations, and receive personalized action plans. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may ask users for personal career history, preferences, and location context. <br>
-Mitigation: Collect only information the user chooses to provide, avoid unnecessary sensitive details, and do not persist profiles unless the user explicitly requests it. <br>
-Risk: Optional report export, memory tracking, email or subscription workflows, and real-time data integrations can expose user information or trigger external actions. <br>
-Mitigation: Use those capabilities only after explicit user authorization and only when the current host environment permits them. <br>
-Risk: Built-in insurance-company recommendations and phone numbers may be outdated or unsuitable for a user's circumstances. <br>
-Mitigation: Present insurance-company information as reference material and advise users to independently verify companies, phone numbers, and suitability before acting. <br>
-Risk: Career, salary, job-demand, and AI-impact guidance may be incomplete or become outdated. <br>
-Mitigation: Frame recommendations as planning guidance rather than guarantees, disclose uncertainty, and use current external data only when requested and authorized. <br>
+## Use Case:
 
+External users use this agent for China-focused career planning, school or major selection, career transition advice, and AI-era job risk assessment. The skill produces structured recommendations, learning paths, salary and demand context, and next-step action plans.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mnetfairy/skills/career-planner-china) <br>
-- [Career planning workflow](references/flow_engine.md) <br>
-- [Career assessment framework](references/assessment.md) <br>
-- [MBTI reference](references/mbti.md) <br>
-- [Career anchor reference](references/career_anchor.md) <br>
-- [AI career impact reference](references/ai_career_impact.md) <br>
-- [Salary data reference](references/salary_data.md) <br>
-- [Salary database](references/salary_database.json) <br>
-- [Job demand reference](references/job_demand.md) <br>
-- [Industry trends reference](references/industry_trends.md) <br>
-- [Education paths reference](references/education_paths.md) <br>
-- [Insurance broker company list](references/insurance_broker_companies.json) <br>
-- [Optional integrations reference](references/integrations.md) <br>
-- [Zhaopin salary and job data source](https://www.zhaopin.com/) <br>
-- [Liepin salary and job data source](https://www.liepin.com/) <br>
-- [Boss Zhipin salary and job data source](https://www.zhipin.com/) <br>
-- [Indeed Beijing backend developer salary source](https://cn.indeed.com/career/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88/salaries/%E5%8C%97%E4%BA%AC%E5%B8%82) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Chinese conversational guidance and structured Markdown career-planning reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Holland code, MBTI type, career anchor, salary ranges, AI impact ratings, recommended career paths, and action lists.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.2.245 (source: ClawHub release evidence) <br>
+Risk: Insurance-company recommendations may not be neutral.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the insurance recommendation path before installing or using the skill, and treat listed companies as options to compare rather than unbiased endorsements.
+
+Risk: Optional report export, email sending, memory writes, tracking, or network-backed job lookup may write or transmit user career-profile data.
+
+Mitigation: Allow these behaviors only after confirming the destination, retained data, execution environment, and explicit user consent.
+
+Risk: Career, salary, and job-demand guidance can become stale or overconfident.
+
+Mitigation: Use the report as planning support, verify high-impact career or education decisions against current market sources, and preserve uncertainty in recommendations.
+
+## Reference(s):
+
+- [Skill source](artifact/SKILL.md)
+- [AI career impact reference](artifact/references/ai_career_impact.md)
+- [Assessment methods](artifact/references/assessment.md)
+- [Career anchors](artifact/references/career_anchor.md)
+- [Education paths](artifact/references/education_paths.md)
+- [Flow engine](artifact/references/flow_engine.md)
+- [Industry trends](artifact/references/industry_trends.md)
+- [Job demand](artifact/references/job_demand.md)
+- [MBTI reference](artifact/references/mbti.md)
+- [Salary data summary](artifact/references/salary_data.md)
+- [Salary database](artifact/references/salary_database.json)
+- [Insurance broker companies](artifact/references/insurance_broker_companies.json)
+- [Integration notes](artifact/references/integrations.md)
+- [Tracker system](artifact/references/tracker_system.md)
+- [2026 emerging careers](artifact/references/emerging_industries/2026_careers.md)
+- [Tech career industry reference](artifact/references/industries/tech_career.md)
+- [Healthcare industry reference](artifact/references/industries/healthcare.md)
+- [Finance industry reference](artifact/references/industries/finance.md)
+- [Education industry reference](artifact/references/industries/education.md)
+- [Creative industry reference](artifact/references/industries/creative.md)
+- [Manufacturing industry reference](artifact/references/industries/manufacturing.md)
+- [National Financial Regulatory Administration](https://www.nfra.gov.cn/)
+- [ClawHub skill page](https://clawhub.ai/mnetfairy/skills/career-planner-china)
+- [ClawHub publisher profile](https://clawhub.ai/user/mnetfairy)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Conversational guidance and structured Markdown career-planning reports; optional Markdown file export when explicitly requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Defaults to offline reference-based guidance; optional email, memory, tracking, or network-backed job lookup should be used only after explicit user consent.]
+
+## Skill Version(s):
+
+2.99.99 (source: ClawHub release metadata; artifact frontmatter reports 2.2.260)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,56 @@
-## Description: <br>
-LogSnag helps agents operate LogSnag through an OOMOL-connected account using the oo CLI for events, insights, and user profile updates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+LogSnag connects an agent to LogSnag through the OOMOL oo CLI for reading, creating, and updating LogSnag data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and teams managing LogSnag use this skill to publish project events and insight values, update user profiles, and mutate numeric insights through schema-checked oo CLI actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Some state-changing LogSnag actions may not be clearly labeled as requiring confirmation. <br>
-Mitigation: Require explicit user confirmation for identify_user, mutate_insight, publish_event, and publish_insight after reviewing the exact payload and expected effect. <br>
-Risk: First-time setup may install or authenticate the oo CLI before the user actually needs it. <br>
-Mitigation: Only run first-time setup after an auth, connection, or missing-command failure, and verify the oo CLI installer before use. <br>
+## Use Case:
 
+Developers and operators use this skill to publish LogSnag events, update user profile properties, and publish or mutate numeric insights from an agent workflow.
 
-## Reference(s): <br>
-- [LogSnag homepage](https://logsnag.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub LogSnag skill page](https://clawhub.ai/oomol/skills/oo-logsnag) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance with inline bash commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId; state-changing actions should be confirmed with the user before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The setup path asks users to run remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verifiable package manager when possible, or inspect and verify the installer script before running it.
+
+Risk: Write actions can change LogSnag events, user properties, or numeric insights.
+
+Mitigation: Fetch the live action schema and confirm the exact payload and effect with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-logsnag)
+- [LogSnag homepage](https://logsnag.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses oo CLI connector actions; write actions require payload confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: evidence release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

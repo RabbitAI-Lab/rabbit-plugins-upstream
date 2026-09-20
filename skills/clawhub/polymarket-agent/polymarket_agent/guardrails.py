@@ -179,7 +179,7 @@ def evaluate_order(
         remaining = settings.autonomous_expires_at - time.time()
         warnings.append(
             f"autonomous mode active for {remaining / 60:.0f} more min — "
-            "orders within the limits go through without asking"
+            "orders within the limits go through unattended"
         )
 
     # Low liquidity is a warning, not a block (the agent decides this with the user).

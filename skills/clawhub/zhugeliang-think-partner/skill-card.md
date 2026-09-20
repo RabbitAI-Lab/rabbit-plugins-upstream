@@ -1,41 +1,57 @@
-## Description: <br>
-A Chinese-first thinking partner that applies Zhuge Liang-inspired strategy, systems thinking, psychological game analysis, resource leverage, and priority-setting frameworks to planning questions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-language thinking partner that applies Zhuge Liang-inspired strategy models to strategic planning, systems design, negotiation posture, resource leverage, and prioritization.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users and agents use this skill when they want a strategy-advice lens for project planning, complex stakeholder situations, resource allocation, long-term forecasting, system design, or prioritization. It is best suited for human-facing planning guidance rather than factual historical research or automated decision enforcement. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill's broad strategy and planning triggers may influence generic planning conversations more than expected. <br>
-Mitigation: Enable it only for users who want a Chinese-first, Zhuge Liang-themed strategy lens, and review recommendations before treating them as plans of record. <br>
-Risk: Advice is framed through historical and strategic analogies, which may be persuasive without being fact-checked for a specific modern context. <br>
-Mitigation: Use the output as advisory framing and require human review, current evidence, and domain-specific validation before acting on high-impact decisions. <br>
+## Use Case:
 
+External users and knowledge workers use this skill to structure ambiguous strategy, prioritization, systems, resource, and stakeholder problems through Zhuge Liang-inspired thinking frameworks. It is best used as a framing aid rather than as authoritative business, legal, financial, or policy advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/zhugeliang-think-partner) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or plain text strategic analysis and recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only advisory output; no code execution, data access, persistence, or hidden install behavior is indicated by the server security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: server release evidence) <br>
+Risk: Users may treat strategic framing output as authoritative advice for business, legal, financial, or policy decisions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify current facts and high-impact decisions independently with qualified sources before acting.
+
+Risk: Adversarial negotiation metaphors could be applied in deceptive or unethical ways.
+
+Mitigation: Use the frameworks for transparent planning, prioritization, and risk assessment; avoid manipulative or deceptive applications.
+
+Risk: Historical analogies and strategy models may oversimplify modern situations.
+
+Mitigation: Pair the skill's frameworks with current evidence, explicit assumptions, and review of worst-case outcomes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/zhugeliang-think-partner)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown or structured prose with tables and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese-first responses with English terms where useful; no executable code.]
+
+## Skill Version(s):
+
+2.0.2 (source: server release evidence and target metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

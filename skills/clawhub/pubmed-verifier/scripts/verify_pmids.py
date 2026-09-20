@@ -1,22 +1,41 @@
 #!/usr/bin/env python3
 """
-PMID Citation Verifier — PubMed E-utilities API
+PMID Citation Verifier -- PubMed E-utilities API v2.2.0
 Verifies existence, metadata cross-check, and optional content-matching of PMID citations.
 
-Three-state verdict:
-  ✅ Correct  — PMID exists AND matches claimed paper
-  ⚠️ Mismatch — PMID exists but points to a DIFFERENT paper
-  ❌ Invalid  — PMID not found in PubMed
+Five-state verdict:
+  correct  -- PMID exists AND matches claimed paper
+  mismatch -- PMID exists but points to a DIFFERENT paper (AI hallucination!)
+  partial  -- Some metadata matches (e.g. author+journal but title differs)
+  invalid  -- PMID not found in PubMed
+  unknown  -- Insufficient claimed metadata for cross-check, OR both data
+              sources unreachable (a network failure is never reported as
+              "PMID not found")
+
+v2.2.0 network hardening (ported from cite-holmes field-proven lessons):
+  --ncbi-api-key  NCBI E-utilities API key (env NCBI_API_KEY): rate ceiling
+                  3 -> 10 req/s, batch interval 0.4s -> 0.12s (~3x faster)
+  --meta-source   auto (default: NCBI with per-batch Europe PMC fallback) /
+                  ncbi / europepmc; metadata origin reported per entry
+  --mailto        Crossref polite pool (?mailto=) + NCBI tool/email etiquette
+  429 Retry-After backoff (clamped 1-5s), 403/406 User-Agent rotation, and a
+  per-host circuit breaker (2 call-level transport failures -> skip remaining
+  calls with an actionable message; HTTP status errors never trip it).
 
 Usage:
   python3 verify_pmids.py --source <file_or_dir> [--match-keywords] [--output report.html]
   python3 verify_pmids.py --pmids 31018962,22213727
   python3 verify_pmids.py --claims-file claims.json --output report.html
+
+Exit codes: 0 = no problems found; 1 = invalid/mismatch citations found;
+            2 = verification incomplete (data sources unreachable).
 """
 
 import argparse
 import csv
 import hashlib
+import html
+import http.client
 import json
 import os
 import re
@@ -30,62 +49,223 @@ from pathlib import Path
 from collections import defaultdict
 
 
-# ── PubMed API helpers ──
+# ── Options & HTTP core (v2.2.0 network hardening) ──
 
-def _api_get(url: str, max_retries: int = 3, timeout: int = 20) -> bytes:
-    """HTTP GET with retry and exponential backoff. Returns response body."""
+_OPTS = {"ncbi_key": "", "mailto": "", "meta_source": "auto", "timeout": 20}
+_UA_TOOL = "pubmed-verifier/2.2 (+PMID citation verifier; stdlib-only)"
+_UA_BROWSER = ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+               "(KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36")
+_CIRCUIT_THRESHOLD = 2  # call-level consecutive transport failures per host
+_HOST_FAILS = defaultdict(int)
+
+
+class CircuitOpenError(RuntimeError):
+    """Host circuit breaker is open after repeated transport failures."""
+
+
+def _host_key(url: str) -> str:
+    """'https://eutils.ncbi.nlm.nih.gov' from a full URL (scheme://host granularity)."""
+    parts = url.split("/")
+    return "/".join(parts[:3]) if len(parts) > 2 else url
+
+
+def _api_get(url: str, max_retries: int = 3, timeout=None) -> bytes:
+    """HTTP GET hardened for the field: UA rotation on 403/406, Retry-After
+    compliance on 429, per-host circuit breaker.
+
+    Breaker accounting is per LOGICAL call (one exhausted call = +1), never
+    per retry attempt -- per-attempt counting would open the breaker on the
+    first slow call. HTTP status errors never count as transport failures.
+    """
+    timeout = _OPTS["timeout"] if timeout is None else timeout
+    hk = _host_key(url)
+    if _HOST_FAILS[hk] >= _CIRCUIT_THRESHOLD:
+        raise CircuitOpenError(
+            f"{hk} 已连续 {_CIRCUIT_THRESHOLD} 次传输失败并熔断，跳过本批次后续请求。"
+            f"建议：确认网络/代理后重试；或 --timeout {_OPTS['timeout'] * 2:.0f} 放宽超时；"
+            f"或 --meta-source europepmc 改走 Europe PMC 兜底源。")
+    last_err = None
+    transport = False
     for attempt in range(max_retries):
+        ua = _UA_TOOL if attempt == 0 else _UA_BROWSER  # 403/406 → 换浏览器 UA 重试
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "pubmed-verifier/2.1"})
+            req = urllib.request.Request(url, headers={"User-Agent": ua})
             with urllib.request.urlopen(req, timeout=timeout) as resp:
-                return resp.read()
-        except (urllib.error.URLError, OSError) as e:
-            if attempt < max_retries - 1:
-                wait = 2 ** attempt  # 1s, 2s, 4s
+                body = resp.read()
+            _HOST_FAILS[hk] = 0  # success resets the breaker
+            return body
+        except urllib.error.HTTPError as e:
+            last_err, transport = e, False  # HTTP responses never trip the breaker
+            if e.code == 429 and attempt < max_retries - 1:
+                wait = 2.0
+                try:
+                    wait = min(5.0, max(1.0, float(e.headers.get("Retry-After", 2.0))))
+                except (TypeError, ValueError):
+                    pass
                 time.sleep(wait)
+            elif e.code in (403, 406) and attempt < max_retries - 1:
+                time.sleep(0.8)
+            elif e.code >= 500 and attempt < max_retries - 1:
+                time.sleep(2 ** attempt)      # transient server errors: back off
+            elif e.code < 500:
+                raise                          # deterministic 4xx: no point retrying
+        except (urllib.error.URLError, OSError, TimeoutError, http.client.HTTPException) as e:
+            last_err, transport = e, True
+            if attempt < max_retries - 1:
+                time.sleep(2 ** attempt)
+    if transport:
+        _HOST_FAILS[hk] += 1
+    if last_err is None:  # e.g. max_retries=0 — never raise None
+        raise RuntimeError(f"no attempts made for {url}")
+    raise last_err
+
+
+def _ncbi_params(extra: dict = None) -> str:
+    """E-utilities common params: api_key (when configured) + tool/email etiquette."""
+    params = {"tool": "pubmed-verifier"}
+    params.update(extra or {})
+    if _OPTS["ncbi_key"]:
+        params["api_key"] = _OPTS["ncbi_key"]
+    if _OPTS["mailto"]:
+        params["email"] = _OPTS["mailto"]
+    return urllib.parse.urlencode(params)
+
+
+def _parse_esummary(batch: list, data: dict) -> dict:
+    """Map an esummary JSON response onto {pmid: metadata_dict}.
+
+    A 200 response whose body is valid JSON but lacks the `result` map is a
+    source anomaly (schema change / silently degraded service), NOT an
+    answer: those are marked network_error so they are never classified as
+    "PMID not found" and never poison the cache. Individual PMIDs missing
+    from a well-formed `result` map ARE an authoritative not-found.
+    """
+    out = {}
+    if not isinstance(data, dict) or "result" not in data:
+        for pmid in batch:
+            out[pmid] = {"valid": False, "network_error": True,
+                         "error": f"esummary 响应异常（缺少 result 结构）：{str(data)[:80]}"}
+        return out
+    for pmid in batch:
+        if pmid in data.get("result", {}):
+            article = data["result"][pmid]
+            if "error" not in article:
+                doi_raw = article.get("elocationid", "")
+                doi = doi_raw.replace("doi: ", "") if doi_raw.startswith("doi: ") else doi_raw
+                out[pmid] = {
+                    "title": article.get("title", ""),
+                    "authors": [a.get("name", "") for a in article.get("authors", [])],
+                    "journal": article.get("source", ""),
+                    "pubdate": article.get("pubdate", ""),
+                    "volume": article.get("volume", ""),
+                    "pages": article.get("pages", ""),
+                    "doi": doi,
+                    "valid": True,
+                    "source": "ncbi",
+                }
             else:
-                raise
+                out[pmid] = {"valid": False, "error": article["error"], "source": "ncbi"}
+        else:
+            out[pmid] = {"valid": False, "error": "PMID not found in API response", "source": "ncbi"}
+    return out
 
 
-def fetch_summaries(pmids: list[str], batch_size: int = 50) -> dict:
-    """Fetch article summaries from PubMed esummary API. Returns {pmid: metadata_dict}."""
+def fetch_summaries(pmids: list, batch_size: int = 50) -> dict:
+    """Fetch article summaries from PubMed. Primary source: NCBI esummary.
+
+    With --meta-source auto (default), a batch whose NCBI call FAILS
+    (transport error, circuit breaker, exhausted retries) is retried against
+    Europe PMC before being reported as unreachable. A definite "not found"
+    answer from NCBI is authoritative and never re-queried.
+    Entries that could not be verified carry network_error=True and are
+    classified as unknown -- a network failure is never "invalid".
+    """
+    if _OPTS["meta_source"] == "europepmc":
+        # Explicitly forced: never touch NCBI (deterministic for testing and
+        # for users who must avoid NCBI altogether).
+        return fetch_summaries_europepmc(pmids, batch_size=min(batch_size, 25),
+                                         primary_label="Europe PMC")
     results = {}
+    batch_interval = 0.12 if _OPTS["ncbi_key"] else 0.4
+    use_fallback = _OPTS["meta_source"] == "auto"
     for i in range(0, len(pmids), batch_size):
         batch = pmids[i:i + batch_size]
         ids_str = ",".join(batch)
-        url = f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id={ids_str}&retmode=json"
+        url = ("https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?"
+               + _ncbi_params({"db": "pubmed", "id": ids_str, "retmode": "json"}))
         try:
             data = json.loads(_api_get(url))
-            for pmid in batch:
-                if pmid in data.get("result", {}):
-                    article = data["result"][pmid]
-                    if "error" not in article:
-                        doi_raw = article.get("elocationid", "")
-                        doi = doi_raw.replace("doi: ", "") if doi_raw.startswith("doi: ") else doi_raw
-                        results[pmid] = {
-                            "title": article.get("title", ""),
-                            "authors": [a.get("name", "") for a in article.get("authors", [])],
-                            "journal": article.get("source", ""),
-                            "pubdate": article.get("pubdate", ""),
-                            "volume": article.get("volume", ""),
-                            "pages": article.get("pages", ""),
-                            "doi": doi,
-                            "valid": True,
-                        }
-                    else:
-                        results[pmid] = {"valid": False, "error": article["error"]}
-                else:
-                    results[pmid] = {"valid": False, "error": "PMID not found in API response"}
+            results.update(_parse_esummary(batch, data))
+        except Exception as e:
+            if use_fallback:
+                results.update(fetch_summaries_europepmc(batch))
+            else:
+                for pmid in batch:
+                    results[pmid] = {"valid": False, "error": str(e), "network_error": True}
+        time.sleep(batch_interval)
+    return results
+
+
+def fetch_summaries_europepmc(pmids: list, batch_size: int = 25,
+                              primary_label: str = "NCBI 与 Europe PMC") -> dict:
+    """Europe PMC fallback source (free, no key, mirrors PubMed).
+
+    Returns an entry for every requested PMID: matched records map to the
+    same metadata shape (source='europepmc'); records absent from a
+    well-formed reply are reported not-found via this source; a failed or
+    malformed call marks the whole batch network_error=True (unknown, never
+    invalid).
+    """
+    results = {}
+    for i in range(0, len(pmids), batch_size):
+        batch = pmids[i:i + batch_size]
+        q = " OR ".join(f"EXT_ID:{p}" for p in batch)
+        params = urllib.parse.urlencode({
+            "query": f"({q}) AND SRC:MED", "format": "json",
+            "pageSize": str(batch_size), "resultType": "lite"})
+        url = f"https://www.ebi.ac.uk/europepmc/webservices/rest/search?{params}"
+        got = {}
+        try:
+            data = json.loads(_api_get(url))
+            if not isinstance(data, dict) or "resultList" not in data:
+                raise ValueError(f"响应缺少 resultList 结构：{str(data)[:80]}")
+            for h in data.get("resultList", {}).get("result", []):
+                pmid = str(h.get("id", "")).strip()
+                if not pmid.isdigit():
+                    continue
+                got[pmid] = {
+                    "title": h.get("title", ""),
+                    "authors": [a.strip() for a in (h.get("authorString") or "").split(",") if a.strip()],
+                    "journal": h.get("journalTitle", ""),
+                    "pubdate": h.get("pubYear", ""),
+                    "volume": h.get("journalVolume", ""),
+                    "pages": h.get("pageInfo", ""),
+                    "doi": h.get("doi", "") or "",
+                    "valid": True,
+                    "source": "europepmc",
+                }
         except Exception as e:
             for pmid in batch:
-                results[pmid] = {"valid": False, "error": str(e)}
-        time.sleep(0.4)  # Respect rate limit
+                results[pmid] = {"valid": False, "network_error": True,
+                                 "error": f"{primary_label} 均不可达（最后错误：{e}）。"
+                                          f"未判定——网络故障不会判为「PMID不存在」"}
+            continue
+        for pmid in batch:
+            if pmid in got:
+                results[pmid] = got[pmid]
+            else:
+                results[pmid] = {"valid": False, "error": "PMID not found (europepmc)",
+                                 "source": "europepmc"}
+        time.sleep(0.35)  # be polite to EBI when walking large batches
     return results
 
 
 def fetch_doi_metadata(doi: str) -> dict:
-    """Fetch metadata from Crossref API by DOI. Returns dict with title/authors/journal/year."""
+    """Fetch metadata from Crossref API by DOI. With --mailto set, requests
+    join the Crossref polite pool (?mailto=) for more generous rate limits."""
     url = f"https://api.crossref.org/works/{urllib.parse.quote(doi, safe='')}"
+    if _OPTS["mailto"]:
+        url += f"?mailto={urllib.parse.quote(_OPTS['mailto'])}"
     try:
         data = json.loads(_api_get(url, timeout=15))
         msg = data.get("message", {})
@@ -112,13 +292,13 @@ def fetch_doi_metadata(doi: str) -> dict:
         return {"valid": False, "error": str(e)}
 
 
-def search_pubmed(query: str, max_results: int = 5) -> list[dict]:
+def search_pubmed(query: str, max_results: int = 5) -> list:
     """Search PubMed and return article summaries."""
-    params = urllib.parse.urlencode({"db": "pubmed", "term": query, "retmode": "json", "retmax": max_results})
+    params = _ncbi_params({"db": "pubmed", "term": query, "retmode": "json",
+                           "retmax": str(max_results)})
     url = f"https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?{params}"
     try:
-        with urllib.request.urlopen(url, timeout=15) as resp:
-            data = json.loads(resp.read())
+        data = json.loads(_api_get(url, timeout=15))
         ids = data["esearchresult"]["idlist"]
         if ids:
             return [{"pmid": pid, **fetch_summaries([pid]).get(pid, {})} for pid in ids]
@@ -398,7 +578,7 @@ def cross_check_citation(claimed: dict, actual: dict) -> dict:
         details_parts.append("title differs but author+journal match")
     elif result["title_match"] and not result["author_match"] and not result["journal_match"]:
         result["verdict"] = "partial"
-        details_parts.append("title matches but author/journal differ")
+        details_parts.append("title matches but author/journal not claimed or differ")
     else:
         result["verdict"] = "mismatch"
         if not result["title_match"]:
@@ -572,25 +752,40 @@ def _cache_path() -> Path:
     return p / "cache.db"
 
 
+CACHE_SCHEMA_VERSION = 2  # v2: clears pre-v2.2.0 rows that mislabeled network
+                          # failures as valid=0 (30-day "invalid" poisoning)
+
+
 def _cache_init(db_path: Path) -> None:
-    """Initialize cache database."""
-    with sqlite3.connect(str(db_path)) as conn:
-        conn.execute("""CREATE TABLE IF NOT EXISTS pmid_cache (
-            pmid TEXT PRIMARY KEY,
-            title TEXT, authors TEXT, journal TEXT, pubdate TEXT,
-            doi TEXT, valid INTEGER, error TEXT,
-            cached_at REAL,
-            source TEXT DEFAULT 'pubmed'
-        )""")
-        conn.execute("CREATE INDEX IF NOT EXISTS idx_cached_at ON pmid_cache(cached_at)")
+    """Initialize cache database; migrate legacy schemas."""
+    conn = sqlite3.connect(str(db_path))
+    try:
+        with conn:
+            conn.execute("""CREATE TABLE IF NOT EXISTS pmid_cache (
+                pmid TEXT PRIMARY KEY,
+                title TEXT, authors TEXT, journal TEXT, pubdate TEXT,
+                doi TEXT, valid INTEGER, error TEXT,
+                cached_at REAL,
+                source TEXT DEFAULT 'pubmed'
+            )""")
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_cached_at ON pmid_cache(cached_at)")
+            version = conn.execute("PRAGMA user_version").fetchone()[0]
+            if version < CACHE_SCHEMA_VERSION:
+                # Legacy negatives may be transport failures mislabeled by
+                # older versions -- drop them so they get re-queried honestly.
+                conn.execute("DELETE FROM pmid_cache WHERE valid = 0")
+                conn.execute(f"PRAGMA user_version = {CACHE_SCHEMA_VERSION}")
+    finally:
+        conn.close()
 
 
 def _cache_load(db_path: Path, pmids: list[str], max_age_days: int = 30) -> dict:
     """Load cached results for given PMIDs. Returns {pmid: metadata_dict}."""
     results = {}
     cutoff = time.time() - max_age_days * 86400
+    conn = sqlite3.connect(str(db_path))
     try:
-        with sqlite3.connect(str(db_path)) as conn:
+        with conn:
             placeholders = ",".join("?" * len(pmids))
             rows = conn.execute(
                 f"SELECT pmid,title,authors,journal,pubdate,doi,valid,error,cached_at,source "
@@ -613,13 +808,16 @@ def _cache_load(db_path: Path, pmids: list[str], max_age_days: int = 30) -> dict
                 results[pmid] = {"valid": False, "error": error or "Unknown", "source": source}
     except Exception:
         pass
+    finally:
+        conn.close()
     return results
 
 
 def _cache_save(db_path: Path, pmid: str, info: dict) -> None:
     """Save a single PMID result to cache."""
+    conn = sqlite3.connect(str(db_path))
     try:
-        with sqlite3.connect(str(db_path)) as conn:
+        with conn:
             if info.get("valid"):
                 conn.execute(
                     "INSERT OR REPLACE INTO pmid_cache (pmid,title,authors,journal,pubdate,doi,valid,error,cached_at,source) "
@@ -636,6 +834,29 @@ def _cache_save(db_path: Path, pmid: str, info: dict) -> None:
                 )
     except Exception:
         pass
+    finally:
+        conn.close()
+
+
+def _cache_save_fresh(db_path: Path, fresh: dict) -> None:
+    """Persist fresh lookups. Network failures are NOT cached: they are not
+    answers, and caching one would poison the PMID as 'invalid' for 30 days."""
+    for pmid, info in fresh.items():
+        if info.get("network_error"):
+            continue
+        _cache_save(db_path, pmid, info)
+
+
+def classify_unverified(info: dict) -> tuple:
+    """(verdict, details) for a lookup that returned no article.
+
+    Network failures classify as unknown (unverified) -- honest labeling:
+    "both sources unreachable" is a different fact from "PMID not found".
+    """
+    if info.get("network_error"):
+        return "unknown", ("数据源不可达，未能验证（不判为无效 PMID）。建议：检查网络后重试；"
+                           "或 --meta-source europepmc；或 --timeout 加大超时。")
+    return "invalid", f"PMID not found: {info.get('error', 'Unknown')}"
 
 
 # ── CSV claims loader ──
@@ -709,17 +930,17 @@ def generate_html_report(results: list[dict], stats: dict, source: str) -> str:
             status_icon = "❓"
             row_class = "unknown"
 
-        claimed_title = r.get("claimed_title", "")[:80]
-        actual_title = r.get("title", r.get("error", "?"))[:80]
-        journal = r.get("journal", "")
-        date = r.get("pubdate", "")
-        source_file = r.get("source_file", "")
-        details = r.get("details", "")
+        claimed_title = html.escape(r.get("claimed_title", "")[:80])
+        actual_title = html.escape(str(r.get("title", r.get("error", "?")))[:80])
+        journal = html.escape(r.get("journal", ""))
+        date = html.escape(r.get("pubdate", ""))
+        source_file = html.escape(r.get("source_file", ""))
+        details = html.escape(r.get("details", ""))
         suggested = r.get("suggested_pmids", [])
         suggested_str = ""
         if suggested:
             suggested_str = "<br>".join(
-                f'<a href="https://pubmed.ncbi.nlm.nih.gov/{s["pmid"]}/" target="_blank">PMID {s["pmid"]}</a>: {s.get("title","")[:60]}'
+                f'<a href="https://pubmed.ncbi.nlm.nih.gov/{s["pmid"]}/" target="_blank">PMID {s["pmid"]}</a>: {html.escape(s.get("title","")[:60])}'
                 for s in suggested[:3]
             )
         match_score = r.get("match_score")
@@ -739,8 +960,15 @@ def generate_html_report(results: list[dict], stats: dict, source: str) -> str:
             f'{match_cell}</tr>\n'
         )
 
+    epmc_count = sum(1 for r in results if r.get("meta_source") == "europepmc")
+    epmc_note = (f'<div style="color:#b06060;font-size:.8rem;margin:8px 0;">⚠ {epmc_count} citation(s) '
+                 f'fetched via Europe PMC fallback (NCBI unreachable) — per-entry origin in JSON output.</div>'
+                 if epmc_count else "")
+    net_card = (f'<div class="stat"><div class="num" style="color:#b06060">{stats.get("network_errors", 0)}</div>'
+                f'<div class="label">Unverified (network)</div></div>' if stats.get("network_errors") else "")
+
     return f"""<!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PMID Verification Report</title>
@@ -762,13 +990,14 @@ tr.invalid{{background:#ffebee;}}
 .legend{{margin:10px 0;font-size:.82rem;color:#6b6560;}}
 </style></head><body>
 <h1>📋 PMID Citation Verification Report</h1>
-<p>Source: <code>{source}</code></p>
+<p>Source: <code>{html.escape(source)}</code></p>
 <div class="stats">
 <div class="stat"><div class="num">{total}</div><div class="label">Total</div></div>
 <div class="stat"><div class="num" style="color:#4a9e3f">{correct}</div><div class="label">Correct</div></div>
 <div class="stat"><div class="num" style="color:#e6a817">{mismatch}</div><div class="label">Mismatch</div></div>
 <div class="stat"><div class="num" style="color:#d05040">{invalid}</div><div class="label">Invalid</div></div>
 <div class="stat"><div class="num" style="color:#888">{unknown}</div><div class="label">Unknown</div></div>
+{net_card}
 <div class="stat"><div class="num" style="color:#e08a30">{partial}</div><div class="label">Partial</div></div>
 {f'<div class="stat"><div class="num" style="color:#8a8580">{unmatched}</div><div class="label">Low Match</div></div>' if unmatched else ''}
 <div class="stat"><div class="num">{pct:.1f}%</div><div class="label">Correct Rate</div></div>
@@ -778,21 +1007,22 @@ tr.invalid{{background:#ffebee;}}
 ⚠️ Mismatch: PMID exists but points to a different paper &nbsp;|&nbsp;
 ❌ Invalid: PMID not found &nbsp;|&nbsp;
 🔶 Partial: Some metadata matches &nbsp;|&nbsp;
-❓ Unknown: Insufficient metadata for cross-check
+❓ Unknown: Insufficient metadata for cross-check, or data sources unreachable (network)
 </div>
+{epmc_note}
 <table><tr>
 <th></th><th>PMID</th><th>Source</th><th>Claimed Title</th><th>Actual Title</th>
 <th>Journal</th><th>Date</th><th>Details</th><th>Suggested</th>{"<th>Relevance</th>" if unmatched else ""}
 </tr>
 {rows}</table>
-<div class="footer">Generated by pubmed-verifier skill (v2.1) · {time.strftime("%Y-%m-%d %H:%M")}</div>
+<div class="footer">Generated by pubmed-verifier skill (v2.2) · {time.strftime("%Y-%m-%d %H:%M")}</div>
 </body></html>"""
 
 
 # ── Main ──
 
 def main():
-    parser = argparse.ArgumentParser(description="PMID Citation Verifier v2.1 — Three-state verification with caching, CSV, and DOI support")
+    parser = argparse.ArgumentParser(description="PMID Citation Verifier v2.2.1 -- Five-state verification with caching, CSV, DOI support, and dual-source network hardening")
     parser.add_argument("--source", help="File or directory to scan for PMIDs")
     parser.add_argument("--pmids", help="Comma-separated PMIDs to verify directly")
     parser.add_argument("--claims", help="JSON string with claimed metadata: [{pmid,title,authors,journal,year},...]")
@@ -806,7 +1036,20 @@ def main():
     parser.add_argument("--cache-days", type=int, default=30, help="Cache validity in days (default: 30)")
     parser.add_argument("--output", help="Output file (.json or .html)")
     parser.add_argument("--format", choices=["json", "html", "text"], default="text", help="Output format")
+    parser.add_argument("--ncbi-api-key", default="",
+                        help="NCBI E-utilities API key (or env NCBI_API_KEY): rate limit 3->10 req/s, batch ~3x faster")
+    parser.add_argument("--mailto", default="",
+                        help="Contact email (or env PUBMED_VERIFIER_MAILTO): Crossref polite pool + NCBI etiquette")
+    parser.add_argument("--meta-source", choices=["auto", "ncbi", "europepmc"], default="auto",
+                        help="Metadata source: auto = NCBI with Europe PMC fallback (default)")
+    parser.add_argument("--timeout", type=float, default=20, help="Per-request timeout seconds (default: 20)")
+    parser.add_argument("--version", action="version", version="pubmed-verifier 2.2.1")
     args = parser.parse_args()
+
+    _OPTS["ncbi_key"] = args.ncbi_api_key or os.environ.get("NCBI_API_KEY", "")
+    _OPTS["mailto"] = args.mailto or os.environ.get("PUBMED_VERIFIER_MAILTO", "")
+    _OPTS["meta_source"] = args.meta_source
+    _OPTS["timeout"] = args.timeout
 
     # Collect PMIDs with optional claimed metadata
     pmid_entries = []  # list of (pmid, source_file, context, claimed_dict)
@@ -913,10 +1156,9 @@ def main():
     # Query PubMed API for uncached PMIDs
     if uncached_pmids:
         fresh = fetch_summaries(uncached_pmids)
-        # Save to cache
+        # Save to cache (network failures excluded -- they are not answers)
         if use_cache:
-            for pmid, info in fresh.items():
-                _cache_save(db_path, pmid, info)
+            _cache_save_fresh(db_path, fresh)
     else:
         fresh = {}
 
@@ -947,6 +1189,7 @@ def main():
                 entry["pubdate"] = info["pubdate"]
                 entry["authors"] = ", ".join(info["authors"][:3])
                 entry["doi"] = info.get("doi", "")
+                entry["meta_source"] = info.get("source", "ncbi")
 
                 # DOI cross-verification (optional, via Crossref)
                 if args.verify_doi and info.get("doi"):
@@ -954,8 +1197,11 @@ def main():
                     if doi_meta.get("valid"):
                         entry["doi_verified"] = True
                         entry["crossref_title"] = doi_meta.get("title", "")
+                        entry["doi_title_match"] = _sequence_similarity(
+                            doi_meta.get("title", ""), info["title"]) >= 0.90
                     else:
                         entry["doi_verified"] = False
+                        entry["doi_note"] = "crossref unreachable (network) — not a verdict"
 
                 # Cross-check claimed vs actual
                 cross = cross_check_citation(claimed, {
@@ -992,20 +1238,33 @@ def main():
                         stats["unmatched"] += 1
             else:
                 entry["valid"] = False
-                entry["verdict"] = "invalid"
+                entry["verdict"], entry["details"] = classify_unverified(info)
                 entry["error"] = info.get("error", "Unknown")
-                entry["details"] = f"PMID not found: {entry['error']}"
-                stats["invalid"] += 1
+                entry["meta_source"] = info.get("source", "")
+                if info.get("network_error"):
+                    entry["network_error"] = True
+                    entry["verdict"] = "unknown"
+                    stats["unknown"] += 1          # keep verdict stats reconcilable
+                    stats["network_errors"] = stats.get("network_errors", 0) + 1
+                else:
+                    stats["invalid"] += 1
 
             results.append(entry)
 
     # Output
     if args.output:
         ext = Path(args.output).suffix.lower()
-        if ext == ".json" or args.format == "json":
+        # Explicit --format wins; otherwise derive from the file extension
+        # (.json -> json, .html/.htm -> html). Anything else is refused
+        # rather than silently writing HTML into a .txt.
+        if args.format == "json" or ext == ".json":
             output_text = generate_json_report(results, stats)
-        else:
+        elif args.format == "html" or ext in (".html", ".htm"):
             output_text = generate_html_report(results, stats, args.source or args.pmids or "claims")
+        else:
+            print("Unsupported --output extension (use .json or .html); "
+                  "omit --output for terminal text output.", file=sys.stderr)
+            sys.exit(1)
         Path(args.output).write_text(output_text, encoding="utf-8")
         print(f"Report written to {args.output}")
     else:
@@ -1019,6 +1278,9 @@ def main():
               f"{stats['invalid']} invalid, {partial} partial, {unknown} unknown")
         if stats.get("unmatched"):
             print(f"Relevance warnings: {stats['unmatched']}")
+        if stats.get("network_errors"):
+            print(f"⚠ Network: {stats['network_errors']} citation(s) could NOT be verified "
+                  f"(data sources unreachable; reported as unknown, NOT invalid)")
         print(f"{'='*60}\n")
 
         for r in results:
@@ -1050,7 +1312,11 @@ def main():
                 line += f"\n   Error: {r.get('error', '?')}"
             print(line)
 
-    # Exit code: non-zero if any invalid or mismatch found
+    # Exit codes: 2 = verification incomplete (network); 1 = problems found;
+    # 0 = clean. Network-incomplete outranks problem-found so automation
+    # never mistakes "could not verify" for "all verified".
+    if stats.get("network_errors"):
+        sys.exit(2)
     sys.exit(1 if stats["invalid"] > 0 or stats.get("mismatch", 0) > 0 else 0)
 
 

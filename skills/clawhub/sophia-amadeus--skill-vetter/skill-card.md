@@ -1,42 +1,56 @@
-## Description: <br>
-Audits AI skills for security risks before installation by checking credentials, permissions, network use, destructive operations, and ClawHub vetting status. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Audits AI skills for security risks before installation by checking credentials, permissions, network use, destructive operations, and ClawHub security status.
 
-## Publisher: <br>
-[sophia-amadeus](https://clawhub.ai/user/sophia-amadeus) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sophia-amadeus](https://clawhub.ai/user/sophia-amadeus)
 
-## Use Case: <br>
-Developers and agent users use Skill Vetter to pre-screen ClawHub, GitHub, or third-party skills before installation. It helps identify credential leaks, broad permissions, network access, destructive operations, and other patterns that call for manual review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill's score and Install verdict can be overconfident if treated as proof that another skill is safe. <br>
-Mitigation: Use the result as an initial screen and manually review high-impact permissions, network destinations, credential handling, hooks, and install scripts before installing third-party skills. <br>
-Risk: The shell helper depends on current ClawHub inspection output and local CLI availability. <br>
-Mitigation: Confirm the inspected files directly when a result affects installation or production use. <br>
+## Use Case:
 
+Developers and agent operators use this skill before installing or running ClawHub, GitHub, or third-party skills to review credentials, permissions, network access, destructive operations, and ClawHub security status.
 
-## Reference(s): <br>
-- [Credential Patterns](artifact/references/credential-patterns.md) <br>
-- [Safe Coding Patterns](artifact/references/safe-patterns.md) <br>
-- [Flagged Skills](artifact/references/flagged-skills.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance and terminal-style security vetting output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses score and verdict labels such as Install, Caution, Reject, and Dangerous.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Automated verdicts can overstate safety after incomplete checks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use this skill as a checklist only; manually review the target package and rely on official ClawHub security status where available.
+
+Risk: Pattern-based checks may miss important files, alternate execution paths, or disguised credentials.
+
+Mitigation: Inspect all files and scripts in the target skill before installation, especially files that execute commands, access networks, or handle credentials.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/sophia-amadeus/skills/skill-vetter)
+- [Credential Patterns](references/credential-patterns.md)
+- [Safe Coding Patterns](references/safe-patterns.md)
+- [Flagged Skills](references/flagged-skills.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and structured security verdict text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes security status, credential storage, network access, file system, permission, pattern, score, verdict, and reason fields.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
