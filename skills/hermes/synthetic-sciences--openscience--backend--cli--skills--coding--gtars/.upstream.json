@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/coding/gtars",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/coding/gtars",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/coding/gtars",
+  "branch": "main",
+  "pushedAt": "2026-09-20T12:23:04Z",
+  "contentHash": "f3d6604705129c6f01868fc2f878f7bfb8611c728f32cf89b7e832c23132e0f3",
+  "fetchedAt": "2026-09-20T12:27:58.503Z"
+}

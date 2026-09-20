@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/research-lookup",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/research-lookup",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/research-lookup",
+  "branch": "main",
+  "pushedAt": "2026-09-14T09:27:38Z",
+  "contentHash": "aac7981ddcc52f403f849215e4cb2582ab7f7bc9e61b9bde8e76bb925c2e54e0",
+  "fetchedAt": "2026-09-20T12:28:12.374Z"
+}

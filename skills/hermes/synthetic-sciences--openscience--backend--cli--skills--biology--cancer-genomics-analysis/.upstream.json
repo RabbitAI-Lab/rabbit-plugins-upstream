@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/cancer-genomics-analysis",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/cancer-genomics-analysis",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/cancer-genomics-analysis",
+  "branch": "main",
+  "pushedAt": "2026-09-20T12:23:04Z",
+  "contentHash": "bc8737c67d828604951ba501c6c10b83d44755d8e1761a5277581482d7260955",
+  "fetchedAt": "2026-09-20T12:27:58.443Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/paidf-orchestration-setup",
+  "identifier": "NVIDIA/skills/skills/paidf-orchestration-setup",
+  "repo": "NVIDIA/skills",
+  "path": "skills/paidf-orchestration-setup",
+  "branch": "main",
+  "pushedAt": "2026-09-19T00:31:39Z",
+  "contentHash": "826be57810950cbf3278c396dfad5d34e81772f822b84bb7444eaa59cf21783c",
+  "fetchedAt": "2026-09-20T12:27:57.240Z"
+}
