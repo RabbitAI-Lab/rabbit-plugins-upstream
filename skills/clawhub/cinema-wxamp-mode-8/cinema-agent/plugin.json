@@ -1,0 +1,280 @@
+{
+  "schemaVersion": 1,
+  "packageId": "bagbot.wxamp-mode-8",
+  "pluginId": "wxamp-mode-8",
+  "version": "1.0.0-openclaw.1",
+  "hostApiVersion": "1",
+  "displayName": "5 · OpenClaw Skill",
+  "mode": "wxamp_mode_8",
+  "businessMode": "",
+  "executionMode": "bridge-only",
+  "gene": {
+    "id": "wxamp_mode_8",
+    "file": "gene.json",
+    "sha256": "485183f08059bac0c8ed3bd25264eff96df53c664256b2a5d52382192abef80d"
+  },
+  "adapters": {
+    "service": "wxamp-mode-8",
+    "preload": "wxamp-mode-8",
+    "coupon": "mode-8"
+  },
+  "capabilities": {
+    "hostKernel": "page-flow-kernel@1",
+    "hostBridge": {
+      "kind": "host-kernel-bridge",
+      "entry": "code/host-bridge.mjs",
+      "export": "*",
+      "requiredExports": [
+        "captureAwareFetch",
+        "resolveChannelAuth",
+        "resolveChannelTemplate",
+        "isChannelTemplateReady",
+        "clearCloudChannelTemplateCache",
+        "isAprPlatformSupported",
+        "runAprForOrder"
+      ],
+      "sha256": "a8e341a06dad688965c0e747e6e317a5fb222efd8a37458a03df0f17d1e5ef26"
+    },
+    "service": {
+      "kind": "main-service",
+      "entry": "code/main-service.mjs",
+      "export": "createWxampMode8ServicePlugin",
+      "sha256": "69b06f9cf12b2aff39c1fadef5df41f5700fe71dc49efde3c75924582b61d7f5"
+    },
+    "runtime": {
+      "kind": "preload-runtime",
+      "entry": "code/preload-runtime.mjs",
+      "export": "createWxampMode8RuntimePlugin",
+      "sha256": "7d06042d7908f99fe303d991992348cab0fd4dbd11709ff73bc6e25128ac258c"
+    },
+    "coupon": {
+      "kind": "coupon-adapter",
+      "entry": "code/coupon-adapter.mjs",
+      "export": "createMode8CouponBindAdapter",
+      "sha256": "c31db6b14f6d15edc2eb0a3a57d7b79aefc18360f879dd2c71f34e00946b167c"
+    },
+    "failure": {
+      "kind": "failure-notifier",
+      "entry": "code/failure.mjs",
+      "export": "*",
+      "requiredExports": [
+        "formatFailureMessage",
+        "buildFailureStepPayload"
+      ],
+      "sha256": "7bc813d6cd53f0487efba24826fae66ce917aa50f29f9caca82d44d8a685c4ea"
+    },
+    "capture": {
+      "kind": "capture-capability",
+      "entry": "code/capture.mjs",
+      "export": "*",
+      "requiredExports": [
+        "getCaptureModeKey",
+        "buildCaptureJourneySteps",
+        "evaluateCaptureCompleteness",
+        "resolveCaptureCheckpoint",
+        "resolveMode8LoginVerificationResponse"
+      ],
+      "sha256": "b91f6e5a54cb513c677c99aa445061e2f9b5477ac11490d46c19cf2c2fef21a7"
+    },
+    "seed": {
+      "kind": "window-seed-capability",
+      "entry": "code/seed.mjs",
+      "export": "*",
+      "requiredExports": [
+        "normalizeLoginOnlyObjBaseSeedValue",
+        "buildLoginOnlySessionStorage",
+        "resolveWindowSeedRestoreMode",
+        "resolveWindowSeedSessionStorageMode",
+        "resolveWindowSeedCookieMode",
+        "shouldPreserveWindowSeedSessionStorage",
+        "applyWindowSeedStoragePolicy",
+        "buildWindowSeedCookieDescriptors"
+      ],
+      "sha256": "a098d48385a796cb5651e411d706465a7688324c9f8d4a583cba4a21dc7b4b57"
+    },
+    "pageWorld": {
+      "kind": "page-world",
+      "entry": "code/page-world.mjs",
+      "export": "*",
+      "requiredExports": [
+        "createWxampMode8PageBridgeHelpers",
+        "isolateWxampMode8PageWorldBridgeSource",
+        "resolveWxampMode8SelectionBridgeRequest"
+      ],
+      "sha256": "fa309625226e4e018fff4ff676637a3b6c5356118928fbc23a2665438e2985b8"
+    }
+  },
+  "runtimeDependencies": [
+    "electron-log",
+    "undici",
+    "ppu-paddle-ocr"
+  ],
+  "permissions": {
+    "networkDomains": [],
+    "webview": true,
+    "desktopAutomation": false
+  },
+  "policies": {
+    "businessProfile": {
+      "pluginId": "wxamp-mode-8",
+      "pluginCode": "wxamp_mode_8",
+      "pluginName": "wxamp_mode_8 业务插件",
+      "description": "承载 Mode 8 H5 的路由差异、回放步骤差异与调度默认值，渠道入口由云配置提供。",
+      "defaultBusinessLineId": "",
+      "defaultBusinessLineKey": "",
+      "defaultEntryUrl": "",
+      "defaultLaunchUrl": "",
+      "windowBehavior": {
+        "keepAlive": false,
+        "forceResidentWindow": false,
+        "alwaysCreateNewWindow": true,
+        "attachToMainWindow": false,
+        "shareCarrierAcrossTasks": true,
+        "persistLoginSeedAcrossTasks": true,
+        "carrierScope": "business-line",
+        "showDuringReplay": true,
+        "keepBelowMainWindowDuringReplay": true,
+        "preserveSessionStorage": true,
+        "freshAccessRequiresSessionReset": false,
+        "preserveLoginStorageDuringFreshAccess": true,
+        "disableReplayBootstrap": false,
+        "seedCookieMode": "login-only",
+        "seedRestoreMode": "login-only",
+        "seedSessionStorageMode": "fresh-login-only",
+        "activationResetPolicy": "order-session"
+      },
+      "identityProfile": {
+        "stableQueryKeys": [
+          "tenantId",
+          "tenantid",
+          "appid",
+          "appId",
+          "channelCode",
+          "channel",
+          "bizId",
+          "businessId"
+        ],
+        "transientQueryKeys": [
+          "stamp",
+          "from",
+          "comeFrom",
+          "spm",
+          "scene",
+          "token",
+          "sign",
+          "signature",
+          "timestamp",
+          "ts",
+          "t",
+          "time",
+          "code",
+          "state",
+          "authCode",
+          "auth_code",
+          "shareToken",
+          "share_token",
+          "requestId",
+          "request_id",
+          "traceId",
+          "trace_id",
+          "bagbot_open_nonce"
+        ]
+      },
+      "routeProfile": {
+        "sessionStorageOptional": true,
+        "runtimeExecutionMode": "bridge-only",
+        "routePaths": {
+          "payIndex": "/pay/index",
+          "coupon": "/pay/coupons"
+        }
+      },
+      "blueprintProfile": {
+        "disableDomReplayActions": true,
+        "selectCinemaPageHints": [
+          "/city",
+          "/cinema",
+          "/page/index",
+          "/home/movieScheduling"
+        ],
+        "selectMoviePageHints": [
+          "/page/index",
+          "/home/movieScheduling",
+          "/login"
+        ],
+        "selectShowDatePageHints": [
+          "/home/movieScheduling"
+        ],
+        "selectShowSessionPageHints": [
+          "/home/movieScheduling",
+          "/home/chooseSeat",
+          "/login"
+        ],
+        "applyShowFitPageHints": [
+          "/home/chooseSeat"
+        ],
+        "applySeatFitPageHints": [
+          "/home/chooseSeat"
+        ],
+        "confirmSeatsPageHints": [
+          "/home/chooseSeat"
+        ],
+        "orderConfirmPageHints": [
+          "/home/confirmOrder",
+          "/pay/index"
+        ],
+        "goodsNextPageHints": [
+          "/pos/list.html",
+          "/pay/index"
+        ],
+        "couponOpenPageHints": [
+          "/pay/index"
+        ],
+        "applyCouponFitPageHints": [
+          "/pay/coupons",
+          "/pay/index"
+        ],
+        "couponSelectPageHints": [
+          "/pay/coupons",
+          "/pay/index"
+        ],
+        "couponConfirmPageHints": [
+          "/pay/coupons",
+          "/pay/index"
+        ],
+        "confirmPaymentPageHints": [
+          "/pay/index"
+        ],
+        "includeOrderConfirmStep": true,
+        "showSessionActionTexts": [
+          "购票"
+        ],
+        "goodsNextActionTexts": [
+          "下一步",
+          "确认",
+          "去支付",
+          "确认订单"
+        ]
+      },
+      "businessLines": []
+    },
+    "modeContract": {
+      "mode": "wxamp_mode_8",
+      "pluginId": "wxamp-mode-8",
+      "businessSpace": "wxamp_mode_8",
+      "executionLockKey": "wxamp-mode-8",
+      "concurrencyScope": "channel",
+      "localExecutionLock": true,
+      "runtimeExecutionMode": "bridge-only"
+    }
+  },
+  "packageType": "system-capability-package",
+  "distribution": {
+    "format": "openclaw-cinema-skill",
+    "runtimeTargets": [
+      "openclaw",
+      "cinema-agent"
+    ],
+    "sourcePackage": "bagbot.wxamp-mode-8",
+    "obfuscated": true
+  }
+}

@@ -1,43 +1,57 @@
-## Description: <br>
-Choose low-token Sendmux calls across MCP, CLI, SDKs, and HTTP by using snippets, counts, batches, deltas, cursors, ETags, and idempotency. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Choose low-token Sendmux calls across MCP, CLI, SDKs, and HTTP by using snippets, counts, batches, deltas, cursors, ETags, and idempotency.
 
-## Publisher: <br>
-[sendmux.ai](https://clawhub.ai/user/sendmux.ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sendmux.ai](https://clawhub.ai/user/sendmux.ai)
 
-## Use Case: <br>
-Developers and agents use this skill to choose efficient Sendmux operations for authorized email, mailbox, management, and API workflows while minimizing unnecessary reads, sends, retries, and attachment transfer. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Agents may access Sendmux keys or agent tokens while performing authorized workflows. <br>
-Mitigation: Keep key and token scopes narrow, use the appropriate Sendmux credential type for each surface, and do not ask users to paste secrets into chat. <br>
-Risk: Sends, deletes, provider changes, and other account-impacting actions can have side effects. <br>
-Mitigation: Require explicit approval for account-impacting actions and use idempotency keys for supported mutations and retries. <br>
-Risk: Full mailbox reads, broad log scans, or inline attachment transfer can expose unnecessary content and consume excess context. <br>
-Mitigation: Prefer counts, snippets, small limits, batch reads, deltas, cursors, ETags, and file paths or presigned URLs for attachments. <br>
+## Use Case:
 
+Developers and agents use this skill to choose efficient Sendmux MCP, CLI, SDK, or HTTP routes for mailbox, sending, management, attachment, sync, and log tasks while minimizing tokens and calls.
 
-## Reference(s): <br>
-- [Sendmux skills repository](https://github.com/Sendmux/skills) <br>
-- [ClawHub skill page](https://clawhub.ai/sendmux.ai/skills/sendmux-token-efficient-usage) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration instructions] <br>
-**Output Format:** [Markdown with tables and inline bash/code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Provides route, batching, pagination, idempotency, and attachment-handling guidance for Sendmux workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: ClawHub release metadata; artifact frontmatter says 1.3.0) <br>
+Risk: Sendmux credentials or scoped tokens could be exposed if a user is asked to paste secrets into chat.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use available environment variables, CLI profiles, OAuth sessions, or scoped tokens outside chat, and keep SENDMUX_API_KEY values out of model-visible content.
+
+Risk: Email sending, message updates or deletes, and management changes can create external side effects.
+
+Mitigation: Require clear user confirmation before side-effecting operations and use idempotency keys or conditional headers where the skill recommends them.
+
+Risk: Broad mailbox, attachment, or log reads can expose unnecessary content and increase token usage.
+
+Mitigation: Prefer counts, snippets, small limits, selected batch reads, metadata-only attachment handling, cursors, deltas, and ETag checks before fetching full content.
+
+## Reference(s):
+
+- [Sendmux skills homepage](https://github.com/Sendmux/skills)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with CLI, SDK, MCP, and HTTP examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Focuses on low-token Sendmux route selection, credential boundaries, batching, cursors, ETags, idempotency, and attachment handling.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

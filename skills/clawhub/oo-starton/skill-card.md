@@ -1,43 +1,59 @@
-## Description: <br>
-Starton connector skill for reading, creating, updating, and deleting Starton data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Starton (starton.com). Use this skill for any Starton request, including reading, creating, updating, and deleting data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Starton IPFS pins from an agent through the OOMOL oo CLI, including listing pins, reading pin details, creating JSON pins, pinning existing CIDs, and deleting pins. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill operates through an OOMOL-brokered Starton connection and may use sensitive account credentials without exposing raw tokens to the agent. <br>
-Mitigation: Install only when the user trusts OOMOL to broker the Starton connection and is comfortable allowing the agent to manage Starton IPFS pins through the oo CLI. <br>
-Risk: Pin deletion can remove Starton data. <br>
-Mitigation: Confirm the exact pin target and obtain explicit user approval before running destructive deletion actions. <br>
-Risk: The pin_existing_file action creates a pin even though the artifact does not tag it as a write action. <br>
-Mitigation: Ask for confirmation before running pin_existing_file, matching the security guidance for state-changing actions. <br>
+## Use Case:
 
+Developers and agents use this skill to manage Starton IPFS pins from a connected OOMOL account. It supports listing and reading pins, creating JSON pins, pinning existing IPFS CIDs, and deleting pins with explicit approval.
 
-## Reference(s): <br>
-- [Starton homepage](https://starton.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action payload construction and may return oo CLI JSON responses when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: One-time CLI installation can involve pipe-to-shell commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer the linked install guide or verify the installer before running it, and install only if OOMOL's oo CLI is trusted.
+
+Risk: Write actions can create new Starton IPFS pins or pin existing CIDs.
+
+Mitigation: Inspect the live action schema, confirm the exact payload and intended effect with the user, then run the action.
+
+Risk: The delete action can remove a Starton pin.
+
+Mitigation: Confirm the pin identifier and obtain explicit user approval before executing the destructive action.
+
+## Reference(s):
+
+- [Starton homepage](https://starton.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

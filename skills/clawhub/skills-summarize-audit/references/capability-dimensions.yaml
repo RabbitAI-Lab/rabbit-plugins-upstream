@@ -440,6 +440,38 @@ agent_tools:
 # 能力维度冲突/互补判定阈值（v9.0.0）
 # 用于 agent-dispatch-ambiguity.md 的 overlap 计算
 # ──────────────────────────────────────────────
+# [local-patch 2026-08-08] 补充 ZCode 会话历史中出现的 5 个 agent（COLLABORATION.md §8 角色体系）
+  - name: manager
+    type: agent
+    capabilities:
+      planning: {level: 8, source: "出《实施方案》/任务拆解"}
+      reasoning: {level: 7, source: "对抗审查/终审确认"}
+      code-analysis: {level: 5, source: "方案评审"}
+  - name: tech-lead
+    type: agent
+    capabilities:
+      code-analysis: {level: 8, source: "spec+质量双审/技能合规"}
+      reasoning: {level: 7, source: "《审查报告》"}
+      file-ops: {level: 5, source: "读代码与规则"}
+  - name: researcher
+    type: agent
+    capabilities:
+      research: {level: 8, source: "多源检索/只读侦察"}
+      web-search: {level: 7, source: "agent-reach 13 渠道"}
+      file-ops: {level: 5, source: "读文件取证"}
+  - name: doc-writer
+    type: agent
+    capabilities:
+      file-ops: {level: 8, source: "文档撰写/格式化"}
+      code-analysis: {level: 6, source: "测试落码/样板代码"}
+      reasoning: {level: 5, source: "文档结构组织"}
+  - name: debugger
+    type: agent
+    capabilities:
+      code-analysis: {level: 8, source: "根因定位/影响分析"}
+      file-ops: {level: 6, source: "读代码定位"}
+      reasoning: {level: 6, source: "修复建议"}
+
 overlap_thresholds:
   capability_jaccard:
     high_conflict: 0.7    # >= 0.7 触发合并建议

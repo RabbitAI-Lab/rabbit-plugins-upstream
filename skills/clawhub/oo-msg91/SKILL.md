@@ -5,8 +5,9 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "MSG91"
   author: "OOMOL"
-  version: "1.0.0"
+  version: "1.0.4"
   services: ["msg91"]
+  icon: "https://static.oomol.com/logo/third-party/msg91.svg"
 ---
 
 # MSG91
@@ -36,7 +37,7 @@ Each action is listed below with a one-line description; actions that change sta
 
 ## Available actions
 
-- `resend_otp` — Resend an existing MSG91 OTP by text message or voice call.
+- `resend_otp` — Resend an existing MSG91 OTP by text message or voice call. [write]
 - `send_flow_sms` — Send an SMS through an approved MSG91 Flow template. [write]
 - `send_otp` — Generate or send an OTP with an MSG91 OTP template. [write]
 - `verify_otp` — Verify an OTP previously sent through MSG91.

@@ -1,39 +1,52 @@
-## Description: <br>
-Control the Spotify Linux desktop client via MPRIS DBus for playback, launching, volume, track information, and opening Spotify URIs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Control Spotify on Linux via MPRIS DBus. Use when: launching Spotify from command line, playing/pausing/skipping tracks, searching songs and switching playback to a specific track, any Spotify playback control task on Linux.
 
-## Publisher: <br>
-[lxp731](https://clawhub.ai/user/lxp731) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[lxp731](https://clawhub.ai/user/lxp731)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+External users and developers use this skill to launch and control the Spotify desktop client on Linux through MPRIS DBus, including playback controls, Spotify URI playback, status checks, and volume control.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Playback, Spotify URI, and volume commands can immediately change what is playing on the local desktop client.
+
+Mitigation: Confirm track, album, or playlist URIs and intended volume or playback actions before execution.
+
+Risk: Launching Spotify starts a managed background process in the user's desktop session.
+
+Mitigation: Use the bundled launcher checks and stop command, and run only from the intended non-root desktop user session.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Linux desktop users and agents use this skill to launch and control the Spotify desktop client through DBus, including playback, volume, track metadata, and Spotify URI playback. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can start Spotify playback immediately, change playback state, and adjust volume on the user's Linux desktop. <br>
-Mitigation: Use it only on a desktop session where Spotify control is intended, confirm Spotify URIs and volume changes before execution, and pause playback when the task is complete. <br>
-Risk: Spotify may remain running after the agent task ends because the launch workflow detaches the Spotify process. <br>
-Mitigation: Close Spotify manually or stop the Spotify process after use when persistent playback or a background app is not desired. <br>
+**Output Format:** [Markdown with inline bash code blocks]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
+**Other Properties Related to Output:** [Commands act on the invoking user's local Spotify desktop session.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline bash commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands target the local Linux desktop session and Spotify MPRIS DBus interface.] <br>
+1.0.2 (source: server release metadata)
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

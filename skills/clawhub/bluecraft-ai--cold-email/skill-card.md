@@ -1,45 +1,61 @@
-## Description: <br>
-Build cold email campaigns and generate hyper-personalized email sequences with MachFive. Build a campaign end-to-end, preview output, then generate sequences from lead data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build cold email campaigns and generate hyper-personalized email sequences with MachFive from lead data.
 
-## Publisher: <br>
-[bluecraft-ai](https://clawhub.ai/user/bluecraft-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[bluecraft-ai](https://clawhub.ai/user/bluecraft-ai)
 
-## Use Case: <br>
-External users and sales teams use this skill to build MachFive cold email campaigns, configure required generation settings, preview results, and generate personalized outbound email sequences from lead data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Lead and sender information is sent to MachFive for campaign building, enrichment, preview, and email generation. <br>
-Mitigation: Use only lead data the user is allowed to share, review applicable privacy and email obligations, and enable enrichment only when company, website, or LinkedIn data sharing is appropriate. <br>
-Risk: Preview and generation calls can spend MachFive account credits. <br>
-Mitigation: Confirm the expected credit cost before preview or generation, including the higher per-lead cost when enrichment is enabled. <br>
-Risk: The skill requires MACHFIVE_API_KEY for authenticated API calls. <br>
-Mitigation: Store MACHFIVE_API_KEY as an environment secret and do not place it in chat messages, source files, or generated artifacts. <br>
+## Use Case:
 
+External users and developers use this skill to set up MachFive cold-email campaigns, gather required generation settings, preview output, and generate single-lead or batch email sequences.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/bluecraft-ai/skills/cold-email) <br>
-- [MachFive API key settings](https://app.machfive.io/settings) <br>
-- [MachFive application](https://app.machfive.io) <br>
-- [MachFive product site](https://machfive.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, API calls] <br>
-**Output Format:** [Markdown guidance with API request examples, shell polling commands, and generated email sequence text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MACHFIVE_API_KEY and may call MachFive APIs that process lead and sender information.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release evidence) <br>
+Risk: Lead data and sender signatures are shared with MachFive for outbound email generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the intended use and data-sharing posture before installation or execution, and only provide lead data and signatures approved for use with MachFive.
+
+Risk: Preview, generation, enrichment, and batch workflows can consume MachFive credits.
+
+Mitigation: Confirm credit costs before approving preview or generation, and review enrichment and batch settings before submitting jobs.
+
+Risk: Asynchronous generation or campaign-build jobs can be left incomplete or reported from stale status.
+
+Mitigation: Use the documented polling loop or notification email, and make a fresh status request before reporting completion.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/bluecraft-ai/skills/cold-email)
+- [Publisher profile](https://clawhub.ai/user/bluecraft-ai)
+- [MachFive API settings](https://app.machfive.io/settings)
+- [MachFive app and API base URL](https://app.machfive.io)
+- [MachFive website](https://machfive.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, API calls, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON request bodies, and generated email text.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires MACHFIVE_API_KEY and uses MachFive API calls for campaign setup, previews, generation, polling, and export.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

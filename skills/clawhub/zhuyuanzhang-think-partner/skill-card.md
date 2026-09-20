@@ -1,42 +1,55 @@
-## Description: <br>
-A Chinese-language thinking partner that uses Zhu Yuanzhang's state-building history as a lens for early organization building, institutional design, scarce-resource decisions, and pragmatic survival strategy. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a Chinese-first strategic thinking partner that uses Zhu Yuanzhang's founding-era models to frame organization building, survival under scarcity, institution design, leadership tradeoffs, and ground-level validation.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users and teams use this skill to frame organization-building, governance, leadership, and survival questions through historical strategy patterns from Zhu Yuanzhang. It is intended for reflective analysis and critique, not literal instruction in coercive or abusive control. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Historical examples include iron-fist rule, punishment, betrayal, and power consolidation. <br>
-Mitigation: Use the skill for reflective analysis and critique; do not treat harsh-governance examples as instructions for violence, intimidation, retaliation, or abusive workplace control. <br>
-Risk: The skill provides advisory strategy framing rather than executable procedures or verified management policy. <br>
-Mitigation: Review outputs against current law, organizational policy, and human-centered leadership standards before applying any recommendation. <br>
+## Use Case:
 
+Users seeking organizational strategy or leadership perspective use this skill to analyze decisions through five Zhu Yuanzhang-inspired models, including survival-first planning, institution design, pragmatic prioritization, rule enforcement with incentives, and direct access to front-line evidence.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/zhuyuanzhang-think-partner) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
-- [Packaged skill source](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown prose with structured analysis steps and historical framing] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese-first responses with occasional English terminology when useful] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: server-resolved release metadata) <br>
+Risk: Authoritarian historical references could be misread as permission for coercion, retaliation, violence, or unlawful workplace conduct.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the historical framing as metaphorical structure only, and apply it as lawful rule design, transparent governance, and proportionate decision support.
+
+Risk: Historical strategy analogies can oversimplify modern organizational, legal, or cultural constraints.
+
+Mitigation: Use the skill as a thinking lens, then verify decisions against current policy, law, stakeholder impact, and domain expertise.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/gechengling/skills/zhuyuanzhang-think-partner)
+- [Publisher Profile](https://clawhub.ai/user/gechengling)
+- [Source Skill Definition](artifact/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-first Markdown guidance with structured models, tables, and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No code execution, install scripts, persistence, or data access are described in the security evidence.]
+
+## Skill Version(s):
+
+2.0.2 (source: server release evidence and SKILL.md)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

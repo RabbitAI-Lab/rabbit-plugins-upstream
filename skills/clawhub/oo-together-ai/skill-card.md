@@ -1,43 +1,56 @@
-## Description: <br>
-Together AI helps agents work with Together AI through an OOMOL-connected account for chat completions, embeddings, and model discovery. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Together AI connector for creating chat completions, generating embeddings, and listing models through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate Together AI from an agent session through an OOMOL-connected account. It supports non-streaming chat completions, embedding generation, and model discovery. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and requested inputs may be sent to Together AI and may incur Together AI or OOMOL costs. <br>
-Mitigation: Review the intended payload and cost impact before approving write-tagged actions. <br>
-Risk: Chat completion and embedding actions are write-tagged and can create provider-side activity. <br>
-Mitigation: Confirm the exact action, schema-derived payload, and expected effect before execution. <br>
+## Use Case:
 
+Developers and agents use this skill to run Together AI chat completion, embedding, and model-listing actions via the oo CLI with credentials managed by OOMOL.
 
-## Reference(s): <br>
-- [Together AI homepage](https://www.together.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-together-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions may return JSON data with execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: First-time setup asks users to run remote installer commands that can execute code on the machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid running remote install commands blindly; prefer a verified package, pinned release, or reviewed installer before connecting an account.
+
+Risk: Together AI actions are operated through OOMOL as an intermediary.
+
+Mitigation: Install only if using OOMOL as an intermediary for Together AI actions is acceptable for the deployment.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/oomol/skills/oo-together-ai)
+- [Together AI homepage](https://www.together.ai)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions can create non-streaming chat completions, generate embeddings, or list models available to the connected API key.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence release.version and SKILL.md metadata.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

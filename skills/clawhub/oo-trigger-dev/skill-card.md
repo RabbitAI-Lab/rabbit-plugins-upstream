@@ -1,43 +1,61 @@
-## Description: <br>
-Trigger.dev helps agents operate Trigger.dev through an OOMOL-connected account for reading run data and carrying out user-approved state-changing actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Trigger.dev helps agents operate Trigger.dev through an OOMOL-connected account for reading runs, retrieving results, triggering tasks, replaying runs, and canceling in-progress runs.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Trigger.dev action schemas, list and retrieve run data, fetch completed results, cancel or replay runs with confirmation, and trigger tasks through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Credentialed Trigger.dev actions can change run state or trigger tasks. <br>
-Mitigation: Use scoped API tokens where possible and confirm exact payloads and expected effects before write or destructive actions. <br>
-Risk: Commands can fail when authentication, Trigger.dev connection scope, or billing state is missing. <br>
-Mitigation: Run setup steps only after the matching error and resolve authentication, app connection, or billing before retrying. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Trigger.dev action schemas and run Trigger.dev connector actions through the oo CLI. It supports read workflows for run inspection and guarded state-changing workflows for triggering tasks, replaying runs, and canceling in-progress runs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-trigger-dev) <br>
-- [Trigger.dev homepage](https://trigger.dev) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Fetches live action schemas before constructing JSON payloads; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: artifact frontmatter and release evidence) <br>
+Risk: The skill can trigger tasks, replay runs, and cancel in-progress Trigger.dev runs, which may change account state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact payload, target run or task, and expected effect with the user before running write or destructive actions.
+
+Risk: The skill relies on OOMOL as the connector layer for the user's Trigger.dev account.
+
+Mitigation: Install only when the user is comfortable with that connector layer and has connected the intended Trigger.dev account.
+
+Risk: First-time setup may require running an oo CLI installer from the network.
+
+Mitigation: Review the install source or use an official verified installation path before running one-time installer commands.
+
+## Reference(s):
+
+- [Trigger.dev homepage](https://trigger.dev)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-trigger-dev)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses oo connector commands that return JSON responses from Trigger.dev actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

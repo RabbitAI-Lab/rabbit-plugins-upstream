@@ -1,45 +1,57 @@
-## Description: <br>
-This skill lets agents operate NetSuite through an OOMOL-connected account by reading records, running SuiteQL queries, and creating or updating records through the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+NetSuite (netsuite.com). Use this skill for ANY NetSuite request - reading, creating, and updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and business operators use this skill to inspect, create, and update NetSuite records through an OOMOL-connected account. It supports record lookup, record listing, SuiteQL queries, and state-changing record operations with confirmation for writes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create or update NetSuite records. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running create or update actions. <br>
-Risk: Read actions, including record listing and SuiteQL queries, can expose sensitive business data. <br>
-Mitigation: Run read actions only for the user's stated purpose and avoid broad queries when narrower record access is sufficient. <br>
-Risk: The skill depends on an OOMOL-connected NetSuite account and the oo CLI. <br>
-Mitigation: Install and connect the CLI only when the user intends to let the agent access that NetSuite account. <br>
+## Use Case:
 
+Developers and business operators use this skill to inspect NetSuite action schemas and run connected-account actions for reading, creating, listing, querying, and updating NetSuite records.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-netsuite) <br>
-- [NetSuite Homepage](https://www.netsuite.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL NetSuite Connection](https://console.oomol.com/app-connections?provider=netsuite) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill retrieves live connector schemas before constructing action payloads and returns connector results as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill can operate on sensitive NetSuite business data through create, update, and SuiteQL actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact payload and expected effect with the user before running any write or SuiteQL action.
+
+Risk: First-time setup may install the oo CLI through a remote shell installer.
+
+Mitigation: Review the official installer or use a verified package or installation method before granting CLI access.
+
+## Reference(s):
+
+- [ClawHub NetSuite skill page](https://clawhub.ai/oomol/skills/oo-netsuite)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [NetSuite homepage](https://www.netsuite.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

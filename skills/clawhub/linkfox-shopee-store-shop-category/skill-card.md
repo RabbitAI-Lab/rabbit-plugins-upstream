@@ -1,44 +1,64 @@
-## Description: <br>
-Helps agents manage Shopee Shop Category operations through LinkFox scripts for listing, creating, updating, and deleting shop categories and their item lists. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage Shopee Shop Category data through LinkFox's Shopee developer proxy, including creating, updating, listing, and deleting shop categories and category item lists.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Developers, operators, and ecommerce agents use this skill to call Shopee Shop Category APIs for authorized stores, including category management and category item-list updates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, and delete Shopee shop-category data. <br>
-Mitigation: Review the intended store, category, and item-list changes before running mutating operations. <br>
-Risk: API responses may contain sensitive store or business data and are saved locally. <br>
-Mitigation: Run the skill in a private workspace, treat saved LinkFox response files as sensitive, and delete them when no longer needed. <br>
-Risk: The skill depends on LinkFox/Shopee authorization and API-key access. <br>
-Mitigation: Install and configure only the required authorization skill and keep LinkFox API keys out of shared shells, logs, and repositories. <br>
+## Use Case:
 
+External Shopee sellers, store operators, and developers use this skill to manage authorized store categories and the products assigned to those categories. It is intended for agents that need to call LinkFox scripts or produce guidance for Shopee shop-category workflows.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-shop-category) <br>
-- [Shopee Shop Category API reference](https://open.shopee.com/documents/v2/v2.shop_category.add_shop_category?module=101&type=1) <br>
-- [Artifact API reference](artifact/references/api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, JSON] <br>
-**Output Format:** [Markdown guidance with Python command examples and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses are saved to a local LinkFox session directory; large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The skill uses credential-bearing LinkFox and Shopee API calls and can guide API-key generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a secure secret manager for API keys, avoid exposing phone or SMS codes in shared logs, and install only when the LinkFox publisher and workflow are trusted.
+
+Risk: Custom LINKFOX_* gateway URL environment variables can change where credential-bearing requests are sent.
+
+Mitigation: Leave gateway URL overrides unset unless the destination is explicitly trusted and reviewed.
+
+Risk: The skill can assist with billing orders and payment flows.
+
+Mitigation: Verify the selected plan, payment method, and order details before proceeding with payment.
+
+Risk: Full API responses are persisted under local linkfox output directories and may include sensitive store or business data.
+
+Mitigation: Restrict access to the workspace output directory and delete saved response files when they are no longer needed.
+
+## Reference(s):
+
+- [Shop Category API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+- [Shopee Open Platform Shop Category documentation](https://open.shopee.com/documents/v2/v2.shop_category.add_shop_category?module=101&type=1)
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-shop-category)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses saved to local files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts save full responses under a linkfox session directory and print either the full JSON response or a summary depending on response size.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

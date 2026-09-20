@@ -1,42 +1,55 @@
-## Description: <br>
-This skill lets an agent validate and standardize postal addresses through an OOMOL-connected Google Address Validation account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Address Validation (developers.google.com). Use this skill for ANY Google Address Validation request: reading, creating, and updating data through the OOMOL connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to validate and standardize postal addresses through an OOMOL-connected Google Address Validation account, including verdicts, parsed address details, and geocode data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The feedback-sending action can submit the final outcome of a completed validation sequence and is not clearly labeled as state-changing in the artifact. <br>
-Mitigation: Review and explicitly approve any provide_validation_feedback payload before execution. <br>
-Risk: First-time setup may require optional remote installer commands for the oo CLI. <br>
-Mitigation: Review installer commands before approving them, and use an already installed oo CLI when available. <br>
+## Use Case:
 
+Developers and operators use this skill to validate, standardize, and inspect postal addresses with Google Address Validation through an OOMOL-connected account. It also supports submitting validation feedback after the user confirms the payload and intended effect.
 
-## Reference(s): <br>
-- [Google Address Validation documentation](https://developers.google.com/maps/documentation/address-validation) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-google-address-validation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Markdown, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs depend on live Google Address Validation connector schemas and may include validation verdicts, parsed address details, geocode data, response metadata, or setup guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and frontmatter) <br>
+Risk: First-time setup recommends running a remote installer script directly in the shell, which may execute unreviewed code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after trusting OOMOL and the oo CLI source; prefer downloading and inspecting the installer or using a verified package-manager flow before execution.
+
+Risk: The provide_validation_feedback action changes service-side state.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running the action.
+
+## Reference(s):
+
+- [Google Address Validation documentation](https://developers.google.com/maps/documentation/address-validation)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-google-address-validation)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill instructs the agent to inspect the live connector schema before building action payloads.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

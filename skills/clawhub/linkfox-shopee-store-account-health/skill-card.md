@@ -1,45 +1,66 @@
-## Description: <br>
-Shopee-店铺健康 helps agents query authorized Shopee store account-health metrics, penalty points, punishments, late orders, and listings with issues through LinkFox's Shopee developer proxy. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents query Shopee Account Health data for authorized stores through LinkFox, covering shop performance, metric source details, penalty points, punishments, listings with issues, and late orders.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Shopee sellers, operators, and support agents use this skill to inspect account-health status for authorized stores and investigate performance metrics, penalty history, punishments, late orders, and listings with issues. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can save full Shopee account-health responses locally, which may include sensitive store and operational data. <br>
-Mitigation: Run it only in workspaces intended for this data, protect generated linkfox session files, and delete them when no longer needed. <br>
-Risk: The skill depends on LinkFox and Shopee credentials to access authorized store data. <br>
-Mitigation: Use it only for stores the user is allowed to inspect, keep API keys in environment variables, and avoid sharing generated outputs unnecessarily. <br>
-Risk: Security evidence reports unclear cost and storage behavior for API calls and saved results. <br>
-Mitigation: Confirm expected API credit use before additional calls and avoid repeated probing unless the user explicitly approves. <br>
+## Use Case:
 
+External sellers, operators, and support agents use this skill to inspect Shopee store health, diagnose account-health metric failures, and prioritize late orders, listing issues, penalty points, and punishment history for authorized shops.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-account-health) <br>
-- [Artifact API reference](artifact/references/api.md) <br>
-- [Shopee Account Health API reference](https://open.shopee.com/documents/v2/v2.account_health.get_shop_performance?module=103&type=1) <br>
-- [LinkFox Skills](https://skill.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with Python command examples; scripts emit JSON or summarized text.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires LinkFox API credentials and the linkfox-shopee-store-auth dependency; full API responses are saved locally under a linkfox session directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The skill handles LinkFox API keys, Shopee account-health data, phone/SMS login flows, and billing or unpaid order flows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the publisher is trusted for this data, avoid sharing OTPs or API keys in logs, and rotate any exposed key.
+
+Risk: Custom gateway environment variables can redirect requests to endpoints outside the default LinkFox service.
+
+Mitigation: Use custom gateway variables only for endpoints you control and verify before sending store identifiers or credentials.
+
+Risk: Saved LinkFox response files may contain sensitive store, order, listing, or account-health data.
+
+Mitigation: Review saved JSON files before sharing them and keep the linkfox session data directory under appropriate access controls.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-account-health)
+- [Shopee Account Health get_shop_performance](https://open.shopee.com/documents/v2/v2.account_health.get_shop_performance?module=103&type=1)
+- [API reference](references/api.md)
+- [Onboarding guide](references/onboarding.md)
+- [get_shop_performance API guide](references/apis/get-shop-performance.md)
+- [get_metric_source_detail API guide](references/apis/get-metric-source-detail.md)
+- [get_penalty_point_history API guide](references/apis/get-penalty-point-history.md)
+- [get_punishment_history API guide](references/apis/get-punishment-history.md)
+- [get_listings_with_issues API guide](references/apis/get-listings-with-issues.md)
+- [get_late_orders API guide](references/apis/get-late-orders.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Files, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses or saved JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include Shopee store health, order, listing, penalty, and punishment data; large or full responses can be saved under a linkfox session data directory.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

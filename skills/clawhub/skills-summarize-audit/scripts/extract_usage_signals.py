@@ -196,7 +196,7 @@ def extract_python_package_calls(transcript_path: Path) -> dict[str, int]:
 # Headroom proxy activity detection
 # ---------------------------------------------------------------------------
 
-def detect_headroom_proxy_activity() -> dict:
+def detect_headroom_proxy_activity(allow_external: bool = False) -> dict:
     """Detect if headroom proxy is active and collect performance stats.
 
     Tries:
@@ -213,6 +213,10 @@ def detect_headroom_proxy_activity() -> dict:
         "data_source": "unavailable",
         "note": None,
     }
+
+    if not allow_external:
+        result["note"] = "外部命令探测默认禁用（保持只读承诺）；传 --allow-external-commands 启用"
+        return result
 
     try:
         import subprocess
@@ -527,6 +531,13 @@ def _parse_codex_session_file(filepath: Path, since_cutoff: datetime | None) -> 
 
                 ts = d.get("timestamp") or d.get("ts")
 
+                if since_cutoff:
+                    try:
+                        if not ts or datetime.fromisoformat(ts.replace("Z", "+00:00")) < since_cutoff:
+                            continue
+                    except (ValueError, TypeError):
+                        continue
+
                 # Track earliest timestamp for time filtering
                 if ts and (min_ts is None or ts < min_ts):
                     min_ts = ts
@@ -535,7 +546,7 @@ def _parse_codex_session_file(filepath: Path, since_cutoff: datetime | None) -> 
                 if d.get("type") != "response_item":
                     continue
                 payload = d.get("payload", {})
-                if payload.get("type") != "custom_tool_call":
+                if payload.get("type") not in {"custom_tool_call", "function_call"}:
                     continue
                 tool_name = payload.get("name", "")
                 if not tool_name:
@@ -545,7 +556,14 @@ def _parse_codex_session_file(filepath: Path, since_cutoff: datetime | None) -> 
                     mcp_calls.append({"tool": tool_name, "ts": ts})
 
                 # Extract Python package usage from Bash/Write/Edit tool inputs
-                tool_input = payload.get("input", {})
+                tool_input = payload.get("input", payload.get("arguments", {}))
+                if isinstance(tool_input, str):
+                    try:
+                        tool_input = json.loads(tool_input)
+                    except (ValueError, TypeError):
+                        tool_input = {}
+                if not isinstance(tool_input, dict):
+                    tool_input = {}
 
                 if tool_name == "Bash":
                     cmd = tool_input.get("command", "")
@@ -579,7 +597,9 @@ def _parse_codex_session_file(filepath: Path, since_cutoff: datetime | None) -> 
     except Exception:
         return None
 
-    # Time filter using earliest timestamp
+    if since_cutoff and min_ts is None:
+        return None
+    # Time filter using earliest timestamp retained inside the requested window.
     if since_cutoff and min_ts:
         try:
             created = datetime.fromisoformat(min_ts.replace("Z", "+00:00"))
@@ -854,6 +874,7 @@ def aggregate_signals(
             if not server:
                 continue
             mcp_by_server[server]["tool_calls"] += 1
+            mcp_by_server[server]["observed_in_clients"].add(_infer_client_name(rec))
             mcp_by_server[server]["tools_used"][call["tool"]] += 1
             ts = call.get("ts")
             if ts:
@@ -867,6 +888,7 @@ def aggregate_signals(
             "tool_calls": info["tool_calls"],
             "last_used": info["last_used"],
             "tools_used": dict(info["tools_used"]),
+            "observed_in_clients": sorted(info["observed_in_clients"]),
             "status": "observed",
         }
         mcp_usage_evidence.append(evidence)
@@ -917,6 +939,9 @@ def aggregate_signals(
         "agents_scanned": len(agent_records),
         "time_range": time_range,
         "clients_scanned": clients_scanned,
+        "client_status": {name: client_results.get(name, {}).get("status", "unavailable") for name in clients_scanned},
+        "coverage_complete": False,
+        "coverage_note": "显式工具事件抽样；嵌套 exec、隐式 Skill 与日志缺失可能漏计，零记录不是零使用。",
         "sessions_scanned": 0,
         "transcripts_parsed": 0,
     }
@@ -968,7 +993,8 @@ def merge_with_mcp_config(signals: dict, mcp_config_path: Path | None, clients_s
                 servers = cfg.get("mcpServers", {})
             configured = set(servers.keys())
 
-    observed = {m["mcp_server"] for m in signals.get("mcp_usage_evidence", [])}
+    signals.setdefault("mcp_usage_evidence", [])
+    observed = {m["mcp_server"] for m in signals["mcp_usage_evidence"] if m.get("status") == "observed"}
     never_observed = sorted(configured - observed)
 
     # Mark configured-but-never-seen MCP servers with clients info
@@ -984,10 +1010,10 @@ def merge_with_mcp_config(signals: dict, mcp_config_path: Path | None, clients_s
             }
         )
 
-    # Add observed_in_clients to existing observed entries
+    # Preserve actual event provenance; requested scan scope is not observed usage.
     for entry in signals["mcp_usage_evidence"]:
         if entry["status"] == "observed":
-            entry["observed_in_clients"] = clients_scanned
+            entry.setdefault("observed_in_clients", [])
 
     # v9.1.0: Cross-reference MCP servers with Python package usage
     python_pkg_map = {
@@ -1016,14 +1042,14 @@ def merge_with_mcp_config(signals: dict, mcp_config_path: Path | None, clients_s
                 # Override status to reflect proxy activity
                 entry["status"] = "configured_never_observed" if entry["tool_calls"] == 0 else entry["status"]
                 entry["status_note"] = (
-                    f"MCP tool 通道未用（0 次调用），但 proxy 通道活跃："
+                    f"MCP 可归因调用 {entry['tool_calls']} 次；proxy 探测记录："
                     f"已处理 {stats.get('requests', '?')} 请求，"
                     f"压缩 {stats.get('reduction_percent', '?')}%，"
                     f"节省约 {tok:,} tokens"
                 )
             else:
                 entry["working_mode"] = "proxy_unconfirmed"
-                entry["status_note"] = "MCP tool 通道未用；proxy 模式检测不可用（headroom 未运行或 headroom perf 不可调用）"
+                entry["status_note"] = "proxy 运行状态未验证；未探测或探测不可用不能证明服务未运行。"
 
         # v9.1.0: Cross-reference MCP servers with Python package usage
         py_pkg = MCP_TO_PYTHON_MAP.get(server)
@@ -1031,7 +1057,7 @@ def merge_with_mcp_config(signals: dict, mcp_config_path: Path | None, clients_s
             py_count = python_pkg_map.get(py_pkg, 0)
             note = None
             if py_count > 0 and entry["tool_calls"] == 0:
-                note = f"MCP tool 从未被调用，但同名 Python 包被调用 {py_count} 次（独立通道）"
+                note = f"本次记录未检出 MCP 调用，同名 Python 包可归因调用 {py_count} 次（独立通道，覆盖不完整）"
             elif py_count > 0:
                 note = f"MCP tool 被调用 {entry['tool_calls']} 次，同名 Python 包被调用 {py_count} 次（独立通道）"
             entry["related_python_package"] = {
@@ -1053,6 +1079,10 @@ def merge_with_mcp_config(signals: dict, mcp_config_path: Path | None, clients_s
 
 
 def main() -> int:
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
     parser = argparse.ArgumentParser(
         description="Scan ZCode / Codex / Claude session directories for attributable usage signals."
     )
@@ -1073,6 +1103,11 @@ def main() -> int:
     )
     parser.add_argument("--json", action="store_true", help="Output JSON.")
     parser.add_argument("--summary", action="store_true", help="Human-readable summary.")
+    parser.add_argument(
+        "--allow-external-commands",
+        action="store_true",
+        help="允许执行 tasklist/ps/headroom 等外部命令探测（默认关闭，保持只读承诺）",
+    )
     parser.add_argument(
         "--scan-clients",
         default="zcode",
@@ -1147,7 +1182,7 @@ def main() -> int:
     signals = aggregate_signals(all_records, clients_scanned=clients_to_scan, client_results=client_results)
 
     # v9.1.0: Detect headroom proxy activity (live check, not transcript-based)
-    headroom_proxy = detect_headroom_proxy_activity()
+    headroom_proxy = detect_headroom_proxy_activity(args.allow_external_commands)
     signals["headroom_proxy_activity"] = headroom_proxy
 
     # Cross-reference with MCP config

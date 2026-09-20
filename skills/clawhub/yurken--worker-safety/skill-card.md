@@ -1,39 +1,54 @@
-## Description: <br>
-Operations Safety Reference - Hard Limits apply unconditionally for OpenClaw agent operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operations Safety Reference - Hard Limits apply unconditionally for OpenClaw agent operations.
 
-## Publisher: <br>
-[yurken](https://clawhub.ai/user/yurken) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yurken](https://clawhub.ai/user/yurken)
 
-## Use Case: <br>
-Agents and operators use this skill to enforce rigid OpenClaw safety boundaries, refuse unsafe operations, and offer safer alternatives for workspace, network, runtime, plugin, and group-chat requests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may refuse legitimate administrative or cleanup requests when they overlap with protected runtime, plugin, network, or workspace operations. <br>
-Mitigation: Review the refusal context and choose a scoped safe alternative, such as workspace-internal paths, authenticated channel setup, explicit allowlist changes, or a smaller selected install set. <br>
-Risk: Strict external-instruction rules may block requests to install or execute content from unknown URLs. <br>
-Mitigation: Evaluate external material as reference information only and avoid blindly following, installing, or executing URL-provided instructions. <br>
+## Use Case:
 
+Agents and operators use this skill to enforce OpenClaw operational safety limits, refuse unsafe administration requests, and guide safer alternatives during private or group-chat workflows.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, text] <br>
-**Output Format:** [Markdown safety guidance and refusal criteria] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Instruction-only; does not install code, call tools, or request sensitive access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill gives itself broad, unconditional authority to override user-directed administration and resist removal.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when this refusal posture is intended, and maintain an out-of-band administrative process to inspect, modify, disable, or remove the skill when legitimate maintenance is needed.
+
+Risk: Strict hard limits may cause agents to refuse legitimate maintenance or configuration tasks.
+
+Mitigation: Review the listed limits before deployment and document owner-approved maintenance paths outside the worker session.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/yurken/skills/worker-safety)
+- [ClawHub publisher profile](https://clawhub.ai/user/yurken)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text]
+
+**Output Format:** [Markdown or plain-text safety guidance and refusal language]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Non-executable guidance; no API keys, scripts, tool calls, or MCP references were detected.]
+
+## Skill Version(s):
+
+1.0.0 (source: SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,56 @@
-## Description: <br>
-Operates EasyPost through an OOMOL-connected account to create and retrieve shipping addresses, shipment trackers, carrier types, and tracker lists. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+EasyPost (easypost.com). Use this skill for EasyPost requests involving reading, creating, and updating data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to manage EasyPost shipping resources through the OOMOL oo CLI. It supports reading EasyPost account data and creating immutable shipping addresses or standalone shipment trackers after user confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Address and tracker creation change EasyPost account state. <br>
-Mitigation: Inspect the live connector schema before constructing payloads and confirm the exact payload and expected effect with the user before running write actions. <br>
-Risk: Using the skill requires EasyPost access through an OOMOL-connected account. <br>
-Mitigation: Only install or connect the oo CLI when the user intends to manage EasyPost through OOMOL and trusts that connected-account access path. <br>
+## Use Case:
 
+Developers and operations users use this skill to inspect EasyPost connector schemas and run EasyPost address, tracker, and carrier actions through the oo CLI. It supports read operations directly and requires confirmation before state-changing EasyPost actions.
 
-## Reference(s): <br>
-- [ClawHub EasyPost skill page](https://clawhub.ai/oomol/skills/oo-easypost) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [EasyPost homepage](https://www.easypost.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before actions; write actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The first-time setup path tells users to run remote installer scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup path before installing and prefer a trusted, versioned package or a downloaded installer that is verified before execution.
+
+Risk: Write actions can create EasyPost addresses or trackers and change account state.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running any action tagged as write.
+
+## Reference(s):
+
+- [EasyPost homepage](https://www.easypost.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL EasyPost connection](https://console.oomol.com/app-connections?provider=easypost)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-easypost)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, JSON, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash code blocks and JSON command responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill instructs the agent to fetch live connector schemas before building action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

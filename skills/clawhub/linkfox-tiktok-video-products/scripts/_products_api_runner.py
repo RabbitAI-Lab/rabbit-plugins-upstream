@@ -12,7 +12,7 @@ from _tiktok_video_products_common import (
     ensure_auth_skill_available,
     merge_upstream_body,
     qs_add,
-    resolve_account_tokens,
+    require_open_id,
 )
 
 
@@ -137,15 +137,10 @@ def run_products_api(api_name: str, params: dict, caller: Optional[str] = None) 
     else:
         body = _build_post_body(params, spec)
 
-    tokens = resolve_account_tokens(params)
-    if tokens.get("error") or tokens.get("errcode"):
-        return tokens
-    access_token = tokens.get("accessToken")
-    if not access_token:
-        return {"error": "missing accessToken after token resolution", "details": tokens}
+    open_id = require_open_id(params)
 
     proxy = developer_proxy_call(
-        access_token,
+        open_id,
         path,
         method,
         region=params.get("region"),

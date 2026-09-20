@@ -39,12 +39,14 @@ def version_consistency():
     """所有对外版本源必须与 VERSION 一致。"""
     checks = {
         "VERSION": (ROOT / "VERSION", r"^\s*(\d+\.\d+\.\d+)\s*$"),
-        "SKILL.md": (ROOT / "SKILL.md", r"^> Version:\s*(\d+\.\d+\.\d+)"),
+        "SKILL.md": (ROOT / "SKILL.md", r"^[#>]\s*Version:\s*(\d+\.\d+\.\d+)"),
         "README.md": (ROOT / "README.md", r"^# .*?v(\d+\.\d+\.\d+)"),
         "CHANGELOG.md": (ROOT / "CHANGELOG.md", r"^## \[(\d+\.\d+\.\d+)\]"),
         "config.yaml": (ROOT / "config.yaml", r"^# skills-summarize-audit v(\d+\.\d+\.\d+)"),
         "actions-schema.md": (ROOT / "references" / "actions-schema.md", r"^# .*?v(\d+\.\d+\.\d+)"),
         "ci-output-schema.md": (ROOT / "references" / "ci-output-schema.md", r'"version":\s*"(\d+\.\d+\.\d+)"'),
+        "package.json": (ROOT / "package.json", r'"version":\s*"(\d+\.\d+\.\d+)"'),
+        "report-template.md": (ROOT / "references" / "report-template.md", r"^# .*?v(\d+\.\d+\.\d+)"),
     }
     versions = {}
     for name, (path, pattern) in checks.items():
@@ -252,13 +254,13 @@ def behavior_and_output_contract():
     skill = (ROOT / "SKILL.md").read_text(encoding="utf-8-sig")
     report = (ROOT / "references" / "report-template.md").read_text(encoding="utf-8")
     flow = (ROOT / "references" / "execution-flow.md").read_text(encoding="utf-8")
-    for required in ["技能库翻译精炼", "技能与插件问题审查", "项目画像", "技能/插件推荐", "用户画像", "默认只读"]:
+    for required in ["技能库翻译精炼", "技能审查", "项目画像", "技能推荐 / 插件推荐", "用户画像", "默认只读"]:
         if required not in skill:
             errors.append(f"SKILL.md 缺少核心边界: {required}")
     for required in ["翻译精炼", "项目画像", "推荐", "明确不做"]:
         if required not in flow:
             errors.append(f"主流程缺少精简能力定义: {required}")
-    for required in ["中文翻译候选", "项目画像", "### 推荐", "## 下一步", "## 需处理", "影响:", "## 安装全景", "## 评分与证据边界", "## 优化与卸载候选", "--detail"]:
+    for required in ["中文翻译候选", "项目画像", "### 推荐", "## 下一步", "## 建议执行", "影响:", "## 安装全景", "## 评分与证据边界", "## 优化建议", "--detail"]:
         if required not in report:
             errors.append(f"报告模板缺少核心区块: {required}")
     if "外部搜索必须取得本次明确同意" not in skill:
@@ -362,7 +364,7 @@ def translation_and_decision_output_contract():
             errors.append(f"采集器缺少翻译质量契约: {token}")
 
     report = (ROOT / "references" / "report-template.md").read_text(encoding="utf-8")
-    for section in ["中文翻译候选", "项目画像", "### 推荐", "## 下一步", "## 需处理", "影响:", "## 安装全景", "## 评分与证据边界", "## 优化与卸载候选", "--detail"]:
+    for section in ["中文翻译候选", "项目画像", "### 推荐", "## 下一步", "## 建议执行", "影响:", "## 安装全景", "## 评分与证据边界", "## 优化建议", "--detail"]:
         if section not in report:
             errors.append(f"报告模板缺少核心区块: {section}")
     return errors
@@ -377,15 +379,22 @@ def audit_ui_and_skill_contract():
     ui = ui_path.read_text(encoding="utf-8-sig")
     expected = {
         "display_name": "Skills Summarize Audit",
-        "short_description": "技能审查 → 问题·评分·冲突·翻译·推荐",
-        "default_prompt": "使用 $skills-summarize-audit 审查已安装技能与插件的问题、版本、画像匹配、评分、冲突和互补；需要翻译时只处理当前 UI 可见集合。",
     }
     for key, value in expected.items():
         if f'{key}: "{value}"' not in ui:
             errors.append(f"Audit UI 元数据缺少中文 {key}")
 
     skill = (ROOT / "SKILL.md").read_text(encoding="utf-8-sig")
-    for required in ["references/report-template.md", "references/skill-plugin-issue-audit.md", "当前 UI 可见", "--visible-id", "audit_skill_plugin_issues.py", "用户交互与反馈", "项目画像", "技能/插件推荐", "用户画像", "冲突", "互补", "## 边界"]:
+    if len(re.findall(r"^## 能力[一二三四五六]", skill, re.MULTILINE)) != 3:
+        errors.append("公开能力必须恰好为三项")
+    if HAS_YAML:
+        interface = yaml.safe_load(ui).get("interface", {})
+        short = interface.get("short_description", "")
+        if not 25 <= len(short) <= 40 or not re.search(r"[\u4e00-\u9fff]", short):
+            errors.append("UI 中文短说明必须为 25–40 字符")
+        if "$skills-summarize-audit" not in interface.get("default_prompt", ""):
+            errors.append("默认提示缺少技能调用名")
+    for required in ["references/report-template.md", "references/skill-plugin-issue-audit.md", "当前 UI 可见", "--visible-id", "audit_skill_plugin_issues.py", "用户交互与反馈", "项目画像", "技能推荐 / 插件推荐", "用户画像", "冲突", "互补", "## 边界"]:
         if required not in skill:
             errors.append(f"SKILL.md 缺少当前输出规则: {required}")
     for stale in ["随后输出评分表片段", "优先输出 30 秒摘要块", "references/installation.md", "CI/CD 无交互模式"]:
@@ -407,7 +416,7 @@ def main():
 
     # 2. Version
     versions = version_consistency()
-    ok = len(set(versions.values())) <= 1
+    ok = "MISSING" not in versions.values() and len(set(versions.values())) == 1
     failed |= not ok
     results.append(("版本一致性", ok, [f"{k}: {v}" for k, v in versions.items()]))
 
@@ -458,6 +467,11 @@ def main():
     ok = not errs
     failed |= not ok
     results.append(("Audit UI 与主工作流门禁", ok, errs or ["OK"]))
+
+    regression = subprocess.run([sys.executable, "-m", "pytest", "tests/test_evidence_contract.py", "-q"], cwd=ROOT, capture_output=True, text=True)
+    ok = regression.returncode == 0
+    failed |= not ok
+    results.append(("证据与扫描行为回归", ok, [regression.stdout.strip() or regression.stderr.strip()]))
 
     print("=" * 60)
     print("skills-audit 自动化验证")

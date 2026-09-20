@@ -1,44 +1,60 @@
-## Description: <br>
-Courier (courier.com). Use this skill for Courier requests that read, create, update, delete, and send data through the OOMOL Courier connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Courier (courier.com). Use this skill for Courier requests that read, create, update, and delete data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to let an agent manage Courier profiles, subscription lists, list subscriptions, and message sending through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send Courier messages and change or delete Courier profiles and subscription lists through the connected OOMOL account. <br>
-Mitigation: Require exact target and payload confirmation before approving any write or destructive action. <br>
-Risk: Incorrect payloads can affect unintended recipients, profiles, or lists. <br>
-Mitigation: Fetch the live action schema before constructing payloads and confirm the intended effect with the user. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Courier messages, subscription lists, and user profiles from an agent using the oo CLI. It supports read actions as well as write and destructive actions that require confirmation before execution.
 
-## Reference(s): <br>
-- [Courier homepage](https://www.courier.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-courier) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; Courier action responses are JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: Setup guidance can lead an agent toward remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a trusted, verified process outside autonomous agent execution before using the skill.
+
+Risk: Write and destructive Courier actions can send messages, overwrite lists, unsubscribe users, or delete profiles and lists.
+
+Mitigation: Inspect the live action schema, confirm the exact payload and expected effect with the user, and require explicit approval before any write or destructive action.
+
+Risk: Courier actions depend on OOMOL as the intermediary for account connection and credential handling.
+
+Mitigation: Use the skill only when the user is comfortable authorizing Courier through OOMOL and has reviewed the connected account and scopes.
+
+## Reference(s):
+
+- [ClawHub Courier skill page](https://clawhub.ai/oomol/skills/oo-courier)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Courier homepage](https://www.courier.com/)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live Courier connector schemas before running actions; commands execute through the oo CLI against a connected Courier account.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

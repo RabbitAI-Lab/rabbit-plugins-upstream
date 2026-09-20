@@ -1,48 +1,72 @@
-## Description: <br>
-Provides Shopee SBS warehouse and inventory queries for authorized stores through LinkFox's Shopee developer proxy, covering bound warehouses, current inventory, expiry reports, stock aging, and stock movement. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Shopee SBS warehouse and inventory query workflows for bound warehouses, current inventory, expiry reports, stock aging, and stock movement through LinkFox's Shopee integration.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Developers and operators working with authorized Shopee stores use this skill to retrieve SBS warehouse, inventory, aging, expiry, and stock-movement data. It is intended for store-specific operational analysis where the user has valid LinkFox and Shopee authorization. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Complete Shopee merchant API responses are saved on the local machine, which may expose store inventory or warehouse data if the workspace is shared. <br>
-Mitigation: Use the skill only in a private workspace and review or delete generated linkfox data folders after use. <br>
-Risk: Inline output can place large or sensitive SBS responses directly into the agent transcript. <br>
-Mitigation: Avoid inline output for large or sensitive results and inspect saved JSON files selectively with tools such as jq. <br>
-Risk: Repeated SBS queries may have unclear point-cost behavior despite conflicting artifact notes about cost. <br>
-Mitigation: Confirm point-cost behavior with the publisher before repeated queries. <br>
+## Use Case:
 
+External Shopee sellers, store operators, and agents use this skill to inspect authorized SBS warehouse bindings, inventory levels, expiry status, stock aging, and stock movement history for operational reporting.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-sbs) <br>
-- [Shopee SBS get_bound_whs_info documentation](https://open.shopee.com/documents/v2/v2.sbs.get_bound_whs_info?module=124&type=1) <br>
-- [Shopee SBS get_current_inventory documentation](https://open.shopee.com/documents/v2/v2.sbs.get_current_inventory?module=124&type=1) <br>
-- [Shopee SBS get_expiry_report documentation](https://open.shopee.com/documents/v2/v2.sbs.get_expiry_report?module=124&type=1) <br>
-- [Shopee SBS get_stock_aging documentation](https://open.shopee.com/documents/v2/v2.sbs.get_stock_aging?module=124&type=1) <br>
-- [Shopee SBS get_stock_movement documentation](https://open.shopee.com/documents/v2/v2.sbs.get_stock_movement?module=124&type=1) <br>
-- [Artifact API reference](references/api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Shell commands, Files, Guidance] <br>
-**Output Format:** [JSON responses saved to local files with stdout JSON or summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes complete API responses under a local linkfox data directory; large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill requires LinkFox/Shopee account access through API keys and authorized store identifiers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only intended business accounts, avoid exposing API keys in shared shell profiles, and rotate keys if they are copied into an unsafe location.
+
+Risk: Onboarding helpers can support billing and payment order flows.
+
+Mitigation: Run payment or order commands only after explicit user confirmation that credits should be purchased.
+
+Risk: LINKFOX_* endpoint environment variables can alter which service endpoints receive requests.
+
+Mitigation: Review endpoint-related environment variables before use and restrict them to trusted LinkFox endpoints.
+
+Risk: Saved response files may contain store inventory or other sensitive business data.
+
+Mitigation: Store workspaces securely and clean up generated linkfox response files when they are no longer needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-sbs)
+- [SBS API reference](references/api.md)
+- [Bound warehouse info reference](references/apis/get-bound-whs-info.md)
+- [Current inventory reference](references/apis/get-current-inventory.md)
+- [Expiry report reference](references/apis/get-expiry-report.md)
+- [Stock aging reference](references/apis/get-stock-aging.md)
+- [Stock movement reference](references/apis/get-stock-movement.md)
+- [Shopee Open Platform SBS get_bound_whs_info](https://open.shopee.com/documents/v2/v2.sbs.get_bound_whs_info?module=124&type=1)
+- [Shopee Open Platform SBS get_current_inventory](https://open.shopee.com/documents/v2/v2.sbs.get_current_inventory?module=124&type=1)
+- [Shopee Open Platform SBS get_expiry_report](https://open.shopee.com/documents/v2/v2.sbs.get_expiry_report?module=124&type=1)
+- [Shopee Open Platform SBS get_stock_aging](https://open.shopee.com/documents/v2/v2.sbs.get_stock_aging?module=124&type=1)
+- [Shopee Open Platform SBS get_stock_movement](https://open.shopee.com/documents/v2/v2.sbs.get_stock_movement?module=124&type=1)
+
+## Skill Output:
+
+**Output Type(s):** [text, json, files, shell commands, configuration, guidance]
+
+**Output Format:** [JSON responses saved to session files, stdout JSON or summaries, and Markdown guidance with shell commands.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full API responses are retained under linkfox session data; large responses print summaries unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

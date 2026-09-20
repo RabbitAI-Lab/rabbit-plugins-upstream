@@ -1,46 +1,60 @@
-## Description: <br>
-Google Sheets skill for reading, creating, updating, and deleting spreadsheet data through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Sheets skill for reading, creating, updating, and deleting spreadsheet data through the OOMOL oo CLI and Google Sheets connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Google Sheets through an OOMOL-connected account, including reading ranges, creating spreadsheets, updating values, and managing sheet structure. It is suited for agent workflows that need Google Sheets actions through the oo CLI connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change spreadsheet state through write actions. <br>
-Mitigation: Confirm the exact spreadsheet target, action, and payload with the user before running any action tagged [write]. <br>
-Risk: The skill can remove or overwrite spreadsheet data through destructive actions. <br>
-Mitigation: Get explicit user approval for the target and effect before running any action tagged [destructive], especially clear, delete row or column, and delete sheet operations. <br>
-Risk: The skill depends on an OOMOL-connected Google Sheets account. <br>
-Mitigation: Install only when the operator is comfortable granting OOMOL access to Google Sheets and use the first-time setup flow only after an auth or connection error. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Google Sheets through an OOMOL-connected account, including spreadsheet discovery, range reads, row lookups, value writes, formatting, filters, validation, and sheet management.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-googlesheets) <br>
-- [Google Sheets homepage](https://workspace.google.com/products/sheets/) <br>
-- [oo CLI repository](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [OOMOL Google Sheets connection page](https://console.oomol.com/app-connections?provider=googlesheets) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects with data and meta.executionId fields when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Fallback setup may ask the agent to run a remote oo CLI installer script.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the CLI is missing, and inspect or verify the OOMOL installer before running it.
+
+Risk: Write and destructive Google Sheets actions can overwrite, clear, delete, or replace spreadsheet data.
+
+Mitigation: Confirm the target spreadsheet, sheet, range, payload, and expected effect with the user before executing write or destructive actions.
+
+Risk: The connector relies on OOMOL-managed account access for Google Sheets operations.
+
+Mitigation: Use only with trusted OOMOL access and a connected Google Sheets account that is authorized for the data being accessed.
+
+## Reference(s):
+
+- [ClawHub Google Sheets Skill](https://clawhub.ai/oomol/skills/oo-googlesheets)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Google Sheets](https://workspace.google.com/products/sheets/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with oo CLI commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions return normalized Google Sheets data, metadata, counters, batch replies, or range-focused response shapes.]
+
+## Skill Version(s):
+
+1.0.4 (source: evidence release version and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,65 @@
-## Description: <br>
-Guides agents through WeChat Mini Program development, including project structure, debugging, preview, testing, publishing, optimization, and CloudBase integration when applicable. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents build, debug, preview, publish, optimize, and integrate CloudBase features in WeChat Mini Program projects.
 
-## Publisher: <br>
-[binggg](https://clawhub.ai/user/binggg) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[binggg](https://clawhub.ai/user/binggg)
 
-## Use Case: <br>
-Developers and engineers use this skill to build, modify, debug, preview, upload, and optimize WeChat Mini Program projects, including CloudBase-backed mini programs when the project uses wx.cloud or related CloudBase services. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Preview, upload, publish, database, storage, or cloud-function actions can target the wrong Mini Program appid or CloudBase environment. <br>
-Mitigation: Confirm the intended appid, project path, and CloudBase environment before running DevTools, miniprogram-ci, or cloud-resource commands. <br>
-Risk: DevTools or CloudBase workflows may prompt for WeChat scan login or device-code authentication. <br>
-Mitigation: Review authentication prompts and authorize only the intended account and environment. <br>
+## Use Case:
 
+Developers and coding agents use this skill when working on WeChat Mini Program projects that need project-structure guidance, DevTools preview/upload workflows, CloudBase integration, message push or customer-service behavior, and WeChat search optimization.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/binggg/skills/miniprogram-development) <br>
-- [CloudBase Mini Program Integration](references/cloudbase-integration.md) <br>
-- [WeChat DevTools Debug and Preview](references/devtools-debug-preview.md) <br>
-- [WeChat IDE Skills vs CloudBase MCP](references/wxide-vs-cloudbase-mcp.md) <br>
-- [Common Pitfalls](references/pitfalls.md) <br>
-- [WeChat Developer Tools Nightly](https://developers.weixin.qq.com/miniprogram/dev/devtools/nightly_backup.html) <br>
-- [CloudBase WeChat Pay Mini Program Documentation](https://docs.cloudbase.net/integration/wechat-pay-miniprogram/index.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with code blocks and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose DevTools, miniprogram-ci, wechatide, or CloudBase MCP commands that require user approval and project-specific appid and environment values.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.28.15 (source: ClawHub release metadata) <br>
+Risk: The skill can guide real WeChat Mini Program uploads, CloudBase deployments, and customer-service messaging.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation before login, upload, deploy, cloud-write, message-push, or customer-service actions.
+
+Risk: Fallback CloudBase MCP instructions use unpinned npm package resolution.
+
+Mitigation: Pin and review npm package versions before running CloudBase MCP or mcporter commands.
+
+Risk: Incorrect mini program guidance can mix Web SDK authentication or unsupported tool paths into WeChat projects.
+
+Mitigation: Follow the skill's platform-specific references and verify project configuration, appid, environment ID, and available DevTools commands before making changes.
+
+## Reference(s):
+
+- [CloudBase Mini Program Integration](references/cloudbase-integration.md)
+- [WeChat DevTools Debug and Preview](references/devtools-debug-preview.md)
+- [WeChat IDE Skills vs CloudBase MCP](references/wxide-vs-cloudbase-mcp.md)
+- [Message Push and Customer Service Auto-Reply](references/message-push-customer-service.md)
+- [Mini Program SEO and WeChat Search Optimization](references/seo-search-optimization.md)
+- [Common Pitfalls](references/pitfalls.md)
+- [WeChat Developer Tools Nightly](https://developers.weixin.qq.com/miniprogram/dev/devtools/nightly_backup.html)
+- [CloudBase Create Environment](https://docs.cloudbase.net/quick-start/create-env)
+- [WeChat Mini Program Search SEO](https://developers.weixin.qq.com/miniprogram/dev/framework/search/seo.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown responses with code, configuration snippets, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose preview, upload, deploy, or cloud-operation commands that require user confirmation before execution.]
+
+## Skill Version(s):
+
+1.28.59 (source: server release evidence; artifact frontmatter version is 2.34.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

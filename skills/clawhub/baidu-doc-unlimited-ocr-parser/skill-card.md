@@ -1,48 +1,63 @@
-## Description: <br>
-Calls Baidu Unlimited-OCR to parse PDFs, Word files, PowerPoint files, and images into structured Markdown, including HTML table markup for complex tables. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+调用百度 Unlimited-OCR API 解析 PDF、Word、PPT、图片等文档，并返回适合复杂表格、多段落、多结构文档的 Markdown 结构化结果。
 
-## Publisher: <br>
-[maglanyulan](https://clawhub.ai/user/maglanyulan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[maglanyulan](https://clawhub.ai/user/maglanyulan)
 
-## Use Case: <br>
-Developers and document-processing users can use this skill to submit supported documents or document URLs to Baidu Unlimited-OCR and retrieve Markdown suitable for review, RAG ingestion, or knowledge-base workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Documents, document URLs, OCR result links, and parsed output are sent to and handled by Baidu services. <br>
-Mitigation: Use the skill only for documents approved for Baidu processing, and avoid confidential, regulated, customer, or otherwise sensitive material unless organizational policy permits it. <br>
-Risk: Baidu API keys and secret keys are required to obtain access tokens. <br>
-Mitigation: Store credentials in approved secret or environment-variable management, avoid committing them to skill files or shared settings, and rotate them if exposed. <br>
-Risk: Downloaded Markdown and JSON parse results may contain sensitive source-document content. <br>
-Mitigation: Treat generated result files and time-limited result URLs as sensitive artifacts, and review sharing, retention, and logging practices before use. <br>
+## Use Case:
 
+Developers and agents use this skill to submit documents or document URLs to Baidu Unlimited-OCR, poll for task completion, and retrieve Markdown parsing results for downstream review, knowledge-base ingestion, or document conversion workflows.
 
-## Reference(s): <br>
-- [Baidu Unlimited-OCR API documentation](https://cloud.baidu.com/doc/OCR/s/fmr1p39gb) <br>
-- [Baidu OCR pricing documentation](https://cloud.baidu.com/doc/OCR/s/Fls06fa15) <br>
-- [Baidu AI console](https://console.bce.baidu.com/ai/) <br>
-- [Baidu intelligent document analysis](https://ai.baidu.com/solution/intelligent-document-analysis) <br>
-- [API parameters](references/parameters.md) <br>
-- [Error codes](references/error_codes.md) <br>
-- [API key setup](references/apikey-fetch.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown and JSON from Baidu OCR results, with command-line status and error output.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Asynchronous processing returns a task ID, polls until completion, and may download Markdown and parse-result JSON from time-limited result URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and artifact _meta.json) <br>
+Risk: The skill can send full document contents or document URLs to Baidu for OCR processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only after explicit user agreement that the selected document or URL may be sent to Baidu, and avoid confidential, regulated, or internal documents unless that data flow is approved.
+
+Risk: Baidu API credentials are required and the artifact documents both environment variables and plaintext agent configuration as setup options.
+
+Mitigation: Prefer environment variables or a managed secret store, and avoid storing API keys or secret keys in plaintext agent configuration files.
+
+Risk: The client can automatically download Markdown and parse-result URLs returned by the OCR service.
+
+Mitigation: Consider disabling automatic result downloads or validating returned URLs against expected Baidu domains before retrieval.
+
+## Reference(s):
+
+- [API Parameters Reference](artifact/references/parameters.md)
+- [Error Codes Reference](artifact/references/error_codes.md)
+- [API Key Configuration Guide](artifact/references/apikey-fetch.md)
+- [Baidu Unlimited-OCR Official API Documentation](https://cloud.baidu.com/doc/OCR/s/fmr1p39gb)
+- [Baidu OCR Free Test Resources](https://cloud.baidu.com/doc/OCR/s/fk3h7xu7h)
+- [Baidu OCR Pricing](https://cloud.baidu.com/doc/OCR/s/Fls06fa15)
+- [Baidu AI Console](https://console.bce.baidu.com/ai/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and JSON returned from Baidu OCR APIs, with command-line usage and configuration guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses asynchronous task submission and polling; Markdown and parse-result URLs returned by the service are documented as valid for 30 days.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

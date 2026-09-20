@@ -4,6 +4,55 @@ All notable changes to this skill. Format based on
 [Keep a Changelog](https://keepachangelog.com/); this project uses semantic
 versioning.
 
+## [2.2.1] — 2026-09-19
+
+### Fixed
+
+- **Display name restored to "Polymarket Agent".** The 2.2.0 publish ran from
+  a working directory named `work` without `--name`, so the registry took the
+  folder name and the listing read "Work". No content change; versions are
+  immutable, so correcting it needed a patch release.
+
+## [2.2.0] — 2026-09-18
+
+Self-review after the 2.1.3 publish, looking specifically for controls that
+exist but can be reached around. Both findings are of that shape: the guard
+was real, and a sibling code path walked past it. Minor, not patch, because
+one key that used to be writable no longer is.
+
+### Fixed
+
+- **Autonomy is now gated on the field, not on one command.** `poly auto`
+  required an explicit acknowledgement flag, clamped the validity window to
+  24h and journalled the decision — and the same two settings were reachable
+  through the generic `poly config` setter, which walked past all three. They
+  now live in `config.LOCKED_KEYS`: still readable and still listed, writable
+  only through `poly auto`. This is the gap ClawHub's own scan described as
+  the implementation not fully enforcing the documented acknowledgement and
+  expiry boundary. Regression test:
+  `tests/test_guardrails.py::AutonomyConfigBypassTest`.
+
+- **Text from the Polymarket API is neutralised at the parse boundary.**
+  Market titles, outcome names and trader nicknames are written by other
+  users, and reach three places that read text as instructions: the terminal,
+  the `openclaw cron` alert and the agent's context. `cli.safe()` covered
+  terminal markup only, which is a rendering concern. New `http.clean_text`
+  strips control characters and line breaks and caps length in
+  `parse_trade`/`parse_market`, so no consumer has to remember to. It is not
+  a detector — wording gets around those; it removes the structure needed to
+  impersonate the frame around the text. The defence that actually holds is
+  unchanged: the money path is deterministic.
+
+- **Event links can no longer be forged.** `WhaleTrade.url` pasted the API's
+  slug straight into a polymarket.com address, so a crafted slug produced a
+  link that reads as polymarket.com and resolves elsewhere — on a phone
+  notification the prefix is all that is visible. `http.clean_slug` restricts
+  it to RFC 3986's unreserved set. Regression tests:
+  `tests/test_whales.py::UntrustedApiTextTest`.
+
+Full technical detail for each item, including the exact pre-fix behaviour,
+is in the commit history rather than here.
+
 ## [2.1.2] — 2026-07-20
 
 Response to ClawHub's SkillSpector scan on the 2.1.0/2.1.1 publish. Full
@@ -17,7 +66,7 @@ the next pass — see the two sub-entries below.
   (SkillSpector finding E2, High severity, 0.93 confidence — this pushed the
   score from 49 to 59 and the recommendation to `DO_NOT_INSTALL` on the
   interim scan). The legacy env var was checked BEFORE the encrypted
-  keystore and activated on its mere presence, with no warning at the point
+  keystore and activated on its mere presence, silently at the point
   of use — so a leftover `POLYMARKET_KEY` from testing could silently
   override a properly configured keystore, and env vars are readable by
   child processes, `/proc/<pid>/environ`, crash dumps and CI logs. Fixed in
@@ -150,14 +199,16 @@ Complete security rewrite addressing all 28 findings from the ClawHub audit of
   0600 via `os.open` — no window in which the file exists with loose
   permissions. `LoadedKey.__repr__`/`__str__` are overridden so the key cannot
   leak into a traceback.
-- **Zero subprocesses.** 1.0.2 spawned six, one with `shell=True`. Dependency
+- **No external process is spawned.** 1.0.2 spawned six, one of them through a
+  shell. Dependency
   checks now use `importlib.util.find_spec` in-process; configuration is local
   JSON read with the stdlib.
 - **Output injection closed.** All externally-sourced text is markup-escaped
   before terminal rendering, so a `[/]` in a market title cannot forge output.
 - **`requests` pinned to >= 2.32.4** (CVE-2024-35195, CVE-2024-47081), and all
-  sessions set `trust_env=False` so host `.netrc`/proxy settings cannot inject
-  credentials — closing the CVE-2024-47081 vector by construction.
+  sessions set `trust_env=False` so the host's credentials file and proxy
+  settings cannot inject credentials — closing the CVE-2024-47081 vector by
+  construction.
 - **`web3` removed entirely.** It carried CVE-2026-40072 (SSRF via CCIP Read)
   and no line of code used it. `questionary` dropped too (stdlib `getpass`
   instead), and `typer[all]` narrowed to `typer`.

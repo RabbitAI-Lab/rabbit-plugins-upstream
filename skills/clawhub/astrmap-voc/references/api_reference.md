@@ -371,40 +371,27 @@ Content-Type: application/json
 
 ---
 
-### 4.4 桌面客户端下载配置
+### 4.4 浏览器扩展下载配置
 
 **端点**: `GET /download-config.json`
 
-这是一个公开的配置文件（无需 API Key 认证），用于获取桌面客户端的下载链接。
+这是一个公开的配置文件（无需 API Key 认证），用于获取浏览器扩展的下载链接。
+注：网站已不再提供桌面客户端下载，`downloads` 中现仅有 `extension` 一项。
 
 **响应**:
 ```json
 {
-  "version": "1.0.0",
-  "last_updated": "2026-04-27T14:31:08.795719Z",
+  "version": "1.5.1",
+  "last_updated": "2026-09-19T00:00:00Z",
   "downloads": {
-    "macos": {
-      "name_zh": "macOS 版",
-      "name_en": "macOS Version",
+    "extension": {
+      "name_zh": "Chrome 扩展",
+      "name_en": "Chrome Extension",
       "url": "<实际下载地址>",
-      "version": "1.0.0",
-      "size": "156MB",
+      "version": "0.6.11",
+      "size": "150.8 KB",
       "requirements": {
-        "min_version": "10.15",
-        "recommended_memory": "8GB",
-        "disk_space": "500MB"
-      }
-    },
-    "windows": {
-      "name_zh": "Windows 版",
-      "name_en": "Windows Version",
-      "url": "<实际下载地址>",
-      "version": "1.0.0",
-      "size": "142MB",
-      "requirements": {
-        "min_version": "10",
-        "recommended_memory": "8GB",
-        "disk_space": "500MB"
+        "min_chrome_version": "88"
       }
     }
   }
@@ -1181,12 +1168,12 @@ else:
 
 创建任务前，需确保满足以下条件：
 
-1. AstrMap 桌面客户端已登录
-2. 桌面客户端已登录亚马逊买家账号（勿使用正在做业务的卖家账号）
+1. 采集通道在线（Chrome 扩展已安装并连接）
+2. 已在浏览器中登录亚马逊买家账号（勿使用正在做业务的卖家账号）
 3. 确保亚马逊访问畅通
 
 ### 错误处理建议
-1. 端点不在线（`is_alive: false` 或 msg 含"设备"）：检查桌面客户端是否登录
+1. 端点不在线（`is_alive: false` 或 msg 含“设备”）：提示用户安装并登录浏览器扩展
 2. 积分不足（msg 含"积分"）：提示用户充值积分
 3. API Key 无效（HTTP 400 + msg 含"API Key"）：检查 API Key 是否正确
 4. 写操作被拒（msg 含"只读"）：只读 Key 不能创建任务/触发分析/增量/重命名

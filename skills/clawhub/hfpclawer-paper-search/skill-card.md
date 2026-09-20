@@ -1,38 +1,60 @@
-## Description: <br>
-Discover, download, and organize academic papers from arXiv, HuggingFace Papers, and OpenReview, including multi-source search, deduplication, PDF download, Markdown conversion, and optional wiki sync. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discover, download, and organize academic papers from arXiv, HuggingFace Papers, and OpenReview with multi-source search, deduplication, PDF download, Markdown conversion, and optional wiki sync.
 
-## Publisher: <br>
-[diamond2nv](https://clawhub.ai/user/diamond2nv) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[diamond2nv](https://clawhub.ai/user/diamond2nv)
 
-## Use Case: <br>
-Researchers and research developers use this skill to monitor new academic papers, configure topic searches, download matching PDFs, convert them to Markdown, and optionally sync paper notes into a wiki. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Running the full pipeline can download papers, consume disk space, and write local files including optional wiki output. <br>
-Mitigation: Install in a dedicated project or virtual environment, review config.yaml before running, and start with --dry-run or step-by-step commands. <br>
+## Use Case:
 
+Researchers and developers use this skill to monitor research topics, discover new papers across multiple sources, download PDFs, convert papers to Markdown, and optionally sync results into a wiki or local paper workflow.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/diamond2nv/hfpclawer-paper-search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and YAML configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance may lead an agent to create local configuration, SQLite data, downloaded PDFs, converted Markdown, and optional wiki files through the hfpclawer CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.0 (source: server release metadata; artifact frontmatter lists 1.0.0) <br>
+Risk: The skill can access research configs, local paper stores, optional Zotero data, and external paper APIs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when those accesses are intended, review config paths before wiki sync or profile-based recommendations, and keep private identifiers in local ignored configuration.
+
+Risk: Unpinned uvx or pip installs can change package contents over time.
+
+Mitigation: Prefer pinned package versions or trusted lockfiles before relying on the skill in repeatable workflows.
+
+Risk: MCP and monitor modes expose tool functions to an agent when started.
+
+Mitigation: Start MCP or monitor modes only for sessions where those capabilities are expected and appropriate.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/diamond2nv/skills/hfpclawer-paper-search)
+- [Project homepage](https://github.com/diamond2nv/hfpapers-crawler)
+- [PyPI package](https://pypi.org/project/hfpclawer/)
+- [Publisher profile](https://clawhub.ai/user/diamond2nv)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce or organize local paper metadata, PDFs, Markdown conversions, wiki-ready files, audit records, and optional MCP tool guidance.]
+
+## Skill Version(s):
+
+0.19.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

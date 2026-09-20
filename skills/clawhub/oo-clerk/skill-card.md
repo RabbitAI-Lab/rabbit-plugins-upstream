@@ -1,42 +1,56 @@
-## Description: <br>
-Clerk lets an agent manage Clerk users through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Clerk enables agents to inspect and run Clerk account actions through the OOMOL-connected oo CLI for reading, creating, updating, and deleting Clerk data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect, create, update, lock, ban, unban, or delete Clerk users through an OOMOL-connected Clerk account. It is suited for Clerk account administration workflows where the agent should fetch live action schemas before running commands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact Clerk account changes, including deletes, bans, locks, and metadata updates. <br>
-Mitigation: Confirm the exact target, payload, and intended effect with the user before write or destructive actions. <br>
-Risk: The skill depends on an OOMOL-connected Clerk account and first-time setup may require installing the oo CLI. <br>
-Mitigation: Use the existing signed-in OOMOL connection when available, avoid handling raw Clerk tokens, and verify the oo CLI installer source before setup. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Clerk users through an OOMOL-connected account, including read actions, user creation, profile updates, locks, bans, and deletion with confirmation for state-changing actions.
 
-## Reference(s): <br>
-- [Clerk skill on ClawHub](https://clawhub.ai/oomol/oo-clerk) <br>
-- [Clerk homepage](https://clerk.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands call the oo CLI and may return JSON data with an execution id.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server evidence release.version and skill metadata) <br>
+Risk: Remote installer commands for the oo CLI can execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the install path, prefer a verified package or documented release with integrity checks, and avoid running installer commands without user approval.
+
+Risk: The skill can perform write or destructive Clerk user-management actions.
+
+Mitigation: Require explicit user confirmation of the target, payload, and expected effect before banning, locking, updating, or deleting users.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-clerk)
+- [Clerk homepage](https://clerk.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing Clerk action payloads.]
+
+## Skill Version(s):
+
+1.0.5 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -6,7 +6,72 @@ description: |
 
 # VoD (Voice of Developer) Collector Skill
 
-> **Script execution**: All scripts are located in `<SKILL_DIR>/scripts/`. You **must** use `skill action=exec` to execute them. Do not run them directly in a shell. `<SKILL_DIR>` = directory containing this SKILL.md. `.vod/` is relative to CWD (project working directory).
+> **Script execution**: All scripts are located in `<SKILL_DIR>/scripts/`. You **must** use `skill action=exec` to execute them. Do not run them directly in a shell.
+> `<SKILL_DIR>` = directory containing this SKILL.md.
+> `.vod/` is relative to CWD (project working directory).
+
+---
+
+## Overview
+
+The VoD (Voice of Developer) Collector captures poor developer experiences and issues encountered while using Huawei Cloud tools or services.
+It prepares high-quality requirements or issue reports (GitCode issues) for product and engineering teams.
+The skill is declarative: it collects feedback with scripts and a hooks-based capture pipeline, deduplicates, sanitizes, and delivers prioritized issues to a GitCode repository.
+
+**Dependency**: Quality telemetry is collected automatically via `skill-quality-cli` (installed by `scripts/ensure_cli.sh` if absent).
+
+## Core Commands
+
+Common CLI examples grouped by function (all scripts under `<SKILL_DIR>/scripts/`):
+
+- Capture
+
+```bash
+skill-quality-cli run --skill-name huawei-cloud-vod-collector -- python <SKILL_DIR>/scripts/md_io.py write-feedback --output .vod/feedbacks/
+skill-quality-cli run --skill-name huawei-cloud-vod-collector -- python <SKILL_DIR>/scripts/vod_sanitize.py file --path <file>
+```
+
+- Extract / Edit (use `write-feedback` to update fields or edit feedback files directly)
+
+- Deliver
+
+```bash
+skill-quality-cli run --skill-name huawei-cloud-vod-collector -- python <SKILL_DIR>/scripts/vod_deliver.py deliver --feedback-id <id> --feedbacks-dir .vod/feedbacks
+skill-quality-cli run --skill-name huawei-cloud-vod-collector -- python <SKILL_DIR>/scripts/vod_deliver.py update-status --feedback-id <id> --status delivered --feedbacks-dir .vod/feedbacks
+```
+
+- Auto-login (only when `deliver` returns `need_login`)
+
+```bash
+skill-quality-cli run --skill-name huawei-cloud-vod-collector -- bash <SKILL_DIR>/scripts/vod_install.sh
+skill-quality-cli run --skill-name huawei-cloud-vod-collector -- python <SKILL_DIR>/scripts/vod_deliver.py server-start
+skill-quality-cli run --skill-name huawei-cloud-vod-collector -- curl -s -X POST http://localhost:8080/login/start
+skill-quality-cli run --skill-name huawei-cloud-vod-collector -- python <SKILL_DIR>/scripts/vod_deliver.py login-wait --session-id <session_id>
+skill-quality-cli run --skill-name huawei-cloud-vod-collector -- python <SKILL_DIR>/scripts/vod_deliver.py server-stop --pid <pid>
+```
+
+## Parameter Confirmation
+
+The following parameters can be configured by users or integrators:
+
+- `--feedbacks-dir`: Path for storing feedbacks, default is `.vod/feedbacks/`.
+- `--atomgit-home` / `ATOMCODE_HOME`: AtomGit-GO configuration directory, default `~/.atomcode`.
+- `delivery.channels.gitcode.repo_url`: Target repository URL — read only from `assets/config.yaml`.
+- `capture.dedup_window_sec`: In-session deduplication window in seconds.
+- `storage.max_feedbacks_per_session`: Maximum stored feedbacks per session (default 5).
+- Logging/Debug: Optional flags inside scripts to enable additional logging or debug modes.
+
+Before delivery or auto-login, ensure the `repo_url` is provided via `assets/config.yaml` and is not inferred from `git remote`.
+
+## References
+
+See additional implementation details and integration guides in the repository:
+
+- [references/hooks-setup.md](references/hooks-setup.md)
+- [references/openclaw-integration.md](references/openclaw-integration.md)
+- [assets/VOD_FEEDBACKS.md](assets/VOD_FEEDBACKS.md)
+- [assets/VOD_ISSUE.md](assets/VOD_ISSUE.md)
+- [references/acceptance-criteria.md](references/acceptance-criteria.md)
 
 ---
 
@@ -21,6 +86,11 @@ pip install -r <SKILL_DIR>/requirements.txt
 ```
 
 ---
+- **`skill-quality-cli`** — ensured by `bash scripts/ensure_cli.sh` (idempotent, skips if present)
+  - Upgrade: run `skill-quality-cli upgrade` manually (no auto-upgrade)
+  - Disable telemetry report: set `SKILL_QUALITY_REPORT=0`
+
+> **⚠️ Mandatory: every script execution in this skill MUST be wrapped with `skill-quality-cli run --skill-name huawei-cloud-vod-collector -- ` (e.g. `skill-quality-cli run --skill-name huawei-cloud-vod-collector -- python <SKILL_DIR>/scripts/md_io.py write-feedback ...`) — bare invocations of `python` / `md_io.py` / `vod_sanitize.py` / `vod_deliver.py` / `vod_install.*` / `curl` are strictly forbidden. Disable telemetry (opt-out): `SKILL_QUALITY_REPORT=0`.
 
 ## Workflow
 
@@ -30,8 +100,8 @@ Triggered by hooks (tool errors, user rejection, proactive reports). Generates r
 
 #### 1.1 Generate Raw Feedback
 
-- **Write the feedback file** — `python <SKILL_DIR>/scripts/md_io.py write-feedback --output .vod/feedbacks/` (see `--help` for all params)  
-- **Sanitize** — secrets are redacted automatically by `write-feedback`. To manually sanitize an existing file: `python <SKILL_DIR>/scripts/vod_sanitize.py file --path <file>`
+- **Write the feedback file** — `skill-quality-cli run --skill-name huawei-cloud-vod-collector -- python <SKILL_DIR>/scripts/md_io.py write-feedback --output .vod/feedbacks/` (see `--help` for all params)  
+- **Sanitize** — secrets are redacted automatically by `write-feedback`. To manually sanitize an existing file: `skill-quality-cli run --skill-name huawei-cloud-vod-collector -- python <SKILL_DIR>/scripts/vod_sanitize.py file --path <file>`
 
 #### 1.2 Deduplication
 
@@ -41,6 +111,8 @@ Triggered by hooks (tool errors, user rejection, proactive reports). Generates r
 ---
 
 ### Phase 2: Extract
+
+> **Note:** This phase is executed by the Agent (LLM) directly — there is no independent extraction script. The Agent enriches the feedback file using `write-feedback` to update fields.
 
 Enrich feedback with context using LLM, then write all fields directly into the feedback file.
 
@@ -62,59 +134,54 @@ Use `write-feedback` again to update fields, or edit the markdown file directly.
 
 #### 3.1 Sync to GitCode Issue
 
-> ⚠️ `repo_url` comes **only** from `assets/config.yaml.template` → `delivery.channels.gitcode.repo_url`. Never use `git remote`, never ask the user.
+> ⚠️ `repo_url` comes **only** from `assets/config.yaml` → `delivery.channels.gitcode.repo_url`. Never use `git remote`, never ask the user.
 
 **Single delivery** — submit one feedback as a GitCode Issue:
 
 ```bash
-python <SKILL_DIR>/scripts/vod_deliver.py deliver \
+skill-quality-cli run --skill-name huawei-cloud-vod-collector -- python <SKILL_DIR>/scripts/vod_deliver.py deliver \
   --feedback-id <id> \
-  --feedbacks-dir .vod/feedbacks
-```
-
-**Batch notification** — scan undelivered feedbacks and submit as a single merged issue:
-
-```bash
-python <SKILL_DIR>/scripts/vod_deliver.py notify \
   --feedbacks-dir .vod/feedbacks
 ```
 
 **Update status** — mark a feedback as delivered (or other status):
 
 ```bash
-python <SKILL_DIR>/scripts/vod_deliver.py update-status \
+skill-quality-cli run --skill-name huawei-cloud-vod-collector -- python <SKILL_DIR>/scripts/vod_deliver.py update-status \
   --feedback-id <id> --status delivered --feedbacks-dir .vod/feedbacks
 ```
 
 ---
 
-**Auto-login** — when `deliver` or `notify` returns `"need_login": true`, perform the following:
+**Auto-login** — when `deliver` returns `"need_login": true`, perform the following:
 
 **CRITICAL: Before installation, MUST tell the user:**
+
 - This login uses the open-source project **AtomGit-GO** (MIT license).
 - Source: https://gitcode.com/weixin_45218422/AtomGit-GO
 
-1. **Check & install**: Execute `bash <SKILL_DIR>/scripts/vod_install.sh` (Linux/macOS) or `powershell <SKILL_DIR>/scripts/vod_install.ps1` (Windows).  
+1. **Check & install**: Execute `skill-quality-cli run --skill-name huawei-cloud-vod-collector -- bash <SKILL_DIR>/scripts/vod_install.sh` (Linux/macOS) or `skill-quality-cli run --skill-name huawei-cloud-vod-collector -- powershell <SKILL_DIR>/scripts/vod_install.ps1` (Windows).  
 
-2. **Start server**: `python <SKILL_DIR>/scripts/vod_deliver.py server-start` → get `pid` from JSON output
+2. **Start server**: `skill-quality-cli run --skill-name huawei-cloud-vod-collector -- python <SKILL_DIR>/scripts/vod_deliver.py server-start` → get `pid` from JSON output
 
-3. **Initiate QR login**: `curl -s -X POST http://localhost:8080/login/start` → get `login_url`, `qr_code`, `session_id` from JSON
+3. **Initiate QR login**: `skill-quality-cli run --skill-name huawei-cloud-vod-collector -- curl -s -X POST http://localhost:8080/login/start` → get `login_url`, `qr_code`, `session_id` from JSON
 
 4. **Show QR to user**: Display the `login_url` and ASCII `qr_code`. Say: "🔐 First-time login requires AtomGit authorization. Scan the QR code or open the URL in your browser."
 
-5. **Wait for authorization**: `python <SKILL_DIR>/scripts/vod_deliver.py login-wait --session-id <session_id>` — blocks until scanned (up to 60s). Do NOT ask the user whether they scanned; just wait.
+5. **Wait for authorization**: `skill-quality-cli run --skill-name huawei-cloud-vod-collector -- python <SKILL_DIR>/scripts/vod_deliver.py login-wait --session-id <session_id>` — blocks until scanned (up to 60s). Do NOT ask the user whether they scanned; just wait.
 
 6. On `SCAN_SUCCESS`, proceed to step 7.
 
    **CRITICAL: After successful authorization, MUST output the Security Notice:**
 
-   - **Security Notice:** After authorization, the access token **will be saved** to `~/.atomcode/auth.toml` (owner-readable only, mode 0600). Anyone with file access can impersonate you — do not share this file.
+   - **Security Notice:** After authorization, the access token **will be saved** to `~/.atomcode/auth.toml` (owner-readable only, mode 0600).
+     Anyone with file access can impersonate you — do not share this file.
    - **Note:** Stored only in the local AI Shell environment. It will not be uploaded to any external server.
    - **Deletion:** Manually delete the file, or it will be cleaned up when the environment resources are reclaimed.
 
-7. **Stop server**: `python <SKILL_DIR>/scripts/vod_deliver.py server-stop --pid <pid>`
+7. **Stop server**: `skill-quality-cli run --skill-name huawei-cloud-vod-collector -- python <SKILL_DIR>/scripts/vod_deliver.py server-stop --pid <pid>`
 
-8. **Re-run** the original `deliver` or `notify` command.
+8. **Re-run** the original `deliver` command.
 
 ---
 
@@ -126,6 +193,7 @@ python <SKILL_DIR>/scripts/vod_deliver.py update-status \
 - **Session limit**: Max `storage.max_feedbacks_per_session` (default 5). Exceeded → inform user.
 - **Updates**: In-place only. ID immutable. State machine: `open → promoted → resolved` or `open → discarded`.
 - **Auto-init**: `.vod/` created on first use. Never overwritten.
+- **Quality telemetry (mandatory)**: every script/command execution is wrapped with `skill-quality-cli run --skill-name huawei-cloud-vod-collector --`; disable via `SKILL_QUALITY_REPORT=0` (opt-out).
 
 ---
 
@@ -139,7 +207,7 @@ python <SKILL_DIR>/scripts/vod_deliver.py update-status \
 ## CLI Reference
 
 | Parameter | Description |
-|-----------|-------------|
+| ----------- | ------------- |
 | `--atomgit-home <path>` | AtomGit-GO config dir (default: `~/.atomcode` or `$ATOMCODE_HOME`) |
 | `--feedback-id <id>` | Feedback ID to deliver/update |
 | `--feedbacks-dir <path>` | Path to `.vod/feedbacks/` |
@@ -147,6 +215,8 @@ python <SKILL_DIR>/scripts/vod_deliver.py update-status \
 ### Token Configuration
 
 - Token from open-source [AtomGit-GO](https://gitcode.com/weixin_45218422/AtomGit-GO), saved **in plaintext** to `~/.atomcode/auth.toml` (mode `0600`)
+- **Security Note:** GitCode API v5 requires `access_token` as a URL query parameter.
+  The token may appear in proxy/load-balancer/server logs. Error responses are redacted, but normal request URLs are not. This is a GitCode API limitation.
 - Override: `--atomgit-home <path>`
 - Missing/expired → script returns `"need_login": true` → follow Phase 3.1 auto-login
 - **Never** write token to any file outside `~/.atomcode/auth.toml`

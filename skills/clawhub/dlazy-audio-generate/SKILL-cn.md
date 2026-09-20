@@ -1,13 +1,15 @@
 ---
 name: dlazy-audio-generate
 version: 1.3.7
-description: 音频生成技能。根据提示词自动选择最佳的 dlazy CLI 音频/TTS 模型。
-metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，请自动选择对应的 dlazy 子命令执行。"}}
+description: "音频生成技能。根据提示词自动选择最佳的 dlazy CLI 音频/TTS 模型。"
+metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazy-ai/cli","source":"https://github.com/dlazy-ai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，请自动选择对应的 dlazy 子命令执行。"}}
 ---
 
-# dlazy-audio-generate
+# 音频生成 Audio Generate
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
+
+
 
 
 
@@ -56,7 +58,7 @@ CLI 会把 key 保存在你的用户配置目录（macOS/Linux 上为 `~/.dlazy/
 
 ## 关于与来源 (Provenance)
 
-- **CLI 源代码**: [github.com/dlazyai/cli](https://github.com/dlazyai/cli)
+- **CLI 源代码**: [github.com/dlazy-ai/cli](https://github.com/dlazy-ai/cli)
 - **维护者**: dlazyai
 - **npm 包名**: `@dlazy/cli`（本技能 install 字段固定到 `1.2.3` 版本）
 - **官网**: [dlazy.com](https://dlazy.com)
@@ -101,7 +103,7 @@ dlazy seedream-4.5 --prompt "雪地里的红狐" \
 
 # 文生图 + TTS 配音（拿第一个 output 的 url 作为画面）
 dlazy seedream-4.5 --prompt "黎明的灯塔" \
-  | dlazy keling-tts --text "欢迎来到海岸。" --image @0.url
+  | dlazy qwen-tts --text "欢迎来到海岸。" --image @0.url
 
 # 批量分发：把上游所有 output 的 url 一次性传给批处理步骤
 dlazy seedream-4.5 --prompt "城市天际线" --n 4 \
@@ -122,15 +124,8 @@ dlazy seedream-4.5 --prompt "城市天际线" --n 4 \
 - `dlazy elevenlabs-search`: 搜索 ElevenLabs 人声库：按关键词、来源、分类筛选可用音色，返回每个音色的试听样本，便于挑选后用于 TTS 配音。只给一个英文描述词检索（如 deep / young / narrative）；多给词只会收窄结果，整句通常一个都搜不到。
 - `dlazy elevenlabs-sfx`: ElevenLabs 文本生音效模型，根据描述生成 1–22 秒短音效。适合拟音、环境声、提示音与游戏音效。
 - `dlazy elevenlabs-tts`: ElevenLabs eleven_v3 文本转语音，提供 12 种精选英文/多语种音色，支持稳定性、相似度、风格控制。适合配音、有声内容与角色对话。选择音色前，可以从 elevenlabs-search 检索合适的音色。
-- `dlazy elevenlabs-voice-clone`: ElevenLabs 即时音色克隆（IVC），上传一段干净人声样本即可复刻自定义音色，可用于 ElevenLabs TTS 配音。
-- `dlazy gemini-2.5-tts`: 基于 Gemini 的高质量文本转语音。支持双语（中/英）和多种情感音色。
-- `dlazy keling-sfx`: 音效生成模型：可文本生音效，也可对参考视频生成配套音效/配乐。适合拟音、环境声与短视频声音补全。
-- `dlazy keling-tts`: 文本转语音模型（TTS），可设置语言、音色、语速与输出格式。适合配音旁白、有声内容和语音播报。
-- `dlazy kling-audio-clone`: 自定义音色（可灵），复刻音色用于生成配音或与主体绑定
-- `dlazy qwen-audio-clone`: 阿里云百炼 qwen3-tts 声音复刻，上传一段干净人声样本即可复刻自定义音色，可在后续 TTS 中使用。
 - `dlazy qwen-tts`: 阿里云百炼 qwen3-tts 文本转语音，支持系统音色（含方言）或通过自然语言描述自定义新音色（声音设计）。
 - `dlazy suno-music`: Suno V5.5 音乐生成模型。支持灵感模式（自动作词）和自定义模式（手动填曲风/标题/歌词），可生成包含人声或纯器乐的音乐，并通过风格权重、怪异度、音频权重细调输出。
-- `dlazy vidu-audio-clone`: 复刻真人音色，并使用该音色朗读指定文本。
 
 > **智能体关键指令**:
 >

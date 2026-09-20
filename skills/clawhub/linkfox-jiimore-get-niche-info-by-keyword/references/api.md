@@ -4,7 +4,7 @@
 
 - **请求地址**：`${LINKFOX_TOOL_GATEWAY}/jiimore/getNicheInfoByKeyword`
 - **请求方式**：POST，Content-Type: application/json
-- **认证方式**：Header `Authorization: <api_key>`，api_key 从环境变量 `LINKFOX_AGENT_API_KEY` 或 `LINKFOXAGENT_API_KEY` 读取（如未配置 按 SKILL.md 的 **## 解决认证和积分问题** 处理）
+- **认证方式**：Header `Authorization: <api_key>`，api_key 从环境变量 `LINKFOX_AGENT_API_KEY` 或 `LINKFOXAGENT_API_KEY` 读取（如未配置 按 SKILL.md 的 **## 解决认证和算力问题** 处理）
 
 ## 请求参数
 
@@ -175,7 +175,7 @@ POST Body（JSON）：
 | returnRateAnnual | number | 退货率（全年数据） |
 | acos | number | （ACOS）广告销售成本比 |
 | profitMarginGt50PctSkuRatio | number | 利润率大于50%的商品比例 |
-| breakEvenRatio | number | 盈亏平衡比率 |
+| breakEvenRatio | number | 盈亏平衡自然占比 |
 | cpc | object | CPC数据：`{ high（最高价）, medium（中间价）, low（最低价） }` |
 | categorieList | array | 商品品类列表 |
 | referenceAsinImageUrl | string | 细分市场参考图片地址 |
@@ -187,8 +187,8 @@ POST Body（JSON）：
 | errcode | 含义 | 处理建议 |
 |---------|------|----------|
 | 200 | 成功 | 正常解析业务字段 |
-| 401 | 认证失败 | HTTP 401 或 authorized error：按 SKILL.md 的 **## 解决认证和积分问题** 处理。|
-| 402 | 积分不足 | HTTP 402：按 SKILL.md 的 **## 解决认证和积分问题** 处理。|
+| 401 | 认证失败 | HTTP 401 或 authorized error：按 SKILL.md 的 **## 解决认证和算力问题** 处理。|
+| 402 | 算力不足 | HTTP 402：按 SKILL.md 的 **## 解决认证和算力问题** 处理。|
 | 其他非200值 | 业务异常 | 参考 `errmsg` 字段获取具体错误原因 |
 
 错误响应示例：

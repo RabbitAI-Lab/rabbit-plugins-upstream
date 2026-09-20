@@ -1,46 +1,60 @@
-## Description: <br>
-Operates Cohere through an OOMOL-connected account using the oo CLI for chat, embeddings, and document reranking. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cohere (cohere.com). Use this skill for ANY Cohere request -- reading, creating, and updating data. Whenever a task involves Cohere, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to send Cohere chat, embedding, and reranking requests through an OOMOL-connected account without handling raw Cohere credentials directly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and documents sent to chat, embed, or rerank are transmitted to external services. <br>
-Mitigation: Review user data before execution and avoid sending sensitive content unless the connected Cohere and OOMOL accounts are approved for that data. <br>
-Risk: First-time setup may require installing or authenticating the oo CLI. <br>
-Mitigation: Review the oo CLI installer before running setup and only install it when the user intends to use OOMOL with a connected Cohere account. <br>
-Risk: Connector actions depend on the current live schema and account connection state. <br>
-Mitigation: Inspect the connector schema before constructing payloads and use first-time setup steps only after matching authentication, connection, or billing errors. <br>
+## Use Case:
 
+Developers and agent users use this skill to operate Cohere through an OOMOL-connected account for chat generation, text embeddings, and document reranking.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-cohere) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Cohere homepage](https://cohere.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples; connector responses are JSON] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the live connector schema before constructing action payloads] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release and skill metadata) <br>
+Risk: The setup path includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review OOMOL's oo CLI installer source or use a safer verified installation method before installing.
+
+Risk: Prompts, documents, or text may be sent through the OOMOL/Cohere connector.
+
+Mitigation: Run the skill only when the user intends to send that content to the connected Cohere service.
+
+Risk: The embed_texts action is marked as write behavior in the artifact.
+
+Mitigation: Confirm action payloads marked as write before execution.
+
+## Reference(s):
+
+- [Cohere homepage](https://cohere.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-cohere)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Guidance, Configuration instructions]
+
+**Output Format:** [Markdown instructions with bash or PowerShell command examples and JSON response guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Action payloads should be built from the live connector schema; actions tagged as write require user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

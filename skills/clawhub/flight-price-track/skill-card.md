@@ -1,40 +1,58 @@
-## Description: <br>
-机票降价监控与多平台比价助手，搜索多平台实时价格对比，支持航线搜索、指定航班精确比价、低价日历、降价监控，帮你把握最佳购票时机。暑期机票价格监控。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents compare real-time flight prices across travel platforms, assess fare levels, scan flexible dates, and prepare price-watch requests.
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-Travelers and travel-planning agents use this skill to search flight routes, compare real-time prices across multiple booking sources, identify cheaper travel dates, and prepare price-watch requests for later follow-up. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Flight search details such as city pairs, dates, and optional target prices are sent to external proxy services. <br>
-Mitigation: Install only when that data flow is acceptable, and avoid using unrelated personal or corporate secrets for PROXY_TOKEN. <br>
-Risk: Same-price booking results may place commission-linked sources first, and prices can change after the skill reports them. <br>
-Mitigation: Review all returned platform options and confirm final price and booking terms on the destination booking page before purchase. <br>
+## Use Case:
 
+External travel users and agents use this skill to search flight options, compare fares across platforms, identify lower-price travel dates, and set up target-price monitoring workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/flight-price-track) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, guidance] <br>
-**Output Format:** [JSON results and concise agent guidance with optional shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include flight search results, platform price comparisons, low-price calendar summaries, and structured price-watch requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.3 (source: server release evidence) <br>
+Risk: A shared proxy token is embedded in the artifact.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Remove and rotate the token before release, and load credentials from the declared PROXY_TOKEN environment variable or a managed secret store.
+
+Risk: Monitoring output can include a shell command string.
+
+Mitigation: Treat check_command as untrusted data; pass structured monitoring arguments to the host scheduler and avoid shell execution.
+
+Risk: The skill sends flight query parameters to external proxy endpoints.
+
+Mitigation: Review the endpoints before installation, document the data flow for users, and limit outbound network access to approved services.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/flight-price-track)
+- [Publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, guidance]
+
+**Output Format:** [JSON from the helper script with concise Markdown guidance from the agent]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search, comparison, calendar, and monitoring outputs may include route/date inputs, fare analysis, booking URLs, and monitor task details.]
+
+## Skill Version(s):
+
+2.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

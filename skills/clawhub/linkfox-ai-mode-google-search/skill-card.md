@@ -1,45 +1,63 @@
-## Description: <br>
-Google-AI Mode Search lets agents query Google AI Mode for a single keyword and return the AI Overview as Markdown with source links for research and web-summary tasks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google-AI Mode 搜索 retrieves a Google AI Overview / AI Mode result for one keyword and returns the captured answer as Markdown with source links for live web research.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Developers, researchers, and commerce analysts use this skill to ask one Google AI Mode search question and summarize the returned AI Overview for market research, technical Q&A, product exploration, and consumer preference analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search prompts and related metadata are sent to the service provider. <br>
-Mitigation: Avoid confidential, regulated, or secret-bearing queries unless provider terms and data handling have been approved. <br>
-Risk: Full responses and cached results may be saved locally. <br>
-Mitigation: Run the skill only in an appropriate workspace and clean retained response or cache files when prompts or results contain sensitive material. <br>
-Risk: Feedback may be sent automatically when behavior or satisfaction signals are detected. <br>
-Mitigation: Review or disable feedback behavior before using the skill in sensitive workflows. <br>
-Risk: Google AI Overview output is live, variable, and may not be available for every keyword. <br>
-Mitigation: Treat results as time-specific, preserve source links, and tell users when the response reports zero AI Overview blocks. <br>
+## Use Case:
 
+External users, developers, and research agents use this skill to ask one Google AI Mode search question at a time for deep research, technical question answering, long-tail product analysis, and overseas consumer preference research.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/linkfox-ai/skills/linkfox-ai-mode-google-search) <br>
-- [API reference](references/api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, text, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown returned in stdout, with saved JSON response files and concise terminal summaries for large responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Single-keyword requests only; responses may vary because Google AI Mode is fetched live.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: release metadata) <br>
+Risk: Search queries and some agent or session metadata may be sent to LinkFox.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sensitive queries and use the skill only when sharing that information with LinkFox is acceptable.
+
+Risk: Full search responses are retained in local response files.
+
+Mitigation: Review and clear saved response files according to the user's local data-retention policy.
+
+Risk: Onboarding and billing flows may involve phone numbers, SMS codes, API keys, and payment actions.
+
+Mitigation: Use these flows only intentionally, verify billing steps before proceeding, and manage API keys through a secure credential store.
+
+Risk: Search output is live AI Overview text and may be unavailable, change between calls, or be incomplete.
+
+Mitigation: Preserve source links, tell users when no AI Overview is returned, and avoid treating the Markdown as structured data.
+
+## Reference(s):
+
+- [Google AI Search API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-ai-mode-google-search)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, API Calls, Files, Shell commands, Guidance]
+
+**Output Format:** [Markdown answer text and JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Single keyword per call; full API responses are saved locally, with large responses summarized on stdout unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.7 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

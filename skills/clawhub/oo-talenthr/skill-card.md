@@ -1,44 +1,60 @@
-## Description: <br>
-TalentHR (talenthr.io). Use this skill for ANY TalentHR request: searching, reading data, and changing an employee role through the OOMOL TalentHR connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TalentHR connector skill for reading, creating, and updating TalentHR data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees and HR operators use this skill to route TalentHR requests through an OOMOL-connected account, including schema-checked execution of the employee role change action. The skill requires explicit confirmation before state-changing actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The release evidence flags a mismatch between the skill's read/search-oriented description and its role-changing TalentHR action. <br>
-Mitigation: Review before installing and require explicit confirmation of the employee, new role, and business reason before running the role change action. <br>
-Risk: The skill requires sensitive connected-account credentials to operate TalentHR through OOMOL. <br>
-Mitigation: Use only with an intentionally connected OOMOL account and avoid exposing raw credentials in prompts, files, or command output. <br>
+## Use Case:
 
+Employees and operators use this skill to let an agent operate TalentHR through an OOMOL-connected account, including role changes that update TalentHR state. The agent should inspect the live connector schema before building action payloads and confirm write effects with the user.
 
-## Reference(s): <br>
-- [ClawHub TalentHR skill listing](https://clawhub.ai/oomol/oo-talenthr) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [TalentHR homepage](https://www.talenthr.io/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution; state-changing payloads require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The skill can change a TalentHR employee role through a scoped write action.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running role-change commands.
+
+Risk: The first-time setup includes pipe-to-shell installer commands for the oo CLI.
+
+Mitigation: Prefer the official install guide or inspect installer scripts before execution.
+
+Risk: Using the skill gives an agent access through the user's OOMOL-connected TalentHR account.
+
+Mitigation: Install and use it only when the user intends the agent to operate that TalentHR account.
+
+## Reference(s):
+
+- [TalentHR homepage](https://www.talenthr.io/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-talenthr)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline bash code blocks and JSON command payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas and returns connector responses as JSON when actions run.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

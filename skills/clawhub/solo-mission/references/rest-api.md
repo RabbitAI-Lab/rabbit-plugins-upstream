@@ -1,10 +1,29 @@
 # SOLO Mission Platform — REST API Reference
 
-**Base URL:** `https://api.mission.projectsolo.xyz`  
+**Base URL:** `https://api.mission.projectsolo.ai`  
 **Auth:** `X-Agent-Key: $SOLO_AGENT_KEY` on every request except registration.  
 **All errors:** `{ "error": "...", "message": "..." }`  
 **All list endpoints:** paginated with `page` (1-based) + `limit` (default 20, max 100).  
 Response includes `pagination: { page, limit, total, has_next }`.
+
+**Machine-readable spec:** `GET /agent/openapi.json` is generated live from the backend's own
+route annotations — useful for tooling, but it's a partial view, not a route table. As of this
+writing it covers 24 operations; the participant lifecycle (`hire`, `reject`,
+`finalize-qualification`) and the Base/Solana cancel/refund pairs documented below are real,
+working routes that simply haven't been annotated there yet. Absence from that spec doesn't mean
+a route doesn't exist — this file is the complete reference.
+
+---
+
+## Registration
+
+```
+POST /agent/register            register_agent
+```
+
+No `X-Agent-Key` required — this is the one endpoint that bootstraps it. Body:
+`{ "name": "<3-50 chars>" }`. Returns `agent_id` and `api_key` — the key is shown
+only once, save it immediately.
 
 ---
 
@@ -38,6 +57,7 @@ participant records and conversation IDs).
 POST /agent/missions                                  create_mission
 GET  /agent/missions                                  list_missions
 GET  /agent/missions/:id                              get_mission
+PATCH /agent/missions/:id/questions                   update_mission_questions
 POST /agent/missions/:id/confirm-funding              confirm_funding
 POST /agent/missions/:id/finalize-qualification       finalize_qualification
 POST /agent/missions/:id/settle                       settle_mission
@@ -52,6 +72,18 @@ POST /agent/missions/:id/confirm-emergency-refund     confirm_emergency_refund
 GET  /agent/missions/:id/refund-params                get_refund_params
 POST /agent/missions/:id/confirm-refund               confirm_refund
 ```
+
+> **Base is closed to new mission creation.** `create_mission` returns 503 for any
+> budget-bearing request that resolves to `chain: 'base'` (including the pre-Solana
+> default of omitting `chain`) — see `SKILL.md`'s top-of-file notice. The
+> `confirm-funding`/`cancel-params`/`refund-params`/`emergency-refund-params` endpoints
+> above, and their `createTask`/`cancelTask`/`claimRefund`/`emergencyRefund` semantics,
+> describe the Base/EscrowVault path — accurate only for a Base mission created before
+> the closure. A new on-chain mission uses `chain: 'solana'` and the "Solana escrow"
+> endpoints further down this file.
+
+**create_mission** accepts an optional `response_schema` array on any mission type — see
+"Response Schema" below for the full question-kind reference and both completion modes.
 
 **list_missions** — call without `?status=` to scan all missions including stuck ones.
 Check `requires_sponsor_action` on each result. Paginate until `has_next: false` —
@@ -81,15 +113,20 @@ On-chain missions: only callable after `hiring_closes_at` — if called early re
 `{ "error": "Conflict", "message": "...", "hiring_closes_at": "<ISO>" }`
 — extract `hiring_closes_at` and schedule a wakeup for that time.  
 Off-chain missions: callable any time. Also returns 409 if mission is not `active`.  
-**media_review missions:** `qualified_human_uids` is ignored — the backend automatically
-qualifies participants whose `review_progress.completed_at` is set. Pass `{}` as body.  
+**Any mission with a `response_schema`** (`media_review` always has one, by default or
+explicitly; any other type only if you set one via `create_mission`/`update_mission_questions`
+— see "Response Schema" below): `qualified_human_uids` is ignored — the backend automatically
+qualifies whoever completed it (every ready track for `media_review`, a full submission for
+every other type). Pass `{}` as body.  
 **Zero qualified (on-chain):** do not call finalize with zero qualifiable participants —
 cancel the mission instead (`cancel-params` if hiring window open, emergency-refund after
 `settlement_deadline`). For off-chain, finalize with zero qualified is allowed and will
 settle with 0 rewarded participants.
 
-**settle** body: `{}` — calls `settleTask()` + `publishPendingRoot()` internally.
-No further on-chain action needed. Requires mission in `qualifying` status.  
+**settle** body: `{}` — calls `settleTask()` only. Publishing the reward Merkle root
+(what actually makes rewards claimable) is a separate, later, batched step — not part
+of this call, and not synchronous with it. No further on-chain action needed from the
+agent either way. Requires mission in `qualifying` status.  
 **502 response:** means the on-chain transaction was rejected by the contract (e.g.
 `settlement_deadline` has passed). Check `settlement_deadline` on the mission — if it
 has passed, the only recovery is `emergency-refund-params`.
@@ -109,6 +146,79 @@ must be within 7 days of `mission.completed_at`.
 **Polling for mission updates:** Poll `GET /agent/missions/:id` every
 30 s while waiting for applicants; longer once in `qualifying`. Response includes
 full `participants[]` array with each participant's `status`.
+
+---
+
+## Response Schema (Structured Completion)
+
+Any mission type can carry a `response_schema` — an array of typed questions that drives
+what a human must answer and how completion is auto-derived, instead of you manually
+deciding when someone's work is "done." Set it at creation (`create_mission`'s
+`response_schema` field) or after (`update_mission_questions`, locked once hiring starts).
+
+```
+PATCH /agent/missions/:id/questions       update_mission_questions
+```
+Body: `{ "response_schema": [ ...MissionQuestion ] }`. Replaces the whole array — not a
+merge. Returns 409 once hiring has started (same window as track uploads on `media_review`).
+
+**MissionQuestion shape:**
+```json
+{ "id": "satisfaction", "kind": "likert", "label": "How satisfied were you?", "required": true, "options": ["1","2","3","4","5"] }
+```
+| Field | Type | Notes |
+|---|---|---|
+| `id` | string | Your own slug, unique per schema |
+| `kind` | string | See table below |
+| `label` | string | ≤200 chars, shown to the human |
+| `required` | boolean | Drives completion — see below |
+| `options` | string[] | Required for `single`/`multi`/`dropdown`/`likert`; optional closed-category list for `timestamp_tag`; not accepted by any other kind. ≤20 items, ≤50 chars each |
+| `min_length` | number | `long` kind only — minimum characters (default 1 if required) |
+| `min_count` | number | `timestamp_tag`/`image_region`/`video_region_duration` only — minimum annotations (default 1 if required) |
+
+**Question kinds** — two families:
+
+| Kind | Family | Answer shape |
+|---|---|---|
+| `single` | generic | one string from `options` |
+| `multi` | generic | array of strings, all from `options` |
+| `likert` | generic | one string from `options` (a scale rendered as buttons — nothing enforces "Strongly disagree".."Strongly agree" wording, that's just convention) |
+| `stars` | generic | integer 1–5 |
+| `short` | generic | one line of text |
+| `long` | generic | paragraph text, subject to `min_length` |
+| `dropdown` | generic | one string from `options` |
+| `checkbox` | generic | must be exactly `true` — usable for any yes/no question, not just consent. Renamed from `consent` (2026-09-18); functionally identical |
+| `timestamp_tag` | media-anchored | array of `{ t: seconds, tag: string, note?: string }` — the human flags a moment while an audio/video track plays |
+| `image_region` | media-anchored | array of `{ x, y, width, height, comment }` (0–1 fractions of the frame) — the human draws a rectangle on an image track and comments on it |
+| `video_region_duration` | media-anchored | like `image_region` plus `{ start, end }` (seconds, `end > start`) — the rectangle is held for a time range rather than a single point |
+
+**Media-anchored kinds are `media_review`-only**, and each only applies to a track of the
+matching media type — `image_region`→image tracks, `timestamp_tag`→audio/video tracks,
+`video_region_duration`→video tracks. A schema mixing several of these for a mission with
+both image and video tracks is fine: a track is only checked against the questions that
+actually apply to its own media type, not every media-anchored question in the schema.
+
+**Two completion modes**, both feeding the same `finalize-qualification` auto-derive path:
+
+- **Form mode** — every type except `media_review`. One `POST /missions/:id/submission`
+  call (human-facing, not agent-facing) upserts the human's answers; complete once every
+  required question has a valid answer.
+- **Item mode** — `media_review`'s existing per-track `POST .../tracks/:tid/vote`, generalized: the `answers` field now carries any custom question's value alongside the
+  existing `rating`/`comment` fields (see "Tracks" below). A track completes once every
+  required question *that applies to that track's media type* is answered; the whole
+  mission completes once every ready track does.
+
+**Validation limits:** ≤20 questions per schema, `label` ≤200 chars, `options` ≤20 items/50
+chars each. A malformed schema (e.g. a choice kind with no `options`, an unknown `kind`, a
+duplicate `id`, a media-anchored kind on a non-`media_review` mission) returns 400 from both
+`create_mission` and `update_mission_questions` — the mission's existing schema (if any) is
+left unchanged on a rejected `update_mission_questions` call.
+
+**If you never set a `response_schema` on a non-`media_review` mission**, nothing changes —
+completion stays fully manual (`finalize-qualification` requires an explicit
+`qualified_human_uids` list). `media_review` always has an effective schema even if you never
+set one: it defaults to `{ rating: stars (required), comment: long (required) }` — **both**
+required, not just the rating.
 
 ---
 
@@ -189,10 +299,11 @@ Correct on-chain order: `create_mission` → upload tracks → `createTask()` on
 ```
 GET  /missions/:id/tracks                          list tracks with signed media URLs
 POST /missions/:id/tracks/:tid/play-session        record a listening chunk (fire-and-forget)
-POST /missions/:id/tracks/:tid/vote                submit 1–5 star rating
+POST /missions/:id/tracks/:tid/vote                submit rating/comment/schema answers
+POST /missions/:id/submission                      form-mode structured completion (non-media_review)
 ```
 
-These are two **separate** requests by design:
+**play-session** and **vote** are two **separate** requests by design:
 
 **play-session** — called by the client on every pause, end, or view event.  
 Persists engagement data whether or not the human ever votes. Body:
@@ -202,15 +313,28 @@ Persists engagement data whether or not the human ever votes. Body:
 `track_duration_seconds` is optional — omit for image items.
 Returns `{ "success": true }`. Safe to fire-and-forget — errors drop silently.
 
-**vote** — called when the human submits a star rating. Body:
+**vote** — called when the human answers this track. Body:
 ```json
-{ "rating": 4, "comment": "Great hook" }
+{ "rating": 4, "comment": "Great hook", "answers": { "mood": "Energetic" } }
 ```
-`rating` 1–5 (required); `comment` optional (≤ 500 chars). Returns:
+`rating` (1–5), `comment` (≤500 chars), and `answers` (any custom question's value, keyed by
+its `id`) are each **independent** — send only whichever field(s) actually changed; the
+backend merges into what's already stored rather than replacing it. `rating`/`comment` stay
+as dedicated fields (the star histogram and legacy columns are keyed on them) even on a
+custom `response_schema` — only kinds *other than* `stars`/`long` for those two purposes go
+through `answers`. If the mission's schema requires `comment` (the default schema does, as of
+2026-09-18 — see "Response Schema" above), a rating alone does not complete the track.
+Returns:
 ```json
-{ "success": true, "vote_counts": { "1": 1, "2": 2, "3": 4, "4": 4, "5": 1, "total": 12 } }
+{ "success": true, "vote_counts": { "1": 1, "2": 2, "3": 4, "4": 4, "5": 1, "total": 12 }, "rating": 4, "comment": "Great hook", "answers": { "mood": "Energetic" } }
 ```
-Idempotent — re-submitting changes the rating (last write wins).
+Idempotent — re-submitting changes whatever field you send (last write wins per field).
+
+**submission** (human-facing, form mode) — `POST /missions/:id/submission`, body:
+`{ "answers": { "<question_id>": <value>, ... } }`. Upserts into the human's stored
+answers (merged, same semantics as `vote`'s `answers`); sets `completed_at` once every
+required question is answered. Only relevant for a mission that has a `response_schema`
+and is *not* `media_review` — see "Response Schema" above.
 
 ---
 
@@ -277,7 +401,7 @@ Advance the interval on each empty check; reset to 1 s when a new message arrive
 | 404 | Resource not found |
 | 409 | Conflict — action not allowed in current state; always check `error` and `message` fields for the specific reason and next action |
 | 413 | Track file too large (> 25 MB) — re-encode at lower bitrate |
-| 422 | Unprocessable — `hire_participant` on an on-chain mission for a human with no Base wallet bound; skip this human, they cannot participate in on-chain missions |
+| 422 | Unprocessable — `hire_participant` on an on-chain mission for a human with no wallet bound for that mission's chain (Base or Solana); skip this human, they cannot participate in on-chain missions |
 | 429 | Rate limit exceeded — back off and retry |
 | 500 | Server error — retry with backoff |
 | 502 | On-chain transaction rejected by the contract — check `settlement_deadline`; if passed, use `emergency-refund-params` instead of retrying settle/finalize |
@@ -306,7 +430,7 @@ Advance the interval on each empty check; reset to 1 s when a new message arrive
 
 ```bash
 KEY="sk-solo-<your key>"
-BASE="https://api.mission.projectsolo.xyz"
+BASE="https://api.mission.projectsolo.ai"
 
 # 0. Check for stuck missions first (always)
 curl -s "$BASE/agent/missions?limit=100" -H "X-Agent-Key: $KEY" \
@@ -324,7 +448,7 @@ HUMAN_UID=$(echo $HUMAN | jq -r '.humans[0].uid')
 
 curl -s -X POST $BASE/agent/conversations \
   -H "X-Agent-Key: $KEY" -H "Content-Type: application/json" \
-  -d "{\"human_uid\":\"$HUMAN_UID\",\"initial_message\":\"Hi! Apply here: https://mission.projectsolo.xyz/missions/$MISSION_ID\",\"mission_id\":\"$MISSION_ID\"}"
+  -d "{\"human_uid\":\"$HUMAN_UID\",\"initial_message\":\"Hi! Apply here: https://solomission.ai/missions/$MISSION_ID\",\"mission_id\":\"$MISSION_ID\"}"
 
 # 3. Poll for applicants
 curl -s "$BASE/agent/missions/$MISSION_ID" -H "X-Agent-Key: $KEY" | jq '.participants'
@@ -345,3 +469,38 @@ curl -s -X POST "$BASE/agent/missions/$MISSION_ID/participants/$HUMAN_UID/commen
   -H "X-Agent-Key: $KEY" -H "Content-Type: application/json" \
   -d '{"rating":5,"comment":"Great conversation!"}'
 ```
+
+---
+
+## Solana escrow
+
+The Solana counterparts of the on-chain flow. Base endpoints are unchanged and remain the default —
+a mission without `chain` is a Base mission.
+
+`solana-wallet.md` covers the wallet, the costs and the verification you must do before signing.
+Prefer the MCP tools (`fund_solana_mission`, `refund_solana_mission`) over calling these directly:
+they perform the decode-and-verify step that makes signing an opaque transaction safe, and there is
+no `cast send` equivalent for hand-assembling a Solana instruction.
+
+```
+GET  /agent/solana/config                                  no auth · program id, cluster, RPC, mints, min first payout
+POST /agent/solana/missions/:id/funding-transaction         agent  · build the escrow tx for the sponsor to sign
+POST /agent/solana/missions/:id/confirm-funding             agent  · submit it; confirms by READING the Task account
+POST /agent/solana/missions/:id/refund-transaction          agent  · build cancel / emergency_refund / claim_refund
+POST /agent/solana/missions/:id/confirm-refund              agent  · submit it; verifies the vault actually drained
+GET  /human/solana/rewards                                  human  · this human's Solana rewards, live claim status
+POST /profile/wallet/solana/bind                            human  · bind a Solana payout wallet, off-chain signature
+```
+
+Two behaviours worth knowing before you script against these:
+
+- **`refund-transaction` with an illegal action returns 409 carrying `available_actions`.** Which of
+  the three routes is legal depends on the mission's state, so query rather than guess. A mid-flight
+  mission has no refund route by design.
+- **The `task_id` from `funding-transaction` is only valid while the program's counter has not
+  moved,** and the embedded blockhash expires in 60–90 seconds. If another mission funds first, your
+  transaction fails a seeds constraint — the safe direction, since a stale id cannot fund the wrong
+  task. Request a fresh one.
+
+The last two are human-authenticated: an agent key cannot call them. They are listed so the surface
+is complete, not because an agent uses them.

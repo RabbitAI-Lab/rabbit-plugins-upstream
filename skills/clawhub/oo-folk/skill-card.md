@@ -1,45 +1,59 @@
-## Description: <br>
-folk (folk.app). Use this skill for any folk request: reading, creating, updating, and deleting data through the OOMOL oo CLI connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+folk (folk.app) connector for reading, creating, updating, and deleting Folk people, companies, groups, custom fields, and workspace users through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent read, create, update, and delete folk CRM people, companies, groups, users, and related custom-field data through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and modify folk CRM data through an OOMOL-connected account. <br>
-Mitigation: Install it only when the agent should operate folk data through OOMOL, and review create or update payloads before approval. <br>
-Risk: Delete actions can remove folk people or companies. <br>
-Mitigation: Require explicit user confirmation of the target record and intended effect before running destructive actions. <br>
-Risk: The optional oo CLI installer runs a remote installation script. <br>
-Mitigation: Run the installer only when the CLI is needed and the user trusts OOMOL's installer. <br>
+## Use Case:
 
+Employees, external users, and developers use this skill to operate Folk CRM data through an OOMOL-connected account, including people, companies, groups, custom fields, and workspace users. The skill supports read, create, update, and delete workflows while requiring confirmation for write and destructive actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-folk) <br>
-- [folk homepage](https://folk.app) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include oo CLI connector commands, schema inspection guidance, JSON action payloads, and confirmation prompts for write or delete actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and SKILL.md metadata) <br>
+Risk: First-time setup references unverified remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installing, prefer a trusted versioned source with checksum or signature verification, and avoid automatic installer execution.
+
+Risk: The skill can create, update, and delete Folk CRM records.
+
+Mitigation: Confirm exact payloads for write actions and require explicit approval before destructive delete actions.
+
+Risk: The connector operates on the Folk account connected through OOMOL.
+
+Mitigation: Connect only the Folk account intended for agent-managed workflows and review connection scope or expiration errors before retrying.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-folk)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [folk homepage](https://folk.app)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May issue oo CLI commands that return JSON responses from Folk connector actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

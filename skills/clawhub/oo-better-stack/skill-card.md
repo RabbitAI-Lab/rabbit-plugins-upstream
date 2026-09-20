@@ -1,44 +1,56 @@
-## Description: <br>
-Better Stack (betterstack.com). Use this skill for ANY Better Stack request — reading, creating, and updating data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill enables an agent to read and manage Better Stack incident data through OOMOL's Better Stack connector and the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and incident responders use this skill to read and manage Better Stack incidents, comments, metadata, and escalation workflows through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Incident-management actions can affect alerting, escalation, or on-call routing. <br>
-Mitigation: Require explicit user approval before creating, acknowledging, or escalating incidents, and review payloads before execution. <br>
-Risk: The skill requires access to Better Stack through an OOMOL-connected account. <br>
-Mitigation: Install only where Better Stack account permissions are appropriate for the intended operational scope. <br>
+## Use Case:
 
+Developers and operations teams use this skill to inspect Better Stack incident schemas, list and retrieve incident information, and perform incident actions such as create, acknowledge, or escalate with confirmation for state-changing actions.
 
-## Reference(s): <br>
-- [ClawHub Better Stack Skill](https://clawhub.ai/oomol/oo-better-stack) <br>
-- [Better Stack Homepage](https://betterstack.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Better Stack Icon](https://static.oomol.com/logo/third-party/Better%20Stack.svg) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution; Better Stack credentials are required through the connected OOMOL account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: State-changing Better Stack actions can create, acknowledge, or escalate incidents.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the exact incident target, payload, and expected effect with the user before approving write or destructive actions.
+
+Risk: First-time setup may require installing the oo CLI from a remote installer.
+
+Mitigation: Confirm the user trusts OOMOL and the oo CLI installation source before running installation commands.
+
+## Reference(s):
+
+- [ClawHub Better Stack Skill](https://clawhub.ai/oomol/skills/oo-better-stack)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Better Stack Homepage](https://betterstack.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands should inspect the live connector schema before building payloads and should request confirmation before write or destructive actions.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

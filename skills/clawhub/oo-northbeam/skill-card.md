@@ -1,44 +1,57 @@
-## Description: <br>
-Northbeam (northbeam.io) lets an agent search and read Northbeam data through an OOMOL-connected account instead of calling the Northbeam API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents operate Northbeam through an OOMOL-connected account by inspecting connector schemas and running read-only Northbeam data actions with the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to query Northbeam account data through the OOMOL oo CLI, including attribution models, metrics, breakdowns, and paginated spend records. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose Northbeam spend and attribution data, which may be sensitive business information. <br>
-Mitigation: Install it only for agents that should query the connected Northbeam account, and restrict access to users allowed to view that data. <br>
-Risk: The OOMOL and Northbeam connection scopes determine what account data the agent can access. <br>
-Mitigation: Review the OOMOL and Northbeam access scopes before installation and re-check them when credentials are renewed or reconnected. <br>
-Risk: Future connector actions tagged as write or destructive could change or remove data if run without review. <br>
-Mitigation: Inspect the live connector schema before building payloads and require explicit user approval for any write or destructive action. <br>
+## Use Case:
 
+Developers, analysts, and operators use this skill to query Northbeam attribution, breakdown, metrics, daily spend, and hourly spend data through a connected OOMOL account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-northbeam) <br>
-- [Northbeam Homepage](https://www.northbeam.io) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, Text] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action payloads; returned spend and attribution data should be treated as sensitive business information.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and frontmatter) <br>
+Risk: Fallback setup instructs users to pipe downloaded installer scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path first and prefer a pinned package, signed release, checksum verification, or manual installer inspection before installation.
+
+Risk: Read-only Northbeam actions may expose business spend and attribution data through the connected OOMOL account.
+
+Mitigation: Use an account with appropriate access scope and share returned data only with authorized recipients.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-northbeam)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Northbeam Homepage](https://www.northbeam.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses from the connector are expected as JSON with data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

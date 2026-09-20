@@ -1,47 +1,72 @@
-## Description: <br>
-百炼标书智能写作工具 helps agents use the 百炼®标书 API to interpret tender documents, extract bid packages, generate editable .docx bid documents, and optionally review compliance after user consent to upload files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+百炼标书智能写作工具 helps users process tender and bid files through the 百炼标书 cloud service to interpret tender requirements, generate bid documents, review bid compliance, and compare 2-3 bid files for similarity risk.
 
-## Publisher: <br>
-[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chichihaixiaojian666](https://clawhub.ai/user/chichihaixiaojian666)
 
-## Use Case: <br>
-External users and bid-writing teams use this skill to turn local tender files into interpretation reports, generated bid documents, and compliance review reports. It is intended for workflows where users understand that tender and bid files are uploaded to the 百炼®标书 service and bid generation may consume account credits. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tender and bid files may contain sensitive business, pricing, or personal data and are uploaded to biaoshu.zhiliaobiaoxun.com for processing. <br>
-Mitigation: Confirm user awareness and consent before the first upload, and only process files the user explicitly provides. <br>
-Risk: The App Key is an account credential that could expose account access if pasted into chat or forwarded in credential-bearing links. <br>
-Mitigation: Keep the App Key in the local config file, do not ask users to paste it into chat, and do not forward URLs containing bind_key or other credential parameters. <br>
-Risk: Bid generation consumes credits from the App Key owner's account. <br>
-Mitigation: Check balance before generation and make the credit impact clear before submitting generation tasks. <br>
-Risk: Changing service endpoints or credential paths can redirect sensitive files or credentials to an untrusted destination. <br>
-Mitigation: Use the default service endpoint and local credential path unless the user explicitly trusts the replacement location. <br>
+## Use Case:
 
+External bidding, procurement, and proposal teams use this skill to analyze tender files, produce draft bid documents, review submission risks, and check similarity across legally held bid files before submission.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-bailian) <br>
-- [百炼®标书 platform](https://biaoshu.zhiliaobiaoxun.com/) <br>
-- [百炼®标书 API reference](references/api.md) <br>
-- [Usage guide](references/usage.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Files, Configuration] <br>
-**Output Format:** [Markdown guidance plus generated .docx, .html, and Word report files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include tender interpretation summaries, generated bid documents, compliance findings, local report paths, and account-balance guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release metadata and release changelog) <br>
+Risk: Tender and bid files may contain confidential commercial, pricing, or personal information and are uploaded to the 百炼标书 service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when the user is authorized to upload those files and accepts service-side processing and retention.
+
+Risk: The skill uses a full-account API key for 百炼标书 operations.
+
+Mitigation: Keep the key in the local skill config file with restrictive permissions, never paste it into chat, and reset it if exposure is suspected.
+
+Risk: Generated reports or bid documents may be written outside a tightly controlled location when arbitrary output paths or basenames are used.
+
+Mitigation: Prefer a dedicated output folder and avoid user-controlled report basenames or arbitrary save paths.
+
+Risk: Tender and job metadata may persist locally across sessions.
+
+Mitigation: Clear ~/.zcm/projects.json if persistent local tender or job metadata is not desired.
+
+Risk: Bid generation, compliance review, and duplicate checking may consume the user's word balance.
+
+Mitigation: Confirm paid operations before running them and monitor the account balance returned by the service.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chichihaixiaojian666/skills/biaoshu-bailian)
+- [百炼标书 service](https://biaoshu.zhiliaobiaoxun.com/?ch=c666)
+- [百炼标书开放 API 总调度](references/api.md)
+- [鉴权、任务与可用字数接口](references/api-auth.md)
+- [智能解读与标书制作 API](references/api-bid-workflow.md)
+- [标书审查 API](references/api-compliance.md)
+- [标书查重 API](references/api-duplicate.md)
+- [执行细节](references/usage.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files]
+
+**Output Format:** [Text guidance, JSON summaries, HTML or Word reports, short-lived download links, and .docx bid documents.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Paid generation, review, and duplicate-check tasks consume the user's 百炼标书 word balance; generated files and task results may be retained by the service for about 7 days.]
+
+## Skill Version(s):
+
+1.0.17 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

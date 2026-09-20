@@ -1,42 +1,61 @@
-## Description: <br>
-Gmail (workspace.google.com). Use this skill for ANY Gmail request: reading, creating, updating, and deleting data through the OOMOL Gmail connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses the OOMOL Gmail connector through the oo CLI to read, create, update, send, organize, and delete Gmail data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to operate Gmail through an OOMOL-connected account. It supports reading and searching mail, managing drafts, labels, filters, mailbox settings, and performing confirmed send, reply, trash, and bulk label workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and destructive Gmail actions can change mailbox state, send messages, or move and delete drafts, filters, labels, messages, and threads. <br>
-Mitigation: Confirm the exact action, target, payload, and expected effect with the user before write actions; require explicit approval for destructive actions. <br>
-Risk: Incorrect payloads or stale assumptions about connector inputs can cause failed actions or unintended Gmail changes. <br>
-Mitigation: Inspect the live action schema with `oo connector schema` before constructing payloads and use label, message, draft, thread, and filter IDs returned by read actions. <br>
+## Use Case:
 
+Employees, external users, and developers use this skill to let an agent operate a connected Gmail mailbox for message retrieval, drafting, sending, labeling, filtering, settings review, and mailbox organization.
 
-## Reference(s): <br>
-- [ClawHub Gmail skill page](https://clawhub.ai/oomol/oo-gmail) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Gmail homepage](https://workspace.google.com/gmail/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before building action payloads; command responses include JSON data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and frontmatter) <br>
+Risk: The skill can operate with broad Gmail mailbox authority, including send, update, delete, forwarding, filter, label, and settings changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval for every write or destructive action, including the exact target, payload, and expected effect.
+
+Risk: The setup instructions include remote-script CLI installer commands.
+
+Mitigation: Do not run installer commands blindly; prefer reviewed or manual installation steps before using the skill.
+
+Risk: Incorrect action payloads could change or remove Gmail data.
+
+Mitigation: Inspect the live connector schema before constructing payloads and confirm destructive targets with the user.
+
+## Reference(s):
+
+- [ClawHub Gmail Skill](https://clawhub.ai/oomol/skills/oo-gmail)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Gmail Homepage](https://workspace.google.com/gmail/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline bash and JSON snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector action responses are JSON objects containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

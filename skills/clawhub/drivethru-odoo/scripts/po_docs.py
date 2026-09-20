@@ -62,14 +62,23 @@ from odoo_mcp import _fail, _run  # noqa: E402
 # ── MCP result unwrapping ────────────────────────────────────────────────────
 
 
+def _result_field(result: Any, camel: str, snake: str) -> Any:
+    """Read a CallToolResult field across mcp SDK generations — 1.x exposes
+    camelCase attributes (`structuredContent`, `isError`), 2.x snake_case."""
+    v = getattr(result, camel, None)
+    if v is None:
+        v = getattr(result, snake, None)
+    return v
+
+
 def _tool_json(result: Any) -> dict[str, Any]:
     """Pull the JSON payload out of an MCP CallToolResult.
 
-    drivethru_mcp returns its dict either as `structuredContent` or as JSON
+    drivethru_mcp returns its dict either as structured content or as JSON
     text in the first content block — accept both, and unwrap a lone
     ``{"result": ...}`` envelope when present.
     """
-    sc = getattr(result, "structuredContent", None)
+    sc = _result_field(result, "structuredContent", "structured_content")
     if isinstance(sc, dict) and sc:
         if set(sc.keys()) == {"result"} and isinstance(sc["result"], dict):
             return sc["result"]
@@ -86,11 +95,30 @@ def _tool_json(result: Any) -> dict[str, Any]:
     return {}
 
 
+def _unwrap_envelope(name: str, payload: dict[str, Any]) -> dict[str, Any]:
+    """Unwrap drivethru_mcp's tool envelope `{status, tool, data: {...}}`.
+
+    The live server wraps every result this way, while the callers here expect
+    the INNER data (`payload["folders"]`, `page["documents"]`, ...). A bare
+    inner dict passes through untouched; an error envelope RAISES so a failure
+    can never masquerade as an empty result.
+    """
+    if "status" in payload and "tool" in payload:
+        if payload.get("status") == "error":
+            raise RuntimeError(
+                f"{name} failed: {json.dumps(payload.get('error') or payload)}"
+            )
+        data = payload.get("data")
+        if isinstance(data, dict):
+            return data
+    return payload
+
+
 async def _call(session: Any, name: str, args: dict[str, Any]) -> dict[str, Any]:
     result = await session.call_tool(name, args)
-    if getattr(result, "isError", False):
+    if bool(_result_field(result, "isError", "is_error")):
         raise RuntimeError(f"{name} failed: {_tool_json(result) or result}")
-    return _tool_json(result)
+    return _unwrap_envelope(name, _tool_json(result))
 
 
 # ── PDF text extraction (local, no bytes leave this process) ─────────────────
@@ -207,6 +235,10 @@ async def _extract(session: Any, args: dict[str, Any]) -> dict[str, Any]:
                 "limit": limit,
                 "offset": offset,
                 "include_subfolders": include_subfolders,
+                # The server's default detail ("minimal") returns only
+                # id/name/folder, dropping the mimetype/type this reader keys
+                # on. Ask for the fields explicitly.
+                "fields": ["name", "mimetype", "file_size", "type"],
             },
         )
         docs = page.get("documents") or []
@@ -222,7 +254,14 @@ async def _extract(session: Any, args: dict[str, Any]) -> dict[str, Any]:
             # URL bookmarks / nested folders carry no bytes to read.
             continue
         doc_id = meta["id"]
-        full = await _call(session, "documents_get", {"document_id": doc_id})
+        full = await _call(
+            session,
+            "documents_get",
+            # response_detail defaults to "minimal", which returns identity only
+            # and OMITS data_base64 — even with include_content. "full" is what
+            # surfaces the bytes.
+            {"document_id": doc_id, "include_content": True, "response_detail": "full"},
+        )
         b64 = full.get("data_base64")
         if not b64:
             # Over the 20MB transport guard, or a non-binary doc.

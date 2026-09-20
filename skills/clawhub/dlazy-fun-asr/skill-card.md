@@ -1,43 +1,56 @@
-## Description: <br>
-Alibaba Bailian Fun-ASR recording transcription supports Chinese, English and other languages, with auto language detection and speaker diarization for subtitles, transcription, and meeting notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Alibaba Bailian Fun-ASR recording transcription supports Chinese, English, and other languages, with automatic language detection and speaker diarization for subtitles, transcription, and meeting notes.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and agent operators use this skill to send recording files to dLazy's hosted Fun-ASR service for multilingual transcription, speaker diarization, subtitle preparation, and meeting notes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User-provided audio, video, image, and parameters may be sent to dLazy as a third-party cloud processor. <br>
-Mitigation: Use the skill only when that processing is acceptable for the data involved, avoid sensitive recordings unless policy permits it, and review dLazy service terms for retention and access practices. <br>
-Risk: Authentication can store a dLazy API key in the local CLI configuration. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable for per-session credentials when a saved config key is not desired, and rotate or revoke keys from the dLazy dashboard when needed. <br>
+## Use Case:
 
+External users, developers, and teams use this skill to invoke dLazy Fun-ASR for cloud-based audio transcription, subtitle generation, speaker diarization, and meeting-note workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-fun-asr) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy service homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [JSON responses and agent-facing command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return asynchronous task identifiers when invoked with no-wait behavior.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: Audio files, prompts, and parameters are sent to dLazy infrastructure for cloud transcription.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with recordings approved for that cloud service, and avoid sensitive audio unless organizational policy permits it.
+
+Risk: A persistent global install or saved API key may leave credentials on the local machine.
+
+Mitigation: Prefer npx @dlazy/cli@1.2.3 or the DLAZY_API_KEY environment variable when users do not want a persistent global CLI install or saved key.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-fun-asr)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, JSON, Files, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON result examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return asynchronous task identifiers when --no-wait is used; saved output files are controlled by the --save option.]
+
+## Skill Version(s):
+
+1.3.17 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

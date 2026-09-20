@@ -1,44 +1,56 @@
-## Description: <br>
-This skill lets agents operate Databricks through OOMOL-connected oo CLI actions for reading, creating, updating, and deleting Databricks resources. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill lets agents inspect schemas and run OOMOL Databricks connector actions for clusters, jobs, runs, repos, secrets, and workspace objects.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and workspace operators use this skill to inspect Databricks schemas and run OOMOL-connected Databricks actions for jobs, clusters, repositories, secret scopes, and workspace files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, start, trigger, cancel, overwrite, or delete Databricks resources and workspace files. <br>
-Mitigation: Require explicit user approval for every state-changing action and confirm the exact payload, target resource, and expected effect before execution. <br>
-Risk: The skill requires an OOMOL-connected Databricks account with sensitive workspace credentials. <br>
-Mitigation: Use least-privileged Databricks access and keep credentials in the OOMOL connection rather than exposing raw tokens in prompts or files. <br>
-Risk: First-time setup may install or invoke the external oo CLI. <br>
-Mitigation: Review the oo CLI installer before running it and only perform setup when an auth, connection, or missing-command error requires it. <br>
+## Use Case:
 
+Developers, data engineers, and operators use this skill to manage Databricks resources through an OOMOL-connected account. It supports read, write, and destructive administration workflows with confirmation expected before state-changing actions.
 
-## Reference(s): <br>
-- [Databricks](https://www.databricks.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-databricks) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads or results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI to execute Databricks connector actions; state-changing and destructive actions require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: The setup flow includes running a remote oo CLI installer script without an artifact-level verification step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer before running it and prefer a verified package or checksum-backed install path when available.
+
+Risk: Write and destructive Databricks actions can create, modify, overwrite, or delete workspace resources.
+
+Mitigation: Confirm the exact target, payload, and intended effect with the user before running any action marked write or destructive.
+
+## Reference(s):
+
+- [Databricks homepage](https://www.databricks.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-databricks)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON payload instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are expected as JSON objects containing data and metadata, including an execution ID when actions run.]
+
+## Skill Version(s):
+
+1.0.4 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

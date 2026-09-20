@@ -1,42 +1,56 @@
-## Description: <br>
-Operates Get 笔记 (biji.com) through the OOMOL getnote connector for reading, creating, updating, sharing, and deleting notes and related knowledge-base data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Get Biji (biji.com). Use this skill for reading, creating, updating, deleting, sharing, tagging, and searching Get Biji notes and knowledge bases through the OOMOL getnote connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage Get 笔记 notes, tags, sharing, and knowledge bases from an agent through the OOMOL oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write or destructive actions can change or delete Get 笔记 data. <br>
-Mitigation: Confirm the target note, knowledge base, tags, payload, and expected effect before approving write or destructive actions. <br>
-Risk: Installing or authenticating the OOMOL oo CLI affects access to the user's connected account. <br>
-Mitigation: Install or authenticate the OOMOL oo CLI only from the documented source and only when an auth or connection error requires it. <br>
+## Use Case:
 
+External users and agents use this skill to operate a connected Get Biji account for note, tag, knowledge base, blogger, and live-session workflows. It is intended for read, write, search, share, and destructive note-management tasks with user confirmation for state-changing actions.
 
-## Reference(s): <br>
-- [Get 笔记 homepage](https://www.biji.com/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-getnote) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call the OOMOL oo CLI and return connector JSON responses when actions are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The setup path can run a remote oo CLI installer script on the user's machine without independent verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source before running setup commands, and use the setup path only after a command fails because the CLI is missing.
+
+Risk: Write and destructive actions can alter Get Biji notes, tags, and knowledge bases.
+
+Mitigation: Require clear user confirmation of the exact payload, target note, tag, or knowledge base before executing actions marked write or destructive.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-getnote)
+- [Get Biji Homepage](https://www.biji.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agent-facing instructions for inspecting live connector schemas and running oo CLI actions]
+
+## Skill Version(s):
+
+1.0.5 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

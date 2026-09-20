@@ -1,11 +1,18 @@
 #!/usr/bin/env bash
+
+
 # phase-1-skill-analysis.sh — 功能提取
 # 读取 SKILL.md，提取 metadata、commands、capabilities、resource_types
-set -uo pipefail
+set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 source "$SCRIPT_DIR/lib/utils.sh"
 source "$SCRIPT_DIR/lib/chain-verify.sh"
+
+# Load config and discover available services dynamically
+source "$SCRIPT_DIR/lib/config.sh"
+discover_hcloud_services >/dev/null  # populate cache
+export SERVICES_CLI_COMMA
 
 PHASE_NUM=1
 PHASE_NAME="skill-analysis"
@@ -79,6 +86,26 @@ if desc_match:
         if not triggers:
             triggers = [t.strip().strip(',').strip().strip('"').strip("'") for t in trig_raw.replace(',', ' ').split() if t.strip()]
 
+# Also check frontmatter Trigger: / Triggers: field (some skills use this instead of "Triggers include:")
+if not triggers:
+    _trig_line = re.search(r'^[Tt]rigger[s]?\s*:\s*(.+)$', yaml_text, re.MULTILINE)
+    if _trig_line:
+        _trig_raw = _trig_line.group(1).strip()
+        if _trig_raw.startswith('[') and _trig_raw.endswith(']'):
+            triggers = [t.strip().strip('"').strip("'") for t in _trig_raw[1:-1].split(',') if t.strip()]
+        else:
+            triggers = [t.strip().strip('"').strip("'") for t in re.split(r'[,;]', _trig_raw) if t.strip()]
+
+# Fallback: use tags as triggers if no explicit triggers found (ISSUE-003)
+if not triggers and tags:
+    triggers = list(tags)
+
+# Fallback: extract keywords from description text if still no triggers
+if not triggers and desc_text:
+    _desc_kw = re.findall(r'"([^"]{2,40})"', desc_text)
+    if _desc_kw:
+        triggers = _desc_kw[:10]
+
 # Extract capabilities by looking for sections
 cap_list = []
 cap_create = []
@@ -107,9 +134,29 @@ commands = []
 cmd_id = 0
 
 # Helper: detect service from text
+# Uses dynamic service list from config.sh (SERVICES_CLI_FALLBACK covers 36+ services)
+_detect_svc_list = None
+def _get_svc_list():
+    global _detect_svc_list
+    if _detect_svc_list is None:
+        import os
+        # Try comma-joined list from config.sh first
+        comma_list = os.environ.get('SERVICES_CLI_COMMA', '')
+        if comma_list:
+            _detect_svc_list = comma_list.split(',')
+        else:
+            # Fallback to comprehensive static list
+            _detect_svc_list = [
+                'bss', 'ecs', 'vpc', 'evs', 'eip', 'iam', 'rds', 'dns', 'obs', 'ims', 'as', 'elb',
+                'nat', 'cdn', 'cce', 'scm', 'ces', 'rfs', 'ucs', 'dcs', 'kps', 'cfw', 'hss',
+                'secmaster', 'coc', 'aom', 'cts', 'swr', 'cci', 'dds', 'gaussdb', 'ddm', 'drs',
+                'das', 'dli', 'dws', 'mrs', 'smn', 'functiongraph', 'apig', 'vpn', 'dc', 'cc', 'er', 'eg'
+            ]
+    return _detect_svc_list
+
 def detect_service(txt):
     txt_l = txt.lower()
-    for svc in ['bss', 'ecs', 'vpc', 'evs', 'eip', 'iam', 'rds', 'dns', 'obs', 'ims', 'as', 'elb']:
+    for svc in _get_svc_list():
         if svc in txt_l:
             return svc
     return None
@@ -241,6 +288,9 @@ for lang, block in all_code_blocks:
             })
 
     elif lang == 'bash' or lang == 'sh' or lang == '':
+        # 合并反斜杠续行: "cmd \ 换行 --args" → "cmd --args" 单行完整命令,
+        # 避免多行命令被拆行后只保留 "cmd \" 导致用例不可执行。
+        block = re.sub(r'\\\s*\n', ' ', block)
         for cl in block.strip().split('\n'):
             cl = cl.strip()
             if not cl or cl.startswith('#') or cl.startswith('$'):
@@ -288,6 +338,13 @@ if not commands:
                 continue
             clean_cmd = re.sub(r'<[^>]+>', '', cmd_text).strip()
             clean_cmd = re.sub(r'\s+', ' ', clean_cmd)
+            # Skip entries that are not real executable commands (ISSUE-001:
+            # parameter names like kubectl, --bin-dir, bin in backticks were
+            # extracted as independent script paths, causing all test cases to fail)
+            if not (clean_cmd.startswith('hcloud ') or clean_cmd.startswith('python3 ')
+                   or clean_cmd.startswith('bash ') or clean_cmd.startswith('curl ')
+                   or clean_cmd.startswith('from ') or clean_cmd.startswith('sh ')):
+                continue
             exe = 'cli'
             if clean_cmd.startswith('hcloud '):
                 exe = 'cli'
@@ -305,6 +362,72 @@ if not commands:
                 'executor': exe,
                 'is_write': is_write
             })
+
+# Scan references/*.md for additional commands (ISSUE-008: some skills put
+# command variants in references/ docs, not in SKILL.md body).
+_refs_dir = os.path.join(skill_dir, 'references')
+if os.path.isdir(_refs_dir):
+    for _rf in sorted(os.listdir(_refs_dir)):
+        if not _rf.endswith('.md'):
+            continue
+        try:
+            with open(os.path.join(_refs_dir, _rf), encoding='utf-8') as _rf_f:
+                _ref_text = _rf_f.read()
+        except Exception:
+            continue
+        _bt3 = chr(96) * 3
+        _ref_blocks = re.findall(_bt3 + r'(\w+)?\s*\n(.*?)' + _bt3, _ref_text, re.DOTALL)
+        for _lang, _block in _ref_blocks:
+            _lang = (_lang or '').lower().strip()
+            _block = re.sub(r'\\\s*\n', ' ', _block)
+            if _lang in ('python', 'py'):
+                _mc = re.findall(r'(?:response\s*=\s*)?client\.(\w+)\s*\(', _block)
+                for _mn in _mc:
+                    _svc = detect_service(_block) or 'bss'
+                    _req_cls = ''.join(w.capitalize() for w in _mn.split('_')) + 'Request'
+                    _snippet = build_sdk_snippet(_svc, _mn, _req_cls, _block)
+                    _sig = _snippet[:200]
+                    if _sig and not any(c.get('command', '')[:200] == _sig for c in commands):
+                        cmd_id += 1
+                        commands.append({
+                            'id': 'CMD-%02d' % cmd_id,
+                            'source': 'references/%s-python-block' % _rf,
+                            'description': '%s (SDK)' % _mn,
+                            'command': _snippet,
+                            'executor': 'sdk',
+                            'is_write': any(kw in _mn.lower() for kw in ['create', 'delete', 'update', 'reclaim', 'destroy']),
+                            'method_name': _mn,
+                            'service': _svc,
+                            'request_class': _req_cls
+                        })
+            elif _lang in ('bash', 'sh', ''):
+                for _cl in _block.strip().split('\n'):
+                    _cl = _cl.strip()
+                    if not _cl or _cl.startswith('#') or _cl.startswith('$'):
+                        continue
+                    if _cl.startswith('python3 ') and 'scripts/' in _cl:
+                        if not any(c.get('command', '') == _cl for c in commands):
+                            cmd_id += 1
+                            commands.append({
+                                'id': 'CMD-%02d' % cmd_id,
+                                'source': 'references/%s-bash-block' % _rf,
+                                'description': _cl[:80],
+                                'command': _cl,
+                                'executor': 'script',
+                                'is_write': any(kw in _cl.lower() for kw in ['create', 'delete', 'update', 'destroy', 'activate', 'reclaim'])
+                            })
+                    elif _cl.startswith('hcloud '):
+                        _clean = re.sub(r'<[^>]+>', '', _cl).strip()
+                        if not any(c.get('command', '') == _clean for c in commands):
+                            cmd_id += 1
+                            commands.append({
+                                'id': 'CMD-%02d' % cmd_id,
+                                'source': 'references/%s-bash-block' % _rf,
+                                'description': _clean[:80],
+                                'command': _clean,
+                                'executor': 'cli',
+                                'is_write': any(kw in _cl.lower() for kw in ['create', 'delete', 'update', 'destroy'])
+                            })
 
 # Detect resource types
 resource_types = []
@@ -340,6 +463,28 @@ if os.path.isdir(refs_dir):
     for f in sorted(os.listdir(refs_dir)):
         if f.endswith('.md'):
             refs.append('references/%s' % f)
+
+# 文档一致性检查(#003): SKILL.md 中引用的 references/*.md 是否存在
+doc_checks = {'referenced_refs': [], 'missing_refs': []}
+_md_mentions = sorted(set(re.findall(r'references/([\w\-\.]+\.md)', text)))
+doc_checks['referenced_refs'] = ['references/%s' % m for m in _md_mentions]
+for m in _md_mentions:
+    if not os.path.isfile(os.path.join(skill_dir, 'references', m)):
+        doc_checks['missing_refs'].append('references/%s' % m)
+
+# 禁用文件类型检查(issue#37): skill 包不应包含 .bak/.template/.orig/.rej 等
+# 残留/模板文件, 不符合 skill 编写要求。
+_FORBIDDEN_EXT = ('.bak', '.template', '.orig', '.rej', '.swp', '~')
+forbidden_files = []
+for _root, _dirs, _files in os.walk(skill_dir):
+    # 精确匹配路径段中的 .git(避免子串误伤, 如 my.git.repo)
+    if '.git' in _root.split(os.sep):
+        continue
+    for _f in sorted(_files):
+        _low = _f.lower()
+        if _low.endswith(_FORBIDDEN_EXT) or _low.endswith('~'):
+            forbidden_files.append(os.path.join(_root, _f).replace(skill_dir + os.sep, ''))
+doc_checks['forbidden_files'] = forbidden_files
 
 # Also read templates/test-vars.json for SDK/CLI test cases
 test_vars_path = os.path.join(skill_dir, 'templates', 'test-vars.json')
@@ -400,14 +545,17 @@ result = {
     'resource_types': list(set(resource_types)),
     'commands': commands,
     'scripts': scripts,
-    'references': refs
+    'references': refs,
+    'doc_checks': doc_checks
 }
 print(json.dumps(result, indent=2, ensure_ascii=False))
 PYANALYSIS
 
   local analysis
+  set +e
   analysis=$(python3 "$py_tmp" "$sk_file" "$skill_dir")
   local analysis_rc=$?
+  set -e
   rm -f "$py_tmp"
 
   if [ $analysis_rc -ne 0 ]; then
@@ -460,6 +608,7 @@ r = {
 }
 print(json.dumps(r, indent=2, ensure_ascii=False))
 PYEOF
+  ensure_test_files_dir "$skill_dir" > /dev/null
   python3 "$summary_py_tmp" "$tmp_json" "$PHASE_NUM" "$PHASE_NAME" "$skill_name" "$ts" "$duration" > "$(phase_file "$skill_dir" 1)"
   rm -f "$summary_py_tmp"
 
@@ -468,6 +617,22 @@ PYEOF
   echo ""
   info "提取结果: ${cmd_count} 条命令, ${trig_count} 个触发词, ${res_count} 种资源类型"
   info "写操作: $(echo "$analysis" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('has_write_operations', False))")"
+  # 触发词缺失提示: frontmatter triggers 为空会导致 Phase 1 partial
+  if [ "$trig_count" -eq 0 ]; then
+    warn "⚠️ 未提取到触发词 — SKILL.md frontmatter 缺少 triggers 或为空, Phase 1 判定为 partial"
+  fi
+  # 文档一致性: SKILL.md 引用了但 references/ 下不存在的文件
+  local missing_refs
+  missing_refs=$(echo "$analysis" | python3 -c "import json,sys; d=json.load(sys.stdin); print(' '.join(d.get('doc_checks', {}).get('missing_refs', [])))" 2>/dev/null)
+  if [ -n "$missing_refs" ]; then
+    warn "⚠️ SKILL.md 引用了缺失的 references 文件: $missing_refs"
+  fi
+  # 禁用文件检查(issue#37): .bak/.template 等残留文件
+  local forbidden
+  forbidden=$(echo "$analysis" | python3 -c "import json,sys; d=json.load(sys.stdin); print(' '.join(d.get('doc_checks', {}).get('forbidden_files', [])))" 2>/dev/null)
+  if [ -n "$forbidden" ]; then
+    warn "⚠️ 包含禁用文件类型(.bak/.template 等): $forbidden"
+  fi
   echo ""
   echo "$analysis" | python3 -c "
 import json,sys
@@ -484,7 +649,30 @@ if trigs:
 "
 }
 
-for skill_dir in "$@"; do
+# Parse args: getopts for -s, pre-filter --skill (getopts can't handle --long)
+SKILL_DIRS=()
+_rest=()
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --skill) SKILL_DIRS+=("$2"); shift 2 ;;
+    --skill=*) SKILL_DIRS+=("${1#--skill=}"); shift ;;
+    --help|-h) echo "用法: $(basename "$0") [-s <dir>]... [--skill <dir>]... [<dir>...]"; exit 0 ;;
+    *) _rest+=("$1"); shift ;;
+  esac
+done
+set -- ${_rest[@]+"${_rest[@]}"}
+OPTIND=1
+while getopts ":s:h" opt; do
+  case $opt in
+    s) SKILL_DIRS+=("$OPTARG") ;;
+    h) echo "用法: $(basename "$0") [-s <dir>]... [--skill <dir>]... [<dir>...]"; exit 0 ;;
+    \?) ;;
+  esac
+done
+shift $((OPTIND-1))
+for arg in "$@"; do SKILL_DIRS+=("$arg"); done
+
+for skill_dir in "${SKILL_DIRS[@]}"; do
   run_phase1 "$skill_dir" || exit 1
   echo ""
 done

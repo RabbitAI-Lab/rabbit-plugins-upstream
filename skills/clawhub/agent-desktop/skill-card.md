@@ -1,47 +1,66 @@
-## Description: <br>
-Desktop automation via native OS accessibility trees using the agent-desktop CLI for observing and interacting with desktop applications. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reliable computer use via native OS accessibility trees for agents that need to observe and operate desktop applications.
 
-## Publisher: <br>
-[lahfir](https://clawhub.ai/user/lahfir) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lahfir](https://clawhub.ai/user/lahfir)
 
-## Use Case: <br>
-Developers and agent operators use this skill to guide agents through desktop GUI observation, interaction, app lifecycle, window, clipboard, notification, wait, and session workflows. It is intended for real desktop automation tasks where the calling agent must inspect UI state and act through the agent-desktop CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill enables broad control of a user's real desktop through accessibility and screen recording permissions. <br>
-Mitigation: Grant permissions only to trusted launchers and install the skill only when real desktop operation is intended. <br>
-Risk: Desktop observation, screenshots, clipboard use, and trace artifacts may expose sensitive application data. <br>
-Mitigation: Avoid running the skill around secrets or sensitive apps, use --no-trace or short-lived sessions when possible, and clean up ~/.agent-desktop sessions after use. <br>
-Risk: High-impact physical or forced input can disrupt active applications. <br>
-Mitigation: Use headed or forceful commands only when explicit physical interaction is intended and verify UI state before continuing. <br>
+## Use Case:
 
+Developers and agent builders use this skill to let an AI agent inspect desktop UI state, run scoped desktop automation commands, and verify GUI interactions across observation, interaction, app lifecycle, clipboard, notification, wait, and session workflows.
 
-## Reference(s): <br>
-- [Agent Desktop Skill](https://clawhub.ai/lahfir/skills/agent-desktop) <br>
-- [Observation Commands](artifact/references/commands-observation.md) <br>
-- [Interaction Commands](artifact/references/commands-interaction.md) <br>
-- [System Commands](artifact/references/commands-system.md) <br>
-- [Common Automation Workflows](artifact/references/workflows.md) <br>
-- [macOS Platform](artifact/references/macos.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON output expectations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs guide an agent that invokes the separate agent-desktop CLI; command results are expected to use structured JSON envelopes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.21 (source: server release metadata) <br>
+Risk: The skill enables broad local desktop automation through a CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only for explicit desktop automation tasks where the operator is comfortable granting that level of local control.
+
+Risk: Screenshots, clipboard contents, traces, and exported replay artifacts can contain sensitive local data.
+
+Mitigation: Treat those outputs as sensitive, prefer `--no-trace` or cleanup commands for sensitive work, and opt in to screenshot artifacts only when needed.
+
+Risk: Forced or physical input can deliver shortcuts or pointer actions with side effects.
+
+Mitigation: Prefer scoped app and ref-based commands, avoid `--force` unless the shortcut is intentionally being delivered, and verify UI state after actions.
+
+Risk: Desktop automation depends on platform permissions and currently documented macOS adapter behavior.
+
+Mitigation: Check permissions before use, grant Accessibility and Screen Recording only when required, and account for Windows and Linux support being planned rather than documented as complete.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/lahfir/skills/agent-desktop)
+- [Observation commands](references/commands-observation.md)
+- [Interaction commands](references/commands-interaction.md)
+- [System commands](references/commands-system.md)
+- [Common automation workflows](references/workflows.md)
+- [macOS platform notes](references/macos.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill guides an agent in invoking a local CLI that returns structured JSON envelopes and may create local screenshots, traces, and session artifacts when requested.]
+
+## Skill Version(s):
+
+0.1.31 (source: server release metadata; artifact frontmatter reports 0.4.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,55 @@
-## Description: <br>
-Analyzes WeRead bookshelf, reading statistics, highlights, and personal thoughts to produce reading dashboards, book analyses, cross-book connections, and exportable notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+WeRead AI Brain analyzes a user's WeRead shelf, reading statistics, highlights, and personal thoughts to produce reading dashboards, book analyses, cross-book connections, and optional Markdown or HTML exports after user confirmation.
 
-## Publisher: <br>
-[yamyeed](https://clawhub.ai/user/yamyeed) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yamyeed](https://clawhub.ai/user/yamyeed)
 
-## Use Case: <br>
-WeRead users and agents use this skill to turn authorized reading data into personal dashboards, focused book analysis, cross-book synthesis, reading-personality summaries, and Markdown or HTML exports. It is intended for workflows where the user explicitly requests WeRead or Weixin Reading data processing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses WEREAD_API_KEY to access personal WeRead bookshelf, reading statistics, highlights, and personal thoughts. <br>
-Mitigation: Install and run only when comfortable granting that access, keep the API key private, and confirm the requested data scope before analysis. <br>
-Risk: Cross-book analysis can aggregate private notes and reading history beyond the minimum needed for a single-book request. <br>
-Mitigation: Confirm the books and data range before cross-book analysis, and limit requests to the smallest useful scope. <br>
-Risk: Generated Markdown or HTML exports may contain private notes, highlights, and reading history. <br>
-Mitigation: Review generated files before sharing and confirm the file type, path, and included data before export or opening. <br>
+## Use Case:
 
+External users and developers use this skill to turn WeRead activity, highlights, and personal notes into readable dashboards, focused book analysis, cross-book synthesis, and portable note exports. The skill is intended for user-approved WeRead workflows that may require a WeRead API key and access to private reading data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/yamyeed/skills/weread-ai-brain) <br>
-- [WeRead agent gateway](https://i.weread.qq.com/api/agent/gateway) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports, single-file HTML dashboards, Markdown exports, shell command examples, and API request guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the user's WEREAD_API_KEY to read authorized WeRead data; export paths, local files, browser opening, and cross-book aggregation require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The skill can access private WeRead shelf data, reading statistics, highlights, personal thoughts, and a WeRead API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only after the user confirms the data scope; keep the API key in WEREAD_API_KEY and send it only to the WeRead official HTTPS gateway.
+
+Risk: Markdown or HTML exports may contain private reading notes, highlights, or analysis derived from those notes.
+
+Mitigation: Confirm the export content and path before writing files, and avoid exporting unless the user explicitly requests it.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/yamyeed/skills/weread-ai-brain)
+- [Project homepage](https://github.com/yamyeed/weread-ai-brain)
+- [WeRead API gateway](https://i.weread.qq.com/api/agent/gateway)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown responses, optional Markdown files, optional single-file HTML dashboards, and JSON API data used for analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May require WEREAD_API_KEY and explicit confirmation before fetching private WeRead data or writing exports.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

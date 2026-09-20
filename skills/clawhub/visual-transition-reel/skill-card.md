@@ -1,42 +1,59 @@
-## Description: <br>
-Guides an agent through planning, generating, reviewing, and assembling a montage with transitions between composed video clips. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent through planning, generating, reviewing, and assembling a montage with transitions between composed video clips where narration is optional.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-External creators and developers use this skill to build visual transition reels such as action-sequence montages or multi-scene pieces where narration is optional. The skill structures intake, approval gates, still generation, video transition prompts, and final ffmpeg assembly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Source images may be uploaded to provider APIs during still, video, or audio generation phases. <br>
-Mitigation: Confirm input rights and sensitivity before generation, and use the skill's approval gates before proceeding with uploads or generated assets. <br>
-Risk: Video and audio generation phases may spend provider credits. <br>
-Mitigation: Require explicit approve plan, approve stills, and approve clips gates before moving into paid generation or assembly steps. <br>
+## Use Case:
 
+External creators and developers use this skill to plan scene anchor pairs, generate start and end stills, render transition clips, and assemble a reviewed multi-scene reel.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/visual-transition-reel) <br>
-- [Example prompt](artifact/example-prompt.md) <br>
-- [Transition plan template](artifact/templates/transition-plan.template.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON plan templates and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces phased scene plans, transition prompts, generation steps, review gates, and assembly commands; generated media is produced through dependent skills and provider APIs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Install examples use unpinned external npx skills add commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only from a trusted PrunaAI source and prefer pinned versions or reviewed commits when available.
+
+Risk: The workflow can upload image assets to external media-generation services and consume generation credits.
+
+Mitigation: Review prompts, input assets, and phase gates before generation, especially before paid video steps.
+
+Risk: Local media assembly uses ffmpeg on generated or supplied media files.
+
+Mitigation: Run ffmpeg only on trusted local files in a controlled workspace and review generated commands before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/visual-transition-reel)
+- [Example prompt](artifact/example-prompt.md)
+- [Transition plan template](artifact/templates/transition-plan.template.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON plan templates and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce scene plans, media-generation prompts, file paths, ffmpeg commands, and review-gated workflow instructions.]
+
+## Skill Version(s):
+
+1.0.13 (source: server release metadata and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

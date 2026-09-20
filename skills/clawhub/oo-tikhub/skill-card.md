@@ -1,42 +1,60 @@
-## Description: <br>
-TikHub connector skill that lets agents inspect schemas and run TikHub actions through the OOMOL oo CLI for TikTok, Douyin, Xiaohongshu, and TikHub account queries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TikHub helps agents inspect TikHub action schemas and run TikHub search, read, usage, pricing, and endpoint actions through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to retrieve public TikTok, Douyin, and Xiaohongshu data and to check TikHub account, usage, endpoint, and pricing information through a connected OOMOL TikHub account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Some actions may expose TikHub account or API-key-related information. <br>
-Mitigation: Run account and usage actions only when needed, and review returned data before sharing or storing it. <br>
-Risk: Actions marked write may change TikHub state, and the exact side effect may depend on the live connector contract. <br>
-Mitigation: Fetch the live action schema, confirm the exact payload and expected effect with the user, and avoid write actions without explicit approval. <br>
+## Use Case:
 
+Developers and external agents use this skill to query TikHub data, discover supported endpoints, check account usage or pricing, and invoke functional TikHub APIs with schemas verified before execution.
 
-## Reference(s): <br>
-- [TikHub homepage](https://tikhub.io/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub TikHub skill page](https://clawhub.ai/oomol/skills/oo-tikhub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the OOMOL oo CLI; action schemas should be fetched before constructing JSON payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and server release evidence) <br>
+Risk: The setup path includes remote shell installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installer commands before running them, prefer verified vendor documentation or pinned signed releases, and avoid elevated shells for curl|bash or irm|iex installation.
+
+Risk: Running actions uses the connected TikHub account and may expose account or API-key information or consume paid TikHub/OOMOL usage.
+
+Mitigation: Use an appropriate connected account, review action scope and payloads before execution, and check pricing or daily usage when cost exposure matters.
+
+Risk: Incorrect endpoint payloads can produce failed or unintended TikHub API calls.
+
+Mitigation: Fetch the live action schema before constructing payloads and confirm any write or destructive action details with the user before execution.
+
+## Reference(s):
+
+- [ClawHub TikHub skill](https://clawhub.ai/oomol/skills/oo-tikhub)
+- [TikHub homepage](https://tikhub.io/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires the oo CLI, an authenticated OOMOL account, and a connected TikHub API key; endpoint schemas are checked before action payloads are sent.]
+
+## Skill Version(s):
+
+1.0.6 (source: SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

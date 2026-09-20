@@ -38,7 +38,7 @@ license: MIT
 | 用户类型 | 免费额度 |
 |---------|---------|
 | 个人实名认证用户 | **200 页** |
-| 企业实名认证用户 | **1000 页** |
+| 企业实名认证用户 | **200 页** |
 
 ## API 配置
 
@@ -173,8 +173,8 @@ python3 scripts/baidu_doc_parser.py --file_url <文件公网URL>
 | 字段 | 类型 | 说明 |
 |------|------|------|
 | `page_id` | string | 页码 ID |
-| `page_num` | int | 页码数 |
-| `text` | string | 当前页的所有纯文字内容 |
+| `page_num` | int | 页码数，从 0 开始 |
+| `text` | string | 当前页的所有纯文字内容，含表格 Markdown |
 | `layouts` | list | 页面内容版式分析的结果 |
 | `tables` | list | 页面表格解析结果 |
 | `images` | list | 页面中图片解析结果 |
@@ -207,7 +207,7 @@ python3 scripts/baidu_doc_parser.py --file_url <文件公网URL>
 
 | 类型 | 说明 |
 |------|------|
-| `para` | 段落 |
+| `text` | 段落 |
 | `table` | 表格 |
 | `image` | 文档中的插图 |
 | `head_tail` | 页面顶部（页眉/页脚） |
@@ -215,6 +215,7 @@ python3 scripts/baidu_doc_parser.py --file_url <文件公网URL>
 | `seal` | 印章 |
 | `title` | 标题 |
 | `formula` | 公式 |
+| `hand_sign` | 手写签名 |
 
 **子类型（sub_type）**：
 

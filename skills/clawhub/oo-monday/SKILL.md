@@ -5,7 +5,7 @@ allowed-tools: [Bash(oo *)]
 metadata:
   title: "monday"
   author: "OOMOL"
-  version: "1.0.2"
+  version: "1.0.7"
   services: ["monday"]
   icon: "https://static.oomol.com/logo/third-party/Monday.svg"
 ---
@@ -40,8 +40,8 @@ Each action is listed below with a one-line description; actions that change sta
 - `activate_form` — Activate a monday Workform so it starts accepting submissions. [write]
 - `add_teams_to_board` — Add monday teams to a board as subscribers or owners. [write]
 - `add_users_to_board` — Add monday users to a board as subscribers or owners. [write]
-- `archive_board` — Archive a monday board. [write]
-- `archive_item` — Archive a monday item. [write]
+- `archive_board` — Archive a monday board. [destructive]
+- `archive_item` — Archive a monday item. [destructive]
 - `assign_department_members` — Assign users to a monday department on an enterprise account. [write]
 - `change_item_position` — Change a monday item's position on the same board. [write]
 - `change_multiple_column_values` — Change multiple monday column values in one mutation using the official JSON payload shape. [write]
@@ -57,6 +57,7 @@ Each action is listed below with a one-line description; actions that change sta
 - `create_item` — Create a monday item on a board, optionally setting column values and position. [write]
 - `create_subitem` — Create a monday subitem under an existing parent item. [write]
 - `create_update` — Create a monday update on an item or as a reply to an existing update. [write]
+- `create_workspace` — Create a monday workspace with the official create_workspace mutation. [write]
 - `deactivate_form` — Deactivate a monday Workform so it stops accepting submissions. [destructive]
 - `delete_board` — Delete a monday board. [destructive]
 - `delete_column` — Delete a monday column from an existing board. [destructive]
@@ -68,6 +69,7 @@ Each action is listed below with a one-line description; actions that change sta
 - `delete_subscribers_from_board` — Remove monday user subscribers from a board. [destructive]
 - `delete_teams_from_board` — Remove monday team subscribers from a board. [destructive]
 - `delete_update` — Delete an existing monday update. [destructive]
+- `delete_workspace` — Delete a monday workspace with the official delete_workspace mutation. [destructive]
 - `duplicate_item` — Duplicate a monday item. [write]
 - `edit_update` — Edit an existing monday update. [write]
 - `find_items_by_column_values` — Find monday items on a board by matching explicit column values.
@@ -87,20 +89,21 @@ Each action is listed below with a one-line description; actions that change sta
 - `list_groups` — List the groups for a specific monday board.
 - `list_subitems_by_parent` — List monday subitems for one or more parent items.
 - `list_team_members` — List the members of a specific monday team.
-- `list_teams` — List monday teams with official filters and pagination.
-- `list_update_replies` — List monday replies for updates on one or more boards. [write]
+- `list_teams` — List monday teams, optionally filtering by team IDs.
+- `list_update_replies` — List monday replies for updates on one or more boards.
 - `list_updates` — List monday updates with optional date filtering.
 - `list_users` — List monday users with official root-level filters and pagination.
 - `list_workspaces` — List monday workspaces with official filters and pagination.
-- `move_item_to_board` — Move a monday item to another board and target group. [write]
+- `move_item_to_board` — Move a monday item to another board and target group. [destructive]
 - `move_item_to_group` — Move a monday item to another group on the same board. [write]
-- `set_item_description_content` — Replace a monday item description using markdown content. [write]
-- `update_board` — Update a monday board attribute with the official update_board mutation. [write]
+- `set_item_description_content` — Replace a monday item description using markdown content. [destructive]
+- `update_board` — Update a monday board attribute with the official update_board mutation. [destructive]
 - `update_column` — Update a monday column with the official update_column mutation. [write]
 - `update_dashboard` — Update a monday dashboard with the official dashboard mutation. [write]
 - `update_department` — Update a monday department on an enterprise account. [write]
 - `update_doc_name` — Update the name of an existing monday doc. [write]
 - `update_group` — Update an existing monday group attribute. [write]
+- `update_workspace` — Update a monday workspace with the official update_workspace mutation. [write]
 
 ## Safety
 

@@ -1,45 +1,54 @@
-## Description: <br>
-Operates an OOMOL-connected Amara account for reading, creating, updating, and deleting Amara data through the oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Amara (amara.org). Use this skill for Amara requests including reading, creating, updating, and deleting data through the OOMOL-connected Amara connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent inspect Amara schemas and run Amara read, write, and subtitle workflow actions through a connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, or delete Amara data when write or destructive actions are used. <br>
-Mitigation: Require explicit user intent and confirm the exact payload, target, and expected effect before running write or destructive actions. <br>
-Risk: The skill operates through a connected Amara account and requires sensitive account credentials. <br>
-Mitigation: Install it only for intended Amara account operation, rely on the connected credential flow, and avoid exposing raw tokens in prompts, logs, or files. <br>
-Risk: Running setup or connection commands unnecessarily can alter authentication or connection state. <br>
-Mitigation: Use first-time setup steps only after an oo CLI, authentication, connection, scope, or billing error requires them. <br>
+## Use Case:
 
+Developers and agent users use this skill to manage Amara videos, subtitle languages, subtitle versions, notes, URLs, teams, users, and activity through the oo CLI. It supports read operations as well as user-confirmed write and destructive Amara actions.
 
-## Reference(s): <br>
-- [ClawHub Amara Skill](https://clawhub.ai/oomol/oo-amara) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Amara](https://amara.org) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands should inspect the live connector schema before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: The fallback setup may run a remote oo CLI installer directly in the shell without integrity checks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installation and prefer a trusted, versioned source with integrity verification.
+
+Risk: Write and destructive Amara actions can change, remove, or overwrite Amara data.
+
+Mitigation: Confirm the exact action, target, and payload with the user before running write actions, and require explicit approval before destructive actions.
+
+## Reference(s):
+
+- [Amara homepage](https://amara.org)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include a data object and meta.executionId when actions are run.]
+
+## Skill Version(s):
+
+1.0.4 (source: server evidence release version and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

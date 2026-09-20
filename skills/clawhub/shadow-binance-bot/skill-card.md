@@ -1,40 +1,58 @@
-## Description: <br>
-Analyze Binance trade history and portfolio data to identify emotional trading patterns and simulate alternative strategies for educational trading insights. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered read-only trading analysis coach that simulates alternative strategies against your Binance trade history.
 
-## Publisher: <br>
-[acevod](https://clawhub.ai/user/acevod) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[acevod](https://clawhub.ai/user/acevod)
 
-## Use Case: <br>
-Traders and developers use this skill to review Binance Spot and Futures history, compare actual trades with simulated alternative strategies, and receive educational coaching about risk management and trading behavior. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses sensitive Binance API credentials to read balances and trading history. <br>
-Mitigation: Use read-only Binance API keys, disable trading and withdrawals, restrict keys by IP where possible, and prefer environment variables over config files. <br>
-Risk: Strategy simulations and coaching output may be mistaken for financial advice or trading signals. <br>
-Mitigation: Treat all simulations as educational estimates and review decisions independently before trading. <br>
+## Use Case:
 
+Traders and developers use this skill to analyze Binance Spot and Futures trading history, compare real results with simulated strategy alternatives, and generate coaching guidance for risk management and trading discipline.
 
-## Reference(s): <br>
-- [Shadow Binance Bot on ClawHub](https://clawhub.ai/acevod/shadow-binance-bot) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, API Calls] <br>
-**Output Format:** [Markdown-style trading analysis, simulation summaries, and coaching guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses read-only Binance API credentials when configured; demo mode can run without real account access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.3 (source: server release evidence, SKILL.md frontmatter, package.json) <br>
+Risk: The skill uses Binance API credentials and may display sensitive balances and trading history locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use read-only Binance API keys with trading and withdrawals disabled, apply IP restrictions where possible, and avoid sharing console output that contains account details.
+
+Risk: Trading analysis and simulated strategy alternatives may be mistaken for financial advice or trading signals.
+
+Mitigation: Treat generated reports as educational analysis only and review recommendations independently before making trading decisions.
+
+## Reference(s):
+
+- [Shadow Binance Bot on ClawHub](https://clawhub.ai/acevod/skills/shadow-binance-bot)
+- [Project homepage](https://github.com/acevod/Shadow-Binance-Bot)
+- [OpenClaw](https://openclaw.ai)
+- [Binance OpenClaw AI Builder Contest recognition](https://x.com/binance/status/2041259653305114833)
+- [Architecture diagram](assets/architecture.png)
+- [Shadow strategy simulation diagram](assets/shadow-simulation.png)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Console text and Markdown documentation with inline shell commands and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses Binance read-only API credentials when configured; runs in demo mode with generated data when credentials are absent.]
+
+## Skill Version(s):
+
+1.5.0 (source: SKILL.md frontmatter, package.json, CHANGELOG, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

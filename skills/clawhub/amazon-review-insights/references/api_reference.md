@@ -372,40 +372,27 @@ Manually trigger AI analysis for a collection-only task. Applicable to tasks wit
 
 ---
 
-### 4.4 Desktop Client Download Config
+### 4.4 Browser Extension Download Config
 
 **Endpoint**: `GET /download-config.json`
 
-A public config file (no API Key required) for retrieving desktop client download links.
+A public config file (no API Key required) for retrieving browser extension download links.
+Note: the website no longer offers the desktop client for download; `downloads` now contains only the `extension` entry.
 
 **Response**:
 ```json
 {
-  "version": "1.0.0",
-  "last_updated": "2026-04-27T14:31:08.795719Z",
+  "version": "1.5.1",
+  "last_updated": "2026-09-19T00:00:00Z",
   "downloads": {
-    "macos": {
-      "name_zh": "macOS Version",
-      "name_en": "macOS Version",
+    "extension": {
+      "name_zh": "Chrome Extension",
+      "name_en": "Chrome Extension",
       "url": "<actual download URL>",
-      "version": "1.0.0",
-      "size": "156MB",
+      "version": "0.6.11",
+      "size": "150.8 KB",
       "requirements": {
-        "min_version": "10.15",
-        "recommended_memory": "8GB",
-        "disk_space": "500MB"
-      }
-    },
-    "windows": {
-      "name_zh": "Windows Version",
-      "name_en": "Windows Version",
-      "url": "<actual download URL>",
-      "version": "1.0.0",
-      "size": "142MB",
-      "requirements": {
-        "min_version": "10",
-        "recommended_memory": "8GB",
-        "disk_space": "500MB"
+        "min_chrome_version": "88"
       }
     }
   }
@@ -1180,12 +1167,12 @@ Grouped semantically. These are the **server-side internal classifications** —
 
 Before creating a task, ensure:
 
-1. AstrMap desktop client is logged in
-2. Desktop client is logged in with an Amazon buyer account (do not use your seller account)
+1. Collection channel online (Chrome extension installed and connected)
+2. Signed in to an Amazon buyer account in the browser (do not use your seller account)
 3. Amazon access is working
 
 ### Error-handling Guidance
-1. Endpoint offline (`is_alive: false` or msg contains "设备"): check if desktop client is logged in
+1. Endpoint offline (`is_alive: false` or msg contains "设备"): prompt the user to install and sign in to the browser extension
 2. Insufficient points (msg contains "积分"): prompt user to top up
 3. Invalid API Key (HTTP 400 + msg contains "API Key"): verify the API Key
 4. Write op rejected (msg contains "只读"): a read-only key cannot create task / trigger analysis / incremental / rename

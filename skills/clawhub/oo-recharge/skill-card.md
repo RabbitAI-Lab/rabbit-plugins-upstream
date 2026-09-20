@@ -1,45 +1,61 @@
-## Description: <br>
-Recharge helps agents operate Recharge through an OOMOL-connected account for reading, creating, and updating Recharge data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Recharge (getrecharge.com). Use this skill for ANY Recharge request - searching and reading data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to retrieve and manage Recharge charges, customers, orders, products, and subscriptions through the OOMOL oo CLI connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The setup instructions include remote installer commands for the oo CLI. <br>
-Mitigation: Use a verified or manual oo CLI installation path before granting the skill access to Recharge operations. <br>
-Risk: Recharge customer, order, charge, and subscription data can include sensitive business or customer information. <br>
-Mitigation: Install only for trusted OOMOL accounts and limit use to users authorized to access the connected Recharge data. <br>
-Risk: Some connector actions are marked as write-capable and may affect Recharge state. <br>
-Mitigation: Inspect the live action schema and confirm the exact payload and expected effect with the user before running write actions. <br>
+## Use Case:
 
+External users and operators use this skill to read Recharge store data through an OOMOL-connected account. It retrieves individual charges, customers, orders, products, and subscriptions, and lists those resources with pagination and common filters.
 
-## Reference(s): <br>
-- [Recharge homepage](https://getrecharge.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-recharge) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce live oo CLI connector commands that return JSON responses from Recharge.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: OOMOL intermediates Recharge data access for this skill.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use the skill only when that intermediary access model is acceptable for the target Recharge account and data.
+
+Risk: Fallback setup includes pipe-to-shell CLI installation commands.
+
+Mitigation: Review OOMOL's official installation guide or install the oo CLI through a trusted method before running setup commands.
+
+Risk: The connector may expose state-changing actions outside the listed read-oriented workflow.
+
+Mitigation: Keep use to the documented read actions unless the user explicitly approves any state-changing connector action and payload.
+
+## Reference(s):
+
+- [ClawHub Recharge Skill](https://clawhub.ai/oomol/skills/oo-recharge)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Recharge Homepage](https://getrecharge.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

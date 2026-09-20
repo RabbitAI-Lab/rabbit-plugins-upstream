@@ -1,38 +1,48 @@
-## Description: <br>
-Ensures all relative time or current event queries first obtain the current date via session_status to provide accurate, up-to-date answers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Ensures agents obtain the current date before answering relative-time or current-event questions so responses can be based on up-to-date tool results.
 
-## Publisher: <br>
-[space-cadet](https://clawhub.ai/user/space-cadet) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[space-cadet](https://clawhub.ai/user/space-cadet)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers and agent operators use this skill to make agents verify the current date before constructing searches or answers for relative-time and current-event requests. It is most useful in environments where stale dates or training-data assumptions can cause wrong-year queries or unsupported factual claims.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The agent environment may not provide a session_status-style current-date source, causing time-sensitive requests to stop or return warnings.
+
+Mitigation: Install the skill only where an equivalent current-date tool is available, or document the fallback warning behavior for users.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers and agent operators use this skill to make assistants resolve the current date before answering relative-time or current-events questions, reducing wrong-year searches and unsupported time-sensitive claims. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [guidance, text]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can make an agent more conservative on current-events and relative-date questions by requiring a current-date check and tool-backed answers. <br>
-Mitigation: Install where explicit time verification is desired, and review agent behavior to ensure the added caution matches the deployment's response expectations. <br>
+**Output Format:** [Markdown instructions]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/space-cadet/skills/time-awareness) <br>
+**Other Properties Related to Output:** [Requires an available session_status-style current-date source for time-sensitive queries; otherwise the agent should warn that the result may be inaccurate.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, text] <br>
-**Output Format:** [Markdown instructions for agent behavior] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Directs agents to call session_status before relative-time or current-events queries and to limit answers to current-session tool evidence.] <br>
+1.0.0 (source: server release evidence)
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

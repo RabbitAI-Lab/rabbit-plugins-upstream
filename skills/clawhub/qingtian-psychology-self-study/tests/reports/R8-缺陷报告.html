@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>青田·心理学自学室 · R8 缺陷报告</title>
+<style>
+  :root{
+    --bg:#f6f8fc; --card:#ffffff; --ink:#1f2937; --sub:#64748b;
+    --line:#e6ebf2; --brand1:#6d5efc; --brand2:#22b8cf;
+    --p0:#dc2626; --p1:#ea580c; --p2:#ca8a04; --p3:#0891b2; --ok:#16a34a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.6;padding:28px 18px 60px}
+  .wrap{max-width:980px;margin:0 auto}
+  .hero{background:linear-gradient(120deg,var(--brand1),var(--brand2));color:#fff;
+    border-radius:18px;padding:30px 32px;box-shadow:0 12px 30px rgba(109,94,252,.25)}
+  .hero .tag{display:inline-block;background:rgba(255,255,255,.18);padding:4px 12px;
+    border-radius:999px;font-size:12px;letter-spacing:.5px;margin-bottom:12px}
+  .hero h1{font-size:26px;font-weight:700;margin-bottom:8px}
+  .hero p{opacity:.92;font-size:14px}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:22px 0}
+  .metric{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center}
+  .metric .n{font-size:28px;font-weight:800;color:var(--brand1)}
+  .metric .l{font-size:12px;color:var(--sub);margin-top:4px}
+  .sec{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:18px}
+  .sec h2{font-size:17px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .sec h2::before{content:"";width:4px;height:18px;background:linear-gradient(var(--brand1),var(--brand2));border-radius:3px}
+  .defect{border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:14px}
+  .defect .bar{height:6px}
+  .b-p1{background:var(--p1)} .b-p3{background:var(--p3)}
+  .defect .body{padding:16px 18px}
+  .defect .hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .defect .id{font-weight:700;font-size:15px}
+  .pill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;color:#fff}
+  .p-p1{background:var(--p1)} .p-p3{background:var(--p3)}
+  .defect .loc{font-size:12px;color:var(--sub);margin-bottom:8px}
+  .defect p{font-size:13.5px;color:#374151}
+  .defect .fix{margin-top:10px;background:#f0fdf4;border-left:3px solid var(--ok);padding:10px 12px;border-radius:8px;font-size:13px}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+  th{color:var(--sub);font-weight:600;font-size:12px}
+  .pass{color:var(--ok);font-weight:700}
+  .neg{color:var(--p3)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+  .badge{background:#eef2ff;color:#4338ca;border:1px solid #c7d2fe;font-size:12px;padding:4px 10px;border-radius:8px}
+  .warn{background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;font-size:12px;padding:4px 10px;border-radius:8px}
+  .foot{text-align:center;color:var(--sub);font-size:12px;margin-top:10px}
+  ul{margin:6px 0 6px 18px;font-size:13.5px;color:#374151}
+  code{background:#f1f5f9;padding:1px 6px;border-radius:5px;font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <span class="tag">PRODUCTION TEST · R8</span>
+    <h1>青田·心理学自学室 · 缺陷报告</h1>
+    <p>盲区增量测试 · 基线 v1.1.0 → 交付 <b>v1.1.1</b> · 2026-08-10 · 模式：盲区增量（不重跑 R1–R7）</p>
+  </div>
+
+  <div class="grid">
+    <div class="metric"><div class="n">R8</div><div class="l">测试轮次</div></div>
+    <div class="metric"><div class="n">2</div><div class="l">本轮新增缺陷</div></div>
+    <div class="metric"><div class="n">100%</div><div class="l">缺陷修复率</div></div>
+    <div class="metric"><div class="n">D1–D40</div><div class="l">累计缺陷计数</div></div>
+  </div>
+
+  <div class="sec">
+    <h2>本轮新增缺陷</h2>
+
+    <div class="defect">
+      <div class="bar b-p1"></div>
+      <div class="body">
+        <div class="hd"><span class="id">D39 · 多维度量表计分失败</span><span class="pill p-p1">P1 生产阻塞</span></div>
+        <div class="loc">位置：<code>assessment/scripts/scoring_engine.py</code> score() · 与 <code>SKILL.md §6</code> 文档约定冲突</div>
+        <p><b>现象</b>：计分引擎按 <b>item_id</b> 匹配作答键，而 <code>SKILL.md §6</code> 与 <code>score_and_report.py</code> 文档均要求 LLM 产出 <code>{"q1":0,"q2":1,…}</code>（按 items 顺序的位置键）。两者仅在 <b>PHQ-9</b>（恰好用 <code>q1..q9</code> 作 item id）上巧合一致；PANAS(<code>pa1/na1</code>)、FFMQ(<code>ob1…</code>)、ECR、SCL-90 等按文档作答时<b>全部题目缺失 → 退出码 2「作答不完整」→ 计分静默失败</b>。R1–R7 的 e2e 仅测了 PHQ-9，此盲区从未暴露（占 19 个量表中 18 个）。</p>
+        <div class="fix"><b>修复</b>：新增 <code>_normalize_answers()</code>，把 <code>q&lt;n&gt;</code> 位置键映射到第 n 个 item 的 id，item_id 键原样透传。文档约定的 <code>q1..qn</code> 格式对<b>所有量表</b>均可计分；SKILL.md §6 无需改动即与引擎一致。实证：PANAS <code>q1..q20</code> 修复前 exit=2 / 0 分，修复后 exit=0、0 缺失。</div>
+      </div>
+    </div>
+
+    <div class="defect">
+      <div class="bar b-p3"></div>
+      <div class="body">
+        <div class="hd"><span class="id">D40 · 版本可追溯性脱节</span><span class="pill p-p3">P3 文档时效</span></div>
+        <div class="loc">位置：<code>SKILL.md</code> frontmatter</div>
+        <p><b>现象</b>：文件版本号为 <code>1.1.0</code>，但最新测试报告为 R7（声称 <code>1.0.7</code>、可交付），中间无对应轮次报告，形成「未测试版本」状态。</p>
+        <div class="fix"><b>修复</b>：本次 R8 补全报告；交付版本对齐为 <b>1.1.1</b>（含 D39 修复）并写入累计计数，恢复版本/报告可追溯性。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>盲区走查与覆盖</h2>
+    <table>
+      <tr><th>盲区（测试清单 v2 维度）</th><th>走查对象</th><th>结果</th></tr>
+      <tr><td>维度 11 · 指令真实可执行</td><td>多维度量表计分：PANAS(2维)/FFMQ(5因子含反向题) 按文档 <code>q1..qn</code> 作答</td><td class="pass">✅ 修复后通过（D39）</td></tr>
+      <tr><td>维度 11 · 指令真实可执行</td><td><code>daily_recommend</code> 处理器（R7 未单独演练）不变量</td><td class="pass">✅ 通过（3选1 / 字段更新 / weekCompleted 分支）</td></tr>
+      <tr><td>维度 5 · 示例/文档时效</td><td>版本号 frontmatter 与 R7 报告脱节</td><td class="neg">⚠ 记录并修复（D40）</td></tr>
+      <tr><td>回归 · 历史缺陷</td><td>integration_test / build_dryrun(PHQ-9) / r7_dryrun 复跑</td><td class="pass">✅ 全绿，无回归</td></tr>
+    </table>
+    <div class="row">
+      <span class="badge">15/15 处理器已演练</span>
+      <span class="badge">daily_recommend 本轮补齐</span>
+      <span class="warn">19 量表中 18 个曾被命名巧合陷阱掩盖</span>
+    </div>
+  </div>
+
+  <div class="sec">
+    <h2>自动化验证</h2>
+    <table>
+      <tr><th>用例</th><th>断言</th><th>结论</th></tr>
+      <tr><td><code>tests/integration_test.py</code>（R5 存量·R8 复跑）</td><td>16/16</td><td class="pass">✅ 通过</td></tr>
+      <tr><td><code>tests/dryrun/build_dryrun.py</code>（PHQ-9 真实计分）</td><td>不变量全符合</td><td class="pass">✅ 通过</td></tr>
+      <tr><td><code>tests/dryrun/r7_dryrun.py</code>（R7 四处理器）</td><td>18/18</td><td class="pass">✅ 通过</td></tr>
+      <tr><td><code>tests/dryrun/r8_probe.py</code>（R8 新增）</td><td>PANAS 修复前 fail / 修复后 pass</td><td class="pass">✅ 通过</td></tr>
+      <tr><td><code>tests/dryrun/r8_multidim.py</code>（R8 新增）</td><td>PANAS+FFMQ+日常推荐+PHQ-9 回归</td><td class="pass">✅ 通过</td></tr>
+    </table>
+  </div>
+
+  <div class="sec">
+    <h2>结论</h2>
+    <p>青田·心理学自习室经 R1–R8 共 8 轮测试。本轮以<b>盲区增量</b>方式发现并修复 1 个 <b>P1 生产阻塞</b>（多维度量表按文档格式计分失败）与 1 个 <b>P3 文档时效</b>缺陷，全部存量用例复跑无回归。技能维持<b>生产级，可交付使用</b>。</p>
+    <p style="margin-top:8px"><b>本轮关键价值</b>：D39 揭示了 R1–R7 因「仅用 PHQ-9 做 e2e」而长期隐藏的命名巧合陷阱——任何非 <code>q1..qn</code> 命名的量表（占 19 个中 18 个）此前按文档作答都会静默失败；修复后该盲区彻底消除。</p>
+    <p style="margin-top:8px;color:var(--sub);font-size:12.5px">已知边界（README 已声明，非缺陷）：组队线下环节、进度可视化独立 HTML、实时提醒靠 WorkBuddy 自动化、无 Python 时量表计分回退 LLM。</p>
+  </div>
+
+  <div class="foot">青田·心理学自学室 · skill-prod-test R8 · 2026-08-10</div>
+</div>
+</body>
+</html>

@@ -1,43 +1,60 @@
-## Description: <br>
-团队任务管家 is a platform-neutral team task coordination skill that stores tasks in JSON files and supports natural-language task creation, reminders, overdue escalation, analytics, and multi-format export. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+在用户明确要求管理团队任务台账或调用 team-tasks 时，提供本地 JSON 任务存储、更新、评论、归档、备份、受限恢复、提醒风险解析和可重试的提醒同步事件。
 
-## Publisher: <br>
-[djoldwang](https://clawhub.ai/user/djoldwang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[djoldwang](https://clawhub.ai/user/djoldwang)
 
-## Use Case: <br>
-Teams and their agents use this skill to maintain shared task records, assign owners, send platform-neutral reminders, track progress, search tasks, produce statistics, and export task data. Host integrations provide member identity mapping, notification routing, and regional workday calendars. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent task files, task history, exports, and reminders can expose team work details or personal assignment data. <br>
-Mitigation: Install only in workspaces where that storage and reminder behavior is acceptable; configure file permissions, retention expectations, export access, and notification routing before use. <br>
-Risk: Ambiguous natural-language requests can create the wrong task, assignee, priority, or notification target. <br>
-Mitigation: Require confirmation for ambiguous task creation, assignment, priority, deadline, and routing decisions, and use reliable member identity mapping from the host environment. <br>
-Risk: Local JSON task storage can become inconsistent if writes fail or if multiple actors modify files without coordination. <br>
-Mitigation: Use the documented read-modify-backup-write flow, preserve .bak files for recovery, scan archives when generating IDs, and avoid unsynchronized manual edits. <br>
+## Use Case:
 
+Employees, external teams, developers, and integration maintainers use this skill to manage a shared local team-task ledger, generate task status views or exports, and coordinate reminder scheduling through trusted external adapters.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/djoldwang/team-tasks) <br>
-- [Publisher profile](https://clawhub.ai/user/djoldwang) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with command examples, JSON data models, text templates, and export format specifications] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces and updates local team task JSON files and can describe CSV, TXT, or JSON exports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Task records, history, reminder receipts, and backups persist in the configured local data directory.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Deploy only to a trusted local-only directory with appropriate filesystem ownership and permissions, and account for retained backups during data handling and review.
+
+Risk: The storage scripts do not authenticate users or authorize notification recipients.
+
+Mitigation: Require a trusted adapter or integration layer to enforce team identity, business permissions, notification authorization, and delivery target validation before invoking the skill.
+
+Risk: Reminder text is user-facing and currently Chinese-only.
+
+Mitigation: Use this release where Chinese reminder output is acceptable, or add a reviewed localization layer before broader deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/djoldwang/skills/team-tasks)
+- [安全存储接口与接入步骤](artifact/references/storage.md)
+- [调度适配器契约](artifact/references/reminder-adapters.md)
+- [OpenClaw 可选适配](artifact/references/openclaw.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON request examples, shell command examples, and text, JSON, or CSV task exports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces local task-ledger operations and reminder-planning guidance; actual notification delivery and authorization remain with trusted external adapters.]
+
+## Skill Version(s):
+
+1.4.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

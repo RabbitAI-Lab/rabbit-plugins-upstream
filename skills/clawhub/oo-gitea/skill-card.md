@@ -1,43 +1,60 @@
-## Description: <br>
-This skill lets agents operate Gitea through an OOMOL-connected account for repository discovery, issue workflows, and approved issue or comment creation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gitea (about.gitea.com). Use this skill for ANY Gitea request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and teams use this skill to inspect Gitea account, repository, issue, and comment data through an OOMOL-connected Gitea account. With explicit confirmation, it can also create issues and issue comments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Gitea account and repository information through the connected OOMOL account. <br>
-Mitigation: Connect only a Gitea account whose repositories you are comfortable exposing to this connector. <br>
-Risk: The skill can create Gitea issues and issue comments when write actions are approved. <br>
-Mitigation: Review the exact payload and expected effect before allowing any write action. <br>
+## Use Case:
 
+Developers and repository operators use this skill to manage Gitea repositories, issues, pull requests, releases, webhooks, deploy keys, and related collaboration workflows through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-gitea) <br>
-- [Gitea product page](https://about.gitea.com/products/gitea/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return JSON data from Gitea connector actions when commands are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: The fallback installer can execute remote installation code directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified oo CLI installation path and review installation commands before execution.
+
+Risk: Write and destructive Gitea actions can change or delete repository data.
+
+Mitigation: Require explicit user approval for the exact target and payload before running any write or destructive action.
+
+Risk: The skill acts through an OOMOL-connected Gitea account.
+
+Mitigation: Install only when OOMOL and the connected account scope are trusted, and prefer least-privilege account access.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-gitea)
+- [Gitea product page](https://about.gitea.com/products/gitea/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, json, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [State-changing actions should include the exact target and payload for user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

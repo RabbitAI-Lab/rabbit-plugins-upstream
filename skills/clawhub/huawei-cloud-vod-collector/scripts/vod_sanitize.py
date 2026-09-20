@@ -8,7 +8,7 @@ from pathlib import Path
 
 PATTERNS: dict[str, tuple[str, str]] = {
     "api_key": (
-        r"(api[_\-]?key|apikey)\s*[:=]\s*[\"']?(\S{8,})[\"']?",
+        r"(api[_\-]?key|apikey|access[_\-]?key)\s*[:=]\s*[\"']?(\S{8,})[\"']?",
         r"\1=***REDACTED***",
     ),
     "token": (
@@ -20,8 +20,22 @@ PATTERNS: dict[str, tuple[str, str]] = {
         r"\1=***REDACTED***",
     ),
     "secret": (
-        r"(secret|credential)\s*[:=]\s*[\"']?(\S{8,})[\"']?",
+        r"(secret|secret[_\-]?key|secret[_\-]?access[_\-]?key)\s*[:=]\s*[\"']?(\S{8,})[\"']?",
         r"\1=***REDACTED***",
+    ),
+    "huawei_ak": (
+        r"\b(AK|HW_ACCESS_KEY|AccessKeyId)\s*[:=]\s*[\"']?(\S{8,})[\"']?",
+        r"\1=***REDACTED***",
+    ),
+    "huawei_sk": (
+        r"\b(SK|HW_SECRET_KEY|SecretAccessKey)\s*[:=]\s*[\"']?(\S{8,})[\"']?",
+        r"\1=***REDACTED***",
+    ),
+    # 裸密钥字符串（无 key= 前缀）: 独立实现同款掩码逻辑, 不依赖外部 SDK,
+    # 覆盖常见 AK/SK 前缀: sk- (OpenAI 类), AKIA (AWS), LTAI (阿里云), mul_ (Multica)
+    "bare_secret": (
+        r"\b(sk-[A-Za-z0-9-]{8,}|AKIA[A-Z0-9]{16}|LTAI[A-Za-z0-9]{12,}|mul_[A-Za-z0-9]{20,})\b",
+        r"***REDACTED***",
     ),
 }
 
@@ -39,9 +53,9 @@ def sanitize(text: str, custom_patterns: list[str] | None = None) -> str:
     return result
 
 
-def sanitize_file(file_path: Path, output_path: Path | None = None) -> Path:
+def sanitize_file(file_path: Path, output_path: Path | None = None, custom_patterns: list[str] | None = None) -> Path:
     content = file_path.read_text(encoding="utf-8")
-    sanitized = sanitize(content)
+    sanitized = sanitize(content, custom_patterns=custom_patterns)
     target = output_path or file_path
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(sanitized, encoding="utf-8")

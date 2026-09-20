@@ -1,41 +1,56 @@
-## Description: <br>
-Cardly (card.ly) helps agents search and read Cardly account data through the OOMOL Cardly connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cardly (card.ly) lets an agent read, create, and update Cardly data through the OOMOL `oo` CLI connector instead of calling the Cardly API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to retrieve Cardly balances, credit history, available media, fonts, and writing styles from an OOMOL-connected Cardly account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Setup, login, Cardly connection, billing, or echo-debugging steps can affect the user's account or environment. <br>
-Mitigation: Approve those steps explicitly, and avoid sending sensitive personal data in echo payloads unless intentionally testing the authenticated endpoint. <br>
+## Use Case:
 
+Developers and external users use this skill to operate Cardly through an OOMOL-connected account, including balance lookup, credit-history lookup, personalization asset listing, and authenticated request debugging. The skill guides agents to inspect each action schema before running connector commands and to confirm write or destructive actions before execution.
 
-## Reference(s): <br>
-- [ClawHub Cardly skill page](https://clawhub.ai/oomol/skills/oo-cardly) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Cardly homepage](https://www.card.ly) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector action responses are JSON objects containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The first-time setup section includes remote installer commands for the oo CLI, including shell and PowerShell install scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not allow an agent to run installer commands automatically; install the oo CLI only from a trusted source and prefer pinned or otherwise verified installation steps.
+
+Risk: The skill can run write-tagged Cardly actions through an authenticated connector.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions, and require explicit approval for any destructive action.
+
+## Reference(s):
+
+- [Cardly homepage](https://www.card.ly)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [OOMOL Cardly connection settings](https://console.oomol.com/app-connections?provider=cardly)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector action responses are expected as JSON with `data` and `meta.executionId`; users should inspect the live schema before preparing payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -12,7 +12,7 @@ from urllib.request import Request, urlopen
 
 
 SLUG = "linkfox-1688-procurement"
-TIMEOUT_SECONDS = 120
+TIMEOUT_SECONDS = 150
 SMALL_THRESHOLD = 8000
 
 ENDPOINTS = {

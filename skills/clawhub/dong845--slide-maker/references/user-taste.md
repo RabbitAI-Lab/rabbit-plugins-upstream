@@ -16,10 +16,19 @@ one-deck guess never hardens into a standing rule.
 - Why this shape
 
 ## Where it lives — and the empty-file rule
-`taste.md` sits at the **active template-registry ROOT** — `~/.claude/slide-templates/taste.md`
-(Claude Code) · `~/.codex/slide-templates/taste.md` (Codex); if only one root exists, use it —
-NOT inside this skill, because it is the user's personal footprint: portable across hosts,
-theirs to edit or delete line-by-line. **A missing or empty `taste.md` is silently skipped** —
+`taste.md` sits at the **active template-registry ROOT**. 🔴 **Resolve that root with
+`python3 scripts/registry.py`, never from memory** — it prints every candidate, which ones
+exist, the write target, and whether a `taste.md` is already there. `~/.claude/slide-templates/`
+(Claude Code) and `~/.codex/slide-templates/` (Codex) keep their priority, and a runtime that is
+NEITHER — Kimi, Gemini, Cursor, Coze, an API caller — falls back to the host-neutral
+`~/.slide-maker/slide-templates/`. That fallback exists because the two-host list was the whole
+list for a long time, so on every other runtime this file's protocol silently did not run: no
+root, no read, no write, and nothing anywhere reporting it. `$SLIDE_MAKER_REGISTRY` overrides
+all of them. Reads scan every root that exists (higher priority wins on a name clash), so a
+template or profile saved under one agent is findable from another.
+
+It lives at that root and **not inside this skill**, because it is the user's personal
+footprint: portable across hosts, theirs to edit or delete line-by-line. **A missing or empty `taste.md` is silently skipped** —
 a brand-new user has NO footprint (the same rule as the empty registry), so never manufacture a
 profile; create the file only when the first durable signal is written at a Step-6 close.
 
@@ -55,7 +64,7 @@ evidence, like any other dial.)*
 ## LOOK HISTORY  (most recent 10 lines only — prune the oldest at append)
 | date | deck | preset/look | canvas value | signature motif |
 |---|---|---|---|---|
-| 2026-06-14 | cine-mri | dark_tech | dark navy | k-space spiral |
+| 2026-06-14 | cine-mri | dark_tech | dark navy #101A24 · accents #E3004F #4CC9F0 | k-space spiral |
 ```
 
 - **DIALS (≤10 rows)** — durable design preferences, one row per dimension, each carrying its
@@ -64,8 +73,16 @@ evidence, like any other dial.)*
   existing row** (move the dial, `handoff-and-iteration.md`), never appends a contradiction —
   two rows arguing about one dimension is the diverging-sources-of-truth failure.
 - **NO-GOs (≤5 lines)** — hard user vetoes, evidenced the same way.
+- **`registers.md` (beside this file)** — the registers this user has INVENTED, appended by `scripts/save_register.py` at hand-off. The look-history row below records that a deck had a bespoke look; the register file records the look itself, in enough detail to start from again. Both are needed: nine registers were shipped and lost while only the one-line rows survived.
 - **LOOK HISTORY (10 lines)** — one line per delivered deck; the freshness input
   (`agents/slide-design.md` §1 varies at least one foundation against the LAST line).
+  🔴 **Write the canvas value AND the accents as HEX**, as the example row does. This is not
+  decoration: `scripts/check_register_pixels.py` scores the new deck's rendered pixels against
+  these rows, and it can only see what the row records. Measured on this repo's own registry
+  before the rule existed, 8 of 10 rows carried exactly one hex — the canvas — with the accents
+  written as prose ("teal=you, amber=leverage"), so the accent half of *never reuse the last
+  deck's scheme* had nothing to compare against. A prose description of a colour is unreadable to
+  every check downstream; keep the prose, add the hex.
 - 🔴 **MUST — SCOPE EXCLUSION: design dials, NO-GOs, and look history ONLY; never
   workflow/mode directives** (the per-deck auto waiver, checkpoint skips) — SKILL.md settles
   those per-deck, and recording one here would silently carry an approval waiver across decks.

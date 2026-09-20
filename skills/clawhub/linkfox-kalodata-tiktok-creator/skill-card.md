@@ -1,45 +1,63 @@
-## Description: <br>
-Searches Kalodata TikTok creator leaderboards and retrieves an individual creator's profile, commerce performance, contact, product, and shop details by creatorId. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+通过 Kalodata data, this skill helps agents browse TikTok Shop creator leaderboards and fetch a selected creator's profile, sales, audience, content, live, product, shop, and contact metrics by creatorId.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External commerce analysts, sellers, and agents use this skill to discover TikTok Shop creators by market and time window, then inspect a selected creator's audience, sales, content, live, contact, product, and shop metrics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Creator lookup queries and API credentials are sent to the configured service endpoint. <br>
-Mitigation: Use approved credentials only, avoid sensitive queries, and restrict LINKFOX_TOOL_GATEWAY overrides to trusted endpoints. <br>
-Risk: Creator responses may include contact fields and are saved as JSON files in the workspace session data directory and cache. <br>
-Mitigation: Run the skill in a private workspace, protect or remove saved linkfox data before sharing a repository, and avoid shared workspaces for sensitive lookups. <br>
-Risk: Feedback reporting may send user experience details outside the local environment when the skill supports it. <br>
-Mitigation: Disable or constrain feedback reporting where user comments or operational context should remain internal. <br>
-Risk: Repeated creator lookups and pagination consume paid credits. <br>
-Mitigation: Use the built-in cache, avoid automatic parameter changes, and ask the user before performing additional paid lookups. <br>
+## Use Case:
 
+External sellers, analysts, and e-commerce operators use this skill to discover high-performing TikTok Shop creators by market and time window, then inspect one creator's detailed performance and contact data. It is intended for creator ranking, comparison, and profile lookup workflows rather than product, shop, livestream, or ad campaign management.
 
-## Reference(s): <br>
-- [Kalodata TikTok Creator API Reference](artifact/references/api.md) <br>
-- [ClawHub Skill Release Page](https://clawhub.ai/linkfox-ai/skills/linkfox-kalodata-tiktok-creator) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown summaries or tables plus JSON responses saved to files; scripts may print full JSON or a compact text summary.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires LINKFOX_AGENT_API_KEY or LINKFOXAGENT_API_KEY. Each API call consumes credits. Responses are cached for 24 hours by parameter set and saved under the current workspace's linkfox session data directory when writable.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The server security verdict is suspicious because the skill handles creator queries, account onboarding data, payment actions, and local cached results.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the publisher is trusted, review the skill before use, and clear local linkfox cache and output files when they may contain contact or business data.
+
+Risk: Authentication and onboarding flows can expose API keys, phone numbers, SMS codes, and billing actions in local terminals or logs.
+
+Mitigation: Prefer self-service key setup, avoid entering SMS codes or API keys in shared terminals, and review payment details before running billing commands.
+
+Risk: The skill allows custom gateway and login URLs through environment variables, which could redirect sensitive requests.
+
+Mitigation: Use the default LinkFox endpoints unless an administrator has explicitly approved alternate gateway or login URLs.
+
+Risk: The artifact describes automatic feedback reporting behavior that may send interaction feedback outside the current workspace.
+
+Mitigation: Disable or remove automatic feedback reporting before deployment if outbound feedback collection is not acceptable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-kalodata-tiktok-creator)
+- [Kalodata-TikTok达人搜索与详情 API 参考](references/api.md)
+- [解决认证和算力问题](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries and tables, JSON API responses, saved JSON files, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search and detail scripts always save full responses under a local linkfox session directory; small responses may also be printed inline, while larger responses are summarized unless --inline is used.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

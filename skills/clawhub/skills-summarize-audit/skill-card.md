@@ -1,47 +1,58 @@
-## Description: <br>
-Audits installed skills and plugins for source, version, availability, metadata, conflicts, ecosystem fit, Chinese display text, project profiling, and recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps Chinese-speaking users refine skill descriptions, profile projects, and generate evidence-based skill and plugin recommendations while staying read-only by default.
 
-## Publisher: <br>
-[gtbwpkwjnb-alt](https://clawhub.ai/user/gtbwpkwjnb-alt) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[gtbwpkwjnb-alt](https://clawhub.ai/user/gtbwpkwjnb-alt)
 
-## Use Case: <br>
-Developers and agent operators use this skill to inspect installed skills, plugins, MCP configuration, project context, and display metadata before deciding what to keep, refine, hide, or review further. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can inspect local skills, plugins, project files, MCP configuration, and session history, which may contain sensitive information. <br>
-Mitigation: Run it only against explicit directories you intend to audit, review outputs before sharing, and redact session or project data when needed. <br>
-Risk: A helper script may run local diagnostic commands beyond the read-only description. <br>
-Mitigation: Inspect the script before execution, verify the PATH and local binaries it can call, and disable the live diagnostic probe if it is not needed. <br>
-Risk: Lifecycle and action outputs may include commands or configuration changes that would affect local agent setup if executed. <br>
-Mitigation: Treat generated actions as proposals only; require explicit confirmation, backups, and review before applying changes. <br>
+## Use Case:
 
+Developers and AI-agent users use this skill to audit local skill/plugin ecosystems, refine Chinese UI descriptions, profile projects, and prepare evidence-backed recommendations for keeping, upgrading, replacing, introducing, coexisting with, or archiving tools.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gtbwpkwjnb-alt/skills/skills-summarize-audit) <br>
-- [README](README.md) <br>
-- [Health checklist](references/health-checklist.md) <br>
-- [MCP health checklist](references/mcp-health-checklist.md) <br>
-- [Recommendation framework](references/recommendation-framework.md) <br>
-- [Output contract](references/output-contract.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON reports with optional shell command templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Default behavior is read-only, but local scans may include skills, plugins, project files, MCP configuration, and session history within the supplied scope.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-9.1.0 (source: ClawHub release metadata and VERSION file) <br>
+Risk: The skill can read local skill/plugin directories, MCP config metadata, and session transcripts when the usage-signal collector is explicitly run.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Limit scans to the paths and clients needed for the task, avoid broad all-client scans unless necessary, and review reports before acting on recommendations.
+
+Risk: Recommendations may be mistaken for completed install, update, archive, or uninstall actions.
+
+Mitigation: Treat reports as read-only advice, require explicit user approval for follow-up changes, and verify any action through the appropriate agent or tool before considering it applied.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gtbwpkwjnb-alt/skills/skills-summarize-audit)
+- [README](README.md)
+- [Skill definition](SKILL.md)
+- [Output contract](references/output-contract.md)
+- [Report template](references/report-template.md)
+- [Actions schema](references/actions-schema.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown reports with optional JSON output and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only recommendations by default; exported reports require an explicit output request.]
+
+## Skill Version(s):
+
+9.2.2 (source: changelog, package.json, VERSION, released 2026-09-20)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

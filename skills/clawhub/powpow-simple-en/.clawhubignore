@@ -1,0 +1,8 @@
+# Never publish local state, sessions, or build artifacts.
+config/session.json
+session.json
+_state/
+_test/
+node_modules/
+*.log
+.DS_Store

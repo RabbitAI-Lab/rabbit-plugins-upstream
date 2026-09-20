@@ -1,0 +1,653 @@
+{
+  "id": "PANAS",
+  "name": "正性负性情绪量表（PANAS）",
+  "short_name": "PANAS 情绪",
+  "category": "情绪",
+  "target_population": "成年人",
+  "estimated_time": "约 2 分钟",
+  "item_count": 20,
+  "description": "测量过去一周积极情绪（PA）与消极情绪（NA）两个独立维度，各 10 题，1–5 自评。",
+  "source": "Watson, Clark & Tellegen, 1988",
+  "license": "学术免费使用",
+  "scoring_type": "sum",
+  "items": [
+    {
+      "id": "pa1",
+      "text": "过去一周，你感到「感兴趣的」的程度。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "几乎没有",
+          "score": 1
+        },
+        {
+          "label": "比较少",
+          "score": 2
+        },
+        {
+          "label": "中等",
+          "score": 3
+        },
+        {
+          "label": "比较多",
+          "score": 4
+        },
+        {
+          "label": "极其",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "pa2",
+      "text": "过去一周，你感到「兴奋的」的程度。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "几乎没有",
+          "score": 1
+        },
+        {
+          "label": "比较少",
+          "score": 2
+        },
+        {
+          "label": "中等",
+          "score": 3
+        },
+        {
+          "label": "比较多",
+          "score": 4
+        },
+        {
+          "label": "极其",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "pa3",
+      "text": "过去一周，你感到「坚强的」的程度。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "几乎没有",
+          "score": 1
+        },
+        {
+          "label": "比较少",
+          "score": 2
+        },
+        {
+          "label": "中等",
+          "score": 3
+        },
+        {
+          "label": "比较多",
+          "score": 4
+        },
+        {
+          "label": "极其",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "pa4",
+      "text": "过去一周，你感到「热情的」的程度。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "几乎没有",
+          "score": 1
+        },
+        {
+          "label": "比较少",
+          "score": 2
+        },
+        {
+          "label": "中等",
+          "score": 3
+        },
+        {
+          "label": "比较多",
+          "score": 4
+        },
+        {
+          "label": "极其",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "pa5",
+      "text": "过去一周，你感到「警觉的」的程度。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "几乎没有",
+          "score": 1
+        },
+        {
+          "label": "比较少",
+          "score": 2
+        },
+        {
+          "label": "中等",
+          "score": 3
+        },
+        {
+          "label": "比较多",
+          "score": 4
+        },
+        {
+          "label": "极其",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "pa6",
+      "text": "过去一周，你感到「专注的」的程度。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "几乎没有",
+          "score": 1
+        },
+        {
+          "label": "比较少",
+          "score": 2
+        },
+        {
+          "label": "中等",
+          "score": 3
+        },
+        {
+          "label": "比较多",
+          "score": 4
+        },
+        {
+          "label": "极其",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "pa7",
+      "text": "过去一周，你感到「活跃的」的程度。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "几乎没有",
+          "score": 1
+        },
+        {
+          "label": "比较少",
+          "score": 2
+        },
+        {
+          "label": "中等",
+          "score": 3
+        },
+        {
+          "label": "比较多",
+          "score": 4
+        },
+        {
+          "label": "极其",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "pa8",
+      "text": "过去一周，你感到「决心十足的」的程度。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "几乎没有",
+          "score": 1
+        },
+        {
+          "label": "比较少",
+          "score": 2
+        },
+        {
+          "label": "中等",
+          "score": 3
+        },
+        {
+          "label": "比较多",
+          "score": 4
+        },
+        {
+          "label": "极其",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "pa9",
+      "text": "过去一周，你感到「鼓舞的」的程度。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "几乎没有",
+          "score": 1
+        },
+        {
+          "label": "比较少",
+          "score": 2
+        },
+        {
+          "label": "中等",
+          "score": 3
+        },
+        {
+          "label": "比较多",
+          "score": 4
+        },
+        {
+          "label": "极其",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "pa10",
+      "text": "过去一周，你感到「自豪的」的程度。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "几乎没有",
+          "score": 1
+        },
+        {
+          "label": "比较少",
+          "score": 2
+        },
+        {
+          "label": "中等",
+          "score": 3
+        },
+        {
+          "label": "比较多",
+          "score": 4
+        },
+        {
+          "label": "极其",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "na1",
+      "text": "过去一周，你感到「心烦的」的程度。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "几乎没有",
+          "score": 1
+        },
+        {
+          "label": "比较少",
+          "score": 2
+        },
+        {
+          "label": "中等",
+          "score": 3
+        },
+        {
+          "label": "比较多",
+          "score": 4
+        },
+        {
+          "label": "极其",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "na2",
+      "text": "过去一周，你感到「难过」的程度。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "几乎没有",
+          "score": 1
+        },
+        {
+          "label": "比较少",
+          "score": 2
+        },
+        {
+          "label": "中等",
+          "score": 3
+        },
+        {
+          "label": "比较多",
+          "score": 4
+        },
+        {
+          "label": "极其",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "na3",
+      "text": "过去一周，你感到「内疚的」的程度。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "几乎没有",
+          "score": 1
+        },
+        {
+          "label": "比较少",
+          "score": 2
+        },
+        {
+          "label": "中等",
+          "score": 3
+        },
+        {
+          "label": "比较多",
+          "score": 4
+        },
+        {
+          "label": "极其",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "na4",
+      "text": "过去一周，你感到「恐惧的」的程度。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "几乎没有",
+          "score": 1
+        },
+        {
+          "label": "比较少",
+          "score": 2
+        },
+        {
+          "label": "中等",
+          "score": 3
+        },
+        {
+          "label": "比较多",
+          "score": 4
+        },
+        {
+          "label": "极其",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "na5",
+      "text": "过去一周，你感到「敌意的」的程度。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "几乎没有",
+          "score": 1
+        },
+        {
+          "label": "比较少",
+          "score": 2
+        },
+        {
+          "label": "中等",
+          "score": 3
+        },
+        {
+          "label": "比较多",
+          "score": 4
+        },
+        {
+          "label": "极其",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "na6",
+      "text": "过去一周，你感到「易怒的」的程度。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "几乎没有",
+          "score": 1
+        },
+        {
+          "label": "比较少",
+          "score": 2
+        },
+        {
+          "label": "中等",
+          "score": 3
+        },
+        {
+          "label": "比较多",
+          "score": 4
+        },
+        {
+          "label": "极其",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "na7",
+      "text": "过去一周，你感到「羞怯的」的程度。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "几乎没有",
+          "score": 1
+        },
+        {
+          "label": "比较少",
+          "score": 2
+        },
+        {
+          "label": "中等",
+          "score": 3
+        },
+        {
+          "label": "比较多",
+          "score": 4
+        },
+        {
+          "label": "极其",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "na8",
+      "text": "过去一周，你感到「紧张的」的程度。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "几乎没有",
+          "score": 1
+        },
+        {
+          "label": "比较少",
+          "score": 2
+        },
+        {
+          "label": "中等",
+          "score": 3
+        },
+        {
+          "label": "比较多",
+          "score": 4
+        },
+        {
+          "label": "极其",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "na9",
+      "text": "过去一周，你感到「坐立不安的」的程度。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "几乎没有",
+          "score": 1
+        },
+        {
+          "label": "比较少",
+          "score": 2
+        },
+        {
+          "label": "中等",
+          "score": 3
+        },
+        {
+          "label": "比较多",
+          "score": 4
+        },
+        {
+          "label": "极其",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "na10",
+      "text": "过去一周，你感到「害怕的」的程度。",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "几乎没有",
+          "score": 1
+        },
+        {
+          "label": "比较少",
+          "score": 2
+        },
+        {
+          "label": "中等",
+          "score": 3
+        },
+        {
+          "label": "比较多",
+          "score": 4
+        },
+        {
+          "label": "极其",
+          "score": 5
+        }
+      ]
+    }
+  ],
+  "dimensions": [
+    {
+      "name": "积极情绪(PA)",
+      "items": [
+        "pa1",
+        "pa2",
+        "pa3",
+        "pa4",
+        "pa5",
+        "pa6",
+        "pa7",
+        "pa8",
+        "pa9",
+        "pa10"
+      ],
+      "max": 50,
+      "min": 10
+    },
+    {
+      "name": "消极情绪(NA)",
+      "items": [
+        "na1",
+        "na2",
+        "na3",
+        "na4",
+        "na5",
+        "na6",
+        "na7",
+        "na8",
+        "na9",
+        "na10"
+      ],
+      "max": 50,
+      "min": 10
+    }
+  ],
+  "standard_score": null,
+  "interpretation": {
+    "bands": [
+      {
+        "dimension": "积极情绪(PA)",
+        "min": 10,
+        "max": 24,
+        "level": "偏低",
+        "summary": "积极情绪体验较少。",
+        "advice": "尝试能带来愉悦与投入的活动。"
+      },
+      {
+        "dimension": "积极情绪(PA)",
+        "min": 25,
+        "max": 50,
+        "level": "正常/较高",
+        "summary": "积极情绪体验在正常或较高水平。",
+        "advice": "维持。"
+      },
+      {
+        "dimension": "消极情绪(NA)",
+        "min": 10,
+        "max": 24,
+        "level": "正常",
+        "summary": "消极情绪在正常范围。",
+        "advice": "维持。"
+      },
+      {
+        "dimension": "消极情绪(NA)",
+        "min": 25,
+        "max": 50,
+        "level": "偏高",
+        "summary": "消极情绪体验偏高，可能处于压力或低落中。",
+        "advice": "关注情绪来源，必要时寻求支持或咨询。"
+      }
+    ]
+  },
+  "safety": {
+    "crisis_items": [],
+    "crisis_rule": "",
+    "high_risk_rule": ""
+  }
+}

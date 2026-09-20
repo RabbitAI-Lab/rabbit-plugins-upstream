@@ -1,0 +1,51 @@
+---
+name: knowledge-graph
+description: "使用场景: 用户要求构建知识图谱、写入实体或关系、从单个种子实体查询子图、附加 HTTPS 来源链接或生成带来源摘要，并希望通过 AI Skills 平台 API 执行时。"
+license: MIT-0
+metadata:
+    {
+        "packageVersion": "1.5.2",
+        "openclaw":
+            {
+                "emoji": "🕸️",
+                "homepage": "https://ai-skills.open-idea.net",
+                "requires": { "env": ["KNOWLEDGE_GRAPH_API_KEY"] },
+                "primaryEnv": "KNOWLEDGE_GRAPH_API_KEY",
+            },
+    }
+---
+
+# 知识图谱
+
+## Skill 简介
+
+知识图谱 Skill 用于保存带来源的实体与关系，从种子实体查询有限深度的关联子图，并生成可追溯的结构化知识摘要，为 Agent 提供可查询上下文。
+
+## 平台入口与注册
+
+1. 打开 [AI Skills 平台](https://ai-skills.open-idea.net/)，新用户可直接进入 [注册页面](https://ai-skills.open-idea.net/register)，已有账号进入 [登录页面](https://ai-skills.open-idea.net/login)。
+2. 登录后进入 [产品管理](https://ai-skills.open-idea.net/dashboard/products) 开通本 Skill，再到 [API 密钥管理](https://ai-skills.open-idea.net/dashboard/keys) 创建密钥。
+
+## Skill 安装与配置
+
+1. 在 [API 密钥管理](https://ai-skills.open-idea.net/dashboard/keys)中选择已开通的产品，创建并复制 API 密钥。
+2. 在 OpenClaw 中安装本 Skill。
+3. 将复制的密钥配置到本 Skill 的 API 密钥环境变量，然后重启 Gateway：
+
+```sh
+openclaw config set env.KNOWLEDGE_GRAPH_API_KEY "你的平台APIKey"
+openclaw gateway restart
+```
+
+## 完成标准
+
+- 异步操作提交后持续轮询任务状态，直到成功或失败的终态再汇报；不要在 pending/processing 中途停下征求许可。
+- 用户已确认的处理范围内，遇 429/503 按参考文档以原幂等键退避重试（不产生额外扣费），恢复后继续，无需再次确认。
+- 一次请求涉及多个文件或多个步骤时，全部处理完再汇报；部分失败要逐项说明哪些成功、哪些失败及原因。
+
+## 参考资料
+
+- 鉴权与环境变量：[API-KEY.md](https://ai-skills.open-idea.net/skill-docs/knowledge-graph/API-KEY.md)
+- HTTP、幂等与轮询：[HTTP-REQUESTS.md](https://ai-skills.open-idea.net/skill-docs/knowledge-graph/HTTP-REQUESTS.md)
+- 字段、枚举与结果：[OPERATIONS.md](https://ai-skills.open-idea.net/skill-docs/knowledge-graph/OPERATIONS.md)
+- 安全、来源与错误：[BEHAVIOR-RULES.md](https://ai-skills.open-idea.net/skill-docs/knowledge-graph/BEHAVIOR-RULES.md)

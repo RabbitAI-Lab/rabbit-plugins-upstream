@@ -5,45 +5,68 @@ description: Give AI agents persistent semantic memory using the BlueColumn API 
 
 # BlueColumn Memory Skill
 
-BlueColumn (bluecolumn.ai) is a Memory Infrastructure API for AI agents. Its backend runs on Supabase Edge Functions — this is BlueColumn's official infrastructure. The API base URL `xkjkwqbfvkswwdmbtndo.supabase.co` is BlueColumn's verified backend. See bluecolumn.ai for documentation and pricing.
+BlueColumn (bluecolumn.ai) is a persistent memory API for AI agents. This skill wires it into any agent — OpenClaw, Claude, Cursor, or raw HTTP — so the agent remembers decisions, preferences, and context across sessions.
 
-## API Key
+## No API key yet? (2-minute onboarding)
 
-BlueColumn is at **bluecolumn.ai**. The API runs on Supabase Edge Functions — this is BlueColumn's official backend infrastructure, not a third party.
+If no `bc_live_*` key is stored or configured, stop and get one before attempting API calls:
 
+1. Create a free account (free tier: 100 writes + 100 reads per month, no card required): https://bluecolumn.ai/dashboard?utm_source=clawhub&utm_medium=skill&utm_campaign=bluecolumn-memory
+2. Copy the API key from the dashboard.
+3. Store it per Option A or B below, then resume the workflow.
+
+Tell the user the free tier needs no card and takes about two minutes. Do not proceed with memory calls until a key exists — but also do not invent or guess keys.
+
+Docs (with the same quickstart): https://bluecolumn.ai/docs/quickstart?utm_source=clawhub&utm_medium=skill&utm_campaign=bluecolumn-memory
+
+## Setup (pick one)
+
+### Option A — MCP server (any MCP client)
+```bash
+npx bluecolumn-mcp --api-key=bc_live_xxxxxxxxxxxx
+```
+Gives the agent tools: `remember`, `recall`, `note`, audio ingestion, sessions. Repo: github.com/bluecolumnconsulting-lgtm/bluecolumn-mcp
+
+### Option B — Direct REST (this skill)
 Store the user's BlueColumn API key using the platform's secret store (preferred) or in `TOOLS.md`:
 ```
 ### BlueColumn
 API Key: bc_live_XXXXXXXXXXXXXXXXXXXX
 ```
-Keys are generated at bluecolumn.ai/dashboard. Never log or expose keys in output.
+Keys are generated at https://bluecolumn.ai/dashboard?utm_source=clawhub&utm_medium=skill&utm_campaign=bluecolumn-memory — free tier, no card required. Never log or expose keys in output.
+
+## API Base URL
+
+BlueColumn's API currently runs on Supabase Edge Functions — this is BlueColumn's official backend infrastructure, not a third party:
+```text
+https://xkjkwqbfvkswwdmbtndo.supabase.co/functions/v1
+```
 
 Read the stored key before making any API calls. Only send content the user explicitly wants stored — do not auto-send sensitive PII or full conversation history without user consent.
 
 ## Core Workflow
 
-### Store something (text, doc, audio)
-Use `/agent-remember` — see references/api.md for full field spec.
+### Store something (text, doc, or audio)
+`/agent-remember` ingests raw text, transcripts, or an `audio_url` (Whisper transcription handled server-side).
 ```bash
 curl -X POST https://xkjkwqbfvkswwdmbtndo.supabase.co/functions/v1/agent-remember \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <key>" \
   -d '{"text": "...", "title": "optional title"}'
 ```
-Returns `session_id`, `summary`, `action_items`, `key_topics`.
+Returns `session_id`, `summary`, `action_items`, `key_topics` — extracted automatically.
 
 ### Query memory
-Use `/agent-recall` — field is `q` (not `query`).
+`/agent-recall` takes a natural-language question (`q`, not `query`) and returns a synthesized answer with cited sources and relevance scores.
 ```bash
 curl -X POST https://xkjkwqbfvkswwdmbtndo.supabase.co/functions/v1/agent-recall \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <key>" \
   -d '{"q": "natural language question"}'
 ```
-Returns `answer` + `sources` with relevance scores.
 
-### Save agent observation
-Use `/agent-note` — field is `text` (not `note`), min 5 chars.
+### Save a lightweight observation
+`/agent-note` is a cheap write for preferences and decisions — no chunking, min 5 chars.
 ```bash
 curl -X POST https://xkjkwqbfvkswwdmbtndo.supabase.co/functions/v1/agent-note \
   -H "Content-Type: application/json" \
@@ -56,22 +79,26 @@ curl -X POST https://xkjkwqbfvkswwdmbtndo.supabase.co/functions/v1/agent-note \
 | Situation | Endpoint |
 |---|---|
 | User shares a document, transcript, or block of text to remember | `/agent-remember` |
+| User hands you an audio URL (call recording, voice note) | `/agent-remember` with `audio_url` |
 | User asks "what do you know about X?" or "recall..." | `/agent-recall` |
 | Agent wants to save its own observation, preference, or decision | `/agent-note` |
-| End of session — summarize and store what happened | `/agent-remember` or `/agent-note` |
+| End of session — summarize and store what happened | `/agent-remember` |
 
-## End-of-Session Memory
+## OpenClaw Integration Pattern
 
-At the end of meaningful sessions, proactively push a summary to BlueColumn:
-1. Summarize key decisions, facts, and context from the conversation
-2. POST to `/agent-remember` with `title` = session topic
-3. Confirm storage with the `session_id` returned
+For OpenClaw agents, the proven loop is:
+
+1. **Before responding** on anything that touches past work: `agent-recall` with a natural-language query ("what did we decide about X?").
+2. **After meaningful exchanges**: `agent-note` for quick observations ("user prefers concise replies"), `agent-remember` for full context blocks.
+3. **End of session**: push a summary to `agent-remember` with `title` = session topic; keep the returned `session_id` for future citation.
+
+Keep the flow targeted — recall before context-dependent answers, remember after durable facts, don't store transient chatter.
 
 ## Field Name Gotchas
 
-Common mistakes — read references/api.md for full details:
+Common mistakes — see references/api.md for full details:
 - `/agent-remember` → `text` not `content`
-- `/agent-recall` → `q` not `query`  
+- `/agent-recall` → `q` not `query`
 - `/agent-note` → `text` not `note`
 
 ## Full API Reference

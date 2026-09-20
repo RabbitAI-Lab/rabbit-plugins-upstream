@@ -32,8 +32,7 @@ def main() -> None:
             "Usage: precheck_shoppable_video.py '<JSON>'\n"
             "Required: openId (or ttsAccessToken), video_info, product_link_info\n"
             "  video_info.file_id — from upload or large file bind\n"
-            "  product_link_info.product_id — from linkfox-tiktok-video-products "
-            "(get_shop_products / get_showcase_products)\n"
+            "  product_link_info.product_id — from get_shop_products / get_showcase_products\n"
             "  product_link_info.title — product anchor title (< 30 chars recommended)\n"
             "Returns: data.precheck.task_id — use with get_shoppable_video_precheck_result.py\n"
             "Or pass full body via requestBody",

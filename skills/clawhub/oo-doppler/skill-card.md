@@ -1,43 +1,60 @@
-## Description: <br>
-Doppler (doppler.com). Use this skill for ANY Doppler request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Doppler through OOMOL's oo CLI for reading, creating, updating, exporting, and deleting Doppler projects, configs, secrets, tokens, syncs, and change requests.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Doppler connector schemas and run Doppler project, environment, config, secret, service token, sync, and change request actions through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose Doppler secret values and perform major account changes when requested. <br>
-Mitigation: Use a least-privilege Doppler connection and review exact targets before approving write, token, sync, or delete operations. <br>
-Risk: Write and destructive actions can change or remove Doppler projects, configs, environments, secrets, service tokens, syncs, and dynamic secret leases. <br>
-Mitigation: Confirm the exact payload and target before running write actions, and require explicit approval before destructive actions. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Doppler secrets, projects, environments, configs, change requests, service tokens, syncs, integrations, and dynamic secret leases through an OOMOL-connected Doppler account.
 
-## Reference(s): <br>
-- [Doppler homepage](https://www.doppler.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Doppler connection settings](https://console.oomol.com/app-connections?provider=doppler) <br>
-- [Doppler skill on ClawHub](https://clawhub.ai/oomol/oo-doppler) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return Doppler connector JSON responses when actions are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The skill can read and export Doppler secrets through the user's connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review requests that read, export, or disclose secrets, and run them only for intended projects and configs.
+
+Risk: Write and destructive actions can create, overwrite, revoke, or delete Doppler resources including secrets, projects, configs, tokens, syncs, and leases.
+
+Mitigation: Confirm the exact target, payload, and expected effect before running actions marked write or destructive.
+
+Risk: The setup path includes a remote installer command for the oo CLI.
+
+Mitigation: Prefer a verified or package-manager install path, or inspect the installer before executing it.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-doppler)
+- [Doppler Homepage](https://www.doppler.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses JSON request payloads and returns connector JSON responses with execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

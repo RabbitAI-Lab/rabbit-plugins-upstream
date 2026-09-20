@@ -1,44 +1,60 @@
-## Description: <br>
-Measure helps agents read, create, and update Measure billing data through the OOMOL maple_billing connector and oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Measure through an OOMOL-connected account using the maple_billing connector for customer, product, pricing, subscription, and checkout workflows.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Measure billing workflows from an agent, including customer, product, pricing, subscription, and checkout-session lookup plus selected customer and checkout creation or update actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access Measure billing data through OOMOL. <br>
-Mitigation: Install and use it only when the user intends to grant agent access through OOMOL and trusts that integration. <br>
-Risk: Write actions can create or update Measure customers and checkout sessions. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running any action tagged as write. <br>
-Risk: First-time setup may install the oo CLI or connect an OOMOL account. <br>
-Mitigation: Run installer, authentication, or account-connection steps only after a matching command failure and only with user approval. <br>
+## Use Case:
 
+Developers and external users use this skill to let an agent inspect Measure action schemas and run Measure customer, product, pricing, subscription, and hosted-checkout workflows through OOMOL. It supports read actions directly and requires user confirmation before write or destructive actions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-maple-billing) <br>
-- [Measure Homepage](https://getmeasure.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, Text] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release and skill frontmatter) <br>
+Risk: The skill can run write actions that create checkout sessions, create customers, or update customer records in Measure.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact payload and intended effect with the user before running actions tagged as write, following the artifact safety guidance.
+
+Risk: A one-time oo CLI install command fetches and executes a remote installer.
+
+Mitigation: Use official OOMOL documentation or verify the installer before running it, as recommended by the security guidance.
+
+Risk: Measure access depends on a connected OOMOL account with valid credentials and billing status.
+
+Mitigation: Only attempt setup or reconnection after an auth, scope, credential, app, or billing error, and direct the user to the relevant OOMOL connection or billing page.
+
+## Reference(s):
+
+- [Measure homepage](https://getmeasure.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-maple-billing)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the oo CLI to fetch live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

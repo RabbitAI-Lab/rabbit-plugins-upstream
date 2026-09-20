@@ -1,45 +1,56 @@
-## Description: <br>
-Operate TiDB Cloud through an OOMOL-connected account using the oo CLI connector for TiDB Cloud read, create, and update workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents search and read TiDB Cloud clusters, branches, regions, quotas, API keys, audit logs, imports, and exports through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and cloud operators use this skill to inspect TiDB Cloud resources and run supported TiDB Cloud connector actions through an OOMOL-connected account. It covers API keys, clusters, branches, imports, exports, regions, node specs, audit logs, providers, and quotas. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The connected account can expose TiDB Cloud resources and metadata, including API keys, clusters, audit logs, and related organization information. <br>
-Mitigation: Install only when the user trusts OOMOL with the TiDB Cloud connection and understands what the connected account can read. <br>
-Risk: Write or destructive connector actions can change or remove TiDB Cloud state if run with an incorrect payload or target. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running actions tagged as write or destructive. <br>
-Risk: First-time setup may require running an external oo CLI installer. <br>
-Mitigation: Review the oo CLI installer before first-time setup and run setup steps only when an auth, connection, or missing-command error requires them. <br>
+## Use Case:
 
+External developers and operators use this skill to inspect TiDB Cloud resources and operational records from an OOMOL-connected account without handling raw TiDB Cloud tokens directly.
 
-## Reference(s): <br>
-- [TiDB Cloud ClawHub skill page](https://clawhub.ai/oomol/oo-tidb) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [TiDB Cloud homepage](https://www.pingcap.com/tidb/cloud/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands can return JSON responses from the oo CLI when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Installer guidance pipes remote OOMOL CLI scripts into a shell without an integrity check.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer before running it, or use a verified package, checksum, or signature workflow when available.
+
+Risk: Connected OOMOL credentials can expose TiDB Cloud data visible to the organization, including API key listings and audit logs.
+
+Mitigation: Install and connect the skill only when OOMOL is trusted with that TiDB Cloud access, and use the least-privileged organization credentials available.
+
+## Reference(s):
+
+- [TiDB Cloud homepage](https://www.pingcap.com/tidb/cloud/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-tidb)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution; read-oriented TiDB Cloud actions return JSON responses from the oo CLI.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

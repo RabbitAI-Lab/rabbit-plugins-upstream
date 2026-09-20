@@ -1,42 +1,60 @@
-## Description: <br>
-Access Vibo event music planning through an MCP server for events, timelines, song requests, playlists, guest activity, and connected music exports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Access your Vibo event music planning through MCP for event timelines, song requests, playlists, guest activity, and music exports.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and event hosts use this skill to let an agent inspect and manage Vibo event music planning, including timeline sections, requested songs, playlists, guest participation, and Spotify or Apple Music exports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can depend on Vibo passwords, access tokens, refresh tokens, or captured browser sessions. <br>
-Mitigation: Keep `.mcp.json`, environment variables, and `~/.vibo-mcp/session.json` private, avoid committing them, and rotate Vibo credentials or sessions if exposed. <br>
-Risk: Write tools can modify event songs, comments, sections, guests, notifications, and connected music exports. <br>
-Mitigation: Review dry-run previews first and only rerun mutating tools with `confirm: true` when the proposed change is intended. <br>
+## Use Case:
 
+External users and developers use this skill to connect an agent to Vibo event music planning so they can inspect events, manage timeline sections, review song requests, and perform confirm-gated music planning actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/skills/vibo-mcp) <br>
-- [vibo-mcp npm package](https://www.npmjs.com/package/vibo-mcp) <br>
-- [Vibo](https://vibodj.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with JSON configuration snippets, tool guidance, and command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide MCP tool calls that read or mutate Vibo account and event data; mutating tools are described as confirm-gated.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.3 (source: server release evidence) <br>
+Risk: Vibo passwords, access tokens, refresh tokens, or captured sessions may expose event data if committed or shared.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not commit .mcp.json or session files; store credentials only in trusted local configuration and rotate or revoke them if exposed.
+
+Risk: Confirm-gated write tools can change Vibo event data when confirm:true is supplied.
+
+Mitigation: Review the proposed action and target event or section before approving any confirm:true call.
+
+Risk: The skill depends on the third-party vibo-mcp npm package for MCP server behavior.
+
+Mitigation: Install only if you trust the package and need Vibo access from your agent.
+
+## Reference(s):
+
+- [Vibo](https://vibodj.com)
+- [vibo-mcp npm package](https://www.npmjs.com/package/vibo-mcp)
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/vibo-mcp)
+- [ClawHub publisher profile](https://clawhub.ai/user/chrischall)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, configuration, shell commands, text]
+
+**Output Format:** [Markdown with configuration examples and tool guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill guides use of an MCP server whose read tools return Vibo event data and whose mutating tools require confirm:true before changing event data.]
+
+## Skill Version(s):
+
+2.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

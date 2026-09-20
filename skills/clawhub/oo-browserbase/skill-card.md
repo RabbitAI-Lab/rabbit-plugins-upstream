@@ -1,44 +1,57 @@
-## Description: <br>
-Browserbase (browserbase.com). Use this skill for Browserbase requests that read, create, update, or delete Browserbase data through the OOMOL connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Browserbase (browserbase.com). Use this skill for ANY Browserbase request - reading, creating, updating, and deleting data. Whenever a task involves Browserbase, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Browserbase projects, sessions, contexts, and usage through an OOMOL-connected account. It supports read operations, state-changing session and context creation, credential refresh, and context deletion with confirmation guidance for write and destructive actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Browserbase account and sensitive credentials are handled by the OOMOL connection. <br>
-Mitigation: Install only when you trust the publisher and intend to operate Browserbase through the connected account. <br>
-Risk: Write and destructive actions can create sessions or contexts, refresh upload credentials, request session release, or delete Browserbase contexts. <br>
-Mitigation: Confirm the exact payload, target identifiers, and expected effect with the user before running write or destructive actions. <br>
-Risk: The authoritative security verdict is suspicious and recommends review before use. <br>
-Mitigation: Review the skill and security guidance before deployment, and restrict use to the intended account and maintenance workflow. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Browserbase projects, sessions, contexts, and usage through an OOMOL-connected account without handling raw Browserbase API tokens.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-browserbase) <br>
-- [Browserbase Homepage](https://www.browserbase.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON when actions are run with the documented --json flag.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup instructions include running a remote installer script directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only through a verified, user-reviewed method, and avoid letting an agent execute the remote installer script without explicit approval.
+
+Risk: Write and destructive Browserbase actions can create sessions, change contexts, delete contexts, or request early session release.
+
+Mitigation: Confirm the exact action, target identifier, payload, and expected effect with the user before running actions tagged as write or destructive.
+
+## Reference(s):
+
+- [Browserbase homepage](https://www.browserbase.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [OOMOL Browserbase connection](https://console.oomol.com/app-connections?provider=browserbase)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-browserbase)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill directs the agent to inspect live connector schemas before building Browserbase action payloads.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

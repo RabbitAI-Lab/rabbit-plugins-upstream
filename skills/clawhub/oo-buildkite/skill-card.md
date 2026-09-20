@@ -1,43 +1,62 @@
-## Description: <br>
-Buildkite helps agents read and manage Buildkite organizations, pipelines, and builds through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Buildkite skill for reading, creating, updating, and deleting Buildkite data through the OOMOL-connected Buildkite connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and CI operators use this skill to let an agent inspect Buildkite account, organization, pipeline, and build data, and to perform approved build operations such as create, cancel, and rebuild. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform state-changing Buildkite operations such as creating, canceling, or rebuilding builds. <br>
-Mitigation: Confirm the exact organization, pipeline, build number, payload, and intended effect with the user before running state-changing actions. <br>
-Risk: The skill depends on an OOMOL-connected Buildkite account and can use sensitive credentials through that connection. <br>
-Mitigation: Install and use it only when the user intends to let an agent operate Buildkite through OOMOL, and have the user approve oo CLI installation, sign-in, and connection steps. <br>
+## Use Case:
 
+Developers and CI operators use this skill to inspect Buildkite organizations, pipelines, builds, users, and token details, and to create, cancel, or rebuild Buildkite builds after confirming write or destructive actions.
 
-## Reference(s): <br>
-- [ClawHub Buildkite skill page](https://clawhub.ai/oomol/oo-buildkite) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Buildkite homepage](https://buildkite.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May execute Buildkite connector actions through the oo CLI when the user has connected an OOMOL account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Setup instructions include remote installer commands that can execute downloaded scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified installation path for the oo CLI and avoid running pipe-to-shell installers automatically.
+
+Risk: The connector can create, rebuild, or cancel Buildkite builds in a connected CI account.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before any write or destructive action.
+
+Risk: Token scopes and token owner details may expose sensitive account metadata.
+
+Mitigation: Treat token inspection output as sensitive and share only the information needed for the task.
+
+## Reference(s):
+
+- [ClawHub Buildkite Skill](https://clawhub.ai/oomol/skills/oo-buildkite)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Buildkite Homepage](https://buildkite.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [OOMOL Buildkite Connection](https://console.oomol.com/app-connections?provider=buildkite)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May invoke the oo CLI to run Buildkite connector actions and return JSON responses from the connector.]
+
+## Skill Version(s):
+
+1.0.4 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

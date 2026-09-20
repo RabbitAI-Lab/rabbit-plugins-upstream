@@ -1,48 +1,58 @@
-## Description: <br>
-A multifunction utility toolbox that helps agents provide image, PDF, video, data conversion, text, developer, education, everyday utility, and system tools, including v3.6 additions for file hashing, UUIDs, timestamps, IP tools, expanded unit conversion, and MD5/SHA/base conversion. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese multifunction toolbox skill that helps agents run common calculation, text, developer, media, system, and AI-office utility workflows, including v4.0 tax calculation data and exchange-rate cache freshness handling.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-External users, employees, and developers use this skill as a general-purpose toolbox for calculations, conversions, local file utilities, HTTP checks, media/PDF/image workflows, and system-resource inspection from an agent session. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is a broad local toolbox that can read and write user-selected files, inspect local system resources, and rename files after preview. <br>
-Mitigation: Use it only in directories you intend to modify, review paths and previews before confirming operations, and keep backups for important files. <br>
-Risk: The skill can make outbound requests to user-supplied and third-party URLs. <br>
-Mitigation: Use trusted URLs, avoid sending sensitive data, and treat responses from third-party services as untrusted input. <br>
-Risk: The security evidence says file-safety and network-safety promises are weaker than the included examples consistently enforce. <br>
-Mitigation: Do not rely solely on the documented filters; review proposed file and network actions before execution, especially around protected or sensitive file types. <br>
-Risk: Some features require optional dependencies or external tools such as Pillow, PyPDF2, rembg, jieba, qrcode, or FFmpeg. <br>
-Mitigation: Confirm package names and install commands before running them, prefer isolated environments, and install only the dependencies needed for the requested task. <br>
+## Use Case:
 
+External users and developers use this skill to ask an agent for everyday utility work such as calculations, text processing, file and media conversion, HTTP testing, system checks, QR and password utilities, meeting notes, and weekly report generation.
 
-## Reference(s): <br>
-- [Dgngjx Skill on ClawHub](https://clawhub.ai/fyniujin/skills/dgngjx-skill) <br>
-- [Online Mortgage Calculator](https://www.zhujisuanqi.com/) <br>
-- [Tax Calculator](https://www.taxcalculator.com) <br>
-- [Base64 Online](https://www.base64encode.org/) <br>
-- [Photopea](https://www.photopea.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline code blocks and command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose optional dependency installation commands and file operations that require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The toolbox can persist tool inputs and outputs locally, which may expose sensitive prompts, documents, passwords, URLs, or meeting content through history-enabled workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid entering secrets or confidential content unless history behavior has been reviewed, disabled, or cleared after use.
+
+Risk: Some workflows can send user-provided content to third-party services, including QR generation, online transcription, HTTP testing, entertainment, knowledge lookup, wallpaper, and exchange-rate features.
+
+Mitigation: Use offline or manual modes for sensitive content and review destination services before submitting private links, documents, audio, or credentials.
+
+Risk: File and media workflows may read or write local files and may install optional packages such as Pillow, PyPDF2, rembg, jieba, qrcode, FFmpeg, or Whisper after confirmation.
+
+Mitigation: Install optional dependencies only from trusted sources and run file-changing workflows on reviewed copies or in a controlled workspace.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/dgngjx-skill)
+- [tax_2026.yaml](references/tax_2026.yaml)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, files, guidance]
+
+**Output Format:** [Markdown, plain text, JSON-like structured output, shell commands, and generated local files depending on the selected tool.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Some workflows may read or write local working files, persist local history, call external services, or require optional package installation after user confirmation.]
+
+## Skill Version(s):
+
+4.0.0 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

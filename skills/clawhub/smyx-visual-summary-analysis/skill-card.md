@@ -1,43 +1,59 @@
-## Description: <br>
-Performs AI analysis on input video clips and images, then generates a smooth natural scene description. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Performs AI analysis on input video clips/image content and generates a smooth, natural scene description. | 视觉摘要智述技能，对传入的视频片段/图片内容进行AI分析，生成一段通顺自然的场景描述内容
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Agents use this skill when a user provides an image, local video file, or media URL and needs a readable visual summary, scene description, or report history lookup. It is suited to content understanding, accessibility support, and media asset review workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded media is processed by the publisher's cloud service. <br>
-Mitigation: Avoid sending sensitive personal, business, or regulated media unless the publisher's retention, access, and account controls are acceptable. <br>
-Risk: The skill can create or reuse a local identity, store authentication tokens locally, and retrieve cloud-stored report history associated with that identity. <br>
-Mitigation: Use it only in workspaces where local identity state and token storage are acceptable, and review account-linked history before relying on it. <br>
+## Use Case:
 
+Developers and agent users use this skill to send clear image or video inputs to a remote visual-analysis service and receive natural-language scene summaries, structured analysis results, report links, or historical report listings.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-visual-summary-analysis) <br>
-- [Visual summary API documentation](references/api_doc.md) <br>
-- [Analysis API error documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON text containing scene descriptions, structured analysis results, report links, or history tables.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports local file input, media URL input, optional saved output files, and cloud-backed report history lookup.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: server release evidence; artifact SKILL.md frontmatter lists 1.0.8) <br>
+Risk: Images, videos, and report queries are sent to the provider's cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with media approved for that provider, and confirm upload, retention, and sharing practices before deployment.
+
+Risk: The security evidence says the skill silently manages identity and tokens.
+
+Mitigation: Make identity and token creation, reuse, storage, and revocation explicit and controllable before production use.
+
+Risk: The security evidence reports an active plaintext development API configuration.
+
+Mitigation: Remove the development HTTP profile and require HTTPS before attaching credentials, media, or report data.
+
+## Reference(s):
+
+- [API interface documentation](references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-visual-summary-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json]
+
+**Output Format:** [Markdown or JSON visual-analysis report with scene descriptions, structured findings, recommendations, and report links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May save the returned report to a file when an output path is provided; artifact documentation states support for jpg, jpeg, png, mp4, avi, and mov inputs up to 10 MB.]
+
+## Skill Version(s):
+
+1.0.15 (source: server-resolved release metadata; artifact frontmatter states 1.0.16)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

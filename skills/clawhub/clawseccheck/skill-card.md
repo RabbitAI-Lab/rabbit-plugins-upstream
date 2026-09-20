@@ -1,48 +1,59 @@
-## Description: <br>
-Free, local security self-audit for an OpenClaw agent that reads local OpenClaw configuration, bootstrap files, logs, session metadata, installed skills, and bounded host-security signals to produce an A-F security score and prioritized findings without changing the OpenClaw setup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ClawSecCheck audits a user's local OpenClaw setup for configuration, prompt-injection, installed skill and plugin, MCP, credential-surface, and host-security risks while keeping reports local.
 
-## Publisher: <br>
-[gl0di](https://clawhub.ai/user/gl0di) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[gl0di](https://clawhub.ai/user/gl0di)
 
-## Use Case: <br>
-OpenClaw users, developers, and security reviewers use this skill to audit an agent's local security posture, inspect prompt-injection and supply-chain risk, vet installed or candidate skills, and receive a concise grade plus prioritized findings. It is intended for local self-audit and reporting rather than automatic remediation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The scanner reads local OpenClaw configuration, bootstrap files, logs, session metadata, installed skill text, selected host-security files, global dotenv settings, and ClawHub token-store metadata. <br>
-Mitigation: Install and run it only when that read scope is acceptable; review the security model first and use scoping flags such as --no-host, --no-history, or --no-native when a narrower audit is needed. <br>
-Risk: The optional suppression workflow can change .clawseccheckignore and reduce what future reports show. <br>
-Mitigation: Treat ignore proposals as review-only until a human checks the exact entries, and monitor suppression changes as audit-relevant drift. <br>
-Risk: Audit output can contain quoted untrusted skill names, file content, findings, or payload previews. <br>
-Mitigation: Treat report content as evidence, not instructions; summarize findings in trusted prose and act only on explicit user requests. <br>
+## Use Case:
 
+Developers, security reviewers, and OpenClaw users use this skill to inspect their own OpenClaw setup, surface security findings, monitor drift, and vet local skills or plugins before installation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gl0di/skills/clawseccheck) <br>
-- [Project README](README.md) <br>
-- [User guide](docs/USAGE.md) <br>
-- [Security model](SECURITY_MODEL.md) <br>
-- [Check catalog](docs/CHECKS.md) <br>
-- [Threat coverage matrix](docs/THREAT_COVERAGE.md) <br>
-- [Output schema](docs/OUTPUT_SCHEMA.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Chat-readable report text and Markdown, with optional JSON, SARIF, HTML, SVG badge, and saved report files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports include an A-F grade, score, prioritized findings, optional next-step commands, and machine-readable outputs when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.57.0 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: The scanner reads OpenClaw configuration, logs, installed skill and plugin text, and limited credential-related artifacts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that local read scope is acceptable, review the documented scope before running, and avoid sharing raw reports that may describe local configuration.
+
+Risk: The skill can write local audit history, monitor state, and requested report files; some opt-in modes can write inside the audited OpenClaw home.
+
+Mitigation: Use --no-history when local audit history is not desired, and review opt-in modes such as --monitor, --watch, --apply-ignore-proposals, and report export paths before use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gl0di/skills/clawseccheck)
+- [Security model](SECURITY_MODEL.md)
+- [Security policy](SECURITY.md)
+- [Output schema](docs/OUTPUT_SCHEMA.md)
+- [User guide](docs/USAGE.md)
+- [Check catalog reference](docs/CHECKS.md)
+- [CLI flags](references/cli-flags.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, SARIF, files, shell commands, configuration, guidance]
+
+**Output Format:** [Conversational summaries and reports, with optional JSON, SARIF, HTML, SVG badge, PDF, and saved text outputs.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports are local by default; grading is emitted only when the documented audit layers have enough evidence.]
+
+## Skill Version(s):
+
+4.2.1 (source: SKILL.md frontmatter, CHANGELOG, pyproject.toml, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

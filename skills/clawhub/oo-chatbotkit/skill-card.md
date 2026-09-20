@@ -1,43 +1,56 @@
-## Description: <br>
-ChatBotKit helps an agent operate ChatBotKit resources through an OOMOL-connected account using the `oo` CLI for reading, creating, and updating data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ChatBotKit (chatbotkit.com). Use this skill for ANY ChatBotKit request: reading, creating, updating, and deleting data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect and manage ChatBotKit bots, conversations, messages, datasets, files, and account usage through an OOMOL-connected ChatBotKit account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and change ChatBotKit resources through an OOMOL-connected account. <br>
-Mitigation: Install it only for agents that should access that account, and require confirmation for write actions that create or update bots, conversations, datasets, records, files, syncs, or uploads. <br>
-Risk: Connector actions depend on sensitive credentials managed by the OOMOL connection. <br>
-Mitigation: Keep ChatBotKit connected only in the intended OOMOL account and treat authentication or scope errors as setup issues rather than bypassing the connector flow. <br>
+## Use Case:
 
+Developers and operators use this skill to manage ChatBotKit bots, conversations, datasets, files, usage data, and related account resources through the OOMOL oo CLI. It supports read workflows as well as confirmed write and destructive workflows.
 
-## Reference(s): <br>
-- [ChatBotKit ClawHub listing](https://clawhub.ai/oomol/oo-chatbotkit) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [ChatBotKit homepage](https://chatbotkit.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads; connector responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an installed and authenticated OOMOL `oo` CLI with ChatBotKit connected.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill depends on OOMOL's oo CLI and an OOMOL-connected ChatBotKit account, which grants account access through that toolchain.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use the skill only if the user trusts OOMOL's oo CLI and is comfortable granting it access to the connected ChatBotKit account.
+
+Risk: Write and destructive ChatBotKit actions can change bots, datasets, files, conversations, or attached data.
+
+Mitigation: Review the live action schema, exact target, payload, and expected effect with the user before approving any write or destructive action.
+
+## Reference(s):
+
+- [ChatBotKit homepage](https://chatbotkit.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-chatbotkit)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Fetches the live connector schema before payload construction; write and destructive actions require user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.4 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

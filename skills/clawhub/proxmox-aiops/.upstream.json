@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/proxmox-aiops",
   "slug": "proxmox-aiops",
   "ownerHandle": null,
-  "version": "0.8.0",
-  "updatedAt": 1784668582670,
-  "contentHash": "f8887fe091aae1bc77c5b78d91f2912e3cc7aee0146de2bf191c4eb41bead73b",
-  "fetchedAt": "2026-07-26T18:08:53.608Z"
+  "version": "0.13.3",
+  "updatedAt": 1789453289788,
+  "contentHash": "3e41966e3b8ad812a0e5ebbe74c12e170fcafc206f679589e445f2a145e32fbf",
+  "fetchedAt": "2026-09-20T13:04:11.770Z"
 }

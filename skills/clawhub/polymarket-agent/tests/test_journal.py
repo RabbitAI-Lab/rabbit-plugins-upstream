@@ -169,7 +169,7 @@ class TradeLockTest(unittest.TestCase):
         )
         holder = subprocess.Popen(
             [sys.executable, "-c", script],
-            stdout=subprocess.PIPE, text=True, env=os.environ.copy(),
+            stdout=subprocess.PIPE, text=True, env=dict(os.environ),
         )
         try:
             self.assertEqual(holder.stdout.readline().strip(), "LOCKED")

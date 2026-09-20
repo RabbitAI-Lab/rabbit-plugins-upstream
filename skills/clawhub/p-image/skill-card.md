@@ -1,39 +1,54 @@
-## Description: <br>
-Use when someone wants a fast AI image - product shots, hero visuals, mood boards, or draft photos from a text prompt. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when someone explicitly wants fast, low-cost photo generation for mood boards, bulk panels, or quick iterations, rather than controlled photoreal output or in-image text.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-Developers, creators, and external users use this skill to draft prompts, choose aspect ratios, and call Pruna's p-image model for fast text-to-image generation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill exposes a disable_safety_checker option, which could bypass normal provider safety controls. <br>
-Mitigation: Review the skill before installing, avoid using disable_safety_checker, and provide external tokens or custom weights only when their purpose and destination are understood. <br>
+## Use Case:
 
+External users, developers, and agents use this skill to route simple photo-generation requests to Pruna's p-image model, craft faithful prompts, choose aspect ratios, and call the Pruna API for quick still-image outputs.
 
-## Reference(s): <br>
-- [p-image on ClawHub](https://clawhub.ai/pruna-ai/skills/p-image) <br>
-- [Pruna predictions API endpoint](https://api.pruna.ai/v1/predictions) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON request bodies] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires PRUNA_API_KEY; required input is prompt, with optional aspect ratio, seed, LoRA settings, Hugging Face token, and safety-checker control.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata and skill frontmatter) <br>
+Risk: Prompts, private images, or sensitive tokens may be sent to Pruna's API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not submit confidential prompts, private images, or sensitive tokens unless the user accepts sharing them with Pruna's API.
+
+Risk: Installer commands load Pruna skills from an external source.
+
+Mitigation: Confirm the Pruna skill source is trusted and prefer pinned or otherwise verified installer commands before installation.
+
+## Reference(s):
+
+- [ClawHub p-image skill page](https://clawhub.ai/pruna-ai/skills/p-image)
+- [Pruna predictions API endpoint](https://api.pruna.ai/v1/predictions)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API calls, Configuration]
+
+**Output Format:** [Markdown with inline bash commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires PRUNA_API_KEY and sends prompt and aspect-ratio inputs to Pruna's API.]
+
+## Skill Version(s):
+
+1.0.13 (source: server release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

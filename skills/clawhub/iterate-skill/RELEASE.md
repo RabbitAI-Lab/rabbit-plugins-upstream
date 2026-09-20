@@ -1,0 +1,930 @@
+# 发布手册 / Release Manual
+
+iterate 生态目前有 **三个** 会独立对外发布的项目。本手册把它们所有的发布渠道、
+命令、前置步骤、版本同步规则与已知坑整理在一起，作为每次发版的统一 checklist，
+避免遗漏。
+
+> 发布架构总览见 [`DESIGN-iterate-harness.md`](DESIGN-iterate-harness.md) §6「仓库形态」与各版本迭代记录。
+
+---
+
+## 生态项目一览
+
+| 项目 | 仓库 | 分发渠道 | 版本线 |
+|---|---|---|---|
+| **iterate-skill**（skill 本体 + CLI + 安装器） | `jingzhao-l/iterate-skill`（主仓库，唯一维护点） | GitHub Release / npm / ClawHub / ModelScope / Tencent SkillHub | 3.0.x（与 skill 同步） |
+| **iterate-harness**（Python 引擎 + npm 包装器） | `jingzhao-l/iterate-harness`（subtree 独立发布仓） | GitHub tag / npm 包装器 | 1.9.x（独立） |
+| **iterate-plugin**（dsh 插件） | `jingzhao-l/iterate-plugin`（subtree 独立发布仓） | npm | 2.12.x（独立，自 2.3.7 起） |
+
+三个项目共用同一主仓库 `jingzhao-l/iterate-skill` 作为唯一开发/评审点，
+`harness/` 下的两个子项目通过 `git subtree` 拆分到各自的独立发布仓库，再在
+`.release/` 发布工作区执行 npm 发布。
+
+---
+
+## 项目 1：iterate-skill（skill 本体）
+
+### ⚠️ 核心规范（skill 就是 skill，发布前必读）
+
+> **skill 发布只发 skill 本体，`harness/` 下的两个独立子项目一律排除。**
+>
+> 生态里 `harness/iterate-plugin`（dsh 插件）与 `harness/iterate-harness`（Python 引擎）
+> 各有自己的分发仓库（`jingzhao-l/iterate-plugin` / `jingzhao-l/iterate-harness`），
+> **不属于 skill 分发包**。任何平台（ClawHub / ModelScope / SkillHub / GitHub release
+> tarball）的 skill 发布包都不得携带 `harness/*` 源码。
+>
+> - 失效规范示例（历史误报，已废弃）：2.3.14/2.3.15 曾把 `harness/iterate-plugin`
+>   完整源码夹带进 ModelScope 与旧 SkillHub 包，全部跳过。
+> - **自 2.3.16 起所有平台包均剔除 `harness/*`。**
+> - **发布前强制复核**：任意平台的包/目录发出前，先跑
+>   `unzip -l <zip> | grep harness/`（zip）或 `find <stage目录> -path '*/harness/*'`（stage 目录），
+>   结果为 **0 条**才允许发出。
+>
+> 每步发布清单中凡是碰包的，都会在对应步骤再次带回这条提醒。
+
+### 需要同步的版本号文件
+
+发版前必须同步以下文件的版本号（step 1 一次性完成）：
+
+| 文件 | 字段 |
+|---|---|
+| `pyproject.toml` | `[project].version` |
+| `iterate_cli/__init__.py` | `__version__` |
+| `SKILL.md` | frontmatter `version` |
+| `npm-installer/package.json` | `version` |
+| `CHANGELOG.md` | 新增版本条目 |
+
+> **核心规范（参见上文 ⚠️ 总则）**：skill 分发包只发 skill 本体，
+> `harness/` 下两个独立子项目一律排除、不得携带。自 2.3.16 起所有平台包均剔除 `harness/*`。
+> 重建/发布前用 `unzip -l <zip> | grep harness/` 复核必须为 0。
+
+### 发布清单
+
+- [x] **1. 同步版本号**：人工编辑上述 5 个文件 + 更新 `CHANGELOG.md`（保留旧版本条目，只新增）。
+- [x] **2. 本地验证**：跑通全部测试（`pytest tests/ -q`、`ruff check`），确认 `iterate --version` 输出新版本。
+- [x] **3. 提交并推送主仓库**：`git add -A && git commit && git push origin main`。
+- [x] **4. 打 GitHub Release tag**：`git tag v<X.Y.Z> && git push origin v<X.Y.Z>`，在 GitHub 创建 Release。
+      > `.github/workflows/release.yml` 会在 Release published 时自动生成并上传
+      > `iterate-skill.tar.gz` + `SHA256SUMS.txt`（从 tag 树确定性构建）。
+      > **（skill 只发 skill）**：`git archive` 使用 pathspec `':!harness'` 剔除 harness，tarball 不含 `harness/`。
+- [x] **5. 发布 npm 安装器**（安装器从 GitHub Release 下载 tarball，务必先于/同步于 npm 发布）：
+      ```bash
+      cd npm-installer
+      npm publish
+      ```
+      验证：`npx iterate-skill-installer --version` 能拉到新版本。
+- [x] **6. 发布 ClawHub**：
+      ```bash
+      clawhub publish <stage 目录> --slug iterate-skill --name Iterate --version <X.Y.Z> --no-input
+      ```
+      > **坑**：必须显式传 `--name Iterate`，否则显示名会被默认取为发布目录 basename
+      > （历史上出现过 `Clawhub Stage 2.3.12`）。ClawHub 有已知 bug（issue #2983），
+      > 偶发 `skillId/versionId invalid value`，发布前需清理残留的 suspended 进程。
+      >
+      > **串行上传慢**：ClawHub 逐文件串行上传慢网络下极易假死，可用并发脚本
+      > `.dist_tmp/clawhub_publish.py`（`--concurrency N`）并行上传。
+      >
+      > **stage 必须干净（skill 只发 skill）**：stage 目录不得含任何 `harness/` 子项目
+      > （`harness/iterate-harness`、`harness/iterate-plugin` 均为 0；历史 2.3.14–2.3.16
+      > 误打包 65MB clone 超 50MB 上限）。
+      > 发布前复核：`find <stage目录> -path '*/harness/*'` 结果为空。
+      >
+      > 唯一可发的纯 skill 本体文件集就是 `git archive ':!harness'` 产出的 tarball 解包结果。
+- [x] **7. 发布 ModelScope**（skill 只发 skill）：
+      - 用 **精简包**（重建脚本 `.dist_tmp/rebuild_ms.py` 已剔除 `harness/*`）。
+      - zip 需 < 5MiB；通过 OpenAPI 更新：`openapi.update_skill_settings(owner, name, {'skill_file': file_id})`。
+      > **坑**：完整包常超 5MiB 上限，必须用精简包；且历史版本曾夹带 `harness/iterate-plugin`
+      > 源码，重构后必须为 0。发出前复核 `unzip -l <ms.zip> | grep harness/` 为空。
+- [x] **8. 发布 Tencent SkillHub**（skill 只发 skill）：
+      - 用 **SkillHub 专用包 `iterate-skill-skillhub.zip`**（重建脚本 `.dist_tmp/rebuild_skillhub.py`
+        在剔 harness 的 ms 精简包基础上**再剔除 LICENSE**），skillId `104490`。
+      - **发布命令（skillhub CLI）**：本地工具 `~/.local/bin/skillhub`（源码在
+        `~/.skillhub/skills_store_cli.py`），自动读取登录凭证
+        `~/.skillhub/credentials.json`（个人社区版 `skh_` key）：
+        ```bash
+        ~/.local/bin/skillhub publish <skillhub.zip 或目录> \
+          --version <X.Y.Z> --changelog "<本次变更一句话>" --json
+        ```
+        > CLI 内部调用 `POST https://api.skillhub.cn/api/v1/community/skills/publish`，
+        > multipart 上传（`payload` JSON 含 slug/version/displayName/summary/.../changelog
+        > + 每个 skill 文件一个 `files` part，filename 存相对路径）。
+        > 返回 JSON `{"ok":true,"skillId":104490,"version":"<X.Y.Z>","versionId":...,"tags":{"latest":"<X.Y.Z>"},"reviewStatus":"pending","securityScanStatus":"pending"}`。
+        > `reviewStatus/securityScanStatus=pending` 为平台异步审核，与既往一致，非失败。
+        > 可选 `--dry-run --json` 做本地预检（只校验 metadata+打包，不发 HTTP）。
+      > **坑**：必须用去掉 LICENSE 的精简专用包（约 288KB）防止上传 `Broken pipe`；
+      > 完整包（含 LICENSE）会因过大上传失败。该专用包源自剔 harness 的 ms 精简包，
+      > 故天然不含 `harness/`；发出前仍复核 `unzip -l <skillhub.zip> | grep harness/` 为空
+      > （0 条）且 `unzip -p <zip> SKILL.md | grep ^version:` 已是 `<X.Y.Z>`。
+      >
+      > **无法同版本重传**：SkillHub 对已发布版本上锁，重传必须升版本（本手册 2.3.17
+      > 即因清理 harness 后同版本被锁而统一升版覆盖）。
+- [x] **9. 三平台版本一致性确认**：ClawHub / ModelScope / SkillHub 均指向 `<X.Y.Z>`。
+      > **3.4.1 状态（2026-09-16）**：patch（updater 硬化批次）。GitHub Release
+      > v3.4.1 已发布（tag `v3.4.1`，CI 自动生成 `iterate-skill.tar.gz` 552,991 字节 +
+      > `SHA256SUMS.txt` + `iterate-qoder.zip` 596,002 字节，`:!harness` 剔除 harness，
+      > `tar -tzf | grep harness/` 为 0、`SKILL.md version: 3.4.1`、pyproject 3.4.1，
+      > 本地 `shasum -a 256` 与 SHA256SUMS 一致，tarball 含 `iterate_cli/updater.py`
+      > 且 `assistants_unknown` 字段已入包）；
+      > npm `iterate-skill-installer@3.4.1` 已发布（registry `latest=3.4.1`，实测
+      > `npx -y iterate-skill-installer@3.4.1 --version` 输出 3.4.1）；
+      > ClawHub（skillId `kd73s950z2gathsjtaenp987cx8ax0mm`）经并发脚本 `.dist_tmp/clawhub_publish.py`
+      > + stage `.dist_tmp/clawhub-stage-3.4.1/iterate-skill`（80 文件、1,956,773 字节、harness 0）
+      > 发布 3.4.1（`ok:true`，versionId `k9707hpy803r7scvqartjp51ns8ehk7n`，`status` pending，
+      > `latestVersion` 异步传播中）；
+      > ModelScope 已 PATCH 生效（`.dist_tmp/rebuild_ms_341.py` 按 3.4.0 文件集重建精简 zip
+      > 535,305 字节、73 文件、harness 0、SKILL 3.4.1、updater 含 assistants_unknown；
+      > `.dist_tmp/verify_update_341.py` `update_skill_settings` success，
+      > file_id `c5e924b3-b560-4181-bbe8-ead030ec17fa`）；
+      > SkillHub（skillId `104490`）经 `.dist_tmp/rebuild_skillhub_341.py` 精简包（69 文件、532,922
+      > 字节、harness 0、剔除 LICENSE/.gitignore/.gitmodules/npm-installer/LICENSE）`.skillhub publish`
+      > 成功（`ok:true`，versionId `318659`，`tags.latest=3.4.1`，`reviewStatus/securityScanStatus`
+      > =pending 为平台异步审核）。发版前全量 pytest 1108 + ruff 通过、npm 安装器测试通过。
+      > 3.4.1 内容：`iterate update` 子进程超时真正生效（此前 GIT/PIP timeout 常量是死参数，挂死的
+      > `git pull`/`pip install` 会无限阻塞；现生产 runner 以 `timeout=` 传入 `subprocess.run`，
+      > `TimeoutExpired` 转可读错误）；`_safe_extractall` 目录成员与符号链接目标统一穿越/逃逸校验
+      > （覆盖 <py3.12 无 `data_filter` 的回退路径）；`_urlopen_bounded` 下载上限改为按字节精确
+      > （原先按块数允许 ~52.4MiB）；`--assistants` 未知名 fail-fast 白名单（JSON 含
+      > `assistants_unknown`，成功应用 `--json` 退出码由 1 修正为 0）。新增 tests/test_updater.py
+      > 19 项（timeout 传递/契约/TimeExpired、目录穿越/绝对路径/链接目标拒绝、字节上限精确、
+      > assistants 白名单、CLI JSON 退出码）。
+      >
+      > **3.4.0 状态（2026-09-15）**：feature（`iterate update` 自更新命令）。GitHub Release
+      > v3.4.0 已发布（tag `v3.4.0`，CI 自动生成 `iterate-skill.tar.gz` 546,730 字节 +
+      > `SHA256SUMS.txt` + `iterate-qoder.zip`，`:!harness` 剔除 harness，`tar -tzf | grep harness/`
+      > 为 0、`SKILL.md version: 3.4.0`、pyproject 3.4.0，本地 `shasum -a 256` 与 SHA256SUMS
+      > 一致，tarball 含 `iterate_cli/updater.py`）；
+      > npm `iterate-skill-installer@3.4.0` 已发布（registry `latest=3.4.0`，E2E 实测
+      > `npx iterate-skill-installer@3.4.0 --target <tmp> --ai trae --force` 下载/校验/安装成功，
+      > SKILL.md version: 3.4.0、harness 0、updater.py present）；
+      > ClawHub（skillId `kd73s950z2gathsjtaenp987cx8ax0mm`）经并发脚本 `.dist_tmp/clawhub_publish.py`
+      > + stage `.dist_tmp/clawhub-stage-3.4.0`（80 文件、1,933,945 字节）发布
+      > 3.4.0（`ok:true`，versionId `k97719j2g3ns8srag2d082xmch8eea50`，`publicationStatus` pending）；
+      > ModelScope 已 PATCH 生效（`.dist_tmp/rebuild_ms_340.py` 按 3.3.1 文件集重建精简 zip
+      > 529,928 字节、73 文件、harness 0、SKILL 3.4.0，并补回此前 3.3.1 缺失的
+      > iterate_cli/{configcmd,guard,dimension_sets,updater}.py + 新增 test_updater*；
+      > `.dist_tmp/verify_update_340.py` `update_skill_settings` success，
+      > file_id `c9fb069b-c433-429b-91a5-03291cc16d33`）；
+      > SkillHub（skillId `104490`）经 `.dist_tmp/rebuild_skillhub_340.py` 精简包（69 文件、527,545
+      > 字节、harness 0、剔除 LICENSE/.gitignore/.gitmodules/npm-installer/LICENSE、含 updater.py）
+      > `.skillhub publish` 成功（`ok:true`，versionId `316974`，`tags.latest=3.4.0`，
+      > `reviewStatus/securityScanStatus`=pending 为平台异步审核）。发版前全量 pytest 1089 + ruff
+      > 通过、npm 安装器测试通过。
+      > 3.4.0 内容：`iterate update`——SHA-256 校验先行（不匹配拒绝任何写入）后，刷新已安装
+      > 助手技能目录（按 install.py SUPPORTED_AI 布局，harness 永不入）+ 重装 CLI（pip
+      > `--force-reinstall --no-deps` / 源码 `git pull --ff-only` + `pip install -e`）；交互确认
+      > 默认 No、`--check` 零写入、`--json` 结构化、`--assistants` 限定范围、单助手失败不阻断；
+      > `iterate --version` 24h 缓存式升级提示（可 `ITERATE_UPDATE_CHECK=0` 关闭）。新增
+      > tests/test_updater.py（44 项，offline mock）+ tests/test_updater_sync.py（3 项 AST 锁定）。
+      >
+      > **3.3.1 状态（2026-09-14）**：patch（doctor unhashable 崩溃修复 + config schema minItems 加固 + installer 清理）。GitHub Release
+      > v3.3.1 已发布（tag `v3.3.1`，CI 自动生成 `iterate-skill.tar.gz` 526,844 字节 +
+      > `SHA256SUMS.txt` + `iterate-qoder.zip`，`:!harness` 剔除 harness，`tar -tzf | grep harness/`
+      > 为 0、`SKILL.md version: 3.3.1`，本地 `shasum -a 256` 与 SHA256SUMS 一致）；
+      > npm `iterate-skill-installer@3.3.1` 已发布（`npm view` latest=3.3.1）；
+      > ClawHub（skillId `kd73s950z2gathsjtaenp987cx8ax0mm`）经并发脚本 `.dist_tmp/clawhub_publish.py`
+      > + stage `.dist_tmp/clawhub-stage-3.3.1`（82 文件归档，发布 77 文件、1,857,426 字节）发布
+      > 3.3.1（`ok:true`，versionId `k9756pw0vkh68aa6xyy2sznr998edd45`，`publicationStatus` pending）；
+      > ModelScope 已 PATCH 生效（`.dist_tmp/rebuild_ms_331.py` 按 3.3.0 文件集重建精简 zip
+      > 493,903 字节、67 文件、harness 0、SKILL 3.3.1；`.dist_tmp/verify_update_331.py`
+      > `update_skill_settings` success，file_id `ed8617c3-d6f3-4563-89c0-95b4f7faad9f`）；
+      > SkillHub（skillId `104490`）经 `.dist_tmp/rebuild_skillhub_331.py` 精简包（63 文件、491,520
+      > 字节、harness 0、剔除 LICENSE/.gitignore/.gitmodules/npm-installer/LICENSE）`.skillhub publish`
+      > 成功（`ok:true`，versionId `312170`，`tags.latest=3.3.1`，`reviewStatus/securityScanStatus`
+      > =pending 为平台异步审核）。发版前全量 pytest 1042 + ruff 通过、npm 安装器测试通过。
+      > 3.3.1 内容：doctor dimension_sets 不可哈希崩溃修复（非字符串条目不再触发 TypeError）；
+      > config schema 拒绝空 validation.commands/invariants.commands 模块数组（minItems:1）；
+      > npm 安装器 parseArgs 移除死亡重复 token 默认键（行为不变）。
+      >
+      > **3.3.0 状态（2026-09-12）**：guard/invariant/status 行为批次（minor）。GitHub Release
+      > v3.3.0 已发布（tag `v3.3.0`，CI 自动生成 `iterate-skill.tar.gz` 525,190 字节 +
+      > `SHA256SUMS.txt` + `iterate-qoder.zip`，`:!harness` 剔除 harness，`tar -tzf | grep harness/`
+      > 为 0、`SKILL.md version: 3.3.0`，本地 `shasum -a 256` 与 SHA256SUMS 一致）；
+      > npm `iterate-skill-installer@3.3.0` 已发布（`npm view` latest=3.3.0，tar 6 文件含
+      > bin/lib/README/LICENSE，`files` 白名单生效）；
+      > ClawHub（skillId `kd73s950z2gathsjtaenp987cx8ax0mm`）经并发脚本 `.dist_tmp/clawhub_publish.py`
+      > + stage `.dist_tmp/clawhub-stage-3.3.0`（82 文件归档，发布 77 文件、1,851,470 字节）发布
+      > 3.3.0（`ok:true`，versionId `k972t6debt7fhv8gyn0t5ym4zn8eahay`，`publicationStatus` pending）；
+      > ModelScope 已 PATCH 生效（`.dist_tmp/rebuild_ms_330.py` 按 3.2.3 文件集重建精简 zip
+      > 492,352 字节、67 文件、harness 0、SKILL 3.3.0；`.dist_tmp/verify_update_330.py`
+      > `update_skill_settings` success，file_id `c67e796a-1872-4e99-92af-cbffa0249569`）；
+      > SkillHub（skillId `104490`）经 `.dist_tmp/rebuild_skillhub_330.py` 精简包（63 文件、489,969
+      > 字节、harness 0、剔除 LICENSE/.gitignore/.gitmodules/npm-installer/LICENSE）`.skillhub publish`
+      > 成功（`ok:true`，versionId `309058`，`tags.latest=3.3.0`，`reviewStatus/securityScanStatus`
+      > =pending 为平台异步审核）。发版前全量 pytest 1040 + ruff 通过、npm 安装器测试通过。
+      > 3.3.0 内容：guard pre-check 工具可用性、invariant ensure 路径安全、status 损坏/缺失配置
+      > 区分、doctor 标量 section 硬错误、tui 转义修复、install/installer/publish_qoder 供应链加固。
+      >
+      > **3.2.3 状态（2026-09-10）**：日常审查维护发版（patch）。GitHub Release
+      > v3.2.3 已发布（tag `v3.2.3`，CI 自动生成 `iterate-skill.tar.gz` 512,874 字节 +
+      > `SHA256SUMS.txt` + `iterate-qoder.zip`，`:!harness` 剔除 harness，`tar -tzf | grep harness/`
+      > 为 0、`SKILL.md version: 3.2.3`）；
+      > npm `iterate-skill-installer@3.2.3` 已发布（`npm view` latest=3.2.3）；
+      > ClawHub（skillId `kd73s950z2gathsjtaenp987cx8ax0mm`）经并发脚本 `.dist_tmp/clawhub_publish.py`
+      > + stage `.dist_tmp/clawhub-stage-3.2.3`（82 文件归档，发布 77 文件、1,801,931 字节）发布
+      > 3.2.3（`ok:true`，versionId `k97b0fqd5nkyfq9n0q01ka9bks8e5mkp`，`publicationStatus` pending）；
+      > ModelScope 已 PATCH 生效（精简 zip 483,604 字节、67 文件、
+      > harness 0；`update_skill_settings` success，file_id
+      > `873f1995-951b-4ebd-a370-ce1609d56b3c`）；
+      > SkillHub（skillId `104490`）精简包（63 文件、481,221
+      > 字节、harness 0、剔除 LICENSE/.gitignore/.gitmodules/npm-installer/LICENSE）`.skillhub publish`
+      > 成功（`ok:true`，versionId `304286`，`tags.latest=3.2.3`，`reviewStatus/securityScanStatus`
+      > =pending 为平台异步审核）。发版前全量 pytest 1002 + ruff 通过、npm 安装器测试通过。
+      > 3.2.3 内容：日常审查维护，全部 1002 测试通过，ruff 检查通过，无新增功能变更。
+      >
+      > **3.2.1 状态（2026-09-07）**：配置硬化 + 供应链防御批次（patch）。GitHub Release
+      > v3.2.1 已发布（tag `v3.2.1`，主仓库提交 `8325395`，CI 自动生成 `iterate-skill.tar.gz`
+      > + `SHA256SUMS.txt` + `iterate-qoder.zip`，`:!harness` 剔除 harness，本地 `sha256sum -c`
+      > 通过、`tar -tzf | grep harness/` 为 0、`SKILL.md version: 3.2.1`）；
+      > npm `iterate-skill-installer@3.2.1` 已发布（`npm view` latest=3.2.1，tar 6 文件含
+      > bin/lib/README/LICENSE，`files` 白名单生效、移除全局 `iterate-skill` bin）；
+      > ClawHub（skillId `kd73s950z2gathsjtaenp987cx8ax0mm`）经并发脚本 `.dist_tmp/clawhub_publish.py`
+      > + stage `.dist_tmp/clawhub-stage-3.2.1`（82 文件归档，发布 77 文件、1,785,336 字节）发布
+      > 3.2.1（`ok:true`，versionId `k9770nr8c0tm2v51dt7zq9szz18dz7vm`，`publicationStatus` pending，
+      > resolve `latestVersion` 异步传播后确认 =3.2.1）；
+      > ModelScope 已 PATCH 生效（`.dist_tmp/rebuild_ms_321.py` 重建精简 zip 518,620 字节、77 文件、
+      > harness 0；`.dist_tmp/verify_update_321.py` `update_skill_settings` success，file_id
+      > `40de4a18-b80b-4f76-8b5c-63c0cc7f4760`；`get_skill.last_modified`=`2026-09-07T12:54:29Z`；
+      > 下载 `archive/zip/master` 复核 `SKILL.md version: 3.2.1`、`/harness/` 条目 0）；
+      > SkillHub（skillId `104490`）经 `.dist_tmp/rebuild_skillhub_321.py` 精简包（73 文件、516,237
+      > 字节、harness 0、剔除 LICENSE/.gitignore/.gitmodules/npm-installer/LICENSE）`.skillhub publish`
+      > 成功（`ok:true`，versionId `296866`，`tags.latest=3.2.1`，`reviewStatus/securityScanStatus`
+      > =pending 为平台异步审核）。发版前全量 pytest 1001 + ruff 通过、npm 安装器测试通过。
+      > 3.2.1 内容：guard/personalize 命令白名单运行时二次校验（堵 `rm -rf .`、`curl`、
+      > `python <脚本> -m <安全工具>` 绕过，扩展 dart/flutter/mix/bundle/ruby/true/false/exit）；
+      > 手写配置防崩溃（onboarding/personalization/validation.commands/language 非 dict 或非法值
+      > 在 status/fingerprint/refresh/show/wizard/config set 安全降级或拒绝）；install.py 供应链加固
+      >（跨主机重定向剥 Authorization、API 响应字节上限、`_safe_extractall` 解压炸弹防护、符号链接
+      > 祖先目录写入拒绝、文件/目录类型冲突）；install 非交互无操作返回 1；uninstall 非交互拒绝；
+      > validate.py 坏 schema 诊断而非崩溃；config set 中间段标量拒绝覆盖 + 备份名加盐；doctor
+      > dimension_sets 归一化；npm 安装器 askYesNo EOF/超时、校验和 hex+重复冲突拒绝、-h/-v 短路、
+      > files 打包白名单。
+      >
+      > **3.2.0 状态（2026-09-06）**：综合评审修复批次 + B1–B6 特性（minor）。GitHub Release
+      > v3.2.0 已发布（tag `v3.2.0`，CI 自动生成 `iterate-skill.tar.gz` 491,552 字节 +
+      > `SHA256SUMS.txt` + `iterate-qoder.zip`，`:!harness` 剔除 harness，本地 `sha256sum -c` 通过、
+      > `tar -tzf | grep harness/` 与 `unzip -l | grep harness/` 均为 0）；
+      > npm `iterate-skill-installer@3.2.0` 已发布（`npm view` latest=3.2.0）；ClawHub（skillId
+      > `kd73s950z2gathsjtaenp987cx8ax0mm`）经并发脚本 `.dist_tmp/clawhub_publish.py` + stage
+      > clawhub-stage-3.2.0（82 文件归档，发布 77 文件、1,736,372 字节）发布 3.2.0（`ok:true`，
+      > versionId `k97bybandn8f1v4777289vbjes8dxkag`，status pending=normal，resolve 已显示
+      > latestVersion=3.2.0）；ModelScope 已 PATCH 生效（`.dist_tmp/rebuild_ms_320.py` 重建精简
+      > zip 503,261 字节、77 文件、harness 0；`.dist_tmp/verify_update_320.py` `update_skill_settings`
+      > success，file_id `7e80df35-d27b-4c0e-8827-296aa1a5464f`；`get_skill.last_modified` =
+      > `2026-09-06T03:07:59Z`；下载 `archive/zip/master` 复核 `SKILL.md version: 3.2.0`、`/harness/`
+      > 条目 0）；SkillHub（skillId `104490`）经 `.dist_tmp/rebuild_skillhub_320.py` 精简包
+      >（73 文件、500,929 字节、harness 0、剔除 LICENSE）.`skillhub publish` 成功（`ok:true`，
+      > versionId `292200`，`tags.latest=3.2.0`，`reviewStatus/securityScanStatus=pending` 为平台
+      > 异步审核）。发版前全量 pytest 970 + ruff + mypy 通过。3.2.0 内容：
+      > B1 `refresh --json`、B2 `doctor --strict`、B3 `doctor --fix` 指纹补录、B4 `status --json`
+      > 漂移明细、B5 `config` 点号别名、B6 doctor markers/invariants 检查；另修复 doctor 白名单
+      > 合规 fail-open、漂移三原因、guard 全量上报、refresh 空白名单/`_diff_stats`、installer/install.py
+      > 常量时间校验和+PAT 作用域+字节上限等。主仓库提交 `9ae7e2a`。
+      >
+      > **3.1.0 状态（2026-09-05）**：GitHub Release v3.1.0 已发布（tag `v3.1.0`，CI 自动生成
+      > `iterate-skill.tar.gz` 475,872 字节 + `SHA256SUMS.txt` + `iterate-qoder.zip` 517,636 字节，
+      > `:!harness` 剔除 harness，复核 harness 条目 0）；npm `iterate-skill-installer@3.1.0` 已发布
+      >（latest=3.1.0）；ClawHub（skillId `kd73s950z2gathsjtaenp987cx8ax0mm`）经并发脚本
+      > `.dist_tmp/clawhub_publish.py` + `clawhub-stage-3.1.0`（82 文件归档，发布 77 文件、1,676,737 字节）
+      > 发布 3.1.0（`ok:true`，versionId `k9715bdha605j512hsyzqr43dd8dvee4`，status pending=normal）；
+      > ModelScope 已 PATCH 生效（`.dist_tmp/rebuild_ms_310.py` 重建精简 zip 488,759 字节、77 文件、
+      > harness 0；`.dist_tmp/verify_update_310.py` `update_skill_settings` success，file_id
+      > `b50e6971-4efd-42b8-9948-7c3bd0b73e13`；`archive/zip/master` 复核 `SKILL.md version: 3.1.0`、
+      > harness 0、`last_modified 2026-09-05T01:48:13Z`）；SkillHub（skillId `104490`）
+      > `skillhub publish` 成功（`ok:true`，73 文件、486,427 字节，versionId `288704`，
+      > `tags.latest=3.1.0`，`reviewStatus/securityScanStatus=pending` 为平台异步审核）。
+      > 3.1.0 为 3.0 稳定版收口（`/iterate` 主流程 + repo-map 交互 + publish-rate-limit 保护）。
+      >
+      > **⚠️ 历史重写与 tag 清理（2026-09-05，本次发版前置）**：主仓库 `jingzhao-l/iterate-skill`
+      > 执行了一次 message-only 历史重写 —— 剔除早期两笔提交中的 `Co-authored-by: traeagent` 尾行
+      >（GitHub contributor 统计会按 co-author 计入，重写后 contributor 不再显示 TRAE agent；
+      > 树内容、全部 99 tag 的对象树、主分支 tree 哈希均未变，各平台发布包字节级不受影响），
+      > 并清理了主仓库 tag 命名空间：**主仓库只保留 skill 本体版本 tag（v2.x/v3.x 共 58 个）**，
+      > 删除误推的 plugin/harness tag（`v1.*`、无 `v` 前缀 `1.12.1`/`2.8.1`，以及 plugin 线的
+      > `v2.7.2`/`v2.7.3`/`v2.8.2`/`v2.8.4`/`v2.9.2`–`v2.9.4`/`v2.12.1`）；同步将 plugin 独立仓
+      > `jingzhao-l/iterate-plugin` 补打 `v3.2.1` tag（npm `iterate-plugin@3.2.1` 对应提交
+      > `de8116e`，approval-gate fail-safe fix + hardening，已推远端）。此后主仓库 tag 只发 skill
+      > 本体，harness/plugin 各自 tag 只发各自独立仓。
+      >
+      > **SkillHub CLI SSL 坑（新）**：SkillHub CLI 默认用框架自带 Python 3.11 的 CA 库，
+      > 缺少 DNSPod 根证书导致上传报 SSL 错；须带
+      > `SSL_CERT_FILE=$(python -c "import certifi; print(certifi.where())")` 环境变量执行
+      > `~/.local/bin/skillhub publish`。
+      >
+      > **3.0.1 状态（2026-09-03）**：GitHub Release v3.0.1 已发布（tag `v3.0.1`，CI 自动生成
+      > `iterate-skill.tar.gz` + `SHA256SUMS.txt` + `iterate-qoder.zip`，`:!harness` 剔除 harness）；
+      > npm `iterate-skill-installer@3.0.1` 已发布（`npm view` 确认 latest=3.0.1）；ClawHub
+      > （skillId `kd73s950z2gathsjtaenp987cx8ax0mm`）经并发脚本 `.dist_tmp/clawhub_publish.py`
+      > + `clawhub-stage-3.0.1`（82 文件归档，发布 77 文件、1,640,836 字节）发布 3.0.1
+      > （resolve 已显示 `latestVersion: 3.0.1` 传播；重传同版本被拒 `Version 3.0.1 already exists`，
+      > 确认并行会话已先行发布成功）；ModelScope 已 PATCH 生效（`.dist_tmp/rebuild_ms_301.py`
+      > 重建 3.0.1 精简 zip 481,396 字节、`update_skill_settings` success，
+      > `get_skill.last_modified` 更新至 2026-09-03T13:41:30Z；下载
+      > `archive/zip/master` 复核 `SKILL.md version: 3.0.1`、`harness` 条目为 0）；SkillHub
+      > （skillId `104490`）`skillhub publish` 成功（重传同版本被拒 `VERSION_EXISTS` 409，
+      > 确认 `tags.latest=3.0.1` 已生效，`reviewStatus/securityScanStatus=pending` 为平台异步审核）。
+      > 3.0.1 核心变更（纯修复版 patch）：`guard pre-check` 空验证命令 fail-closed、npm 安装器 /
+      > install.py 校验和 `*` 前缀剥离语义统一、build-system 精确定版本、新增 release-meta
+      > 四版本源一致性测试（`tests/test_release_meta.py`）。发版前已全量通过 pytest（928 个）+ ruff。
+      > **3.0.0 状态（2026-09-03）**：GitHub Release v3.0.0 已发布（tag `v3.0.0`）；npm
+      > `iterate-skill-installer@3.0.0` 已发布；ClawHub 发布 3.0.0（76 文件、1,632,761 字节，
+      > versionId `k979w3z4vc4sv363xb77r5xa218dpybr`，`ok:true`）。3.0.0 为 3.0 大版本：
+      > 新增防御式编程模式（`/iterate defensive` + `guard pre-check/post-check/invariant`），
+      > 因紧随补丁升 3.0.1，ModelScope / SkillHub 未落 3.0.0 版，最终一致状态以 3.0.1 为准。
+      > **2.11.2 状态（2026-09-01）**：GitHub Release v2.11.2 已发布（tag `v2.11.2`，CI 自动生成
+      > `iterate-skill.tar.gz` + `SHA256SUMS.txt` + `iterate-qoder.zip`，`:!harness` 剔除 harness，
+      > 本地 `sha256sum -c` 通过、tar 解包后 `harness/*` 为 0）；npm `iterate-skill-installer@2.11.2`
+      > 已发布（`npm view` 确认 latest=2.11.2，`npx -y iterate-skill-installer@2.11.2 --version` 输出
+      > 2.11.2）；ClawHub（skillId `kd73s950z2gathsjtaenp987cx8ax0mm`）经并发脚本
+      > `.dist_tmp/clawhub_publish.py` + `clawhub-stage-2.11.2/iterate-skill`（72 文件、1,503,797 字节）
+      > 发布 2.11.2（响应 `ok:true`、`status=pending`，versionId `k97e8fhws61rx9jmhq38b4mn2d8djnez`，
+      > 发布前 resolve 显示 `latestVersion: 2.11.1`；首次上传遇 Convex read-timeout 被中止，重试后成功）；
+      > ModelScope 已 PATCH 生效（`.dist_tmp/rebuild_ms_2112.py` 重建 2.11.2 精简 zip 432,648 字节、
+      > 70 文件，`update_skill_settings` success，file_id `c04caaee-92f2-47d9-8b4c-7c58be35f8bf`，
+      > `get_skill` last_modified 更新至 2026-09-01T13:49:21Z）；SkillHub（skillId `104490`）
+      > `skillhub publish` 成功（`ok:true`，66 文件、430,316 字节，versionId `281031`，
+      > `tags.latest=2.11.2`，`reviewStatus/securityScanStatus/contentAuditStatus=pending` 为平台异步审核）。
+      > 2.11.2 核心变更（纯修复版 patch）：refresh 调和结果真正落盘、doctor 畸形白名单不再绕过
+      > 元字符安全网、wizard 重跑基础配置不再丢弃数据、validate.py 重定义区块切分双重偏移、
+      > publish_qoder 幂等标记字符不一致；含新回归测试（test_refresh_reconcile/test_publish_qoder 等）。
+      > **2.11.1 状态（2026-09-01）**：GitHub Release v2.11.1 已发布（tag `v2.11.1`，CI 自动生成
+      > `iterate-skill.tar.gz` + `SHA256SUMS.txt`，`:!harness` 剔除 harness）；npm
+      > `iterate-skill-installer@2.11.1` 已发布（`npm view` 确认 latest=2.11.1）；ClawHub
+      > （skillId `kd73s950z2gathsjtaenp987cx8ax0mm`）经并发脚本 `.dist_tmp/clawhub_publish.py`
+      > + `clawhub-stage-2.11.1`（76 文件归档，发布 71 文件）发布 2.11.1（响应 `ok:true`、
+      > `status=pending`，versionId `k97476thb57248qjvwbn8z3k2n8djtxf`，发布前 resolve 显示
+      > `latestVersion: 2.11.0`，发布后待传播为 2.11.1）；ModelScope 已 PATCH 生效
+      > （`.dist_tmp/rebuild_ms_2111.py` 重建 2.11.1 精简 zip 426,568 字节、69 文件，
+      > `update_skill_settings` success，file_id `fb0050a8-8f39-4d6c-9456-6a7070732412`）；
+      > SkillHub（skillId `104490`）`skillhub publish` 成功（`ok:true`，65 文件、424,236 字节，
+      > versionId `280724`，`tags.latest=2.11.1`，`reviewStatus/securityScanStatus/contentAuditStatus=
+      > pending` 为平台异步审核）。
+      > 2.11.1 核心变更：偏门范围 on-the-fly 重定义「禁抄预设」——未命中命名维度集的 goal 必须
+      > 从根（维度全集）重新推导方案，禁止以全局 `dimensions`/任一维度集为起点筛选微调，每个选中
+      > 维度须给出本范围特有的独立理由；`scripts/validate.py decisions` 新增对重定义记录小节的机器校验
+      > （要求 `Origin scope:` 与 `Independent reason` 表格、理由不得照抄 `config/dimensions/<dim>.yaml`
+      > 默认 focus）；决策日志模板同步新增该小节。发版前已全量通过 pytest（862 个）+ ruff。
+      > **2.11.0 状态（2026-09-01）**：GitHub Release v2.11.0 已发布（tag `v2.11.0`，CI 自动生成
+      > `iterate-skill.tar.gz` + `SHA256SUMS.txt` + `iterate-qoder.zip`，`:!harness` 剔除 harness）；
+      > npm `iterate-skill-installer@2.11.0` 已发布（`npm view` 确认 latest=2.11.0）；ClawHub
+      > （skillId `kd73s950z2gathsjtaenp987cx8ax0mm`）经并发脚本 `.dist_tmp/clawhub_publish.py`
+      > + `clawhub-stage-2.11.0`（76 文件归档，发布 71 文件）发布 2.11.0（响应 `ok:true`、
+      > `status=pending`，versionId `k9791qfc8epsvq8hcsvk85fan18dk7c5`，resolve 确认
+      > `latestVersion: 2.11.0` 已传播）；ModelScope 已 PATCH 生效（`rebuild_ms_2110.py`
+      > 重建 2.11.0 精简 zip 421,804 字节、69 文件，`update_skill_settings` success，
+      > file_id `d320aafb-16a4-4dd1-8a3d-d66d27586ff1`，`get_skill.last_modified` 已更新至当日）；
+      > SkillHub（skillId `104490`）`skillhub publish` 成功（`ok:true`，65 文件、
+      > 409.6 KB，versionId `280650`，`tags.latest=2.11.0`，`reviewStatus/securityScanStatus/
+      > contentAuditStatus=pending` 为平台异步审核）。
+      > 本次发版核心变更：审查维度集（dimension_sets）、增量刷新（refresh 保留用户编辑区）、
+      > `iterate config` 非交互式配置子命令，发版前已全量通过 pytest + ruff + mypy。
+      > **2.10.0 状态（2026-08-30）**：GitHub Release v2.10.0 已发布（tag `v2.10.0`，CI 自动生成
+      > `iterate-skill.tar.gz` + `SHA256SUMS.txt` + `iterate-qoder.zip`，`:!harness` 剔除 harness）；
+      > npm `iterate-skill-installer@2.10.0` 已发布（`npm view` 确认 latest=2.10.0）；ClawHub
+      > （skillId `kd73s950z2gathsjtaenp987cx8ax0mm`）经并发脚本 `.dist_tmp/clawhub_publish.py`
+      > + `clawhub-stage-2.10.0` 发布 2.10.0（69 文件，响应 `ok:true`、`status=pending`，
+      > versionId `k970tndrg02jpb4320bym5hgns8df38h`，`latestVersion` 数分钟传播）；ModelScope
+      > 已 PATCH 生效（`rebuild_ms_2100.py` 重建 2.10.0 精简 zip 411,499 字节，
+      > `update_skill_settings` success，file_id `dd25d77d-20b4-4c88-9be8-77a12fef3c76`）；
+      > SkillHub（skillId `104490`）`skillhub publish` 成功（`ok:true`，63 文件，
+      > versionId `277355`，`tags.latest=2.10.0`，`reviewStatus/securityScanStatus/pending`
+      > 为平台异步审核）。发版时清理了被误提交的本地 `.trae-html-share-packages` 工具残留
+      > （已 git rm + 加入 `.gitignore`，修正常涉及发布包的 stage/zip 均复核为 0）。
+      > **2.9.1 状态（2026-08-27）**：GitHub Release v2.9.1 已发布（tag `v2.9.1`，CI 自动生成
+      > `iterate-skill.tar.gz` 379,201 字节 + `SHA256SUMS.txt`，`:!harness` 剔除 harness，release
+      > workflow 自动上传）；npm `iterate-skill-installer@2.9.1` 已发布（`npm view` 确认
+      > latest=2.9.1）；ClawHub（skillId `kd73s950z2gathsjtaenp987cx8ax0mm`）经并发脚本
+      > `.dist_tmp/clawhub_publish.py` + `clawhub-stage-2.9.1` 发布 2.9.1；ModelScope 已 PATCH
+      > 生效（2.9.1 精简 zip 408,767 字节，`update_skill_settings` success，skill_file 指向 2.9.1
+      > 精简包）；SkillHub（skillId `104490`）`skillhub publish` 成功（`ok:true`，versionId
+      > `271762`，`tags.latest=2.9.1`，`reviewStatus/securityScanStatus=pending` 为平台异步审核）。
+      > **2.9.0 状态（2026-08-26）**：GitHub Release v2.9.0 已发布（tag `v2.9.0`，CI 自动生成
+      > `iterate-skill.tar.gz` 363,078 字节 + `SHA256SUMS.txt`，`:!harness` 剔除 harness，release
+      > workflow success 10s）；npm `iterate-skill-installer@2.9.0` 已发布；ClawHub（skillId
+      > `kd73s950z2gathsjtaenp987cx8ax0mm`）经并发脚本 `.dist_tmp/clawhub_publish.py` 发布 2.9.0
+      > （65 文件，响应 `ok:true`、`status=pending`，versionId `k9729hvta6v07r899exy2wesv58d4ve9`，
+      > `latestVersion` 数分钟传播，待复查）；ModelScope 已 PATCH 生效（上传 2.9.0 精简 zip
+      > 383 KB，file_id `261d5466-31a1-4966-a349-0153637beea2`，`update_skill_settings` success）；
+      > SkillHub（skillId `104490`）`skillhub publish` 成功（`ok:true`，versionId `269836`，
+      > `tags.latest=2.9.0`，`reviewStatus/securityScanStatus/pending` 为平台异步审核）。
+      > **2.8.1 状态（2026-08-23）**：GitHub Release v2.8.1 已发布（tag `v2.8.1`，CI 自动生成
+      > `iterate-skill.tar.gz` 358,948 字节 + `SHA256SUMS.txt`，`:!harness` 剔除 harness，release
+      > workflow success 12s）；npm `iterate-skill-installer@2.8.1` 已发布；ClawHub（skillId
+      > `kd73s950z2gathsjtaenp987cx8ax0mm`）经并发脚本 `.dist_tmp/clawhub_publish.py` 发布 2.8.1
+      > （65 文件，响应 `ok:true`、`status=pending`，versionId `k973ymjma5q386kq4dhz3kzvg98d0d3c`，
+      > `latestVersion` 数分钟传播，待复查）；ModelScope 已 PATCH 生效（上传 2.8.1 精简 zip
+      > 379 KB，file_id `6eba7c0a-8c26-4d9a-960a-d92b2993d113`，`update_skill_settings` success）；
+      > SkillHub（skillId `104490`）`skillhub publish` 成功（`ok:true`，versionId `263704`，
+      > `tags.latest=2.8.1`，`reviewStatus/securityScanStatus/pending` 为平台异步审核）。
+      > **2.8.0 状态（2026-08-22）**：GitHub Release v2.8.0 已发布（tag `v2.8.0`，CI 自动生成
+      > `iterate-skill.tar.gz` + `SHA256SUMS.txt`，`:!harness` 剔除 harness）；npm
+      > `iterate-skill-installer@2.8.0` 已发布（发布时因沙箱 PATH 无 node，npm 走
+      > `/usr/local/bin/node /usr/local/lib/node_modules/npm/bin/npm-cli.js` 调用）；
+      > ClawHub（skillId `kd73s950z2gathsjtaenp987cx8ax0mm`）经并发脚本
+      > `.dist_tmp/clawhub_publish.py` 发布 2.8.0（65 文件，响应 `ok:true`、
+      > `status=pending`，versionId `k979c16gb6em97h0vf6p5bff118cy5vt`，`latestVersion`
+      > 需数分钟传播）；ModelScope 已 PATCH 生效（`verify_update_280.py` 上传 2.8.0
+      > 精简 zip 382,483 字节，file_id `f1d44ec0-53b7-4103-9a28-436c58f841fb`，
+      > `update_skill_settings` success）；SkillHub（skillId `104490`）`skillhub publish`
+      > 成功（`ok:true`，versionId `262149`，`tags.latest=2.8.0`，`reviewStatus/
+      > securityScanStatus=pending` 为平台异步审核）。
+      > **2.6.0 状态（2026-08-21）**：GitHub Release v2.6.0 已发布，CI 已上传
+      > `iterate-skill.tar.gz`（346,530 字节）+ `SHA256SUMS.txt`（github-actions[bot] 上传，
+      > release `published_at` 2026-08-21T14:35:49Z）；npm `iterate-skill-installer@2.6.0`
+      > 已发布；ClawHub（skillId `kd73s950z2gathsjtaenp987cx8ax0mm`）经并发脚本
+      > `.dist_tmp/clawhub_publish.py` 提交 2.6.0，发布响应 `status=pending`（平台异步，
+      > `latestVersion` 需数分钟传播，待复查确认）；ModelScope 已 PATCH 生效（`verify_update.py`
+      > 上传 2.6.0 精简 zip 并 `update_skill_settings` 成功，skill_file 指向 2.6.0 精简包）；
+      > SkillHub（skillId `104490`）`skillhub publish` 成功（`ok:true`，versionId `260224`，
+      > `tags.latest=2.6.0`，`reviewStatus/securityScanStatus=pending` 为平台异步审核）。
+      > **SkillHub 新增坑**：专用包除剔除 LICENSE 外还要剔除 `.gitignore` `.gitmodules`
+      > 等一切点文件/无扩展名文件（服务端 400「不允许的文件类型」），`rebuild_skillhub.py`
+      > 已改为通用黑名单 `_banned()`（basename 小写命中黑名单、以 `.` 开头或无扩展名即剔除）。
+      > **2.5.0 状态（2026-08-21）**：ClawHub（skillId `kd73s950z2gathsjtaenp987cx8ax0mm`）
+      > 经并发脚本 `.dist_tmp/clawhub_publish.py` 上传并发布 `latestVersion: 2.5.0` 已生效；ModelScope
+      > 已 PATCH 生效（`verify_update.py` 上传精简 zip 并 `update_skill_settings` 成功，
+      > skill_file 指向 2.5.0 精简包）；SkillHub（skillId `104490`）`skillhub publish` 成功
+      > （`ok:true`，versionId 255314，`tags.latest=2.5.0`，`reviewStatus/securityScanStatus=pending`
+      > 为平台异步审核）。三平台一致。
+      > **2.4.5 状态（2026-08-21）**：ClawHub（skillId `kd73s950z2gathsjtaenp987cx8ax0mm`）
+      > `latestVersion: 2.4.5` 已生效（发布响应 `ok:true`，versionId `k97agect6q7q0a38zy4p1hhgkd8cxzm6`，
+      > 初始 `status=pending`，约数分钟后 latestVersion 传播为 2.4.5）；ModelScope 已 PATCH 生效
+      > （file_id `0c4c8bee-57d5-4810-aca4-0597bf5b808b`，`success:True`，skill_file 指向 2.4.5 精简包 325.4KB）；
+      > SkillHub（skillId `104490`）`skillhub publish` 成功（`ok:true`，versionId 254717，`tags.latest=2.4.5`，
+      > `reviewStatus/securityScanStatus=pending` 为平台异步审核）。三平台一致。
+      > **2.4.0 状态（2026-08-19）**：ClawHub（skillId `kd73s950z2gathsjtaenp987cx8ax0mm`）
+      > `latestVersion: 2.4.0` 已生效；ModelScope 已 PATCH 生效（file_id `5a322066…`，
+      > skill_file 指向 2.4.0 精简包 305.8KB）；SkillHub（skillId `104490`）`skillhub publish`
+      > 成功（`ok:true`，versionId 246530，`tags.latest=2.4.0`）。三平台一致。
+      > **2.3.20 状态（2026-08-19）**：ClawHub（skillId `kd73s950z2gathsjtaenp987cx8ax0mm`）
+      > `latestVersion` 已激活为 2.3.20；ModelScope 已 PATCH 生效（file_id 593dcf19…，
+      > skill_file 指向 2.3.20 精简包）；SkillHub（skillId `104490`）`skillhub publish` 成功
+      > （`ok:true`，versionId 246436，`tags.latest=2.3.20`），公开 `latestVersion` 指标仍有
+      > 平台传播延迟，待复查确认。
+      > **2.3.18 状态（2026-08-18）**：ModelScope 已生效（`update_skill_settings` PATCH 成功，
+      > skill_file 指向 2.3.18 精简包）；ClawHub（skillId `kd73s950z2gathsjtaenp987cx8ax0mm`）
+      > 与 SkillHub（skillId `104490`）均已 HTTP 200 提交 2.3.18，发布响应 `status=pending`，
+      > 其 `latestVersion` 仍显示 2.3.17，属平台异步审核/传播延迟，需复查确认后再勾选。
+
+---
+
+## 项目 2：iterate-harness（Python 引擎 + npm 包装器）
+
+### 版本锁步规则
+
+`npm 包装器 version == harness 版本 == GitHub tag`（npm `1.9.1` → tag `v1.9.1`）。
+包装器首次运行会把匹配版本的 release tarball pip 安装进托管 venv，npm 升级后
+stamp 不匹配会自动重装到新 tag。
+
+### 需要同步的版本号文件
+
+| 文件 | 字段 |
+|---|---|
+| `harness/iterate-harness/pyproject.toml` | `[project].version` |
+| `harness/iterate-harness/src/iterate_harness/__init__.py` | `__version__`（若存在） |
+| `harness/iterate-harness/npm/package.json` | `version` |
+| `harness/iterate-harness/CHANGELOG.md` | 新增版本条目 |
+
+### 发布清单
+
+- [x] **1. 同步版本号**：编辑上述文件 + 更新 `CHANGELOG.md`（保留旧条目）。
+- [x] **2. 本地验证**：跑通 harness 测试（`cd harness/iterate-harness && pytest tests/ -q`）
+      与 npm 包装器测试（`cd harness/iterate-harness/npm && node --test test/bootstrap.test.js`）。
+- [x] **3. 提交并推送主仓库**：`git commit && git push origin main`。
+- [x] **4. subtree 拆分到独立发布仓**（`git subtree split` push 连续多版被
+      non-fast-forward 拒绝且 split 产物 head 滞后于已发布内容，按 2.1.0 起
+      各版发布记录改走下方 `.release/iterate-harness` 替代路径提交并快进推送，
+      与公开 main 共享历史）：
+      ```bash
+      git subtree split --prefix=harness/iterate-harness -b subtree-harness
+      git push harness-origin subtree-harness:main
+      git branch -D subtree-harness
+      ```
+      > 独立仓 `jingzhao-l/iterate-harness` 同时承载 Python 源码 + `npm/` 包装器。
+- [x] **5. 独立仓打 tag + Release**：在独立仓打 `v<X.Y.Z>` tag 并创建 GitHub Release
+      （作为 npm 包装器 pip-install 的 tarball 锚点）。
+- [x] **6. 同步发布工作区 + npm publish**：
+      ```bash
+      # 进入发布工作区（克隆的独立仓，gitignore）
+      cd .release/iterate-harness
+      git pull origin main
+      cd npm
+      npm publish
+      ```
+      验证：`npm install -g iterate-harness && ih --version` 输出新版本。
+> npm `repository` 元数据指向独立仓 `jingzhao-l/iterate-harness`。
+       >
+       > **2.2.3 发布记录（2026-09-08）**：例行审查 + 修复发版（patch）。主要变更：
+       > WebUI 停止确认消息取消竞态修复（`web/run_manager.py` `CancelledError` 分支
+       > 用 `asyncio.shield` 包裹 `_publish_chat`/`_set_state`，停止后确认可靠送达，
+       > 二次取消落位 `_stopping` + warning）；空 `invariants:` 段降级为 `None`
+       >（此前产出「已配置但什么都不做」的空 `InvariantConfig`，防御内核不再回退
+       > `validation.commands`，新增 2 个回归用例）；`dimension_resources` /
+       > `token_budget` / `budget_usd` / `max_turns_per_minute` / `worktree_isolation` /
+       > `thresholds` 解析错误逐一 `log.warning`；`ITERATE_LOG_LEVEL` 非法值 stderr
+       > 警告后回退 WARNING；`assert chosen is not None` 改显式 `RuntimeError` 守卫；
+       > CLI 帮助补全（iterate 18 子命令 + 移除 web_app 内部 "design §17"引用）；
+       > `--theme` 持久化 stderr 提示；`IterateAssumptionTool` 补入 `__all__`；
+       > npm 包装器 `packageVersion()` 损坏 manifest 回退 `0.0.0-unknown`、
+       > SIGINT/SIGTERM 转发器 `removeListener` 清理防累积、`ITERATE_HARNESS_SKIP_INSTALL`
+       > 识别 `1/true/yes/on`。版本号在 `__init__.py` / `npm/package.json` /
+       > `frontend/web/package.json` / `CHANGELOG.md` 同步至 2.2.3；校验 **2072 pytest
+       > + 6 skip**、ruff / mypy strict clean、npm 包装器 45 tests passed、前端
+       > `tsc --noEmit` + vitest 13 passed。继续走 `.release/iterate-harness` 替代路径
+       >（与公开 main 共享历史）提交并快进推送（`c69f854..55aeac3`）。GitHub Release
+       > v2.2.3 已建，release.yml 自动构建 `iterate_harness-2.2.3-py3-none-any.whl`
+       >（772,342 字节）上传 release + 自动发布 PyPI 2.2.3（已验证 PyPI latest=2.2.3）；
+       > npm `iterate-harness@2.2.3` 已发布（PUT 202 staged 延迟约 3 分钟后 registry
+       > latest=2.2.3，与 2.0.1 记录一致）。端到端验证：`npm install -g --prefix
+       > ~/.npm-global iterate-harness@2.2.3` 后 `ih --version` = `iterate_harness 2.2.3`
+       >（用户前缀 + postinstall 被 allow-scripts 门控不影响，包装器首次运行惰性
+> bootstrap 命中 GitHub release 锚点 tarball）。主仓库 push 提交 `9c156b5`。
+         >
+         > **2.2.7 发布记录（2026-09-16）**：例行审查 + 修复发版（patch）。主要变更：
+         > CLI `--permission-mode`/`--allowed-tools`/`--disallowed-tools` 原来是
+         >   `merge_cli_overrides` 的 stray attr（写入 `Settings` 顶层、永远不被读取），
+         >   现已路由到真实使用的 `Settings.permission` 子模型；`--settings` 指向不存在
+         >   的路径时 main() 报错退出而不是静默回落默认配置；死选项 `--name`/`--bare`/
+         >   `--mcp-config` 移除（无后端实现）。npm 包装器下载产物新增 SHA256 完整性
+         >   校验（bootstrap.js 从 `.sha256` sidecar 取 digest，不匹配即 abort；release.yml
+         >   新增 Generate SHA256 checksums step 上传 sidecar）。插件 YAML frontmatter
+         >   `"false"` 不再被 `bool()` 误成 True（`_coerce_bool`）；swarm mailbox 的
+         >   `agent_id` 入口加 `validate_agent_id` 拒绝 `../`/NUL/`.`/`..` 路径穿越；
+         >   bridge session_id 加 `secrets.token_hex(3)` 后缀消除秒级碰撞 + manager
+         >   拒绝重复/空 ID；hooks JSON 被 ````json 围栏包裹时先 `_strip_code_fences`
+         >   再解析；session_storage 消除 exists()-then-read TOCTOU（改 try/except
+         >   return None）并用 `exclusive_file_lock` 包裹双文件写；cron 历史文件超过
+         >   5MB/5000 条下锁修剪，shutdown 时 in-flight job cancel + 10s 等待（stop
+         >   等待 12s 后才 SIGKILL）。校验 **2098 pytest + 6 skip**、ruff clean、mypy
+         >   clean（13 源文件专项 + 246 全量）、npm 包装器 **56 passed**，`release.yml`
+         >   端到端产出 wheel + `.whl.sha256` 双 asset（已验证）。版本号在
+         >   `__init__.py` / `npm/package.json` / `CHANGELOG.md` 同步至 2.2.7。走
+         >   `.release/iterate-harness` 替代路径同步提交并快进推送（`0da9c89..645bf6f`）；
+         >   主仓库 push 提交 `f883ca4`。GitHub Release v2.2.7 已建（release.yml 自动
+         >   构建 wheel 传 release + 发布 PyPI 2.2.7，已验证 PyPI latest=2.2.7）；npm
+         >   `iterate-harness@2.2.7` 已发布（registry latest=2.2.7）。端到端验证：
+         >   `npm install -g --prefix ~/.npm-global iterate-harness@2.2.7` 后
+         >   `ih --version` = `iterate_harness 2.2.7`。
+         >
+         > **2.2.5 发布记录（2026-09-10）**：例行审查 + 修复发版（patch）。主要变更：
+        > npm 包装器在无人值守/非 TTY 环境下首次运行会永久挂死（`npm/lib/ui.js`
+        > 的 `askYesNo` + `npm/lib/bootstrap.js` 的 `runHarness`）：`askYesNo` 只
+        > 监听 `rl.question` 回调，从不处理 EOF（`readline` 在 stdin 关闭/管道化/
+        > 重定向 `< /dev/null` 时发出 `close`）或无人应答的超时；而 `runHarness`
+        > 无条件 `{ interactive: true }`——CI/cron/`npx` 管道等场景首次运行（stamp
+        > 不匹配）会卡死在安装向导 y/n 提示直到外层超时。现 `askYesNo` 在 EOF 与
+        > 超时（默认 120s，`options.timeoutMs` 可覆盖，`0` 关闭）回落默认值并明确
+        > 提示，支持注入 `input`/`output`，`timer.unref()` 不阻塞退出；新增
+        > `interactiveSession()`（stdin+stderr 均为 TTY）并令 `runHarness` 仅在真
+        > 终端下请求交互向导；导出 `DEFAULT_PROMPT_TIMEOUT_MS`/`interactiveSession`
+        > 并新增 5 个回归用例。校验 **2073 pytest + 6 skip**、ruff / mypy strict
+        > clean（246 源文件）、npm 包装器 **50 passed**。走 `.release/iterate-harness`
+        > 替代路径（与公开 main 共享历史）rsync 同步提交并快进推送
+        >（`0acd1f4..84e641b`）；主仓库 push 提交 `e0c05e0`（rebase 至 `377e2ff`）。
+        > GitHub Release v2.2.5 已建，npm `iterate-harness@2.2.5` 已发布
+        >（registry `latest=2.2.5`）。端到端验证：`npm install -g --prefix
+        > ~/.npm-global iterate-harness@2.2.5` 后 `ih --version` = `iterate_harness
+        > 2.2.5`。版本号在 `__init__.py` / `npm/package.json` /
+        > `frontend/web/package.json` / `CHANGELOG.md` 同步至 2.2.5。
+        >
+        > **2.2.4 发布记录（2026-09-09）**：例行审查 + 修复发版（patch）。主要变更：
+        > 防御内核在工具**抛异常**时从未回滚（`engine/query.py`）：变更类工具
+        > `kernel.snapshot()` 后若 `tool.execute` 中途 raise（而非返回错误结果），
+        > `after_mutation` 不执行——部分写入留在磁盘、原子事务 + fail-fast 回滚
+        >（design §20.3.2）被异常路径静默击穿。现以 try/except 包裹执行：异常路径先
+        > `kernel.after_mutation(..., success=False)` 回滚快照再上抛（回滚失败仅
+        > warning），新增回归用例 `test_mutating_tool_that_raises_rolls_back_snapshot`；
+        > coordinator 模式上下文消息破坏 provider 的 tool_use/tool_result 顺序
+        >（`engine/query.py`）：纯文本 `# Coordinator User Context` 每次回合插入在
+        > tool_use 与 tool_result 之间，provider 要求 tool_result 必须紧跟在对应
+        > tool_use 之后，乱序会 400 拒绝——现改为 tool result 之后回落为尾消息，
+        > 并新增顺序断言；`ui/backend_host.py` 8 处 `assert self._bundle is not None`
+        > 依赖断言做控制流（`python -O` 下被剥离静默失效）改显式 `RuntimeError` 守卫；
+        > `config set timeout` 误入 `_INT_KEYS` 而 `Settings.timeout` 实为 float——
+        > 小数触发 `int()` 抛错、原串写进浮点字段，新增 `_FLOAT_KEYS` 独立强转；
+        > meta-review `ROUND_GAP` 对续跑片段（如 `[4,5,6,7]`）误报缺口，改为只校验
+        > 片段内相邻缺口不再要求从 1 起连续；glob 沙箱校验误用进程 cwd 作边界
+        >（docker 沙箱激活时）改传 `context.cwd` 项目根；bash 工具 stdout 无上限
+        > 缓冲改按 10MB 分块读取（防 `cat`/构建日志撑爆内存）；
+        > `IterateLoopPolicy.cost_meter` 消除 `field(default=None) + type: ignore`，
+        > 改私有 `_cost_meter` + 类型化只读属性；`Mailbox.mark_read` 不再吞掉
+        > 「消息不存在」结果——返回是否标记成功；死 `TYPE_CHECKING: pass` 脚手块清理；
+        > 非交互 `run_print_mode._clear_output` no-op 修复（text 清屏、stream-json
+        > 发 `clear_screen` 事件）；npm 包装器 postinstall `SKIP_INSTALL` 值识别与
+        > `bootstrap.ensureRuntime`（`1/true/yes/on` 忽略大小写）对齐；CI 新增
+        > `npm-wrapper` job（此前 npm 包装器测试从未在 CI 执行），`test` 脚本补入
+        > 一直存在却未运行过的 `test/ui.test.js`、`files` 白名单纳入 `README.zh-CN.md`。
+        > 版本号在 `__init__.py` / `npm/package.json` / `frontend/web/package.json` /
+        > `CHANGELOG.md` 同步至 2.2.4；校验 **2073 pytest + 6 skip**（新增 1 个防御
+        > 内核回滚回归用例）、ruff / mypy strict clean（246 源文件）、npm 包装器
+        > 45 tests passed（现含此前未执行的 ui 用例）、前端 `tsc --noEmit` + vitest
+        > 13 passed。走 `.release/iterate-harness` 替代路径（与公开 main 共享历史）
+        > rsync 同步提交并快进推送（`55aeac3..0acd1f4`）；主仓库 push 提交 `d62cfde`
+        >（rebase 至 `a38a9b4` 后）。GitHub Release v2.2.4 已建（`.release` 工作区
+        > `gh release create`），release.yml 自动构建 `iterate_harness-2.2.4-py3-none-any.whl`
+        > 上传 release + 自动发布 PyPI 2.2.4（官方 pypi.org latest=2.2.4 已验证；
+        > tuna 镜像联动延迟属正常）。npm `iterate-harness@2.2.4` 已发布（PUT staged
+        > 延迟约 1 分钟后 registry latest=2.2.4）。端到端验证：`npm install -g
+        > --prefix ~/.npm-global iterate-harness@2.2.4` 后 `ih --version` =
+        > `iterate_harness 2.2.4`。独立仓 CI 5 个 job（Python 3.10/3.11 + quality +
+        > 新 npm-wrapper + frontend typecheck）全绿。
+       >
+       > **2.2.2 发布记录（2026-09-07）**：例行审查 + 修复发版。**Python 3.10
+      > import 回归**（`state/store.py` 的 `typing.Unpack` 需 3.11+，而
+      > `requires-python = ">=3.10"`，3.10 安装导入期崩溃，CI 3.10 矩阵已连续失败）
+      > 改版本守卫导入（3.11+ `typing.Unpack`，3.10 回退 `typing_extensions.Unpack`），
+      > `typing-extensions==4.16.0` 显式加入运行时依赖；本机 Python 3.10.10 实测通过。
+      > 版本号在 `__init__.py` / `npm/package.json` / `frontend/web/package.json` /
+      > `CHANGELOG.md` 同步至 2.2.2；校验 **2070 pytest + 6 skip**、ruff / mypy strict
+      > clean、前端构建正常（本地 `uv build --wheel` 成功，286 个包文件）。继续走
+      > `.release/iterate-harness` 替代路径（与公开 main 共享历史）提交并快进推送
+      >（`b2068dc..c69f854`）。GitHub Release v2.2.2 已建，release.yml 自动构建
+      > `iterate_harness-2.2.2-py3-none-any.whl` 上传 release + 自动发布 PyPI 2.2.2
+      >（已验证 PyPI latest=2.2.2）；npm `iterate-harness@2.2.2` 已发布（latest=2.2.2）。
+      > 端到端验证：`npm install -g --prefix ~/.npm-global iterate-harness` 后
+      > `ih --version` = `iterate_harness 2.2.2`（npm 装到用户前缀，postinstall 被
+      > allow-scripts 门控也不影响——包装器首次运行惰性 bootstrap）。
+      >
+      > **2.2.1 发布记录（2026-09-07）**：例行审查 + 修复发版（patch）。WebUI 干预
+      > 通道无人值守挂死修复（`web/run_manager._ask_user_prompt` / `_ask_user_select`
+      > 与 `_permission_prompt` / `backend_host` 的 300s 有界等待对齐，超时落入安全
+      > 默认并推送可见状态消息）；`ih iterate sessions` 对损坏 `created_at` 的崩溃
+      > 修复（`cli.py` 捕获扩展 + `session_storage._coerce_mtime` 排序前规整）；
+      > `ui/runtime.py` 冗余 `except (ValueError, Exception)` 消除。校验 2069 pytest +
+      > 6 skip、ruff / mypy strict clean。subtree split 再遇 non-fast-forward（split
+      > 产物 head 停在 v2.1.0），走 `.release/iterate-harness` 替代路径提交并快进
+      > 推送（`0e03e26..b2068dc`）；GitHub Release v2.2.1 已建（release.yml 自动构建
+      > wheel 上传 + 自动发布 PyPI 2.2.1），npm 包装器最终随 2.2.2 一起发布。
+      >
+      > **2.2.0 发布记录（2026-09-06）**：例行审查 + 修复 + 发版迭代。主要变更：
+      > in-process 队友从「日志 + sleep」stub 变为真实引擎执行
+      > （`build_teammate_query_context` 组装完整接线，`code` 模式随 `task_mode` 继承防御
+      > 内核，缺 auth 才降级为可诊断的 no-op）；changed-only 审查修复非 ASCII 文件名
+      > （强制 `core.quotepath=false`）与历史 report 形状（`findings_from_report` 兼容
+      > `topFindings`/`notableFindings`/嵌套 `summary`）；`--branch` 隔离 worktree 用完即
+      > 清（`_BranchSwitch.restore()`，绝不 `--force` 丢弃未提交改动）；agent shell 不再
+      > 加载用户 rc（`bash --noprofile --norc`，conda/nvm 等 login hook 不再为每条命令
+      > 重复付费，实测 9.9s → 0.009s，`ITERATE_HARNESS_SHELL_LOAD_RC=1` 逃生阀保留旧
+      > 行为）。版本号在 `__init__.py` / `npm/package.json` / `frontend/web/package.json` /
+      > `CHANGELOG.md` 同步至 2.2.0；校验 **2065 pytest + 6 skip**、ruff / mypy strict（246
+      > 源文件）clean、`bootstrap.test.js` 36 passed、前端 `tsc --noEmit` + vitest 13
+      > passed。**subtree split push 仍被拒（non-fast-forward，且 split 产物 head 停在
+      > v2.1.0，未带上 rebase 后的 v2.2.0 commits）**，继续走 `.release/iterate-harness`
+      > 替代路径（与公开 main 共享历史）提交并快进推送（`4a4eab7..e7f09c8`）。GitHub
+      > Release v2.2.0 已建，release event 自动触发 release.yml 构建
+      > `iterate_harness-2.2.0-py3-none-any.whl`（770,727 字节）上传 release + 自动发布
+      > PyPI 2.2.0（已验证 PyPI latest=2.2.0，走 pypi.org 官方源）；npm
+      > `iterate-harness@2.2.0` 已发布（registry 传播约 90s，latest=2.2.0）。端到端验证：
+      > `npm install -g iterate-harness && ih --version` = `iterate_harness 2.2.0`。
+      >
+      > **2.0.1 发布记录（2026-09-04）**：v2.0 后首个补丁版——修复 `config_loader.py`
+      > `invariants` 配置段未被解析的关键 bug（此前 `effective.config.invariants` 恒为 `None`，
+      > code 模式防御式内核收不到项目不变量、只能回退 `validation.commands`；现已正确解析
+      > `ensure` + `commands`，段内字段形状错误整体降级为 `None`），并同步中英 README 补记
+      > v2.0 双模式架构。版本号在 `__init__.py` / `npm/package.json` / `CHANGELOG.md` 同步至
+      > 2.0.1；校验 2049 pytest + 39 npm 包装器测试全过，ruff clean。继续走
+      > `.release/iterate-harness` 替代路径提交并快进推送（`dfae8f3..81c3adc`）。GitHub Release
+      > v2.0.1 已建，release.yml 自动触发构建 `iterate_harness-2.0.1-py3-none-any.whl` 上传
+      > release + 自动发布 PyPI 2.0.1（已验证 PyPI latest=2.0.1）；npm `iterate-harness@2.0.1`
+      > 已发布。**本次 npm publish 首次 PUT 返回 202（staged 异步处理），registry 数分钟未出现
+      > 新版本；重试报 409 `Cannot publish over previously staged version`，属预期状态而非失败，
+      > 等待约 1 分钟后 registry 正常呈现 latest=2.0.1。** 后续发版遇到 202 时可先等待再核验，
+      > 无需重试（重试只会撞 409）。
+      >
+      > **2.0.0 发布记录（2026-09-04）**：v2.0 双模式架构（dual-mode）大版本——`task_mode`
+      >（`code` / `iterate`）与 `permission_mode` 正交；code 模式新增防御式内核（原子事务缓冲、
+      > 不变量守护、假设审计，`defensive/` 包）+ `record_assumption` 工具；`--task-mode`
+      > 全链路穿透使 worker 继承防御内核；TUI 空输入 Tab 循环切换模式 + 竖向色条/底部模式文字。
+      > 版本号在 `__init__.py` / `npm/package.json` / `CHANGELOG.md` 同步至 2.0.0；校验 2045
+      > pytest + 36 npm 包装器测试全过，ruff / mypy / 前端 tsc 全净。**subtree split push 仍被拒
+      >（non-fast-forward）**，继续走 `.release/iterate-harness` 替代路径（与公开 main 共享历史）
+      > 提交并快进推送（`597a436..3767267`）。GitHub Release v2.0.0 已建，release.yml 构建
+      > `iterate_harness-2.0.0-py3-none-any.whl`（759,999 字节）上传 release + 自动发布 PyPI 2.0.0
+      >（已验证 PyPI latest=2.0.0）；npm `iterate-harness@2.0.0` 已发布（registry 传播约 60s，
+      > latest=2.0.0）。端到端验证：本机 PyPI 官方源 pip 安装 2.0.0 成功，`ih --version`
+      > = `iterate_harness 2.0.0`，`defensive.kernel.DefensiveKernel` 与
+      > `IterateAssumptionTool` 导入正常（本机 npm 包装器直连 GitHub 下载受 TLS 证书/502
+      > 影响失败，属已知环境网络问题，PyPI 通道不受影响）。
+      >
+      > **1.16.2 发布记录（2026-08-28）**：版本号在 `__init__.py` / `npm/package.json` / `CHANGELOG.md`
+      > 同步至 1.16.2；校验 1995 pytest + 39 npm 包装器测试全过。**subtree split push 被拒
+      > （non-fast-forward）**：独立仓 main 因官方 dependabot merge 提交（`a136035` 等）与
+      > `git subtree split` 产物历史产生分歧，改用替代路径在 `.release/iterate-harness` 工作区
+      > （与公开 main 共享历史）提交并快进推送（`90ff6bb..140ae27`）。GitHub Release v1.16.2 已建，
+      > release.yml 构建 `iterate_harness-1.16.2-py3-none-any.whl` 上传 release 并自动发布 PyPI 1.16.2
+      >（已验证 PyPI latest=1.16.2）；npm `iterate-harness@1.16.2` 已发布（registry 传播约 60s）。
+      > 纯自动后台升级 + `reasoning_effort` + 图片/视觉附件透传三项特性随本版上线。
+      >
+      > **1.16.3 发布记录（2026-08-31）**：mypy strict 全量归零（修复 40+ 模块严格类型错误）+
+      > CI 新增 `mypy src` 门禁 + WebUI 路径环逃逸防护（`os.path.realpath(strict=True)`）+
+      > WebUI 选择菜单契约修正。继续走 `.release/iterate-harness` 替代路径（与公开 main 共享
+      > 历史）提交并快进推送（`a9251d9..597a436`）。GitHub Release v1.16.3 已建，release.yml
+      > 构建 `iterate_harness-1.16.3-py3-none-any.whl` 上传 release + 自动发布 PyPI 1.16.3
+      >（已验证 PyPI latest=1.16.3）；npm `iterate-harness@1.16.3` 已发布（registry 传播约 60s），
+      > npm 包装器 `ih --version` 验证 =1.16.3。
+
+---
+
+## 项目 3：iterate-plugin（dsh 插件）
+
+### 版本规则
+
+**独立版本线**（自 2.3.7 起），不再与 skill 本体版本号强绑定。仅改
+`harness/iterate-plugin/package.json` 的 `version`。
+
+### 需要同步的版本号文件
+
+| 文件 | 字段 |
+|---|---|
+| `harness/iterate-plugin/package.json` | `version` |
+| `harness/iterate-plugin/package-lock.json` | `version` |
+| `harness/iterate-plugin/CHANGELOG.md`（若存在） | 新增版本条目 |
+
+### 发布清单
+
+- [x] **1. 同步版本号**：编辑 `package.json`（含 `package-lock.json` 若已提交）。
+- [x] **2. 本地验证**：`cd harness/iterate-plugin && npm install && npm run typecheck && npm test`。
+- [x] **3. 提交并推送主仓库**：`git commit && git push origin main`。
+- [ ] **4. subtree 拆分到独立发布仓**：
+      ```bash
+      # 若尚未配置 plugin 独立仓 remote（主仓库默认只有 origin / harness-origin）：
+      git remote add plugin-origin https://github.com/jingzhao-l/iterate-plugin.git
+
+      git subtree split --prefix=harness/iterate-plugin -b subtree-plugin
+      git push plugin-origin subtree-plugin:main
+      git branch -D subtree-plugin
+      ```
+      > 独立仓 `jingzhao-l/iterate-plugin` 带 `dsh-plugin` topic，作为 dsh 生态发现入口。
+      >
+      > **⚠️ 非快进/无关联历史坑（2026-08-23 · 2.12.1）**：若 `git push plugin-origin subtree-plugin:main`
+      > 被拒（non-fast-forward），且 `git merge-base plugin-origin/main subtree-plugin` 为空
+      > （两者历史不相关），说明公开仓 main 是被早期 `git subtree push`（含 merge commit）建起的
+      > 独立历史，与当前 `git subtree split` 产物无公共祖先。不要 `--force`、不要裸 `git merge`
+      > （会“refusing to merge unrelated histories”）。**可用的替代路径**：直接改在 `.release/iterate-plugin`
+      > 工作区（它与公开仓 main 共享历史）提交并快进推送：
+      > ```bash
+      > cd .release/iterate-plugin && git pull origin main        # 对齐公开仓 main
+      > # 从主仓库把插件目录同步过来（排除 node_modules/.git）：
+      > rsync -a --exclude node_modules --exclude .git --exclude .release \
+      >   /Volumes/Eng-Dev/iterate-skill/harness/iterate-plugin/ ./
+      > git status --short      # 应只出现本次变更文件，再按需 git add 指定文件
+      > git commit && git push origin main
+      > ```
+      > 之后照常 `.release/iterate-plugin` 里 `npm publish`。
+      > **2.12.1 发布记录（2026-08-23）**：分支 `release/plugin-2.12.1`（基于 origin/main，
+      > cherry-pick 两笔 client fix），版本 2.12.0→2.12.1；公开仓 main `649a146..8b2b7d0`；
+      > npm `iterate-plugin@2.12.1` latest 已生效（62 文件 / 241.4 kB）。
+      > **2.12.3 发布记录（2026-09-01）**：走 `.release/iterate-plugin` 替代路径（与公开仓
+      > main 共享历史）发布 2.12.3。变更：适配 dsh `0.1.2-alpha.3`（JsonValue 迁至
+      > `@deepseek-ai/dsh-util-values`）、修复 git-scope 非 ASCII 文件名 UTF-8/octal 解码、
+      > 观测台 UX（live/timeline 筛选、线程全部展开/收起、JSON 导出、运行阶段 chip）并补齐
+      > 426 个单元测试；独立仓 main `3377f91..0e745f9`（含重建 dist/jobs.js 与 client bundle，
+      > 修复 git-clone 安装 dist 与 src 不一致问题）；npm `iterate-plugin@2.12.3` latest
+      > 已生效（64 文件 / 254.0 kB）。
+       > **3.2.1 发布记录（2026-09-05）**：approval-gate fail-safe fix + hardening；提交
+       > `de8116e`（`chore: release iterate-plugin v3.2.1`），独立仓 main 已含（其上前置
+       > `4096c92`/`67e1092` 为 README 重构，vs skill 子树仅 README 差异、src 完全一致）；
+       > 补打 `v3.2.1` tag 并推送远端（`a7c4ff1`）；npm `iterate-plugin@3.2.1` latest 已生效。
+- [x] **5. 同步发布工作区 + npm publish**：
+      ```bash
+      cd .release/iterate-plugin
+      git pull origin main
+      npm publish
+      ```
+      验证：npm 上 `iterate-plugin` 版本为 `<X.Y.Z>`。
+       > npm `repository` 元数据指向主仓库 `jingzhao-l/iterate-skill`（目录 `harness/iterate-plugin`）。
+       >
+       > **3.3.0 发布记录（2026-09-06）**：质量指挥中心 F8/F9/F10 实渲染（`lib/parse.js`
+       > 新增 `scanSessionForQualityGate` / `scanSessionForExperienceBank` / `scanSessionForDefenseEvents`
+       > 反向时序会话扫描，`get/add` 单条折叠、`record/counts` 折入计数+事件流）、TriagePanel §8
+       > 指派修复按钮（按批量作用域复制 `iterate_fix` 指令）、task_mode 端到端打通（`iterate_transcript
+       > capture` 接受 `taskMode`、builder 持久化、`iterate_status` 经 `readTranscriptTaskMode` 输出）；
+       > 另含 3.2.2 的 store 写失败结构化报错透出与 toolGate 死代码移除。主仓库提交 `71bd6a2`（release）
+       > + `3b57336`（DESIGN v3.1 记录）；subtree split push 再遇 non-fast-forward，走 `.release/
+       > iterate-plugin` 替代路径（reset 至 origin/main 后 rsync 插件目录，提交 `038d6c1` 快进推送
+       > `4096c92..038d6c1`）；npm `iterate-plugin@3.3.0` 已发布（latest=3.3.0，76 文件 / 292.3 kB，
+       > 已复核 tarball 含 `lib/parse.js` 新扫描器）。验证 483 测试全过、server/client typecheck 干净。
+       >
+       > **3.3.1 发布记录（2026-09-06）**：DSH STORE manifest 合规修复（回应
+       > AI-Scarlett/DSH-Store#504）——`package.json` `repository` 指向 canonical 主仓库
+       > `jingzhao-l/iterate-skill`（`directory: harness/iterate-plugin`，homepage/bugs 同步），
+       > 声明 `dsh.compatibility.dshReleases`（`0.1.2-alpha.4/.5/rc.1` = compatible），
+       > README（EN+ZH）新增「权限、依赖与兼容性」披露段（files/commands/credentials/network、
+       > 精确锁版依赖、无安装期生命周期脚本、失败边界）。纯元数据 + 文档变更，无运行时代码改动。
+       > "update deferred" 根因：目录固定 Commit `4422104f` 因 2026-09-05 主仓库历史重写已不存在，
+       > 推送新固定 Commit 后商店自动化重建基线。主仓库 `c3bd961`（manifest 修复）+ `0679925`
+       > （3.3.1 bump）；独立仓 `2e090ee` + `1cbf51d`；npm `iterate-plugin@3.3.1` 已发布
+       > （latest=3.3.1，76 文件，已复核 tarball manifest 含修复）。验证 483 测试全过。
+       >
+       > **3.4.0 发布记录（2026-09-06）**：综合审查 + 硬化批次——`iterate_checkpoint` 新增 `resume`
+       > 操作（加载断点 + 累加 resumeCount 原子写回，观测台 F5 复制指令由死指令变为可用）；
+       > `iterate_status` 补齐类型早已声明却从未填充的 `qualityGate`/`experienceBank`/`defenseEvents`
+       > 快照输出；安全硬化（`applyConfigUpdates` 原型污染防护；`iterate_config` 写操作对
+       > `observatory.approval` fail-closed，模型不可翻审批策略绕过人审门禁）；defense/quality 存储
+       > 读取规范化防 NaN/崩溃；`buildReviewReport` 轮次排序修复无序 rounds 收敛误判；
+       > `collectScopeFiles` 改 `path.relative` 修复 Windows 绝对路径泄漏；transcript fixes 上限、
+       > history 渲染守卫、defense record 负行拒绝；空态 dashboard 新增 `/iterate` 与
+       > `/iterate review-only` 启动按钮。**上游 dsh 检查**：`dsh-v0.1.3-alpha.1` tag 已发布但其 npm
+       > 包尚未发布（最高仍 `0.1.2-rc.1`），且本版含破坏性 SessionHandle 变更 + 已知性能回退——
+       > 插件未使用任何受影响 API，依赖声明保持不变，`dshReleases` 兼容声明待 npm 包发布后再评估。
+       > 重建 dist：既有 `dist/` 自 3.2.2 起与 `src/` 漂移（toolGate 死代码移除、store 写失败透出
+       > 未入包），本次重构建使 tarball 与 src 完全一致。主仓库 `3e04d59`；subtree split push 再遇
+       > non-fast-forward，走 `.release/iterate-plugin` 替代路径（rsync 同步后提交 `58d14e5` 快进
+       > 推送 `1cbf51d..58d14e5`）；npm `iterate-plugin@3.4.0` 已发布（latest=3.4.0，76 文件 /
+       > 300.1 kB，tarball 复核含 resume op / client launcher / 原型防护）。验证 typecheck +
+       > typecheck:client + build + build:client 干净，503 测试全过。
+       >
+       > **3.4.1 发布记录（2026-09-07）**：DSH STORE 契约对齐（回应 AI-Scarlett/DSH-Store#504
+       > 的"上游固定 Commit 已变化，阻断条件未清除"复检消息）——`dsh.compatibility.dshReleases`
+       > 精确声明扩到 `0.1.1-rc.1` / `0.1.2-alpha.4/5` / `0.1.2-rc.1` / `0.1.3-alpha.1`（覆盖商店
+       > 当前"最新三版本"窗口 alpha.5/rc.1/0.1.3-alpha.1，防候选库因兼容覆盖不足被剔除；
+       > `0.1.1-rc.1` 附带真实一次性 Profile 证据，`0.1.3-alpha.1` 为源码声明）；README（EN+ZH）
+       > 权限披露修正 `commands` 描述（`iterate_validate` 确经 `node:child_process` 执行配置内
+       > 精确白名单命令、超时 ≤600s；`git diff` 仅 changed-only 范围；此前"由宿主执行、非本插件"
+       > 措辞不准确）。（同批并入工作区已存在的健壮性修复：git-scope `sep` 前缀、skill-prompt
+       > 收敛/无效轮次守卫、parse.js 图片计数去重与循环防护，均带测试。）**一次性 Profile 证据
+       > （真实）**：临时 `$DSH_HOME` 下 `dsh plugin --profile dshstore-ev add <repo>` 449ms 安装
+       > → `--dump-config` 合成含 `# == iterate-plugin` 的 bundle → `remove` 602ms 卸载且合成配置
+       > 零残留；start/rollback 因一次性 Profile 无模型提供方按 `unknown`/`partial` 如实记录。
+       > **结论**：剩余固定门禁失败（files/commands/credentials 权限信号 + 运行依赖需独立供应链
+       > 审查）为插件固有高权限能力，按商店契约保持 `user-reviewed`/守卫（仍可 GitHub 手动安装），
+       > 属设计预期而非可经 manifest 修复；商店每八小时从新固定 Commit 自动复检。主仓库
+       > `c8235d7`；subtree split 再次 non-fast-forward，走 `.release/iterate-plugin` 替代路径
+       >（rsync 同步后提交 `cb1ef85` 快进推送 `58d14e5..cb1ef85`）；npm `iterate-plugin@3.4.1`
+       > 已发布（latest=3.4.1，76 文件 / 302.8 kB，tarball 复核含 `0.1.3-alpha.1` 兼容声明、
+       > skill-prompt `schemaInvalid` 收敛守卫、parse.js `consumed` 去重）。验证 typecheck +
+       > typecheck:client + build + build:client 干净，515 测试全过。
+       >
+       > **3.5.0 发布记录（2026-09-09）**：全面审查 + 硬化批次——新增 `src/atomic-fs.ts` 共享
+       > 原子写助手（tmp+rename），fix/prune/checkpoint/triage/config-write/experience-store/
+       > defense-store/quality-store/transcript 十处持久化全部切换为崩溃安全写入，三个 store
+       > 统一走 `iterateDir()`；`iterate_prune` 新增 `.iterate` 陈旧临时文件清扫（matcher 覆盖
+       > `X.tmp-*` 与 `.tmp-*` 两种命名约定，dry-run 报告、逐文件删错不中断）；`iterate_validate`
+       > 经 `exec.signal` 观察取消并声明 `timeoutMs` 契约（异步工具取消传播）；读类工具补
+       > per-args `isConcurrencySafe` 并发注解（history/context/status/quality-gate/diff/
+       > decision-log/transcript/defense-events/experience/config/triage/prune），fix/rollback/
+       > validate/config 四个写/执行类工具新增 `presentCall` 终态视图（fix 为纯 diff 视图，
+       > validate 展示 exitCode/failed 命令/invalidLines），validate 输出新增 per-command
+       > `invalidLines` 解析失败明细。**上游 dsh 检查**：`dsh-v0.1.3-alpha.1` npm 包仍未发布
+       > （最高仍 `0.1.2-rc.1`，跳过升级）；`dsh-v0.1.5-alpha.1`（含 ctx.agent 移除 / Inbox
+       > 类型化 / Session V3 破坏性变更）四包已可安装——沙盒实测插件在 0.1.5-alpha.1 上
+       > typecheck + 523 测试全绿，破坏性变更不触及本插件（仅用 defineTool/JsonValue/exec.*），
+       > 依赖声明维持 `0.1.2-rc.1` 精确锁版，`dshReleases` 兼容声明不变。+8 单元测试
+       > （523 总）。主仓库 `71f704f`（先 rebase 上游 badges 数据提交 `ac703a8`）；subtree
+>        split merge-base 为空（历史不相关），照例走 `.release/iterate-plugin` 替代路径
+>        （rsync 同步后提交 `f99098b` 快进推送 `8d034f6..f99098b`）；npm `iterate-plugin@3.5.0`
+>       已发布（latest=3.5.0，78 文件 / 309.8 kB，tarball 复核含 `dist/atomic-fs.js`）。验证
+>       typecheck + typecheck:client + build + build:client 干净，523 测试全过。
+>
+>        **3.5.1 发布记录（2026-09-12）**：上游兼容窗口扩展 + 审查闭环补齐批次——**上游
+>        dsh 检查**：`dsh-v0.1.5-rc.1` 已发布（2026-09-10），四包 npm 版 `0.1.5-rc.1` 可用；
+>        0.1.5 破坏性变更（`ctx.agent` 移除 / Inbox 类型化 / Session V3 / Web slot
+>        `conversation.*`→`main.*`）经一次性 Profile 沙盒实测不影响本插件（仅用
+>        `exec.agent`/`defineTool`/`JsonValue`，slot 名不变），`dsh.compatibility.dshReleases`
+>        兼容声明扩到 `0.1.5-alpha.1` / `0.1.5-alpha.2` / `0.1.5-rc.1`（0.1.5-rc.1 带真实
+>        一次性 Profile 证据：typecheck + 全量测试绿）；构建期依赖维持 `0.1.2-rc.1` 精确锁版
+>        （0.1.5 pins 干净 install 会 ERESOLVE——dsh-jobs peer 需 dsh-agent，harness 安装期
+>        对 `@deepseek-ai/*` 去重）。**审查缺口 G1-G5 补齐**：① `iterate_experience` 新增
+>        `remove` 操作（按 id 删除过时/错误经验条目，store 层 `removeExperience` 纯函数，
+>        未知 id 报 `ok:false` 不改库）；② `iterate_quality_gate` 新增 `clear` 操作
+>        （`clearQualityGate` 删除持久化质量凭证，读回退 pending，陈旧 FAIL 证书可重置）；
+>        ③ `iterate_rollback` 经 fail-safe `markFixRolledBackInTranscript` 把回滚镜像进
+>        `.iterate/transcript.json`（F4 不再把已回滚修复仍显示为成功；缺失/损坏 transcript
+>        忽略且不回滚失败）；④ `iterate_status` 文本渲染补全 JSON 已含的质量门禁
+>        （PASS/FAIL+分数+验证通过率）/经验银行（条目+命中）/防御事件（类型计数）摘要；
+>        ⑤ 活动流 `classifyTool` 覆盖三个 v3.0 指挥中心工具（experience/quality_gate/
+>        defense_events → info）。README（EN+ZH）/ skill-prompt / CHANGELOG / DESIGN v3.4
+>        随改。主仓库 `34bc3e5`（先 rebase 上游 badges 数据提交到 `05edc05`）；subtree split
+>        产物（`6d2bebf`）与 plugin-origin/main 存在公共祖先但双边推进非快进，照例走
+>        `.release/iterate-plugin` 替代路径（rsync 同步后提交 `27058b5` 快进推送
+>        `f99098b..27058b5`）；npm `iterate-plugin@3.5.1` 已发布（latest=3.5.1，78 文件 /
+>        313.4 kB，tarball 复核含 `dist/live.js` 新分类器、`clearQualityGate`、
+>        `markFixRolledBackInTranscript`，compat 含 `0.1.5-rc.1`）。验证 typecheck +
+>        build + build:client 干净，541 测试全过。
+
+---
+
+## 常见遗漏点（Checklist 之外）
+
+- **skill 侧**：改了代码但忘记同步 `npm-installer/package.json` 版本 → npx 拉到旧版安装器。
+- **skill 侧**：ClawHub 发布未传 `--name Iterate` → 显示名变成目录名。
+- **skill 侧**：ModelScope 用完整 zip → 超 5MiB 失败；SkillHub 忘了去掉 LICENSE → `Broken pipe`。
+- **harness 侧**：npm 包装器版本与 harness/tag 不同步 → 用户升级后装错版本。
+- **harness 侧**：subtree 拆分后忘记在独立仓打 tag → npm 包装器 pip-install 找不到 tarball。
+- **plugin / harness 侧**：subtree push 后忘记同步 `.release/` 工作区就直接 `npm publish`
+  → 发布会发布旧版本。
+
+---
+
+## 快速对照（命令速查）
+
+| 动作 | 命令 |
+|---|---|
+| skill 打 tag | `git tag v<X.Y.Z> && git push origin v<X.Y.Z>` |
+| skill npm 安装器 | `cd npm-installer && npm publish` |
+| skill ClawHub | `clawhub publish <stage> --slug iterate-skill --name Iterate --version <X.Y.Z> --no-input` |
+| skill ModelScope | `openapi.update_skill_settings(owner, name, {'skill_file': file_id})`（精简 zip <5MiB） |
+| skill SkillHub | 上传 `iterate-skill-skillhub.zip`（去 LICENSE），skillId `104490` |
+| harness subtree | `git subtree split --prefix=harness/iterate-harness -b subtree-harness && git push harness-origin subtree-harness:main` |
+| harness npm | `cd .release/iterate-harness/npm && npm publish`（先 `git pull`） |
+| plugin subtree | `git subtree split --prefix=harness/iterate-plugin -b subtree-plugin && git push plugin-origin subtree-plugin:main`（先 `git remote add plugin-origin https://github.com/jingzhao-l/iterate-plugin.git` 若未配置） |
+| plugin npm | `cd .release/iterate-plugin && npm publish`（先 `git pull`） |

@@ -1,45 +1,56 @@
-## Description: <br>
-Generates CTO and CISO training plans, exams, certificates, progress reports, and compliance follow-up artifacts for an agent-led training workflow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps CHO agents generate CTO/CISO training plans, courseware, exams, certificates, and progress reports for security and compliance training.
 
-## Publisher: <br>
-[johnsmithfan](https://clawhub.ai/user/johnsmithfan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[johnsmithfan](https://clawhub.ai/user/johnsmithfan)
 
-## Use Case: <br>
-Training and security operations agents use this skill to turn a CHO training plan into local courseware, exam scoring, certificate files, progress summaries, compliance reports, and action items. It is intended for controlled internal training workflows where human reviewers approve official records. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated scores, certificates, signatures, and escalation reports may look official. <br>
-Mitigation: Require separate human approval and real cryptographic signing before using any generated artifact as an authoritative personnel, training, or compliance record. <br>
-Risk: Training records can contain sensitive personnel and compliance data. <br>
-Mitigation: Run the skill only in a controlled internal workspace and restrict access to generated files under knowledge-base/training/. <br>
-Risk: The release requests a wallet-related capability without clear need in the evidence. <br>
-Mitigation: Avoid granting wallet or other sensitive capabilities unless the publisher documents why they are required for the deployment. <br>
+## Use Case:
 
+CHO, CTO, and CISO agents use this skill to turn a training plan into local courseware, exam materials, score records, certificates, progress reports, and action items. It is intended for operational training support, with certificate and audit outputs reviewed before they are used as compliance evidence.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/johnsmithfan/cto-ciso-training) <br>
-- [Artifact README](artifact/README.md) <br>
-- [Skill instructions](artifact/SKILL.md) <br>
-- [Security review](artifact/SECURITY_REVIEW.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON files, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Local files and Markdown with command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes training plans, exam results, certificate artifacts, audit trails, progress reports, compliance reports, and action items under knowledge-base/training/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence) <br>
+Risk: Exam, certificate, approval, signature, and audit records may be mistaken for compliance evidence.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the outputs as local training support only until real exam records, signer authorization, and cryptographic signatures are independently verified.
+
+Risk: Shared or untrusted TRAINING_WORKSPACE directories may weaken record integrity or path containment assumptions.
+
+Mitigation: Run the skill only in a controlled local workspace with trusted inputs and reviewed workspace configuration.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/johnsmithfan/skills/cto-ciso-training)
+- [Publisher profile](https://clawhub.ai/user/johnsmithfan)
+- [Artifact README](artifact/README.md)
+- [Artifact security review](artifact/SECURITY_REVIEW.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and JSON files with local shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes local training artifacts under knowledge-base/training; certificate, signature, audit, and approval fields need independent verification before compliance use.]
+
+## Skill Version(s):
+
+2.0.0 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,51 @@
-## Description: <br>
-Tavily Search gives agents Tavily-powered web search, research-mode search, image search, source citations, and structured search results. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tavily Search gives AI agents web search, deep research, image search, citation-oriented source results, and structured search output through Tavily.
 
-## Publisher: <br>
-[wuzhuhai](https://clawhub.ai/user/wuzhuhai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wuzhuhai](https://clawhub.ai/user/wuzhuhai)
 
-## Use Case: <br>
-Developers and external agent users use this skill to run current web searches, deeper multi-page research, and image searches through Tavily with text or JSON results that include source URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries and retrieved content are sent to Tavily, an external service. <br>
-Mitigation: Avoid sensitive or regulated queries and review service handling requirements before use. <br>
-Risk: The release ships with a plaintext Tavily API key in config.json. <br>
-Mitigation: Replace or remove the bundled key before use and store a user-owned Tavily key in a safer secret mechanism when available. <br>
+## Use Case:
 
+Developers and agent builders use this skill to let an agent query Tavily for current web results, deeper research summaries, image URLs, and JSON-formatted search responses.
 
-## Reference(s): <br>
-- [Tavily Website](https://tavily.com/) <br>
-- [Tavily Search API Endpoint](https://api.tavily.com/search) <br>
-- [ClawHub Skill Page](https://clawhub.ai/wuzhuhai/skills/tavily-search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Configuration] <br>
-**Output Format:** [Plain text or JSON search results with source URLs and optional image URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can return generated answers, result titles, source links, publication dates, snippets, response time, and optional images.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter, package.json, release evidence) <br>
+Risk: The release ships and stores Tavily API credentials in plaintext configuration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Remove and revoke any bundled key before installation, avoid sensitive queries, and prefer an environment variable or OS credential manager for user credentials.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/wuzhuhai/skills/tavily-search)
+- [Tavily Website](https://tavily.com/)
+- [Tavily Search API Endpoint](https://api.tavily.com/search)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, API calls, shell commands, configuration]
+
+**Output Format:** [Plain text or JSON search results with answer text, source URLs, optional image URLs, and response metadata.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search behavior depends on Tavily API availability and on the configured API key.]
+
+## Skill Version(s):
+
+1.0.0 (source: SKILL.md frontmatter, package.json, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

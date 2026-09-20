@@ -1,0 +1,348 @@
+{
+  "id": "PSS-10",
+  "name": "感知压力量表（PSS-10）",
+  "short_name": "PSS-10 压力自评",
+  "category": "压力",
+  "target_population": "成年人",
+  "estimated_time": "约 3 分钟",
+  "item_count": 10,
+  "description": "评估个体在过去一个月中感知到的心理压力水平，含 4 道反向计分题。",
+  "source": "Cohen, Kamarck & Mermelstein, 1983",
+  "license": "学术免费使用",
+  "scoring_type": "sum",
+  "items": [
+    {
+      "id": "q1",
+      "text": "在过去一个月里，你有多少时候因为一些意料之外的事情发生而感到心烦意乱？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "几乎不",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "在过去一个月里，你有多少时候感到无法控制生活中重要的事情？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "几乎不",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "在过去一个月里，你有多少时候感到紧张和压力？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "几乎不",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "在过去一个月里，你有多少时候感到自己能成功地处理恼人的生活麻烦？",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "几乎不",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q5",
+      "text": "在过去一个月里，你有多少时候感到事情都在按你的意愿发展？",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "几乎不",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q6",
+      "text": "在过去一个月里，你有多少时候发现你无法应对所有必须做的事？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "几乎不",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q7",
+      "text": "在过去一个月里，你有多少时候能控制生活中的烦心事？",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "几乎不",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q8",
+      "text": "在过去一个月里，你有多少时候感到自己能掌控全局？",
+      "reverse": true,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "几乎不",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q9",
+      "text": "在过去一个月里，你有多少时候因为一些超出你控制的事情而生气？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "几乎不",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "总是",
+          "score": 4
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "text": "在过去一个月里，你有多少时候感到困难堆积如山，无法逾越？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "几乎不",
+          "score": 1
+        },
+        {
+          "label": "有时",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "总是",
+          "score": 4
+        }
+      ]
+    }
+  ],
+  "dimensions": [
+    {
+      "name": "压力总分",
+      "items": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7",
+        "q8",
+        "q9",
+        "q10"
+      ],
+      "max": 40,
+      "min": 0
+    }
+  ],
+  "standard_score": null,
+  "interpretation": {
+    "bands": [
+      {
+        "dimension": "压力总分",
+        "min": 0,
+        "max": 13,
+        "level": "低感知压力",
+        "summary": "你感知到的压力水平较低，应对资源较充足。",
+        "advice": "维持现有的压力管理习惯。"
+      },
+      {
+        "dimension": "压力总分",
+        "min": 14,
+        "max": 26,
+        "level": "中等感知压力",
+        "summary": "处于中等压力水平，偶尔可能感到吃力。",
+        "advice": "关注主要压力源，尝试时间管理与放松练习；必要时倾诉或求助。"
+      },
+      {
+        "dimension": "压力总分",
+        "min": 27,
+        "max": 40,
+        "level": "高感知压力",
+        "summary": "感知压力明显偏高，长期可能损害身心。",
+        "advice": "建议梳理压力源、建立支持系统，并考虑专业心理支持。"
+      }
+    ]
+  },
+  "safety": {
+    "crisis_items": [],
+    "crisis_rule": "",
+    "high_risk_rule": ""
+  }
+}

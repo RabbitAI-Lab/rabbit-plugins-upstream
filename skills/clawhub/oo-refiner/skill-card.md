@@ -1,44 +1,59 @@
-## Description: <br>
-Refiner (refiner.io). Use this skill for ANY Refiner request - reading, creating, updating, and deleting data. Whenever a task involves Refiner, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Refiner (refiner.io). Use this skill for ANY Refiner request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent operate a connected Refiner workspace through OOMOL, including contact, form, segment, response, reporting, account, and event workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use sensitive Refiner credentials through an OOMOL-connected account. <br>
-Mitigation: Install only when the agent should operate that Refiner workspace, and use the OOMOL connection flow only if that provider is trusted. <br>
-Risk: Some connector actions can create, update, remove, or otherwise change Refiner data. <br>
-Mitigation: Review payloads and effects before approving write actions, and require explicit approval before destructive actions. <br>
-Risk: Connector schemas may change over time, which can make cached payload assumptions inaccurate. <br>
-Mitigation: Inspect the live connector schema before constructing each action payload. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Refiner contacts, forms, segments, responses, reporting, and product events through an OOMOL-connected Refiner account.
 
-## Reference(s): <br>
-- [ClawHub Refiner skill](https://clawhub.ai/oomol/oo-refiner) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Refiner homepage](https://refiner.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill directs agents to inspect live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: The skill can create or update contacts, track events, tag responses, and modify segment membership in Refiner.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact payload and expected effect with the user before write actions, and require explicit approval before destructive actions.
+
+Risk: The optional oo CLI installer uses pipe-to-shell commands.
+
+Mitigation: Review or verify the installer before running it, or use the platform install guide instead of executing the command blindly.
+
+Risk: Refiner access is mediated through OOMOL-connected credentials.
+
+Mitigation: Install and use the skill only when the user accepts OOMOL as the intermediary for the connected Refiner account.
+
+## Reference(s):
+
+- [Refiner homepage](https://refiner.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; command responses are JSON from the oo CLI.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

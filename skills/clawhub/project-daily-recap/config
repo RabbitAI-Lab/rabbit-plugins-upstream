@@ -19,6 +19,12 @@ CHECKLIST="发了技术内容?,有客户沟通?,项目有推进?"
 PUSH_HOUR=20
 PUSH_MINUTE=0
 
-# ---------- 通道配置已迁移到 reminder.sh（2026-07-13）----------
-# 现已固定走企业微信Agent通道（wecom-agent:default:Feng），不受48h限制
-# 不需要在 config 中配置通道参数
+# ---------- 以下由 setup.sh 自动填写 ----------
+# 微信通道（openclaw-weixin 或 openclaw-wechat）
+WEIXIN_CHANNEL="openclaw-weixin"
+
+# 微信接收人 ID（格式: xxx@im.wechat）
+WEIXIN_TARGET="o9cq80yTg9YA6Y1jSYCcUpInWNbI@im.wechat"
+
+# OpenClaw 账号 ID
+WEIXIN_ACCOUNT="51fdf6380286-im-bot"

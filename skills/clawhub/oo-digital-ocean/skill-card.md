@@ -1,44 +1,56 @@
-## Description: <br>
-Use this skill for DigitalOcean requests involving account and resource lookup, listing, and approved Droplet lifecycle operations through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+DigitalOcean (digitalocean.com). Use this skill for any DigitalOcean request, including reading, creating, updating, and deleting data through the OOMOL connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and cloud administrators use this skill to inspect DigitalOcean account, Droplet, App Platform, database, DNS, firewall, load balancer, and VPC resources through an OOMOL-connected account. It can also initiate basic Droplet lifecycle actions when the user explicitly approves the target action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan reports that the skill can trigger DigitalOcean Droplet lifecycle changes while describing untagged actions as safe to run directly. <br>
-Mitigation: Treat manage_droplet_lifecycle as a write action and require explicit user approval of the target Droplet and lifecycle operation before execution. <br>
-Risk: The skill may require running remote installer commands for the oo CLI during first-time setup. <br>
-Mitigation: Run remote installer commands only when the CLI is missing and after confirming that the user trusts OOMOL and needs the CLI for this workflow. <br>
-Risk: The skill requires sensitive DigitalOcean credentials through an OOMOL-connected account. <br>
-Mitigation: Use least-privilege DigitalOcean credentials, review connection scopes, and avoid connecting production resources unless the user has approved the operational risk. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect DigitalOcean account and team context and manage core DigitalOcean resources through an OOMOL-connected account. It supports inventory queries for Droplets, Apps, databases, DNS, firewalls, load balancers, and VPCs, plus guarded Droplet lifecycle actions.
 
-## Reference(s): <br>
-- [DigitalOcean homepage](https://www.digitalocean.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses OOMOL server-side credential injection and returns connector responses containing data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: Remote CLI installer commands can execute code during first-time setup if used without inspection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only when required, prefer a verified or inspected installation method, and avoid piping remote installer output directly into a shell where possible.
+
+Risk: Droplet lifecycle actions can interrupt running infrastructure.
+
+Mitigation: Confirm the target Droplet ID, payload, and intended effect with the user before running actions tagged destructive.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-digital-ocean)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [DigitalOcean Homepage](https://www.digitalocean.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

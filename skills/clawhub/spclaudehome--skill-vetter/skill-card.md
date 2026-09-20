@@ -1,39 +1,53 @@
-## Description: <br>
-Security-first skill vetting for AI agents. Use before installing any skill from ClawdHub, GitHub, or other sources. Checks for red flags, permission scope, and suspicious patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Skill Vetter helps agents review third-party skills before installation by checking source trust, permission scope, red flags, and suspicious behavior.
 
-## Publisher: <br>
-[spclaudehome](https://clawhub.ai/user/spclaudehome) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[spclaudehome](https://clawhub.ai/user/spclaudehome)
 
-## Use Case: <br>
-Developers and agents use this skill before installing or running third-party skills to review source, permissions, risk signals, and produce a structured vetting report. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Users may fetch or review skill content from unintended repositories if they copy placeholder GitHub commands without checking the target. <br>
-Mitigation: Fetch only repositories intentionally selected for review and replace placeholders carefully before running lookup commands. <br>
-Risk: Downloaded skill text may contain misleading or unsafe instructions. <br>
-Mitigation: Treat downloaded skill text as untrusted content and review it before installation or execution. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/spclaudehome/skills/skill-vetter) <br>
+## Use Case:
 
+Developers and agent operators use this skill to vet skills from ClawHub, GitHub, or other sources before installation or execution. It guides source checks, full file review, permission review, risk classification, and a final install recommendation.
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown report with checklist items and optional bash examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a manual vetting report; downloaded skill text should be treated as untrusted.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: For GitHub-hosted skills, the skill may lead an agent to fetch public repository metadata and skill files from GitHub.
+
+Mitigation: Run those checks only for sources the user intends to evaluate, and avoid submitting private or sensitive repository information.
+
+Risk: The skill provides review guidance and a verdict, but an agent may still miss subtle malicious behavior or misleading metadata.
+
+Mitigation: Use the report as a checklist, review all skill files before installation, and require human approval for high-risk findings such as credential access, destructive commands, or elevated permissions.
+
+## Reference(s):
+
+- [Skill Vetter ClawHub page](https://clawhub.ai/spclaudehome/skills/skill-vetter)
+- [Publisher profile](https://clawhub.ai/user/spclaudehome)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands]
+
+**Output Format:** [Markdown report with checklist guidance and optional shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces a structured skill vetting report with red flags, permissions, risk level, verdict, and notes.]
+
+## Skill Version(s):
+
+1.0.0 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

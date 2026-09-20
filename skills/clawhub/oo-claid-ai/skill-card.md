@@ -1,44 +1,55 @@
-## Description: <br>
-Claid AI lets agents operate the Claid AI image-editing connector through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Claid AI (claid.ai). Use this skill for ANY Claid AI request - reading, creating, and updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to edit public images with Claid AI through OOMOL-managed connector actions, including synchronous edits and asynchronous task submission and polling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires connected service credentials and can run Claid AI write actions through the OOMOL connector. <br>
-Mitigation: Confirm the exact action payload and expected effect with the user before running write actions, and rely on OOMOL-managed credentials rather than handling raw API tokens. <br>
-Risk: Connector action schemas may change over time, which can make a previously valid payload incorrect. <br>
-Mitigation: Inspect the live action schema before constructing or submitting each connector payload. <br>
-Risk: Authentication, connection, or billing failures can interrupt task execution. <br>
-Mitigation: Use the documented recovery steps only after a command fails for the matching reason. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Claid AI through an OOMOL-connected account, including synchronous image edits and asynchronous image-edit task submission and polling. The skill guides agents to inspect the live connector schema before constructing payloads.
 
-## Reference(s): <br>
-- [Claid AI homepage](https://claid.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-claid-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API calls, Configuration guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The fallback setup includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installation method first, prefer an official package manager or verified download path, and do not run the remote installer automatically unless OOMOL and the install URL are trusted.
+
+Risk: Image editing actions can change Claid AI state.
+
+Mitigation: Confirm the exact image-edit payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [Claid AI homepage](https://claid.ai)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Claid AI skill page](https://clawhub.ai/oomol/skills/oo-claid-ai)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses oo connector commands; write actions require user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and frontmatter metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

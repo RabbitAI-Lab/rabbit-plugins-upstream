@@ -161,8 +161,8 @@ class TestAssessMcpHealth:
         assert fc["dimensions"]["usage"]["calls"] == 15
 
         pw = next(r for r in result if r["server"] == "playwright")
-        assert pw["dimensions"]["usage"]["status"] == "fail"
-        assert pw["dimensions"]["usage"]["reason"] == "configured but never called"
+        assert pw["dimensions"]["usage"]["status"] == "unavailable"
+        assert pw["dimensions"]["usage"]["calls"] is None
 
         hr = next(r for r in result if r["server"] == "headroom")
         assert hr["dimensions"]["usage"]["status"] == "unavailable"
@@ -177,12 +177,12 @@ class TestAssessMcpHealth:
         assert fc["dimensions"]["permissions"]["exposed_fields"][0]["field"] == "FIRECRAWL_API_KEY"
 
     def test_assess_mcp_health_never_called(self, fake_mcp_config, fake_signals):
-        """configured_never_observed -> usage=fail"""
+        """No attributable event is not evidence of non-use."""
         pw = next(
             r for r in assess_mcp_health(fake_mcp_config, fake_signals)
             if r["server"] == "playwright"
         )
-        assert pw["dimensions"]["usage"]["status"] == "fail"
+        assert pw["dimensions"]["usage"]["status"] == "unavailable"
 
     def test_assess_mcp_health_empty_config(self, fake_signals):
         """Empty config -> empty list."""
@@ -291,7 +291,8 @@ class TestValueScore:
 class TestConfidenceLevel:
     def test_confidence_high(self):
         """Has local usage -> high."""
-        assert confidence_level(True, False, False) == "high"
+        assert confidence_level(True, False, False) == "medium"
+        assert confidence_level(True, True, True) == "high"
 
     def test_confidence_medium(self):
         """No local usage, has market or alignment -> medium."""
@@ -351,9 +352,9 @@ class TestAssessSkillsOptimization:
         assert r["type"] == "skill"
         # usage_norm=10, alignment=5, health=8
         # = 10*0.4 + 5*0.25 + 8*0.2 = 4 + 1.25 + 1.6 = 6.85
-        assert r["value_score"] == 6.85
-        assert r["layer"] == "watch"
-        assert r["confidence"] == "high"
+        assert r["value_score"] is None
+        assert r["layer"] == "pending_evidence"
+        assert r["confidence"] == "medium"
 
     def test_assess_skills_optimization_no_usage(self):
         """No usage -> usage=0."""
@@ -362,9 +363,9 @@ class TestAssessSkillsOptimization:
         r = result[0]
         # usage=0, alignment=3, health=8
         # = 0 + 3*0.25 + 8*0.2 = 0.75 + 1.6 = 2.35
-        assert r["value_score"] == 2.35
-        assert r["layer"] == "hide"
-        assert r["confidence"] == "medium"
+        assert r["value_score"] is None
+        assert r["layer"] == "pending_evidence"
+        assert r["breakdown"]["usage"] is None
 
     def test_assess_skills_optimization_multiple_skills(self):
         """Multiple skills sorted descending by value_score."""
@@ -377,7 +378,8 @@ class TestAssessSkillsOptimization:
         assert len(result) == 2
         assert result[0]["target"] == "hi"
         assert result[1]["target"] == "lo"
-        assert result[0]["value_score"] > result[1]["value_score"]
+        assert all(r["value_score"] is None for r in result)
+        assert result[1]["breakdown"]["usage"] is None
 
 
 class TestAssessMcpOptimization:
@@ -392,14 +394,15 @@ class TestAssessMcpOptimization:
         assert r["type"] == "mcp"
         # usage_norm=10, alignment=4, health=8
         # = 10*0.4 + 4*0.25 + 8*0.2 = 4 + 1 + 1.6 = 6.6
-        assert r["value_score"] == 6.6
+        assert r["value_score"] is None
+        assert r["breakdown"]["alignment"] is None
 
     def test_assess_mcp_optimization_hide_review(self):
         """Low-score MCP downgraded to hide_review."""
         health = [{"server": "bm", "health_score": 1.0}]
         usage = [{"mcp_server": "bm", "tool_calls": 0}]
         result = assess_mcp_optimization(health, usage)
-        assert result[0]["layer"] == "hide_review"
+        assert result[0]["layer"] == "pending_evidence"
 
     def test_assess_mcp_optimization_empty(self):
         """Empty lists -> empty."""
@@ -426,7 +429,7 @@ class TestAuditEcosystem:
         assert "overlap_pairs" in ea["agent_dispatch"]
         assert "total_injection_tokens" in ea["context_pressure"]
         assert ea["skill_layer"]["status"] == "unavailable"
-        assert ea["optimization"]["status"] == "observed"
+        assert ea["optimization"]["status"] == "partial"
 
     def test_audit_ecosystem_missing_config(self, fake_user_skill_dir, fake_signals, tmp_path):
         """Missing config -> empty mcp list."""
@@ -476,4 +479,4 @@ class TestAuditEcosystem:
             runtime_dir=root / "cache",
             staging_dir=root / ".tmp" / "bundled-marketplaces",
         )
-        assert result["ecosystem_assessment"]["optimization"]["status"] == "observed"
+        assert result["ecosystem_assessment"]["optimization"]["status"] == "partial"

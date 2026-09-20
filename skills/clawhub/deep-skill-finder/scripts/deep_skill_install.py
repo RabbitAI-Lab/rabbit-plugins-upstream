@@ -10,6 +10,7 @@
 import argparse
 import json
 import os
+import re
 import sys
 import tempfile
 import time
@@ -77,7 +78,7 @@ def get_api_url_candidates():
         candidates.append(configured.rstrip("/"))
 
     if not candidates:
-        candidates = ["https://www.meyo.life/api/v1"]
+        candidates = ["https://www.deepskill.market/api/v1"]
 
     return candidates
 
@@ -208,6 +209,9 @@ def download_skill_zip(name: str, version: str = None, request_id: str = None, a
         request_id = _load_last_search_request_id()
 
     params = {"name": name, "ref": "clawhub"}
+    skill_version = get_skill_version()
+    if skill_version != "unknown":
+        params["skillVersion"] = skill_version
     if version:
         params["version"] = version
     if request_id:
@@ -222,6 +226,15 @@ def download_skill_zip(name: str, version: str = None, request_id: str = None, a
     req = urllib.request.Request(url, headers=headers)
     with urllib.request.urlopen(req, timeout=60) as resp:
         return resp.read()
+
+def get_skill_version() -> str:
+    """从 SKILL.md frontmatter 读取当前版本号。"""
+    skill_md = Path(__file__).resolve().parent.parent / "SKILL.md"
+    if skill_md.exists():
+        m = re.search(r'version:\s*"([^"]+)"', skill_md.read_text(encoding="utf-8"))
+        if m:
+            return m.group(1)
+    return "unknown"
 
 
 def _load_last_search_request_id() -> str:
@@ -253,10 +266,18 @@ def install_from_zip(data: bytes, skill_name: str, target_dir: Path) -> bool:
                 rel = entry[len(strip_prefix):] if strip_prefix else entry
                 if not rel:
                     continue
+                # 安全校验：拒绝路径穿越
+                if rel.startswith("/") or ".." in rel.split("/"):
+                    print(f"  ✗ 拒绝不安全路径: {entry}", file=sys.stderr)
+                    return False
+                # 校验最终路径必须落在 skill_dir 内
+                out_path = (skill_dir / rel).resolve()
+                if not str(out_path).startswith(str(skill_dir.resolve())):
+                    print(f"  ✗ 路径越界: {entry}", file=sys.stderr)
+                    return False
                 if entry.endswith("/"):
                     (skill_dir / rel).mkdir(parents=True, exist_ok=True)
                 else:
-                    out_path = skill_dir / rel
                     out_path.parent.mkdir(parents=True, exist_ok=True)
                     out_path.write_bytes(zf.read(entry))
 
@@ -336,8 +357,18 @@ def uninstall_skill(skill_name: str, target_dir: Path):
         print(f"✗ '{skill_name}' 是内置 skill，由桌面端自动管理，无法卸载", file=sys.stderr)
         sys.exit(1)
 
-    import shutil
+    # 安全校验：skill_name 只含合法字符
+    import re
+    if not re.match(r'^[a-zA-Z0-9_-]+$', skill_name):
+        print(f"✗ 非法 skill 名称: '{skill_name}'", file=sys.stderr)
+        sys.exit(1)
+    # 校验路径必须落在 target_dir 内
     skill_dir = target_dir / skill_name
+    if not str(skill_dir.resolve()).startswith(str(target_dir.resolve())):
+        print(f"✗ 路径越界: {skill_dir}", file=sys.stderr)
+        sys.exit(1)
+
+    import shutil
     if skill_dir.exists():
         shutil.rmtree(skill_dir)
         print(f"✓ 已卸载 '{skill_name}' (删除 {skill_dir})")

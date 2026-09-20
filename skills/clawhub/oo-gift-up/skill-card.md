@@ -1,44 +1,60 @@
-## Description: <br>
-Gift Up enables agents to read, create, and update Gift Up account data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gift Up (giftup.com). Use this skill for ANY Gift Up request - reading, creating, updating, and deleting data. Whenever a task involves Gift Up, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External developers and business operators use this skill to manage Gift Up company, gift card, order, item, promotion, location, and transaction workflows from an agent. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Gift card balance, redemption, void, reactivation, and undo actions can affect money-bearing records. <br>
-Mitigation: Review the exact action, target, payload, and expected effect with the user before running state-changing Gift Up commands. <br>
-Risk: The security evidence reports that several money-affecting actions are under-labeled in the artifact. <br>
-Mitigation: Treat redeem, redeem in full, top up, undo redemption, reactivate, and void actions as requiring explicit approval even when the skill text does not tag them as write or destructive. <br>
-Risk: The skill gives an agent access to Gift Up through an OOMOL-connected account. <br>
-Mitigation: Install and use it only when that account access is intended, and keep Gift Up connection scopes aligned with the user's operational needs. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect and manage Gift Up company, gift card, item, order, location, promotion, and report transaction data through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-gift-up) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Gift Up Homepage](https://www.giftup.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector action responses are returned as JSON when commands are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and frontmatter) <br>
+Risk: The skill can perform high-impact Gift Up account actions, including redemptions, voids, top-ups, reactivations, and undo operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation of the target, payload, and expected effect before running any write or destructive Gift Up action.
+
+Risk: The skill includes a remote oo CLI installer command.
+
+Mitigation: Review the oo CLI installation step before installing or executing the installer.
+
+Risk: Gift Up operations run through an OOMOL-connected account.
+
+Mitigation: Use only a Gift Up account that the user intends OOMOL to operate.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-gift-up)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Gift Up Homepage](https://www.giftup.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing Gift Up action payloads.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

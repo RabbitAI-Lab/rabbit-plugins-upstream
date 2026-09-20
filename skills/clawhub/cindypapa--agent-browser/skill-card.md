@@ -1,44 +1,59 @@
-## Description: <br>
-A fast Rust-based headless browser automation CLI with Node.js fallback that enables AI agents to navigate, click, type, and snapshot pages via structured commands. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A fast Rust-based headless browser automation CLI with Node.js fallback that enables AI agents to navigate, click, type, and snapshot pages via structured commands.
 
-## Publisher: <br>
-[cindypapa](https://clawhub.ai/user/cindypapa) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cindypapa](https://clawhub.ai/user/cindypapa)
 
-## Use Case: <br>
-Developers, QA engineers, and agent builders use this skill to automate browser navigation, interaction, form filling, UI testing, page inspection, screenshots, PDFs, recordings, and structured data extraction through the agent-browser CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Browser automation can act on authenticated sites or accounts the user has opened. <br>
-Mitigation: Use the skill only on sites and accounts the user intends the agent to control, and prefer isolated sessions for important accounts. <br>
-Risk: Saved browser state, cookies, storage output, screenshots, PDFs, recordings, and traces can contain sensitive information. <br>
-Mitigation: Treat these outputs as sensitive data and avoid committing, sharing, or storing them where unauthorized users can access them. <br>
-Risk: The skill depends on installing and running the agent-browser CLI and browser components. <br>
-Mitigation: Confirm trust in the npm package or upstream repository before installation and keep Node.js and npm available as required runtime dependencies. <br>
+## Use Case:
 
+Developers and automation engineers use this skill to drive browser sessions through structured commands for web UI testing, data extraction, form filling, page inspection, and session workflows.
 
-## Reference(s): <br>
-- [Agent Browser Skill Page](https://clawhub.ai/cindypapa/skills/agent-browser) <br>
-- [agent-browser CLI Repository](https://github.com/vercel-labs/agent-browser) <br>
-- [Agent Browser Skill Issue Repository](https://github.com/TheSethRose/Agent-Browser-CLI) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Markdown, Code, Files, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks and optional JSON CLI output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce screenshots, PDFs, video recordings, traces, saved browser state, cookies, storage data, and structured page snapshots when the documented CLI commands are used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence) <br>
+Risk: Browser sessions and generated files may contain sensitive cookies, localStorage, screenshots, PDFs, traces, recordings, or saved authentication state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat these outputs as sensitive, avoid saving privileged sessions, keep state files out of repositories, restrict permissions, and delete them when finished.
+
+Risk: Global installation from a moving package target can change the reviewed behavior over time.
+
+Mitigation: Prefer a pinned reviewed package version or commit instead of installing the latest global package blindly.
+
+Risk: Broad browser automation and JavaScript execution can mutate pages, sessions, or data in unintended ways.
+
+Mitigation: Install only in workflows where broad browser automation is appropriate and review target sites, sessions, and commands before execution.
+
+## Reference(s):
+
+- [ClawHub Agent Browser Skill](https://clawhub.ai/cindypapa/skills/agent-browser)
+- [agent-browser CLI Repository](https://github.com/vercel-labs/agent-browser)
+- [Agent Browser Skill Issues](https://github.com/TheSethRose/Agent-Browser-CLI)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown instructions with shell command examples and optional JSON-output command usage.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The referenced CLI can produce browser snapshots, extracted values, screenshots, PDFs, traces, recordings, and saved session state.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

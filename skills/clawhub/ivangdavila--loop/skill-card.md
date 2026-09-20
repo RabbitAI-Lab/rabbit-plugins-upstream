@@ -1,44 +1,58 @@
-## Description: <br>
-Run iterative agent loops until success criteria are met. Controlled autonomous iteration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Run iterative agent loops until success criteria are met with bounded autonomous iteration.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-Developers and agents use Loop to repeat clearly scoped tasks, verify success criteria, and preserve concise iteration learnings until success or a bounded stopping condition is reached. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Repeated attempts can amplify an incorrect plan or repeatedly propose risky commands. <br>
-Mitigation: Keep success criteria narrow, review commands before they run, require explicit approval for destructive operations, and stop at the skill's bounded iteration limit. <br>
-Risk: Loop history is saved locally under ~/loop/ and could contain sensitive task notes if the user includes them. <br>
-Mitigation: Avoid putting secrets or sensitive data in loop notes, and review or delete local history when it is no longer needed. <br>
-Risk: Autonomous iteration can increase token and tool-use cost. <br>
-Mitigation: Estimate cost before starting, use a small iteration limit by default, and switch approaches instead of continuing when repeated attempts show the same failure pattern. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [Loop on ClawHub](https://clawhub.ai/ivangdavila/loop) <br>
-- [Publisher profile: ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
-- [Loop examples](examples.md) <br>
-- [Memory between iterations](memory.md) <br>
+## Use Case:
 
+Developers and agent operators use Loop to retry tasks with clear success criteria, verification steps, and bounded iteration. It is useful when a task has a fixable failure path and needs repeated attempts with concise learnings carried forward.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown instructions with inline shell commands and file path conventions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create local loop state under ~/loop/ and record bounded iteration history.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.2 (source: SKILL.md frontmatter and server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Repeated attempts can multiply cost or continue work after several failures.
+
+Mitigation: Use clear success criteria, set a bounded iteration count, and stop when failures indicate a different approach is needed.
+
+Risk: Loop state and attempt summaries may be stored locally under ~/loop.
+
+Mitigation: Avoid storing secrets or sensitive task details in loop summaries, and review local logs when handling confidential work.
+
+Risk: A task that modifies important files could be retried multiple times.
+
+Mitigation: Review file-changing tasks before allowing the loop to continue and require explicit approval for destructive actions.
+
+## Reference(s):
+
+- [Loop on ClawHub](https://clawhub.ai/ivangdavila/skills/loop)
+- [Loop Examples](examples.md)
+- [Memory Between Iterations](memory.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands and structured iteration summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May record loop state and iteration summaries under ~/loop when used.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

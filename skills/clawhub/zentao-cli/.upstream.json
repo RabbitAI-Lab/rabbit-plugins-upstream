@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/zentao-cli",
   "slug": "zentao-cli",
   "ownerHandle": null,
-  "version": "0.1.7",
-  "updatedAt": 1779703136296,
-  "contentHash": "8f175e929e7a76d7a05898ad01c529f99af83743ceba840bda5a3fc5c533939f",
-  "fetchedAt": "2026-07-26T18:40:16.261Z"
+  "version": "0.3.1",
+  "updatedAt": 1789881203027,
+  "contentHash": "9dfd23011c6efd29ff20fc09fcece325aff80dd28166f02623a1faa40f5c19c3",
+  "fetchedAt": "2026-09-20T12:35:03.835Z"
 }

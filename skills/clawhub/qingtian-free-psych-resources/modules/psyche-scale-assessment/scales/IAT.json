@@ -1,0 +1,718 @@
+{
+  "id": "IAT",
+  "name": "网络成瘾测验（IAT，Young）",
+  "short_name": "IAT 网络成瘾",
+  "category": "行为成瘾",
+  "target_population": "成年人/青少年",
+  "estimated_time": "约 3 分钟",
+  "item_count": 20,
+  "description": "Young 网络成瘾测验，20 题 0–5 频率自评（从不/很少/偶尔/经常/频繁/总是），总分 0–100，评估网络使用相关的耐受、戒断、冲突与功能损害。总分越高倾向越强。",
+  "source": "Young, 1998",
+  "license": "学术使用",
+  "scoring_type": "sum",
+  "items": [
+    {
+      "id": "q1",
+      "text": "在过去，你多长时间会发现自己的实际上网时间比原本打算的要长？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "频繁",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "在过去，你多长时间会因为上网而忽略家务？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "频繁",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q3",
+      "text": "在过去，你多长时间会更愿意上网而不愿和伴侣或朋友共处？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "频繁",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "在过去，你的家人多长时间会抱怨你上网时间太多？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "频繁",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q5",
+      "text": "在过去，你的学习或工作多长时间会因上网而受到影响？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "频繁",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q6",
+      "text": "在过去，你多长时间会因上网与家人/朋友发生争执？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "频繁",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q7",
+      "text": "在过去，你多长时间会因上网而被他人误解？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "频繁",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q8",
+      "text": "在过去，你多长时间会因上网而耽误出门？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "频繁",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q9",
+      "text": "在过去，你多长时间会因上网而减少了重要活动？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "频繁",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "text": "在过去，你多长时间会因上网与家人/朋友发生冲突？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "频繁",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "text": "在过去，你多长时间会因上网而减少睡眠时间？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "频繁",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "text": "在过去，你多长时间会在无法上网时感到不安？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "频繁",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "text": "在过去，你多长时间会试图减少上网却没有成功？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "频繁",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "text": "在过去，你多长时间会试图隐藏自己实际上网的时间？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "频繁",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "text": "在过去，你多长时间会在下网后感到空虚、抑郁或易怒？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "频繁",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "text": "在过去，你多长时间会因上网而与家人发生激烈冲突？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "频繁",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "text": "在过去，你多长时间会因上网而导致学习/工作效率下降？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "频繁",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "text": "在过去，你多长时间会因上网而明显减少了睡眠？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "频繁",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "text": "在过去，你多长时间会因上网而忽略身体健康？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "频繁",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    },
+    {
+      "id": "q20",
+      "text": "在过去，你多长时间会因上网而影响现实人际关系？",
+      "reverse": false,
+      "crisis": false,
+      "options": [
+        {
+          "label": "从不",
+          "score": 0
+        },
+        {
+          "label": "很少",
+          "score": 1
+        },
+        {
+          "label": "偶尔",
+          "score": 2
+        },
+        {
+          "label": "经常",
+          "score": 3
+        },
+        {
+          "label": "频繁",
+          "score": 4
+        },
+        {
+          "label": "总是",
+          "score": 5
+        }
+      ]
+    }
+  ],
+  "dimensions": [
+    {
+      "name": "成瘾倾向总分",
+      "items": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7",
+        "q8",
+        "q9",
+        "q10",
+        "q11",
+        "q12",
+        "q13",
+        "q14",
+        "q15",
+        "q16",
+        "q17",
+        "q18",
+        "q19",
+        "q20"
+      ],
+      "max": 100,
+      "min": 0
+    }
+  ],
+  "standard_score": null,
+  "interpretation": {
+    "bands": [
+      {
+        "dimension": "成瘾倾向总分",
+        "min": 0,
+        "max": 49,
+        "level": "正常",
+        "summary": "网络使用未表现出明显成瘾倾向。",
+        "advice": "保持健康使用习惯。"
+      },
+      {
+        "dimension": "成瘾倾向总分",
+        "min": 50,
+        "max": 79,
+        "level": "中度倾向",
+        "summary": "存在一定网络使用冲突与功能影响。",
+        "advice": "设定使用边界、增加线下活动；如失控建议行为干预。"
+      },
+      {
+        "dimension": "成瘾倾向总分",
+        "min": 80,
+        "max": 100,
+        "level": "重度倾向",
+        "summary": "网络使用已造成明显功能损害，倾向较强。",
+        "advice": "建议寻求专业行为成瘾干预或心理咨询。"
+      }
+    ]
+  },
+  "safety": {
+    "crisis_items": [],
+    "crisis_rule": "",
+    "high_risk_rule": ""
+  }
+}

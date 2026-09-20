@@ -1,47 +1,64 @@
-## Description: <br>
-Creates a complete picture book from a theme by drafting a paged story, generating style-consistent illustrations and background music with dLazy services, and assembling a portable HTML book. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates complete picture books from a theme by drafting a paged story, generating style-consistent illustrations and background music through the dLazy CLI, and assembling a portable HTML book.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to have an agent create children's picture books or bedtime storybooks with coordinated story text, generated illustrations, background music, and an offline HTML reading experience. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and reference images may be sent to dLazy services during generation. <br>
-Mitigation: Avoid sensitive images or private story details unless the user is comfortable uploading them to the service. <br>
-Risk: Generated media is downloaded and written into the local project folder. <br>
-Mitigation: Use a dedicated output directory and review generated files before sharing the finished book. <br>
-Risk: Authentication may store a dLazy API key in the local CLI configuration. <br>
-Mitigation: Use the documented dLazy authentication flow, keep the config file private, and rotate or revoke the key from the dLazy dashboard when needed. <br>
-Risk: Media generation can consume paid credits or fail when credits are insufficient. <br>
-Mitigation: Use the skill's low-quality image setting for draft books and confirm credit availability before generating many pages. <br>
+## Use Case:
 
+External users and developers use this skill to create illustrated children's picture books or bedtime storybooks from a theme. It guides story planning, dLazy-backed image and music generation, and local HTML assembly into a shareable book folder.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-picture-book) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON book manifest, generated media files, and self-contained HTML] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs typically include book.json, index.html, generated image files, and a background music file with relative paths for offline sharing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and release evidence) <br>
+Risk: The skill requires a dLazy API key that may be saved locally or supplied through the environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the documented dLazy login or auth flow, protect the local CLI configuration file, and rotate or revoke keys from the dLazy dashboard when needed.
+
+Risk: Picture-book generation can spend dLazy credits through image and music API calls.
+
+Mitigation: Confirm the intended page count, quality settings, and music duration before generation, and monitor credit usage before running a full book.
+
+Risk: Prompts and local reference images are sent to dLazy-hosted services for media generation.
+
+Mitigation: Avoid submitting sensitive prompts or private reference images unless the user accepts upload to dLazy API and media storage endpoints.
+
+Risk: The final HTML book depends on local book.json, image, and music paths being consistent.
+
+Mitigation: Keep index.html next to the generated images and music folders, and verify book.json paths before sharing the finished folder.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-picture-book)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, files]
+
+**Output Format:** [Markdown guidance with JSON book data, shell commands, and generated HTML files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces a book.json plan, image and music asset paths, and an index.html picture-book build.]
+
+## Skill Version(s):
+
+1.3.18 (source: server release evidence; artifact frontmatter reports 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

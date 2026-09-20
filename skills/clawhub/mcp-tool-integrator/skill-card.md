@@ -1,41 +1,57 @@
-## Description: <br>
-AI-powered Model Context Protocol integration assistant for scaffolding MCP servers, connecting agent tools, debugging MCP connections, and building custom tool chains. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered assistant to scaffold, configure, debug, and integrate MCP servers connecting AI agents with tools such as GitHub, Slack, Notion, Airtable, Postgres, and filesystems.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers, agent builders, and DevOps engineers use this skill to plan MCP architectures, generate server scaffolds and runtime configuration, connect tools such as GitHub, Slack, Notion, databases, and filesystems, and troubleshoot failed MCP integrations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated MCP configurations and tool chains can grant agents access to production services, data stores, or collaboration tools. <br>
-Mitigation: Use least-privilege credentials, read-only database connections where possible, explicit approval workflows for write access, and audit logging before deployment. <br>
-Risk: Outdated, over-broad, or untested MCP server settings can cause failed integrations, excessive API calls, or unintended tool behavior. <br>
-Mitigation: Pin server versions, test connections with an MCP inspector or development CLI, apply rate limits and budgets, and review generated commands and configuration before use. <br>
+## Use Case:
 
+Developers, agent builders, and DevOps engineers use this skill to plan MCP architecture, scaffold MCP servers, configure tool connections, and debug integration failures. It is suited for agents that need guidance, code snippets, shell commands, and configuration patterns for multi-tool MCP deployments.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/mcp-tool-integrator) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with code blocks, shell commands, JSON configuration snippets, diagnostic tables, and setup guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include MCP architecture recommendations, generated Python or TypeScript server scaffolds, runtime configuration examples, debugging reports, and operational best practices.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.0.2 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Referenced MCP packages, server registries, and protocol behavior may change after release.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify current MCP package sources and official MCP documentation before installing or configuring integrations.
+
+Risk: Credentialed or write-capable tool integrations can expose data or perform unintended actions.
+
+Mitigation: Use least-privilege credentials, read-only defaults, explicit confirmation for write actions, and audit logging.
+
+Risk: Marketplace metadata may be rejected if malformed frontmatter is required for installation.
+
+Mitigation: Fix the malformed frontmatter before publishing or installing in environments that require valid skill metadata.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/mcp-tool-integrator)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with code blocks, configuration snippets, diagnostic tables, and setup steps]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include MCP architecture recommendations, server scaffolds, debugging reports, and security checklists.]
+
+## Skill Version(s):
+
+4.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

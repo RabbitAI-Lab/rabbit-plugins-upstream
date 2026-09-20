@@ -1,119 +1,50 @@
-# Report Template — Skills-Summarize-Audit v8.2.2
+# Report Template — Skills-Summarize-Audit v9.2.2
 
-事实状态（observed/inferred/estimated/unavailable）遵循 `references/output-contract.md`。
-
-只输出本次请求涉及的区块。报告采用“先结论、后行动、再证据”的阅读顺序：每个结论标注 `observed`、`inferred`、`estimated` 或 `unavailable`；默认只读。不要用全量技能表、逐项健康分或 `info` 提示占据首屏。
-
-```text
-# 技能/插件审查
-
-状态: complete | partial
-范围: <installed / visible> | 写入: 本轮只读，未修改文件
-证据覆盖: observed <n> / inferred <n> / estimated <n> / unavailable <n>
+按请求选择区块；先结论、后行动、再证据。事实状态遵循 output-contract.md。
+首屏最多五项优先建议；完整字段用 --detail / --json 查看。不用全量评分表淹没结论。
 
 ## 一眼结论
-扫描 <n> 项；需处理 <n> 项（critical <n> / warning <n>）。
-决策: <可直接保留 / 先处理阻断项 / 证据不足，暂不变更>。
+
+扫描状态与评估状态分别标 complete / partial；范围：客户端、来源与时间窗；模式：full / incremental。
+扫描数量、checked/reused/removed；critical/warning 数；证据覆盖和不可得维度。
+完整扫描不等于全部正常、已修复或 UI 已更新。
+
+## 建议执行
+
+每项：优先级、目标、问题、影响:、证据（绝对路径/URL/时间）、判断、建议动作、操作步骤、执行 Agent、验证、回滚、当前状态。
+无证据项明确“补充证据，暂不变更”，不能用 [需确认] 包装无依据的卸载结论。
+不得将 suggested 写为 applied/verified。
+共同缺口聚合，逐项目标和证据保留在 JSON；不输出零项任务，不全量联网补分。
 
 ## 安装全景
-| 来源组/外挂 | 项数 | 低适用项 | 上下文压力 | 建议 |
-| --- | ---: | ---: | --- | --- |
-| system / global / runtime / <plugin-name> | <n> | <n> | 高/中/低 [inferred] | 保留 / 按任务保留 / [需确认] 评估禁用或卸载 |
 
-来源组说明：`system` 是内置技能，`global` 是用户全局技能，`runtime` 是运行时发现项，插件名为外挂。缓存或 manifest 项不等于当前 UI 可见项。
+按 global/system/plugin/runtime 展示去重数；catalog 和 cache-only 单列，不计入已安装。
+安装、启用、UI 可见、实际调用、运行通过是不同状态。
 
 ## 评分与证据边界
-| 维度 | 解释 | 状态 |
-| --- | --- | --- |
-| 健康分 | 来源、元数据和版本可解析性；不代表常用或适用。 | observed/unavailable |
-| 适用度 | 用户画像词命中；高/中/低。 | observed/unavailable |
-| 使用频率 | 只接受可归因的 session/tool-call 事件。 | observed/unavailable |
-| 上下文压力 | 按安装项数量推断发现/选择噪声，不等同于实际 prompt token。 | inferred |
 
-## 需处理
-### [CRITICAL|WARNING] <技能/插件> - <问题代码>
-问题: <一条可理解的故障描述>
-影响: <对当前使用、发布或可信度的实际影响> [observed/inferred]
-证据: <绝对路径 / 命令 / 已获同意的 URL>
-建议: <只读建议，或标记 [需确认] 的最小后续动作>
+分别列健康、适用度、调用、市场、上下文；unknown=null，不补零。
+仅完整数据可输出综合分和排序；info 折叠。
+局部健康分显示维度覆盖；上下文估算交代扫描目录与假定窗口；内部模块单列未查状态。
 
-无 critical/warning 时明确写“无”；不以 `info` 凑数量。
-
-## 边界与协同
-| 对象 | 判断 | 依据 | 建议 |
-| <技能 A + 技能 B> | conflict / complementary | <重叠分与理由> | <明确边界 / 共存分工> |
-
-仅列 `conflict` 和 `complementary`；不输出 `unrelated` 的成对组合。
-
-## 优化与卸载候选
-| 对象 | 来源组 | 健康 | 适用度 | 使用频率 | 建议 |
-| --- | --- | ---: | --- | --- | --- |
-| <id> | <system/global/runtime/plugin> | <0-10> | 高/中/低/unavailable | observed/unavailable | 先维修 / [需确认] 评估禁用或卸载 |
-
-没有使用频率或完整 UI 可见证据时，不输出“应卸载”；只能输出 `[需确认] 评估禁用或卸载`。
-
-## 按请求展开
-### 中文翻译候选
-可见性证据: <截图 / ID 列表 / 已验收导出；缺失为 unavailable>
-| 标识 | 原文 -> 中文候选 | 来源 | 质量 | 可编辑性 |
-| <id> | <原文> -> <候选> | <绝对路径> | ready/needs_agent_refinement | true/false |
-
-### 项目画像
-| 观察到的事实 | 对当前工作的影响 | 证据 | 状态 |
-| <技术栈/依赖/规则> | <影响> | <path> | observed/inferred/unavailable |
+## 优化建议
 
 ### 推荐
-| 决策 | 解决的具体缺口 | 证据与风险 | 状态 |
-| 保留/观察/考虑引入/不建议 | <工作> | <本地依据或已同意联网证据> | observed/inferred/unavailable |
 
-### 生态综合评估（v9.0.0 新增）
+保留/升级/替换/引入/共存/归档，附现有方案比较、项目/全局作用域理由、许可证、维护、成本、风险和取证日期。
+证据不足转补采集；深度运行与安全测试尚未执行要明示。
 
-**MCP 健康表**
-| MCP 服务器 | 健康分 | 等级 | 调用次数 | 关键问题 | 建议 |
-| --- | ---: | :---: | ---: | --- | --- |
-| <name> | <0-10> | 🟢/🟡/🟠/🔴 | <n> [observed] | <启动/配置/权限/未调用> | 保留/隐藏/[需确认] 卸载 |
+### 项目画像
 
-**Agent 调用歧义表**
-| Agent A | Agent B | Overlap | 调用频次差 | 风险 | 建议 |
-| --- | --- | ---: | ---: | :---: | --- |
-| <profile_a> | <profile_b> | <0-1> | <0-1> | 🔴/🟡/🟢 | 合并/边界澄清/归档/无干预 |
+技术指纹 observed；项目类型和匹配 inferred；版本路径和扫描截断单列。
 
-仅列 `critical` 和 `warning` 风险对，不输出 `ok`。
+## Codex 命令栏与侧边栏中文翻译清单
 
-**上下文压力评估**
-| 来源 | 工具数 | 注入 token | 占比 | 等级 |
-| --- | ---: | ---: | ---: | :---: |
-| Skills | <n> | <n> | <%> | 🟢/🟡/🟠/🔴 [estimated] |
-| MCP schemas | <n> | <n> | <%> | |
-| Agent profiles | <n> | <n> | <%> | |
-| **合计** | <n> | <n> | <%> | |
-
-**精简候选**（按 prune_value 排序）
-| 对象 | 类型 | token | 使用次数 | 画像匹配 | 精简值 | 建议 |
-| --- | --- | ---: | ---: | ---: | ---: | --- |
-| <id> | skill/mcp/agent | <n> | <n> | <0-10> | <0-1> | hide/uninstall/[需确认] |
-
-**配置优化总览**
-| 层级 | 数量 | 说明 |
-| --- | ---: | --- |
-| 保留（value≥7） | <n> | 高频高匹配，当前配置合理 |
-| 观察（4≤value<7） | <n> | 暂时保留，30 天复查 |
-| 隐藏（2≤value<4） | <n> | 从命令栏隐藏但保留文件 |
-| 卸载候选（value<2） | <n> | [需确认] 评估卸载 |
-
-数据来源标注：`observed`（transcript/skills 目录）/ `inferred`（算法推导）/ `estimated`（公式估算）/ `market_observed`（联网查询）/ `unavailable`（无数据）。
-
-## 未获取数据
-- <例如：结构化使用证据、外部版本新鲜度、完整 UI 可见清单>；说明它为何为 `unavailable`，不使用默认值补齐。
+中文翻译候选：ID、当前可见证据、命令栏原文、侧边栏原文、中文 short/long candidate、绝对来源、可编辑性、质量与事实状态。
+未请求翻译时写“本次未请求”，不混入 catalog。候选 ready 不等于已应用。
 
 ## 下一步
-| 优先级 | 建议直接调用 | 用户应提供的输入 |
-| P0/P1/P2 | <对应 Agent/技能类型> | <目标、范围、确认条件> |
 
-## 附录
-- 已折叠 <n> 条 `info`；仅在用户说“深度”或要求完整清单时展开。
-- `--json` 保持完整机器可读证据；常规对话不粘贴原始 JSON。
-- `--detail` 输出逐项安装表，包含健康、适用度、使用频率和建议。
-```
-
-“下一步”不包含执行命令，也不将后续工作吸收进 Audit。
+优先建议与可复制给 Agent 的任务提示，逐项绑定证据、目标、验证和回滚。
+末尾介绍深度分析：版本、真实运行、来源冲突及同类 GitHub 项目比较。
+增量达到升级阈值时询问“是否进行一次全景扫描？”，说明具体原因；无触发不重复询问。

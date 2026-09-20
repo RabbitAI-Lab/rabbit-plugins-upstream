@@ -1,45 +1,57 @@
-## Description: <br>
-Operates LangSmith through an OOMOL-connected account for reading, creating, and updating workspace, project, dataset, example, and tracing data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents operate LangSmith through the OOMOL-connected oo CLI for reading, creating, and updating datasets, examples, tracing projects, and workspaces.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agent users use this skill to operate LangSmith workspaces, projects, datasets, examples, and tracing resources through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create LangSmith projects, datasets, and examples. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running actions marked as write. <br>
-Risk: The skill depends on an OOMOL-connected LangSmith account and valid credentials. <br>
-Mitigation: Use a least-privilege LangSmith token and only run first-time setup steps after an authentication or connection failure. <br>
-Risk: Broad trigger wording may cause the skill to be selected for many LangSmith-related requests. <br>
-Mitigation: Inspect the live action schema before execution and avoid write operations unless the user explicitly confirms them. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect LangSmith connector schemas, run read actions, and create LangSmith datasets, examples, and tracing projects through an authenticated OOMOL connection.
 
-## Reference(s): <br>
-- [LangSmith skill on ClawHub](https://clawhub.ai/oomol/skills/oo-langsmith) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [LangSmith homepage](https://www.langchain.com/langsmith) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Setup instructions include remote installer scripts that should be reviewed before installation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a pinned, verifiable oo CLI release or an official package manager flow before enabling the skill.
+
+Risk: Write actions can create LangSmith datasets, examples, and tracing projects.
+
+Mitigation: Confirm the exact LangSmith payload and expected effect with the user before running state-changing actions.
+
+## Reference(s):
+
+- [ClawHub LangSmith Skill](https://clawhub.ai/oomol/skills/oo-langsmith)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [LangSmith Homepage](https://www.langchain.com/langsmith)
+- [OOMOL LangSmith Connection Setup](https://console.oomol.com/app-connections?provider=langsmith)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, API Calls, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; state-changing actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
