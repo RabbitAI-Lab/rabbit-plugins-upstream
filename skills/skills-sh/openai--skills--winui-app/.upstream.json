@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/winui-app",
+  "repo": "openai/skills",
+  "skillId": "winui-app",
+  "branch": "main",
+  "pushedAt": "2026-09-08T20:35:26Z",
+  "contentHash": "ec09eb913f29e27dd77a4f5d1949e96f2e5ba5130214d3b226f957823424f42a",
+  "fetchedAt": "2026-09-20T12:29:55.397Z"
+}

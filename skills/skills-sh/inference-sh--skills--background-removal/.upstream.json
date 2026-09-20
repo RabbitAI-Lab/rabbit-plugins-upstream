@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/background-removal",
+  "repo": "inference-sh/skills",
+  "skillId": "background-removal",
+  "branch": "main",
+  "pushedAt": "2026-09-18T10:41:45Z",
+  "contentHash": "f306372e1ffcf4664d17f798a27e4ec61fb3db777e017714e792c3660360b144",
+  "fetchedAt": "2026-09-20T12:27:55.221Z"
+}
