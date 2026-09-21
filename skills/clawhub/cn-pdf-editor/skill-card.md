@@ -1,41 +1,53 @@
-## Description: <br>
-Cn Pdf Editor helps an agent provide local PDF editing workflows for text edits, image insertion, watermarking, annotations, merging, splitting, page reordering, and signatures using the bundled PyMuPDF-based tool. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+本地PDF编辑工具，支持文本修改、图片插入、水印添加、批注、合并拆分、页面重排和签名，数据全程本地处理。
 
-## Publisher: <br>
-[freedompixels](https://clawhub.ai/user/freedompixels) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[freedompixels](https://clawhub.ai/user/freedompixels)
 
-## Use Case: <br>
-Developers, document operators, and agents use this skill to edit PDFs locally, including document tweaks, watermarking, annotations, page management, merging, splitting, and signatures. It is best suited for local document processing where users review resulting PDFs before relying on them. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The local PDF editor web server is exposed to the network without authentication. <br>
-Mitigation: Bind the service to 127.0.0.1 before use, run it only on trusted networks, close it when finished, and avoid highly sensitive PDFs until the exposure is fixed. <br>
-Risk: PDF edits may alter document meaning or leave unexpected formatting artifacts. <br>
-Mitigation: Review the edited PDF before sharing or relying on it for contracts, quotes, or other business documents. <br>
+## Use Case:
 
+Developers and document operators use this skill to launch a local web editor or CLI for modifying PDFs, adding watermarks and annotations, inserting images or signatures, and merging, splitting, reordering, rotating, deleting, or extracting pages.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/freedompixels/skills/cn-pdf-editor) <br>
-- [Publisher profile](https://clawhub.ai/user/freedompixels) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and code-oriented usage details] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide local file edits through the bundled PDF editor; users should review generated PDFs and avoid exposing the unauthenticated web service on untrusted networks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: The PDF editing web server exposes sensitive PDF viewing and editing endpoints on all network interfaces without authentication while describing itself as local-only.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only on a trusted machine and network, avoid opening sensitive PDFs while the server binds broadly, and prefer changing the server to localhost-only with authentication before routine use.
+
+Risk: Delete, redaction, and save actions may permanently alter document content or produce edited copies that replace expected workflows.
+
+Mitigation: Keep backup copies of source PDFs and review edited outputs before relying on or distributing them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/freedompixels/skills/cn-pdf-editor)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Files, JSON]
+
+**Output Format:** [Markdown guidance with inline bash commands, JSON responses, and generated PDF or image files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can launch a local web UI or run CLI actions that save edited PDFs, split outputs, extracted page images, and document metadata.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,17 +1,14 @@
-# Skills-Summarize-Audit v8.2.4
+# Skills-Summarize-Audit v9.2.2
 
-已安装技能与插件问题审查、版本/可用性核验、用户画像定位与评分、冲突/互补分析、技能翻译精炼、项目画像与工具推荐。默认只读，不负责安装、更新、发布、配置、迁移或历史清理。
+面向中文用户的技能生态证据审查与优化建议。三项核心能力：技能库翻译精炼、项目画像、技能/插件推荐操作。默认只读，不负责安装、更新、发布、配置、迁移或历史清理。
 
 ## 核心能力
 
 | 能力 | 输入 | 输出 |
 |---|---|---|
-| 已安装技能/插件问题审查 | 当前真实安装登记、技能和插件来源 | 问题严重度、证据、版本、可用性和处理方案 |
-| 用户画像定位与评分 | 用户画像、结构化使用证据和技能元数据 | 画像命中词、健康维度、评分和证据状态 |
-| 冲突与互补分析 | 可解释触发词、能力和画像关系 | 冲突/互补/无关关系、重叠度和理由 |
 | 技能说明翻译精炼 | 侧栏与命令栏完整可见 ID 集合 | 保留英文名称的中文 `short_description` 候选、质量和来源门禁 |
 | 项目画像 | 当前或指定项目目录 | 技术栈、项目类型、扫描覆盖和技能推荐 |
-| 技能/插件推荐 | 翻译清单、项目画像或明确缺口 | 保留/升级/替换/引入/共存/归档建议及证据 |
+| 技能/插件推荐操作 | 项目画像、真实来源、使用/版本/MCP/Agent/安全证据 | 保留/升级/替换/引入/共存/归档建议与完整执行交接 |
 
 ## 触发
 
@@ -21,7 +18,7 @@
 - `项目画像`：只生成当前项目的事实画像。
 - `技能推荐` 或 `插件推荐`：只输出建议。
 
-触发词应独立发送。详细规则见 [SKILL.md](SKILL.md)。
+支持自然语言请求；旧审查触发词进入第三项内部证据采集。详细规则见 [SKILL.md](SKILL.md)。
 
 ## 边界
 
@@ -34,7 +31,7 @@
 
 ```powershell
 python tests/validate.py --strict
-python tests/test_collect_codex_display_candidates.py
+python -m pytest tests/ -v
 ```
 
 ## 环境依赖
@@ -44,7 +41,7 @@ python tests/test_collect_codex_display_candidates.py
 
 ## 脚本参数
 
-三个脚本均为只读；完整参数以各脚本 `argparse` 定义为准（`-h` 查看）。
+扫描脚本默认只读；测试依赖用 `python -m pip install -r requirements-dev.txt` 安装在隔离环境。完整参数用 `--help` 查看。
 
 **`scripts/analyze_project_profile.py`**（项目画像，需 PyYAML）
 
@@ -73,7 +70,24 @@ python tests/test_collect_codex_display_candidates.py
 |---|---|
 | `--root` / `--catalog-dir` / `--runtime-dir` / `--staging-dir` / `--user-skill-dir` | 各来源目录覆盖 |
 | `--profile` | 用户画像文件；缺失时 profile_alignment=unavailable |
-| `--scope`（installed/visible/all） | 审查范围，默认 installed |
+| `--scope`（installed/visible/all/ecosystem） | 审查范围，默认 installed；ecosystem 是推荐内部取证模式 |
+| `--signals-path` / `--market-path` | 显式输入使用/市场证据；缺失值不补零、不推荐隐藏卸载 |
+| `--scan-mode auto/full/incremental` / `--baseline` | 首次全景、有效基线增量；所有来源重新发现和比对 |
+| `--output <new-file>` | 用户明确要求时才导出；不覆盖已有文件，JSON 含 baseline |
 | `--visible-id`（可重复） | 用户提供的可见技能 ID |
 | `--fail-on`（none/info/warning/critical） | 严重度门禁 |
 | `--detail` / `--json` | 逐项明细 / JSON 输出 |
+
+## DeepSeek Harness 插件市场
+
+本仓库同时是 DeepSeek Harness（dsh）技能包插件，可通过 dsh 插件系统安装：
+
+```bash
+dsh plugin --profile web add github:gtbwpkwjnb-alt/skills-summarize-audit-skill
+```
+
+安装后重启 dsh web，技能出现在 Settings → Plugins，按需懒加载（渐进式披露）。技能包由本仓库根目录的 `SKILL.md` 提供，`cordis.patch.yml` + `index.js` 为插件外壳（只读 skill provider，无工具、无凭据、无网络请求）。
+
+- 测试兼容版本：dsh v0.1.1-rc.2（2026-08-22）。预览期版本迭代快，若 API 变更请以官方文档为准。
+- 技能格式：kebab-case 名称 + `name`/`description` frontmatter，与 dsh 技能契约一致。
+- 插件外壳无 npm 依赖，可从 GitHub 直装。

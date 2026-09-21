@@ -1,43 +1,60 @@
-## Description: <br>
-Amazon Review Insights helps agents collect and analyze Amazon product reviews through AstrMap APIs, including negative feedback, trend, statistics, and improvement insight workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Amazon product review intelligence analysis tool for global e-commerce sellers that fetches Amazon reviews, analyzes negative feedback, surfaces issues in high-rated reviews, tracks trends, and suggests product improvements.
 
-## Publisher: <br>
-[sparkbayes](https://clawhub.ai/user/sparkbayes) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sparkbayes](https://clawhub.ai/user/sparkbayes)
 
-## Use Case: <br>
-E-commerce sellers and their agents use this skill to create or inspect AstrMap review-analysis tasks for Amazon ASINs, retrieve completed insights, and guide product improvement or market research decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: AstrMap API credentials and product or review task data are sent to AstrMap. <br>
-Mitigation: Install only when this data sharing is acceptable, store the API key in CUSTOMER_INSIGHTS_API_KEY or another protected secret store, and rotate or disable the key when no longer needed. <br>
-Risk: Some workflows require a desktop client logged into an Amazon buyer account and may consume AstrMap points. <br>
-Mitigation: Use a dedicated Amazon buyer account, verify the desktop-client download and signature, and confirm with the user before actions that spend points or change tasks. <br>
+## Use Case:
 
+External e-commerce sellers and their agents use this skill to collect Amazon product review data through AstrMap, monitor task status, and retrieve review intelligence such as AI insights, negative review lists, tag distributions, statistics, and trends.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/sparkbayes/skills/amazon-review-insights) <br>
-- [AstrMap API Reference](artifact/references/api_reference.md) <br>
-- [AstrMap Desktop Client Security Guide](artifact/references/security.md) <br>
-- [AstrMap website](https://www.astrmap.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires CUSTOMER_INSIGHTS_API_KEY for authenticated AstrMap API actions; task creation and incremental fetch workflows may require the AstrMap desktop client.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.3 (source: server release metadata) <br>
+Risk: The AstrMap API key and review/task data are sent to AstrMap services for authentication and analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if AstrMap is trusted for this data, pass the key through CUSTOMER_INSIGHTS_API_KEY when possible, and rotate or disable the key when no longer needed.
+
+Risk: Creating collection tasks requires a Chrome browser extension that can access data from sites the browser is signed in to.
+
+Mitigation: Review the extension permissions before loading it and use a dedicated Amazon buyer account instead of a seller, primary, or business account.
+
+Risk: Auto-analysis and incremental fetch operations can deduct AstrMap account points.
+
+Mitigation: Check the points balance, explain the expected point use, and wait for explicit user confirmation before creating those tasks.
+
+## Reference(s):
+
+- [AstrMap API Reference](references/api_reference.md)
+- [AstrMap Browser Extension Security Guide](references/security.md)
+- [ClawHub Skill Page](https://clawhub.ai/sparkbayes/skills/amazon-review-insights)
+- [AstrMap Extension Download Page](https://www.astrmap.com/en/#download)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and API response summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May call AstrMap APIs and summarize task status, review statistics, AI insights, category-tag distributions, trends, and review lists.]
+
+## Skill Version(s):
+
+1.2.5 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

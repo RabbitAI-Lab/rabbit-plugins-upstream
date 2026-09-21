@@ -19,14 +19,6 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-# Stub Google deps before importing tools — same pattern as
-# test_school_calendar_sync.py so import never touches the network.
-for _mod in (
-    "google", "google.oauth2", "google.oauth2.credentials",
-    "google.auth", "google.auth.transport", "google.auth.transport.requests",
-    "googleapiclient", "googleapiclient.discovery",
-):
-    sys.modules.setdefault(_mod, types.ModuleType(_mod))
 
 import tools  # noqa: E402
 
@@ -47,14 +39,14 @@ class TestSavePendingSchoolEvents:
         with patch("features.calendar.calendar_manager.create_event") as m_create:
             result = tools.save_pending_school_events(
                 email_id="msg-abc",
-                events=[{"title": "Amyra — Spring Picnic", "date": "2026-05-03"}],
+                events=[{"title": "Ana — Spring Picnic", "date": "2026-05-03"}],
             )
         assert "✅" in result
         assert "pending confirmation" in result
         m_create.assert_not_called()  # never touch calendar on save
         data = json.loads(pending_file.read_text())
         assert "msg-abc" in data
-        assert data["msg-abc"]["events"][0]["title"] == "Amyra — Spring Picnic"
+        assert data["msg-abc"]["events"][0]["title"] == "Ana — Spring Picnic"
         assert "proposed_at" in data["msg-abc"]
 
     def test_save_rejects_empty_events(self, pending_file):
@@ -108,8 +100,8 @@ class TestGetPendingSchoolEvents:
 class TestConfirmPendingSchoolEvents:
     def test_confirm_creates_events_and_clears_queue(self, pending_file):
         tools.save_pending_school_events("msg-1", [
-            {"title": "Amyra — Picnic", "date": "2026-05-03"},
-            {"title": "Amyra — Field Day", "date": "2026-05-10", "time": "09:00"},
+            {"title": "Ana — Picnic", "date": "2026-05-03"},
+            {"title": "Ana — Field Day", "date": "2026-05-10", "time": "09:00"},
         ])
         with patch("features.calendar.calendar_manager.create_event") as m_create:
             m_create.return_value = {"id": "evt-x"}
@@ -196,63 +188,6 @@ class TestRejectPendingSchoolEvents:
 
 
 # ── dedup: check_calendar_for_date queries + formats, agent judges match ─────
-
-
-class TestCheckCalendarForDate:
-    def test_returns_events_on_date_filtered_by_query(self, pending_file):
-        mock_service = MagicMock()
-        mock_service.events.return_value.list.return_value.execute.return_value = {
-            "items": [
-                {
-                    "id": "evt-1",
-                    "summary": "Amyra — Field Trip",
-                    "start": {"date": "2026-04-20"},
-                },
-                {
-                    "id": "evt-2",
-                    "summary": "Amyra — Soccer",
-                    "start": {"dateTime": "2026-04-20T15:00:00-07:00"},
-                },
-            ]
-        }
-        with patch("features.calendar.calendar_manager.get_calendar_service", return_value=mock_service), \
-             patch("features.calendar.calendar_manager.CALENDAR_ID", "cal-test"):
-            result = tools.check_calendar_for_date(date="2026-04-20", query="Amyra")
-
-        data = json.loads(result)
-        assert isinstance(data, list)
-        assert len(data) == 2
-        all_day = [d for d in data if d["all_day"]]
-        timed = [d for d in data if not d["all_day"]]
-        assert len(all_day) == 1 and all_day[0]["summary"] == "Amyra — Field Trip"
-        assert len(timed) == 1 and timed[0]["summary"] == "Amyra — Soccer"
-
-        # Google list was called with the right window + q
-        params = mock_service.events.return_value.list.call_args.kwargs
-        assert params["timeMin"].startswith("2026-04-20")
-        assert params["timeMax"].startswith("2026-04-21")
-        assert params["q"] == "Amyra"
-        assert params["singleEvents"] is True
-
-    def test_empty_when_no_events(self, pending_file):
-        mock_service = MagicMock()
-        mock_service.events.return_value.list.return_value.execute.return_value = {"items": []}
-        with patch("features.calendar.calendar_manager.get_calendar_service", return_value=mock_service):
-            result = tools.check_calendar_for_date(date="2026-04-20", query="Amyra")
-        assert json.loads(result) == []
-
-    def test_returns_error_json_on_exception(self, pending_file):
-        with patch(
-            "features.calendar.calendar_manager.get_calendar_service",
-            side_effect=RuntimeError("auth dead"),
-        ):
-            result = tools.check_calendar_for_date(date="2026-04-20")
-        data = json.loads(result)
-        assert "error" in data
-        assert "auth dead" in data["error"]
-
-
-# ── dispatcher wiring ────────────────────────────────────────────────────────
 
 
 class TestDispatcher:

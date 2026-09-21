@@ -1,46 +1,56 @@
-## Description: <br>
-Roboflow (roboflow.com). Use this skill for Roboflow project discovery, version inspection, hosted object detection, workflow validation, workflow execution, and inference server diagnostics through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides OOMOL-connected access to Roboflow for reading, creating, and updating Roboflow data through the oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Roboflow projects and versions, run object detection, validate or run Roboflow workflows, and check inference server diagnostics from an agent session. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Workflow runs, saved workflow runs, and object detection can process sensitive inputs or consume Roboflow and OOMOL-connected account resources. <br>
-Mitigation: Require explicit user intent before running execution actions and confirm payloads that include sensitive image data, workflow inputs, workspace identifiers, or project versions. <br>
-Risk: The source skill describes untagged actions as reads even though inference and workflow execution perform processing through a connected account. <br>
-Mitigation: Treat detect_objects, run_workflow, and run_saved_workflow as execution actions rather than passive reads. <br>
-Risk: The skill requires sensitive credentials through an OOMOL-connected Roboflow account. <br>
-Mitigation: Use the server-managed credential flow, avoid exposing raw tokens, and only perform setup or reconnection when an authentication or connection error requires it. <br>
+## Use Case:
 
+External developers and operations teams use this skill to operate Roboflow through an OOMOL-connected account, including project discovery, inference, workflow validation, and workflow execution. It helps agents inspect connector schemas before constructing Roboflow payloads.
 
-## Reference(s): <br>
-- [Roboflow homepage](https://roboflow.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub Roboflow skill page](https://clawhub.ai/oomol/oo-roboflow) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return Roboflow connector data, action schemas, execution IDs, detection results, workflow outputs, metrics, or setup guidance depending on the requested action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Setup guidance includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer official installation documentation or verify the installer source and contents before running the commands.
+
+Risk: Workflow execution actions can change Roboflow state.
+
+Mitigation: Review the exact workflow payload and expected effect with the user before approving write actions, and require explicit approval before any destructive action.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-roboflow)
+- [Roboflow Homepage](https://roboflow.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce oo CLI connector commands, JSON payload guidance, and summaries of JSON connector responses.]
+
+## Skill Version(s):
+
+1.0.4 (source: server evidence release.version and artifact metadata.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

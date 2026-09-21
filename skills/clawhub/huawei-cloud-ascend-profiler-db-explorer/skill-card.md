@@ -1,48 +1,61 @@
-## Description: <br>
-Converts natural language questions into safe executable SQL for querying Ascend PyTorch Profiler and msprof SQLite databases for operator, communication, dispatch, and schema performance analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts natural language questions into safe executable SQL for querying Ascend PyTorch Profiler and msprof databases about operator time, communication, dispatch, and schema details.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and performance engineers use this skill to inspect Ascend profiler databases, generate bounded SQL for common operator, communication, and dispatch questions, and interpret profiling results for bottleneck analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated SQL can be executed against local SQLite database files without an enforced read-only boundary. <br>
-Mitigation: Review SQL before execution, run against the intended Ascend/msprof profiler database only, and use read-only database access where available. <br>
-Risk: Broad trigger terms such as sqlite, table, and schema may activate the skill for unrelated or sensitive databases. <br>
-Mitigation: Use explicit prompts that include the profiler database path and analysis goal, and avoid using this skill with unrelated or sensitive databases. <br>
-Risk: Large result sets or file exports can expose more profiling data than needed. <br>
-Mitigation: Keep queries aggregated or limited, prefer the documented LIMIT patterns, and export CSV only when the user explicitly requests file output. <br>
+## Use Case:
 
+Developers and performance engineers use this skill to analyze Ascend PyTorch Profiler and msprof SQLite databases, generate bounded SQL for operator, communication, and dispatch bottlenecks, and inspect documented profiler table schemas.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-ascend-profiler-db-explorer) <br>
-- [Skill instructions](artifact/SKILL.md) <br>
-- [Profiler DB Data Format](artifact/references/profiler_db_data_format.md) <br>
-- [Acceptance Criteria](artifact/references/acceptance-criteria.md) <br>
-- [Verification Method](artifact/references/verification-method.md) <br>
-- [Troubleshooting](artifact/references/troubleshooting.md) <br>
-- [Schema extraction helper](artifact/scripts/get_schema.py) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown analysis with SQL snippets, shell command examples, and tabular query result summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces read-oriented SQL drafts, schema lookup commands, profiling result summaries, and optimization suggestions for Ascend profiler databases.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Generated SQL may query more profiler data than intended or perform large scans.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated SQL before execution, require aggregation or an ORDER BY with LIMIT for main queries, and prefer read-only SQLite access.
+
+Risk: CSV export can persist profiler metadata such as operator names, timings, hardware topology, and model-performance details.
+
+Mitigation: Use CSV export only when explicitly requested and acceptable for the data environment.
+
+Risk: Schema mismatches between profiler documentation and a specific database version can produce incorrect queries or misleading analysis.
+
+Mitigation: Compare documented tables with the target database and use the bundled schema helper before relying on table or column semantics.
+
+## Reference(s):
+
+- [Profiler DB Data Format](references/profiler_db_data_format.md)
+- [Acceptance Criteria](references/acceptance-criteria.md)
+- [Verification Method](references/verification-method.md)
+- [Troubleshooting](references/troubleshooting.md)
+- [ClawHub Skill Page](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-ascend-profiler-db-explorer)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with SQL snippets, shell commands, and concise analysis tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include generated SQL, table schema excerpts, query result summaries, and performance optimization recommendations.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

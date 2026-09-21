@@ -1,45 +1,60 @@
-## Description: <br>
-Payable matching for BaconCo that reconciles vendor documents and Sports Inc invoices against Odoo purchase orders, corrects supported PO line price variances, files reviewed documents, and creates draft vendor bills for human posting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reconciles BaconCo vendor documents and Sports Inc invoices against Odoo purchase orders, corrects supported price variances, files documents for matched or human review, and posts vendor bills only when totals match.
 
-## Publisher: <br>
-[zmtucker](https://clawhub.ai/user/zmtucker) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zmtucker](https://clawhub.ai/user/zmtucker)
 
-## Use Case: <br>
-Finance operations agents use this skill to review Odoo Purchasing documents, compare vendor prices against confirmed purchase orders, correct unambiguous price variances, and route unresolved issues for human review. The Sports Inc flow extends the same matching process to API-sourced invoices and creates draft bills that a human must post. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can make live accounting changes, including PO line price corrections and draft vendor bill creation. <br>
-Mitigation: Install only for trusted AP automation agents, use a least-privilege Odoo token, require clear operator approval for batch corrections and draft bills, and keep audit logging enabled. <br>
-Risk: Runtime dependency bootstrapping may install Python packages when the host has not preinstalled them. <br>
-Mitigation: Prefer host-managed or pinned dependencies, and review the runtime environment before enabling the skill. <br>
-Risk: Sports Inc delegated credential sharing can expose an API key to an unintended agent connection if configured incorrectly. <br>
-Mitigation: Enable Sports Inc credential sharing only on the intended delegated connection and test the flow in a sandbox or small folder first. <br>
+## Use Case:
 
+Employees and finance operators use this skill to reconcile payable documents, update Odoo purchase order pricing when vendor evidence is clear, and create or post vendor bills only when invoice totals pass the configured match check. Ambiguous, unreadable, mismatched, or unsupported cases are routed for human review.
 
-## Reference(s): <br>
-- [Matching Procedure](references/matching_procedure.md) <br>
-- [Sports Inc Payables](references/sportsinc_payables.md) <br>
-- [Odoo](https://www.odoo.com) <br>
-- [ClawHub Skill Page](https://clawhub.ai/zmtucker/skills/drivethru-payable-matching) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON command payloads and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces operational instructions and tool-call payloads for Odoo payable matching; does not post vendor bills automatically.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill can change live accounts-payable records, including PO prices, document filing, vendor bills, and matched bill posting.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only where the Odoo token is intentionally allowed to perform those actions, confirm the intended posting mode, and begin with dry-run or draft-only operation until the workflow is validated on real tenant data.
+
+Risk: A mismatched or unsupported invoice could be posted if operators bypass the documented match checks.
+
+Mitigation: Post only when the bill total matches the vendor invoice within tolerance; leave mismatches in draft and route them to a human reviewer.
+
+Risk: The Odoo MCP token and optional Sports Inc credential-sharing setup grant access to sensitive financial workflows.
+
+Mitigation: Treat credentials as secrets, scope installation to trusted environments, and review the optional credential-sharing setup before enabling it.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zmtucker/skills/drivethru-payable-matching)
+- [Odoo](https://www.odoo.com)
+- [Payable matching procedure](references/matching_procedure.md)
+- [Sports Inc payables](references/sportsinc_payables.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown status reports with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May update Odoo purchase orders, document folders, internal log notes, draft vendor bills, and matched posted bills through configured tools.]
+
+## Skill Version(s):
+
+0.9.8 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

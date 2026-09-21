@@ -12,13 +12,20 @@
 
 ## 登录
 
-**推荐用 `scripts/sn_oa_login.py`**，自动处理验证码识别（ddddocr + 预处理 + eval）。
+**推荐用 `scripts/sn_oa_login.py`**：默认 ddddocr 自动识别；也可拆成「取图 + 提交」两阶段，把识别交给使用者当前 agent 的多模态模型。
+
+```bash
+python scripts/sn_oa_login.py --fetch-only                                  # 取图，输出 uuid/image_path/data_url
+python scripts/sn_oa_login.py --submit --uuid <uuid> --code <答案>          # 提交；被拒则自动回退 ddddocr
+```
 
 手动流程：
-1. `GET /sn/captchaImage` → 获取 base64 PNG + uuid
+1. `GET /sn/captchaImage` → 获取 base64 PNG + uuid（`img` 实为 data URL，前缀 image/png 但字节是 JPEG）
 2. ddddocr 识别算术题，预处理（放大3倍灰度），清理非数字运算符后 `eval()` 求值
 3. `GET /sn/passWord/encryption?passWord=<密码>` → 加密密码
 4. `POST /sn/login` → `{ "username", "password", "code", "uuid" }` → 返回 `{ "code": 200, "data": { "token": "..." } }`
+
+> 验证码按 `uuid` 校验，不绑定 HTTP 会话，因此取图与提交可以跨进程执行。验证码错误时服务端返回 `code=500, msg=验证码不正确`，可据此区分「验证码被拒」与其他登录失败。
 
 ## 项目接口
 
@@ -28,6 +35,39 @@ POST /sn/project/timeFeeDropDownPageList
 Body: {"page": 1, "size": 8000}
 ```
 返回 `{ "code": "200", "data": { "content": [{ "id": "...", "projectBoName": "..." }, ...] } }`（注意字段名为 `projectBoName`）
+
+---
+
+## 报销与费用申请接口
+
+### 查询申请列表
+```http
+POST /sn/feeRequest/findPageList
+Body: {"page": 1, "size": 20, "total": 0, "startTime": "", "endTime": ""}
+```
+返回 `data.content`，主要字段有：`id`、`feeType`、`sumAmount`、`projectName`、`state`、`procInsId`、`createdTime`、`updatedTime`、`rejectReason`、`reimburseCompany`。
+
+状态：`-1` 已撤回、`0` 已作废、`10` 待提交、`20` 审批中、`30` 已通过、`40` 已驳回。
+
+费用类型：`1` 报销、`2` 备用金、`3` 补助、`4` 外采、`5` 其它、`6` 备用金抵扣。报销公司：`1` 蜀宁、`2` 天域智慧。
+
+### 获取申请详情
+```http
+GET /sn/feeRequest/details/<申请ID>
+```
+返回申请主信息与 `detailList` 费用明细。
+
+### 获取审批流程
+```http
+GET /sn/workflow/process/detail?procInsId=<流程实例ID>
+```
+当前审批节点可从 `data.historyProcNodeList` 中筛选 `activityType == "userTask"` 且 `endTime` 为空的记录；`activityName` 是节点名，`assigneeName` 是当前审批人。
+
+推荐脚本：
+```bash
+python scripts/query_fee_requests.py
+python scripts/query_fee_requests.py --state 审批中 --with-progress
+```
 
 ---
 

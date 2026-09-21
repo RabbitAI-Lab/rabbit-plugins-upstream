@@ -1,49 +1,59 @@
-## Description: <br>
-Migrates vision, detection, and segmentation small models to Ascend NPU with model structure analysis, migration verification, performance profiling, and optimization guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides migration of vision, detection, and segmentation models to Ascend NPU using torch_npu and msprof for model analysis, migration verification, performance profiling, and optimization recommendations.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and engineers use this skill to assess and migrate supported computer vision models such as ResNet, YOLO, and UNet from GPU-oriented workflows to Ascend NPU. It helps produce model analysis, NPU verification, profiling, bottleneck analysis, and optimization recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security evidence reports exposed root SSH credentials. <br>
-Mitigation: Remove the plaintext credential, rotate any affected password, and use authorized least-privilege SSH access. <br>
-Risk: The skill normalizes privileged server and container actions. <br>
-Mitigation: Run commands only in disposable or approved test environments and review proposed actions before execution. <br>
-Risk: The workflow may install packages and load model artifacts. <br>
-Mitigation: Pin and review package changes, and load only trusted model artifacts or safer checkpoint formats. <br>
-Risk: The security verdict is suspicious for real infrastructure use. <br>
-Mitigation: Do not install or use the skill as-is against production or sensitive infrastructure. <br>
+## Use Case:
 
+Developers and engineers use this skill to migrate encoder-only, detection, and segmentation models such as ResNet, YOLO, and UNet to Ascend NPU, then verify inference behavior and analyze performance bottlenecks.
 
-## Reference(s): <br>
-- [Acceptance Criteria](references/acceptance-criteria.md) <br>
-- [Verification Methods](references/verification-method.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
-- [Migration Report Template](references/report-template.md) <br>
-- [Performance Analysis SQL Query Reference](references/profiler-sql.md) <br>
-- [Migration Verification Scripts Reference](references/migration-scripts.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports with inline bash, Python, and SQL snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes model analysis, NPU verification, profiling, troubleshooting, and optimization recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The artifact exposes a root SSH credential for a named server and repeatedly directs root access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the credential as exposed, rotate it if real, and require users to provide least-privilege SSH credentials through a secret manager or explicit interactive approval.
+
+Risk: The workflow includes package installation, Docker commands, SSH access, and hardware-specific profiling actions that can affect a host environment.
+
+Mitigation: Run migration and profiling steps only in an isolated container or test host, and limit use to explicit Ascend NPU migration tasks.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-ascend-small-model-migrate)
+- [Acceptance Criteria](references/acceptance-criteria.md)
+- [Verification Method](references/verification-method.md)
+- [Troubleshooting](references/troubleshooting.md)
+- [Report Template](references/report-template.md)
+- [Profiler SQL](references/profiler-sql.md)
+- [Migration Scripts](references/migration-scripts.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown reports with inline Python, SQL, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include migration verification reports, profiling summaries, bottleneck tables, and optimization recommendations.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

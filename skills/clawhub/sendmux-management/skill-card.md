@@ -1,41 +1,59 @@
-## Description: <br>
-Manage Sendmux domains, mailboxes, mailbox keys, sending accounts, webhooks, logs, billing, and account-level setup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage Sendmux domains, mailboxes, mailbox keys, sending accounts, webhooks, logs, billing, and account-level setup.
 
-## Publisher: <br>
-[sendmux.ai](https://clawhub.ai/user/sendmux.ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sendmux.ai](https://clawhub.ai/user/sendmux.ai)
 
-## Use Case: <br>
-Developers, operators, and team administrators use this skill to manage Sendmux account resources, including domains, mailboxes, mailbox keys, sending accounts, webhooks, logs, billing, and account-level setup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sendmux root credentials can administer account-level resources and expose sensitive one-time secrets. <br>
-Mitigation: Use scoped Sendmux credentials where possible, keep root keys and generated secrets in a secret store, and do not paste secrets into chat. <br>
-Risk: Administrative actions can delete, suspend, rotate, test, or expose account resources, billing data, and logs. <br>
-Mitigation: Review confirmations carefully and verify target resources before destructive, high-impact, billing, log, or secret-rotation operations. <br>
+## Use Case:
 
+Developers and operations administrators use this skill to guide Sendmux account-management work across domains, mailboxes, sending accounts, webhooks, logs, billing, and permission checks. It helps an agent choose the right Sendmux surface, produce CLI or SDK examples, and route mailbox or setup tasks to the appropriate companion skill.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/sendmux.ai/skills/sendmux-management) <br>
-- [Sendmux Skills Homepage](https://github.com/Sendmux/skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands, TypeScript code examples, MCP tool names, and configuration notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes guidance for handling Sendmux credentials, confirmations, pagination, idempotency keys, and concurrency headers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: An agent using broad Sendmux credentials could perform account-level management actions beyond the user's immediate task.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the narrowest Sendmux credential or OAuth scopes that fit the requested operation, and keep root keys in a secret store.
+
+Risk: Destructive or sensitive operations such as deletes, suspensions, key changes, webhook secret rotations, or test sends could affect the wrong resource.
+
+Mitigation: Verify resource names and ask for confirmation before approving those operations.
+
+Risk: One-time mailbox keys or webhook secrets could be exposed if printed into chat or reused incorrectly.
+
+Mitigation: Write one-time secrets only to the user's chosen secret store or secure output path.
+
+## Reference(s):
+
+- [Sendmux skills repository](https://github.com/Sendmux/skills)
+- [ClawHub skill page](https://clawhub.ai/sendmux.ai/skills/sendmux-management)
+- [Publisher profile](https://clawhub.ai/user/sendmux.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with inline bash, JSON, and TypeScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes credential-scope, routing, confirmation, and secret-handling guidance for Sendmux management operations.]
+
+## Skill Version(s):
+
+1.0.8 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

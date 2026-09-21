@@ -1,46 +1,60 @@
-## Description: <br>
-Google Slides (workspace.google.com). Use this skill for ANY Google Slides request - reading, creating, and updating data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Slides (workspace.google.com). Use this skill for ANY Google Slides request -- reading, creating, updating, and deleting data. Whenever a task involves Google Slides, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, developers, and agents use this skill to read, create, copy, update, and inspect Google Slides presentations through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and modify Google Slides through an OOMOL-connected account. <br>
-Mitigation: Install and use it only when that account-level access is intended. <br>
-Risk: Write actions, especially raw batchUpdate requests, can change presentation content or structure. <br>
-Mitigation: Review the exact payload and expected effect with the user before approving write actions. <br>
-Risk: The first-time setup path includes a remote CLI installer command. <br>
-Mitigation: Verify the OOMOL CLI installer source before running the install command. <br>
+## Use Case:
 
+Developers and agents use this skill to operate a connected Google Slides account through OOMOL's oo CLI, including reading presentations, creating slides decks, copying templates, retrieving thumbnails, and applying batch updates.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-googleslides) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Google Slides](https://workspace.google.com/products/slides/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions return JSON data with execution metadata when run through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+Risk: The skill can operate a connected Google Slides account, including actions that create or modify presentations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only when you trust OOMOL and intend to let an agent operate that connected account.
+
+Risk: Write and destructive actions can change, overwrite, or remove presentation content if the payload or target is wrong.
+
+Mitigation: Review the exact write or batch update payload and confirm the target presentation before approving the action.
+
+Risk: The optional first-time setup path includes a remote pipe-to-shell installer.
+
+Mitigation: Avoid running the installer unless it has been verified against OOMOL's official installation documentation.
+
+## Reference(s):
+
+- [ClawHub Google Slides skill](https://clawhub.ai/oomol/skills/oo-googleslides)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Google Slides](https://workspace.google.com/products/slides/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses oo CLI connector schemas before running Google Slides actions; command responses include data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

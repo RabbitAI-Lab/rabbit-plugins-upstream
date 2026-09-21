@@ -1,45 +1,56 @@
-## Description: <br>
-Abyssale helps agents read, create, and update Abyssale data through the OOMOL oo CLI instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Abyssale helps an agent read, create, and update Abyssale data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate Abyssale from an agent session, including listing designs and projects, inspecting designs and formats, creating projects or dynamic image URLs, and generating banners from JSON element overrides. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an OOMOL-connected Abyssale account and requires sensitive credential access. <br>
-Mitigation: Use the existing OOMOL connection and avoid handling raw API tokens; run setup or reconnection only after an auth or connection error. <br>
-Risk: Write actions can create Abyssale projects or dynamic image URLs. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running actions tagged as write or destructive. <br>
-Risk: Action inputs can drift from the expected schema or produce unintended banner outputs. <br>
-Mitigation: Inspect the live connector schema before constructing payloads and review JSON overrides before execution. <br>
+## Use Case:
 
+External users and developers use this skill to operate Abyssale through an OOMOL-connected account. The skill supports listing and retrieving Abyssale resources, creating projects, generating banners, and creating dynamic image URLs.
 
-## Reference(s): <br>
-- [Abyssale homepage](https://www.abyssale.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-abyssale) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses include connector data and execution metadata when actions are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Fallback setup includes remote installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path before installing and prefer verified official installation guidance before running installer commands.
+
+Risk: The skill can create projects, generate banners, and create dynamic image URLs, which can change Abyssale state.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions, and require explicit approval before any destructive action.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-abyssale)
+- [Abyssale homepage](https://www.abyssale.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May execute oo CLI connector calls that return JSON for requested Abyssale actions.]
+
+## Skill Version(s):
+
+1.0.5 (source: evidence.json release.version and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

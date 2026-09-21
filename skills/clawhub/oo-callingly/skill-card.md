@@ -1,45 +1,62 @@
-## Description: <br>
-Callingly (callingly.com). Use this skill for ANY Callingly request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Callingly (callingly.com). Use this skill for Callingly requests that read, create, update, and delete data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent operate Callingly through an OOMOL-connected account, including reading calls, leads, teams, agents, and schedules, plus creating calls and updating or deleting leads when confirmed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create calls or update Callingly lead data. <br>
-Mitigation: Confirm the exact action payload and expected effect with the user before running write actions. <br>
-Risk: The destructive delete_lead action can remove Callingly lead data. <br>
-Mitigation: Require explicit approval for the target lead before running deletion. <br>
-Risk: First-time setup may require installing or authenticating the oo CLI. <br>
-Mitigation: Review the oo CLI install method before setup and only run authentication or connection steps after a command fails for the matching reason. <br>
+## Use Case:
 
+Developers and operators use this skill to operate Callingly through an OOMOL-connected account, including listing and retrieving calls, leads, teams, agents, and schedules, plus creating calls and updating or deleting leads when approved.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-callingly) <br>
-- [Callingly Homepage](https://callingly.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The agent fetches the live connector schema before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: The setup instructions include remote installer commands that pipe downloaded scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer manually downloading and verifying the OOMOL oo CLI installer before running it.
+
+Risk: The skill can create calls and update or delete Callingly leads.
+
+Mitigation: Review the live action schema, exact payload, target record, and expected effect before approving write or destructive actions.
+
+Risk: The oo CLI operates against the user's connected Callingly account.
+
+Mitigation: Install and use the skill only when OOMOL is trusted to broker access to the connected Callingly account.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-callingly)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Callingly Homepage](https://callingly.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Callingly App Connection](https://console.oomol.com/app-connections?provider=callingly)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing payloads; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,55 @@
-## Description: <br>
-SupportBee helps agents operate a connected SupportBee account through OOMOL to read, create, update, and delete support-desk data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SupportBee (supportbee.com). Use this skill for ANY SupportBee request -- reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Support teams and developers use this skill to inspect SupportBee connector schemas and run OOMOL connector actions for tickets, labels, teams, users, and customer groups. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and destructive SupportBee actions can change support-desk records, including tickets, replies, comments, users, and labels. <br>
-Mitigation: Confirm the exact action, target, payload, and expected effect with the user before running write or destructive actions. <br>
-Risk: The skill operates a connected SupportBee account through OOMOL, so actions may affect real customer-support data. <br>
-Mitigation: Install and use it only for accounts where agent operation through OOMOL is intended, and prefer read-only actions unless a change is explicitly requested. <br>
+## Use Case:
 
+Support and operations teams use this skill to work with SupportBee tickets, replies, comments, labels, teams, users, and customer groups through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [SupportBee Skill Page](https://clawhub.ai/oomol/skills/oo-supportbee) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [SupportBee Homepage](https://supportbee.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector action responses are JSON objects with data and meta.executionId when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and artifact metadata) <br>
+Risk: The first-time setup path may pipe a remote oo CLI installer directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path and prefer an official package manager or verified installer before allowing installation commands to run.
+
+Risk: Write or destructive SupportBee actions can create, update, or remove desk data.
+
+Mitigation: Require confirmation of the exact target, payload, and expected effect before running write or destructive actions.
+
+## Reference(s):
+
+- [SupportBee homepage](https://supportbee.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [SupportBee ClawHub release](https://clawhub.ai/oomol/skills/oo-supportbee)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

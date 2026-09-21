@@ -1,43 +1,63 @@
-## Description: <br>
-Mybooks helps agents manage a MyBooks/Talebook personal library by searching and browsing books, retrieving details and statistics, editing metadata, uploading or adding books, and sending books to email or reader devices. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MyBooks helps an agent manage a personal book library by searching and browsing books, viewing statistics, editing metadata, managing reading state and notes, uploading books, and using MiMo TTS audiobook features through a user-configured MyBooks server.
 
-## Publisher: <br>
-[poxenstudio](https://clawhub.ai/user/poxenstudio) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[poxenstudio](https://clawhub.ai/user/poxenstudio)
 
-## Use Case: <br>
-External users and developers with a configured MyBooks server use this skill to operate a personal library through agent-issued API calls, including querying library and reading statistics, managing metadata and reading state, uploading books, and sending books to devices or email. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can upload local files to the configured MyBooks server. <br>
-Mitigation: Use least-privileged MyBooks credentials and confirm exact local file paths before permitting upload actions. <br>
-Risk: The skill can send books to user-supplied email addresses or reader device destinations. <br>
-Mitigation: Supervise transfer requests and verify destination email addresses, device types, and device URLs before execution. <br>
-Risk: The skill requires stored MyBooks credentials that may allow library changes. <br>
-Mitigation: Provide credentials through session-scoped environment variables or a dedicated secret manager, and avoid shared global configuration files. <br>
+## Use Case:
 
+External users and developers use this skill to operate their own MyBooks library from an agent session, including catalog search, metadata updates, reading progress management, note import, book upload, and TTS audiobook workflows.
 
-## Reference(s): <br>
-- [MyBooks Homepage](https://www.mybooks.top) <br>
-- [ClawHub Mybooks Skill Page](https://clawhub.ai/poxenstudio/skills/mybooks) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, API calls] <br>
-**Output Format:** [Markdown instructions with shell command examples and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3 and the MYBOOKS_HOST, MYBOOKS_USER, and MYBOOKS_PASSWORD environment variables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill uses MyBooks credentials and can mutate library data on the configured server.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for trusted MyBooks servers, pass credentials through session-scoped environment variables or a dedicated secret manager, and review mutating actions before execution.
+
+Risk: TTS workflows may send book text, voice samples, or TTS provider credentials through the configured MyBooks server to the selected TTS service.
+
+Mitigation: Use TTS only with trusted servers and providers, avoid real API keys in shared shells or logs, and avoid converting sensitive books or voice samples unless the transfer is acceptable.
+
+Risk: Book and voice-sample upload tools can read local files explicitly named by the user and upload them to MYBOOKS_HOST.
+
+Mitigation: Upload only user-approved ebook, MP3, or WAV paths and confirm the destination host before sending files.
+
+Risk: Plain HTTP can expose credentials or content unless restricted to local or private networks.
+
+Mitigation: Use HTTPS for public hosts; keep plain HTTP limited to localhost or LAN unless the user knowingly enables the documented override.
+
+## Reference(s):
+
+- [MyBooks homepage](https://www.mybooks.top)
+- [ClawHub skill page](https://clawhub.ai/poxenstudio/skills/mybooks)
+- [ClawHub publisher profile](https://clawhub.ai/user/poxenstudio)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires python3 plus MYBOOKS_HOST, MYBOOKS_USER, and MYBOOKS_PASSWORD environment variables.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -38,3 +38,12 @@ python3 scripts/batch_rename.py ./截图 --sequence
 - 整理导出的一批截图 / 照片
 - 项目文件统一命名规范
 - 批量去空格 / 改扩展名
+
+## 📊 相关服务：品牌 AI 搜索存在感免费检测
+
+做品牌 / 营销 / 内容，你的品牌在 AI 搜索里"被看见"了吗？
+
+AISoBrand 免费检测：看你的品牌在豆包 / 千问 / 元宝 / 文心 / Kimi / DeepSeek 的 AI 搜索里有没有名字、排第几。
+
+👉 免费检测：https://aisobrand.com/free-diagnosis
+

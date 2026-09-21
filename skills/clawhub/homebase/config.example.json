@@ -15,12 +15,16 @@
   },
 
   "whatsapp": {
-    "_comment": "The primary family group is groups[0] — used by the morning briefing, school email monitor, and meal check-in. Additional groups are addressed by cron jobs that fan out to multiple targets (e.g. the club_studio watcher). agent_number is the phone the bridge sends from. Legacy shape (group_id scalar) is still accepted by config_loader for backward compat, but new configs should use groups[].",
+    "_comment": "The primary family group is groups[0] — used by the morning briefing, school email monitor, and meal check-in. agent_number is the phone the bridge sends from. Legacy shape (group_id scalar) is still accepted by config_loader for backward compat, but new configs should use groups[].",
     "groups": [
-      { "id": "YOUR_GROUP_ID@g.us", "name": "Family Group" },
-      { "id": "YOUR_CLUB_STUDIO_GROUP_ID@g.us", "name": "Club Studio" }
+      { "id": "YOUR_GROUP_ID@g.us", "name": "Family Group" }
     ],
     "agent_number": "+15550000000"
+  },
+
+  "alerts": {
+    "_comment": "Out-of-band failure channel for the claude-runners, surfaced by get_message_targets as alert_webhook and used by notify_out_of_band in claude-runners/_lib/runner.sh when a WhatsApp alert cannot be delivered. It must NOT route through the OpenClaw gateway: every other runner send already does, which makes the gateway a single point of failure for both a message and the warning that the message did not go. A plain HTTPS push (ntfy.sh, or any URL that accepts a POST body) still reaches you when the gateway is what broke. Carries the failure reason only, never message content, so a public relay is acceptable. Leave empty to disable.",
+    "ntfy_url": "https://ntfy.sh/your-private-topic-here"
   },
 
   "calendar": {
@@ -102,17 +106,19 @@
   },
 
   "school": {
-    "_comment": "email_domains and email_addresses build the Gmail search query for the school email monitor.",
+    "_comment": "email_domains and email_addresses build the Gmail search query for the school email monitor. List EVERY domain the school can mail from, including its software vendor's — these are often several, and they are not guessable from each other. Procare, for example, sends day-to-day messages from one domain and calendar/event invitations from a different one. A sender that is not listed is never fetched, which is silent in a way a dropped email is not: there is no log line anywhere, because nothing was ever read.",
     "name": "School Name",
-    "email_domains": ["school.com"],
+    "email_domains": ["school.com", "notifications.school-vendor.com"],
     "email_addresses": ["info@school.com"]
   },
 
-  "club_studio": {
-    "_comment": "Watches Gmail for booking + cancellation emails from the given sender_domain, creates/deletes a calendar event on the family calendar, and prints structured JSON stdout for the agent to fan out to every whatsapp.groups[] entry. Set enabled to true after populating the second group JID in whatsapp.groups. Cron: register via `openclaw cron edit`, do NOT edit ~/.openclaw/cron/jobs.json directly.",
+  "bills": {
+    "_comment": "Watches Gmail for bill mail from the given billers within lookback_days. Where a PDF statement is attached its text is extracted via pypdf; where it is not, the email body is used instead, because plenty of billers only ever send a 'your bill is ready, log in to view' notice with nothing attached. Prints structured JSON on stdout for the caller to summarize (consumption + genuine tips pulled from the bill's own content) and post to the primary family WhatsApp group (whatsapp.groups[0]) — one of the jobs permitted to target the family group under CLAUDE.md principle 6. Errors/empty polls stay silent on the group and DM the owner instead, same silence-or-substance contract as the school email monitor. 'sender' is a full mailbox address, not just a domain — some billers send through a shared third-party billing platform, so matching on domain alone could pull in unrelated senders. It must also be the address the INVOICE arrives from: billers commonly send invoices and payment receipts from two different mailboxes, and configuring the receipt one means no bill is ever matched. Find it by searching your own inbox for a past bill and copying the exact From: address. lookback_days must comfortably exceed the longest gap between scheduled runs, or mail arriving just after one run ages out before the next. Non-bill mail from these addresses (outage alerts, marketing, receipts) is matched too and is expected to be recognized and dropped downstream. Set enabled to true once billers[] has at least one real sender.",
     "enabled": false,
-    "sender_domain": "clubstudiofitness.com",
-    "poll_minutes": 15
+    "lookback_days": 5,
+    "billers": [
+      { "name": "Electric Co", "sender": "billing@electricco.example.com" }
+    ]
   },
 
   "meals": {

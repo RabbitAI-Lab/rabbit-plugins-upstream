@@ -1,45 +1,56 @@
-## Description: <br>
-Use this skill for Readwise requests that read, create, or update data through the OOMOL Readwise connector instead of calling the Readwise API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Readwise lets an agent read, create, update, and delete Readwise data through the OOMOL `oo` CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Readwise through an OOMOL-connected account, including exporting highlights, listing books or Reader documents, saving URLs, creating highlights, and updating Reader document metadata. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: OOMOL acts as the intermediary for account-scoped Readwise actions. <br>
-Mitigation: Install and use this skill only when the user is comfortable authorizing OOMOL for the connected Readwise account. <br>
-Risk: Write actions can create highlights, save Reader documents, or update Reader document metadata, tags, or location. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running any create, save, or update action. <br>
-Risk: First-time setup commands can install the oo CLI or initiate account connection flows. <br>
-Mitigation: Run installation, login, or connection steps only after an auth or connection failure and only when the user intentionally wants the integration configured. <br>
+## Use Case:
 
+Readwise users can use this skill to operate books, highlights, and Reader documents from an agent without handling raw API tokens. It supports listing and exporting content, saving documents, creating highlights, and updating Reader document metadata after inspecting the live connector schema.
 
-## Reference(s): <br>
-- [ClawHub Readwise skill page](https://clawhub.ai/oomol/skills/oo-readwise) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Readwise homepage](https://readwise.io) <br>
-- [OOMOL Readwise connection](https://console.oomol.com/app-connections?provider=readwise) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md metadata.version and server evidence) <br>
+Risk: The skill can run Readwise actions that create, save, update, or otherwise change account data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running write or destructive actions.
+
+Risk: The first-time setup path includes a one-line installer for the OOMOL CLI.
+
+Mitigation: Install only after trusting OOMOL, preferably by reviewing the install guide, inspecting the installer, and checking available verification details.
+
+## Reference(s):
+
+- [Readwise homepage](https://readwise.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub Readwise skill page](https://clawhub.ai/oomol/skills/oo-readwise)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, text]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands return JSON from the OOMOL connector when run with `--json`.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

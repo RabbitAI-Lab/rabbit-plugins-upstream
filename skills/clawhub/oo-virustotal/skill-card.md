@@ -1,46 +1,55 @@
-## Description: <br>
-VirusTotal (virustotal.com). Use this skill for VirusTotal requests, including reading, creating, and updating data through the OOMOL connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents use VirusTotal through OOMOL's oo CLI to retrieve reports, search objects, submit scans, upload files, and manage comments or votes.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and analysts use this skill to inspect VirusTotal reports and relationships, search VirusTotal objects, and submit URLs, files, comments, votes, or rescans through an OOMOL-connected VirusTotal account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected VirusTotal account and can use sensitive account capabilities. <br>
-Mitigation: Install it only when VirusTotal access through that account is intended, and keep connector authentication scoped to the needed account. <br>
-Risk: URL scans, file uploads, rescans, comments, and votes may submit data to VirusTotal or affect community-visible state, quota, or credits. <br>
-Mitigation: Confirm the exact target, payload, and intended effect before running those actions. <br>
-Risk: Security evidence notes a documentation mismatch around confirmation for URL scans and file rescans. <br>
-Mitigation: Treat URL scans and file rescans as confirmation-required actions even when the source text is less explicit. <br>
+## Use Case:
 
+Developers and security analysts use this skill to ask an agent to inspect VirusTotal reports, analyses, comments, votes, relationships, and metadata, or to submit scans and uploads after confirming state-changing payloads.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-virustotal) <br>
-- [VirusTotal Homepage](https://www.virustotal.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [OOMOL VirusTotal Connection](https://console.oomol.com/app-connections?provider=virustotal) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution and returns connector responses as JSON when actions run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: First-time setup recommends executing remote installer scripts without checksum or signature verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path before installing; prefer a verified package-manager or documented installer flow and inspect downloaded scripts.
+
+Risk: Write actions can upload files, submit URLs, rescan files, add comments, or cast votes in VirusTotal.
+
+Mitigation: Confirm the exact action, target, payload, and effect with the user before running state-changing commands.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/oomol/skills/oo-virustotal)
+- [VirusTotal homepage](https://www.virustotal.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash and JSON command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON when run with --json; state-changing VirusTotal actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

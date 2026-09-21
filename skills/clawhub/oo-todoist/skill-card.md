@@ -1,45 +1,56 @@
-## Description: <br>
-Todoist (todoist.com). Use this skill for ANY Todoist request - reading, creating, and updating data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Todoist (todoist.com). Use this skill for ANY Todoist request - reading, creating, updating, and deleting data. Whenever a task involves Todoist, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to read, create, update, organize, and complete Todoist tasks, projects, sections, labels, and comments through an OOMOL-connected Todoist account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, complete, and organize Todoist records, so an ambiguous request could change the user's task data unexpectedly. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running write actions. <br>
-Risk: The skill requires access to a connected Todoist account through OOMOL. <br>
-Mitigation: Install it only when the agent is expected to use that Todoist account, and review requests before allowing account-backed actions. <br>
-Risk: The security summary notes that the trigger wording is broader than ideal. <br>
-Mitigation: Treat incidental Todoist mentions cautiously and ask for clarification before taking write actions. <br>
+## Use Case:
 
+External users and developers use this skill to operate Todoist through an OOMOL-connected account, including listing, creating, updating, commenting on, and completing Todoist tasks, projects, sections, and labels.
 
-## Reference(s): <br>
-- [Todoist homepage](https://www.todoist.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-todoist) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration instructions, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a signed-in OOMOL account with a connected Todoist provider before live actions can run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Fallback setup can execute remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the official oo CLI installation method and use verified packages or checksum/signature guidance where available before running installer commands.
+
+Risk: The skill operates Todoist through OOMOL-connected credentials and can change account data.
+
+Mitigation: Install only if OOMOL is an acceptable intermediary, and require explicit approval before setup, login, write, or task-closing actions.
+
+## Reference(s):
+
+- [ClawHub Todoist skill page](https://clawhub.ai/oomol/skills/oo-todoist)
+- [Todoist homepage](https://www.todoist.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce Todoist connector calls that read, create, update, or close Todoist records after the agent checks the live action schema.]
+
+## Skill Version(s):
+
+1.0.4 (source: server evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

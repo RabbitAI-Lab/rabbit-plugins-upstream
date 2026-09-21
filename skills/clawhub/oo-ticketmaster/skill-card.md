@@ -1,43 +1,60 @@
-## Description: <br>
-Ticketmaster (ticketmaster.com). Use this skill for Ticketmaster requests that search, read, or retrieve Ticketmaster event, venue, attraction, classification, suggestion, image, section-map, and Season Ticketing information through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates Ticketmaster through an OOMOL-connected account to read, create, and update Ticketmaster data with the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate Ticketmaster through an OOMOL-connected account, primarily for searching and reading Ticketmaster events, venues, attractions, classifications, suggestions, images, and section maps. Season Ticketing command execution should be treated as a higher-risk workflow that needs explicit payload review before use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Season Ticketing command execution may change Ticketmaster account state even though the skill is primarily presented as read/search oriented. <br>
-Mitigation: Require explicit user approval of the exact action payload and expected effect before running Season Ticketing commands. <br>
-Risk: The skill depends on sensitive Ticketmaster credentials injected through an OOMOL-connected account. <br>
-Mitigation: Install and run it only in environments where the OOMOL account connection, scopes, and billing state are trusted and reviewed. <br>
+## Use Case:
 
+External users and developers use this skill to search and retrieve Ticketmaster events, venues, attractions, classifications, images, and suggestions, and to run authorized Ticketmaster season-ticketing actions after reviewing the live action schema.
 
-## Reference(s): <br>
-- [ClawHub Ticketmaster skill page](https://clawhub.ai/oomol/oo-ticketmaster) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Ticketmaster homepage](https://www.ticketmaster.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing Ticketmaster action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: The skill includes one-time remote shell installation commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify installer URLs through OOMOL's official documentation before running installation commands.
+
+Risk: The skill can execute write-capable Ticketmaster season-ticketing commands.
+
+Mitigation: Inspect the live action schema and confirm the exact payload and intended effect with the user before running any write action.
+
+Risk: Ticketmaster actions are mediated through OOMOL-connected credentials.
+
+Mitigation: Install and use the skill only when OOMOL is an acceptable intermediary for the intended Ticketmaster account activity.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-ticketmaster)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+- [Ticketmaster](https://www.ticketmaster.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before running actions and returns connector responses as JSON when actions are executed.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

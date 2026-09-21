@@ -1,46 +1,63 @@
-## Description: <br>
-Queries WallySmarter for single Walmart product details, including current attributes, price history, and sales trend data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Retrieves detailed Walmart product information through WallySmarter, including current attributes, price history, and sales trend data for a single Walmart ItemId.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users, ecommerce operators, and product researchers use this skill to inspect one Walmart ItemId at a time, summarize product attributes, and review available price and sales trend history. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a LinkFox API key and may make billable WallySmarter requests. <br>
-Mitigation: Use only authorized LinkFox credentials and confirm credit consumption before calls, especially when historical stats are included. <br>
-Risk: The skill stores full lookup responses and cache data locally. <br>
-Mitigation: Review local retention behavior and clean saved LinkFox data or cache files when product research details should not persist. <br>
-Risk: The skill can send automatic operational feedback to LinkFox. <br>
-Mitigation: Review the feedback behavior before use and avoid sending sensitive product research details in feedback content. <br>
-Risk: Setting LINKFOX_TOOL_GATEWAY to an untrusted host could redirect API traffic. <br>
-Mitigation: Use the default gateway or a gateway host you explicitly trust. <br>
+## Use Case:
 
+External users and e-commerce operators use this skill to look up a specific Walmart product by ItemId and review product attributes, price history, stock signals, fulfillment details, and sales estimates. It is intended for single-product analysis, not keyword search, bulk comparison, or seller account reporting.
 
-## Reference(s): <br>
-- [WallySmarter-商品详情 API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-wallysmarter-product-detail) <br>
-- [LinkFox Skills](https://skill.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, files, guidance] <br>
-**Output Format:** [Markdown summaries with JSON API responses saved to local files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a Walmart ItemId and optional includeStats boolean; full responses may be cached and retained locally.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill requires LinkFox credentials and may involve phone/SMS onboarding data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in environments where sharing LinkFox credentials and onboarding data is acceptable, and prefer pre-provisioned credentials over ad hoc registration.
+
+Risk: Full product-query responses and query history may be stored locally.
+
+Mitigation: Review local response storage and cache locations before use, and remove saved data when it is no longer needed.
+
+Risk: Feedback may be submitted externally without clear user consent.
+
+Mitigation: Review or disable automatic feedback submission before deployment, especially in workflows involving sensitive user intent or product research.
+
+Risk: The onboarding flow can initiate billing and order actions.
+
+Mitigation: Require explicit user confirmation before listing paid plans, creating orders, or displaying payment details.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-wallysmarter-product-detail)
+- [WallySmarter API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON API results, concise summaries, and shell command examples when onboarding is required]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full product-detail responses may be saved locally; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,57 @@
-## Description: <br>
-Audio generation skill that selects an appropriate dlazy CLI audio or text-to-speech model based on the user's prompt. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates music, sound effects, and text-to-speech audio by selecting an appropriate dLazy CLI audio model from the user's prompt.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to generate speech, music, sound effects, dialogue, or cloned-voice audio through the dLazy hosted CLI service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, generation parameters, and media files supplied for audio or voice cloning may be uploaded to dLazy hosted services. <br>
-Mitigation: Avoid sending sensitive prompts or media, and use the service only when cloud processing is acceptable. <br>
-Risk: Using login or manual authentication can persist an API key in the local dLazy CLI configuration. <br>
-Mitigation: Use per-invocation DLAZY_API_KEY or npx when less persistent setup is preferred, and rotate or revoke API keys as needed. <br>
+## Use Case:
 
+Developers and creators use this skill to route audio-generation requests to the right dLazy CLI model for TTS, multi-speaker dialogue, music, sound effects, and voice search workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-audio-generate) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON command outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated audio is returned through hosted result URLs from the dLazy service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.7 (source: frontmatter and server release metadata) <br>
+Risk: Prompts, parameters, and explicitly provided media files are sent to dLazy's hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting sensitive prompts or media unless the user is comfortable with dLazy processing and hosting generated outputs.
+
+Risk: The dLazy CLI can store an API key under the user's profile and use paid account credits.
+
+Mitigation: Use the npx form when a persistent global install is not desired, review @dlazy/cli before use, and rotate or revoke keys from the dLazy dashboard when needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-audio-generate)
+- [dLazy CLI homepage](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service homepage](https://dlazy.com)
+- [dLazy API key dashboard](https://dlazy.com/dashboard/organization/api-key)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON CLI output guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill selects a dLazy subcommand, checks its help output, and guides execution through the dLazy hosted API.]
+
+## Skill Version(s):
+
+1.3.19 (source: server release metadata; artifact frontmatter reports 1.3.7)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

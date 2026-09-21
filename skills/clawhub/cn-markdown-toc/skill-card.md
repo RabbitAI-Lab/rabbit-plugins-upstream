@@ -1,39 +1,53 @@
-## Description: <br>
-Generates a GitHub-style table of contents for Markdown files by scanning headings, with options to limit heading depth or insert the TOC into the file. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+自动扫描 Markdown 标题并生成带 GitHub 风格锚点的多级目录，支持层级控制和插入文件顶部。
 
-## Publisher: <br>
-[freedompixels](https://clawhub.ai/user/freedompixels) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[freedompixels](https://clawhub.ai/user/freedompixels)
 
-## Use Case: <br>
-Developers, writers, and documentation maintainers use this skill to create Markdown navigation for long-form documents, knowledge bases, blog posts, and Markdown imports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Using insertion mode modifies the selected Markdown file by adding or replacing a TOC block. <br>
-Mitigation: Use preview mode first and keep a backup or version-control diff before running with --insert. <br>
+## Use Case:
 
+Developers, technical writers, and content creators use this skill to generate or insert a navigable table of contents for Markdown documents before publishing or importing them into documentation systems.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/freedompixels/skills/cn-markdown-toc) <br>
-- [Publisher profile](https://clawhub.ai/user/freedompixels) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can preview a generated TOC or modify the selected Markdown file when insertion is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and artifact frontmatter) <br>
+Risk: The --insert option rewrites the selected Markdown file by adding or replacing a TOC block.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the target file and keep version control or a backup before running --insert.
+
+Risk: The artifact mentions an unrelated AISoBrand link that is not required for the Markdown TOC workflow.
+
+Mitigation: Use only the local Markdown TOC functionality unless the external service is separately reviewed and needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/freedompixels/skills/cn-markdown-toc)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Shell commands, Files, Guidance]
+
+**Output Format:** [Markdown table-of-contents block with GitHub-style anchor links; optional in-place Markdown file update.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the Python standard library; --insert rewrites the chosen Markdown file by adding or replacing a TOC block.]
+
+## Skill Version(s):
+
+1.0.1 (source: release evidence; artifact metadata reports 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

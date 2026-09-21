@@ -1,57 +1,70 @@
-## Description: <br>
-Query Huawei Cloud OBS statistics, including bucket capacity and object counts, extranet or intranet traffic, total requests, and month-over-month comparisons. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Query Huawei Cloud OBS statistics including bucket capacity and object counts, extranet and intranet download traffic with month-over-month comparison, and total request counts with month-over-month comparison.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers, operators, and cloud administrators use this skill to inspect Huawei Cloud OBS bucket inventory, storage usage, traffic, and request trends. It helps produce CLI commands, configuration guidance, and terminal reports for read-oriented OBS and CES monitoring tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Huawei Cloud access keys or secrets may be exposed if users paste credentials into chat or command examples. <br>
-Mitigation: Use interactive or secure credential configuration, prefer environment variables where appropriate, and do not ask for, echo, or print AK/SK values. <br>
-Risk: Overbroad IAM permissions could allow actions beyond the skill's read-oriented statistics scope. <br>
-Mitigation: Use least-privilege, read-only OBS and CES permissions, preferably scoped to the required buckets. <br>
-Risk: The skill can query upload traffic and error metrics in addition to download traffic and request counts. <br>
-Mitigation: Install and use it only when those OBS bucket metadata and monitoring queries are intended. <br>
-Risk: Incorrect CES metric names, timestamp units, or time-range interpretation can produce misleading usage reports. <br>
-Mitigation: Confirm region, bucket, and time range with the user, use CES namespace SYS.OBS, millisecond timestamps, and the documented traffic and request metrics. <br>
-Risk: OBS delete or empty-bucket requests are destructive and outside this skill's intended behavior. <br>
-Mitigation: Refuse delete operations and direct the user to manage destructive actions manually through Huawei Cloud tools. <br>
+## Use Case:
 
+Developers and cloud operators use this skill to inspect Huawei Cloud OBS bucket usage and monitoring metrics, including storage capacity, traffic, and request trends, without performing write or delete operations.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-obs-stats) <br>
-- [Task: List Buckets With Stats](references/task-list-buckets-with-stats.md) <br>
-- [Task: Query Traffic](references/task-query-traffic.md) <br>
-- [Task: Query Requests](references/task-query-requests.md) <br>
-- [IAM Permission Policies](references/iam-policies.md) <br>
-- [OBS CES Monitoring Metrics](references/obs-metrics.md) <br>
-- [Related APIs](references/related-apis.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Acceptance Criteria](references/acceptance-criteria.md) <br>
-- [CLI Installation Guide](references/cli-installation-guide.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
-- [Huawei Cloud OBS Monitoring Metrics](https://support.huaweicloud.com/usermanual-obs/obs_03_0010.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and optional Python helper-script output.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires user-confirmed region, bucket, time range, and configured Huawei Cloud credentials; helper scripts produce terminal reports with month-over-month comparisons.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence) <br>
+Risk: The skill queries cloud bucket metadata and monitoring metrics, so over-broad IAM credentials could expose more OBS information than needed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a least-privilege read-only IAM user limited to OBS listing, OBS read metadata, and CES metric queries.
+
+Risk: Huawei Cloud access keys could be exposed if pasted into chat or placed directly on command lines.
+
+Mitigation: Use interactive credential setup or environment variables and do not ask users to provide AK/SK values in conversation.
+
+Risk: CLI installation steps depend on downloaded hcloud and obsutil binaries and may involve elevated permissions.
+
+Mitigation: Verify hcloud and obsutil download sources before installation and before any sudo-based setup.
+
+Risk: Requests outside the documented read-only statistics workflows could lead to destructive OBS operations.
+
+Mitigation: Refuse delete, batch delete, empty bucket, and object removal requests; keep the skill limited to bucket listing and metric queries.
+
+## Reference(s):
+
+- [CLI Installation Guide](references/cli-installation-guide.md)
+- [IAM Permission Policies](references/iam-policies.md)
+- [OBS CES Monitoring Metrics Reference](references/obs-metrics.md)
+- [Related APIs](references/related-apis.md)
+- [Verification Method](references/verification-method.md)
+- [Acceptance Criteria](references/acceptance-criteria.md)
+- [Troubleshooting](references/troubleshooting.md)
+- [Huawei Cloud OBS Monitoring Metrics](https://support.huaweicloud.com/usermanual-obs/obs_03_0010.html)
+- [Huawei Cloud CES ShowMetricData API](https://support.huaweicloud.com/api-ces/ces_03_0059.html)
+- [Huawei Cloud OBS API Reference](https://support.huaweicloud.com/api-obs/obs_04_0001.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and tabular CLI/script output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires user-provided region, bucket name, time range, and configured Huawei Cloud CLI credentials.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

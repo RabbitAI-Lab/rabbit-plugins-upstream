@@ -1,44 +1,56 @@
-## Description: <br>
-Cloudflare Worker (workers.cloudflare.com). Use this skill for any Cloudflare Worker request, including reading, creating, updating, and deleting Cloudflare Worker resources through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cloudflare Worker (workers.cloudflare.com) handles Cloudflare Worker requests, including reading, creating, updating, and deleting Worker resources through the OOMOL connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Cloudflare Workers, scripts, settings, and secrets through the OOMOL oo CLI after inspecting the live connector schema for each action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Cloudflare Worker source, settings, account data, and secret-related reads may expose sensitive information. <br>
-Mitigation: Check Cloudflare account scopes before use and treat source and secret-related reads as sensitive. <br>
-Risk: Write, upload, secret change, and delete actions can alter or remove live Cloudflare Worker resources. <br>
-Mitigation: Require exact target and payload confirmation before uploads, writes, secret changes, or deletes. <br>
+## Use Case:
 
+Developers and engineers use this skill to manage Cloudflare Workers and Workers Builds from an agent session through an OOMOL-connected account. It supports inspection, lifecycle operations, script content and settings changes, secret bindings, and build job management.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-cloudflare-worker) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Cloudflare Workers](https://workers.cloudflare.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads; connector responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live action schema inspection before execution; write, upload, secret, and destructive actions require exact user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill can create, update, overwrite, or delete Cloudflare Worker resources when write or destructive actions are approved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the target resource, payload, and expected effect before approving write actions, and require explicit confirmation for destructive actions.
+
+Risk: The first-time setup instructions include remote shell installer commands for the oo CLI.
+
+Mitigation: Prefer a verified or package-manager installation path, or inspect the installer before running it.
+
+## Reference(s):
+
+- [Cloudflare Workers](https://workers.cloudflare.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-cloudflare-worker)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, API Calls, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses oo connector schema and run commands; write and destructive actions require user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.7 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

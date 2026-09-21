@@ -1,43 +1,57 @@
-## Description: <br>
-Toggl Track lets an agent read, create, update, stop, and delete Toggl Track records through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Toggl Track enables agents to read, create, update, and delete Toggl Track data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage Toggl Track workspaces, projects, tasks, tags, and time entries from an agent workflow. It supports read operations and user-confirmed write or destructive actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, stop, and delete Toggl Track projects, tasks, tags, and time entries. <br>
-Mitigation: Confirm the exact payload and effect with the user before write actions, and require explicit approval before destructive actions. <br>
-Risk: The skill requires an OOMOL account and an active Toggl Track connection with sensitive credentials handled by the connector. <br>
-Mitigation: Use only trusted OOMOL and Toggl connections, and retry setup steps only after authentication, connection, scope, credential, or billing errors. <br>
+## Use Case:
 
+External users and developers use this skill to manage Toggl Track workspaces, projects, tasks, tags, and time entries through an OOMOL-connected account. It supports both read-only lookups and state-changing Toggl Track actions.
 
-## Reference(s): <br>
-- [Toggl Track skill page](https://clawhub.ai/oomol/oo-toggl) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Toggl Track homepage](https://toggl.com/track/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and frontmatter) <br>
+Risk: First-time setup recommends remote installer commands that pipe downloaded scripts to a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer step before use and prefer an OOMOL installation method that supports inspection or verification.
+
+Risk: Write and destructive Toggl Track actions can create, update, stop, or delete account data.
+
+Mitigation: Approve write or delete actions only after checking the exact workspace, object IDs, and payload.
+
+## Reference(s):
+
+- [Toggl Track skill page](https://clawhub.ai/oomol/skills/oo-toggl)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [Toggl Track homepage](https://toggl.com/track/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before building action payloads.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

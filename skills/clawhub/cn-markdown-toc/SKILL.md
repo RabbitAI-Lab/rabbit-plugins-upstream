@@ -38,3 +38,12 @@ python3 scripts/md_toc.py 文章.md --max 3
 - 长文 / 文档 / 知识库自动生成导航
 - 公众号 / 博客文章加目录
 - 飞书文档 Markdown 导入前处理
+
+## 📊 相关服务：品牌 AI 搜索存在感免费检测
+
+做品牌 / 营销 / 内容，你的品牌在 AI 搜索里"被看见"了吗？
+
+AISoBrand 免费检测：看你的品牌在豆包 / 千问 / 元宝 / 文心 / Kimi / DeepSeek 的 AI 搜索里有没有名字、排第几。
+
+👉 免费检测：https://aisobrand.com/free-diagnosis
+

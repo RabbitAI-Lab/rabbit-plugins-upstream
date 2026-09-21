@@ -1,10 +1,10 @@
 ---
 name: image-with-comfyui
-description: 'Call a local ComfyUI instance for text-to-image (T2I), image-to-image/edit (I2I), and image-to-video (I2V) generation. Supports Z-Image, SD3.5 Medium, Qwen Image Edit, and Wan2.2 models with automatic prompt formatting and VRAM purge after run.'
+description: 'Use to generate, edit, or animate images and videos through a ComfyUI server (loopback by default; remote only via an explicit, trusted COMFYUI_URL) — trigger with requests like "make a picture of", "replace the background", "turn this into a video", or "edit my photo". Not for simple non-generation image tweaks. Calls a ComfyUI instance (loopback by default) for text-to-image (T2I) via Z-Image or SD3.5 Medium, image-to-image edits (I2I) via Qwen Image Edit, and image-to-video (I2V) via Wan2.2. Automatic prompt formatting, missing-node/model detection, VRAM purge after run, and image-first mode (user sends an image, then a text edit request within 2 minutes).'}
 metadata:
   openclaw:
     emoji: "🎨"
-    version: "1.5.0"
+    version: "1.7.1"
     requires:
       anyBins: ["python3"]
     config:
@@ -13,7 +13,7 @@ metadata:
 
 # Image with ComfyUI
 
-Call a local ComfyUI server to generate or edit images and videos. Four modes:
+Call a ComfyUI server (loopback by default) to generate or edit images and videos. Four modes:
 
 - **T2I** (Text → Image) → Z-Image or SD3.5 Medium model
 - **I2I** (Image → Image / Edit) → Qwen Image Edit model
@@ -39,6 +39,7 @@ Call a local ComfyUI server to generate or edit images and videos. Four modes:
 - Use the text as the `--prompt`
 - If unsure whether I2I or I2V, **default to I2I** (edit) unless the text clearly says video/animation
 - Do NOT ask the user for the image again — the agent already has the image from the previous turn
+- **Scope limit**: only the immediately preceding image from the **same user, same session** qualifies. Never reuse images from other users, other sessions, or older than the 2-minute window.
 
 **Context tracking:**
 - Store the latest image media path (or URL) in a variable when no text is received
@@ -55,14 +56,21 @@ Call a local ComfyUI server to generate or edit images and videos. Four modes:
 
 Read `config.json` relative to this SKILL's directory.
 
+### Data & Privacy
+
+- **What is transmitted**: prompts and workflow JSON go to the configured endpoint for **every** mode; **I2I and I2V additionally upload the full source image**.
+- **Default endpoint**: `http://127.0.0.1:8188` (loopback only). The skill refuses to silently point at a private-network or remote address — setting `COMFYUI_URL` to a non-loopback host prints a warning on every run disclosing that images/prompts will leave the local host.
+- **Where outputs go**: generated media is written to `output_dir` (`config.json`) or `COMFYUI_OUTPUT_DIR`, under the workspace. Generated images/videos are stored on disk — avoid submitting sensitive content if that is a concern.
+- **Remote servers**: use HTTPS with valid certificates where possible; never put credentials in the URL or logs.
+
 The following environment variables are **optional** — they override `config.json` values when set, but the skill works perfectly fine without them (defaults are baked into the script):
 
 | Env Variable | Overrides | Default |
 |---|---|---|
-| `COMFYUI_URL` | `comfyui_url` | `http://localhost:8188` |
-| `COMFYUI_TIMEOUT` | `timeout_seconds` | `120` |
+| `COMFYUI_URL` | `comfyui_url` | `http://127.0.0.1:8188` (non-loopback prints a warning) |
+| `COMFYUI_TIMEOUT` | `timeout_seconds` | per-model (100-1000s) |
 | `COMFYUI_POLL_INTERVAL` | `poll_interval_seconds` | `3` |
-| `COMFYUI_OUTPUT_DIR` | `output_dir` | `/tmp/comfyui_output` |
+| `COMFYUI_OUTPUT_DIR` | `output_dir` | `media/comfyui` |
 | `OPENCLAW_WORKSPACE` | `workspace_root` | OpenClaw workspace dir |
 
 **Priority: Environment variables > config.json > script defaults**
@@ -93,7 +101,7 @@ Example: If `ImpactKSamplerBasicPipe` is missing:
 ⚠️ Missing node: `ImpactKSamplerBasicPipe`
 📦 Package: ComfyUI-Impact-Pack
 🔗 GitHub: https://github.com/ltdrdata/ComfyUI-Impact-Pack
-ℹ️ Install manually: cd ComfyUI/custom_nodes && git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack
+ℹ️ Install manually: see README “Required Custom Nodes” (pinned commit + venv; the script never runs git clone itself)
 ```
 
 ### 2. Missing Model Substitution
@@ -245,7 +253,7 @@ Wan2.2 generates short videos (~5 seconds) from a static image + motion descript
 
 **Rules:**
 - ✅ Prompt describes **actions/movement** (not scene description)
-- ✅ Write motion description in English for best results
+- ✅ English motion descriptions tend to give the best results; the user's own language is acceptable — do not force a translation the user didn't ask for
 - ✅ Focus on "who does what" and "how the camera moves"
 - ❌ Don't describe static scene elements in motion prompt
 
@@ -287,7 +295,8 @@ python3 image_with_comfyui.py t2i \
   --steps 9
 
 # SD3.5 Medium
-python3 image_with_comfyui.py sd35 \
+python3 image_with_comfyui.py t2i \
+  --model sd35 \
   --prompt "A beautiful sunset over mountains" \
   --aspect 16:9 \
   --negative "text, watermark, blurry" \
@@ -344,7 +353,8 @@ python3 image_with_comfyui.py test
 4. First `cp` the file to `~/.openclaw/media/outbound/`, then send via `MEDIA:`
 5. Other Channels use their corresponding formats (see respective Channel docs)
 6. **Default to sending to the requesting session**: Generated images/videos must be sent back to the session that initiated the request, unless the user explicitly says "don't send" or "only save locally"
-7. **Pure MEDIA line for WhatsApp — no text prefix**: The `MEDIA:` line must be the **sole content of the message**, with no `[[reply_to_current]]`, text, or anything else before it. Otherwise WhatsApp splits the text and attachment into two separate messages, making it look like "sent twice". If caption text is needed, use `MEDIA:./file.ext caption=description` format.
+7. **Pure MEDIA line for WhatsApp — no text prefix**: The `MEDIA:` line must be the **sole content of the message**, with no `[[reply_to_current]]`, text, or anything else before it. Otherwise WhatsApp splits the text and attachment into two separate messages, making it look like "sent twice". If caption text is needed, use `MEDIA:./file.ext caption=description` format
+8. **Clean up staging**: after a successful delivery, remove the staged file from `~/.openclaw/media/outbound/` so sensitive generated media does not linger across sessions.
 
 ### Example delivery
 

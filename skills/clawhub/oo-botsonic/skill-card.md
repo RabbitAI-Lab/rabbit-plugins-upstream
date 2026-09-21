@@ -1,43 +1,55 @@
-## Description: <br>
-Botsonic lets agents use an OOMOL-connected Botsonic account to generate responses and read conversations and FAQs through the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Botsonic (botsonic.com). Use this skill for ANY Botsonic request - reading, creating, and updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to let an agent work with an OOMOL-connected Botsonic account for response generation, conversation lookup, conversation listing, and FAQ listing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose Botsonic conversations and FAQs from the connected account. <br>
-Mitigation: Use the skill only for explicit Botsonic tasks and treat returned conversations and FAQs as sensitive account data. <br>
-Risk: The skill depends on the OOMOL oo CLI and server-side Botsonic connection. <br>
-Mitigation: Install only if you trust OOMOL, and review CLI install, login, or connection steps before running them. <br>
+## Use Case:
 
+Developers and operators use this skill to run Botsonic connector actions through an OOMOL-connected account, including generating bot responses, reading conversations, listing conversations, and listing FAQs.
 
-## Reference(s): <br>
-- [Botsonic homepage](https://botsonic.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-botsonic) <br>
-- [OOMOL ClawHub profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server evidence) <br>
+Risk: First-time setup includes installing the oo CLI by piping a remote installer script into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer step before use, prefer manually downloading and verifying the installer from OOMOL's official documentation, and install the CLI only when required.
+
+Risk: The skill can run Botsonic actions that generate responses or otherwise change service state.
+
+Mitigation: Only run Botsonic actions the user explicitly requested, and confirm payload and effect before actions tagged as write or destructive.
+
+## Reference(s):
+
+- [Botsonic homepage](https://botsonic.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-botsonic)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, Text]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces oo CLI schema inspection and connector execution guidance; connector responses are JSON.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

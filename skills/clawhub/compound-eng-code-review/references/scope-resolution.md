@@ -5,6 +5,8 @@ branch review, and fetching prior discussion before raising findings. The core
 file-selection fallback chain stays in the main skill; this covers the two
 detailed cases.
 
+Contents: [working-tree safety](#working-tree-safety-never-reorganize-the-users-checkout-to-review) · [branch base](#base-branch-resolution-for-branch-reviews) · [coverage ledger](#review-coverage-ledger) · [prior discussions](#fetching-existing-pr-discussions)
+
 ## Working-tree safety: never reorganize the user's checkout to review
 
 A review is read-only on the working tree. Setting up a review must not mutate
@@ -30,8 +32,8 @@ If the target diff genuinely requires a different branch or a clean tree, stop
 and ask before switching, stashing, resetting, or cleaning. Reviewing a branch
 does not require checking it out -- resolve the comparison range and read the
 diff range directly (see "Base-branch resolution for branch reviews" below); a
-remote branch reads via `git diff <base>...<branch>` without touching the
-working tree.
+remote branch reads via `git diff --no-textconv --no-ext-diff <base>...<branch>`
+without touching the working tree.
 
 **HEAD-drift guard (when the review ends in a stage/commit/push):** record the
 commit before staging and re-check before the write:
@@ -67,6 +69,37 @@ via this fallback chain:
 all committed work on the branch and reviews only the uncommitted delta. Stop and
 ask which base to use instead.
 
+**Pass `--no-textconv --no-ext-diff` to every `git diff` / `git show` that
+materializes the reviewed content.** A `.gitattributes` entry in the reviewed
+branch can select a diff or textconv driver already configured in the
+reviewer's environment, so without the flags the branch author chooses which
+program rewrites the diff the review reads.
+
+**The working tree is not the review head.** Unless the branch is checked out,
+every filesystem-backed tool -- file reads, greps, delegated sweeps, any test
+runner mounting the repository -- executes the *base*. The asymmetry is usable:
+findings on files the change touched are unreliable (already-fixed call sites
+report as broken), while findings on untouched files are sound. Partition
+delegated-sweep output by `git diff --name-only <base> <head>` and re-verify only
+the changed-file half against `git show --no-textconv --no-ext-diff <head>:<file>`. Anchoring reads to the
+head SHA does not cover execution: running the suite needs the full head
+materialized, so use a dedicated worktree rather than the changed files alone --
+the diff's runtime closure includes dependencies absent on a stale base, and the
+resulting setup error looks like a defect in the change. Never switch, stash, or
+clean the user's checkout to get there; see working-tree safety above.
+
+**`base...head` is not the tree that ships.** When the target has moved, neither
+endpoint of that range is the merged tree, and two regression classes are
+invisible in it: a branch forked before a fix landed and rewriting that region
+carries the pre-fix body forward, so the natural "keep my code" resolution
+reverts the fix; and a diff that widens a shared value shape auto-merges without
+conflict against a sibling that added a consumer under the old shape. The
+conflict list points the wrong way in both cases. When the merge-base lags the
+target, compare each rewritten unit between head and target directly
+(`git log -S<symbol> origin/<target>`), compose the merge mechanically, run the
+suite on the composed tree, and confirm the broken file carries zero conflict
+markers.
+
 ### Stacked branches
 
 When a branch is stacked on another unmerged branch, `git merge-base HEAD
@@ -75,6 +108,69 @@ fabricating findings on files this change doesn't touch. Prefer the hosting
 platform's authoritative base SHA (PR/MR `base_sha`, or `gh pr diff`) over a
 locally computed merge-base. After the run, intersect every finding's path with
 the change's `--name-only` set and discard off-scope ones.
+
+## Review coverage ledger
+
+Track mechanical coverage separately from finding quality. Prove only that each selected file received a completed correctness review, not that it is defect-free.
+
+### Build the denominator before filtering
+
+After resolving the comparison range, freeze the original changed-file universe from its name-and-status output. Include added, modified, renamed, copied, and deleted paths. Include untracked files in workspace mode. Only then classify each path as `selected` or `excluded(reason)`.
+
+Tests excluded from deep-review size signals are still part of the universe and
+remain selectable. Keep deletion-only changes selectable so removal regressions
+can be reviewed against the old side. Exclude only paths outside explicit user
+scope, or paths in the main skill's declared lockfile, minified/bundled,
+vendored, and generated categories -- all four are review noise that an explicit
+user scope may bring back. Record the concrete reason; never silently drop an
+oversized or unreadable selected file -- mark it failed.
+
+**A credential-bearing path is not excluded here.** This ledger governs local
+review, and a tracked `.env`, key, or `.netrc` is precisely where a
+committed-secret finding lives; dropping it from `selected` would make that
+class unreviewable. Keep the path selected, review it, and report any finding
+under the secret-redaction rule in
+[report-and-integration.md](./report-and-integration.md) -- cite `file:line` and
+describe the pattern, never reproduce the value. The unconditional exclusion of
+these paths applies to *external dispatch only*; the hard-exclusion list in
+[external-review-subprocess.md](./external-review-subprocess.md) keeps them out
+of any packet that leaves the machine.
+
+Use one disposition per path:
+
+| Set | Meaning |
+|-----|---------|
+| `changed` | Original pre-filter universe with path, change status, and workspace diff fingerprint when mutable. |
+| `selected` | Files that require a correctness review. |
+| `covered` | Selected files actually inspected by their assigned correctness coverage unit. |
+| `failed` | Selected files not reviewable, with concrete evidence such as timeout, unreadable input, or context exhaustion. |
+| `pending` | Selected files with no terminal disposition yet. |
+| `excluded` | Changed files deliberately outside review, with a reason. |
+
+For standard reviews, hold the ledger in context. For persisted `/ia-review`
+runs, store the same top-level arrays in transient review scratch state; entries
+carry `path` plus `status`/`fingerprint`, `unit`, or `reason` as applicable.
+Assign every selected file to exactly one correctness unit, even when multiple
+specialist lenses inspect it.
+
+### Reconcile before the verdict
+
+For a frozen branch or commit review, reconcile against the original
+name-and-status set. For mutable workspace review, re-enumerate and compare
+per-file diff fingerprints immediately before the verdict; add new or changed
+paths as pending.
+
+Derive terminal coverage mechanically:
+
+- **complete** -- `selected = covered`, with no failed or pending paths.
+- **partial** -- at least one selected path is covered and at least one is failed or pending.
+- **failed** -- selected paths exist but none received usable coverage, or scope identity became untrustworthy.
+- **skipped** -- no files were selected; report that no review verdict was produced.
+
+Only complete coverage may produce `Ready to merge` or `Ready with fixes`.
+Partial or failed coverage forces `Not ready`, independently of finding count.
+Always list excluded paths under Residual Risks; explicit exclusion makes scope
+truthful, not necessarily safe.
 
 ## Fetching existing PR discussions
 

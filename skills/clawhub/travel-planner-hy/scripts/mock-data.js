@@ -68,21 +68,21 @@ const mockTransport = {
  * 获取指定城市的模拟景点数据
  */
 function getMockAttractions(city) {
-  return mockAttractions[city] || [];
+  return structuredClone(mockAttractions[city] || []);
 }
 
 /**
  * 获取指定城市的模拟酒店数据
  */
 function getMockHotels(city) {
-  return mockHotels[city] || [];
+  return structuredClone(mockHotels[city] || []);
 }
 
 /**
  * 获取指定城市的模拟交通信息
  */
 function getMockTransport(city) {
-  return mockTransport[city] || null;
+  return structuredClone(mockTransport[city] || null);
 }
 
 /**

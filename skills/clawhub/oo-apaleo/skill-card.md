@@ -1,45 +1,59 @@
-## Description: <br>
-apaleo enables agents to read, create, update, and delete apaleo data through the OOMOL oo CLI connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+The apaleo skill lets an agent read, create, update, and delete apaleo data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage apaleo properties, units, unit groups, and unit attributes through an OOMOL-connected account. It supports read workflows and clearly marked write or destructive apaleo actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The release evidence reports a suspicious security verdict for the broader scanned skill set. <br>
-Mitigation: Review the skill before installation and install it only in a trusted development environment. <br>
-Risk: Write and destructive apaleo actions can change or delete live account data. <br>
-Mitigation: Confirm the target resource, payload, and expected effect before running actions marked write or destructive. <br>
-Risk: The skill depends on an authenticated OOMOL account and connected apaleo provider. <br>
-Mitigation: Use the first-time setup paths only after an auth or connection failure, and verify the apaleo connection scope before retrying. <br>
+## Use Case:
 
+Developers, operators, and support teams use this skill to manage apaleo properties, units, unit groups, and unit attributes through an OOMOL-connected account. The skill supports read actions as well as write and destructive account operations when the user confirms the intended payload and effect.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/oomol/oo-apaleo) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [apaleo homepage](https://apaleo.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands produce JSON responses from the oo connector when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill frontmatter) <br>
+Risk: The skill can operate a connected apaleo account and includes write and destructive actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running write or destructive actions.
+
+Risk: First-time setup may ask users to install the oo CLI using fetched installer scripts.
+
+Mitigation: Prefer verified OOMOL installation documentation before running installer commands.
+
+Risk: The agent depends on live connector schemas to construct valid action payloads.
+
+Mitigation: Run the schema inspection command before building payloads for connector actions.
+
+## Reference(s):
+
+- [apaleo homepage](https://apaleo.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include data and meta.executionId when actions are run.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

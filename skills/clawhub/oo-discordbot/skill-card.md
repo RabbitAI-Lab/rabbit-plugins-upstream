@@ -1,44 +1,55 @@
-## Description: <br>
-Discord Bot lets an agent read, create, update, and delete Discord Bot data through OOMOL's discordbot connector and oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discord Bot helps agents read, create, update, and delete Discord resources through OOMOL's `oo` CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent manage Discord Bot workflows, including reading Discord resources and performing confirmed write or destructive operations through OOMOL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Some state-changing Discord actions may be untagged even though the skill treats untagged actions as safe to run directly. <br>
-Mitigation: Require explicit user confirmation for any action that posts, pins, crossposts, unbans, prunes members, changes roles or channels, or deletes data. <br>
-Risk: The skill can operate a connected Discord Bot through OOMOL and may affect guilds, channels, messages, roles, members, threads, invites, stickers, emojis, and application commands. <br>
-Mitigation: Review the bot's Discord permissions and OOMOL connection before installation and before running sensitive actions. <br>
+## Use Case:
 
+Developers, employees, and external agents use this skill to operate Discord bot workflows through OOMOL-connected credentials, including reading guild data, managing channels and messages, and performing moderated write or cleanup actions.
 
-## Reference(s): <br>
-- [ClawHub Discord Bot skill page](https://clawhub.ai/oomol/skills/oo-discordbot) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Discord Developer Applications](https://discord.com/developers/applications) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector action responses are JSON objects with data and meta.executionId when commands are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: Connected Discord bot permissions can allow posting, moderation, deletion, bans, and guild setting changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the user trusts OOMOL and the connected Discord bot permissions; confirm the exact action, payload, target, and expected effect before any write or destructive action.
+
+Risk: The first-time setup path includes a pipe-to-shell installer for the oo CLI.
+
+Mitigation: Review the OOMOL CLI installer before running it and use the documented platform-specific install path when setup is required.
+
+## Reference(s):
+
+- [ClawHub Discord Bot skill page](https://clawhub.ai/oomol/skills/oo-discordbot)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Discord Developer Applications](https://discord.com/developers/applications)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include `oo connector schema` and `oo connector run` commands plus action-specific JSON payload guidance.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

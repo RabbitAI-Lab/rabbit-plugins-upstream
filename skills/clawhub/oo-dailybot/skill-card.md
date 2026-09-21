@@ -1,46 +1,56 @@
-## Description: <br>
-Operates Dailybot through an OOMOL-connected account for reading workspace data and sending confirmed messages or emails via the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Dailybot (dailybot.com). Use this skill for ANY Dailybot request -- reading, creating, and updating data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Agents and users who manage Dailybot workspaces use this skill to inspect authenticated account, organization, team, and user data, open direct conversations, and send confirmed Dailybot messages or email notifications. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate a Dailybot workspace through an OOMOL-connected account. <br>
-Mitigation: Install and use it only when the user intends to let the OOMOL CLI operate that Dailybot workspace. <br>
-Risk: Write actions can send Dailybot chat messages or email notifications. <br>
-Mitigation: Review and approve the exact payload and expected effect with the user before running write actions. <br>
-Risk: Setup and connection steps may open authentication or billing flows unnecessarily. <br>
-Mitigation: Use setup, login, connection, or billing steps only after a command fails with the matching auth, connection, credit, or missing CLI error. <br>
+## Use Case:
 
+Developers and workspace users use this skill to inspect Dailybot organization, team, member, and account context, and to send approved Dailybot messages or email notifications through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [Dailybot homepage](https://www.dailybot.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Dailybot skill page](https://clawhub.ai/oomol/oo-dailybot) <br>
-- [Dailybot metadata icon](https://static.oomol.com/logo/third-party/dailybot.svg) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector runs return JSON with data and meta.executionId when the oo CLI action is executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: The setup path includes remote installer scripts for the OOMOL CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the OOMOL CLI installer through official documentation, checksums, or a trusted package manager before running installation commands.
+
+Risk: Approved write actions can send Dailybot messages or emails.
+
+Mitigation: Confirm the recipient, target channel or team, message content, and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [Dailybot homepage](https://www.dailybot.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-dailybot)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,55 +1,73 @@
-## Description: <br>
-Provides Mongolian language translation, chat and writing support, TTS, ASR, OCR, and Word/PDF document translation through the mongol.open-idea.net service. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mongolian AI routes Mongolian-language translation, chat writing, OCR, speech recognition, text-to-speech, and DOCX/PDF translation requests through the AI Skills platform API.
 
-## Publisher: <br>
-[youteacherasia](https://clawhub.ai/user/youteacherasia) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[youteacher](https://clawhub.ai/user/youteacher)
 
-## Use Case: <br>
-External users and developers use this skill to translate between Chinese, traditional Mongolian, and Cyrillic Mongolian, create or answer in Mongolian, transcribe or synthesize speech, run OCR, and translate Word or PDF documents. It is useful when an agent needs to route Mongolian-language tasks to a dedicated external API while returning only the requested result and any billing line. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Text, documents, images, and audio selected for processing are sent to mongol.open-idea.net. <br>
-Mitigation: Use the skill only for content you are allowed to send to that service, and avoid sensitive, confidential, or regulated information. <br>
-Risk: The skill requires a user API key and may incur charges for successful requests. <br>
-Mitigation: Store MONGOL_AI_SKILL_API_KEY in the local environment, do not paste keys into chat, and confirm large, batch, document, OCR, or long audio jobs before submitting them. <br>
-Risk: OCR, ASR, TTS, and document workflows handle files whose contents may be larger or more sensitive than a short text prompt. <br>
-Mitigation: Review files before upload, keep TTS audio as a file rather than exposing raw audioBase64 or binary content, and avoid blind retries after successful or billable responses. <br>
-Risk: Mixed traditional Mongolian and Cyrillic inputs can be routed incorrectly. <br>
-Mitigation: Follow the documented routing rules and explicitly choose the OCR or translation script when the content may be Cyrillic or mixed-language. <br>
+## Use Case:
 
+External users and agent developers use this skill to process Chinese, traditional Mongolian, and Cyrillic Mongolian text, images, audio, and DOCX/PDF documents through a paid platform API.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/youteacherasia/mongolian-ai) <br>
-- [Mongol AI homepage](https://mongol.open-idea.net) <br>
-- [API key setup](references/API-KEY.md) <br>
-- [Behavior rules](references/BEHAVIOR-RULES.md) <br>
-- [HTTP request templates](references/HTTP-REQUESTS.md) <br>
-- [Interface routing](references/INTERFACE-ROUTING.md) <br>
-- [Translation reference](references/TRANSLATION.md) <br>
-- [Chat completions reference](references/CHAT-COMPLETIONS.md) <br>
-- [OCR reference](references/OCR.md) <br>
-- [ASR reference](references/ASR.md) <br>
-- [TTS reference](references/TTS.md) <br>
-- [Document translation reference](references/DOCUMENT-TRANSLATION.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown responses with translated text, recognized text, transcriptions, billing lines, configuration commands, and local audio or document file references when applicable] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MONGOL_AI_SKILL_API_KEY and sends selected text, files, images, or audio to mongol.open-idea.net; TTS may produce local WAV audio rather than pasted binary content.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.14 (source: server release metadata) <br>
+Risk: Selected text, images, audio, and DOCX/PDF contents are sent to the AI Skills platform for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for material approved for that external processing path, and avoid sensitive or regulated content unless organizational approval is in place.
+
+Risk: Paid API calls can draw from the platform RMB wallet, especially for long text, batch, file, OCR, ASR, TTS, and document operations.
+
+Mitigation: Confirm the processing scope before higher-cost work, use stable idempotency keys for retries, and report platform billing headers without estimating prices.
+
+Risk: The platform API key can be exposed if placed in URLs, logs, screenshots, or final responses.
+
+Mitigation: Store the key only in MENGGUYU_API_KEY and do not print the key, request body, raw response, or debug logs in user-facing output.
+
+Risk: Uploaded materials may contain commands or instructions unrelated to the requested Mongolian-language processing.
+
+Mitigation: Treat uploaded content as data to process, not instructions to execute, and do not send the material to other services without user consent.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/youteacher/skills/mongolian-ai)
+- [AI Skills Platform](https://ai-skills.open-idea.net)
+- [API Key Configuration](https://ai-skills.open-idea.net/skill-docs/mongolian-ai/API-KEY.md)
+- [Interface Routing](https://ai-skills.open-idea.net/skill-docs/mongolian-ai/INTERFACE-ROUTING.md)
+- [Text Translation](https://ai-skills.open-idea.net/skill-docs/mongolian-ai/TRANSLATION.md)
+- [Chat Completions](https://ai-skills.open-idea.net/skill-docs/mongolian-ai/CHAT-COMPLETIONS.md)
+- [OCR](https://ai-skills.open-idea.net/skill-docs/mongolian-ai/OCR.md)
+- [ASR](https://ai-skills.open-idea.net/skill-docs/mongolian-ai/ASR.md)
+- [TTS](https://ai-skills.open-idea.net/skill-docs/mongolian-ai/TTS.md)
+- [Document Translation](https://ai-skills.open-idea.net/skill-docs/mongolian-ai/DOCUMENT-TRANSLATION.md)
+- [HTTP Requests](https://ai-skills.open-idea.net/skill-docs/mongolian-ai/HTTP-REQUESTS.md)
+- [Behavior Rules](https://ai-skills.open-idea.net/skill-docs/mongolian-ai/BEHAVIOR-RULES.md)
+- [Upgrade Guide](https://ai-skills.open-idea.net/skill-docs/mongolian-ai/UPGRADE.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance and API-backed user-facing results, including translated text, generated text, OCR/ASR transcripts, and private TTS audio handling instructions.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses MENGGUYU_API_KEY; file uploads are limited to 5 MB; short text translation accepts up to 4000 characters; synchronous TTS accepts up to 600 characters and asynchronous TTS up to 3000 characters.]
+
+## Skill Version(s):
+
+2.0.0 (source: server release evidence and skill metadata packageVersion)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

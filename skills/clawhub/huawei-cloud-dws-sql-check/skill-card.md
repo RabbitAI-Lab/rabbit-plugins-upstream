@@ -1,44 +1,55 @@
-## Description: <br>
-Checks Huawei Cloud DWS SQL statements for syntax validity, DWS-specific compatibility, and development specification issues using a local tokenizer, parser, and rule engine. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides offline Huawei Cloud DWS SQL syntax and specification checks, including DWS-specific syntax validation, object design rules, data operation rules, and naming guidance.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and data engineers use this skill to review DWS SQL before execution, catch syntax and compatibility issues, and identify specification or performance anti-patterns in SQL statements. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: SQL text from untrusted sources may contain shell metacharacters if pasted directly into a command line. <br>
-Mitigation: Pass untrusted SQL through a safely quoted argument or a temporary file before invoking the checker. <br>
-Risk: Static checks skip rules that require a live DWS cluster, such as index count, non-pushdown SQL, and view dependency analysis. <br>
-Mitigation: Treat static results as pre-execution review and run cluster-dependent checks separately when those findings are needed. <br>
+## Use Case:
 
+Developers and data engineers use this skill to statically review Huawei Cloud DWS SQL before execution, checking syntax compatibility and specification issues without connecting to a cluster.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-dws-sql-check) <br>
-- [AST Schema](references/ast_schema.md) <br>
-- [Syntax Rules](rules/syntax_rules.yaml) <br>
-- [Specification Rules](rules/spec_rules.yaml) <br>
-- [Performance Rules](rules/perf_rules.yaml) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown reports, JSON check results, and concise command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Static syntax and specification checks run locally; cluster-dependent performance rules are documented but skipped in static mode.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: A clean report may be mistaken for proof of complete SQL safety, compliance, performance, or production readiness.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat findings as advisory, review important SQL manually, and use cluster-specific validation for performance or production decisions.
+
+Risk: Some documented checks require cluster metadata or execution-plan analysis and are skipped during local static analysis.
+
+Mitigation: Run appropriate DWS cluster checks for index counts, non-pushdown behavior, view dependency depth, and performance-sensitive changes.
+
+## Reference(s):
+
+- [AST Schema](references/ast_schema.md)
+- [ClawHub Skill Page](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-dws-sql-check)
+- [Publisher Profile](https://clawhub.ai/user/huaweicloudskill)
+
+## Skill Output:
+
+**Output Type(s):** [analysis, markdown, code, shell commands, guidance]
+
+**Output Format:** [JSON or Markdown SQL check reports with rule findings and fix suggestions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Runs local static analysis only; some cluster-dependent checks are skipped in static mode.]
+
+## Skill Version(s):
+
+1.0.1 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,56 @@
-## Description: <br>
-Ayrshare helps agents manage social posting workflows, including reading, creating, updating, validating, scheduling, and deleting posts through a connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Ayrshare enables agents to read, create, update, validate, schedule, retry, analyze, and delete social posts through an OOMOL-connected Ayrshare account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate an Ayrshare-connected social posting account from an agent, including post publishing, validation, analytics, history lookup, profile access, updates, retries, and deletion. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and destructive Ayrshare actions can affect public or scheduled social media content. <br>
-Mitigation: Review payloads carefully and require explicit user confirmation before publishing, updating, retrying, or deleting posts. <br>
-Risk: The skill depends on an OOMOL-connected Ayrshare account and may fail when authentication, connection scope, app readiness, or billing is missing. <br>
-Mitigation: Use the documented first-time setup or billing steps only after a command fails with the matching error. <br>
+## Use Case:
 
+External users and developers use this skill to operate Ayrshare social publishing workflows from an agent, including profile lookup, post validation, publishing or scheduling, analytics, retries, updates, and deletion.
 
-## Reference(s): <br>
-- [ClawHub Ayrshare skill page](https://clawhub.ai/oomol/skills/oo-ayrshare) <br>
-- [Ayrshare homepage](https://www.ayrshare.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May execute Ayrshare connector actions through the oo CLI when the agent has user approval and the account is connected.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata and skill metadata) <br>
+Risk: Setup guidance includes running a remote oo CLI installer script on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after trusting OOMOL and the installer source; prefer reviewing the installer or using official documented package-manager steps before running it.
+
+Risk: The skill can publish, update, retry, or delete Ayrshare posts.
+
+Mitigation: Require explicit confirmation of the target, payload, and expected effect before write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Ayrshare Skill](https://clawhub.ai/oomol/skills/oo-ayrshare)
+- [Ayrshare Homepage](https://www.ayrshare.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live oo connector schemas and may return connector JSON responses when actions are run.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

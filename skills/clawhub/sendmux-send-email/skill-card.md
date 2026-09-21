@@ -1,46 +1,58 @@
-## Description: <br>
-Send one or many emails through Sendmux using approved mailbox or agent credentials, idempotency keys, attachments, MCP, CLI, SDKs, or HTTP. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Send one or many emails through Sendmux using approved mailbox or agent credentials, idempotency keys, attachments, MCP, CLI, SDKs, or HTTP.
 
-## Publisher: <br>
-[sendmux.ai](https://clawhub.ai/user/sendmux.ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sendmux.ai](https://clawhub.ai/user/sendmux.ai)
 
-## Use Case: <br>
-Developers and agents use this skill to prepare and send outbound email through Sendmux, including single messages, batch sends, idempotent retries, and attachment workflows. It is intended for workflows where the user has supplied or confirmed recipients, sender details, message content, and credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sendmux credentials can be exposed if pasted into chat, command output, logs, screenshots, or shared files. <br>
-Mitigation: Use scoped Sendmux credentials stored in environment variables or a secret manager, and avoid printing or pasting secrets. <br>
-Risk: An agent could send email to the wrong recipients or with unintended content if message details are incomplete or assumed. <br>
-Mitigation: Require the user to supply or confirm every recipient, sender, subject, and message body before sending, including the full set for batch sends. <br>
-Risk: Attachments may upload local files to Sendmux for delivery. <br>
-Mitigation: Review selected files before upload, use attachment-specific workflows for local files, and avoid sending sensitive files unless the user explicitly approves. <br>
-Risk: Retrying a send without idempotency can create duplicate outbound email. <br>
-Mitigation: Use one stable Idempotency-Key per logical email or batch whenever a send may be retried. <br>
+## Use Case:
 
+External developers and agents use this skill to prepare Sendmux email sending workflows, including single sends, batch sends, attachments, idempotency, and CLI, SDK, HTTP, or MCP examples. It is intended for situations where the user is ready to send outbound email through Sendmux or needs commands and code for doing so safely.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sendmux.ai/skills/sendmux-send-email) <br>
-- [Sendmux skills homepage](https://github.com/Sendmux/skills) <br>
-- [Sendmux Sending API endpoint](https://smtp.sendmux.ai/api/v1/emails/send) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples, TypeScript snippets, and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Sendmux request bodies, idempotency-key guidance, attachment handling steps, CLI, SDK, MCP, or direct HTTP examples.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: An agent could send email before the user has confirmed recipients, subject, body, sender, and attachments.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation of the complete message or batch before any Sendmux send tool, API call, CLI command, or SDK call is used.
+
+Risk: Sendmux credentials could be exposed if users paste keys into chat or commands print retained secrets.
+
+Mitigation: Keep Sendmux keys in approved environment or profile storage, avoid asking users to paste secrets, and keep bearer tokens and signed upload URLs out of retained command output.
+
+Risk: Attachments may upload local data outside the workspace or be sent with the wrong attachment reference.
+
+Mitigation: Use the documented attachment upload flow, compare file size to the returned limit, avoid model-generated base64 for real files, and send only the returned attachment_id.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/sendmux.ai/skills/sendmux-send-email)
+- [Sendmux skills homepage](https://github.com/Sendmux/skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON, shell, TypeScript, HTTP, and CLI examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Sendmux request bodies, idempotency-key guidance, credential setup guidance, batch-send checks, and attachment-handling instructions.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

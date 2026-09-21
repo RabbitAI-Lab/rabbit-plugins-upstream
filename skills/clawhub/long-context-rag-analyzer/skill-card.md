@@ -1,40 +1,57 @@
-## Description: <br>
-Analyze and optimize retrieval-augmented generation pipelines for 100K-2M token documents using hybrid search, chunking, reasoning, and structured reporting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes and optimizes retrieval-augmented generation pipelines for 100K-2M token documents using hybrid search, chunking, multi-document reasoning, evaluation, and structured reporting.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers, analysts, legal professionals, and researchers use this skill to design, evaluate, and improve long-context RAG workflows for large document collections, including financial reports, legal contracts, research papers, and regulatory filings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Confidential financial or legal documents could be exposed if embeddings or model calls are sent to third-party providers without review. <br>
-Mitigation: Decide whether embeddings and model calls must stay local before using the skill with confidential documents. <br>
-Risk: High-stakes RAG outputs can be misleading if generated without source grounding. <br>
-Mitigation: Require citations, page references, and confidence signals for financial, legal, or regulatory answers. <br>
+## Use Case:
 
+Financial analysts, legal professionals, researchers, and developers use this skill to design, evaluate, and improve long-context RAG workflows for large document collections. It helps choose chunking strategies, configure hybrid retrieval, measure retrieval quality, reason across documents, and produce structured reports with source-aware checks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/long-context-rag-analyzer) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, configuration, shell commands] <br>
-**Output Format:** [Markdown with tables, structured reports, configuration snippets, and code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include citations, confidence scores, retrieval metrics, action plans, and export recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.2 (source: frontmatter and release evidence) <br>
+Risk: Sensitive or unauthorized documents could be included in long-context analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only documents the user is authorized to process, limit intake to the minimum needed set, and redact sensitive personal or business data where possible.
+
+Risk: Generated reports or exports could expose sensitive content if saved or shared without review.
+
+Mitigation: Show the complete report or export preview and require explicit user confirmation before saving, exporting, or sending it.
+
+Risk: RAG outputs for financial or legal material can be misleading when conclusions lack source support.
+
+Mitigation: Require citations or source locations for material conclusions and have qualified reviewers check outputs before decision-making use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/long-context-rag-analyzer)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Configuration, Guidance]
+
+**Output Format:** [Markdown with structured reports, tables, checklists, and illustrative code or configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The artifact requires preview and explicit user confirmation before any report, export, or file write is saved or shared.]
+
+## Skill Version(s):
+
+3.0.3 (source: server release and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

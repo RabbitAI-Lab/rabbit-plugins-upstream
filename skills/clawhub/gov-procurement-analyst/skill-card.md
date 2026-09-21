@@ -1,45 +1,59 @@
-## Description: <br>
-Gov Procurement Analyst helps suppliers, procurement agents, and purchasing teams analyze Chinese government procurement opportunities, bid decisions, compliance risks, contracts, policies, and bid-document drafting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gov Procurement Analyst helps suppliers, procurement agents, and purchasing units analyze Chinese public procurement opportunities, bid fit, bid documents, supplier background, compliance issues, competitor strategy, and post-bid follow-up.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Suppliers, bid teams, procurement agents, and purchasing units use this skill to find public procurement notices, match opportunities to an enterprise profile, assess bid viability, draft bid materials, and review compliance or contract risks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can persist sensitive company profile data, qualifications, historical projects, and generated bid materials on the local machine. <br>
-Mitigation: Use explicit invocation, avoid sensitive certificates unless local-only processing is confirmed, and review how to list, delete, or disable stored profiles, archives, and material libraries. <br>
-Risk: Broad triggers, timed pushes, and update actions may produce or deliver procurement analysis outside the user's intended scope. <br>
-Mitigation: Confirm the target project, company, and delivery channel before relying on reports, and disable scheduled pushes or update actions when they are not needed. <br>
-Risk: Bid, contract, policy, and complaint guidance may be incomplete or unsuitable for a specific procurement matter. <br>
-Mitigation: Have qualified procurement, legal, or finance reviewers check generated reports and filing materials before submission. <br>
+## Use Case:
 
+External procurement teams, suppliers, and purchasing organizations use this skill to discover public procurement opportunities, assess whether to bid, draft or review bid materials, profile competitors, and track compliance-sensitive follow-up tasks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/gov-procurement-analyst) <br>
-- [Procurement platforms and compliance guide](references/procurement-platforms.md) <br>
-- [Anti-scraping best practices](references/anti-scraping-best-practices.md) <br>
-- [Enterprise profiling and matching algorithm](references/enterprise-profiling.md) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown-style reports and guidance with optional JSON files from helper scripts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May persist local enterprise profiles, bid archives, material libraries, generated bid documents, and script output files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.7.0 (source: frontmatter, release evidence, README version history) <br>
+Risk: The skill can store sensitive business, bidding, project history, and company identifier data for later analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only necessary data, avoid entering confidential or non-public procurement material, and periodically delete local databases when long-term reuse is not needed.
+
+Risk: Webhook alert integrations can send procurement or company context to external collaboration systems.
+
+Mitigation: Configure only required push integrations and review webhook recipients, payload content, and access controls before enabling alerts.
+
+Risk: Broad triggers and inconsistent privacy wording may make data handling expectations unclear for real bid workflows.
+
+Mitigation: Review the security guidance before installation and limit inputs to public, procurement-safe information unless the organization has approved the workflow.
+
+## Reference(s):
+
+- [Data Source Platform List and Compliance Guide](references/procurement-platforms.md)
+- [Anti-Scraping Strategy and Data Collection Best Practices](references/anti-scraping-best-practices.md)
+- [Enterprise Profiling and Matching Algorithm Reference](references/enterprise-profiling.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown reports, structured tables, bid templates, JSON-like analysis data, and optional shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include procurement scores, confidence notes, local file paths, and webhook or dependency configuration guidance.]
+
+## Skill Version(s):
+
+5.3.0 (source: frontmatter, release evidence, README version history)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -12,7 +12,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import quote
 from urllib.request import Request, urlopen
 
-API_BASE_URL = os.environ.get("LINKFOX_TOOL_GATEWAY") or "https://tool-gateway.linkfox.com"
+API_BASE_URL = os.environ.get("TIKTOK_VIDEO_API_BASE_URL") or "https://tool-gateway.linkfox.com"
 ACCOUNT_TOKENS_ENDPOINT = f"{API_BASE_URL.rstrip('/')}/tiktokVideo/accountTokens"
 DEVELOPER_PROXY_ENDPOINT = f"{API_BASE_URL.rstrip('/')}/tiktokVideo/developerProxy"
 
@@ -52,14 +52,10 @@ def ensure_auth_skill_available(caller: str = "video script") -> None:
 
 
 def get_api_key() -> str:
-    """
-    获取配置在环境变量的API Key。
-    如果获取不到，按 SKILL.md 的 **## 解决认证和积分问题** 处理。
-    """
     key = os.environ.get("LINKFOXAGENT_API_KEY")
     if not key:
         print(
-            "API Key 未配置",
+            "API Key not configured. Set:\n  export LINKFOXAGENT_API_KEY=<your-key>",
             file=sys.stderr,
         )
         sys.exit(1)
@@ -80,7 +76,7 @@ def call_api(endpoint: str, params: dict) -> dict:
         method="POST",
     )
     try:
-        with urlopen(req, timeout=120) as response:
+        with urlopen(req, timeout=150) as response:
             return json.loads(response.read().decode("utf-8"))
     except HTTPError as e:
         body = e.read().decode("utf-8") if e.fp else ""

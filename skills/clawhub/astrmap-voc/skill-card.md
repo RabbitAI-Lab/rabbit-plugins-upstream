@@ -1,48 +1,62 @@
-## Description: <br>
-AstrMap VOC helps ecommerce sellers collect Amazon reviews and analyze customer feedback, frequent product issues, improvement ideas, and review trends. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AstrMap VOC helps global e-commerce sellers collect Amazon reviews, analyze negative feedback, quantify frequent issues, surface hidden negative signals in high-star reviews, generate improvement suggestions, track review trends, and run incremental updates.
 
-## Publisher: <br>
-[sparkbayes](https://clawhub.ai/user/sparkbayes) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sparkbayes](https://clawhub.ai/user/sparkbayes)
 
-## Use Case: <br>
-External ecommerce sellers and their agents use this skill to create or query AstrMap Amazon review-analysis tasks, retrieve VOC insights, inspect negative and positive review patterns, and produce product-improvement guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The AstrMap API key is sent to api.astrmap.com for authentication. <br>
-Mitigation: Use a limited or read-only API key when possible, pass it through CUSTOMER_INSIGHTS_API_KEY, and rotate or disable it when no longer needed. <br>
-Risk: Creating collection or analysis tasks can require the AstrMap desktop client and an Amazon buyer account. <br>
-Mitigation: Use a dedicated buyer account rather than a primary seller or business account, and keep it separate from production Amazon credentials. <br>
-Risk: Desktop client downloads add supply-chain and local-installation risk. <br>
-Mitigation: Download only from AstrMap's official site, verify HTTPS, check published file integrity, and confirm code signing where available. <br>
-Risk: Automatic analysis and incremental collection can consume AstrMap account credits. <br>
-Mitigation: Check the point balance and obtain user confirmation before creating tasks, running automatic analysis, or starting incremental collection. <br>
+## Use Case:
 
+External e-commerce sellers and agents use this skill to manage AstrMap review-analysis workflows for Amazon products, including task creation, status polling, result retrieval, trend review, and positive or negative review analysis.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/sparkbayes/skills/astrmap-voc) <br>
-- [AstrMap API Reference](references/api_reference.md) <br>
-- [AstrMap Security Guide](references/security.md) <br>
-- [AstrMap API](https://api.astrmap.com) <br>
-- [AstrMap Website](https://www.astrmap.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires CUSTOMER_INSIGHTS_API_KEY and may call api.astrmap.com for requested AstrMap review tasks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Credit-consuming API actions can be started, and the security evidence notes that the code does not enforce the documented confirmation step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation before create_task, create_incremental, or trigger_analysis, and check account points before any credit-consuming action.
+
+Risk: The skill sends the AstrMap API key, product identifiers or URLs, task IDs, and review-analysis data to api.astrmap.com.
+
+Mitigation: Use the skill only when that transfer is acceptable, provide the API key through CUSTOMER_INSIGHTS_API_KEY or a direct parameter, avoid exposing it in chat or logs, and rotate or disable it when no longer needed.
+
+Risk: Review collection may require a Chrome extension with an Amazon buyer account session.
+
+Mitigation: Use a dedicated Amazon buyer account rather than a business seller account, verify the extension source before installation, and review requested browser permissions.
+
+## Reference(s):
+
+- [AstrMap API Reference](references/api_reference.md)
+- [AstrMap Security Guide](references/security.md)
+- [AstrMap App](https://app.astrmap.com/)
+- [AstrMap Extension Download](https://www.astrmap.com/#download)
+- [AstrMap API Endpoint](https://api.astrmap.com)
+- [ClawHub Skill Page](https://clawhub.ai/sparkbayes/skills/astrmap-voc)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and API result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May require CUSTOMER_INSIGHTS_API_KEY and may call AstrMap APIs when the user authorizes actions.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,59 @@
-## Description: <br>
-Give AI agents persistent semantic memory using the BlueColumn API (bluecolumn.ai) for storing, recalling, and searching memories across notes, conversations, documents, and audio. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Give AI agents persistent semantic memory using the BlueColumn API for storing, recalling, and searching notes, conversations, documents, audio, and workflow context.
 
-## Publisher: <br>
-[bluecolumnconsulting-lgtm](https://clawhub.ai/user/bluecolumnconsulting-lgtm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[bluecolumnconsulting-lgtm](https://clawhub.ai/user/bluecolumnconsulting-lgtm)
 
-## Use Case: <br>
-Developers and agent operators use this skill to connect an AI agent to BlueColumn memory endpoints so the agent can store approved session summaries, notes, documents, or audio-derived content and later retrieve relevant stored context. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can persist conversation summaries and user-provided content to an external memory service. <br>
-Mitigation: Require explicit user consent before saving session summaries, documents, audio, personal data, credentials, confidential business details, or regulated information. <br>
-Risk: The skill requires a sensitive BlueColumn API key. <br>
-Mitigation: Store the API key only in a platform secret store, avoid logging or displaying it, and verify the provider endpoint before use. <br>
-Risk: Stored memory may have retention or deletion implications outside the agent runtime. <br>
-Mitigation: Review BlueColumn retention and deletion terms before using the skill for production or sensitive workflows. <br>
+## Use Case:
 
+Developers and agent builders use this skill to connect agents to BlueColumn memory so they can store selected durable context and recall it in later sessions. It supports REST and MCP-style workflows for remembering text, documents, audio URLs, preferences, decisions, and session summaries.
 
-## Reference(s): <br>
-- [BlueColumn API Reference](references/api.md) <br>
-- [BlueColumn](https://bluecolumn.ai) <br>
-- [BlueColumn Memory on ClawHub](https://clawhub.ai/bluecolumnconsulting-lgtm/bluecolumn-memory) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, API Calls, Configuration] <br>
-**Output Format:** [Markdown with inline bash commands and JSON request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include endpoint selection guidance, curl commands, request fields, response-shape expectations, and API key handling instructions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Selected content may be sent to BlueColumn for persistent searchable memory.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation before storing transcripts, documents, sensitive personal data, or session summaries, and store only content the user wants remembered.
+
+Risk: API keys can be exposed through plaintext notes or command-line usage.
+
+Mitigation: Prefer a platform secret store, avoid storing keys in TOOLS.md, and avoid passing live keys directly on command lines.
+
+Risk: Using the optional MCP package introduces package supply-chain review needs.
+
+Mitigation: Pin and review the MCP package before running it in an agent environment.
+
+## Reference(s):
+
+- [BlueColumn API Reference](references/api.md)
+- [BlueColumn Quickstart](https://bluecolumn.ai/docs/quickstart?utm_source=clawhub&utm_medium=skill&utm_campaign=bluecolumn-memory)
+- [BlueColumn](https://bluecolumn.ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with REST examples, endpoint field names, and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include API request examples and user-facing reminders about consent, secrets, and selected memory storage.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

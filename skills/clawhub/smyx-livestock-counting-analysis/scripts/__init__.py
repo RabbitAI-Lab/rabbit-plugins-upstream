@@ -1,1 +1,0 @@
-# Livestock Counting scripts package

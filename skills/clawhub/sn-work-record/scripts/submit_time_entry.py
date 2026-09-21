@@ -10,10 +10,9 @@ from runtime_bootstrap import ensure_runtime
 ensure_runtime(["requests", "ddddocr", "PIL", "chinese_calendar"])
 
 from oa_utils import (
-    build_session,
+    OAAuth,
     is_workday,
     load_credentials,
-    login,
     resolve_base_url,
     submit_time_entry,
 )
@@ -36,6 +35,7 @@ def main():
     parser.add_argument("--save-draft", action="store_true", help="仅保存草稿，不直接提交")
     parser.add_argument("--credentials", default=DEFAULT_CREDS)
     parser.add_argument("--base-url", dest="base_url", default=None)
+    parser.add_argument("--token", default=None, help="复用已有 OA token，跳过登录（配合 sn_oa_login.py 的 agent 识别流程）")
     parser.add_argument("--json", action="store_true", help="输出原始 JSON")
     args = parser.parse_args()
 
@@ -44,9 +44,13 @@ def main():
         parser.error("请提供填写日期，例如：2026-04-11")
 
     try:
-        username, password, base_url, default_project_id, default_project_name = load_credentials(
-            args.credentials, require_project=True
-        )
+        if args.project_id and args.project_name:
+            username, password, base_url = load_credentials(args.credentials, require_project=False)
+            default_project_id = default_project_name = None
+        else:
+            username, password, base_url, default_project_id, default_project_name = load_credentials(
+                args.credentials, require_project=True
+            )
         base_url = resolve_base_url(base_url, args.base_url)
         project_id = args.project_id or default_project_id
         project_name = args.project_name or default_project_name
@@ -55,23 +59,24 @@ def main():
         if not args.save_draft and not is_workday(fill_date):
             raise ValueError("节假日期间无需填写工时~")
 
-        print("正在登录 OA 系统...", file=sys.stderr)
-        token = login(username, password, base_url)
-        session = build_session(token)
+        auth = OAAuth(base_url, username, password, args.token)
         print(f"正在提交 {fill_date} 的工时...", file=sys.stderr)
-        result = submit_time_entry(
-            session,
-            base_url,
-            fill_date=fill_date,
-            project_id=project_id,
-            project_name=project_name,
-            job_desc=args.job_desc,
-            man_hour=args.man_hour,
-            save_or_submit=0 if args.save_draft else 1,
-            project_phase=args.project_phase,
-            work_type=args.work_type,
-            bo_to_pm_status=args.bo_to_pm_status,
-            fill_type=args.fill_type,
+        result = auth.call(
+            lambda s: submit_time_entry(
+                s,
+                base_url,
+                fill_date=fill_date,
+                project_id=project_id,
+                project_name=project_name,
+                job_desc=args.job_desc,
+                man_hour=args.man_hour,
+                save_or_submit=0 if args.save_draft else 1,
+                project_phase=args.project_phase,
+                work_type=args.work_type,
+                bo_to_pm_status=args.bo_to_pm_status,
+                fill_type=args.fill_type,
+            ),
+            allow_relogin=False,
         )
         if args.json:
             print(json.dumps(result, ensure_ascii=False, indent=2))

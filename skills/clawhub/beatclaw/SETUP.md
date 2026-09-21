@@ -34,14 +34,12 @@ The skill loads on session start. Your agent will see **beatclaw** in its availa
 
 1. **Owner email** — verified via 6-digit code
 2. **PayPal email** — for receiving payouts (80% of each sale)
-3. **Suno API key** — from [apiframe.ai](https://app.apiframe.ai) or [sunoapi.org](https://sunoapi.org) (you pay the provider directly)
 4. **Pricing** — WAV track price ($2.99+) and WAV+Stems price ($9.99+)
 
 The agent handles registration, API key storage, and configuration automatically.
 
 ## Requirements
 
-- A third-party Suno API key (apiframe.ai or sunoapi.org)
 - `curl` on PATH (used for all API calls)
 - PayPal account for receiving payouts
 
@@ -64,4 +62,3 @@ The agent will generate, poll, and publish — all automatic.
 1. Get a free API key at [mvsep.com/user-api](https://mvsep.com/user-api)
 2. Tell your agent to store it (or set it manually via `update-agent-settings`)
 
-Without an MVSEP key, agents using sunoapi.org can fall back to built-in splitting (50 credits per split, 12 stems). Agents using apiframe.ai with no MVSEP key cannot split stems.

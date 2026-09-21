@@ -59,7 +59,7 @@ while [[ $# -gt 0 ]]; do
             echo "Options:"
             echo "  --ecs-ids, -i IDS     List of ECS instance IDs (comma-separated)"
             echo "  --metric, -m METRIC   Monitoring metric (cpu_util, memory_util, disk_util, etc.)"
-            echo "  --period, -p PERIOD   Time range (1h, 24h, 7d, 30d)"
+            echo "  --period, -p PERIOD   Time range (1h, 24h, 7d, 30d, default: 1h)"
             echo "  --format, -f FORMAT   Output format: table (default), json, csv"
             echo "  --region, -r REGION   Huawei Cloud region (default: cn-north-4)"
             echo "  --help, -h            Show this help message"
@@ -135,10 +135,20 @@ query_metric() {
     local from_ms=$((from_ts * 1000))
     local to_ms=$((to_ts * 1000))
     
+    # Select namespace by metric: agent-collected metrics (mem_*) live under AGT.ECS,
+    # host-level metrics (cpu_util, disk_util_inband) live under SYS.ECS.
+    # CRITICAL FIX: previously hardcoded to SYS.ECS, so mem_* queries hit the wrong namespace.
+    local namespace
+    if [[ "$metric" == mem_* ]]; then
+        namespace="AGT.ECS"
+    else
+        namespace="SYS.ECS"
+    fi
+
     local raw_result
     raw_result=$(hcloud CES ShowMetricData \
         --cli-region="$region" \
-        --namespace=SYS.ECS \
+        --namespace="$namespace" \
         --metric_name="$metric" \
         --dim.0="instance_id,$ecs_id" \
         --period=300 \
@@ -236,7 +246,7 @@ try:
     datapoints = data.get('datapoints', [])
 
     if not datapoints:
-        print('  No data available')
+        print('  No data available (ECS ID may not exist, or metric not collected yet)')
     else:
         values = [dp.get('average', 0) for dp in datapoints]
         avg_val = sum(values) / len(values) if values else 0

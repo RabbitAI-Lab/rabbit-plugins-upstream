@@ -9,7 +9,7 @@
 ## 1. Install
 
 ```bash
-uv tool install vmware-nsx-security
+uv tool install vmware-nsx-security==1.13.0
 ```
 
 Verify:
@@ -144,7 +144,7 @@ In Cursor Settings → MCP Servers:
 ```
 
 > v1.5.15+ recommends the single-command form `vmware-nsx-security mcp`. Pre-1.5.15 used
-> `uvx --from vmware-nsx-security vmware-nsx-security-mcp`, which still works but re-resolves
+> `uvx --from vmware-nsx-security vmware-nsx-security-mcp`, which still works but re-resolves <!-- install-pin: historical -->
 > from PyPI on each launch and breaks behind corporate TLS proxies. The legacy
 > `vmware-nsx-security-mcp` entry point is also kept for backward compatibility.
 
@@ -203,7 +203,7 @@ To run the agent read-only, give it a read-only NSX service account (RBAC) — w
 
 > **Disclaimer**: This is a community-maintained open-source project and is **not affiliated with, endorsed by, or sponsored by VMware, Inc. or Broadcom Inc.** "VMware" and "NSX" are trademarks of Broadcom.
 
-- **Source Code**: Fully open source at [github.com/zw008/VMware-NSX-Security](https://github.com/zw008/VMware-NSX-Security) (MIT). The `uv` installer fetches the `vmware-nsx-security` package from PyPI, which is built from this GitHub repository. We recommend reviewing the source code and commit history before deploying in production.
+- **Source Code**: Fully open source at [github.com/vmware-skills/VMware-NSX-Security](https://github.com/vmware-skills/VMware-NSX-Security) (MIT). The `uv` installer fetches the `vmware-nsx-security` package from PyPI, which is built from this GitHub repository. We recommend reviewing the source code and commit history before deploying in production.
 - `config.yaml` should be readable only by your user: `chmod 600 ~/.vmware-nsx-security/config.yaml`
 - `.env` must be `chmod 600` — the doctor check warns if it is too permissive
 - Use a dedicated read/write NSX account for security operations, not the global `admin` superuser

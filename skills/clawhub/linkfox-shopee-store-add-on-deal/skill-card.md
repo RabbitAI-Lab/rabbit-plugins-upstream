@@ -1,42 +1,64 @@
-## Description: <br>
-This skill helps agents manage Shopee Add-On Deal promotions through LinkFox by calling the Shopee Open API add-on deal endpoints for listing, creating, updating, ending, and deleting promotions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage Shopee Add-On Deal promotions for authorized stores by using LinkFox scripts for the Shopee Open API Add-On Deal module, including creation, listing, item updates, deletion, and early termination.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External developers and e-commerce operators use this skill to inspect and manage Add-On Deal promotions for authorized Shopee shops. It is useful when an agent needs to call Shopee add-on deal APIs through LinkFox scripts and review the resulting JSON. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Mutating scripts can change, delete, or end live Shopee Add-On Deal promotions. <br>
-Mitigation: Before running mutating scripts, confirm the shopId, promotion ID, affected items, and intended action with the user. <br>
-Risk: Saved API responses can contain sensitive business data. <br>
-Mitigation: Protect or delete saved LinkFox JSON files after use, and avoid inline full-output mode unless full response details are necessary. <br>
+## Use Case:
 
+External marketplace operators, e-commerce teams, and developers use this skill to create, inspect, update, end, or delete Shopee Add-On Deal promotions for stores already authorized through the companion LinkFox Shopee auth skill.
 
-## Reference(s): <br>
-- [Skill API Reference](references/api.md) <br>
-- [Shopee Add-On Deal API Index](https://open.shopee.com/documents/v2/v2.add_on_deal.add_add_on_deal?module=111&type=1) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-add-on-deal) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Files, Shell commands, Guidance] <br>
-**Output Format:** [JSON responses saved to local files, with stdout JSON or summaries and shell command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API results are saved under LinkFox session directories; large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The skill can perform operational changes to Shopee Add-On Deal promotions for authorized stores.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the intended shop, merchant, promotion, item, and action before running create, update, delete, or end operations.
+
+Risk: The skill handles LinkFox API keys, Shopee store access, account onboarding, SMS-code login, billing, and payment flows.
+
+Mitigation: Install only if you trust LinkFox, keep generated API keys secret, and do not submit SMS codes or payment actions unless the user explicitly intends that step.
+
+Risk: The scripts persist full API responses to local JSON files that may include sensitive store or promotion data.
+
+Mitigation: Review and protect saved LinkFox output files, and remove sensitive response files when they are no longer needed.
+
+Risk: Environment URL overrides can redirect API traffic away from the default LinkFox endpoints.
+
+Mitigation: Avoid setting gateway or login URL override environment variables unless the endpoint is trusted and expected.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-add-on-deal)
+- [Shopee Add-On Deal API Index](https://open.shopee.com/documents/v2/v2.add_on_deal.add_add_on_deal?module=111&type=1)
+- [API Parameter and Field Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, JSON, Files, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses; full responses are also saved as JSON files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Small responses are printed in full; larger responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.6 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,56 @@
-## Description: <br>
-Operate Figma through an OOMOL-connected account for reading, creating, updating, and deleting Figma data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill operates Figma (figma.com) for reading, creating, updating, and deleting Figma data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect Figma files, metadata, comments, libraries, rendered images, projects, and team resources, and to perform approved Figma write actions through the OOMOL connector. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access a connected Figma account or workspace through OOMOL. <br>
-Mitigation: Install only if you trust OOMOL with the connected Figma account and review the requested Figma action before execution. <br>
-Risk: Write and destructive actions can change or delete Figma comments, reactions, or dev resources. <br>
-Mitigation: Confirm the exact payload and target with the user before write actions, and require explicit approval before destructive actions. <br>
-Risk: First-time setup may install the oo CLI or require account connection. <br>
-Mitigation: Run setup only after an auth, connection, or missing-command failure and use the documented OOMOL setup flow. <br>
+## Use Case:
 
+Developers and design collaborators use this skill to inspect Figma files, projects, components, comments, image renders, and related metadata through an OOMOL-connected Figma account. It can also propose write or destructive Figma actions when the user has confirmed the exact target and payload.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-figma) <br>
-- [Figma homepage](https://www.figma.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, JSON, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and a meta.executionId when actions run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: evidence release version and SKILL.md metadata) <br>
+Risk: Fallback setup may run a remote oo CLI installer script on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat CLI setup as local code execution; prefer a verified official package or inspect and verify the installer before running it.
+
+Risk: Write and destructive actions can alter or delete Figma data.
+
+Mitigation: Only allow those actions after reviewing the exact target, payload, and expected effect with the user.
+
+## Reference(s):
+
+- [Figma homepage](https://www.figma.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-figma)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, JSON, Configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Write and destructive Figma actions require user confirmation of the exact target and payload.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

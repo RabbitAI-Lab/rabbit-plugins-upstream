@@ -24,6 +24,8 @@ import update_check
 import router
 import report
 import mock_engine
+import session_manager
+import text_splitter
 from adapters.base import _estimate_tokens
 
 
@@ -352,9 +354,278 @@ class TestMockIntegration(unittest.TestCase):
 
     def test_mock_preserves_cost_tracking(self):
         """Mock 模式下成本记录应为 0。"""
-        resp = mock_engine.build_mock_response("任意查询", "chat")
-        # Mock 模式不产生实际计费
-        self.assertIsNotNone(resp)
+class TestMultimodal(unittest.TestCase):
+    """v2.4.0 多模态分类与路由测试。"""
+
+    def test_image_keyword(self):
+        c = classifier.classify("帮我看看这张图片是什么")
+        self.assertEqual(c["multimodal"], "image")
+
+    def test_image_keyword_2(self):
+        c = classifier.classify("描述图中的内容")
+        self.assertEqual(c["multimodal"], "image")
+
+    def test_audio_keyword(self):
+        c = classifier.classify("帮我听听这段音频写了什么")
+        self.assertEqual(c["multimodal"], "audio")
+
+    def test_no_multimodal(self):
+        c = classifier.classify("用 Python 写一个快排")
+        self.assertIsNone(c["multimodal"])
+
+    def test_multimodal_route_auto(self):
+        """auto 策略 + 多模态需求应路由到视觉模型。"""
+        reg = router.load_registry()
+        cls = classifier.classify("分析一下这张图片")
+        p, m, reason = router.resolve("auto", cls, reg, allow_unconfigured=True)
+        # 视觉模型带 multimodal: true 标签
+        mm = reg["providers"][p]["models"]
+        found = [x for x in mm if x["name"] == m]
+        self.assertTrue(found and found[0].get("multimodal"),
+                        "多模态需求应路由到带 multimodal 标签的模型，实际路由: %s/%s" % (p, m))
+
+    def test_multimodal_route_cheap(self):
+        """cheap 策略 + 多模态需求也应过滤到视觉模型。"""
+        reg = router.load_registry()
+        cls = classifier.classify("看看这张图")
+        p, m, reason = router.resolve("cheap", cls, reg, allow_unconfigured=True)
+        mm = reg["providers"][p]["models"]
+        found = [x for x in mm if x["name"] == m]
+        self.assertTrue(found and found[0].get("multimodal"),
+                        "cheap 多模态路由应选视觉模型，实际: %s/%s" % (p, m))
+
+
+class TestArenaBlind(unittest.TestCase):
+    """v2.4.0 arena --blind 开关测试。"""
+
+    def test_blind_default_false(self):
+        """不传 --blind 时默认显名对比模式。"""
+        parser = router.build_parser()
+        args = parser.parse_args(["arena", "--prompt", "hi",
+                                  "--models", "deepseek:deepseek-chat,qwen:qwen-plus",
+                                  "--mock", "--json"])
+        self.assertFalse(getattr(args, "blind", True))
+
+    def test_blind_true_with_flag(self):
+        parser = router.build_parser()
+        args = parser.parse_args(["arena", "--prompt", "hi", "--blind",
+                                  "--models", "deepseek:deepseek-chat,qwen:qwen-plus",
+                                  "--mock", "--json"])
+        self.assertTrue(args.blind)
+
+    def test_blind_routes_differ(self):
+        """--blind 和 非-blind 模式下 mode 字段不同。"""
+        import io, contextlib
+        parser = router.build_parser()
+        reg = router.load_registry()
+
+        # blind 模式
+        args_blind = parser.parse_args(["arena", "--prompt", "hi", "--blind",
+                                        "--models", "deepseek:deepseek-chat,qwen:qwen-plus",
+                                        "--mock", "--json"])
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            router.cmd_arena(args_blind, reg)
+        out = buf.getvalue()
+        self.assertIn('"mode": "blind"', out)
+
+        # 非-blind 模式
+        args_cmp = parser.parse_args(["arena", "--prompt", "hi",
+                                      "--models", "deepseek:deepseek-chat,qwen:qwen-plus",
+                                      "--mock", "--json"])
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            router.cmd_arena(args_cmp, reg)
+        out = buf.getvalue()
+        self.assertIn('"mode": "compare"', out)
+
+
+class TestStreamUsage(unittest.TestCase):
+    """v2.4.0 流式 usage 字段兼容性测试。"""
+
+    def test_extract_usage_alias_input_output(self):
+        """基类 _extract_usage 应覆盖 input_tokens/output_tokens 别名。"""
+        from adapters.base import AdapterBase
+        class Dummy(AdapterBase):
+            def __init__(self): super().__init__({})
+        d = Dummy()
+        it, ot = d._extract_usage({"usage": {"input_tokens": 10, "output_tokens": 20}})
+        self.assertEqual(it, 10)
+        self.assertEqual(ot, 20)
+
+    def test_extract_usage_alias_prompt_completion(self):
+        """基类 _extract_usage 应覆盖 prompt_tokens/completion_tokens。"""
+        from adapters.base import AdapterBase
+        class Dummy(AdapterBase):
+            def __init__(self): super().__init__({})
+        d = Dummy()
+        it, ot = d._extract_usage({"usage": {"prompt_tokens": 5, "completion_tokens": 15}})
+        self.assertEqual(it, 5)
+        self.assertEqual(ot, 15)
+
+
+class TestV26EmbedRerank(unittest.TestCase):
+    """v2.6 embed/rerank 统一接口测试。"""
+
+    def test_base_adapter_embed_raises(self):
+        """基类 embed 默认抛 NotImplementedError。"""
+        from adapters.base import AdapterBase
+        a = AdapterBase({})
+        with self.assertRaises(NotImplementedError):
+            a.embed(["test"])
+
+    def test_base_adapter_rerank_raises(self):
+        """基类 rerank 默认抛 NotImplementedError。"""
+        from adapters.base import AdapterBase
+        a = AdapterBase({})
+        with self.assertRaises(NotImplementedError):
+            a.rerank("query", ["doc1", "doc2"])
+
+    def test_openai_compat_embed_method_exists(self):
+        from adapters.openai_compat import OpenAICompatAdapter
+        self.assertTrue(hasattr(OpenAICompatAdapter, "embed"))
+
+    def test_openai_compat_rerank_method_exists(self):
+        from adapters.openai_compat import OpenAICompatAdapter
+        self.assertTrue(hasattr(OpenAICompatAdapter, "rerank"))
+
+    def test_embed_rerank_cli_args_embed(self):
+        """embed 子命令 CLI 参数正确注册。"""
+        parser = router.build_parser()
+        args = parser.parse_args(["embed", "--texts", "[\"hello\",\"world\"]", "--json"])
+        self.assertEqual(args.texts, "[\"hello\",\"world\"]")
+
+    def test_embed_rerank_cli_args_rerank(self):
+        """rerank 子命令 CLI 参数正确注册。"""
+        parser = router.build_parser()
+        args = parser.parse_args(["rerank", "--query", "test", "--documents", "[\"a\",\"b\"]", "--json"])
+        self.assertEqual(args.query, "test")
+        self.assertEqual(args.documents, "[\"a\",\"b\"]")
+
+
+class TestV26Session(unittest.TestCase):
+    """v2.6 多轮会话管理测试。"""
+
+    def test_create_and_get_session(self):
+        """创建会话后能正确读取。"""
+        sid = "test-" + str(os.getpid())
+        session_manager.delete_session(sid)
+        session_manager.create_session(sid)
+        sess = session_manager.get_session(sid)
+        self.assertIsNotNone(sess)
+        self.assertEqual(sess["id"], sid)
+        self.assertEqual(sess["messages"], [])
+
+    def test_append_message(self):
+        """追加消息后 messages 长度增加。"""
+        sid = "test-append-" + str(os.getpid())
+        session_manager.delete_session(sid)
+        session_manager.create_session(sid)
+        session_manager.append_message(sid, "user", "hello")
+        sess = session_manager.get_session(sid)
+        self.assertEqual(len(sess["messages"]), 1)
+
+    def test_build_messages_with_history(self):
+        """构建带上下文的消息列表包含历史。"""
+        sid = "test-hist-" + str(os.getpid())
+        session_manager.delete_session(sid)
+        session_manager.create_session(sid)
+        session_manager.append_message(sid, "user", "hi")
+        msgs, _, _ = session_manager.build_messages_with_history(sid, "second message")
+        # session 有 1 条历史("hi") + 追加 1 条当前("second message") = 2
+        self.assertEqual(len(msgs), 2)
+
+    def test_compress_history_short(self):
+        """短历史不压缩。"""
+        messages = [{"role": "user", "content": "a"}, {"role": "assistant", "content": "b"}]
+        result = session_manager.compress_history(messages)
+        self.assertEqual(len(result), 2)
+
+    def test_delete_session(self):
+        """删除会话成功。"""
+        sid = "test-del-" + str(os.getpid())
+        session_manager.create_session(sid)
+        ok = session_manager.delete_session(sid)
+        self.assertTrue(ok)
+
+
+class TestV26TextSplitter(unittest.TestCase):
+    """v2.6 文本分段与长文路由测试。"""
+
+    def test_split_short_text(self):
+        import text_splitter
+        chunks = text_splitter.split_by_paragraphs("short text", max_chars=8000)
+        self.assertEqual(len(chunks), 1)
+
+    def test_split_long_text(self):
+        import text_splitter
+        long_text = "para1\n\n" * 1000
+        chunks = text_splitter.split_by_paragraphs(long_text, max_chars=50)
+        self.assertGreater(len(chunks), 1)
+
+    def test_chunked_call(self):
+        import text_splitter
+        chunks = ["chunk1", "chunk2", "chunk3"]
+        def task_fn(chunk, idx):
+            return "summary: " + chunk
+        result = text_splitter.chunked_call(chunks, task_fn)
+        self.assertEqual(result["chunks"], 3)
+        self.assertIn("chunk1", result["result"])
+
+    def test_auto_chunk_length(self):
+        import text_splitter
+        length = text_splitter.auto_chunk_length(64000)
+        self.assertGreater(length, 0)
+        self.assertLess(length, 64000)
+
+    def test_estimate_tokens(self):
+        import text_splitter
+        tokens = text_splitter.estimate_tokens_simple("你好世界")
+        self.assertGreater(tokens, 0)
+
+
+class TestV26TokenAlignment(unittest.TestCase):
+    """v2.6 流式 token 计数对齐测试。"""
+
+    def test_aggregate_includes_token_split(self):
+        """aggregate 结果包含 measured/est 分列。"""
+        with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
+            tmp = f.name
+        try:
+            agg = cost_tracker.aggregate("month", db_path=tmp)
+            self.assertIn("measured_in", agg)
+            self.assertIn("est_in", agg)
+        finally:
+            os.unlink(tmp)
+
+    def test_log_call_with_tokens_estimated(self):
+        """记录带 tokens_estimated 的调用。"""
+        with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as f:
+            tmp = f.name
+        try:
+            cost_tracker.log_call("test", "m", "code", 10, 20, 0.001, 100, True, tokens_estimated=True, db_path=tmp)
+            agg = cost_tracker.aggregate("month", db_path=tmp)
+            self.assertEqual(agg["est_in"], 10)
+            self.assertEqual(agg["est_out"], 20)
+            self.assertEqual(agg["measured_in"], 0)
+        finally:
+            os.unlink(tmp)
+
+
+class TestV26Describe(unittest.TestCase):
+    """v2.6 describe 子命令 CLI 参数测试。"""
+
+    def test_describe_cli_args(self):
+        parser = router.build_parser()
+        args = parser.parse_args(["describe", "/path/to/img.jpg", "--json"])
+        self.assertEqual(args.input, "/path/to/img.jpg")
+
+    def test_describe_session_cli_args(self):
+        parser = router.build_parser()
+        args = router.build_parser().parse_args(["session", "list"])
+        self.assertEqual(args.session_cmd, "list")
+        args = router.build_parser().parse_args(["session", "show", "--id", "abc123"])
+        self.assertEqual(args.id, "abc123")
 
 
 if __name__ == "__main__":

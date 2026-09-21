@@ -1,46 +1,60 @@
-## Description: <br>
-OOMOL Fusion API lets an agent use OOMOL's Fusion API connector through the oo CLI for reading, creating, updating, deleting, and processing data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OOMOL Fusion API helps agents operate the fusion-api connector through the oo CLI for reading, creating, updating, deleting, generating, transforming, and retrieving multimodal content.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to run OOMOL Fusion API actions for multimodal generation, transcription, OCR, image and video workflows, document conversion, web reading, file upload, and task status retrieval through an authenticated OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Some generation and processing actions may change account state or consume paid OOMOL resources even when the action is not tagged as write. <br>
-Mitigation: Ask the agent to show the exact action name and payload before generation, upload, conversion, voice, image, video, or document-processing actions. <br>
-Risk: Destructive actions can remove or overwrite resources. <br>
-Mitigation: Require explicit approval for the target resource before running actions tagged destructive. <br>
-Risk: Incorrect payloads can trigger unintended API behavior or failed jobs. <br>
-Mitigation: Inspect the live action schema with oo connector schema before constructing payloads. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect OOMOL Fusion API action schemas, build JSON payloads, and run connector actions through the oo CLI. It supports multimodal workflows including image, audio, video, OCR, ASR, TTS, document conversion, file upload, web reading, and task result retrieval.
 
-## Reference(s): <br>
-- [OOMOL Fusion API homepage](https://www.oomol.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-fusion-api) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce or retrieve URLs, generated media, converted documents, OCR text, transcripts, task states, and task results depending on the selected Fusion API action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: frontmatter and release evidence) <br>
+Risk: The security review reports unsafe CLI install instructions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the oo command is missing and only from a trusted OOMOL CLI source; avoid repeating one-time setup steps unnecessarily.
+
+Risk: Some generation or cost-incurring actions may be understated as safe reads.
+
+Mitigation: Require explicit user confirmation before write, destructive, upload, generation, transformation, or billing-related actions, including untagged actions that are not passive reads.
+
+Risk: Connector actions can change or delete data when tagged as write or destructive.
+
+Mitigation: Fetch the live schema first, confirm the exact payload and effect with the user, and require explicit approval for destructive targets.
+
+## Reference(s):
+
+- [OOMOL Fusion API homepage](https://www.oomol.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-fusion-api)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution; may return asynchronous task IDs, state, and result data from provider workflows.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

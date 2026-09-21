@@ -1,41 +1,58 @@
-## Description: <br>
-Helps product managers, founders, and app developers apply Zhang Xiaolong-inspired product minimalism to product direction, user experience, feature prioritization, and iteration tradeoffs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Advises product managers, founders, and app developers on product direction, user experience, and requirement prioritization using Zhang Xiaolong-inspired product minimalism.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Product managers, founders, app developers, and product teams use this skill to evaluate whether to add, remove, or defer features; clarify product direction; and reason through user experience tradeoffs using a minimalist product philosophy. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The artifact includes off-topic finance, macro, regulatory, and current-events notes that may become outdated or be mistaken for investment, legal, regulatory, or news advice. <br>
-Mitigation: Use the skill as a product-thinking and UX tradeoff aid only; verify finance, macro, legal, regulatory, and current-events claims with specialized authoritative sources before relying on them. <br>
-Risk: The skill presents Zhang Xiaolong-inspired product philosophy and public-reference summaries that may be interpretive rather than authoritative. <br>
-Mitigation: Treat its recommendations as decision-support prompts and validate important product decisions against user research, business context, and primary-source references where available. <br>
+## Use Case:
 
+Product managers, founders, and app developers use this skill to pressure-test product ideas, decide whether features should be added or removed, and frame user-experience tradeoffs. It is intended for product judgment and self-check questions, not final product specifications, legal advice, investment advice, or a substitute for user research.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/zhangxiaolong-product-way) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Guidance] <br>
-**Output Format:** [Markdown or structured prose with product analysis steps, tradeoff reasoning, and recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only guidance; does not execute code, access data, or persist information.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.1 (source: server release evidence and artifact identity section) <br>
+Risk: The skill may present 2026 trend claims or Zhang Xiaolong-inspired product philosophy as stronger evidence than the release supports.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat trend statements and philosophy quotes as advisory context, and verify important product, market, legal, compliance, or investment claims against authoritative sources before acting.
+
+Risk: Product analysis could expose confidential metrics, customer details, or raw user data if supplied in prompts.
+
+Mitigation: Minimize, aggregate, or anonymize customer data and non-public business metrics before using the skill.
+
+Risk: The skill's output could be mistaken for a ready-to-ship product plan.
+
+Mitigation: Use the output as a decision framework and follow with user research, usability testing, engineering review, and compliance review for concrete product changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/zhangxiaolong-product-way)
+- [Publisher profile](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown with product analysis, tradeoff tables, and self-check questions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese-first prose with English product terms where useful; no shell commands or executable outputs.]
+
+## Skill Version(s):
+
+2.1.2 (source: server release evidence and artifact identity)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

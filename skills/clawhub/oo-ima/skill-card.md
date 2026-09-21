@@ -1,43 +1,60 @@
-## Description: <br>
-ima (ima.qq.com). Use this skill for ANY ima request: reading, creating, and updating data through the OOMOL-connected ima connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ima lets an agent read, create, and update ima notes and knowledge-base content through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent operate Tencent ima through an OOMOL-connected account. It supports reading and searching knowledge bases, folders, items, media, notebooks, and notes, and can create, append, import, upload, or add content when the user confirms write actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change data in the connected ima account, including creating notes, appending content, importing URLs, uploading files, or adding notes to knowledge bases. <br>
-Mitigation: Confirm the exact payload and intended effect with the user before running actions tagged as write, and inspect the live connector schema before constructing payloads. <br>
-Risk: The skill depends on an authenticated OOMOL-connected ima account and may prompt setup, account connection, or billing steps when access is unavailable. <br>
-Mitigation: Use existing authentication when available, run setup only after relevant command failures, and review requested permissions or account connection steps before proceeding. <br>
+## Use Case:
 
+Developers and external users use this skill to operate Tencent ima through an OOMOL-connected account, including note workflows, knowledge-base browsing, search, imports, and uploads.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-ima) <br>
-- [ima homepage](https://ima.qq.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON responses from the oo CLI] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server evidence and skill metadata) <br>
+Risk: The setup path can execute remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from a trusted, verified source, review installer scripts before execution, and avoid pipe-to-shell installation when possible.
+
+Risk: Write actions can create notes, append content, import URLs, upload files, or add items to knowledge bases.
+
+Mitigation: Confirm the exact action, target, payload, and user-visible effect before allowing any write action to run.
+
+Risk: Connector payloads may be invalid or stale if generated without checking the current schema.
+
+Mitigation: Fetch the live action schema with the oo CLI before constructing or submitting each payload.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-ima)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ima homepage](https://ima.qq.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill asks the agent to fetch the live connector schema before building action payloads.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,50 @@
+{
+  "skill_name": "huawei-cloud-resource-inventory",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "name": "single_region_all_types",
+      "command": "python3 scripts/resource_inventory.py --region cn-north-4",
+      "description": "Query all resource types in cn-north-4",
+      "expected_exit_code": 0,
+      "expected_output_contains": "Summary"
+    },
+    {
+      "name": "specific_types",
+      "command": "python3 scripts/resource_inventory.py --region cn-north-4 --resource-type ecs,vpc,eip",
+      "description": "Query only ECS, VPC, and EIP in cn-north-4",
+      "expected_exit_code": 0,
+      "expected_output_contains": "ECS"
+    },
+    {
+      "name": "json_format",
+      "command": "python3 scripts/resource_inventory.py --region cn-north-4 --format json",
+      "description": "Output as JSON format",
+      "expected_exit_code": 0,
+      "expected_output_contains": "{"
+    },
+    {
+      "name": "capability_list",
+      "command": "python3 scripts/resource_inventory.py --capability-list",
+      "description": "List supported capabilities",
+      "expected_exit_code": 0,
+      "expected_output_contains": "Supported resource types"
+    },
+    {
+      "name": "help",
+      "command": "python3 scripts/resource_inventory.py --help",
+      "description": "Show help text",
+      "expected_exit_code": 0,
+      "expected_output_contains": "usage"
+    }
+  ],
+  "credentials_required": true,
+  "credentials_env_vars": [
+    "HUAWEICLOUD_SDK_AK",
+    "HUAWEICLOUD_SDK_SK",
+    "OBS_ACCESS_KEY",
+    "OBS_SECRET_KEY",
+    "HW_ACCESS_KEY",
+    "HW_SECRET_KEY"
+  ]
+}

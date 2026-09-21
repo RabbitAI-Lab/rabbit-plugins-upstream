@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/sofagent",
   "slug": "sofagent",
   "ownerHandle": null,
-  "version": "1.1.9",
-  "updatedAt": 1784734163860,
-  "contentHash": "d64f671f001bf265dbdb76f899634c9e29a3d9af2c144eb5f301a3a60959f626",
-  "fetchedAt": "2026-07-26T18:07:53.601Z"
+  "version": "1.5.0",
+  "updatedAt": 1789830026792,
+  "contentHash": "f8ca360f33ea39ad26d9deea619a8fc02bfb4270d0809939fcfeab101953cc6a",
+  "fetchedAt": "2026-09-21T15:38:12.171Z"
 }

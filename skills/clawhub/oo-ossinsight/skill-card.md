@@ -1,43 +1,56 @@
-## Description: <br>
-OSS Insight helps agents search and read OSS Insight data through the OOMOL `oo` CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agent access to OSS Insight for GitHub repository analytics through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to query OSS Insight analytics for GitHub repositories, including stars, issues, pull requests, creators, countries, organizations, trends, collections, and collection rankings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill runs external `oo` CLI commands and depends on live connector schemas. <br>
-Mitigation: Inspect the connector schema for the selected action before building a payload, and run only actions whose effects are understood. <br>
-Risk: First-time setup may require installing or authenticating the `oo` CLI. <br>
-Mitigation: Run setup commands only when the corresponding command-not-found or authentication failure occurs. <br>
+## Use Case:
 
+Developers and agents use this skill to query OSS Insight for GitHub repository trends, collection rankings, and repository contributor metrics, and to run confirmed ranking actions through the oo CLI.
 
-## Reference(s): <br>
-- [OSS Insight homepage](https://ossinsight.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-ossinsight) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: First-time setup includes remote install commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI setup before installing and prefer a verified or package-manager installation path.
+
+Risk: The rank_collection_repos_by_* actions are documented as write actions and their exact state changes may be unclear before execution.
+
+Mitigation: Fetch the live connector schema and confirm the intended payload and effect with the user before running any rank_* action.
+
+## Reference(s):
+
+- [OSS Insight homepage](https://ossinsight.io)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-ossinsight)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; routine get/list actions are read-oriented, while rank_collection_repos_by_* actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: ClawHub release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

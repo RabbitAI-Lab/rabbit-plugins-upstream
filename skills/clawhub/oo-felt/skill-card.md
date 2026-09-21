@@ -1,47 +1,59 @@
-## Description: <br>
-Felt connector skill for reading, creating, updating, and deleting Felt maps and projects through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use Felt (felt.com) to read, create, update, and delete Felt maps and projects through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent manage Felt maps and projects through the OOMOL Felt connector. It supports account reads as well as confirmed create, update, move, duplicate, and delete actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, move, duplicate, and delete Felt data through the connected account. <br>
-Mitigation: Confirm the exact target, payload, and expected effect with the user before running write or destructive actions. <br>
-Risk: Incorrect payloads can cause unintended account changes or failed connector runs. <br>
-Mitigation: Inspect the live Felt connector schema before constructing each action payload. <br>
-Risk: First-time setup may require installing the oo CLI from an external URL. <br>
-Mitigation: Verify the oo CLI install URL before running installation commands. <br>
-Risk: Authentication, connection, scope, credential-expiration, or billing errors can block connector operations. <br>
-Mitigation: Use the documented setup, connection, and billing recovery steps only after a command fails with the matching error. <br>
+## Use Case:
 
+Developers and agent users use this skill to operate Felt maps and projects through the OOMOL Felt connector, including lookup, creation, updates, duplication, moves, and deletion. The skill is intended for agents handling Felt requests without direct raw API-token handling.
 
-## Reference(s): <br>
-- [ClawHub Felt skill page](https://clawhub.ai/oomol/skills/oo-felt) <br>
-- [Felt homepage](https://felt.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schema inspection before action payload construction; command responses are JSON objects with data and metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: The setup path can run a remote installer script when the oo CLI is missing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI only from a verified official source and review any installer before running it.
+
+Risk: The skill can create, update, move, duplicate, or delete Felt maps and projects.
+
+Mitigation: Fetch the live connector schema first, then confirm the exact target and payload before write or destructive actions.
+
+Risk: Using the skill grants connector-mediated access to a Felt account through OOMOL.
+
+Mitigation: Install only when the publisher is trusted and the user is comfortable granting OOMOL connector access to Felt.
+
+## Reference(s):
+
+- [Felt homepage](https://felt.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before building Felt action payloads; write and destructive actions require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: evidence release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

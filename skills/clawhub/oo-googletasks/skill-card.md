@@ -1,46 +1,57 @@
-## Description: <br>
-Google Tasks (tasks.google.com). Use this skill for ANY Google Tasks request: reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Tasks (tasks.google.com). Use this skill for ANY Google Tasks request -- reading, creating, updating, and deleting data. Whenever a task involves Google Tasks, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent manage Google Tasks through an OOMOL-connected account, including listing, fetching, creating, updating, moving, clearing, and deleting tasks and task lists. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can create, update, or move Google Tasks data. <br>
-Mitigation: Confirm the exact action payload and expected effect before approving write actions. <br>
-Risk: Destructive actions can clear completed tasks or delete tasks and task lists. <br>
-Mitigation: Require explicit approval for the target task list or task before running destructive actions. <br>
-Risk: Incorrect connector payloads can affect the wrong Google Tasks item. <br>
-Mitigation: Inspect the live connector schema before building each action payload. <br>
+## Use Case:
 
+External users and developers use this skill to let an agent inspect Google Tasks schemas and manage Google Tasks through an OOMOL-connected account, including listing, creating, updating, moving, clearing, and deleting task data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-googletasks) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Google Tasks](https://tasks.google.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions may return JSON data and an execution ID from the OOMOL connector.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: The setup flow includes remote installer commands for the oo CLI, which can execute code on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer path before installing and prefer official, versioned installation documentation with integrity verification when available.
+
+Risk: Write and destructive Google Tasks actions can create, update, move, clear, or delete user task data.
+
+Mitigation: Confirm the exact task list, task, payload, and expected effect before allowing write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-googletasks)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Google Tasks](https://tasks.google.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs can include Google Tasks data returned by the googletasks connector; write and destructive actions require confirmation of the target, payload, and effect.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

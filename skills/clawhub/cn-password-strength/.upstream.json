@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cn-password-strength",
   "slug": "cn-password-strength",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1783735255593,
-  "contentHash": "2df75891cd715c4d42570fe4ae6b0338d270bd5ada6912b581e11cb58e02c053",
-  "fetchedAt": "2026-07-26T18:16:57.932Z"
+  "version": "1.0.1",
+  "updatedAt": 1789915391073,
+  "contentHash": "4fd505935759cff330c820f995d45e395f7f290048adede2f735d82ee7edbb45",
+  "fetchedAt": "2026-09-21T15:32:14.419Z"
 }

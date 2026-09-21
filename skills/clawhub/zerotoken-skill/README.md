@@ -4,107 +4,62 @@
 
 **让 Agent 用最少的 token 做最准的事**
 
+> ⚔️ **先谋后动，军无二令 —— 省 token 是效率，尉缭子是秩序。**
+>
 > 💬 **用不完，根本用不完，妈妈再也不用担心我缺 token 了。**
 
-[![Version](https://img.shields.io/badge/version-1.8.2-blue.svg)]()
+[![Version](https://img.shields.io/badge/version-1.17.0-blue.svg)]()
 [![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)](LICENSE)
 [![Author](https://img.shields.io/badge/author-phoenixlucky-orange.svg)]()
+[![CI](https://github.com/phoenixlucky/zerotoken-skill/actions/workflows/ci.yml/badge.svg)](https://github.com/phoenixlucky/zerotoken-skill/actions/workflows/ci.yml)
+
 </div>
 
-> **ZeroToken Skill** 是一套为 AI Agent 设计的**提示词纪律规范**——在不降低回答准确性的前提下，压缩无效上下文、无效解释、无效工具调用和无效输出，从而大幅降低 token 消耗和响应延迟。
+> **ZeroToken Skill** 是一套为 AI Agent 设计的**提示词纪律规范**——在不降低回答准确性的前提下，压缩无效上下文、无效解释、无效工具调用和无效输出。
 >
-> 它解决的核心问题是：Agent 在任务中经常过度读取、过度思考、过度输出，导致一次对话消耗成千上万不必要的 token。ZeroToken Skill 通过一套可执行的**模式决策表 + 行为约束 + 工具链策略**，让 Agent 在每一个任务环节都有明确的"省 token 行为准则"。
+> 它解决的核心问题是：Agent 在任务中经常过度读取、过度思考、过度输出，导致一次对话消耗成千上万不必要的 token。本 Skill 通过一套可执行的**模式决策表 + 行为约束 + 工具链策略**，让 Agent 在每一个任务环节都有明确的"省 token 行为准则"。
 >
 > 🎯 **目标：** 用最精准的提示，做最少的往返，产最精炼的结果。
 >
 > ✅ **适用于：** Reasonix / Codex CLI / OpenCode / Hermes / Cline 等主流 Agent 工具。一次学习，全平台受益。
 
----
+<div align="center">
 
-## 🔌 平台集成指南
+<img src="assets/zerotoken-banner.webp" alt="ZeroToken Skill 概览" width="480">
 
-### 方式一
-
-请依次阅读并安装以下 Skill。
-
-ZeroToken Skill — phoenixlucky，Token 高效约束：最少 token 和精准提示完成任务，减少无效输出  
-地址：https://github.com/phoenixlucky/zerotoken-skill
-
-请根据上面每个 Skill 的「安装指令」完成安装。
-
-### 方式二：从远程 Skill 仓库引用（推荐，始终获取最新版本）
-```bash
-install-source --source https://clawhub.ai/phoenixlucky/zerotoken-skill
-```
-
-### 方式三
-```bash
-安装这个技能  https://clawhub.ai/phoenixlucky/zerotoken-skill
-```
-
-以下是 ZeroToken Skill 对五种主流 Agent 工具的具体强化方向。
+</div>
 
 ---
 
-### ⚡ Reasonix
+## 目录
 
-| 强化维度 | 说明 |
-|---------|------|
-| **🧠 原生 Skill 引擎** | Reasonix 的 Skill 机制原生支持本规范，载入即用，无需额外配置 |
-| **🎯 自动模式匹配** | 根据请求特征自动选择六种任务模式之一（A-F），无需手动指定 |
-| **🔧 工具链优化** | 按模式限制工具调用范围（简单问答不调工具、多文件任务分批加载） |
-| **📄 输出规范** | 结论先行、不复述、要点+位置 等输出模板内嵌为默认行为 |
-| **💰 Token 预算策略** | 按模式自动分配上下文深度：简单问答极低预算，重大重构允许高消耗 |
-
----
-
-### 🤖 Codex CLI
-
-| 强化维度 | 说明 |
-|---------|------|
-| **📏 提示词纪律** | 消除冗长的 Agent 开场白、过渡语和客套话，直入主题 |
-| **🎣 工具调用策略** | 先搜索定位再局部读取，避免扫描全项目；能 1 步不用 2 步 |
-| **✂️ 输出精简** | 只返回结果+验证+注意，不添加无关分析和总结评语 |
-| **🧮 上下文预算意识** | 先判断请求类型再决定投入多少上下文，不默认全量读取 |
+- [安装](#-安装)
+- [能力一览](#-能力一览)
+- [任务模式速查](#-任务模式速查)
+- [平台集成](#-平台集成)
+- [文档地图](#-文档地图)
+- [延伸阅读](#-延伸阅读)
+- [核心原则（一句话版）](#-核心原则一句话版)
+- [Agent 预设](#-agent-预设)
+- [The King Skills](#-the-king-skills)
 
 ---
 
-### 🔧 OpenCode
+## 🔌 安装
 
-| 强化维度 | 说明 |
-|---------|------|
-| **🎯 行为可预测性** | 请求类型公开匹配对应模式，Agent 行为一致可预期 |
-| **🚫 避免过度探索** | 不 glob 全目录、不预览多个候选、不扫描无关文件 |
-| **📋 输出结构一致** | 结论先行格式，开发者一眼看到结果无需翻找 |
-| **⚡ 减少无效往返** | 短计划（3-5 步）+ 分批执行，首轮就给出可操作的输出 |
+| 方式 | 操作 |
+|------|------|
+| **AI 助手安装（推荐）** | 直接对助手说：`安装这个技能 https://github.com/phoenixlucky/zerotoken-skill`（或 ClawHub 源 `https://clawhub.ai/phoenixlucky/zerotoken-skill`） |
+| **远程 Skill 仓库引用** | `install-source --source https://github.com/phoenixlucky/zerotoken-skill`（或 `--source https://clawhub.ai/phoenixlucky/zerotoken-skill`） |
+| **手动载入** | 克隆仓库，将本目录作为 Skill 载入，入口为 [`SKILL.md`](SKILL.md) |
 
----
-
-### 🧠 Hermes
-
-| 强化维度 | 说明 |
-|---------|------|
-| **💬 指令响应效率** | 降低每次 instruct 调用的 token 消耗，响应更快 |
-| **🔇 无装饰输出** | 直接给结果，无问候、无过渡、无"如果你还需要帮助" |
-| **🧩 行为可配置** | 通过 system prompt 一次性注入完整决策表和行为规范 |
-| **📉 上下文压缩** | 能用 1 句话表达的不用 3 句，保留全部准确性 |
-
----
-
-### 🌐 openclaw（ClawHub）
-
-| 强化维度 | 说明 |
-|---------|------|
-| **📦 Skill 分发** | 一次编写，多平台加载，openclaw 作为官方发布中心 |
-| **🔖 版本管理** | openclaw 托管最新 `SKILL.md`，所有用户统一更新路径 |
-| **🔄 跨平台复用** | 同一套规范同时服务 Reasonix / Codex / Hermes 等不同工具 |
-| **📐 标准化规范** | Skill 格式本身即是 ZeroToken 理念的实践——用最少的描述传达最完整的规则 |
+> 📦 分发双端：GitHub（源码）+ ClawHub（发布包）。详见 [`references/publishing-clawhub.md`](references/publishing-clawhub.md)（仅维护者）。
 
 ---
 
 ## 📋 能力一览
 
-根据你的请求特征，ZeroToken Skill 自动匹配六种任务模式。每种模式都有专属的**工具链**、**输出格式**和 **token 预算策略**：
+根据请求特征与系统环境，ZeroToken Skill 自动匹配**七种任务模式**。每种模式都有专属的**工具链**、**输出格式**和 **token 预算策略**：
 
 | 模式 | 一句话概括 | Token 成本 |
 |------|-----------|:----------:|
@@ -113,198 +68,83 @@ install-source --source https://clawhub.ai/phoenixlucky/zerotoken-skill
 | **C. 📦 多文件任务** | 短计划 → 分批加载 → 按步推进 | 🟡 中 |
 | **D. 📚 大资料总结** | 要点 + 证据位置，不逐段复述 | 🟠 中高 |
 | **E. 🏗️ 重大架构调整** | 诊断根因 → 确认方案 → 增量迁移 | 🔴 高（但可控） |
-| **F. 🖥️ Windows/PowerShell 环境适配** | 8 条陷阱规则 + 脚本工具，解决中文+Windows 工作流痛点 | 🟢 低 |
+| **F. 🖥️ Windows/PowerShell 环境适配** | 系统参数自动识别保存 + 15 条陷阱规则 + 脚本工具，Windows 系统自动启用 | 🟢 低 |
+| **G. 🐧 POSIX 标准工作流** | Linux/macOS 自动启用：sh/bash 工具链，不套用 PowerShell 规则 | 🔵 极低 |
+
+> 平台环境由 `python scripts/detect_env.py` 自动识别（`SKILL.md` 中的 F/G 模式），无需用户声明语言或平台。
 
 ---
 
-## 🎭 场景详解
+## 🧩 任务模式速查
 
-### A. 💬 简单问答 — "直接告诉我答案"
+| 模式 | 典型信号 | 行为要点 | 不做什么 |
+|------|---------|---------|---------|
+| **A. 简单问答** | 定义查询、翻译、短建议 | 从已加载上下文/内置知识提取，1-3 句直接回答 | ❌ 不搜索代码库 ❌ 不加客套话 |
+| **B. 代码小改** | 单文件 bug、配置调整、重命名 | grep 定位 → 只读命中行附近 → 精准改 → 最小验证 | ❌ 不写长计划 ❌ 不重构无关代码 |
+| **C. 多文件任务** | 新增功能、常规重构、接口变更 | 3-5 步短计划，一次加载 2-3 个文件，改一批验一批 | ❌ 不一次性加载所有文件 ❌ 不超 5 步 |
+| **D. 大资料总结** | 长文档、日志、PR 差异 | 只标记关键信息，输出「要点 + 证据位置」 | ❌ 不逐段复述 ❌ 不加无关评语 |
+| **E. 重大架构调整** | 反复同类 bug、架构不匹配 | **唯一必须先确认方案再执行**：诊断根因 → 2-3 方案 → 增量迁移 | ❌ 不跳过影响面评估 ❌ 不做不可逆大改 |
+| **F. Windows/PowerShell** | `detect_env.py` 报 Windows | 按保存的系统参数选 PowerShell，含特殊符号/中文的写入走 Python 脚本 | ❌ 不在 Windows 用 bash ❌ 不用 `Add-Content` 写中文 |
+| **G. POSIX** | `detect_env.py` 报 Linux/macOS | sh/bash（macOS 默认 zsh），不套用 F 模式规则 | ❌ 不套用 PowerShell 规避规则 |
 
-**适用场景：** 定义查询、翻译、短建议、快速事实确认。
-
-**典型信号：**
-```
-"什么是 RESTful API？"
-"把这段翻译成英文"
-"Go 和 Rust 在并发模型上有什么不同？"
-```
-
-**行为表现：**
-```
-🏷️ 识别 → "简单问答，无需工具"
-   🔍 定位 → 从已加载上下文或内置知识提取
-      💡 输出 → 1-3 句精炼回答，无冗余开场白
-```
-
-**不做什么：** ❌ 不搜索代码库 ❌ 不调用外部工具 ❌ 不加"好的，我来回答..."这类客套话
+> 完整行为定义、工具链与输出模板见 [`SKILL.md`](SKILL.md)；E 模式迁移手册见 [`references/refactor-playbook.md`](references/refactor-playbook.md)。
 
 ---
 
-### B. 🔧 代码小改 — "这里有个小问题，改一下"
+## 💻 平台集成
 
-**适用场景：** 单文件 bug 修复、配置项调整、变量重命名、简单样式修改。
-
-**典型信号：**
-```
-"这个按钮颜色不对，改成蓝色"
-"login 函数有个空指针异常"
-"把超时时间从 30s 改成 60s"
-```
-
-**行为表现：**
-```
-🏷️ 识别 → "单文件局部修改"
-   🔍 定位 → 快速 grep / LSP 跳到目标行
-      🔧 修改 → 精准编辑，不扫描无关文件
-         ✅ 验证 → 最小化验证（语法检查 / 单测）
-```
-
-**不做什么：** ❌ 不写长篇计划 ❌ 不重构无关代码 ❌ 不扫描整个项目
+| 宿主 | 强化方向 |
+|------|---------|
+| **⚡ Reasonix** | 原生 Skill 引擎、请求特征自动匹配模式、按模式限制工具调用范围 |
+| **🤖 Codex CLI** | 提示词纪律、先搜索后局部读取、只返回结果+验证+注意 |
+| **🦾 Cline** | A-G 决策表约束读取深度、停止条件明确、结论先行输出 |
+| **🔧 OpenCode** | 行为可预期、避免全目录 glob、短计划分批执行、减少无效往返 |
+| **🧠 Hermes** | 降低每次 instruct 的 token 消耗、无装饰输出、system prompt 一次性注入 |
+| **🌐 openclaw（ClawHub）** | Skill 分发与版本托管，同一套规范跨平台复用 |
 
 ---
 
-### C. 📦 多文件任务 — "跨模块，有计划地推进"
+## 📖 文档地图
 
-**适用场景：** 新增功能、常规重构、跨文件修改、接口变更。
+**文档分层：** `SKILL.md` 是常驻核心（决策表 + 原则 + 输出格式，≤14KB）；细节按需读取
+`references/` 下的参考文档——这样加载时不为当前任务用不到的内容付 token。
 
-**典型信号：**
-```
-"给用户模块添加导出 CSV 功能"
-"把日志系统从 zap 迁移到 slog"
-"重构 auth 中间件，支持多租户"
-```
-
-**行为表现：**
-```
-🏷️ 识别 → "跨文件任务，需要计划"
-   📋 计划 → 3-5 步短计划，标注文件清单
-      📂 分批 → 一次只加载 2-3 个相关文件
-         ⚡ 执行 → 改一批 → 验证 → 下一批
-```
-
-**不做什么：** ❌ 不一次性加载所有文件 ❌ 不做过度设计 ❌ 不写超过 5 步的详细计划
-
----
-
-### D. 📚 大资料总结 — "太长了，说重点"
-
-**适用场景：** 长文档分析、日志审查、PR 差异审查、大型配置审计。
-
-**典型信号：**
-```
-"总结这个 5000 行的日志中的关键错误"
-"review 这个 PR，只说有问题的部分"
-"这个设计文档太长了，提取架构决策"
-```
-
-**行为表现：**
-```
-🏷️ 识别 → "资料总结，压缩输出"
-   🔍 提取 → 逐段扫描，只标记关键信息
-      📊 输出 → 要点列表 + 证据位置
-         ❌ 省略 → 不逐段复述，不加评语
-```
-
-**不做什么：** ❌ 不逐段翻译/复述 ❌ 不输出"这部分看起来没问题" ❌ 不添加无关分析
-
----
-
-### E. 🏗️ 重大架构调整 — "要大改，先确认方案"
-
-**适用场景：** 反复出 bug 的系统、架构不匹配、数据库迁移、大规模重构。
-
-**典型信号：**
-```
-"这个支付模块太乱了，每次加功能都出 bug"
-"把单体应用拆成微服务"
-"ORM 性能太差，换成原生 SQL"
-```
-
-**行为表现：**
-```
-🏷️ 识别 → "重大变更，需要谨慎"
-   🩺 诊断 → 深入分析根因（非表面问题）
-      🤝 确认 → 向用户呈现 2-3 种方案+推荐
-         ✅ 认可 → 用户确认后再动手
-            📈 增量 → 分步迁移，每步可验证/可回滚
-```
-
-**核心区别：** 这是唯一**必须先确认方案**再执行的模式。其他所有模式都是"识别即执行"。
-
----
-
-### F. 🖥️ Windows/PowerShell 环境适配 — "当前是 Windows/PowerShell + 中文环境"
-
-> **⚠️ 此模式为可选环境适配，非默认行为。** 仅当工作在 Windows PowerShell 环境且任务涉及中文时才启用。macOS / Linux 或纯英文工作流不需要此模式。
-
-**适用场景：** Windows PowerShell + 中文环境下的文件读写、Git 操作、脚本执行、编码处理。
-
-**典型信号：**
-```
-"这个中文文件打开是乱码"
-"git diff 显示 \\xxx 而不是中文文件名"
-"PowerShell 里中文报语法错误"
-"文件被 GBK 污染了，修复一下"
-```
-
-**行为表现：**
-```
-🏷️ 识别 → "Windows/PowerShell + 中文环境，启用 F 模式"
-   📋 检查 → 8 条已知陷阱匹配当前症状
-      🛠️ 解决 → 对应脚本工具或安全模板处理
-         📝 输出 → 修复结果 + 验证确认
-```
-
-**不做什么：** ❌ 不在 bash 命令中直接嵌入含 `+` 的中文 ❌ 不使用 `Add-Content` 追加中文 ❌ 不直接在 PowerShell 中 `print()` 中文 ❌ 不忽略编码问题强行操作
-
-**内置工具包（`scripts/`）：** `safe_io.py`（安全读写）、`detect_gbk_contamination.py`（检测修复 GBK 污染）、`batch_edit.py`（批量编辑）、`fix_encoding.py`（编码转换）、`verify_output.py`（验证输出）、`init_env.ps1`（环境初始化）
-
----
-
-## ✨ ZeroToken 强化模式
-
-当用户明确要求"省 token"时，叠加以下规则：
-
-- 🔇 **零问候、零过渡、零客套** — 直接给结果
-- 📉 **最大压缩输出** — 用最短的合法表达
-- 🧹 **省略一切冗余** — 无总结、无"如果你还需要帮助"、无格式装饰
-- ⚖️ **准确性不妥协** — 省的是表达方式，不是答案质量
-
-**何时触发：** 用户说"省点 token"、"简洁点"、"直接给结果"等。
-
-## 🚫 退出条件
-
-以下场景自动**退出 ZeroToken 模式**，切换为**详尽模式**：
-
-| 场景 | 原因 |
-|------|------|
-| 🎓 **教学/学习** | 需要详细解释和示例 |
-| 🧠 **头脑风暴** | 需要探索多种可能性 |
-| 🔬 **深度研究** | 需要全面分析和引用 |
-| ❓ **用户要求详细** | 用户主动要求更详尽的回答 |
-
----
-
-## 📖 核心文档
-
-所有详细规范定义在 **[`SKILL.md`](SKILL.md)**，配套脚本工具在 **`scripts/`** 目录：
+**`SKILL.md`（常驻核心）**
 
 - 📐 **快速决策表** — 按请求类型匹配模式与工具链
-- 🧭 **核心原则** — 先分类再预算、压缩提示词、渐进读取、先给结果、不复述
-- 📝 **精准提示词模板** — 目标 → 输入 → 约束 → 输出
-- 🔄 **六种任务模式详解 (A-F)** — 每种模式的完整行为规范
-- 🖥️ **F. Windows/PowerShell 环境适配** — 8 条已知陷阱与解决方案
-- 🛠️ **scripts/ 工具集** — `safe_io.py`, `detect_gbk_contamination.py`, `batch_edit.py`, `fix_encoding.py`, `verify_output.py`, `init_env.ps1`
-- ⚡ **ZeroToken 强化模式 & 退出条件**
-- 🛡️ **质量底线** — 压缩不降质的硬性要求
+- 🧭 **核心原则（8 条）** — 先分类再预算、压缩提示词、渐进读取、先给结果、不复述、plan 只写顶层步骤、设置停止条件、先识别环境再选 Shell
+- ⚔️ **AI 编程总纲（尉缭子十原则）** — 权限边界、单一指令、责任明确、执行一致
+- 📝 **精准提示词模板** — 目标 → 输入 → 约束 → 输出 → 预算
+- 🔄 **任务模式要点 (A-G)** — 每种模式的首轮行为
+- ⚡ **ZeroToken 强化模式 & 退出条件** / 🛡️ **质量底线**
+
+**`references/`（按需读取）**
+
+| 文档 | 内容 |
+|---|---|
+| [`windows-powershell.md`](references/windows-powershell.md) | F 模式：15 条已知陷阱 + 脚本工具表 + 推荐工作流 + 安全读写模板 |
+| [`refactor-playbook.md`](references/refactor-playbook.md) | E 模式：根因诊断 → 影响面 → 方案确认 → 增量迁移 → 收尾 |
+| [`search.md`](references/search.md) | 搜索资料规范：仅用已注册工具、显式授权桥、数据外发提示、禁用行为 |
+| [`tool-mapping.md`](references/tool-mapping.md) | 工具名跨宿主映射、宿主 verification 循环、plan/todo 注册行为 |
+| [`publishing-clawhub.md`](references/publishing-clawhub.md) | 维护者手册：C1-C6 发布陷阱 + 固定发布时序 |
+
+**其他目录**
+
+- 📜 **`docs/unicode-encoding-spec.md`** — Unicode 安全编码规范 15 条 + 项目执行细则
+- 🛠️ **`scripts/` 工具集** — `zt.py`（统一入口：`zt.py help` / `zt.py check`）, `detect_env.py`, `safe_io.py`, `detect_gbk_contamination.py`, `batch_edit.py`, `fix_encoding.py`, `verify_output.py`, `audit_encoding.py`, `audit_skill.py`, `bump_version.py`, `init_env.ps1`
 
 ---
 
+## 📚 延伸阅读
 
-## 🤖 Agent 预设
+以下内容在 `SKILL.md` / `references/` / `docs/` 有完整定义，此处只给入口，避免双份事实源：
 
-针对 OpenAI 兼容接口（含 Codex、OpenCode、Hermes 等）的预设配置位于 [`agents/openai.yaml`](agents/openai.yaml)，可直接导入使用。
+- 📝 **精准提示词模板** — [SKILL.md「精准提示词模板」](SKILL.md#-精准提示词模板)
+- ⚔️ **AI 编程总纲（尉缭子十原则）** — 完整十原则与 System Prompt 总纲见 [SKILL.md「AI 编程总纲」](SKILL.md#-ai-编程总纲尉缭子十原则)
+- ⚡ **ZeroToken 强化模式** — 更激进的压缩规则见 [SKILL.md「ZeroToken 强化模式」](SKILL.md#-zerotoken-强化模式)
+- 🚫 **何时退出 ZeroToken** — 教学/头脑风暴/深度研究自动切详尽模式，见 [SKILL.md「何时不使用 ZeroToken」](SKILL.md#-何时不使用-zerotoken)
+- 🔍 **搜索资料规范** — 已注册工具优先、抓取工具兜底，见 [`references/search.md`](references/search.md)
+- 📜 **Unicode 安全编码规范** — 文本统一 UTF-8（`.ps1` 例外带 BOM），见 [`docs/unicode-encoding-spec.md`](docs/unicode-encoding-spec.md)
 
 ---
 
@@ -318,12 +158,14 @@ install-source --source https://clawhub.ai/phoenixlucky/zerotoken-skill
 | 4 | **先给结果** | 结论先行，细节随后 |
 | 5 | **不复述** | 不重复用户已说的内容 |
 | 6 | **plan 只写顶层步骤** | 避免 bullet 子步骤被 todo 系统注册为独立待办项 |
+| 7 | **设置停止条件** | 已定位目标、必要调用方和验证方式后即停止搜索，不重复读取未变化的文件 |
+| 8 | **先识别环境，再选 Shell** | 命令行任务先跑 `detect_env.py` 保存系统参数，再按平台选 PowerShell / POSIX shell |
 
 ---
 
-## 🏷️ 标签
+## 🤖 Agent 预设
 
-`zerotoken` `token-efficient` `prompt-engineering` `context-optimization` `agent-discipline` `ai-workflow` `token-budget` `concise-output`
+针对 OpenAI 兼容接口（含 Codex、OpenCode、Hermes 等）的预设配置位于 [`agents/openai.yaml`](agents/openai.yaml)，可直接导入使用。
 
 ---
 

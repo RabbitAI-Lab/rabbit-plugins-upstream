@@ -1,49 +1,59 @@
-## Description: <br>
-Chezmoi helps agents manage chezmoi dotfiles through interactive diff review, template consolidation, cross-platform diagnostics, environment checks, and MCP server synchronization. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+chezmoi supports dotfile management workflows for interactive apply review, template consolidation, macOS and Windows compatibility checks, environment validation, MCP server synchronization, and SourceGit helper setup.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and engineers use this skill to review and apply chezmoi dotfile changes safely, consolidate duplicated templates, troubleshoot macOS and Windows compatibility, validate required helper files, and keep MCP server configuration synchronized across tools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The bundled launcher can start Claude with permission checks disabled and resumed context. <br>
-Mitigation: Review before installing and remove or edit bin/claude-source.sh unless that persistent launcher behavior is intentionally required. <br>
-Risk: Dotfile and MCP configuration changes can propagate across multiple local tools. <br>
-Mitigation: Run and review chezmoi diff before applying changes, and get explicit user approval for the affected files. <br>
-Risk: Secrets or tokens could be stored in chezmoi-managed files during MCP or UTCP configuration work. <br>
-Mitigation: Do not store plaintext tokens in managed files; prefer environment variables or a dedicated secret-management flow. <br>
+## Use Case:
 
+Developers and engineers use this skill to manage chezmoi dotfiles: review diffs before applying changes, consolidate templates, fix macOS and Windows compatibility issues, validate required files, and synchronize MCP server configuration.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/drumrobot/skills/chezmoi) <br>
-- [SKILL.md](artifact/SKILL.md) <br>
-- [Apply Guide](artifact/apply.md) <br>
-- [Diff Required Guide](artifact/diff-required.md) <br>
-- [Cross-Platform Guide](artifact/cross-platform.md) <br>
-- [MCP Sync Guide](artifact/mcp-sync.md) <br>
-- [Doctor Guide](artifact/doctor.md) <br>
-- [Template Consolidation Guide](artifact/consolidate.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON examples, TOML snippets, and review prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires user approval before applying chezmoi changes; outputs may include file-specific apply choices and configuration edits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.0 (source: server release metadata and changelog, released 2026-07-07) <br>
+Risk: The SourceGit helper can launch Claude on repository contents while bypassing normal permission prompts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review or remove the helper before installation, and avoid permission-bypass and resume behavior for untrusted repositories.
+
+Risk: Plaintext dotfile management can expose tokens or other secrets if they are stored in chezmoi-managed files.
+
+Mitigation: Keep secrets out of plaintext chezmoi-managed files and review diffs before applying changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/chezmoi)
+- [Apply](artifact/apply.md)
+- [Template Consolidation](artifact/consolidate.md)
+- [Cross-Platform](artifact/cross-platform.md)
+- [Diff Required](artifact/diff-required.md)
+- [Doctor](artifact/doctor.md)
+- [MCP Server Synchronization](artifact/mcp-sync.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include per-file approval prompts before applying chezmoi changes.]
+
+## Skill Version(s):
+
+0.4.3 (source: server release metadata and CHANGELOG, released 2026-09-18)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

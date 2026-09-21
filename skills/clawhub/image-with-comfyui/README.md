@@ -5,7 +5,7 @@ Call a local ComfyUI instance for **text-to-image**, **image-to-image/edit**, an
 ## Quick Start
 
 1. **Ensure ComfyUI is running** on your local machine.
-2. **Set the URL** (via environment variable or `config.json`):
+2. **Set the URL** (via environment variable or `config.json`). The bundled default is loopback-only (`http://127.0.0.1:8188`); point `COMFYUI_URL` at a remote server only if you control and trust it — a data-flow warning is printed on every run for non-loopback hosts:
    ```bash
    export COMFYUI_URL=http://comfyui.host:api-port
    ```
@@ -24,6 +24,12 @@ Read `config.json` at the skill root. All values can be overridden by environmen
 
 **Priority:** Environment variables > `config.json`
 
+### Data & Privacy
+
+- **Transmitted to the endpoint**: prompts and workflow JSON (all modes); **full source images** for I2I and I2V.
+- **Default endpoint** is loopback-only (`http://127.0.0.1:8188`); a non-loopback `COMFYUI_URL` prints a warning on every run. Use HTTPS for remote servers and never put credentials in the URL or logs.
+- **Written to disk**: generated media is saved under `output_dir` (config) or `COMFYUI_OUTPUT_DIR` in your workspace; delivery staging copies live in `~/.openclaw/media/outbound/` and are removed after a successful send. If your content is sensitive, review the endpoint and output location before running.
+
 ## Models & Custom Nodes
 
 This skill uses the **existing** ComfyUI installation — it does not ship models or nodes. Before using, ensure your ComfyUI has:
@@ -41,13 +47,25 @@ This skill uses the **existing** ComfyUI installation — it does not ship model
 | RIFE (for video interpolation) | `ComfyUI/models/frameworks/` |
 
 ### Required Custom Nodes
-| Node | Package | Install Command |
-|---|---|---|
-| Impact Pack | `ComfyUI-Impact-Pack` | `cd ComfyUI/custom_nodes && git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && pip install -r requirements.txt` |
-| WAS Nodes | `ComfyUI-WAS-Nodes` | `cd ComfyUI/custom_nodes && git clone https://github.com/WASasquatch/ComfyUI-WAS-Nodes.git` |
-| ComfyUI-Manager | `ComfyUI-Manager` | `cd ComfyUI/custom_nodes && git clone https://github.com/comfyanonymous/ComfyUI-Manager.git` |
 
-When a missing node or model is detected, the system will report the exact package and install command.
+Install **pinned at reviewed commits** (as of 2026-09-20). Check out the exact commit rather than a mutable default branch, and install dependencies in an isolated venv under a non-privileged user — never `pip install` as root:
+
+| Node | Package (repo) | Pinned commit |
+|---|---|---|
+| Impact Pack | [ltdrdata/ComfyUI-Impact-Pack](https://github.com/ltdrdata/ComfyUI-Impact-Pack) | `429d0159a` |
+| WAS Nodes | [WASasquatch/was-node-suite-comfyui](https://github.com/WASasquatch/was-node-suite-comfyui) *(repo renamed from `ComfyUI-WAS-Nodes`)* | `9934caa92` |
+| ComfyUI-Manager | [Comfy-Org/ComfyUI-Manager](https://github.com/Comfy-Org/ComfyUI-Manager) *(migrated from `comfyanonymous/`)* | `946ef8fe6` |
+
+```bash
+cd ComfyUI/custom_nodes
+git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git
+cd ComfyUI-Impact-Pack && git checkout --detach 429d0159ad429e64d2b3916e6e7be9c22d025c3c
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+```
+
+Repeat the same pin-and-checkout pattern for the other two repositories (use their pinned commits above). Review dependency lists before installing, and re-check upstream commits before upgrading a pin.
+
+When a missing node or model is detected, the script reports the package name and a manual install hint — it never executes `git clone` itself (ComfyUI may run on another host).
 
 ## Testing
 
@@ -60,8 +78,8 @@ python3 image_with_comfyui.py test
 # Test each workflow individually
 python3 image_with_comfyui.py t2i --prompt "A cat on a windowsill"
 
-# Verify all 4 workflows
-python3 test_all_workflows.py
+# Run the health check before each batch of jobs
+python3 image_with_comfyui.py test
 ```
 
 ### Manual Workflow Testing
@@ -75,9 +93,9 @@ You can also test workflows directly in the ComfyUI web UI. Copy any workflow fi
 
 ## Important Notes
 
-### Local Skill — No Separate Installation
+### Local Skill — No Automatic Installation
 
-This skill **does not install anything**. It connects to your existing ComfyUI instance via API calls. The workflows, models, and custom nodes are already configured in your ComfyUI setup. This skill simply provides an interface to use them.
+This skill **does not install anything automatically**. It connects to your existing ComfyUI instance via API calls; the workflows, models, and custom nodes must already be configured in your ComfyUI setup. If a node is missing, the skill only *reports* the package and a pinned manual install hint (it never runs `git clone` itself, since ComfyUI may be on another host). The manual commands in [Required Custom Nodes](#required-custom-nodes) are optional setup steps for your own ComfyUI — review and pin them before running.
 
 ### VRAM Release After Generation
 
@@ -105,7 +123,7 @@ The system handles three categories of errors automatically:
 python3 image_with_comfyui.py t2i --prompt "Your description" --aspect 16:9
 
 # Generate image with SD3.5
-python3 image_with_comfyui.py sd35 --prompt "Your description" --negative "blurry"
+python3 image_with_comfyui.py t2i --model sd35 --prompt "Your description" --negative "blurry"
 
 # Edit an image
 python3 image_with_comfyui.py i2i --prompt "Replace background" --image /path/to/image.png

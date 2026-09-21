@@ -1,42 +1,59 @@
-## Description: <br>
-Opsgenie helps agents read, create, acknowledge, close, fetch, and list Opsgenie alerts through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to read, create, update, and delete Opsgenie data through the OOMOL Opsgenie connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and incident responders use this skill to inspect Opsgenie action schemas, run valid connector payloads, and manage alert lifecycle tasks from an agent session. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, acknowledge, or close Opsgenie alerts, which changes incident-management state. <br>
-Mitigation: Require explicit user confirmation of the exact payload and expected effect before running write actions. <br>
-Risk: The skill depends on an OOMOL-connected Opsgenie account with credentials available to the connector. <br>
-Mitigation: Install only for intended Opsgenie use and keep the connected account scoped to the minimum Opsgenie permissions needed. <br>
+## Use Case:
 
+Developers and operations teams use this skill to manage Opsgenie alerts through an OOMOL-connected account, including listing, fetching, creating, acknowledging, and closing alerts.
 
-## Reference(s): <br>
-- [Opsgenie homepage](https://www.atlassian.com/software/opsgenie) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-opsgenie) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live Opsgenie connector schemas before proposing or running write payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: Opsgenie alert state can be changed through write and close actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact payload and intended effect with the user before write actions, and require explicit approval before destructive close actions.
+
+Risk: Installer commands can execute remote scripts when the oo CLI is missing.
+
+Mitigation: Use official or verified oo CLI installation steps and avoid blindly running installer scripts.
+
+Risk: Opsgenie data is accessed through an OOMOL-connected account.
+
+Mitigation: Ensure the connected account and scopes are appropriate before running commands that read or modify alert data.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-opsgenie)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Opsgenie homepage](https://www.atlassian.com/software/opsgenie)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before building payloads and returns connector responses containing data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

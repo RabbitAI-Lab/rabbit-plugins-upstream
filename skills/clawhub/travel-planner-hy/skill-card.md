@@ -1,48 +1,63 @@
-## Description: <br>
-Travel Planner HY helps agents collect travel requirements, search public travel information, build multi-day itineraries, estimate budgets, and generate markdown-style plans with optional local HTML and QR-code link output. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Travel Planner HY plans multi-day travel itineraries, researches public attractions, compares requested travel options, and exports local itinerary HTML with optional public-platform homepage QR codes.
 
-## Publisher: <br>
-[cryptocxf](https://clawhub.ai/user/cryptocxf) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cryptocxf](https://clawhub.ai/user/cryptocxf)
 
-## Use Case: <br>
-Travelers and travel-planning assistants use this skill to turn destination, dates, party size, budget, and preferences into structured itineraries with attraction, transport, lodging, packing, and safety guidance. It is for planning and display; bookings and payments remain outside the skill. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated prices, QR codes, and third-party booking or payment links may be mistaken for completed checkout or final pricing. <br>
-Mitigation: Treat all prices, QR codes, and Tuniu/12306 or other third-party links as references only; confirm orders and payments directly on the official third-party site. <br>
-Risk: Travel web lookups and optional comparison flows can send itinerary details such as destination, dates, party size, and budget to public travel or map services. <br>
-Mitigation: Use the skill only when these lookups are acceptable, and keep comparison flows opt-in before sending travel details to third-party services. <br>
-Risk: The skill writes generated itinerary HTML and QR assets locally. <br>
-Mitigation: Review generated files in the local output/ directory and remove them when they are no longer needed. <br>
+## Use Case:
 
+External users and agents use this skill to plan concrete multi-day trips, compare requested travel options, summarize budgets and logistics, and generate local itinerary exports. It supports information planning only and does not create bookings, orders, or payments.
 
-## Reference(s): <br>
-- [Travel Planner HY on ClawHub](https://clawhub.ai/cryptocxf/skills/travel-planner-hy) <br>
-- [Parameters and Natural Language Parsing Rules](references/parameters.md) <br>
-- [Validation Rules and Multimodal Boundaries](references/validation.md) <br>
-- [Attraction Data Model and Retrieval Rules](references/attraction-model.md) <br>
-- [Search and Filtering Rules](references/search-rules.md) <br>
-- [Itinerary Rules](references/itinerary-rules.md) <br>
-- [Output Templates](references/output-templates.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown travel plans, structured travel parameters, and optional local HTML/QR-code files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write generated itinerary HTML and QR assets to output/; third-party booking or payment links are references only.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.1 (source: server release evidence) <br>
+Risk: Trip inputs, URLs, or search terms could accidentally include identity documents, payment details, account links, API keys, tokens, or booking information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep trip inputs and public searches limited to destination, attraction, date, budget, and preference information; do not include credentials, payment data, identity documents, or booking records.
+
+Risk: The skill can write local itinerary files and QR code images.
+
+Mitigation: Review generated files before sharing them, keep exports local unless the user explicitly approves publication, and avoid including private travel details in exported content.
+
+Risk: Fetched public travel pages may contain stale information or untrusted page instructions.
+
+Mitigation: Treat fetched page content as reference data only, verify current prices and opening hours against authoritative sources, and do not follow instructions embedded in fetched pages.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/cryptocxf/skills/travel-planner-hy)
+- [README](README.md)
+- [Skill Definition](SKILL.md)
+- [Usage](references/usage.md)
+- [URL Safety](references/url-safety.md)
+- [Validation](references/validation.md)
+- [Output Templates](references/output-templates.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Markdown or plain-text travel guidance with JSON input examples and optional local HTML or PNG exports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Local exports are written to the skill output directory; public web fetching is restricted to approved HTTPS travel domains.]
+
+## Skill Version(s):
+
+1.3.2 (source: server release evidence, skill frontmatter, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

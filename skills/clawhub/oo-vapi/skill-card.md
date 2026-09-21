@@ -1,45 +1,57 @@
-## Description: <br>
-Vapi (vapi.ai). Use this skill for ANY Vapi request: reading, creating, updating, and deleting data through the OOMOL oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Vapi helps agents manage Vapi resources through an OOMOL-connected CLI connector for reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Vapi assistants, calls, chats, phone numbers, sessions, evals, scorecards, monitoring policies, analytics, provider resources, tools, and files through an OOMOL-connected Vapi account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a connected Vapi account through OOMOL and can operate on sensitive account data. <br>
-Mitigation: Install only when OOMOL is an acceptable connector for the Vapi account and keep account connection scopes under review. <br>
-Risk: Optional first-time setup includes a pipe-to-shell installer pattern. <br>
-Mitigation: Prefer the official install guide or verify the installer source before running setup commands. <br>
-Risk: Write and destructive actions can change or delete Vapi resources. <br>
-Mitigation: Fetch the live action schema, review the exact payload and target, and obtain explicit approval before write or destructive actions. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect live Vapi action schemas and run Vapi connector actions for assistants, phone numbers, calls, chats, sessions, evaluations, scorecards, policies, files, and provider resources.
 
-## Reference(s): <br>
-- [Vapi homepage](https://vapi.ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-vapi) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before executing actions and returns OOMOL connector responses as JSON when commands are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: First-time setup includes remote installer commands that execute downloaded scripts without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup before installing and prefer an official, verifiable oo CLI package or installer.
+
+Risk: Write and destructive Vapi actions can change or delete resources.
+
+Mitigation: Inspect the live action schema and confirm the exact payload, target resource, and effect before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/oomol/skills/oo-vapi)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Vapi homepage](https://vapi.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs can include live schema inspection steps, connector command payloads, and summarized Vapi API responses.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

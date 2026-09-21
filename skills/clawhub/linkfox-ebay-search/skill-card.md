@@ -1,50 +1,64 @@
-## Description: <br>
-Searches eBay international marketplaces through LinkFox so an agent can retrieve product listings, compare prices, review sold items, and summarize marketplace results. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and browse eBay product listings across international marketplaces with filters for price, condition, buying format, seller location, sold or completed listings, and sorting.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and commerce operators use this skill to search eBay listings across regional marketplaces, compare product prices, inspect sold or completed listings, and prepare marketplace research summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries and request metadata are sent to LinkFox services using a LinkFox API key. <br>
-Mitigation: Use the skill only for queries appropriate to share with LinkFox and store API keys in environment variables with normal secret-handling controls. <br>
-Risk: Each search may spend LinkFox credits, and repeated fresh searches can increase cost. <br>
-Mitigation: Rely on the documented cache when suitable and confirm with the user before additional searches, pagination, or cache bypasses that could spend more credits. <br>
-Risk: Full API responses are written to local JSON files and may contain search results or operational metadata. <br>
-Mitigation: Keep the generated linkfox data directory out of shared repositories and remove saved responses when they are no longer needed. <br>
-Risk: The API gateway can be redirected with LINKFOX_TOOL_GATEWAY. <br>
-Mitigation: Leave the default gateway in place unless the alternate destination is trusted and approved. <br>
-Risk: Automatic feedback or onboarding behavior can contact additional LinkFox endpoints or prompt installation of another LinkFox skill. <br>
-Mitigation: Review this behavior before installation and disable or avoid it where the deployment requires tighter outbound network control. <br>
+## Use Case:
 
+External e-commerce sellers, buyers, and market researchers use this skill to search eBay listings, compare prices, inspect seller signals, and review active, sold, or completed listings across supported regional marketplaces.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-ebay-search) <br>
-- [eBay 商品搜索 API 参考](references/api.md) <br>
-- [LinkFox Skills guide](https://skill.linkfox.com/linkfoxskills/guide.htm) <br>
-- [LinkFox account portal](https://os.linkfox.com/) <br>
-- [LinkFox Skills](https://skill.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown summaries with optional JSON responses and saved JSON data files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search calls may spend LinkFox credits, use a 24-hour local cache, and save full API responses under a local linkfox data directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The security review rates this release suspicious because it combines eBay search with feedback, account, credential, and payment flows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if comfortable using LinkFox as a paid intermediary for eBay searches, and review any onboarding or payment step before proceeding.
+
+Risk: The skill uses LinkFox API keys and may guide users through phone/SMS account access.
+
+Mitigation: Provide phone or SMS credentials only when intentionally creating or accessing a LinkFox account, and store API keys in a proper secret manager.
+
+Risk: Automatic feedback reporting can send user intent or result details outside the search flow.
+
+Mitigation: Review feedback payloads before sending and do not allow automatic feedback submission without user approval.
+
+Risk: Saved response and cache files can contain sensitive searches, postal codes, or market research.
+
+Mitigation: Periodically delete saved LinkFox response files and avoid searching sensitive terms when local persistence is not acceptable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-ebay-search)
+- [eBay Product Search API Reference](references/api.md)
+- [Authentication and Credits Onboarding](references/onboarding.md)
+- [LinkFox eBay Search API endpoint](https://tool-gateway.linkfox.com/ebay/search)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON parameters, shell commands, and saved JSON search responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search responses may be saved as JSON files and summarized when large; cached search responses may be reused for 24 hours.]
+
+## Skill Version(s):
+
+1.0.6 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,55 @@
-## Description: <br>
-Circle connector skill for reading, creating, and updating Circle data through an OOMOL-connected account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Circle (circle.so) lets an agent search and read Circle community, member, post, space group, and space membership data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Circle connector schemas and run Circle community, member, post, space group, and space member actions through the oo CLI with OOMOL-managed credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent can access connected Circle account data and may run actions that affect Circle content. <br>
-Mitigation: Install only when Circle access through OOMOL is intended, inspect the live action schema before payload construction, and confirm write or destructive payloads with the user before execution. <br>
-Risk: Setup commands can trigger unnecessary CLI installation, login, connection, or billing flows if run proactively. <br>
-Mitigation: Use first-time setup steps only after an oo command, authentication, connection, scope, or billing error indicates they are needed. <br>
+## Use Case:
 
+Developers and operators with an OOMOL-connected Circle account use this skill to inspect Circle community records and run read-oriented connector actions from an agent.
 
-## Reference(s): <br>
-- [Circle homepage](https://circle.so) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with bash command examples; connector responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill instructs the agent to inspect the live connector schema before building action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Setup guidance can execute remote oo CLI installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer before execution or use a verified package or release path when available.
+
+Risk: Circle connector scope may exceed the read-only actions currently listed.
+
+Mitigation: Inspect the live action schema before execution and require explicit user confirmation for any write or destructive action, target, and payload.
+
+## Reference(s):
+
+- [Circle homepage](https://circle.so)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-circle)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands call the oo CLI and return connector JSON when executed.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

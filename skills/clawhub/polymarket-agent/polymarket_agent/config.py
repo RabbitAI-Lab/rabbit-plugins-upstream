@@ -99,9 +99,25 @@ _NUMERIC_BOUNDS: Dict[str, tuple[float, float]] = {
 
 _ALLOWED_RISK_PROFILES = {"conservative", "balanced", "aggressive"}
 
+# Every key that exists on disk. Used to READ and to LOAD.
+KNOWN_KEYS = {f.name for f in fields(Settings)}
+
+#: Fields `poly config` may NOT write.
+#:
+#: SECURITY FIX (found in review): `poly auto` gates autonomous mode behind
+#: `--i-understand-the-risk`, clamps the expiry to 24h and journals the
+#: decision — and none of that mattered, because the same two fields sat in
+#: the generic setter. `poly config --key autonomous_mode --value true` plus
+#: `--key autonomous_expires_at --value 4102444800` bought unsupervised
+#: real-money trading until the year 2100, through a command that reads as
+#: harmless housekeeping. That is exactly the shape a prompt injection takes:
+#: SKILL.md tells the agent never to run `poly auto`, and says nothing about
+#: `poly config`. The gate now lives on the field, not on one command.
+LOCKED_KEYS = {"autonomous_mode", "autonomous_expires_at"}
+
 # Keys the user may change via `poly config`. Secrets are deliberately left out
 # — the private key only ever enters through the keystore.
-EDITABLE_KEYS = {f.name for f in fields(Settings)}
+EDITABLE_KEYS = KNOWN_KEYS - LOCKED_KEYS
 
 
 class ConfigError(ValueError):
@@ -110,7 +126,7 @@ class ConfigError(ValueError):
 
 def _coerce(key: str, raw: Any) -> Any:
     """Convert and validate a value against the type declared in the dataclass."""
-    if key not in EDITABLE_KEYS:
+    if key not in KNOWN_KEYS:
         raise ConfigError(
             f"Unknown key: {key!r}. Use `poly config --list` to see the valid ones."
         )
@@ -176,7 +192,9 @@ def load_settings() -> Settings:
 
     settings = Settings()
     for key, value in raw.items():
-        if key not in EDITABLE_KEYS:
+        # KNOWN_KEYS, not EDITABLE_KEYS: a locked field is still legitimately
+        # written by `poly auto`, so it has to load back from disk.
+        if key not in KNOWN_KEYS:
             continue
         try:
             setattr(settings, key, _coerce(key, value))
@@ -194,6 +212,12 @@ def save_settings(settings: Settings) -> None:
 
 def set_value(key: str, raw: Any) -> Any:
     """Validate and persist a key. Returns the value actually written."""
+    if key in LOCKED_KEYS:
+        raise ConfigError(
+            f"{key} is not editable here: it decides whether real-money orders "
+            "go out unattended. Use `poly auto true --hours N "
+            "--i-understand-the-risk` (max 24h, journaled) or `poly auto false`."
+        )
     settings = load_settings()
     value = _coerce(key, raw)
     setattr(settings, key, value)

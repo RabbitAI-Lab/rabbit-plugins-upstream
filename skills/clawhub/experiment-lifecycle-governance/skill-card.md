@@ -1,39 +1,50 @@
-## Description: <br>
-Add governance to experiment workflows with PIN-protected destructive operations, standardized metric thresholds, compare-scores ranking with gating, and competition rules audit guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Add governance to experiment workflows -- PIN-protected destructive ops, standardized metrics registry with thresholds, compare-scores ranking with gating, and competition rules audit.
 
-## Publisher: <br>
-[diamond2nv](https://clawhub.ai/user/diamond2nv) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[diamond2nv](https://clawhub.ai/user/diamond2nv)
 
-## Use Case: <br>
-Developers and ML engineers use this skill to add governance patterns to experiment workflows, including PIN checks for destructive actions, metric registries with thresholds, experiment ranking, and competition compliance audits. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Destructive experiment actions can be performed without the intended PIN guard if automation normalizes `--force` or command-line PIN use. <br>
-Mitigation: Require scoped automation permissions, audit logging, and human review for cancel, stop, delete, and PIN-clear workflows; avoid command-line PINs and treat `--force` as an exception path. <br>
+## Use Case:
 
+Developers and MLOps engineers use this skill to add governance checks to experiment workflows, including PIN protection for destructive operations, standardized metric reporting, score comparison with gates, and competition-rules audit guidance.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/diamond2nv/experiment-lifecycle-governance) <br>
-- [expflow repository](https://github.com/diamond2nv/expflow) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with Python and bash examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Provides implementation patterns, CLI examples, metric threshold conventions, audit checks, and operational cautions for experiment governance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.0 (source: server release metadata) <br>
+Risk: Automation can bypass PIN protection for destructive experiment commands when --force is used.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing for real ClearML workflows, avoid making --force the default, and require a secure PIN or separate approval path for stop, cancel, delete, or PIN-clear operations.
+
+## Reference(s):
+
+- [expflow project homepage](https://github.com/diamond2nv/expflow)
+- [ClawHub skill page](https://clawhub.ai/diamond2nv/skills/experiment-lifecycle-governance)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline code blocks and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes CLI patterns, metric registry examples, audit checks, and operational guardrails for experiment governance.]
+
+## Skill Version(s):
+
+0.7.1 (source: evidence release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

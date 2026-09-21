@@ -1,45 +1,57 @@
-## Description: <br>
-ClickHouse (clickhouse.com). Use this skill for ANY ClickHouse request -- searching and reading data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ClickHouse (clickhouse.com). Use this skill for ANY ClickHouse request - reading, creating, updating, and deleting data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, analysts, and operators use this skill to inspect ClickHouse database structure and run SQL against an OOMOL-connected ClickHouse account through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The execute_query action may be able to change or delete ClickHouse data. <br>
-Mitigation: Require explicit review of execute_query payloads before execution unless the connected account or backend is known to enforce read-only queries. <br>
-Risk: The skill operates through a connected OOMOL account with server-side credentials. <br>
-Mitigation: Install and use it only with ClickHouse accounts where agent-run SQL is acceptable, and prefer least-privilege or read-only database access when possible. <br>
+## Use Case:
 
+Developers and engineers use this skill to inspect ClickHouse databases, inspect table schemas, and run SQL through an OOMOL-connected ClickHouse account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-clickhouse) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClickHouse](https://clickhouse.com) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClickHouse Service Icon](https://static.oomol.com/logo/third-party/clickhouse.svg) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, SQL, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash, PowerShell, text, and JSON-oriented command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId when actions are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill metadata) <br>
+Risk: Setup instructions include remote installer scripts for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the OOMOL installation path before use, prefer an installer from OOMOL, verify source or checksum/signature when available, and require explicit approval before installation.
+
+Risk: The execute_query action can change or delete ClickHouse data.
+
+Mitigation: Treat non-read SQL as potentially destructive and require clear user confirmation of the exact query, target, and expected effect before execution.
+
+## Reference(s):
+
+- [ClickHouse homepage](https://clickhouse.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-clickhouse)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schema inspection before constructing ClickHouse action payloads.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

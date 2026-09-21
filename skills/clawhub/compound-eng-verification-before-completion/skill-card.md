@@ -1,42 +1,61 @@
-## Description: <br>
-Enforces fresh verification evidence before any completion claim. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enforces fresh verification evidence before any completion claim, including claims that tests pass, bugs are fixed, work is done, a release is ready, or ambiguous scope has been resolved before editing.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering agents use this discipline skill to require immediate, command-backed verification before claiming work is complete. It also helps agents confirm ambiguous change scope before editing and select verification strategies suited to the change type. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can cause agents to propose or run broad verification commands on large projects or long-running suites. <br>
-Mitigation: Review proposed verification commands when they touch large projects, long-running test suites, or broad filesystem scope. <br>
-Risk: Incorrect or stale verification guidance could lead an agent to overstate completion confidence. <br>
-Mitigation: Require fresh command output and explicit failure reporting before accepting any completion claim. <br>
+## Use Case:
 
+Developers and engineering agents use this skill before reporting completion, committing, pushing, opening a PR, or handing off work. It helps match verification commands to the actual claim, preserve unrelated work, avoid weakened proof, and report only what current evidence supports.
 
-## Reference(s): <br>
-- [Isolated Verification](references/isolated-verification.md) <br>
-- [System-Wide Test Check](references/system-wide-test-check.md) <br>
-- [ClawHub release page](https://clawhub.ai/iliaal/skills/compound-eng-verification-before-completion) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands] <br>
-**Output Format:** [Markdown guidance with inline shell commands and structured completion reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prompts the agent to provide fresh verification evidence, scope confirmation, and command results before completion claims.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: The skill can make an agent more cautious about broad scope, dirty worktrees, and failed checks, which may slow completion when verification evidence is incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Apply the skill when completion claims or handoffs need proof, and keep reports concise by naming only the command or path exercised, observed result, skipped or failed checks, and material residual risk.
+
+Risk: A green local run can be misleading when unrelated work, stale binaries, empty test runs, or weakened assertions make the verification easier to satisfy.
+
+Mitigation: Use the artifact's guidance to inspect the worktree, preserve unrelated changes, confirm the invoked binary or entry point, require positive executed counts, and avoid changing the oracle solely to obtain a pass.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-verification-before-completion)
+- [Specification](artifact/SPEC.md)
+- [Proof integrity](artifact/references/proof-integrity.md)
+- [Verification oracles](artifact/references/verification-oracles.md)
+- [Change strategies](artifact/references/change-strategies.md)
+- [Claims and failures](artifact/references/claims-and-failures.md)
+- [Scope and sweeps](artifact/references/scope-and-sweeps.md)
+- [Isolated verification](artifact/references/isolated-verification.md)
+- [System-wide test check](artifact/references/system-wide-test-check.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Markdown, Analysis]
+
+**Output Format:** [Markdown guidance with inline shell commands and concise completion reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should name the verification command or path exercised, observed result, skipped or failed checks, and material residual risk.]
+
+## Skill Version(s):
+
+4.6.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

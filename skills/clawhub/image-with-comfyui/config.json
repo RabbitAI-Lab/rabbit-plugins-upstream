@@ -1,5 +1,5 @@
 {
-  "comfyui_url": "http://10.71.253.215:31577",
+  "comfyui_url": "http://127.0.0.1:8188",
   "poll_interval_seconds": 3,
   "output_dir": "media/comfyui",
   "image": {
@@ -42,7 +42,7 @@
       "default_cfg": 4.5,
       "frame_rate": 16,
       "output_subdir": "video",
-      "keep_interpolated_only": true
+      "keep_interpolated_only": false
     }
   }
 }

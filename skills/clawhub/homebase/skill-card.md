@@ -1,42 +1,60 @@
-## Description: <br>
-Homebase is an OpenClaw household coordinator that helps families manage calendars, morning briefings, school email intake, groceries, meals, restaurant notes, medication logs, trip preparation, and optional fitness booking watchlists. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Family household coordinator: calendar, briefings, kids' meals, school email, groceries, health log, receipts.
 
-## Publisher: <br>
-[hchawla](https://clawhub.ai/user/hchawla) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[hchawla](https://clawhub.ai/user/hchawla)
 
-## Use Case: <br>
-Families and household operators use this skill through OpenClaw to coordinate daily logistics across Google Calendar, Gmail, WhatsApp, local household state files, and scheduled routines. It is intended for configured family environments where the user has reviewed the data access and automation settings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access private family calendar and Gmail data and post information to configured WhatsApp chats. <br>
-Mitigation: Install only after reviewing Google OAuth access, configured senders, family allowlists, and WhatsApp group IDs; use a dedicated Google project or account scope where practical. <br>
-Risk: Scheduled automation can change calendar entries or send private household information without a same-turn manual review. <br>
-Mitigation: Review cron jobs, Calendar delete behavior, and tool confirmations before enabling scheduled tasks; start with noncritical calendars or dry-run checks where available. <br>
-Risk: The shared cron-health digest and optional Club Studio module add extra visibility or third-party automation exposure. <br>
-Mitigation: Review shared cron log access before enabling owner digests, and leave Club Studio disabled unless browser automation against that third-party site is acceptable. <br>
+## Use Case:
 
+Families and their agents use this skill to coordinate household logistics through local tools for calendars, school email queues, meal planning, groceries, health logs, receipts, weather, and trip preparation.
 
-## Reference(s): <br>
-- [Homebase ClawHub skill page](https://clawhub.ai/hchawla/skills/homebase) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and text guidance with JSON-oriented tool data and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce or update local JSON state through OpenClaw tool calls when configured.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.1 (source: server release evidence) <br>
+Risk: Queued school email-derived events can be written to Google Calendar without a technical approval gate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Call confirm_pending_school_events only after explicit family approval for the exact pending events, and keep automated runners from invoking it without that check.
+
+Risk: The skill stores family PII locally in configuration and household state files.
+
+Mitigation: Keep config.json private, use restrictive file permissions, and review local state files before sharing or publishing an installation.
+
+Risk: Gmail and Google Calendar access depends on the external gog integration.
+
+Mitigation: Install only when the operator is comfortable granting gog those permissions, and verify gog authentication status during setup and maintenance.
+
+## Reference(s):
+
+- [Homebase skill page](https://clawhub.ai/hchawla/skills/homebase)
+- [Agent tool reference](references/agent.md)
+- [README](README.md)
+- [CHANGELOG](CHANGELOG.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [CLI tool responses as JSON or concise text; documentation as Markdown with shell command examples.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses local JSON state and depends on Python 3.12+ plus the external gog CLI for Gmail and Google Calendar access.]
+
+## Skill Version(s):
+
+0.6.1 (source: release metadata and pyproject.toml)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

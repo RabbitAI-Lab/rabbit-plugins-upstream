@@ -2,8 +2,8 @@
 name: linkfox-amazon-store-operations
 display_name: Linkfox 亚马逊店铺运营
 display_name_en: LinkFox Amazon Store Operations
-description: 亚马逊店铺 SP-API 运营一站式 AI 工具集，整合授权/订单/Listing/定价/Catalog/报告/Feeds/买家反馈/文件上传/A+ Content 等 10 项子能力，覆盖店铺日常运营全链路。
-description_zh: 亚马逊店铺 SP-API 运营工具集，整合 10 项子能力：店铺授权与令牌管理、订单查询与发货确认、Listing 刊登与限制、定价与比价（含批量 FOEP/竞争摘要）、Catalog 目录检索、95+ 种后台报告下载、Feeds 批量上传、买家反馈洞察、文件预签名上传、A+ Content 管理。经 LinkFox 网关调用 SP-API，需先授权取令牌。当用户需要亚马逊店铺运营、订单、Listing、定价、报告、批量上传、A+ 页面或买家反馈分析时触发。参数见 references/，脚本见 scripts/。
+description: 亚马逊店铺 SP-API 运营一站式 AI 工具集，整合授权/订单/Listing/定价/Catalog/报告/Feeds/买家反馈/文件上传/A+ Content/External Fulfillment/FBA 等 12 项子能力，覆盖店铺日常运营全链路。
+description_zh: 亚马逊店铺 SP-API 运营工具集，整合 12 项子能力：店铺授权与令牌管理、订单查询与发货确认、Listing 刊登与限制、定价与比价（含批量 FOEP/竞争摘要）、Catalog 目录检索、95+ 种后台报告下载、Feeds 批量上传、买家反馈洞察、文件预签名上传、A+ Content 管理、External Fulfillment（location 库存/履约单/面单发票/退货）、FBA（入仓资格/库存/Inbound/MCF）。经 LinkFox 网关调用 SP-API，需先授权取令牌。当用户需要亚马逊店铺运营、订单、Listing、定价、报告、批量上传、A+ 页面、买家反馈分析、External Fulfillment 或 FBA 入仓/库存/MCF 时触发。参数见 references/，脚本见 scripts/。
 description_en: One-stop Amazon store SP-API operations toolkit integrating 10 sub-capabilities: store OAuth authorization & token management, order query & shipment confirmation, Listings management (PATCH/PUT/DELETE/restrictions/Product Type definitions), product pricing & comparison (batch FOEP & competitive summary), Catalog retrieval, automated download of 95+ Seller Central report types (request→poll→download→extract), Feeds bulk data upload, customer feedback insights (review topics/trends/return reasons), presigned file upload, and A+ Content management. All routed through the LinkFox gateway POST /spApi/developerProxy to Amazon SP-API; requires prior store authorization to obtain an access token. Triggered when the user needs Amazon store operations, order management, listing, pricing, report download, bulk upload, A+ pages, or customer feedback analysis. Full params per sub-capability in references/, scripts in scripts/.
 category: e-commerce
 version: 1.0.0
@@ -12,13 +12,13 @@ author: LinkFox
 
 # Linkfox 亚马逊店铺运营（Amazon Store Operations）
 
-亚马逊店铺 SP-API 运营一站式 AI 工具集，整合 **10 项子能力**，覆盖授权与令牌、订单、Listing 刊登、定价、Catalog 目录、报告、Feeds 批量上传、买家反馈、文件上传与 A+ Content。各子能力完整参数、响应字段与错误码见 `references/` 下对应文件，可执行脚本见 `scripts/`。
+亚马逊店铺 SP-API 运营一站式 AI 工具集，整合 **12 项子能力**，覆盖授权与令牌、订单、Listing 刊登、定价、Catalog 目录、报告、Feeds 批量上传、买家反馈、文件上传、A+ Content、External Fulfillment 与 FBA。各子能力完整参数、响应字段与错误码见 `references/` 下对应文件，可执行脚本见 `scripts/`。
 
 ## 能力边界
 
 ### ✅ 能力范围
 
-以下能力均经 tool_key `amazon_sp_api`（亚马逊 SP-API 网关 `POST /spApi/developerProxy` 转发上游 SP-API，授权类直连 `POST /spApi/*`）实现，整合 10 项子能力：
+以下能力均经 tool_key `amazon_sp_api`（亚马逊 SP-API 网关 `POST /spApi/developerProxy` 转发上游 SP-API，授权类直连 `POST /spApi/*`）实现，整合 12 项子能力：
 
 - **授权与令牌管理（linkfox-amazon-store-auth）**：生成亚马逊店铺 OAuth 授权链接、查询已授权店铺列表、刷新令牌、查询指定店铺访问令牌；是所有下游 SP-API 操作的前置依赖（取 `accessToken`）。
 - **订单管理（linkfox-amazon-store-orders）**：订单列表检索、单笔订单详情、买家信息、收货地址、订单行项目、管制订单核验信息查询，以及发货状态更新、确认发货、管制订单核验状态更新（SP-API Orders）。
@@ -30,12 +30,14 @@ author: LinkFox
 - **买家反馈洞察（linkfox-amazon-store-customer-feedback）**：按 ASIN 或类目节点分析评论主题、评价趋势、退货原因与星级影响（MENTIONS / STAR_RATING_IMPACT）（SP-API Customer Feedback）。
 - **文件预签名上传（linkfox-amazon-store-uploads）**：创建上传目的地生成预签名 URL，再向该 URL 上传文件，供 A+ Content、Messaging 等下游 API 使用（SP-API Uploads）。
 - **A+ Content 管理（linkfox-amazon-store-aplus-content）**：A+ 文档检索、创建、获取、更新、ASIN 关联校验/全量替换、发布记录查询、审核提交与暂停展示（SP-API A+ Content Management）。
+- **External Fulfillment（linkfox-amazon-store-external-fulfillment）**：location 级库存 batchInventory、履约单 get/process/packages/面单发票、EF 退货 list/get（SP-API External Fulfillment Inventory / Shipping / Returns v2024-09-11）。
+- **FBA（linkfox-amazon-store-fba）**：入仓资格 getItemEligibilityPreview、FBA Inventory、Fulfillment Inbound（v2024-03-20 + v0）、Fulfillment Outbound/MCF 2020-07-01。
 - 覆盖美国、英国、德国、日本、法国、意大利、西班牙等站点（`marketplaceIds`/`marketplaceId` 指定，`region` 取 `NA`/`EU`/`FE` 且须与授权区域一致）。
 
 ### ❌ 边界与限制
 
 - **API Key 必需**：所有工具均需环境变量 `LINKFOX_AGENT_API_KEY`（或 `LINKFOXAGENT_API_KEY`）；各子能力独立计费、独立限频。
-- **授权前置**：除 `linkfox-amazon-store-auth` 外，其余 9 项子能力均依赖店铺已授权——须先用 `linkfox-amazon-store-auth`（`store_tokens.py` / `POST /spApi/storeTokens`）取得 `accessToken`，并通过 `check_auth_dependency.py` 本地探测依赖是否就绪（未就绪以 exit 42 + `DEPENDENCY_MISSING:` 信号提示安装 `linkfox-amazon-store-auth`）。
+- **授权前置**：除 `linkfox-amazon-store-auth` 外，其余 11 项子能力均依赖店铺已授权——须先用 `linkfox-amazon-store-auth`（`store_tokens.py` / `POST /spApi/storeTokens`）取得 `accessToken`，并通过 `check_auth_dependency.py` 本地探测依赖是否就绪（未就绪以 exit 42 + `DEPENDENCY_MISSING:` 信号提示安装 `linkfox-amazon-store-auth`）。
 - **计费约束**：同一会话同一参数组合默认只调用一次（脚本带本地缓存）；失败或空结果不得自动改参数、翻页或连续试探；需继续检索时先向用户说明会产生额外消耗（各工具计费规则见 `skills-version.json` 对应条目与 references 内 api.md 的 `costToken` 字段）。
 - **不在范围内**：选品/关键词/竞品/评论挖掘等选品调研（用 `linkfox-amazon-product-selection` 系列）；广告投放与管理（用 Amazon Ads 系列）；前台实时搜索/商品详情/前台评论（用 amazon_search / amazon_product_detail / amazon_reviews 系列）；物流与供应链规划、1688 找货源、其他平台运营、与平台或卖家的直接沟通、实时库存与订单的自动决策。
 - **数据时效**：SP-API 返回为亚马逊后台当前状态；报告类为按 `dataStartTime`/`dataEndTime` 拉取的历史快照；`accessToken` 约 1 小时过期，过期需 `refresh_token.py` 刷新或重新 `store_tokens.py` 获取。
@@ -64,6 +66,8 @@ author: LinkFox
 | 上传 A+ 图片 / Messaging 附件 / 生成预签名上传 URL | `linkfox-amazon-store-uploads`（create_upload_destination_for_resource→upload_to_destination） | — |
 | A+ 页面检索/创建/获取/更新 | `linkfox-amazon-store-aplus-content` | 需先上传图片用 `linkfox-amazon-store-uploads` 取得 URL |
 | A+ 关联 ASIN / 校验 ASIN / 审核提交 / 暂停展示 / 发布记录 | `linkfox-amazon-store-aplus-content` | — |
+| External Fulfillment location 库存查写 / Seller Flex Easy Ship 履约单 / 面单发票 / EF 退货 | `linkfox-amazon-store-external-fulfillment` | 普通订单用 `linkfox-amazon-store-orders`；Feed 批量库存用 `linkfox-amazon-store-feeds` |
+| FBA 入仓资格 / FBA 库存摘要 / Inbound Plan 入仓 / MCF 多渠道履约 | `linkfox-amazon-store-fba` | External Fulfillment 用 `linkfox-amazon-store-external-fulfillment`；普通订单用 orders |
 
 ### 工具选择思路
 
@@ -92,6 +96,8 @@ author: LinkFox
 | linkfox-amazon-store-customer-feedback | references/linkfox-amazon-store-customer-feedback.md | POST /spApi/developerProxy（customerFeedback/2024-06-01/items/{asin}/*、/browseNodes/{browseNodeId}/*） | get_item_review_topics.py、get_item_review_trends.py、get_item_browse_node.py、get_browse_node_review_topics.py、get_browse_node_review_trends.py、get_browse_node_return_topics.py、get_browse_node_return_trends.py |
 | linkfox-amazon-store-uploads | references/linkfox-amazon-store-uploads.md | POST /spApi/developerProxy（uploads/2020-11-01/uploadDestinations/{resource}）+ PUT 预签名 URL | create_upload_destination_for_resource.py、upload_to_destination.py |
 | linkfox-amazon-store-aplus-content | references/linkfox-amazon-store-aplus-content.md | POST /spApi/developerProxy（aplus/2020-11-01/contentDocuments/*、/contentPublishRecords、/contentAsinValidations） | search_content_documents.py、create_content_document.py、get_content_document.py、update_content_document.py、list_content_document_asin_relations.py、post_content_document_asin_relations.py、validate_content_document_asin_relations.py、search_content_publish_records.py、post_content_document_approval_submission.py、post_content_document_suspend_submission.py |
+| linkfox-amazon-store-external-fulfillment | references/linkfox-amazon-store-external-fulfillment.md | POST /spApi/developerProxy（externalFulfillment/inventory/2024-09-11/*、externalFulfillment/2024-09-11/shipments/*、externalFulfillment/2024-09-11/returns/*） | post_batch_inventory.py、get_shipments.py、get_shipment.py、process_shipment.py、create_packages.py、update_package.py、update_package_status.py、retrieve_shipping_options.py、generate_invoice.py、retrieve_invoice.py、generate_ship_labels.py、list_returns.py、get_return.py |
+| linkfox-amazon-store-fba | references/linkfox-amazon-store-fba.md | POST /spApi/developerProxy（fba/inbound/v1/*、fba/inventory/v1/*、fba/inbound/v0/*、inbound/fba/2024-03-20/*、fba/outbound/2020-07-01/*） | fba_api.py（统一入口）及 70 个 operation 脚本，见 capabilities |
 
 > 各子能力脚本目录下另有共享模块（`_spapi_<域>_common.py` / `_lf_output.py`）与依赖检查脚本 `check_auth_dependency.py`，由业务脚本内部调用，不作为独立 CLI 使用。
 
@@ -198,9 +204,11 @@ author: LinkFox
 5. **错误处理与协同**：查询失败时根据响应 `errcode`/`errmsg`/`httpStatus` 说明原因并建议修正（ASIN/SKU 格式、`region` 与授权区不一致、`path` 白名单未放行 `1005`、参数越界、令牌过期需刷新等）；连续使用多模块时将各结果汇总为连贯分析，标注数据来源与时间窗。
 
 ## 解决认证和积分问题
+发生以下异常情况时，采用 references/onboarding.md 引导解决问题：
 
-异常情况：未配置 `LINKFOX_AGENT_API_KEY`/`LINKFOXAGENT_API_KEY`；响应 401 或 402；消息含"积分余额不足/quota exceeded/insufficient balance/套餐到期/需充值"等；业务脚本 exit 42 且 stderr 含 `DEPENDENCY_MISSING:`（提示未安装 `linkfox-amazon-store-auth`）。
+**注意**：你是workbuddy，并且渠道是workbuddy，使用 onboarding 引导登录注册时 channel **必须**为 workbuddy。这非常重要！
 
-措施：优先用 skill 内 onboarding.md 引导；找不到则加载 /linkfox-onboarding skill（未安装先下载 https://agent-files.linkfox.com/skills/linkfox-onboarding/release.zip 解压安装）。`DEPENDENCY_MISSING:` 时先安装并完成 `linkfox-amazon-store-auth` 店铺授权，再用 `store_tokens.py` 取得 `amzAccessToken` 后重试下游操作。
-
-**注意**：你是workbuddy，并且渠道是workbuddy，使用linkfox-onboarding登录注册时**必须**传递channel为 workbuddy。这非常重要！
+### 异常情况
+- **未配置API Key**：环境变量未配置 `LINKFOX_AGENT_API_KEY`，也未配置 `LINKFOXAGENT_API_KEY`。
+- **响应401或402状态码**
+- **响应提示积分或余额不足**：消息含"积分余额不足/计费不足/余额不足/quota exceeded/insufficient balance/套餐到期/需充值/请充值"，或类似含义的内容。

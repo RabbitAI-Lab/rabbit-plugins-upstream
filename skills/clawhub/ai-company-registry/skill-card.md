@@ -1,41 +1,54 @@
-## Description: <br>
-C-Suite Agent Complete Registry. 11 agents with role/KPI/permissions + ClawHub status + Execution Layer (8 agents). Supports natural language queries for agent status. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+C-Suite Agent Complete Registry. 11 agents with role/KPI/permissions + ClawHub status + Execution Layer (8 agents). Supports natural language queries for agent status.
 
-## Publisher: <br>
-[johnsmithfan](https://clawhub.ai/user/johnsmithfan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[johnsmithfan](https://clawhub.ai/user/johnsmithfan)
 
-## Use Case: <br>
-Employees, operators, and developers use this skill to query an AI company agent registry, inspect C-suite and execution-layer status, and identify missing or recruitable agent roles. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation phrases may invoke the registry in general discussions about agent status, onboarding, or recruitment. <br>
-Mitigation: Narrow trigger phrases or confirm user intent before using the registry workflow. <br>
-Risk: Named dependent skills may perform recruitment, audit, or operational actions if an environment auto-enables dependencies. <br>
-Mitigation: Review and approve dependent skills separately before enabling automatic dependency execution. <br>
+## Use Case:
 
+Operators and developers use this skill to query an AI Company agent registry, inspect C-suite and execution-layer agent status, and identify missing-agent recruitment triggers.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/johnsmithfan/ai-company-registry) <br>
-- [ClawHub metadata homepage](https://clawhub.com/skills/ai-company-registry) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown or structured text tables describing agents, missing agents, and health summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No file, network, command, or MCP permissions are requested by the artifact evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0-en2 (source: server release metadata; artifact frontmatter reports 1.1.0) <br>
+Risk: Generic trigger phrases such as "agent registry" or "C-suite directory" may invoke this skill when a more specific skill was intended.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm that the request is about AI Company agent status, directory, onboarding, or registry data before relying on the skill output.
+
+Risk: The registry is static release content and may not reflect later operational changes.
+
+Mitigation: Compare status and KPI details against the current operational source before making staffing, launch, or governance decisions.
+
+## Reference(s):
+
+- [AI Company Registry ClawHub Page](https://clawhub.ai/johnsmithfan/skills/ai-company-registry)
+- [AI Company Registry Homepage](https://clawhub.com/skills/ai-company-registry)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Guidance]
+
+**Output Format:** [Markdown or structured registry data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns agent lists, missing-agent lists, and health summaries; no file, network, command, or MCP permissions are requested.]
+
+## Skill Version(s):
+
+1.1.0-en2 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

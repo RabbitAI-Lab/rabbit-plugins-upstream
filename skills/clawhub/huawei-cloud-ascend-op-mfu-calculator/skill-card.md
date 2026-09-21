@@ -1,45 +1,56 @@
-## Description: <br>
-Calculate MFU (Machine FLOP Utilization) for operators like matmul, GEMM, and FlashAttention on Ascend NPU, providing clear formulas and derivation steps. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Calculates Machine FLOP Utilization (MFU) for Ascend NPU operators such as matmul, GEMM, and FlashAttention, with formulas, worked steps, and optimization guidance.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and performance engineers use this skill to calculate and interpret Machine FLOP Utilization for Ascend NPU operators, including matmul, GEMM, and FlashAttention. It helps compare operator efficiency and identify optimization opportunities from dimensions, timing, and hardware peak FLOPs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Profiling files or performance data may contain workload details the user did not intend to analyze. <br>
-Mitigation: Provide only profiling files or performance data intended for MFU analysis. <br>
-Risk: MFU results can be misleading if operator dimensions, execution time, hardware peak FLOPs, or sparse attention settings are incorrect. <br>
-Mitigation: Verify dimensions, timing units, chip model, precision mode, and FlashAttention sparse mode before using the result for optimization decisions. <br>
+## Use Case:
 
+Developers and performance engineers use this skill to calculate operator MFU from dimensions, execution time, and hardware peak FLOPs. It helps compare operator implementations, interpret utilization results, and identify optimization opportunities for Ascend NPU workloads.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-ascend-op-mfu-calculator) <br>
-- [Publisher Profile](https://clawhub.ai/user/huaweiclouddev) <br>
-- [MFU Calculation Methodology](references/mfu-calculation-methodology.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Ascend 910B Series Technical Specifications](https://e.huawei.com/cn/products/computing/ascend-910) <br>
-- [FlashAttention Technical Paper](https://arxiv.org/abs/2205.14135) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown with formulas, calculation steps, and optional Python snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses user-provided operator dimensions, execution time, device model, and peak TFLOPs to calculate and explain MFU.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Profiler CSVs and performance details can reveal workload characteristics.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only provide profiler files and performance details that are intended for analysis in the current agent session.
+
+Risk: Incorrect hardware peak FLOPs values or chip model assumptions can produce misleading MFU results.
+
+Mitigation: Verify peak FLOPs values against current vendor documentation and confirm the target Ascend model and precision mode before relying on results.
+
+## Reference(s):
+
+- [Ascend 910B Series Technical Specifications](https://e.huawei.com/cn/products/computing/ascend-910)
+- [MFU Calculation Methodology](references/mfu-calculation-methodology.md)
+- [Verification Method](references/verification-method.md)
+- [FlashAttention Technical Paper](https://arxiv.org/abs/2205.14135)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, guidance]
+
+**Output Format:** [Markdown guidance with formulas, calculations, interpretation notes, and optional Python snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May use profiler timing data and user-provided hardware peak FLOPs values.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

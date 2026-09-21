@@ -1,42 +1,56 @@
-## Description: <br>
-Operates Honeybadger through an OOMOL-connected account to report check-ins, deployments, Insights events, and exception notices using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Honeybadger helps an agent inspect live connector schemas and run Honeybadger check-in, deployment, Insights event, and exception reporting actions through the OOMOL oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to submit Honeybadger check-ins, deployment reports, Insights events, and exception notices through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can submit Honeybadger check-ins, deployments, events, and exception notices. <br>
-Mitigation: Treat every report_* action as a write, inspect the live connector schema, and require explicit user confirmation of the exact payload before execution. <br>
-Risk: The skill relies on connected Honeybadger credentials through OOMOL. <br>
-Mitigation: Install only for users who intend to use OOMOL with Honeybadger, and retry setup only after authentication, connection, scope, app readiness, or billing failures. <br>
+## Use Case:
 
+Developers, operators, and support engineers use this skill to report Honeybadger check-ins, deployments, Insights events, and exception notices from an OOMOL-connected account. The skill is suited for agent-assisted Honeybadger operations where schemas are checked before action payloads are built.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/oo-honeybadger) <br>
-- [Honeybadger Homepage](https://www.honeybadger.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the oo CLI, an OOMOL account, and a connected Honeybadger credential; report actions can submit data to Honeybadger.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: The setup instructions include remote shell and PowerShell installer commands without checksum or signature verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the OOMOL CLI installation path first, prefer verified official documentation with pinned releases or checksum/signature verification, and do not let an agent run the installer automatically.
+
+Risk: Honeybadger write actions can create operational records such as check-ins, deployments, events, and exception notices.
+
+Mitigation: Fetch the live connector schema, show the exact payload and expected effect to the user, and get confirmation before running any write action.
+
+## Reference(s):
+
+- [ClawHub Honeybadger skill page](https://clawhub.ai/oomol/skills/oo-honeybadger)
+- [Honeybadger homepage](https://www.honeybadger.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with oo CLI shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,55 @@
-## Description: <br>
-Control D (controld.com). Use this skill for ANY Control D request: reading, creating, updating, and deleting data through the OOMOL Control D connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Control D helps agents operate Control D through an OOMOL-connected account to read, create, update, and delete profile DNS data via the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect Control D profiles and manage custom DNS profile rules through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change persistent Control D DNS profile rules. <br>
-Mitigation: Confirm the exact write payload and expected filtering effect with the user before running actions tagged [write]. <br>
-Risk: The skill can delete Control D profile rules. <br>
-Mitigation: Require explicit user approval for destructive actions and confirm the target rule before deletion. <br>
-Risk: The skill depends on OOMOL-connected credentials and the oo CLI provider. <br>
-Mitigation: Install and use it only when the user intends to let an agent manage Control D through OOMOL, and run the remote oo CLI installer only when OOMOL is trusted as the provider. <br>
+## Use Case:
 
+External users and developers use this skill to manage Control D profiles, profile rules, service discovery, and troubleshooting through an OOMOL-connected Control D account.
 
-## Reference(s): <br>
-- [Control D homepage](https://controld.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-control-d) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return Control D profile, rule, service, IP, datacenter, and execution metadata from oo CLI calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: The first-time setup path can run remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer step before use and prefer documented, verifiable package-manager or checksum-verified installation steps.
+
+Risk: Profile rule actions can delete, replace, or overwrite Control D DNS configuration.
+
+Mitigation: Confirm the exact profile, rule targets, and payload with the user before allowing destructive Control D actions.
+
+## Reference(s):
+
+- [ClawHub Control D skill page](https://clawhub.ai/oomol/skills/oo-control-d)
+- [Control D homepage](https://controld.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON command payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May execute oo CLI connector actions that return JSON data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

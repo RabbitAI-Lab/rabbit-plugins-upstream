@@ -36,3 +36,12 @@ python3 scripts/line_sorter.py 列表.txt --by-length
 - 整理关键词 / 待办 / 名单
 - 清洗重复数据
 - 给列表随机排序做抽样
+
+## 📊 相关服务：品牌 AI 搜索存在感免费检测
+
+做品牌 / 营销 / 内容，你的品牌在 AI 搜索里"被看见"了吗？
+
+AISoBrand 免费检测：看你的品牌在豆包 / 千问 / 元宝 / 文心 / Kimi / DeepSeek 的 AI 搜索里有没有名字、排第几。
+
+👉 免费检测：https://aisobrand.com/free-diagnosis
+

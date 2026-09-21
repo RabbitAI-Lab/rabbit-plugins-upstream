@@ -1,47 +1,56 @@
-## Description: <br>
-Use when users need to implement, integrate, debug, build, deploy, or validate a Web frontend after the product direction is already clear, especially for React, Vue, Vite, browser flows, or CloudBase Web integration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when users need to implement, integrate, debug, build, deploy, or validate a Web frontend after the product direction is already clear, especially for React, Vue, Vite, browser flows, or CloudBase Web integration.
 
-## Publisher: <br>
-[binggg](https://clawhub.ai/user/binggg) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[binggg](https://clawhub.ai/user/binggg)
 
-## Use Case: <br>
-Developers and engineers use this skill to implement, debug, build, deploy, and validate web frontends, especially React, Vue, Vite, routing, browser validation, and CloudBase Web integration work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Authentication examples may lead an agent toward weak access control if copied into production without review. <br>
-Mitigation: Review authentication snippets before production use, require real server-side token validation, and avoid client-readable access-token cookies where possible. <br>
-Risk: CloudBase deployment guidance can be applied with an implicit or incorrect region. <br>
-Mitigation: Select an explicit CloudBase region that matches deployment and compliance needs before using the skill for production work. <br>
-Risk: Frontend changes may be declared complete without browser-level verification. <br>
-Mitigation: Run the skill's static checks and browser-validation workflow for changes affecting routing, rendering, forms, authentication, or async UI. <br>
+## Use Case:
 
+Developers and engineers use this skill to implement, debug, build, deploy, and validate Web frontends or static sites, especially when working with React, Vue, Vite, browser workflows, or CloudBase Web integration.
 
-## Reference(s): <br>
-- [CloudBase main skill entry](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/SKILL.md) <br>
-- [Web Development raw source](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/web-development/SKILL.md) <br>
-- [Browser validation playbook](browser-testing.md) <br>
-- [Framework guidance](frameworks.md) <br>
-- [CloudBase integration documentation](https://docs.cloudbase.net/integration/introduce/index.md) <br>
-- [CloudBase Web SDK CDN](https://static.cloudbase.net/cloudbase-js-sdk/latest/cloudbase.full.js) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code snippets, shell commands, configuration examples, and validation notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct the agent to run build, lint, test, deployment, and browser-validation checks when applicable.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.27.17 (source: ClawHub release metadata; artifact frontmatter declares 2.24.1) <br>
+Risk: Authentication examples may lead an agent to create protected routes that accept fake tokens or rely on JavaScript-readable bearer-token cookies.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require real server-side token verification before any protected operation and review or patch authentication examples before production use.
+
+Risk: Deployment and tooling guidance can change CloudBase resources.
+
+Mitigation: Require explicit environment confirmation, build verification, and deployment-gate checks before applying CloudBase hosting or deployment changes.
+
+## Reference(s):
+
+- [CloudBase integration documentation](https://docs.cloudbase.net/integration/introduce.md)
+- [CloudBase JavaScript SDK CDN](https://static.cloudbase.net/cloudbase-js-sdk/latest/cloudbase.full.js)
+- [Browser Validation](artifact/browser-testing.md)
+- [Framework Guidance](artifact/frameworks.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline code blocks and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include implementation steps, verification checks, browser validation guidance, and CloudBase configuration notes.]
+
+## Skill Version(s):
+
+1.27.56 (source: server release metadata; artifact frontmatter lists 2.34.6)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

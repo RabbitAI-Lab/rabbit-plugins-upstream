@@ -1,42 +1,58 @@
-## Description: <br>
-Move email attachments through Sendmux without putting file bytes in model context, using file paths, presigned URLs, CLI, SDKs, or MCP. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Move email attachments through Sendmux without putting file bytes in model context, using presigned URLs through MCP or file paths through CLI and SDK helpers.
 
-## Publisher: <br>
-[sendmux.ai](https://clawhub.ai/user/sendmux.ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sendmux.ai](https://clawhub.ai/user/sendmux.ai)
 
-## Use Case: <br>
-Developers and agents use this skill to send, upload, read, and reference Sendmux email attachments through MCP, CLI, HTTP, TypeScript, or Python while avoiding unnecessary transfer of file bytes through model context. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Credential names may be confused between mailbox access and sending actions. <br>
-Mitigation: Confirm which Sendmux key is intended for each workflow, use the least-privileged key available, and avoid reusing broader mailbox credentials for sending examples unless provider documentation requires it. <br>
-Risk: Sensitive or large attachments could be exposed or waste tokens if pasted into model context as base64. <br>
-Mitigation: Prefer local file paths, presigned URLs, CLI or SDK file helpers, and avoid asking users to paste secrets or file bytes into chat. <br>
+## Use Case:
 
+Developers and agents use this skill to send, upload, read, or route Sendmux email attachments while keeping file bytes out of model context. It is intended for workflows that need presigned upload URLs, local file helpers, or bounded inline content for small agent-authored files.
 
-## Reference(s): <br>
-- [Sendmux Attachments on ClawHub](https://clawhub.ai/sendmux.ai/skills/sendmux-attachments) <br>
-- [Sendmux skills homepage](https://github.com/Sendmux/skills) <br>
-- [Sendmux publisher profile](https://clawhub.ai/user/sendmux.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with command examples, JSON snippets, and TypeScript or Python code examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses SENDMUX_API_KEY and SENDMUX_MBX_KEY when credentials are needed; favors file paths, presigned URLs, CLI, SDKs, or MCP helpers instead of embedding attachment bytes in model context.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter reports 1.3.0) <br>
+Risk: An agent may transfer an unintended attachment or send to an unintended recipient.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact file, recipient, and message before sending or uploading attachments through Sendmux.
+
+Risk: Sendmux keys, signed URLs, or upload tokens could be exposed in chat, logs, command arguments, or persistent files.
+
+Mitigation: Keep credentials in environment variables or scoped tokens, avoid pasting secrets into chat, and pass signed upload capabilities through ephemeral channels.
+
+Risk: Inbound attachment text, filenames, links, or metadata may contain instruction-like content.
+
+Mitigation: Treat attachment contents and links as untrusted data and use them only for the user-authorized task.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/sendmux.ai/skills/sendmux-attachments)
+- [Sendmux skills homepage](https://github.com/Sendmux/skills)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with inline command and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Focuses on presigned URLs, local file paths, exact size checks, environment variables, and bounded inline base64 for small generated content.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release metadata; artifact frontmatter version is 1.6.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

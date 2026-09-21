@@ -30,39 +30,19 @@ from typing import List, Tuple
 
 
 # ── 安全打印（解决 #6: GBK 控制台 UnicodeEncodeError）──
-_STDOUT_ENCODING = getattr(sys.stdout, 'encoding', 'utf-8') or 'utf-8'
+# 统一实现见 safe_io.py（ensure_utf8_stdio / sp 别名），
+# 此处仅复用，不再各脚本维护副本。
+from safe_io import ensure_utf8_stdio, read_text, safe_print, safe_write
 
+sp = safe_print  # 兼容本文件既有的调用名
 
-def sp(*args, **kwargs) -> None:
-    """safe_print：GBK 环境不崩溃。"""
-    try:
-        print(*args, **kwargs)
-    except UnicodeEncodeError:
-        sa = [a.encode(_STDOUT_ENCODING, errors='replace').decode(
-              _STDOUT_ENCODING, errors='replace')
-              if isinstance(a, str) else str(a) for a in args]
-        print(*sa, **kwargs)
-
-
-def safe_read(path: str) -> str:
-    """安全读取（同 safe_io.py，无依赖版本）。"""
-    with open(path, 'rb') as f:
-        raw = f.read()
-    if raw.startswith(b'\xff\xfe') or raw.startswith(b'\xfe\xff'):
-        try:
-            return raw.decode('utf-16')
-        except:
-            pass
-    try:
-        return raw.decode('utf-8')
-    except UnicodeDecodeError:
-        return raw.decode('utf-8', errors='replace')
+ensure_utf8_stdio()
 
 
 def safe_write(path: str, content: str) -> None:
     """安全写入 UTF-8。"""
     os.makedirs(os.path.dirname(path) or '.', exist_ok=True)
-    with open(path, 'w', encoding='utf-8') as f:
+    with open(path, 'w', encoding='utf-8', newline='\n') as f:
         f.write(content)
 
 
@@ -122,7 +102,7 @@ def main():
     sp(f"replacements: {len(replacements)}")
     sp("-" * 40)
 
-    content = safe_read(path)
+    content = read_text(path)
     new_content = apply_replacements(content, replacements, path)
 
     if content == new_content:

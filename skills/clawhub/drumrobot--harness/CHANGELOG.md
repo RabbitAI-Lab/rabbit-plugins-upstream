@@ -1,0 +1,36 @@
+# Changelog
+
+## [0.1.3](https://github.com/es6kr/skills/compare/harness-v0.1.2...harness-v0.1.3) (2026-09-18)
+
+
+### Bug Fixes
+
+* **cleanup:** make the session-end report table self-sufficient ([#487](https://github.com/es6kr/skills/issues/487)) ([c4a0255](https://github.com/es6kr/skills/commit/c4a02557fb8de3b32cf337c549f62535dabf824b))
+
+## [0.1.2](https://github.com/es6kr/skills/compare/harness-v0.1.1...harness-v0.1.2) (2026-08-17)
+
+
+### Bug Fixes
+
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([4982364](https://github.com/es6kr/skills/commit/49823641a7b08123ebd0325273892bee41bc3280))
+
+## [0.1.1](https://github.com/es6kr/skills/compare/harness-v0.1.0...harness-v0.1.1) (2026-08-05)
+
+
+### Bug Fixes
+
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([951c1e6](https://github.com/es6kr/skills/commit/951c1e6871e78e226757c6a7ae5ae53efeb7bfb0))
+
+## 0.1.0 (2026-06-25)
+
+
+### Features
+
+* **harness:** add Phase 1 skill (pipeline, guardrails, recovery) ([0295f9f](https://github.com/es6kr/skills/commit/0295f9f38874a03e2a498b96bec87933b7bc1f59))
+* skill-kit graph topic + harness Phase 1 + auxiliary improvements ([01437f2](https://github.com/es6kr/skills/commit/01437f2135d5729eee16f074cb77e52b3cb1772c))
+
+
+### Bug Fixes
+
+* **fix:** split Step 2 medium by content type — case history to failed-attempts.md ([#62](https://github.com/es6kr/skills/issues/62)) ([747b3f9](https://github.com/es6kr/skills/commit/747b3f957ca0fefdbc5044eb08f66b8aafc1e26a))
+* **harness:** register Phase 1 skill for release-please cascade ([b8bcb1c](https://github.com/es6kr/skills/commit/b8bcb1c69d0c8d446c1fba4a06ecf5bb96430f55))

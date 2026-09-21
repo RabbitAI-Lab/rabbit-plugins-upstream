@@ -1,43 +1,56 @@
-## Description: <br>
-Celigo (celigo.com). Use this skill for ANY Celigo request: reading, creating, and updating data through an OOMOL-connected Celigo account instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Celigo (celigo.com). Use this skill for Celigo requests that search or read data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users, developers, and operations teams use this skill to inspect Celigo resources and run Celigo connector actions through an OOMOL-connected account. It supports connection, export, flow, import, and token metadata workflows while prompting schema checks before action payloads are built. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to an OOMOL-connected Celigo account and may expose account-scoped Celigo data through connector responses. <br>
-Mitigation: Install it only for users who need Celigo account access, and review requested Celigo actions and payloads before approval. <br>
-Risk: Actions tagged write or destructive can change, remove, or overwrite Celigo data if run with an incorrect payload. <br>
-Mitigation: Fetch the live action schema first, confirm the exact target and payload with the user, and require explicit approval before write or destructive actions. <br>
+## Use Case:
 
+Developers, operators, and business users use this skill to inspect Celigo account metadata and retrieve Celigo flows, exports, imports, connections, and token information through the OOMOL oo CLI connector.
 
-## Reference(s): <br>
-- [Celigo skill page](https://clawhub.ai/oomol/oo-celigo) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Celigo homepage](https://www.celigo.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Guidance, JSON] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before building action payloads; command responses may include JSON data and execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: The first-time setup instructions can execute a remote oo CLI installer script with local user privileges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source and prefer a signed or package-manager installation path before running the installer.
+
+Risk: Connector actions depend on the user's connected Celigo account and live action schemas.
+
+Mitigation: Fetch the action schema before constructing payloads and limit execution to the listed read-only get and list actions unless future actions are explicitly reviewed.
+
+## Reference(s):
+
+- [Celigo homepage](https://www.celigo.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-celigo)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution and returns oo CLI connector responses with data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

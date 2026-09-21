@@ -1,45 +1,56 @@
-## Description: <br>
-Roam SCIM lets an agent read, create, update, and delete Roam SCIM users and groups through the OOMOL oo CLI instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Roam SCIM helps agents read, create, update, and delete Roam SCIM data through OOMOL-backed oo CLI connector actions instead of direct API calls.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to administer Roam SCIM through an OOMOL-connected account, including user lifecycle operations, group management, and service provider configuration lookup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change or archive Roam SCIM users and groups through the connected OOMOL account. <br>
-Mitigation: Require explicit user approval of the exact target, payload, and expected effect before running write or destructive actions. <br>
-Risk: Full replacement actions can overwrite supported user attributes or group member lists. <br>
-Mitigation: Fetch the live action schema first and review replacement payloads carefully before execution. <br>
-Risk: The skill depends on the user's OOMOL authentication, service connection, scopes, and billing state. <br>
-Mitigation: Only run setup, reconnection, or billing guidance after the oo command reports the corresponding error. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Roam SCIM users and groups through OOMOL-backed actions, including reads, user lifecycle changes, and group membership updates.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-roam-scim) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Roam SCIM Homepage](https://ro.am) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI commands and JSON payload or response details] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before building action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill metadata) <br>
+Risk: The first-time setup section includes remote shell installer commands for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI manually from trusted official instructions instead of having an agent execute remote installer scripts directly.
+
+Risk: Write and destructive Roam SCIM actions can create, archive, replace, or delete users and groups.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running state-changing actions.
+
+## Reference(s):
+
+- [ClawHub Roam SCIM skill page](https://clawhub.ai/oomol/skills/oo-roam-scim)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Roam SCIM homepage](https://ro.am)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands are scoped to the oo CLI connector for roam_scim and should inspect live schemas before constructing payloads.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

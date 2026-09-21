@@ -1,38 +1,57 @@
-## Description: <br>
-基于贝索斯长期主义和客户至上理念，分析战略决策、创业取舍，助力形成可持续的长期价值与创新方案。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Applies Jeff Bezos-inspired long-termism, customer obsession, Day 1 thinking, and innovation frameworks to help users reason through strategy, entrepreneurship, career, and business-model decisions.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers, founders, product leaders, and business strategists use this Chinese-first skill to apply a Bezos/Amazon-style long-term strategy lens to customer value, entrepreneurship, career, and investment tradeoffs. Treat its dated market and AI commentary as framing prompts rather than verified current facts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Dated market and AI commentary may be mistaken for verified current facts. <br>
-Mitigation: Use the commentary as strategic framing and verify time-sensitive claims against authoritative current sources before relying on them. <br>
+## Use Case:
 
+Business leaders, founders, strategy teams, and career decision-makers use this skill to frame long-term tradeoffs, customer value, reversible versus irreversible decisions, and innovation portfolio choices. It is for strategic brainstorming and decision preparation, not professional investment, legal, HR, or compliance advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/bezos-long-term-principle) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or structured text in Chinese with strategy analysis prompts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prompt-only guidance; no code execution, data access, persistence, or hidden privileged behavior per security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.1 (source: server release evidence and artifact metadata) <br>
+Risk: Users may treat strategic brainstorming as professional financial, legal, HR, or compliance advice.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep outputs framed as decision support and require responsible decision-makers or qualified professionals to validate high-impact conclusions.
+
+Risk: Users may provide confidential business data, customer identifiers, account details, credentials, or unpublished financials while describing strategy questions.
+
+Mitigation: Ask users to minimize, anonymize, or abstract sensitive information before using the skill, and avoid requesting credentials or secrets.
+
+Risk: Long-term strategy outputs may be mistaken for guaranteed outcomes or business commitments.
+
+Mitigation: Express conclusions as scenario-based reasoning with assumptions, uncertainty, and stop conditions rather than promises.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/bezos-long-term-principle)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown-style strategic analysis, decision tables, self-check questions, and caveated recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese-first prose with English key terms; outputs should remain advisory and avoid treating strategic scenarios as guaranteed outcomes.]
+
+## Skill Version(s):
+
+2.1.2 (source: server release metadata and artifact identity)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

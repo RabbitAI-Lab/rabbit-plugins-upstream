@@ -229,7 +229,9 @@ def walk_files(root: Path, filename: str | None = None) -> list[Path]:
         return None
     for current, directories, files in os.walk(root, topdown=True, followlinks=False, onerror=onerror):
         base = Path(current)
-        directories[:] = [name for name in directories if not is_link_or_junction(base / name)]
+        directories[:] = [name for name in directories
+                       if not is_link_or_junction(base / name)
+                       and name.lower() not in ("archived", ".archived")]  # [local-patch] 排除备份目录（大小写不敏感）
         for name in files:
             if filename is None or name == filename:
                 found.append(base / name)
@@ -352,7 +354,9 @@ def enrich_source_conflicts(candidates: list[dict]) -> None:
         by_id.setdefault(item["id"], []).append(item)
     for item in candidates:
         peers = by_id[item["id"]]
-        actionable = [peer for peer in peers if peer.get("source_type") in CONFLICT_SOURCE_TYPES]
+        actionable = [peer for peer in peers if peer.get("source_type") in CONFLICT_SOURCE_TYPES
+                      and peer.get("installation_status") != "cached_only"
+                      and not any(part.startswith("plugin-install-") for raw in peer.get("source_paths", []) for part in Path(raw).parts)]
         catalog_peers = [peer for peer in peers if peer.get("source_type") == "remote_plugin_catalog"]
         item["source_candidates"] = [
             {"source_type": peer.get("source_type"), "source_paths": peer.get("source_paths", []),
@@ -561,6 +565,10 @@ def unresolved_visible_items(items: list[dict]) -> list[str]:
 
 
 def main() -> int:
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
     parser = argparse.ArgumentParser(description="Collect read-only Codex Chinese UI candidates.")
     parser.add_argument("--root", type=Path, default=Path(os.environ.get("CODEX_HOME", Path.home() / ".codex")))
     parser.add_argument("--catalog-dir", type=Path)

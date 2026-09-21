@@ -1,42 +1,58 @@
-## Description: <br>
-Backup and restore Daniel agents with git. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Repair or set up six-hour real workspace backups with immediate failure notification.
 
-## Publisher: <br>
-[daniel-refahi-ikara](https://clawhub.ai/user/daniel-refahi-ikara) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[daniel-refahi-ikara](https://clawhub.ai/user/daniel-refahi-ikara)
 
-## Use Case: <br>
-Agent operators use this skill to set up, audit, repair, and restore backup continuity for Daniel-owned agents. It guides agents through preserving durable memory and workspace source files in git while restoring secrets through approved secret-management paths. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Secrets, credentials, runtime artifacts, or private/customer data could be committed to git during backup. <br>
-Mitigation: Review staged files before each commit, keep credentials outside git, and use a .gitignore that blocks env files, auth stores, logs, caches, databases, and bulky generated state. <br>
-Risk: Backups could be pushed to the wrong repository or a repository without appropriate ownership or access controls. <br>
-Mitigation: Confirm the Azure DevOps organization, project, repo, and credential method before first push, and ask Daniel before creating repositories, changing access controls, or pushing to a new remote. <br>
-Risk: Git backups may be mistaken for full machine recovery. <br>
-Mitigation: Use git for durable human-readable memory and configuration only; restore secrets through approved secret paths and rely on system-level backups for full runtime recovery. <br>
+## Use Case:
 
+Developers and operators use this skill to set up, audit, repair, or restore deterministic backups for a Daniel-owned agent workspace. It focuses on preserving durable memory and configuration through scheduled git commits, pushes, health checks, and failure notification.
 
-## Reference(s): <br>
-- [DR Agent Backup on ClawHub](https://clawhub.ai/daniel-refahi-ikara/skills/dr-agent-backup) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with checklist steps and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes setup, commit, restore, and audit procedures for git-based agent continuity.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Recurring backup jobs can commit and push selected workspace files to a remote repository.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the intended remote, branch, credential method, allowlist, and exclude list before enabling the scheduler.
+
+Risk: Backup credentials or sensitive runtime files could be exposed if included in tracked paths.
+
+Mitigation: Store credentials outside git and verify that env files, local auth profiles, caches, databases, logs, media dumps, and generated transcripts remain excluded.
+
+Risk: A failed backup commit, push, scheduler, or notification route can silently weaken restore continuity.
+
+Mitigation: Use a deterministic scheduler, non-zero runner exits on failure, immediate failure notification, and periodic health checks for stale or missing backups.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/daniel-refahi-ikara/skills/dr-agent-backup)
+- [Publisher profile](https://clawhub.ai/user/daniel-refahi-ikara)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown with checklists and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance is intended for agent execution and review before enabling scheduled backups or notifications.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

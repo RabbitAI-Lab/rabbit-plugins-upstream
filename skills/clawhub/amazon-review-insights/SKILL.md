@@ -1,6 +1,11 @@
 ---
 name: amazon-review-insights
 description: Amazon product review intelligence analysis tool for global e-commerce sellers. Core capabilities:fetch Amazon reviews, AI-powered negative review analysis, quantify high-frequency issues, discover hidden negative feedback in 5-star reviews, generate improvement suggestions, track review trends, incremental updates.
+slug: amazon-review-insights
+displayName: amazon-review-insights
+version: 1.2.5
+summary: Amazon product review intelligence analysis tool for global e-commerce sellers. Fetch Amazon reviews, run AI-powered negative review analysis, quantify high-frequency issues, discover hidden negative feedback in 5-star reviews, generate improvement suggestions, track review trends, and support incremental updates.
+license: MIT-0
 metadata:
   openclaw:
     requires:
@@ -32,10 +37,10 @@ All API calls require an API Key for authentication.
 export CUSTOMER_INSIGHTS_API_KEY="your-api-key-here"
 ```
 
-> To obtain an API Key: Download and install the AstrMap desktop client from https://www.astrmap.com/, log in, click **User Menu (bottom-left)** → **API Keys**, create and copy your API Key.
+> To obtain an API Key: Open https://app.astrmap.com/ and sign in (register first if needed), then click **User Menu (bottom-left)** → **API Keys**, create and copy your API Key.
 
 **Important**: If `CUSTOMER_INSIGHTS_API_KEY` is not set or no API Key is provided, **ask the user first**:
-> "Please provide your AstrMap API Key (download at https://www.astrmap.com/, log in, click User Menu → API Keys to create one)"
+> "Please provide your AstrMap API Key (open https://app.astrmap.com/, sign in, then go to User Menu → API Keys to create one)"
 >
 > Then pass it via `--api-key` parameter for all subsequent commands.
 
@@ -43,7 +48,7 @@ export CUSTOMER_INSIGHTS_API_KEY="your-api-key-here"
 
 ### Feature Tiers
 
-| Feature | Requires Desktop Client | Requires API Key |
+| Feature | Requires Collection Channel (Chrome browser extension) | Requires API Key |
 |---------|------------------------|-----------------|
 | Query completed analysis results | No | Yes |
 | Create collection-only task | Yes (online) | Yes |
@@ -51,19 +56,24 @@ export CUSTOMER_INSIGHTS_API_KEY="your-api-key-here"
 | Incremental fetch | Yes (online) | Yes |
 | Manual trigger analysis | No | Yes |
 
-> Tip: If you only need to query completed analysis results, you can use the API Key directly without downloading the desktop client.
+> Tip: If you only need to query completed analysis results, you can use the API Key directly without installing any collection component.
 
-### Desktop Client
+### Collection Channel: Chrome Browser Extension
 
-Creating tasks requires the AstrMap desktop client running online.
+Creating tasks requires a collection channel running online. AstrMap's collection channel is the **Chrome browser extension** (the website no longer offers the desktop client for download).
 
-**When device is offline** (`check_device` returns 1001 error):
+> The online endpoint returned by `check_device` carries an `endpoint_type` field: `extension` for the browser extension,
+> `desktop` for legacy desktop client installs (historical builds, no longer distributed).
+> Either way, as long as `is_alive=true` you can create tasks.
 
-1. **Ask the user**: "The desktop client is not running. Have you installed it?"
-2. **If not installed**: Ask if you should help download, then guide through extraction and startup
-3. **If installed but not running**: Prompt user to start the desktop client, then re-check online status
+**When the collection channel is offline** (`check_device` returns `is_alive=false` with `endpoint_id`/`endpoint_type` `null` — a normal response, not an error code):
 
-### Desktop Client Download & Installation
+1. **Tell the user**: "No collection channel is online. You need to install and sign in to the AstrMap browser extension first."
+2. **Guide installation**: Point the user to https://www.astrmap.com/en/#download and follow the steps on that page
+3. **Guide login**: After installing, sign in to an Amazon buyer account in Chrome (do not use your seller account) and make sure Amazon is reachable
+4. **Re-check**: Run `check_device` again; confirm `is_alive=true` before creating the task
+
+### Extension Installation Guide
 
 #### 1. Get Download Links
 
@@ -71,21 +81,20 @@ Creating tasks requires the AstrMap desktop client running online.
 python scripts/api_client.py --action get_download_links
 ```
 
-#### 2. Extraction Notes
+#### 2. Installation Steps
 
-> Important: Do not use Windows built-in extraction tools (may cause issues). Use 7-Zip, WPS Extraction, or similar tools instead.
+1. Download and extract the extension package
+2. Open Chrome and go to `chrome://extensions/`
+3. Enable "Developer mode" in the top-right corner
+4. Click "Load unpacked"
+5. Select the extracted extension folder to complete installation
 
-#### 3. Startup Guide
+#### 3. Setup After Installation
 
-**macOS**: Move the folder to "Applications" directory, right-click Astrmap.app → "Open", if blocked go to "System Settings → Privacy & Security → General" → "Still open".
-
-**Windows**: Right-click "launch.vbs" → "Run with PowerShell" or double-click to start.
-
-#### 4. Initial Setup
-
-After launching:
-1. Log in to your AstrMap account
-2. Log in to your Amazon buyer account (do not use your seller account)
+After installing the extension:
+1. Open the Web app at https://app.astrmap.com/ and sign in to your AstrMap account
+2. Sign in to your Amazon buyer account in Chrome (do not use your seller account)
+3. Make sure Amazon is reachable
 3. Ensure Amazon access is working
 
 ### Security & Verification
@@ -108,8 +117,8 @@ pip install -r requirements.txt
 
 ### Prerequisites (only for creating tasks)
 
-1. AstrMap desktop client is logged in
-2. Desktop client is logged in to Amazon buyer account
+1. Collection channel online (Chrome extension installed and connected; `check_device` returns `is_alive=true`)
+2. Signed in to an Amazon buyer account in the browser (do not use your seller account)
 3. Amazon access is working
 
 > Querying completed task results has no restrictions and can be called directly.
@@ -184,7 +193,7 @@ python scripts/api_client.py --action get_task_detail --api-key "your-key" --tas
 | CANCELLED | "Task cancelled" |
 | COLLECTED | "Collection complete! In pending analysis state." |
 
-> If task does not complete after a long time (over 18 minutes), prompt user to check if desktop client is online.
+> If task does not complete after a long time (over 18 minutes), prompt user to check if the collection channel (browser extension) is online.
 
 ### 4. Get Analysis Results
 
@@ -225,7 +234,7 @@ Status flow: `COLLECTED` → `PROCESSING` → `ANALYZING` → `SUCCESS`
 
 | action | Description | Required Parameters |
 |--------|-------------|-------------------|
-| get_download_links | Get desktop client download links | - |
+| get_download_links | Get browser extension download links | - |
 | check_device | Check if device is online | - |
 | create_task | Create task | --asin, --site |
 | create_incremental | Incremental fetch | --task-id |
@@ -246,9 +255,12 @@ Status flow: `COLLECTED` → `PROCESSING` → `ANALYZING` → `SUCCESS`
 
 ## Error Handling
 
+> Note: `api_client` throws `API Error: {msg}` for any non-zero `code` — rely on the returned **msg** for diagnosis;
+> an offline collection channel is **not** an error code, but `check_device`'s normal `is_alive=false` response.
+
 | Error Code | Description | Handling |
 |-----------|-------------|----------|
-| 1001 | Device offline | Desktop client not running. Ask if installed; if not, provide download guide |
+| Device offline | `check_device` returns `is_alive=false` (normal response, not an error code) | No collection channel online; guide the user to install/sign in to the browser extension |
 | 1002 | Insufficient points | Prompt user to recharge at https://www.astrmap.com/ |
 | 2001 | Invalid API Key | Check if API Key is correct |
 | 2002 | API Key disabled | Prompt user to create new API Key |
@@ -284,7 +296,7 @@ AI Agent:
 1. Check API Key and device
 2. Create task with --is-auto false
 3. Poll status until COLLECTED
-4. After user confirms analysis, run trigger_analysis (API Key only, no desktop client required)
+4. After user confirms analysis, run trigger_analysis (API Key only, no collection channel required)
 ```
 
 ### Scenario 3: Query Completed Task

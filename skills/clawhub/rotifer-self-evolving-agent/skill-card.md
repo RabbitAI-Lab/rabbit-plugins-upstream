@@ -1,48 +1,66 @@
-## Description: <br>
-Scans agent capabilities, benchmarks them against Rotifer Arena rankings, and presents stronger upgrade alternatives. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Rank an Agent's Rotifer Genes against the Arena and swap in stronger ones when invoked explicitly with /evolve, with user approval required before replacements are installed.
 
-## Publisher: <br>
-[xiaoba-dev](https://clawhub.ai/user/xiaoba-dev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xiaoba-dev](https://clawhub.ai/user/xiaoba-dev)
 
-## Use Case: <br>
-Developers and agent operators use this skill to audit local Rotifer agent capabilities, compare them with Arena rankings, discover alternatives, and apply approved capability upgrades. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: The runtime MCP server package is fetched with npx and cached locally. <br>
-Mitigation: Install only if the Rotifer MCP package is trusted; inspect the package, source, permissions, and npm integrity before use. <br>
-Risk: Capability upgrades can modify local Rotifer agent configuration under ~/.rotifer/. <br>
-Mitigation: Review the proposed Gene, source, permissions, and expected file changes before approving an upgrade. <br>
-Risk: Arena rankings measure performance and do not guarantee safety or suitability. <br>
-Mitigation: Treat rankings as performance data and run an independent safety and security review before deploying replacements. <br>
+## Use Case:
 
+Developers and agent maintainers use this skill to compare local Rotifer Genes against Arena rankings, inspect stronger alternatives, and approve upgrades or rollbacks. It also helps compose and run local Agents from installed Genes.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/xiaoba-dev/rotifer-self-evolving-agent) <br>
-- [Rotifer Protocol](https://rotifer.dev) <br>
-- [Rotifer Documentation](https://rotifer.dev/docs) <br>
-- [Rotifer MCP Server Package](https://www.npmjs.com/package/@rotifer/mcp-server/v/0.8.1) <br>
-- [Rotifer MCP Server Source](https://github.com/rotifer-protocol/rotifer-mcp-server) <br>
-- [Rotifer Protocol Specification](https://github.com/rotifer-protocol/rotifer-spec) <br>
-- [Capability Marketplace](https://rotifer.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with slash-command examples and MCP tool actions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May recommend or perform local Gene installation under ~/.rotifer/ after user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.2.1 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Runtime tooling is fetched from npm, and run-agent may use an unpinned @rotifer/playground fallback if the reviewed CLI is not installed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and pin the Rotifer packages before use; install the Rotifer CLI at a fixed reviewed version so run-agent does not need the unpinned fallback.
+
+Risk: Upgrades can install unsigned third-party Genes into the current project.
+
+Mitigation: Treat each proposed Gene like a dependency: review the publisher, source, Arena grade, and safety scan before approving, and use rollback if an upgrade behaves unexpectedly.
+
+Risk: When logged in, usage telemetry can be sent to Rotifer Cloud, and installs update a public install counter.
+
+Mitigation: Stay logged out or set ROTIFER_TELEMETRY=0 when telemetry is not desired.
+
+Risk: run-agent executes local Agent Genes.
+
+Mitigation: Keep execution inside the WASM sandbox and do not run Genes unsandboxed from a terminal unless the code has been separately reviewed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/xiaoba-dev/skills/rotifer-self-evolving-agent)
+- [Rotifer Documentation](https://rotifer.dev/docs)
+- [Rotifer Protocol](https://rotifer.dev)
+- [Rotifer Capability Marketplace](https://rotifer.ai)
+- [Rotifer MCP Server package](https://www.npmjs.com/package/@rotifer/mcp-server/v/0.17.0)
+- [Rotifer Protocol Specification](https://github.com/rotifer-protocol/rotifer-spec)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Shell commands, Configuration, Code]
+
+**Output Format:** [Markdown with inline shell commands and local file changes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces recommendations from live Arena data and can write project Genes, Agent definitions, rollback snapshots, local run logs, and an update-check cache after user-approved actions.]
+
+## Skill Version(s):
+
+2.4.8 (source: frontmatter, clawhub metadata, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

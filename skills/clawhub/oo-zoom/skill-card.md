@@ -1,43 +1,56 @@
-## Description: <br>
-Operates Zoom through an OOMOL-connected account to read, create, list, and update Zoom user and meeting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zoom (zoom.com). Use this skill for Zoom requests that read, create, and update meeting or user data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, developers, and automation agents use this skill to inspect Zoom schemas and run Zoom connector actions for user lookup and meeting scheduling or updates through an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Creating or updating Zoom meetings can change real Zoom or calendar state. <br>
-Mitigation: Confirm the exact action, target user or meeting ID, and JSON payload before running write actions. <br>
-Risk: The connected OOMOL Zoom account or OAuth scopes may not match the user's intended account or permissions. <br>
-Mitigation: Review the connected Zoom account and granted OAuth scopes in OOMOL before use, especially before write actions. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Zoom through an OOMOL-connected account, including creating or updating meetings, listing meetings, and fetching user details. It is suited for external or employee workflows that need Zoom automation while confirming write actions before execution.
 
-## Reference(s): <br>
-- [ClawHub Zoom skill page](https://clawhub.ai/oomol/oo-zoom) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Zoom homepage](https://www.zoom.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are returned as JSON with data and meta.executionId fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server evidence and skill frontmatter) <br>
+Risk: Setup instructions include remote script execution for installing the OOMOL CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the OOMOL CLI installation path before use and prefer an official documented installer with verification where available.
+
+Risk: The skill can create or update Zoom meetings through the connected account.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [Zoom homepage](https://www.zoom.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-zoom)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May invoke the oo CLI to return JSON connector responses containing data and an execution ID.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

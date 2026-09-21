@@ -1,15 +1,31 @@
 #!/usr/bin/env bash
-# init-plan.sh — Scaffold .plan/ directory with template files
-# Usage: bash init-plan.sh [task-name]
+# init-plan.sh — Scaffold a durable task plan
+# Usage: bash init-plan.sh [task-name] [--force]
 #
-# Creates .plan/ with task_plan.md, findings.md, progress.md
+# Creates .plan/task_plan.md
 # Adds .plan/ to .gitignore if not present
+# Refuses to overwrite a task_plan.md that still has unchecked tasks
+# unless --force is given.
 
 set -euo pipefail
 
 PLAN_DIR=".plan"
-TASK_NAME="${1:-Unnamed Task}"
+FORCE=0
+TASK_NAME="Unnamed Task"
+for arg in "$@"; do
+    case "$arg" in
+        --force) FORCE=1 ;;
+        *) TASK_NAME="$arg" ;;
+    esac
+done
 DATE=$(date +%Y-%m-%d)
+
+# Guard: an existing plan with unchecked tasks is live work in progress.
+if [ "$FORCE" -ne 1 ] && [ -f "$PLAN_DIR/task_plan.md" ] && grep -q '^\s*- \[ \]' "$PLAN_DIR/task_plan.md"; then
+    echo "ERROR: $PLAN_DIR/task_plan.md has unchecked tasks." >&2
+    echo "Same work continuing: update it in place. Different work: confirm which plan wins, then re-run with --force." >&2
+    exit 1
+fi
 
 # Create directory
 mkdir -p "$PLAN_DIR"
@@ -36,9 +52,14 @@ cat > "$PLAN_DIR/task_plan.md" << EOF
 - **In**: [what's included]
 - **Out**: [what's explicitly excluded]
 
+## Next Step
+
+[one line: the phase and task to resume on]
+
 ## Phase 1: [Name]
 
-**Files**: [specific files, max 5-8 per phase]
+**Status**: pending
+**Files**: [specific files owned by this phase]
 
 **Tasks**:
 - [ ] [Verb-first atomic task]
@@ -48,7 +69,7 @@ cat > "$PLAN_DIR/task_plan.md" << EOF
 
 ## Open Questions
 
-- [Max 3, only truly blocking unknowns]
+- [Only genuinely blocking unknowns]
 
 ## Error Log
 
@@ -56,50 +77,6 @@ cat > "$PLAN_DIR/task_plan.md" << EOF
 |---------|-------------|-----|-------------|
 EOF
 
-# findings.md
-cat > "$PLAN_DIR/findings.md" << EOF
-# Findings: ${TASK_NAME}
-
-**Created:** ${DATE}
-
-## Architecture
-
-[Key structural observations about the codebase]
-
-## Dependencies
-
-[External dependencies, version constraints, gotchas]
-
-## Discoveries
-
-[Anything unexpected found during investigation]
-EOF
-
-# progress.md
-cat > "$PLAN_DIR/progress.md" << EOF
-# Progress: ${TASK_NAME}
-
-**Started:** ${DATE}
-
-## Session Log
-
-### ${DATE}
-
-- [Started planning]
-
-## Files Changed
-
-| File | Change |
-|------|--------|
-
-## Test Results
-
-| Phase | Command | Result |
-|-------|---------|--------|
-EOF
-
 echo "Created ${PLAN_DIR}/ with:"
 echo "  - task_plan.md"
-echo "  - findings.md"
-echo "  - progress.md"
 echo "Added .plan/ to .gitignore"

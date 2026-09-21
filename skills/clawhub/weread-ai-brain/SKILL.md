@@ -1,6 +1,22 @@
 ---
 name: weread-ai-brain
-description: 微信读书/WeRead 专用阅读数据与笔记分析 skill。仅当用户明确提到“微信读书”或“WeRead”，并请求生成微信读书看板、微信读书 HTML 看板、微信读书书籍分析、微信读书跨书关联、微信读书导出笔记、微信读书阅读人格/MBTI 时使用。会通过用户提供的 WEREAD_API_KEY 读取书架、阅读统计、划线和个人想法；导出或打开本地文件前必须先说明内容与路径并取得用户确认。
+description: 微信读书/WeRead 专用阅读数据与笔记分析 skill。仅当用户明确提到“微信读书”或“WeRead”，并请求生成微信读书看板、微信读书 HTML 看板、微信读书书籍分析、微信读书跨书关联、微信读书导出笔记、微信读书阅读人格/MBTI 时使用。会通过用户提供的 WEREAD_API_KEY 读取书架、阅读统计、划线和个人想法；导出本地文件前必须先说明内容与路径并取得用户确认。
+allowed-tools: Bash(python3 ./tools/fetch_weread.py:*)
+permissions:
+  - network
+  - env
+metadata:
+  openclaw:
+    requires:
+      env:
+        - WEREAD_API_KEY
+      bins:
+        - python3
+    primaryEnv: WEREAD_API_KEY
+    envVars:
+      - name: WEREAD_API_KEY
+        required: true
+    homepage: https://github.com/yamyeed/weread-ai-brain
 ---
 
 # WeRead AI Brain — 微信读书 AI 阅读外脑
@@ -21,7 +37,7 @@ description: 微信读书/WeRead 专用阅读数据与笔记分析 skill。仅�
 
 在首次读取微信读书数据前，先用一句话告知用户将访问的数据范围：书架、阅读统计、划线和个人想法。若用户的请求只需要单本书，不要读取多本书笔记；若用户未明确要求跨书关联或语义导出，不要聚合跨书笔记。
 
-本 skill 不向微信读书官方统一网关以外的第三方服务发送用户 API Key。除非用户明确要求导出，否则不要把划线、想法或分析结果写入本地文件。导出前必须说明将保存的文件类型、路径和包含的数据，并等待用户确认。
+本 skill 不向微信读书官方统一网关以外的第三方服务发送用户 API Key。除非用户明确要求导出，否则不要把划线、想法或分析结果写入本地文件。导出前必须说明将保存的文件类型、路径和包含的数据，并等待用户确认。不要执行系统命令打开生成的文件；保存完成后只报告路径，由用户自行决定是否打开。
 
 ## 环境变量
 
@@ -36,6 +52,7 @@ description: 微信读书/WeRead 专用阅读数据与笔记分析 skill。仅�
 - **统一网关入口**：`https://i.weread.qq.com/api/agent/gateway`（POST）
 - **请求头**：`Authorization: Bearer {WEREAD_API_KEY}` 和 `Content-Type: application/json`
 - **请求体**：所有参数平铺在顶层 JSON，必须包含 `api_name` 和 `skill_version: 2.0.0`
+- **传输约束**：只允许 HTTPS，TLS 或 HTTP 失败时立即停止；不要降级协议、切换域名或以宽松参数重试。
 
 ### API 映射表
 
@@ -50,13 +67,15 @@ description: 微信读书/WeRead 专用阅读数据与笔记分析 skill。仅�
 | 个人想法 | `/review/list/mine` | `bookid`, `count` | 返回该书个人想法/点评 |
 | 阅读进度 | `/book/getprogress` | `bookId` | — |
 
+### 辅助脚本隐私闸门
+
+`tools/fetch_weread.py` 的所有联网命令都必须显式传入 `--confirm-private-data`。只有在已经向用户说明目标接口、将读取的数据范围，并取得用户确认后，才可传入该参数。优先使用满足当前请求的最小范围命令，不要用 `dashboard` 代替单书或单项查询。
+
 ```bash
-# 示例
-curl -X POST "https://i.weread.qq.com/api/agent/gateway" \
-  -H "Authorization: Bearer $WEREAD_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"api_name": "/shelf/sync", "skill_version": "2.0.0"}'
+python3 ./tools/fetch_weread.py --confirm-private-data bookmarks "$BOOK_ID"
 ```
+
+脚本会在请求前再次输出微信读书官方网关地址和本次数据范围。不要把该确认参数写入别名、启动脚本或持久化配置。
 
 ---
 
@@ -72,13 +91,13 @@ curl -X POST "https://i.weread.qq.com/api/agent/gateway" \
 
 明确触发词：「微信读书生成 HTML 看板」/「WeRead HTML 看板」/「微信读书卡片版」
 
-根据下方「HTML 看板模板规范」生成完整 HTML 文件。生成文件前先告知用户该 HTML 会包含微信读书统计、书架摘要、划线/想法摘要或分析结果，并询问保存路径；用户未指定路径时，优先保存到当前工作区的 `outputs/` 或 `weread-exports/` 目录。只有用户明确同意“保存并打开”时，才执行 `open`（macOS）/ `xdg-open`（Linux）/ `start`（Windows）。
+根据下方「HTML 看板模板规范」生成完整 HTML 文件。生成文件前先告知用户该 HTML 会包含微信读书统计、书架摘要、划线/想法摘要或分析结果，并询问保存路径；用户未指定路径时，优先保存到当前工作区的 `outputs/` 或 `weread-exports/` 目录。保存完成后只报告文件路径，不要执行系统命令打开文件。
 
 #### HTML 看板模板规范
 
 生成 HTML 看板时，必须遵循以下结构和样式规范，确保视觉一致性和功能完整：
 
-**整体结构**：单文件 HTML，暗色主题为默认，支持亮色切换。使用 Google Fonts（Inter + Noto Sans SC + JetBrains Mono）。最大宽度 1100px 居中布局。
+**整体结构**：单文件 HTML，暗色主题为默认，支持亮色切换。仅使用操作系统自带的无衬线与等宽字体栈，不加载远程字体或其他第三方资源。最大宽度 1100px 居中布局。
 
 **主题系统**：CSS 变量驱动，`[data-theme="dark"]` 和 `[data-theme="light"]` 双主题，所有颜色、背景、边框、发光效果均通过变量控制。右上角固定主题切换按钮（🌙/☀️），localStorage 持久化。
 
@@ -86,18 +105,20 @@ curl -X POST "https://i.weread.qq.com/api/agent/gateway" \
 
 **六模块渲染**：
 
-1. **核心指标**：4 列 grid，每张卡片顶部 2px 渐变色条（蓝/绿/琥珀/粉），数值用 JetBrains Mono 大号字，颜色与色条对应。
+1. **核心指标**：4 列 grid，每张卡片顶部 2px 渐变色条（蓝/绿/琥珀/粉），数值用系统等宽字体大号字，颜色与色条对应。
 2. **绿墙**：CSS grid（48px + 12 列），5 级颜色（lv0-lv4），hover 放大 1.3 倍，底部图例用色块。
 3. **脑波图**：flex 柱状图，每根柱子渐变色（hue 220→260），峰值柱加发光阴影和 🧠 标记。
 4. **知识光谱**：水平进度条 + 百分比，6 色循环。下方诊断区紫色边框背景，推荐书单绿色文字。
-5. **AI 分析卡片**：琥珀→粉→蓝渐变边框 + 双色发光动画（6s 交替），内部深色背景。分析类型用彩色 badge 区分（概念通解蓝、PM 拆解琥珀、法务排雷粉）。摘录区左侧琥珀色竖线 + 大号引号装饰。分析结果支持 markdown→HTML 转换（`**粗体**`、`- 列表`、`1. 编号`）。上下文关联用卡片列表，章节名用琥珀色标签。
+5. **AI 分析卡片**：琥珀→粉→蓝渐变边框 + 双色发光动画（6s 交替），内部深色背景。分析类型用彩色 badge 区分（概念通解蓝、PM 拆解琥珀、法务排雷粉）。摘录区左侧琥珀色竖线 + 大号引号装饰。分析结果以纯文本展示并保留换行和 Markdown 标记，不把外部内容转换为可执行 HTML。上下文关联用卡片列表，章节名用琥珀色标签。
 6. **MBTI 灵魂卡片**：紫→蓝→绿渐变边框 + 发光动画，内部双列布局（左：4 字母方块 + 基因代码标签，右：人格名渐变文字 + 灵魂判词左侧紫线 + 维度条）。4 个字母方块各自渐变色（蓝/紫/粉/琥珀），维度条双向（如 B←→D）。
 
-**占位符替换**：HTML 中使用 `{{PLACEHOLDER}}` 格式，生成时替换为实际数据。占位符映射见下方「HTML 看板占位符映射」表。JS 中数据占位符（如 `{{WALL_DATA_JSON}}`）替换为 JSON 字面量，文本占位符替换为转义后的字符串。
+**安全数据注入**：模板只有 `{{DASHBOARD_DATA_JSON_ESCAPED_FOR_HTML}}` 一个数据占位符。先把完整数据对象序列化为 JSON，再将 `<`、`>`、`&`、U+2028、U+2029 分别替换为 `\\u003c`、`\\u003e`、`\\u0026`、`\\u2028`、`\\u2029`，最后替换该占位符。不要直接替换其他 HTML 或 JavaScript 片段。模板只用 `textContent` 和受限 DOM API 渲染外部字段。
+
+**语言选择**：数据对象中的 `lang` 与 `ui` 必须按用户明确选择的语言生成；用户未指定时，沿用当前对话语言。`ui.weekdays` 也必须本地化。模板初始使用中性的 `lang="und"`，加载数据后才设置用户选择的 BCP 47 标签，不固定任何语言或地区。
 
 **响应式**：768px 以下指标 2 列、双栏变单栏、MBTI 卡片单列居中、分析卡片内边距缩小。
 
-**条件渲染**：若 `{{ANALYSIS_BOOK_TITLE}}` 未被替换（仍为原始占位符字符串），则隐藏整个 AI 分析卡片 section。
+**条件渲染**：若 `analysis.bookTitle` 为空，则隐藏整个 AI 分析卡片 section。
 
 ### 看板六模块规范
 
@@ -239,28 +260,23 @@ curl -X POST "https://i.weread.qq.com/api/agent/gateway" \
 
 ### HTML 看板占位符映射
 
-HTML 看板中使用的占位符及其含义：
+HTML 看板只使用一个安全数据占位符：
 
 | 占位符 | 说明 |
 |:--|:--|
-| `{{USER_NAME}}` | 用户昵称 |
-| `{{DATE}}` | 当前日期 YYYY-MM-DD |
-| `{{BOOK_COUNT}}` / `{{READING_HOURS}}` / `{{NOTE_COUNT}}` / `{{STREAK_DAYS}}` | 四项核心指标 |
-| `{{WALL_DATA_JSON}}` | 二维数组 `[7行][12列]`，值 0-4 |
-| `{{BRAINWAVE_DATA_JSON}}` | 长度 24 的数组，每小时活跃度 |
-| `{{SPECTRUM_DATA_JSON}}` | `[{name, pct, count}, ...]` |
-| `{{DIAGNOSIS_TEXT}}` / `{{RECOMMENDED_BOOKS}}` | AI 认知盲区诊断文字 |
-| `{{MBTI_1}}`~`{{MBTI_4}}` | 4 个字母 |
-| `{{PERSONA_NAME}}` / `{{PERSONA_QUOTE}}` / `{{RECENT_BOOK}}` | 人格信息 |
-| `{{DIM_B_PCT}}`~`{{DIM_S_PCT}}` | 各维度百分比 |
-| `{{ANALYSIS_BOOK_TITLE}}` | 分析书籍名称 |
-| `{{ANALYSIS_BOOK_AUTHOR}}` | 分析书籍作者 |
-| `{{ANALYSIS_TEMPLATE_TYPE}}` | 分析模板：概念通解 / PM拆解 / 法务排雷 |
-| `{{ANALYSIS_EXCERPT}}` | 用户划线原文 |
-| `{{ANALYSIS_RESULT}}` | AI 分析结果（支持 markdown 格式：\*\*粗体\*\*、- 列表、1. 编号） |
-| `{{ANALYSIS_CONTEXT_JSON}}` | 上下文关联 JSON：`[{chapter, text, thought}, ...]` |
+| `{{DASHBOARD_DATA_JSON_ESCAPED_FOR_HTML}}` | 经上述 HTML 安全转义后的完整 JSON 对象；不得放入原始 JSON、HTML 或脚本 |
 
-保存 HTML 前必须取得用户确认。默认保存到当前工作区的 `outputs/` 或 `weread-exports/` 目录；只有用户明确指定桌面时，才保存到 `~/Desktop/` 或 `~/桌面/`。只有用户明确要求打开浏览器时，才执行 `open`（macOS）/ `xdg-open`（Linux）/ `start`（Windows）。
+数据对象包含：
+
+- `lang`：用户选择或当前对话语言对应的 BCP 47 标签。
+- `ui`：本地化界面标签，包含 `weekdays` 七项数组、`weekPrefix`、`bookUnit` 和所有标题、指标、区块、图例文案。
+- `userName`、`date`、`metrics`：用户昵称、日期与四项核心指标。
+- `wall`、`brainwave`、`spectrum`：绿墙二维数组、24 小时数组与 `[{name, pct, count}]`。
+- `diagnosisText`、`recommendedBooks`：诊断与推荐书单文本。
+- `mbti`：`code`、`personaName`、`personaQuote`、`recentBook`、`dimensions`。
+- `analysis`：`bookTitle`、`bookAuthor`、`templateType`、`templateKind`（`concept` / `pm` / `legal`）、`excerpt`、`result`、`context`（`[{chapter, text, thought}]`）。
+
+保存 HTML 前必须取得用户确认。默认保存到当前工作区的 `outputs/` 或 `weread-exports/` 目录；只有用户明确指定桌面时，才保存到 `~/Desktop/` 或 `~/桌面/`。保存完成后只报告路径，不要执行系统命令打开文件。
 
 ---
 
@@ -423,7 +439,7 @@ tags:
 | 触发词 | 能力 | 模块 |
 |:--|:--|:--|
 | "微信读书生成看板" / "WeRead 生成看板" / "微信读书 dashboard" | Markdown 完整看板（5 模块） | 可视化 |
-| "微信读书生成 HTML 看板" / "WeRead HTML 看板" / "微信读书卡片版" | HTML 卡片看板，保存/打开前确认 | 可视化 |
+| "微信读书生成 HTML 看板" / "WeRead HTML 看板" / "微信读书卡片版" | HTML 卡片看板，保存前确认 | 可视化 |
 | "微信读书阅读打卡" / "WeRead 绿墙" | 12 周打卡绿墙 | 可视化 |
 | "微信读书习惯分析" / "WeRead 黄金时段" | 24h 脑波频段图 | 可视化 |
 | "微信读书盲区分析" / "WeRead 偏科分析" | 知识光谱 + 认知盲区诊断 | 可视化 |
@@ -483,4 +499,4 @@ tags:
 - 分析时若上下文为空或不相关，明确说明，不要编造关联。
 - 上下文联动必须经用户确认，且最多选取 8 条相关划线/想法，避免 prompt 过长。
 - 导出文件必须经用户确认；默认保存到当前工作区的 `outputs/` 或 `weread-exports/` 目录，文件名格式 `weread-{类型}-{日期}.md`。
-- 不要自动打开浏览器或本地文件；只有用户明确要求打开时才执行系统打开命令。
+- 不要执行系统命令打开浏览器或本地文件；保存完成后只报告路径。

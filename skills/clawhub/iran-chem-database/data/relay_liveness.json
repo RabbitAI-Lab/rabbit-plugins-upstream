@@ -1,0 +1,231 @@
+{
+ "generated_utc": "2026-09-21T11:58:35Z",
+ "methods": {
+  "translate_goog": {
+   "verdict": "ALIVE",
+   "probes": [
+    {
+     "url": "https://example-com.translate.goog/?_x_tr_sl=auto&_x_tr_tl=de&_x_tr_hl=en",
+     "verdict": "ALIVE",
+     "detail": "5518B in 88ms",
+     "status": 200,
+     "ms": 88
+    }
+   ],
+   "best_ms": 88,
+   "detail": "5518B in 88ms"
+  },
+  "bing_cache": {
+   "verdict": "DEAD",
+   "probes": [
+    {
+     "url": "https://cc.bingj.com/cache.aspx?q=example.com",
+     "verdict": "DEAD",
+     "detail": "URLError: <urlopen error [Errno -2] Name or service not known>",
+     "status": 0,
+     "ms": 22
+    }
+   ],
+   "best_ms": null,
+   "detail": "URLError: <urlopen error [Errno -2] Name or service not known>"
+  },
+  "yandex_cache": {
+   "verdict": "DEAD",
+   "probes": [
+    {
+     "url": "https://cc.yandex.com/cache?url=https%3A%2F%2Fexample.com",
+     "verdict": "DEAD",
+     "detail": "HTTP 404",
+     "status": 404,
+     "ms": 823
+    }
+   ],
+   "best_ms": null,
+   "detail": "HTTP 404"
+  },
+  "web_light": {
+   "verdict": "DEAD",
+   "probes": [
+    {
+     "url": "https://googleweblight.com/i?u=https%3A%2F%2Fexample.com",
+     "verdict": "DEAD",
+     "detail": "HTTP 404",
+     "status": 404,
+     "ms": 112
+    }
+   ],
+   "best_ms": null,
+   "detail": "HTTP 404"
+  },
+  "amp_cache": {
+   "verdict": "ALIVE",
+   "probes": [
+    {
+     "url": "https://cdn.ampproject.org/c/s/example.com/",
+     "verdict": "ALIVE",
+     "detail": "277B in 58ms",
+     "status": 200,
+     "ms": 58
+    }
+   ],
+   "best_ms": 58,
+   "detail": "277B in 58ms"
+  },
+  "cors_proxy": {
+   "verdict": "FLAKY",
+   "probes": [
+    {
+     "url": "https://api.allorigins.win/get?url=https%3A%2F%2Fexample.com",
+     "verdict": "FLAKY",
+     "detail": "TimeoutError: The read operation timed out",
+     "status": 0,
+     "ms": 15063
+    },
+    {
+     "url": "https://corsproxy.io/?https://example.com",
+     "verdict": "DEAD",
+     "detail": "HTTP 403",
+     "status": 403,
+     "ms": 49
+    },
+    {
+     "url": "https://api.codetabs.com/v1/proxy?quest=https%3A%2F%2Fexample.com",
+     "verdict": "FLAKY",
+     "detail": "TimeoutError: The read operation timed out",
+     "status": 0,
+     "ms": 15034
+    }
+   ],
+   "best_ms": null,
+   "detail": "TimeoutError: The read operation timed out"
+  },
+  "microlink": {
+   "verdict": "ALIVE",
+   "probes": [
+    {
+     "url": "https://api.microlink.io/?url=https%3A%2F%2Fexample.com",
+     "verdict": "ALIVE",
+     "detail": "583B in 71ms",
+     "status": 200,
+     "ms": 71
+    }
+   ],
+   "best_ms": 71,
+   "detail": "583B in 71ms"
+  },
+  "jsonlink": {
+   "verdict": "DEAD",
+   "probes": [
+    {
+     "url": "https://jsonlink.io/api/extract?url=https%3A%2F%2Fexample.com",
+     "verdict": "DEAD",
+     "detail": "HTTP 403",
+     "status": 403,
+     "ms": 113
+    }
+   ],
+   "best_ms": null,
+   "detail": "HTTP 403"
+  },
+  "jina": {
+   "verdict": "ALIVE",
+   "probes": [
+    {
+     "url": "https://r.jina.ai/https://example.com",
+     "verdict": "ALIVE",
+     "detail": "367B in 142ms",
+     "status": 200,
+     "ms": 142
+    }
+   ],
+   "best_ms": 142,
+   "detail": "367B in 142ms"
+  },
+  "wayback": {
+   "verdict": "FLAKY",
+   "probes": [
+    {
+     "url": "https://web.archive.org/cdx/search/cdx?url=example.com&limit=1&output=json",
+     "verdict": "FLAKY",
+     "detail": "TimeoutError: The read operation timed out",
+     "status": 0,
+     "ms": 15094
+    }
+   ],
+   "best_ms": null,
+   "detail": "TimeoutError: The read operation timed out"
+  },
+  "commoncrawl": {
+   "verdict": "ALIVE",
+   "probes": [
+    {
+     "url": "http://index.commoncrawl.org/CC-MAIN-2025-21-index?url=example.com&output=json&limit=1",
+     "verdict": "ALIVE",
+     "detail": "415B in 596ms",
+     "status": 200,
+     "ms": 596
+    }
+   ],
+   "best_ms": 596,
+   "detail": "415B in 596ms"
+  },
+  "arquivo_pt": {
+   "verdict": "ALIVE",
+   "probes": [
+    {
+     "url": "https://arquivo.pt/wayback/20200101000000/https://example.com/",
+     "verdict": "ALIVE",
+     "detail": "7810B in 1237ms",
+     "status": 200,
+     "ms": 1237
+    }
+   ],
+   "best_ms": 1237,
+   "detail": "7810B in 1237ms"
+  },
+  "archivetoday": {
+   "verdict": "FLAKY",
+   "probes": [
+    {
+     "url": "https://archive.ph/newest/https://example.com",
+     "verdict": "FLAKY",
+     "detail": "HTTP 429",
+     "status": 429,
+     "ms": 1439
+    }
+   ],
+   "best_ms": null,
+   "detail": "HTTP 429"
+  }
+ },
+ "suggested_chain": [
+  "amp_cache",
+  "microlink",
+  "translate_goog",
+  "jina",
+  "commoncrawl",
+  "arquivo_pt",
+  "cors_proxy",
+  "wayback",
+  "archivetoday"
+ ],
+ "alive": [
+  "amp_cache",
+  "microlink",
+  "translate_goog",
+  "jina",
+  "commoncrawl",
+  "arquivo_pt"
+ ],
+ "flaky_tail": [
+  "cors_proxy",
+  "wayback",
+  "archivetoday"
+ ],
+ "prune_from_default_chain": [
+  "bing_cache",
+  "web_light",
+  "yandex_cache"
+ ],
+ "config_methods_before": "methods: [\"translate_goog\", \"amp_cache\", \"microlink\", \"jina\", \"commoncrawl\", \"arquivo_pt\", \"cors_proxy\", \"wayback\", \"cloud_egress\", \"spn2\", \"translate\", \"archivetoday\", \"bing_cache\", \"yandex_cache\"]"
+}

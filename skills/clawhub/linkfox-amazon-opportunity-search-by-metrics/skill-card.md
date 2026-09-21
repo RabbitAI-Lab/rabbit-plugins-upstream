@@ -1,46 +1,64 @@
-## Description: <br>
-Helps agents reverse-search US Amazon niches and keywords by filtering historical opportunity metrics such as market size, growth, competition, price tiers, demographics, product features, and review themes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reverse-searches US Amazon niche and keyword opportunities from a historical metrics pool using business filters such as market size, growth, competition, pricing, demographics, product features, and review themes.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Amazon sellers, e-commerce operators, and agents use this skill to turn selection criteria such as low competition, growth, price gaps, demographics, and review pain points into concrete US Amazon niche or keyword candidates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global; data coverage is limited to the United States Amazon marketplace. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends the LinkFox API key, query parameters, session metadata, and Amazon opportunity results to LinkFox-controlled endpoints. <br>
-Mitigation: Install and run it only when the user trusts LinkFox with that data, and verify LINKFOX_TOOL_GATEWAY is unset or points to the official LinkFox gateway before use. <br>
-Risk: Full API responses and cache files can be saved in local linkfox data directories. <br>
-Mitigation: Monitor the generated linkfox data and cache folders, avoid running from sensitive working directories, and delete stored results when they are no longer needed. <br>
-Risk: Successful searches consume LinkFox credits, including empty-result searches. <br>
-Mitigation: Warn the user before use, avoid repeated automatic retries or broadening without consent, and rely on the 24-hour cache for repeated identical queries. <br>
-Risk: Feedback behavior can send user context to a separate feedback endpoint. <br>
-Mitigation: Require explicit user consent before submitting feedback or downloading and installing the separate onboarding skill. <br>
+## Use Case:
 
+External sellers, ecommerce operators, and agent users use this skill to turn business criteria such as low competition, growth, pain points, demographics, or pricing gaps into matching US Amazon niche and keyword candidates.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-opportunity-search-by-metrics) <br>
-- [API reference](artifact/references/api.md) <br>
-- [LinkFox Skills](https://skill.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON API parameters, shell command examples, and saved JSON API responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a LinkFox API key; writes full API responses and a 24-hour cache under a linkfox data directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill uses LinkFox account and API credentials to call opportunity-search and account workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when LinkFox account/API access is intended, keep API keys in a controlled secret store, and avoid adding long-lived keys to shell startup files when a safer store is available.
+
+Risk: The onboarding flow can request phone numbers, SMS codes, and billing actions.
+
+Mitigation: Share phone numbers or SMS codes only when intentionally registering or logging in, and confirm any plan, payment method, or payment QR code before proceeding.
+
+Risk: The skill can send feedback payloads and supports endpoint override environment variables.
+
+Mitigation: Review feedback content before sending it and keep endpoint override variables limited to trusted LinkFox endpoints.
+
+Risk: API calls may consume paid compute credits, including successful empty-result calls.
+
+Mitigation: Confirm cost-sensitive searches with the user, reuse the same parameters when possible, and widen filters deliberately instead of repeated automatic probing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-opportunity-search-by-metrics)
+- [亚马逊商业洞察反向选品 API 参考](references/api.md)
+- [解决认证和算力问题](references/onboarding.md)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, JSON files, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API parameters; script execution returns JSON or a summary plus a saved JSON file.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full responses are saved under a linkfox session data directory; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,38 +1,49 @@
-## Description: <br>
-Locally evaluates password strength by length, character variety, entropy, and common weaknesses, then returns a 0-100 score with improvement suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Locally evaluates password strength by length, character variety, estimated entropy, and common weakness checks, then returns a score and improvement suggestions.
 
-## Publisher: <br>
-[freedompixels](https://clawhub.ai/user/freedompixels) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[freedompixels](https://clawhub.ai/user/freedompixels)
 
-## Use Case: <br>
-Developers, security educators, and account administrators use this skill to run local password-strength checks and explain concrete improvements before passwords are used or shared with users. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Plaintext passwords can appear in shell history, terminal output, CI logs, recorded sessions, or monitored environments when users pass real passwords on the command line or use batch mode. <br>
-Mitigation: Run the skill only in local private terminals, avoid real passwords in shared or recorded environments, and protect or disable histories and logs when testing sensitive values. <br>
+## Use Case:
 
+Developers, security educators, and users can use this skill to run a local Chinese-language password strength check before account registration, password hygiene reviews, or customer security guidance.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/freedompixels/skills/cn-password-strength) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and plaintext terminal output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Local-only Python standard library utility; batch mode can print plaintext passwords.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Real passwords supplied as command-line arguments or batch-list entries can be captured in shell history, process listings, terminal output, CI logs, or shared session logs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer sample passwords for routine checks; avoid sensitive credentials in shared terminals, CI jobs, or logged environments; mask or remove batch output before testing real credentials.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/freedompixels/skills/cn-password-strength)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, guidance]
+
+**Output Format:** [Plain text or Markdown with local Python CLI command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese-language guidance; local standard-library Python execution; password values may appear in terminal history, logs, or batch output.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence; artifact frontmatter reports 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
