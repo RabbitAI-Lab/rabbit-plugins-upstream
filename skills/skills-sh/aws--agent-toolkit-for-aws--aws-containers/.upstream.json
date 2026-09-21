@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-containers",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-containers",
+  "branch": "main",
+  "pushedAt": "2026-09-21T10:56:33Z",
+  "contentHash": "a3c19aeb7dfd36733d271210986239be028d8bec4e2f5d6ec0f0c6df974f60db",
+  "fetchedAt": "2026-09-21T14:20:10.967Z"
+}

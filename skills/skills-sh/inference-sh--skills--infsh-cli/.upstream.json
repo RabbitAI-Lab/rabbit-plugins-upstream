@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/infsh-cli",
+  "repo": "inference-sh/skills",
+  "skillId": "infsh-cli",
+  "branch": "main",
+  "pushedAt": "2026-09-20T20:13:33Z",
+  "contentHash": "0168eb0675253562d0f8575ed26910da7fe7f6b799da1861546f4080ac29a052",
+  "fetchedAt": "2026-09-21T14:18:27.202Z"
+}
