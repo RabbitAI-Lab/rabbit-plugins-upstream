@@ -1,42 +1,60 @@
-## Description: <br>
-Use the Baremetrics connector to read, create, and update Baremetrics data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill for Baremetrics requests involving reading, creating, updating, and deleting data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Baremetrics connector schemas and run Baremetrics actions through an OOMOL-connected account. It supports reading sources, customers, plans, subscriptions, and charges, and it can create, update, or cancel Baremetrics records after user confirmation for state-changing actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: State-changing Baremetrics actions can create, update, or cancel business records. <br>
-Mitigation: Confirm the exact action, target, payload, and expected effect with the user before running any action tagged write or destructive. <br>
-Risk: The skill depends on the external OOMOL oo CLI and OOMOL-connected account credentials. <br>
-Mitigation: Install and use it only when the OOMOL CLI source is trusted and the Baremetrics account connection is intended for agent operation. <br>
+## Use Case:
 
+External users and developers use this skill to operate Baremetrics through the oo CLI after connecting a Baremetrics account in OOMOL. It supports reading sources, customers, plans, subscriptions, and charges, plus confirmed write actions for customers, plans, subscriptions, and cancellations.
 
-## Reference(s): <br>
-- [ClawHub Baremetrics Skill](https://clawhub.ai/oomol/skills/oo-baremetrics) <br>
-- [Baremetrics Homepage](https://baremetrics.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId when actions run successfully.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: First-time setup may ask the agent to run remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer the official install guide or inspect and verify installer scripts before execution.
+
+Risk: The skill can create, update, or cancel Baremetrics records through an OOMOL-connected account.
+
+Mitigation: Review every write or cancellation payload and require explicit approval before running state-changing actions.
+
+Risk: Baremetrics operations depend on OOMOL as an intermediary for account connection and credential handling.
+
+Mitigation: Install only when the user accepts OOMOL-mediated Baremetrics access and server-side credential injection.
+
+## Reference(s):
+
+- [ClawHub Baremetrics skill page](https://clawhub.ai/oomol/skills/oo-baremetrics)
+- [Baremetrics homepage](https://baremetrics.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance, text]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,56 @@
-## Description: <br>
-AWS STS helps agents inspect OOMOL connector schemas and run AWS STS actions through the oo CLI, including actions that can return temporary AWS credentials. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AWS STS helps agents operate AWS Security Token Service through an OOMOL-connected account using the oo CLI and live connector schemas.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill when they want an agent to call AWS STS through an OOMOL-connected account, inspect live action schemas, and request temporary credentials for approved STS workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can produce temporary AWS credentials through assume_role or get_federated_credentials. <br>
-Mitigation: Require explicit user approval before running either credential-producing action, including the intended role, federation context, and payload. <br>
-Risk: The artifact presents untagged actions as safe to run directly while the available actions can return credentials. <br>
-Mitigation: Treat all AWS STS action runs as sensitive, inspect the live schema first, and review the exact JSON payload before execution. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect AWS STS connector schemas and request temporary AWS credentials through AssumeRole or OOMOL OIDC federation when an OOMOL AWS STS connection is available.
 
-## Reference(s): <br>
-- [AWS STS homepage](https://aws.amazon.com/iam/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-aws-sts) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses oo CLI connector schema and run commands; responses can include data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: The skill can return temporary AWS credentials to an agent through AWS STS actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only where temporary credential exposure to the agent is acceptable, keep connected AWS permissions narrowly scoped, and confirm write-tagged payloads with the user before execution.
+
+Risk: First-time setup examples include remote installer commands that execute downloaded scripts.
+
+Mitigation: Prefer a verified package or reviewed installer path for the oo CLI before running AWS STS actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-aws-sts)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md)
+- [AWS STS homepage](https://aws.amazon.com/iam/)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash, PowerShell, text, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions executed with --json return a JSON object containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

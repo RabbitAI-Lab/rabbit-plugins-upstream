@@ -1,43 +1,60 @@
-## Description: <br>
-Airbrake helps agents inspect Airbrake projects, deploys, error groups, notices, and notice statuses through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Airbrake (airbrake.io). Use this skill for ANY Airbrake request — searching and reading data. Whenever a task involves Airbrake, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operations teams use this skill to inspect Airbrake projects, deploys, error groups, notices, and notice processing status through an OOMOL-connected Airbrake account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill operates through an OOMOL-connected Airbrake account, so granted Airbrake scopes determine what the agent can access. <br>
-Mitigation: Install it only for intended Airbrake use, review granted scopes, and keep the Airbrake connection limited to the access the workflow requires. <br>
-Risk: Actions marked write or destructive could change Airbrake state if run with an incorrect payload or target. <br>
-Mitigation: Inspect the live connector schema before building payloads and require explicit user confirmation before any action marked write or destructive. <br>
+## Use Case:
 
+Developers and operations teams use this skill to inspect Airbrake projects, deploys, error groups, notices, and notice processing status through an OOMOL-connected Airbrake account.
 
-## Reference(s): <br>
-- [Airbrake homepage](https://airbrake.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-airbrake) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill guides live schema inspection before connector actions and returns connector results as JSON when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill frontmatter) <br>
+Risk: The broad activation language may cause an agent to fetch live Airbrake data whenever Airbrake is mentioned.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installation and constrain use to contexts where live Airbrake access is intended.
+
+Risk: The first-time setup fallback can run a remote oo CLI installer.
+
+Mitigation: Do not allow the agent to run the remote installer unless the OOMOL installer source is trusted and unverified script execution is acceptable.
+
+Risk: Future write or destructive connector actions could change or remove Airbrake data.
+
+Mitigation: Require explicit user confirmation for the exact payload and target before any action tagged write or destructive is run.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-airbrake)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Airbrake](https://airbrake.io)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses are JSON objects with data and meta.executionId fields.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence release.version and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

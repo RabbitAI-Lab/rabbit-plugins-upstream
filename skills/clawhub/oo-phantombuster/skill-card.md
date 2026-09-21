@@ -1,42 +1,60 @@
-## Description: <br>
-PhantomBuster helps an agent read and operate PhantomBuster resources through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PhantomBuster helps agents inspect and operate PhantomBuster agents, containers, and organization data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to inspect PhantomBuster action schemas and run supported read, launch, and stop operations through an OOMOL-connected PhantomBuster account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be invoked too broadly for PhantomBuster-adjacent requests. <br>
-Mitigation: Use it only for PhantomBuster workflows and inspect the live action schema before constructing a payload. <br>
-Risk: Launch, stop, or other account-changing operations can affect PhantomBuster resources. <br>
-Mitigation: Ask for explicit user confirmation of the target, payload, and expected effect before running write actions, and keep connector permissions scoped to the intended account and work. <br>
+## Use Case:
 
+External users and developers use this skill to read PhantomBuster organization, agent, and container information, and to launch or stop PhantomBuster agents when explicitly confirmed.
 
-## Reference(s): <br>
-- [PhantomBuster homepage](https://phantombuster.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-phantombuster) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live schema inspection before execution and returns connector responses as JSON when actions are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: artifact metadata and release evidence) <br>
+Risk: Initial setup can execute a remote oo CLI installer before use.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI from a verified source and avoid unattended pipe-to-shell setup.
+
+Risk: The skill can launch or stop PhantomBuster agents, which may change account state.
+
+Mitigation: Review the live action schema, confirm the exact payload and target, and require explicit approval before write or stop actions.
+
+Risk: Use relies on OOMOL as the broker for the connected PhantomBuster account.
+
+Mitigation: Install only when that trust model is acceptable and review the connected PhantomBuster account state and scopes before use.
+
+## Reference(s):
+
+- [ClawHub PhantomBuster Skill Page](https://clawhub.ai/oomol/skills/oo-phantombuster)
+- [PhantomBuster Homepage](https://phantombuster.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON command responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live action schemas before constructing PhantomBuster connector payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -17,7 +17,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
 from .config import DATA_API, GAMMA_API, LEADERBOARD_CATEGORIES, LEADERBOARD_PERIODS
-from .http import ApiError, get_json
+from .http import ApiError, clean_slug, clean_text, get_json
 
 #: The Data API caps `/holders` at 20 per token — asking for more returns 400.
 MAX_HOLDERS = 20
@@ -81,25 +81,28 @@ def _as_float(raw: Any, default: float = 0.0) -> float:
 
 
 def parse_trade(raw: Dict[str, Any]) -> WhaleTrade:
+    # Every free-text field is cleaned HERE, at the boundary where the API
+    # payload becomes an object — so no consumer (terminal, cron alert, agent
+    # context) has to remember to do it. See `http.clean_text`.
     trader = (
-        str(raw.get("name") or "").strip()
-        or str(raw.get("pseudonym") or "").strip()
-        or str(raw.get("proxyWallet") or "")[:10]
+        clean_text(raw.get("name"), 48)
+        or clean_text(raw.get("pseudonym"), 48)
+        or clean_slug(raw.get("proxyWallet"))[:10]
     )
     return WhaleTrade(
         tx_hash=str(raw.get("transactionHash") or ""),
         wallet=str(raw.get("proxyWallet") or ""),
         trader=trader,
         side=str(raw.get("side") or "").upper(),
-        outcome=str(raw.get("outcome") or "?"),
+        outcome=clean_text(raw.get("outcome"), 40) or "?",
         size_shares=_as_float(raw.get("size")),
         price=_as_float(raw.get("price")),
-        title=str(raw.get("title") or "?"),
-        slug=str(raw.get("slug") or ""),
+        title=clean_text(raw.get("title")) or "?",
+        slug=clean_slug(raw.get("slug")),
         condition_id=str(raw.get("conditionId") or ""),
         asset_id=str(raw.get("asset") or ""),
         timestamp=int(_as_float(raw.get("timestamp"))),
-        event_slug=str(raw.get("eventSlug") or ""),
+        event_slug=clean_slug(raw.get("eventSlug")),
     )
 
 

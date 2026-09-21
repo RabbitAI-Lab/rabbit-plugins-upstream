@@ -1,42 +1,59 @@
-## Description: <br>
-A multi-agent, double-blind A/B testing workflow for comparing two AI models or agents across repeated rounds with coordinator, contestant, and judge roles. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Runs a multi-agent, double-blind A/B testing workflow that compares two AI models or agents across multiple rounds with coordinator, contestant, and judge roles.
 
-## Publisher: <br>
-[johnsmithfan](https://clawhub.ai/user/johnsmithfan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[johnsmithfan](https://clawhub.ai/user/johnsmithfan)
 
-## Use Case: <br>
-Developers, evaluators, and agent builders use this skill to run structured blind comparisons between two models or agents, collect rubric-based judge scores, and produce a final comparison report. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Confidential prompts may be shared with contestant and judge subagents during evaluation. <br>
-Mitigation: Use the workflow only with prompts and outputs that are appropriate to share with all participating subagents. <br>
-Risk: Blind-test integrity can be weakened if judge-facing material reveals contestant identity or anonymizer mapping details. <br>
-Mitigation: Keep anonymizer mapping and CLI output away from the judge, filter identity markers before judging, and invalidate or rerun rounds where a contestant reveals its identity. <br>
+## Use Case:
 
+Developers, evaluators, and agent builders use this skill to compare two models or agents through repeated blind trials, rubric-based judging, anonymized presentation order, and a structured final report.
 
-## Reference(s): <br>
-- [Workflow Guide](references/workflow_guide.md) <br>
-- [Rubric Templates](references/rubric_templates.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/johnsmithfan/ab-test-agent-workflow-1-1-0) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance, prompt templates, optional shell commands, and JSON-style evaluation report structures.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports multi-round A/B comparison, rubric customization, anonymized judging, score aggregation, and optional script-driven test execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: SKILL.md frontmatter and artifact/_meta.json) <br>
+Risk: Blind evaluation can be compromised if contestant identities, model names, or anonymizer mappings are exposed to the judge.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Filter identity markers before judging, keep mappings private until the final reveal, and invalidate or rerun rounds where identity leaks occur.
+
+Risk: Prompts, model outputs, reports, and terminal logs may contain sensitive or proprietary information.
+
+Mitigation: Use controlled evaluation inputs, keep sensitive prompts and proprietary outputs out of the workflow unless storage and log access are governed, and review generated reports before sharing.
+
+Risk: Script-driven normal mode contains placeholder execution paths and should not be treated as a reliable benchmark result by itself.
+
+Mitigation: Use the documented agent workflow or implement and validate real subagent execution before relying on script-produced comparisons.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/johnsmithfan/skills/ab-test-agent-workflow-1-1-0)
+- [Workflow guide](artifact/references/workflow_guide.md)
+- [Rubric templates](artifact/references/rubric_templates.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown reports, JSON summaries, prompt templates, and optional shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Multi-round outputs can include contestant responses, anonymized judge scores, comments, winners, aggregate scores, and confidence notes.]
+
+## Skill Version(s):
+
+1.1.0 (source: SKILL.md frontmatter and artifact/_meta.json; release metadata version: 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

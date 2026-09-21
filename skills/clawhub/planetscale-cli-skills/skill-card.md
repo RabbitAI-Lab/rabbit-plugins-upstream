@@ -1,45 +1,59 @@
-## Description: <br>
-Comprehensive PlanetScale CLI command reference and workflows for database, branch, deploy request, SQL, D1 import, backup, credential, service token, and organization operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PlanetScale CLI Skills helps agents provide command references, safety guidance, and workflow support for PlanetScale operations through the pscale CLI.
 
-## Publisher: <br>
-[vince-winkintel](https://clawhub.ai/user/vince-winkintel) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[vince-winkintel](https://clawhub.ai/user/vince-winkintel)
 
-## Use Case: <br>
-Developers and database operators use this skill to plan and run PlanetScale CLI workflows, including schema branch management, deploy requests, non-interactive SQL queries, Cloudflare D1 imports, backups, and credential administration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can help run live PlanetScale CLI commands against authenticated databases, branches, deploy requests, backups, SQL endpoints, and credentials. <br>
-Mitigation: Verify the organization, database, branch, deploy request, backup ID, SQL statement, and credential target before execution, and require explicit user confirmation for destructive or write-capable commands. <br>
-Risk: Deploy, revert, promote, import, routing, MoveTables, delete, and write SQL operations can change production data or database topology. <br>
-Mitigation: Prefer dry runs, diffs, linting, JSON status checks, and deploy-request review workflows before live execution; show the exact command and target before proceeding. <br>
-Risk: Service tokens and database passwords may be exposed if commands, logs, or shell history include secrets. <br>
-Mitigation: Use environment variables or secret managers for PlanetScale credentials, avoid printing tokens, and rotate or delete temporary credentials after use. <br>
+## Use Case:
 
+Developers, database operators, and platform engineers use this skill to operate PlanetScale databases, branches, deploy requests, credentials, billing, metrics, SQL, backups, webhooks, and related workflows with the pscale CLI.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/vince-winkintel/skills/planetscale-cli-skills) <br>
-- [PlanetScale CLI Documentation](https://planetscale.com/docs/reference/planetscale-cli) <br>
-- [PlanetScale CLI GitHub Repository](https://github.com/planetscale/cli) <br>
-- [PlanetScale Community Discussions](https://github.com/planetscale/discussion) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration] <br>
-**Output Format:** [Markdown with inline bash commands and concise operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include command review notes, JSON-output parsing guidance, and target confirmation prompts before live operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata and VERSION file) <br>
+Risk: The skill can help perform sensitive or destructive PlanetScale operations, including deploys, deletes, billing or payment-method changes, webhook updates, service-token work, and write-capable SQL.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed pscale commands before execution, require explicit approval for sensitive changes, and verify targets and results with read-only commands where possible.
+
+Risk: PlanetScale tokens, service-token details, billing data, and raw CLI output may expose sensitive operational information.
+
+Mitigation: Keep tokens in a secret manager or environment variables, avoid pasting secrets into chat, and redact or limit CLI output before sharing it.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/vince-winkintel/skills/planetscale-cli-skills)
+- [PlanetScale CLI reference](https://planetscale.com/docs/reference/planetscale-cli)
+- [PlanetScale CLI GitHub repository](https://github.com/planetscale/cli)
+- [Webhook API reference](https://planetscale.com/docs/api/reference/create_webhook)
+- [Webhook events reference](https://planetscale.com/docs/api/webhook-events)
+- [Artifact skill overview](artifact/SKILL.md)
+- [Artifact version history](artifact/VERSION)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, command examples, scripts, and configuration notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose pscale CLI commands and bundled shell scripts; review commands before execution.]
+
+## Skill Version(s):
+
+1.0.28 (source: server release metadata and artifact/VERSION)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

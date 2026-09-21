@@ -1,55 +1,69 @@
-## Description: <br>
-Huawei Cloud EIP Cost Optimizer helps agents use hcloud CLI shell scripts to list EIPs, detect idle or unbound addresses, estimate costs, generate reports, configure alerts, and keep audit logs without releasing or deleting resources. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Huawei Cloud EIP Cost Optimizer helps agents list Huawei Cloud Elastic IPs, identify idle or unbound EIPs, generate cost reports, configure alerts, and maintain audit logs through hcloud CLI workflows.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-External developers, cloud operators, and FinOps teams use this skill to inspect Huawei Cloud EIP inventory, identify idle or unbound EIPs, estimate avoidable costs, generate reports, configure monitoring alerts, and maintain audit records. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill includes local installation and dependency-fix paths. <br>
-Mitigation: Review installer and --fix commands before running them, and install hcloud CLI, jq, bc, and curl from approved internal sources where required. <br>
-Risk: Monitoring setup can create cron persistence. <br>
-Mitigation: Review the crontab entry before enabling monitoring, and use the documented removal command when scheduled checks are no longer needed. <br>
-Risk: Webhook or email alerts can disclose public IP addresses and EIP identifiers. <br>
-Mitigation: Send alerts only to approved HTTPS webhook domains and internal email destinations. <br>
-Risk: The skill requires Huawei Cloud credentials for inventory and reporting. <br>
-Mitigation: Use least-privilege read-only IAM credentials, avoid command-line credential arguments, and prefer temporary credentials when available. <br>
-Risk: Cost reports are estimates because the API does not expose charge_mode. <br>
-Mitigation: Treat savings values as planning guidance and confirm billing impact in Huawei Cloud billing data before taking action. <br>
+## Use Case:
 
+Developers, cloud operations teams, and FinOps practitioners use this skill to audit Huawei Cloud EIPs, find idle public IPs, estimate avoidable costs, and prepare monitoring or reporting commands without releasing or modifying EIPs.
 
-## Reference(s): <br>
-- [IAM Permission Policies](references/iam-policies.md) <br>
-- [EIP API Guide](references/eip-api-guide.md) <br>
-- [CLI Installation Guide](references/cli-installation-guide.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Acceptance Criteria](references/acceptance-criteria.md) <br>
-- [KooCLI Official Documentation](https://support.huaweicloud.com/cli/index.html) <br>
-- [KooCLI Reference](https://support.huaweicloud.com/cli/reference.html) <br>
-- [Huawei Cloud EIP Documentation](https://support.huaweicloud.com/eip/index.html) <br>
-- [Huawei Cloud API Explorer](https://apiexplorer.developer.huaweicloud.com/) <br>
-- [IAM AK/SK Management](https://support.huaweicloud.com/usermanual-iam/iam_02_0003.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands; scripts can produce text, HTML, JSON, JSONL, and CSV outputs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Cost estimates depend on regional pricing assumptions and API-visible EIP metadata; monitoring alerts can include public IP and EIP identifiers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The skill includes setup flows that may install local dependencies, write audit logs, and optionally add a cron job.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review any --fix or --setup-cron command before running it, and execute setup only in an environment where local package installation, audit-log creation, and scheduled jobs are allowed.
+
+Risk: Security evidence notes write-capable IAM/API guidance that exceeds the skill's read-only framing.
+
+Mitigation: Grant only the minimum read-only IAM policy for EIP listing and detail lookup; do not grant full-management EIP permissions for this skill.
+
+Risk: Documentation includes installer paths that can download and run the Huawei Cloud CLI installer.
+
+Mitigation: Avoid curl-to-bash usage unless the installer source is independently verified; prefer a reviewed local installer or package-manager path where available.
+
+Risk: When environment-variable credentials are used, helper code may pass credentials to hcloud CLI parameters on the local host.
+
+Mitigation: Prefer hcloud configure or temporary credentials on shared systems, use least-privilege AK/SK values, and rotate credentials regularly.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-eip-cost-optimizer)
+- [EIP API Reference Guide](references/eip-api-guide.md)
+- [IAM Permission Policies](references/iam-policies.md)
+- [CLI Installation Guide](references/cli-installation-guide.md)
+- [Verification Method](references/verification-method.md)
+- [Acceptance Criteria](references/acceptance-criteria.md)
+- [KooCLI Official Documentation](https://support.huaweicloud.com/cli/index.html)
+- [KooCLI Download Page](https://support.huaweicloud.com/cli/reference.html)
+- [IAM AK/SK Management](https://support.huaweicloud.com/usermanual-iam/iam_02_0003.html)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, Markdown, JSON, Code]
+
+**Output Format:** [Markdown guidance with shell command snippets and generated text, HTML, or JSON reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only EIP analysis output; cost estimates use a bandwidth billing model because charge_mode is unavailable from the API.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

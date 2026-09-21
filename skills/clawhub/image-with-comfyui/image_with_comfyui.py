@@ -1,16 +1,33 @@
 #!/usr/bin/env python3
 """
-image_with_comfyui.py - Call local ComfyUI for T2I / I2I image generation.
+image_with_comfyui.py - Call a ComfyUI server for T2I / I2I / I2V media generation.
+
+Modes:
+    t2i      Text-to-Image (Z-Image or SD3.5 Medium via --model)
+    i2i      Image-to-Image / edit (Qwen Image Edit)
+    wan2.2   Image-to-Video (Wan2.2)
+    test     Quick health check
 
 Usage:
     python3 image_with_comfyui.py t2i --prompt "..." [--aspect 16:9] [--model z-image]
     python3 image_with_comfyui.py t2i --prompt "..." --model sd35
     python3 image_with_comfyui.py i2i --prompt "..." --image image.jpg
-    python3 image_with_comfyui.py test                       # Quick health check
+    python3 image_with_comfyui.py wan2.2 --prompt "..." --image image.jpg
+    python3 image_with_comfyui.py test
 
 Configuration:
     Reads config from this SKILL's config.json (relative to this script).
-    Environment variable COMFYUI_URL overrides comfyui_url in config.
+    The bundled default endpoint is loopback-only (http://127.0.0.1:8188).
+    Environment overrides:
+      COMFYUI_URL            endpoint (non-loopback hosts print a warning)
+      COMFYUI_TIMEOUT        global generation timeout in seconds
+      COMFYUI_POLL_INTERVAL  polling interval in seconds
+      COMFYUI_OUTPUT_DIR     output directory
+
+Data flow:
+    Prompts and workflow JSON are sent to the configured endpoint; i2i/i2v
+    additionally upload the full source image. Generated media is written
+    to the output directory (config output_dir / COMFYUI_OUTPUT_DIR).
 """
 
 import argparse
@@ -52,6 +69,39 @@ def _find_workspace_dir() -> Path:
 
 WORKSPACE_DIR = _find_workspace_dir()
 
+def _apply_timeout_override(cfg: dict, timeout: int) -> None:
+    """Apply a global generation timeout override to every model entry."""
+    cfg["timeout_seconds"] = timeout
+    for section in ("image", "video"):
+        for model in cfg.get(section, {}).values():
+            if isinstance(model, dict):
+                model["timeout_seconds"] = timeout
+
+
+def _endpoint_disclosure(cfg: dict) -> None:
+    """Disclose data flow when the endpoint is not loopback.
+
+    Prints a one-time warning (stderr) if comfyui_url points at a
+    non-local host, so users are aware prompts and (for i2i/i2v) full
+    source images will be transmitted there.
+    """
+    url = cfg.get("comfyui_url", "")
+    try:
+        parsed = urllib.parse.urlparse(url)
+    except ValueError:
+        return
+    host = (parsed.hostname or "").lower()
+    if host in ("127.0.0.1", "localhost", "local", "0.0.0.0", "::1"):
+        return
+    scheme = (parsed.scheme or "http").upper()
+    print(
+        f"⚠️  Non-local ComfyUI endpoint: {url} — prompts and (for i2i/i2v) full "
+        f"source images will be sent to this host via {scheme}. "
+        "Only point COMFYUI_URL at a server you control.",
+        file=sys.stderr,
+    )
+
+
 def load_config() -> dict:
     """Load config from config.json, then apply env overrides."""
     config_path = SCRIPT_DIR / "config.json"
@@ -63,6 +113,13 @@ def load_config() -> dict:
     env_poll = os.environ.get("COMFYUI_POLL_INTERVAL")
     if env_poll:
         cfg["poll_interval_seconds"] = int(env_poll)
+    env_timeout = os.environ.get("COMFYUI_TIMEOUT")
+    if env_timeout:
+        _apply_timeout_override(cfg, int(env_timeout))
+    env_out = os.environ.get("COMFYUI_OUTPUT_DIR")
+    if env_out:
+        cfg["output_dir"] = env_out
+    _endpoint_disclosure(cfg)
     return cfg
 
 # ---------------------------------------------------------------------------
@@ -826,12 +883,15 @@ def save_b64_image(b64_data: str, filename: str, output_dir: Path) -> Path:
     return output_path
 
 def print_result(prompt_type: str, prompt: str, images: list[dict],
-                 local_paths: list[Path], output_dir: Path, cfg: dict = None):
+                 local_paths: list[Path], output_dir: Path, cfg: dict = None,
+                 seed: int = None):
     for i, img, path in zip(range(1, len(local_paths)+1), images, local_paths):
         sz = path.stat().st_size / 1024
         print(f"✅ Image {i}: {path.name} ({sz:.0f} KB)")
         print(f"   Prompt: {prompt[:80]}")
         print(f"   File: {path}")
+        if seed is not None:
+            print(f"   Seed: {seed}")
 
 # ---------------------------------------------------------------------------
 # CLI commands
@@ -884,13 +944,16 @@ def save_b64_video(b64_data: str, filename: str, output_dir: Path) -> str:
     return str(output_path)
 
 def print_result_video(prompt_type: str, prompt: str, video_items: list,
-                       local_paths: list, output_dir: Path, cfg: dict) -> None:
+                       local_paths: list, output_dir: Path, cfg: dict,
+                       seed: int = None) -> None:
     for i, v, p in zip(range(1, len(local_paths)+1), video_items, local_paths):
         p = Path(p) if isinstance(p, str) else p
         sz = p.stat().st_size / 1024
         print(f"✅ Video {i}: {p.name} ({sz:.0f} KB)")
         print(f"   Prompt: {prompt[:80]}")
         print(f"   File: {p}")
+        if seed is not None:
+            print(f"   Seed: {seed}")
 
 def cmd_t2i(cfg: dict, args: argparse.Namespace) -> None:
     prompt = args.prompt
@@ -944,7 +1007,7 @@ def cmd_t2i(cfg: dict, args: argparse.Namespace) -> None:
     b64_images = [image_b64_from_comfyui(cfg, img) for img in images]
     local_paths = [save_b64_image(b64, img["filename"], output_dir)
                    for b64, img in zip(b64_images, images)]
-    print_result(prompt_type_str, prompt, images, local_paths, output_dir, cfg)
+    print_result(prompt_type_str, prompt, images, local_paths, output_dir, cfg, seed_used)
 
 def cmd_i2i(cfg: dict, args: argparse.Namespace) -> None:
     prompt = args.prompt
@@ -976,7 +1039,7 @@ def cmd_i2i(cfg: dict, args: argparse.Namespace) -> None:
     b64_images = [image_b64_from_comfyui(cfg, img) for img in images]
     local_paths = [save_b64_image(b64, img["filename"], output_dir)
                    for b64, img in zip(b64_images, images)]
-    print_result(prompt_type_str, prompt, images, local_paths, output_dir)
+    print_result(prompt_type_str, prompt, images, local_paths, output_dir, seed=seed_used)
 
 def cmd_test(cfg: dict, args: argparse.Namespace) -> None:
     url = cfg["comfyui_url"].rstrip("/") + "/history"
@@ -1090,7 +1153,7 @@ def cmd_wan2_2_i2v(cfg: dict, args: argparse.Namespace) -> None:
     b64_videos = [video_b64_from_comfyui(cfg, v) for v in videos]
     local_paths = [save_b64_video(b64, v["filename"], output_dir)
                    for b64, v in zip(b64_videos, videos)]
-    print_result_video(prompt_type_str, prompt, videos, local_paths, output_dir, cfg)
+    print_result_video(prompt_type_str, prompt, videos, local_paths, output_dir, cfg, seed_used)
 
 # ---------------------------------------------------------------------------
 # CLI entry point
@@ -1098,7 +1161,7 @@ def cmd_wan2_2_i2v(cfg: dict, args: argparse.Namespace) -> None:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="ComfyUI image generation client (T2I / I2I)",
+        description="ComfyUI media generation client (T2I / I2I / I2V)",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     subparsers = parser.add_subparsers(dest="command", required=True)

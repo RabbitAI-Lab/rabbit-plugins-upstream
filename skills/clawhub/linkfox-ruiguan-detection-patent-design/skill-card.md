@@ -1,43 +1,64 @@
-## Description: <br>
-Guides agents through Ruiguan/Linkfox design patent risk checks for product images, including similarity search, TRO history signals, and radar analysis across 25+ supported countries and regions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Checks product images with LinkFox Ruiguan design-patent detection to surface visually similar patents, TRO enforcement signals, similarity scores, and AI radar analysis across supported regions.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, IP professionals, and agent developers use this skill to check whether a product image may resemble existing design patents before listing or reviewing products. It helps prepare patent-risk summaries while preserving the skill's instruction to avoid legal conclusions beyond the returned data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Product images, descriptions, and sales context are sent to an external Ruiguan/Linkfox service for analysis. <br>
-Mitigation: Use the skill only for data that may be shared with that provider, and avoid confidential unreleased products unless the provider's data handling is acceptable. <br>
-Risk: Detailed API responses are saved locally and may contain product, patent, and sales-context data. <br>
-Mitigation: Review saved response files after use and remove them when they are no longer needed. <br>
-Risk: The artifact includes feedback-reporting behavior separate from the patent-analysis API. <br>
-Mitigation: Review or disable feedback reporting before installation when user comments or operational details should not be sent externally. <br>
+## Use Case:
 
+E-commerce sellers, IP professionals, and agents use this skill to check product image URLs or local product images for design-patent similarity, TRO enforcement signals, and region-scoped risk indicators before listing or reviewing products.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-ruiguan-detection-patent-design) <br>
-- [API reference](artifact/references/api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with JSON request examples, shell commands, and saved JSON response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a public image URL or uploads a local image to obtain one; full API responses are saved locally and smaller responses may also print as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Local product images may be uploaded to a public URL for patent checking.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only images and product details that may be shared with LinkFox and potentially exposed through a public image URL; avoid confidential or regulated images.
+
+Risk: API keys, account details, billing actions, or order data may appear in logs or transcripts during onboarding and payment flows.
+
+Mitigation: Use onboarding and billing commands only when account management is intended, minimize transcript exposure, and rotate any API key that appears in logs or shared conversations.
+
+Risk: Patent-check responses and sensitive product details are written to local session data files.
+
+Mitigation: Review saved LinkFox data directories before sharing a workspace or transcript, and delete files that contain confidential product or account information when no longer needed.
+
+Risk: Detection output can support risk assessment but is not legal advice.
+
+Mitigation: Treat similarity scores, TRO signals, and radar analysis as screening indicators and consult a qualified IP attorney before making legal or commercial decisions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-ruiguan-detection-patent-design)
+- [LinkFox Publisher Profile](https://clawhub.ai/user/linkfox-ai)
+- [Ruiguan API Reference](artifact/references/api.md)
+- [Authentication and Billing Onboarding](artifact/references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, JSON, guidance]
+
+**Output Format:** [Markdown guidance with JSON API parameters, shell commands, and saved JSON response files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full API responses are saved to LinkFox session data directories; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

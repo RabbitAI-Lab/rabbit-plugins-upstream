@@ -13,23 +13,16 @@ Covers:
   - MAX_REVISIONS auto-lock: revision >= MAX_REVISIONS triggers lock
 """
 import json
-import os
 import sys
 from datetime import datetime, date, timedelta
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-for mod in ("google", "google.oauth2", "google.oauth2.credentials",
-            "google.auth", "google.auth.transport", "google.auth.transport.requests",
-            "googleapiclient", "googleapiclient.discovery"):
-    sys.modules.setdefault(mod, MagicMock())
 
-with patch("core.keychain_secrets.load_google_secrets", return_value=None), \
-     patch("core.config_loader._load_config") as _mc:
+with patch("core.config_loader._load_config") as _mc:
     from conftest import MINIMAL_CONFIG
     from core.config_loader import Config
     _mc.return_value = Config(MINIMAL_CONFIG)
@@ -72,48 +65,48 @@ class TestGenerateWeeklyPlan:
         with self._with_empty_tracker():
             plan = wmp.generate_weekly_plan()
         for day in DAYS:
-            assert "amyra" in plan[day]
-            assert "reyansh" in plan[day]
+            assert "ana" in plan[day]
+            assert "ben" in plan[day]
 
     def test_each_kid_has_all_meals(self):
         with self._with_empty_tracker(), \
              patch.object(wmp.config, '_data', {**wmp.config._data, "meals": {"include_dinner": True, "dinner_options": ["Dal rice", "Chapati with dal", "Dosa"]}}):
             plan = wmp.generate_weekly_plan()
         for day in DAYS:
-            for kid in ("amyra", "reyansh"):
+            for kid in ("ana", "ben"):
                 assert "breakfast" in plan[day][kid]
                 assert "lunch" in plan[day][kid]
                 assert "dinner" in plan[day][kid]
                 assert "side" in plan[day][kid]
 
     def test_egg_rule_no_egg_lunch_on_egg_breakfast(self):
-        """When Amyra has eggs at breakfast, 'Egg bites' must not appear at lunch."""
+        """When Ana has eggs at breakfast, 'Egg bites' must not appear at lunch."""
         # Run many times to catch randomness
         with self._with_empty_tracker():
             for _ in range(30):
                 plan = wmp.generate_weekly_plan()
                 for day in DAYS:
-                    a = plan[day]["amyra"]
+                    a = plan[day]["ana"]
                     if "egg" in a["breakfast"].lower():
                         assert "egg" not in a["lunch"].lower(), (
                             f"Egg at lunch on day {day} despite egg at breakfast"
                         )
 
-    def test_reyansh_lunch_is_from_resolved_pool(self):
-        """Reyansh's lunch picks must come from the resolved pool (khichdi
+    def test_ben_lunch_is_from_resolved_pool(self):
+        """Ben's lunch picks must come from the resolved pool (khichdi
         rotations plus any explicit lunch.options like Dalia)."""
         from features.meals.meal_tracker import MealTracker
         real = MealTracker.__new__(MealTracker)
         real.history = {}
         real.learned = {}
         real.config  = wmp.config
-        kid = next(k for k in wmp.config.kids if k.name.lower() == "reyansh")
+        kid = next(k for k in wmp.config.kids if k.name.lower() == "ben")
         valid = set(real._approved_options_for(kid, "lunch"))
         with self._with_empty_tracker():
             plan = wmp.generate_weekly_plan()
         for day in DAYS:
-            assert plan[day]["reyansh"]["lunch"] in valid, \
-                f"Reyansh lunch on {day} was {plan[day]['reyansh']['lunch']!r}, not in {valid}"
+            assert plan[day]["ben"]["lunch"] in valid, \
+                f"Ben lunch on {day} was {plan[day]['ben']['lunch']!r}, not in {valid}"
 
     def test_meals_from_config_options(self):
         dinner_opts = ["Dal rice", "Chapati with dal", "Dosa"]
@@ -121,9 +114,9 @@ class TestGenerateWeeklyPlan:
              patch.object(wmp.config, '_data', {**wmp.config._data, "meals": {"include_dinner": True, "dinner_options": dinner_opts}}):
             plan = wmp.generate_weekly_plan()
         for day in DAYS:
-            a_b = plan[day]["amyra"]["breakfast"]
-            assert a_b != "TBD", f"Amyra breakfast is TBD on {day}"
-            for kid in ("amyra", "reyansh"):
+            a_b = plan[day]["ana"]["breakfast"]
+            assert a_b != "TBD", f"Ana breakfast is TBD on {day}"
+            for kid in ("ana", "ben"):
                 assert plan[day][kid]["dinner"] in dinner_opts, (
                     f"{kid} dinner {plan[day][kid]['dinner']!r} not from config"
                 )
@@ -134,7 +127,7 @@ class TestGenerateWeeklyPlan:
              patch.object(wmp.config, '_data', {**wmp.config._data, "meals": {"include_dinner": False, "dinner_options": []}}):
             plan = wmp.generate_weekly_plan()
         for day in DAYS:
-            for kid in ("amyra", "reyansh"):
+            for kid in ("ana", "ben"):
                 assert "dinner" not in plan[day][kid], (
                     f"dinner should be absent for {kid} on {day} when include_dinner=False"
                 )
@@ -257,11 +250,11 @@ class TestCmdRevise:
         monkeypatch.setattr(wmp, "HOUSEHOLD_DIR", str(tmp_path))
         wmp.save_pending(sample_weekly_plan, revision=0)
 
-        result = wmp.cmd_revise("swap monday breakfast for Amyra to Oats")
+        result = wmp.cmd_revise("swap monday breakfast for Ana to Oats")
 
         assert result.startswith("NEEDS_REVISION:")
         assert "save_meal_plan" in result
-        assert "swap monday breakfast for Amyra to Oats" in result
+        assert "swap monday breakfast for Ana to Oats" in result
 
         # Must not have touched the pending file — revision stays 0.
         loaded = wmp.load_pending()
@@ -276,7 +269,7 @@ class TestCmdRevise:
         monkeypatch.setattr(wmp, "HOUSEHOLD_DIR", str(tmp_path))
         wmp.save_pending(sample_weekly_plan, revision=wmp.MAX_REVISIONS)  # already at max
 
-        result = wmp.cmd_revise("one more change please")
+        wmp.cmd_revise("one more change please")
 
         # Plan should now be locked
         assert lf.exists()
@@ -298,7 +291,7 @@ class TestCmdAutoApprove:
         monkeypatch.setattr(wmp, "HOUSEHOLD_DIR", str(tmp_path))
         wmp.save_pending(sample_weekly_plan, revision=0)
 
-        result = wmp.cmd_auto_approve()
+        wmp.cmd_auto_approve()
 
         assert lf.exists()
         data = json.loads(lf.read_text())
@@ -334,10 +327,10 @@ class TestGetTodaysMealsFromLockedPlan:
         self._write_locked(tmp_path, monkeypatch, monday.strftime("%Y-%m-%d"), sample_weekly_plan)
         result = wmp.get_todays_meals_from_locked_plan()
         assert result is not None
-        assert "amyra" in result
-        assert "reyansh" in result
-        assert "breakfast" in result["amyra"]
-        assert "lunch" in result["reyansh"]
+        assert "ana" in result
+        assert "ben" in result
+        assert "breakfast" in result["ana"]
+        assert "lunch" in result["ben"]
 
     def test_returns_none_when_plan_is_from_different_week(self, tmp_path, monkeypatch, sample_weekly_plan):
         # Use a Monday far in the past
@@ -350,3 +343,35 @@ class TestGetTodaysMealsFromLockedPlan:
         lf.write_text("{invalid json{{")
         monkeypatch.setattr(wmp, "LOCKED_FILE", str(lf))
         assert wmp.get_todays_meals_from_locked_plan() is None
+
+
+# ─── get_meals_for_date ───────────────────────────────────────────────────────
+
+class TestGetMealsForDate:
+    def _write_locked(self, tmp_path, monkeypatch, week_of: str, plan: dict):
+        lf = tmp_path / "weekly_meal_plan.json"
+        lf.write_text(json.dumps({
+            "week_of": week_of,
+            "locked_at": "2026-07-19T21:05:31",
+            "locked_reason": "family_approved",
+            "plan": plan
+        }))
+        monkeypatch.setattr(wmp, "LOCKED_FILE", str(lf))
+
+    def test_returns_none_when_no_locked_file(self, tmp_path, monkeypatch):
+        monkeypatch.setattr(wmp, "LOCKED_FILE", str(tmp_path / "no_file.json"))
+        assert wmp.get_meals_for_date("2026-07-20") is None
+
+    def test_resolves_correct_weekday_for_given_date(self, tmp_path, monkeypatch, sample_weekly_plan):
+        # Week of Monday 2026-07-20; Wednesday is 2026-07-22.
+        self._write_locked(tmp_path, monkeypatch, "2026-07-20", sample_weekly_plan)
+        result = wmp.get_meals_for_date("2026-07-22")
+        assert result == sample_weekly_plan["wednesday"]
+
+    def test_returns_none_when_date_outside_locked_week(self, tmp_path, monkeypatch, sample_weekly_plan):
+        self._write_locked(tmp_path, monkeypatch, "2026-07-20", sample_weekly_plan)
+        assert wmp.get_meals_for_date("2026-07-28") is None
+
+    def test_invalid_date_string_returns_none(self, tmp_path, monkeypatch, sample_weekly_plan):
+        self._write_locked(tmp_path, monkeypatch, "2026-07-20", sample_weekly_plan)
+        assert wmp.get_meals_for_date("not-a-date") is None

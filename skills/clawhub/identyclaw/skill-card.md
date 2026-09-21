@@ -1,53 +1,66 @@
-## Description: <br>
-IdentyClaw API workflows cover multi-API JWT sessions, HOLA peer handshake lines, DID resolution, and Passport lookup for agents that use IdentyClaw Passport authentication. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+IdentyClaw API workflows - multi-API JWT sessions, HOLA peer handshake lines, DID resolution, and Passport lookup for OpenClaw agents.
 
-## Publisher: <br>
-[identyclaw](https://clawhub.ai/user/identyclaw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[identyclaw](https://clawhub.ai/user/identyclaw)
 
-## Use Case: <br>
-Developers and agent operators use this workflow skill to establish IdentyClaw API sessions, create and verify HOLA authentication lines, resolve Passport and DID identity data, and discover home or federated API capabilities. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow can involve a long-lived Passport signing key and short-lived JWT sessions. <br>
-Mitigation: Use the OpenClaw plugin path where possible, keep keys and JWTs out of chat and logs, and limit local credential access to trusted Gateway environments. <br>
-Risk: Setup guidance may include high-impact installation or communication steps that need operator review. <br>
-Mitigation: Review installation commands and independently verify package signatures or sources before execution. <br>
-Risk: Autonomous communication workflows can send messages or attachments to unintended recipients if enabled without controls. <br>
-Mitigation: Require explicit recipient, approval, attachment, and inbound-content controls before enabling autonomous email or inter-agent communication workflows. <br>
+## Use Case:
 
+Developers and OpenClaw Gateway operators use this skill to guide agents through IdentyClaw Passport authentication, HOLA peer verification, DID resolution, agent discovery, and federated API sessions.
 
-## Reference(s): <br>
-- [IdentyClaw API Docs](https://api.identyclaw.com/docs) <br>
-- [IdentyClaw MCP](https://api.identyclaw.com/mcp) <br>
-- [ClawHub Skill Page](https://clawhub.ai/identyclaw/skills/identyclaw) <br>
-- [OpenClaw IdentyClaw Plugin](https://clawhub.ai/plugins/@identyclaw/openclaw-identyclaw-plugin) <br>
-- [API Reference](references/api-reference.md) <br>
-- [API Login Authentication](references/login-authentication.md) <br>
-- [HOLA Protocol - Inter-Agent Authentication](references/hola-agent-authentication.md) <br>
-- [Send a verifiable HOLA in under 5 minutes](references/hola-howto.md) <br>
-- [Subagent HOLA Protocol](references/hola-subagent-authentication.md) <br>
-- [Finding Agents How-To](references/finding-agents.md) <br>
-- [The did:rodit Method](references/did-rodit-method.md) <br>
-- [IdentyClaw MCP Discovery Index](references/mcp-discovery-index.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API calls, Markdown] <br>
-**Output Format:** [Markdown guidance with command examples, API workflow steps, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide use of local credentials, JWT sessions, HOLA lines, DID resolution, and federated API discovery.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.3 (source: frontmatter and ClawHub release evidence) <br>
+Risk: Verified identity may be mistaken for permission to act on inbound tasks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Deny unknown senders by default, allow only specific task types, isolate tools, and require human approval for consequential actions.
+
+Risk: NEAR private keys, JWTs, or identity metadata could be exposed through chat, logs, or shared workspace files.
+
+Mitigation: Keep private keys and JWTs out of chat and logs, prefer Gateway-held plugin workflows, and minimize collection or storage of full Passport metadata.
+
+Risk: Optional wallet or on-chain tools can perform consequential actions if enabled broadly.
+
+Mitigation: Leave wallet and idcp tools disabled unless needed, allowlist them narrowly, and review on-chain actions before execution.
+
+## Reference(s):
+
+- [IdentyClaw API Docs](https://api.identyclaw.com/docs)
+- [ClawHub Skill Page](https://clawhub.ai/identyclaw/skills/identyclaw)
+- [OpenClaw IdentyClaw Plugin](https://clawhub.ai/plugins/@identyclaw/openclaw-identyclaw-plugin)
+- [API Reference](references/api-reference.md)
+- [API Login Authentication](references/login-authentication.md)
+- [HOLA How-To](references/hola-howto.md)
+- [HOLA Agent Authentication](references/hola-agent-authentication.md)
+- [DID RODiT Method](references/did-rodit-method.md)
+- [OpenClaw Integration Guide](references/openclaw-integration-guide.md)
+- [Token Metadata](references/token-metadata.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON examples, and tool-call instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May direct agents to API, HOLA, DID, MCP documentation, OpenClaw plugin configuration, and credential-handling workflows.]
+
+## Skill Version(s):
+
+1.9.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -202,29 +202,28 @@ def main():
 
     args = parser.parse_args()
 
-    # if not args.file_url and not args.file_data:
-    #     parser.error("Must provide --file_url or --file_data")
-    #
-    # if args.file_data and not args.file_name:
-    #     parser.error("Must provide --file_name when using --file_data")
+    if not args.file_url and not args.file_data:
+        parser.error("Must provide --file_url or --file_data")
+
+    if args.file_data and not args.file_name:
+        parser.error("Must provide --file_name when using --file_data")
 
     try:
 
         client = BaiduDocVLMParser(api_key=args.api_key, secret_key=args.secret_key)
-        result = client.query_task("task-bW0BhR4ZoQoF6E5gznEs1gbo842kuXaJ")
-        # result = client.parse(
-        #     file_url=args.file_url,
-        #     file_data=args.file_data,
-        #     file_name=args.file_name,
-        #     analysis_chart=args.analysis_chart,
-        #     merge_tables=args.merge_tables,
-        #     relevel_titles=args.relevel_titles,
-        #     recognize_seal=args.recognize_seal,
-        #     return_span_boxes=args.return_span_boxes,
-        #     poll_interval=args.poll_interval,
-        #     max_poll_time=args.max_poll_time,
-        #     download_result=not args.no_download
-        # )
+        result = client.parse(
+            file_url=args.file_url,
+            file_data=args.file_data,
+            file_name=args.file_name,
+            analysis_chart=args.analysis_chart,
+            merge_tables=args.merge_tables,
+            relevel_titles=args.relevel_titles,
+            recognize_seal=args.recognize_seal,
+            return_span_boxes=args.return_span_boxes,
+            poll_interval=args.poll_interval,
+            max_poll_time=args.max_poll_time,
+            download_result=not args.no_download
+        )
 
         print(json.dumps(result, ensure_ascii=False, indent=2))
 

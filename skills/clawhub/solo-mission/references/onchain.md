@@ -1,5 +1,14 @@
 # SOLO Mission Platform — On-Chain Reference (EscrowVault)
 
+> ⚠️ **Base is closed to new mission creation** during the Solana private beta
+> migration ahead of Solana mainnet. `create_mission` returns 503 for any
+> budget-bearing request that resolves to `chain: 'base'` — including the
+> pre-Solana default of omitting `chain` entirely. This document remains accurate
+> only for **resuming or managing a Base mission created before the closure**
+> (funding one already in `pending_funding`, or cancelling/settling/refunding one
+> already on-chain). **For any new on-chain mission, use `chain: 'solana'` and read
+> `references/solana-wallet.md` instead — none of the mechanics below apply to it.**
+
 **Network:** Base Sepolia, chain_id `84532`, RPC `https://sepolia.base.org`  
 **EscrowVault:** address varies per mission — **never hardcode it.** Always read
 `funding_params.escrow_vault_address` (returned by `create_mission` / `get_cancel_params` /
@@ -13,7 +22,8 @@ on-chain call on that mission.
 
 All on-chain calls (`createTask`, `cancelTask`, `emergencyRefund`, `claimRefund`)
 must be signed by the same Ethereum EOA — the **Sponsor wallet** — referenced below
-as `$WALLET_ADDRESS` and `$PRIVATE_KEY`.
+as `$WALLET_ADDRESS`, with signing done via `$KEYSTORE_PATH` / `$KEYSTORE_PASSWORD_FILE`
+(a Foundry keystore, not a raw private key — see `references/wallet-setup.md`).
 
 If you already have a signing tool or managed wallet, use it and skip setup.
 If you need to create and secure a new wallet, read `references/wallet-setup.md` first.
@@ -121,7 +131,7 @@ cast send $TOKEN_ADDRESS \
   "approve(address,uint256)" \
   $ESCROW_VAULT_ADDRESS $AMOUNT_RAW \
   --rpc-url https://sepolia.base.org \
-  --private-key $PRIVATE_KEY \
+  --keystore $KEYSTORE_PATH --password-file $KEYSTORE_PASSWORD_FILE \
   --nonce $NONCE
 
 # 3. Create task (nonce N+1) — capture tx hash with --json
@@ -131,24 +141,51 @@ TX_HASH=$(cast send $ESCROW_VAULT_ADDRESS \
   $LOTTERY_REWARD_PER_WINNER $LOTTERY_WINNER_COUNT \
   $QUALIFY_DEADLINE $SETTLEMENT_DEADLINE $SEED_COMMIT \
   --rpc-url https://sepolia.base.org \
-  --private-key $PRIVATE_KEY \
+  --keystore $KEYSTORE_PATH --password-file $KEYSTORE_PASSWORD_FILE \
   --nonce $((NONCE+1)) --json | jq -r '.transactionHash')
 
 _wait_tx $TX_HASH || exit 1
 
 _confirm \
-  "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-funding" \
+  "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-funding" \
   "{\"tx_hash\":\"$TX_HASH\"}"
 ```
 
 All variable names match `funding_params` keys exactly (lowercased, underscored).
 
-**Copy every field verbatim — do not re-derive or hand-type any of them.**
-`confirm-funding` re-reads the actual on-chain task and rejects with 409 if
-`totalBudget`, `basePool`, `lotteryRewardPerWinner`, `lotteryWinnerCount`,
-`qualifyDeadline`, `settlementDeadline`, `seedCommit`, or `token` don't exactly
-match what `create_mission` returned. There is no fix-and-retry for a mismatched
-`task_id` — see the recovery flow in `references/stuck-recovery.md`.
+**Copy every field verbatim — do not re-derive or hand-type any of them.** That
+protects against typos, and `confirm-funding` re-reads the actual on-chain task and
+rejects with 409 if `totalBudget`, `basePool`, `lotteryRewardPerWinner`,
+`lotteryWinnerCount`, `qualifyDeadline`, `settlementDeadline`, `seedCommit`, or
+`token` don't exactly match what `create_mission` returned. There is no
+fix-and-retry for a mismatched `task_id` — see the recovery flow in
+`references/stuck-recovery.md`.
+
+**That check alone does not mean the values are legitimate — only that you signed
+what the API most recently described.** A compromised or bugged backend can quote
+correct-looking numbers and still point you at the wrong contract or token, and
+`confirm-funding` re-reading the same on-chain task you just created can't catch
+that: it wasn't an independent source to begin with. Before signing, verify against
+something the API doesn't control:
+
+- **`token_address`** should match the token you actually intended (e.g. the USDC
+  address at the top of this file) — not just "whatever `funding_params` says."
+- **`escrow_vault_address`** should be a real contract, not an EOA a compromised
+  response could point you at to sign away an approval to:
+  ```bash
+  cast code $ESCROW_VAULT_ADDRESS --rpc-url https://sepolia.base.org
+  # empty ("0x") means this is not a contract — stop, do not send
+  ```
+- **`amount_raw` / `base_pool` / the deadlines** should match what *you* asked
+  `create_mission` for, not merely be internally consistent within the response —
+  compare against your own request, since comparing the API's answer to itself
+  proves nothing about whether it's the answer you actually asked for.
+
+This is the same principle `references/solana-wallet.md`'s `fund_solana_mission`
+enforces automatically (there, `expected_budget` is checked against the built
+transaction, not against the API's own description of itself). Base's flow is raw
+`cast` calls with no equivalent tool, so here that verification is the operator's
+job, not the platform's.
 
 ### Field naming note
 
@@ -207,12 +244,12 @@ passed). Returns 409 after that point.
 TX_HASH=$(cast send $ESCROW_VAULT_ADDRESS \
   "cancelTask(bytes32)" $TASK_ID \
   --rpc-url https://sepolia.base.org \
-  --private-key $PRIVATE_KEY --json | jq -r '.transactionHash')
+  --keystore $KEYSTORE_PATH --password-file $KEYSTORE_PASSWORD_FILE --json | jq -r '.transactionHash')
 
 _wait_tx $TX_HASH || exit 1
 
 _confirm \
-  "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-cancel" \
+  "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-cancel" \
   "{\"tx_hash\":\"$TX_HASH\"}"
 ```
 
@@ -229,9 +266,12 @@ The 30-minute buffer accounts for on-chain transaction time and backend processi
 `settleTask()` reverts if called after the deadline — the only recovery path is
 `emergencyRefund`.
 
-The backend calls `settleTask()` + `publishPendingRoot()` in a single operation.
-No further on-chain action needed. Reward Merkle proofs are written per participant;
-a root activation job runs automatically after a short delay. Humans see a **Claim**
+The backend calls `settleTask()` only — publishing the reward Merkle root is a
+separate, later, batched step (a scheduled dispatcher discovers settled-but-unpublished
+missions every few minutes and publishes them in groups, independent of any single
+`settle_mission` call). No further on-chain action is needed from the agent either way.
+Reward Merkle proofs are written per participant once that batch runs; a root
+activation job then runs automatically after a short delay. Humans see a **Claim**
 button on the platform once the root activates.
 
 For lottery missions the backend selects winners at this point using the revealed
@@ -242,6 +282,22 @@ Merkle tree.
 qualifying → completed   (all budget paid out)
 qualifying → refundable  (unused budget remains)
 ```
+
+**`refundable`/`refunded` alone does not tell you whether anyone was paid.** A mission with
+8 of 10 slots filled (2 slots' worth of budget refunded, 8 real people rewarded) and one with
+0 of 10 filled (the entire budget refunded, nobody rewarded) both land on this exact same
+status once the leftover is refunded — `status` cannot distinguish them. `settle_mission`'s
+response (and later `get_mission`) includes a `settlement_outcome` field that does:
+
+| `settlement_outcome` | Meaning |
+|---|---|
+| `completed` | Budget fully spent — no refund at all |
+| `completed_refundable` | Real participants were rewarded; only the unfilled slots' budget refunds |
+| `no_payout_refunded` | Nobody qualified — the entire budget bounces back |
+
+Check this field, not just `status`, before concluding a `refundable`/`refunded` mission
+"failed" — most of the time it means most of your budget went out as intended and only the
+unfilled slots refunded. Missions settled before this field shipped won't have it.
 
 ---
 
@@ -254,12 +310,12 @@ If `settle_mission` produces a `refundable` mission, claim unused budget within
 TX_HASH=$(cast send $ESCROW_VAULT_ADDRESS \
   "claimRefund(bytes32,address)" $TASK_ID $RECIPIENT_ADDRESS \
   --rpc-url https://sepolia.base.org \
-  --private-key $PRIVATE_KEY --json | jq -r '.transactionHash')
+  --keystore $KEYSTORE_PATH --password-file $KEYSTORE_PASSWORD_FILE --json | jq -r '.transactionHash')
 
 _wait_tx $TX_HASH || exit 1
 
 _confirm \
-  "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-refund" \
+  "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-refund" \
   "{\"tx_hash\":\"$TX_HASH\"}"
 ```
 
@@ -282,12 +338,12 @@ Act as soon as `now > settlement_deadline` — do not wait for the
 TX_HASH=$(cast send $ESCROW_VAULT_ADDRESS \
   "emergencyRefund(bytes32)" $TASK_ID \
   --rpc-url https://sepolia.base.org \
-  --private-key $PRIVATE_KEY --json | jq -r '.transactionHash')
+  --keystore $KEYSTORE_PATH --password-file $KEYSTORE_PASSWORD_FILE --json | jq -r '.transactionHash')
 
 _wait_tx $TX_HASH || exit 1
 
 _confirm \
-  "https://api.mission.projectsolo.xyz/agent/missions/$MISSION_ID/confirm-emergency-refund" \
+  "https://api.mission.projectsolo.ai/agent/missions/$MISSION_ID/confirm-emergency-refund" \
   "{\"tx_hash\":\"$TX_HASH\"}"
 ```
 

@@ -1,43 +1,56 @@
-## Description: <br>
-Canva (canva.com). Use this skill for any Canva request: reading, creating, and updating data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Canva (canva.com). Use this skill for reading, creating, and updating Canva data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent read and manage Canva resources through an OOMOL-connected Canva account, including design creation, export jobs, asset uploads, folder operations, and metadata lookup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform Canva write operations such as creating designs, starting exports, uploading URL assets, creating folders, and moving folder items. <br>
-Mitigation: Review the exact action payload and expected Canva effect with the user before approving write operations. <br>
-Risk: The skill requires a connected Canva account through OOMOL and may rely on sensitive OAuth-backed credentials. <br>
-Mitigation: Install and use it only when OOMOL access is intended, and run login or connection setup only after an authentication or connection failure. <br>
+## Use Case:
 
+External users and developers use this skill to operate Canva through the oo CLI, including creating designs, exporting designs, uploading URL assets, reading design and asset metadata, and organizing folders.
 
-## Reference(s): <br>
-- [Canva homepage](https://www.canva.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-canva) <br>
-- [Publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill may produce Canva connector responses, job identifiers, status results, and setup guidance through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server-resolved release metadata and skill frontmatter) <br>
+Risk: The first-time setup path includes remote installer commands that execute downloaded scripts directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a verified installation path, review the installer source, and confirm the CLI source before running installer commands.
+
+Risk: Some Canva connector actions create designs, folders, exports, uploads, or move folder items.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [Canva homepage](https://www.canva.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub Canva skill page](https://clawhub.ai/oomol/skills/oo-canva)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Write actions can change Canva state and should be confirmed with the user before execution.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -96,32 +96,26 @@ class CustomerInsightsClient:
     # ==================== 下载管理 ====================
 
     def get_download_links(self) -> Dict[str, Any]:
-        """获取桌面客户端下载链接
+        """获取浏览器扩展下载链接
 
-        从官网下载配置获取各平台的最新下载链接。
+        从官网下载配置获取最新下载链接。
+        注：网站已不再提供桌面客户端下载，downloads 中现仅有 extension 一项。
 
         Returns:
-            Dict[str, Any]: 包含 macos 和 windows 的下载信息
+            Dict[str, Any]: 含 extension 的下载信息（若配置中不存在则为空 url）
         """
         config_url = f"{_WEBSITE_URL}/download-config.json"
         config = self._get(config_url)
 
         downloads = config.get("downloads", {}) or {}
-        macos_info = downloads.get("macos") or {}
-        windows_info = downloads.get("windows") or {}
+        extension_info = downloads.get("extension") or {}
 
         return {
-            "macos": {
-                "name": macos_info.get("name_zh") or macos_info.get("name_en") or "macOS 版",
-                "url": macos_info.get("url") or "",
-                "version": macos_info.get("version") or "",
-                "size": macos_info.get("size") or "",
-            },
-            "windows": {
-                "name": windows_info.get("name_zh") or windows_info.get("name_en") or "Windows 版",
-                "url": windows_info.get("url") or "",
-                "version": windows_info.get("version") or "",
-                "size": windows_info.get("size") or "",
+            "extension": {
+                "name": extension_info.get("name_zh") or extension_info.get("name_en") or "Chrome 扩展",
+                "url": extension_info.get("url") or "",
+                "version": extension_info.get("version") or "",
+                "size": extension_info.get("size") or "",
             },
         }
 
@@ -346,10 +340,10 @@ def create_parser() -> argparse.ArgumentParser:
     parser.add_argument("--filter-product", default="all", help="商品筛选: all/ASIN (get_trend)")
     parser.add_argument("--filter-star", default="all", help="评分筛选: 1-5/all (get_comments)")
     parser.add_argument("--filter-verified", default="all", help="筛选已认证评论: all/true/false (get_comments)")
-    parser.add_argument("--association-type", default="tag", help="关联类型: tag/issue (get_related_comments)")
+    parser.add_argument("--association-type", default="tag", help="关联类型: tag/category (get_related_comments)")
     parser.add_argument("--normalized-tag", default=None, help="标准化标签名 (get_related_comments, tag模式)")
     parser.add_argument("--category", default=None, help="标签分类 (get_related_comments, tag模式)")
-    parser.add_argument("--dimension", default=None, help="问题维度 (get_related_comments, issue模式)")
+    parser.add_argument("--dimension", default=None, help="关联维度 (get_related_comments, category模式)")
     parser.add_argument("--polarity", default=None, help="情感极性 (get_representative_reviews, get_related_comments)")
     parser.add_argument("--limit", type=int, default=5, help="返回数量 (get_representative_reviews)")
 
@@ -603,7 +597,7 @@ def check_device_online(api_key: Optional[str] = None) -> Dict[str, Any]:
 
 
 def get_download_links(api_key: Optional[str] = None) -> Dict[str, Any]:
-    """便捷函数：获取桌面客户端下载链接（无需 API Key）"""
+    """便捷函数：获取浏览器扩展下载链接（无需 API Key）"""
     return execute({"api_key": api_key or "", "action": "get_download_links"})
 
 

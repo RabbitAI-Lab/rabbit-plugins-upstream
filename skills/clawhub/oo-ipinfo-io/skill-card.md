@@ -1,41 +1,59 @@
-## Description: <br>
-IPinfo (ipinfo.io) helps agents search and read IP intelligence through OOMOL's IPinfo connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+IPinfo enables agents to run IPinfo lookups and related enrichment actions through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to retrieve IPinfo data through an OOMOL-connected account, including current-IP lookups, arbitrary-IP geolocation, hostname, organization, company, carrier, abuse contact, privacy, token metadata, batch lookup, and map report actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: IP lookup requests, current-IP actions, bulk map uploads, and token metadata requests route data through OOMOL and IPinfo. <br>
-Mitigation: Use the skill only when sharing those IP addresses or account metadata with OOMOL/IPinfo is intended, and avoid sensitive networks or large private IP lists unless the service handling terms have been reviewed. <br>
+## Use Case:
 
+External developers and agents use this skill to look up current or specified IP addresses, enrich IP data, inspect token and account usage metadata, and create IPinfo map reports when requested.
 
-## Reference(s): <br>
-- [IPinfo ClawHub Skill](https://clawhub.ai/oomol/oo-ipinfo-io) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [IPinfo Homepage](https://ipinfo.io) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return IPinfo connector responses containing IP intelligence data and OOMOL execution metadata.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence and skill metadata) <br>
+Risk: The skill can trigger sensitive current-IP and third-party IP lookups.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for explicit IPinfo lookup tasks and confirm the target IPs or current-IP behavior before running actions that expose location, organization, privacy, or related enrichment data.
+
+Risk: The map action can upload large IP lists and returns a generated report URL.
+
+Mitigation: Confirm bulk payloads and the intended report generation with the user before invoking the write action.
+
+Risk: First-time setup includes remote installer commands for the oo CLI.
+
+Mitigation: Prefer a verified oo CLI installation method and review installer commands before running them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-ipinfo-io)
+- [IPinfo homepage](https://ipinfo.io)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses may include IP geolocation, enrichment data, account metadata, and report URLs depending on the action and IPinfo account scope.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

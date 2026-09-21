@@ -16,19 +16,19 @@ Complete setup and security guide for `vmware-aria`.
 ### Via uv (recommended)
 
 ```bash
-uv tool install vmware-aria
+uv tool install vmware-aria==1.17.0
 ```
 
 ### Via pip
 
 ```bash
-pip install vmware-aria
+pip install vmware-aria==1.17.0
 ```
 
 ### From source
 
 ```bash
-git clone https://github.com/zw008/VMware-Aria.git
+git clone --branch v1.17.0 https://github.com/vmware-skills/VMware-Aria.git
 cd VMware-Aria
 pip install -e .
 ```
@@ -86,7 +86,7 @@ Password variable naming convention: `VMWARE_ARIA_<TARGET_UPPER>_PASSWORD`
 vmware-aria doctor
 ```
 
-Expected output: All checks PASS.
+Expected output: All checks PASS. WARN rows (an unreadable version, a DEGRADED or UNKNOWN platform) do not fail the doctor; FAIL rows do.
 
 ---
 
@@ -102,10 +102,10 @@ targets:
     auth_source: LOCAL
 
   lab:
-    host: 10.0.0.100
+    host: aria-lab.example.com
     username: admin
     port: 443
-    verify_ssl: false    # Allow self-signed cert
+    verify_ssl: true     # private CA? see "TLS Certificate Verification" below
     auth_source: LOCAL
 
 default_target: prod
@@ -143,6 +143,35 @@ The `auth_source` value must match the configured authentication source name in 
 
 ---
 
+## TLS Certificate Verification
+
+`verify_ssl` defaults to `true`: a target that omits the key is verified. The
+client trusts the public CA bundle shipped with Python's `certifi` package, **not**
+the operating-system trust store, so adding your CA to macOS Keychain or
+`/etc/pki` does not change what `vmware-aria` accepts.
+
+**Appliance signed by a private or enterprise CA** — keep `verify_ssl: true` and
+point `SSL_CERT_FILE` at the PEM certificate of the CA that signed the Aria
+Operations certificate:
+
+```bash
+export SSL_CERT_FILE=/path/to/aria-ca.pem
+vmware-aria doctor
+```
+
+For the MCP server, add `"SSL_CERT_FILE": "/path/to/aria-ca.pem"` to the
+server's `env` block next to `VMWARE_ARIA_CONFIG`. `SSL_CERT_FILE` replaces the
+default bundle for the whole process; if that process must also reach public
+HTTPS (for example `uvx` resolving packages from PyPI), point it at a bundle that
+contains both your CA and the public roots.
+
+**Isolated lab only** — `verify_ssl: false` disables certificate *and* hostname
+checking for that one target. The username and password are then sent to
+whatever answers at that address, so use it only on a lab network you control,
+never for production or for a target reached over a network you do not trust.
+
+---
+
 ## MCP Server Setup
 
 ### With Claude Code
@@ -165,7 +194,7 @@ Add to `~/.claude.json` (or use `claude mcp add`):
 
 > v1.5.15+ recommends `vmware-aria mcp`. Pre-1.5.15 used the legacy
 > `vmware-aria-mcp` console script (still kept for backward compatibility).
-> If using `uvx --from vmware-aria vmware-aria mcp` and you hit
+> If using `uvx --from vmware-aria==1.17.0 vmware-aria mcp` and you hit
 > `invalid peer certificate: UnknownIssuer` behind a corporate TLS proxy,
 > set `UV_NATIVE_TLS=true` or use the recommended form above.
 
@@ -223,14 +252,31 @@ whitespace are handled correctly).
 
 To run the agent read-only, give it a read-only Aria service account (RBAC).
 
+## Architecture
+
+```
+User (natural language)
+  |
+AI Agent (Claude Code / Goose / Cursor)
+  | reads SKILL.md
+vmware-aria CLI or MCP server (stdio transport)
+  | Aria Operations Suite API (REST/JSON over HTTPS)
+  | POST /suite-api/api/auth/token/acquire → vRealizeOpsToken
+Aria Operations Manager
+  |
+VMs / Hosts / Clusters / Datastores / Alerts / Capacity
+```
+
+The MCP server uses stdio transport (local only, no network listener). Connections to Aria Ops use HTTPS on port 443 with vRealizeOpsToken authentication (6-hour sliding token validity, auto-refreshed).
+
 ## Security Notes
 
 > **Disclaimer**: This is a community-maintained open-source project and is **not affiliated with, endorsed by, or sponsored by VMware, Inc. or Broadcom Inc.** "VMware" and "Aria" are trademarks of Broadcom.
 
-- **Source Code**: Fully open source at [github.com/zw008/VMware-Aria](https://github.com/zw008/VMware-Aria) (MIT). The `uv` installer fetches the `vmware-aria` package from PyPI, which is built from this GitHub repository. We recommend reviewing the source code and commit history before deploying in production.
+- **Source Code**: Fully open source at [github.com/vmware-skills/VMware-Aria](https://github.com/vmware-skills/VMware-Aria) (MIT). The `uv` installer fetches the `vmware-aria` package from PyPI, which is built from this GitHub repository. We recommend reviewing the source code and commit history before deploying in production.
 - **Never** store passwords in `config.yaml` — use env vars or `.env` file
 - `.env` file must be `chmod 600` (owner read/write only)
-- Use `verify_ssl: true` in production; only disable for lab environments
+- TLS verification is on by default (`verify_ssl: true`); trust a private CA with `SSL_CERT_FILE` rather than disabling verification (see [TLS Certificate Verification](#tls-certificate-verification))
 - The MCP server uses stdio transport — it runs locally only, no network listener
 - Audit log at `~/.vmware/audit.db` (SQLite WAL, via vmware-policy) records all write operations (alert acknowledge/cancel, alert definition management, report generate/delete)
 - Tokens have a 6-hour sliding validity (extended on each call); the client re-acquires automatically 60 seconds before expiry. Requests carry `Authorization: vRealizeOpsToken <token>`
@@ -244,11 +290,14 @@ To run the agent read-only, give it a read-only Aria service account (RBAC).
 ```bash
 # Test connectivity
 vmware-aria doctor
-# Or manually
-curl -k https://aria-ops.example.com/suite-api/api/auth/token/acquire
+# Or manually, verifying the certificate against your CA
+curl --cacert /path/to/aria-ca.pem https://aria-ops.example.com/suite-api/api/versions/current
 ```
 
-Check: firewall rules, VPN connectivity, Aria Ops service status.
+Check: firewall rules, VPN connectivity, Aria Ops service status. Any HTTP
+response (even 401) means the network path and certificate are fine; a curl
+certificate error means the CA file is not the one that signed the appliance
+certificate.
 
 ### "401 Unauthorized" on token acquire
 
@@ -257,10 +306,24 @@ Verify:
 2. `auth_source` matches the authentication source name in Aria Ops
 3. The user account is not locked
 
+### "the body is not JSON" or "response carried no 'token' field"
+
+Aria Operations answered with a success status but not with suite-api JSON — a
+login page, an SSO redirect, or a proxy in front of the node answers like this.
+Every tool reports it as an error naming the method, path, HTTP status and
+content type (`NonJsonBodyError`) instead of a JSON decode traceback; during
+token acquisition it is reported as "most likely not an Aria Operations suite-api
+endpoint" (`NotSuiteApiError`). Check that `host` and `port` for the target reach
+the Aria Operations node itself.
+
 ### Self-signed certificate error
 
-Set `verify_ssl: false` in config for the target, or install the Aria Ops certificate into the system trust store.
+Export the CA that signed the Aria Ops certificate as PEM and set
+`SSL_CERT_FILE=/path/to/aria-ca.pem` (see
+[TLS Certificate Verification](#tls-certificate-verification)). Installing it
+into the system trust store has no effect: the client uses the `certifi` bundle.
+`verify_ssl: false` is for isolated labs only.
 
 ### Metrics return empty list
 
-The metric key may not apply to this resource kind, or collection has not started yet. Browse available metric keys in the Aria Ops UI: navigate to the resource → Metrics tab.
+The metric key may not apply to this resource kind, or collection has not started yet. The `missing` list in the output says which: `not_collected_for_resource` (try one of its `similar_keys`), `no_data_in_window`, `resource_reports_no_stat_keys`, or `undetermined` (the stat-key list could not be read or is in an unrecognised form). You can also browse available metric keys in the Aria Ops UI: navigate to the resource → Metrics tab.

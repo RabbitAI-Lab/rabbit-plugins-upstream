@@ -1,45 +1,60 @@
-## Description: <br>
-Operate X (Twitter) through an OOMOL-connected account to read, create, update, and delete account data with schema-first oo CLI connector commands. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+X (Twitter) connector that lets an agent read, search, create, update, and delete X account data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, operators, and agents use this skill to perform X (Twitter) tasks through an OOMOL-connected account, including reading profiles, posts, timelines, bookmarks, lists, Spaces, DMs, and search results. It also supports user-approved posting, following, muting, list management, bookmark, DM, media upload, and deletion workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate an OOMOL-connected X/Twitter account and read private account data, including DMs, when requested. <br>
-Mitigation: Install and use it only for accounts where that level of OOMOL-connected tooling access is acceptable, and review requested read targets before execution. <br>
-Risk: Write actions can change X/Twitter account state, including posts, follows, DMs, lists, bookmarks, mutes, and media uploads. <br>
-Mitigation: Confirm the exact payload and expected account effect with the user before running any action tagged as write. <br>
-Risk: Destructive actions can delete or remove account data such as posts, DMs, lists, list members, and bookmarks. <br>
-Mitigation: Require explicit approval for the exact destructive target before execution. <br>
+## Use Case:
 
+External users and developers use this skill to let an agent read, search, post, message, manage lists, and upload media through an OOMOL-connected X account.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/oomol/oo-twitter) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [X homepage](https://x.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: The setup path may ask the agent to run remote installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation method and script contents before allowing installation.
+
+Risk: The skill can post, delete, send DMs, follow, mute, manage lists, and upload media through the connected X account.
+
+Mitigation: Require the agent to show the exact payload and expected effect, then obtain explicit approval before write or destructive actions.
+
+Risk: Using the connector routes account activity through OOMOL as an intermediary.
+
+Mitigation: Install only when that intermediary relationship is acceptable for the account and task.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-twitter)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [X homepage](https://x.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce read results from X actions and proposed payloads for write or destructive actions.]
+
+## Skill Version(s):
+
+1.0.5 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

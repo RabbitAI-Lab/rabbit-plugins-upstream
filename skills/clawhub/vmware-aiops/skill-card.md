@@ -1,51 +1,71 @@
-## Description: <br>
-vmware-aiops helps agents manage VMware/vSphere/ESXi VMs, deployments, guest operations, clusters, alarms, and triage workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill to manage VMware, vSphere, and ESXi VM lifecycle operations, deployments, guest operations, clusters, alarms, and investigation workflows.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-VMware operators and infrastructure engineers use this skill to automate VM lifecycle tasks, deployment workflows, guest operations, cluster administration, alarm handling, and investigation-driven remediation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can modify VMware infrastructure, including VM lifecycle, guest operation, cluster, alarm, and limited underlay-network actions. <br>
-Mitigation: Install it only for trusted VMware operators, use a dedicated least-privilege vCenter account, and require operator review before state-changing actions. <br>
-Risk: Production changes may affect live workloads or shared infrastructure. <br>
-Mitigation: Configure policy deny rules or maintenance windows for production targets and prefer dry-runs or plan review where supported. <br>
-Risk: Guest execution and file transfer can run commands inside managed VMs. <br>
-Mitigation: Avoid root guest credentials unless strictly necessary and review each guest exec or file transfer request carefully. <br>
-Risk: TLS verification bypass is available for isolated lab environments. <br>
-Mitigation: Keep TLS verification enabled in production and use CA-signed certificates for production vCenter or ESXi endpoints. <br>
-Risk: Read-only VMware questions do not require the write surface exposed by this skill. <br>
-Mitigation: Use vmware-monitor for inventory, health, events, and other read-only questions. <br>
+## Use Case:
 
+Developers, operators, and infrastructure engineers use this skill to operate VMware environments from an agent, including VM lifecycle work, deployment, cluster changes, guest commands, alarm handling, and triage before remediation.
 
-## Reference(s): <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [Capabilities Reference](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Investigation Protocol](references/investigation-protocol.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
-- [VMware-AIops source homepage](https://github.com/zw008/VMware-AIops) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI and MCP tool names, shell command examples, operational plans, and risk notes.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include confirmations, dry-run recommendations, and follow-up checks before VMware state changes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.10 (source: ClawHub release evidence) <br>
+Risk: The skill can perform infrastructure-changing VMware operations, and some write actions can run without a built-in confirmation step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install with a dedicated least-privilege VMware service account, add deny rules before production use, and require operator review for writes such as reconfigure, clone, deploy, cluster changes, alarm reset, and plan apply.
+
+Risk: Guest execution and upload operations can run commands or copy files with the supplied guest credentials.
+
+Mitigation: Use least-privilege guest accounts, avoid root or administrator credentials unless necessary, and review the exact command, file path, and target VM before approving execution.
+
+Risk: Destructive or broad-scope actions such as power-off, delete, migration, snapshot changes, TTL deletion, and alarm reset can affect availability or clear more than one object.
+
+Mitigation: Inspect preview or blast-radius output when available, confirm target names and scopes, and re-check final state after execution.
+
+Risk: Webhook notifications and diagnostics may expose operational metadata such as host names, IP addresses, user names, alarm text, event messages, or connection errors.
+
+Mitigation: Enable webhooks only to trusted destinations and treat notifications as operational data.
+
+Risk: Disabling TLS verification can expose connections to interception outside isolated lab environments.
+
+Mitigation: Keep TLS verification enabled in production and use CA-signed certificates for vCenter or ESXi endpoints.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/vmware-aiops)
+- [Project Homepage](https://github.com/vmware-skills/VMware-AIops)
+- [Capabilities Reference](references/capabilities.md)
+- [Setup Guide](references/setup-guide.md)
+- [CLI Reference](references/cli-reference.md)
+- [Agent Guardrails](references/agent-guardrails.md)
+- [Investigation Protocol](references/investigation-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May direct an agent to call VMware CLI or MCP tools that read or change infrastructure state.]
+
+## Skill Version(s):
+
+1.12.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

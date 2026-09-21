@@ -1,48 +1,62 @@
-## Description: <br>
-Installs Terraform CLI cross-platform with Huawei Cloud mirror support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Installs Terraform CLI on Linux and Windows with Huawei Cloud mirror support for HuaweiCloud provider setup.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and infrastructure engineers use this skill to install Terraform on Linux or Windows, configure Huawei Cloud provider mirror support, check installation status, run initialization tests, or uninstall the local Terraform setup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill makes persistent local or system changes while installing Terraform, configuring provider mirrors, updating PATH on Windows, and writing terraformrc. <br>
-Mitigation: Run it in a controlled environment first, review the target install paths, prefer user-local installation where practical, and back up existing Terraform configuration before execution. <br>
-Risk: The uninstall path can delete Terraform binaries, terraformrc, and provider data. <br>
-Mitigation: Use the uninstall option only after confirming those files are disposable or backed up. <br>
-Risk: The verification references include test-machine root credentials that should be treated as compromised. <br>
-Mitigation: Do not reuse the published credentials and rotate or disable any matching test-machine access before relying on the environment. <br>
+## Use Case:
 
+Developers and engineers use this skill to install Terraform, configure HuaweiCloud provider mirrors, check installation status, initialize Terraform, test provider setup, or uninstall local Terraform components.
 
-## Reference(s): <br>
-- [Terraform Install Documentation](https://developer.hashicorp.com/terraform/install) <br>
-- [HashiCorp Terraform Releases API](https://api.github.com/repos/hashicorp/terraform/releases/latest) <br>
-- [HashiCorp Terraform Releases](https://releases.hashicorp.com/terraform/{version}/terraform_{version}_{os}_{arch}.zip) <br>
-- [Huawei Cloud Terraform Mirror](https://mirrors.huaweicloud.com/terraform/) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Verification Result](references/verification-result.md) <br>
-- [Test Scenarios](references/test-scenarios.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and Python script references] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May run network downloads, modify PATH or installation directories, write terraformrc configuration, run terraform init, and remove Terraform/provider files during uninstall.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The verification docs include a plaintext root SSH credential.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the artifact before use and rotate or invalidate the exposed credential if it is real.
+
+Risk: The installer can make broad local system changes, including Terraform binary installation, PATH updates, terraformrc changes, and provider cache writes.
+
+Mitigation: Run it only on machines where those Terraform and PATH changes are acceptable, and avoid sudo or administrator privileges unless necessary.
+
+Risk: The uninstall path can remove Terraform binaries, Terraform CLI configuration, and provider directories.
+
+Mitigation: Back up existing Terraform configuration and provider caches before using --uninstall.
+
+## Reference(s):
+
+- [Verification Method](references/verification-method.md)
+- [Verification Result](references/verification-result.md)
+- [Test Scenarios](references/test-scenarios.md)
+- [HashiCorp Terraform install documentation](https://developer.hashicorp.com/terraform/install)
+- [HashiCorp Terraform releases](https://releases.hashicorp.com/terraform/)
+- [Huawei Cloud Terraform mirror](https://mirrors.huaweicloud.com/terraform/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and a Python installer script]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May modify Terraform binaries, PATH, terraformrc, and local provider directories when executed.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

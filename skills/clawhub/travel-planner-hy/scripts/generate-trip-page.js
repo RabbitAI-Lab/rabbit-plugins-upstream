@@ -1,30 +1,9 @@
-/**
- * generate-trip-page.js — Travel Plan HTML Page Generator
- *
- * 生成精美的行程网页，左侧显示行程安排，右侧显示第三方平台跳转二维码（仅跳转，不代订不代付）
- *
- * 用法：
- *   node scripts/generate-trip-page.js          # 真实模式（默认不自动打开浏览器）
- *   node scripts/generate-trip-page.js --mock    # Mock 模式（无需 API Key）
- *   node scripts/generate-trip-page.js --open    # 生成后自动打开浏览器
- *
- * --mock 模式使用内置 mock 数据生成演示行程
- */
-
-const fs = require('fs');
-const path = require('path');
-const { spawnSync } = require('child_process');
-
-// Mock 模式检测
-const isMock = process.argv.includes('--mock');
-
-// 加载 mock 数据
-const mockData = require('./mock-data.js');
-
-// ============================================================
-// 样式与 HTML 模板
-// ============================================================
-
+#!/usr/bin/env node
+'use strict';
+// Static, escaped itinerary HTML. This renderer performs no network or subprocess calls.
+const { CSP, escapeHtml: e, validateTrip, validatePlatformUrl, parseTripJson, readTrip, writeOutput } = require('./safety');
+const { generateQRBase64 } = require('./qrcode');
+const mockData = require('./mock-data');
 function getCSS() {
   return `
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -65,161 +44,57 @@ body { font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei',
 `;
 }
 
-function getHTML(tripData) {
-  const { title, subtitle, destination, days, travelers, budget, preferences, attractions, itinerary, hotels, transport, costs, tips } = tripData;
 
+async function getHTML(raw) {
+  validateTrip(raw);
+  // Clone before asynchronous QR work so caller mutations cannot cross the validation boundary.
+  const d = JSON.parse(JSON.stringify(raw));
+  const zh = d.language === 'zh-CN';
+  const l = (cn, en) => zh ? cn : en;
+  const money = value => value == null ? l('待核实','Unknown') : '¥' + value;
+  const label = l('旅行方案','Travel plan');
+  const links = await Promise.all((d.platformUrls || []).map(async value => {
+    const url = validatePlatformUrl(value);
+    const qr = await generateQRBase64(url);
+    return `<div><img src="${e(qr)}" alt="${l('平台首页二维码','Platform homepage QR')}"><p><a class="btn-book" href="${e(url)}" target="_blank" rel="noopener noreferrer">${e(new URL(url).hostname)}</a></p></div>`;
+  }));
   return `<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${title || destination + '旅行方案'}</title>
-  <style>${getCSS()}</style>
-</head>
-<body>
-  <div class="container">
-    <!-- 头部 -->
-    <div class="header">
-      <h1>🗺️ ${title || destination + '旅行方案'}</h1>
-      <div class="subtitle">${subtitle || days + '天 · ' + travelers + '人 · 预算¥' + (budget || '待定')}</div>
-    </div>
-
-    <div class="main-grid">
-      <!-- 左侧：行程详情 -->
-      <div class="left-column">
-        <!-- 预算概览 -->
-        <div class="section">
-          <h2>💰 预算概览</h2>
-          <table class="budget-table">
-            <tr><th>项目</th><th>金额</th><th>占比</th></tr>
-            ${(costs && costs.items) ? costs.items.map(item => '<tr><td>' + item.name + '</td><td>¥' + item.amount + '</td><td>' + item.pct + '</td></tr>').join('') : ''}
-            <tr><td>合计</td><td>¥${costs ? costs.total : 0}</td><td>100%</td></tr>
-          </table>
-        </div>
-
-        <!-- 推荐景点 -->
-        ${attractions ? `
-        <div class="section">
-          <h2>🏆 推荐景点</h2>
-          ${attractions.slice(0, 6).map((a, i) => `
-          <div class="attraction-card">
-            <div class="name">${i+1}. ${a.name}</div>
-            <div class="info">
-              ${a.type.map(t => '<span class="tag">' + t + '</span>').join('')}
-              <span class="${a.ticketPrice === 0 ? 'tag free' : 'tag paid'}">${a.ticketPrice === 0 ? '免费' : '¥' + a.ticketPrice}</span>
-              ⭐ ${a.rating}
-            </div>
-            <div class="info">⏰ ${a.estimatedDuration || '待定'} | ${a.openingHours || ''}</div>
-            ${a.description ? '<div class="info">' + a.description + '</div>' : ''}
-            ${a._reason ? '<div class="reason">💡 ' + a._reason + '</div>' : ''}
-          </div>
-          `).join('')}
-        </div>` : ''}
-
-        <!-- 每日行程 -->
-        ${itinerary ? itinerary.map((day, di) => `
-        <div class="section">
-          <h2>🗓️ 第${di+1}天 — ${day.date || '行程日'}</h2>
-          ${day.items.map(item => `
-          <div class="itinerary-item">
-            <div class="time">${item.time}</div>
-            <div class="content">
-              ${item.icon || '📍'} <strong>${item.title}</strong>
-              ${item.detail ? '<br>' + item.detail : ''}
-              ${item.cost ? '<br><span class="highlight">💰 ' + item.cost + '</span>' : ''}
-            </div>
-          </div>
-          `).join('')}
-          ${day.notes ? '<div style="margin-top:12px;padding:10px;background:#fff8e1;border-radius:8px;font-size:13px"><strong>⚠️ 注意：</strong>' + day.notes + '</div>' : ''}
-        </div>
-        `).join('') : ''}
-
-        <!-- 住宿推荐 -->
-        ${hotels ? `
-        <div class="section">
-          <h2>🏨 住宿推荐</h2>
-          ${hotels.slice(0, 3).map(h => `
-          <div class="attraction-card">
-            <div class="name">${h.name}</div>
-            <div class="info">📍 ${h.area || ''} | ⭐ ${h.rating} | 💰 ¥${h.price}/晚</div>
-            <div class="info">${h.features || ''}</div>
-            ${h.distance ? '<div class="info">📏 ' + h.distance + '</div>' : ''}
-          </div>
-          `).join('')}
-        </div>` : ''}
-
-        <!-- 温馨提示 -->
-        ${tips ? `
-        <div class="section">
-          <h2>💡 温馨提示</h2>
-          <ul class="tips-list">
-            ${tips.map(t => '<li>' + t + '</li>').join('')}
-          </ul>
-        </div>` : ''}
-      </div>
-
-      <!-- 右侧：第三方平台跳转（不代订不代付） -->
-      <div class="right-column">
-        <div class="section qr-section">
-          <h2>🔗 第三方平台跳转</h2>
-          <div class="thirdparty-warning" style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:10px 12px;font-size:12px;color:#856404;margin-bottom:12px;text-align:left;">
-            ⚠️ 本技能<b>不代订、不代付</b>，不创建订单。下方二维码/按钮<b>仅跳转</b>到第三方平台公开页面，您须在第三方平台自行完成预订与支付。本技能不收集您的身份/支付信息。
-          </div>
-          <div id="qrcode-container">
-            <p style="color:#888;font-size:14px;">正在加载二维码...</p>
-          </div>
-          <div class="total-price">¥${costs ? costs.total : 0}</div>
-          <div class="price-label">预估总计（仅供参考）</div>
-          ${costs && costs.paymentUrls ? costs.paymentUrls.map(url =>
-            '<a class="btn-book" href="' + url + '" target="_blank" rel="noopener noreferrer">🔗 ' + (url.includes('tuniu') ? '途牛待付款页（自行支付）' : url.includes('12306') ? '12306（自行购票）' : '前往第三方平台') + '</a>'
-          ).join('') : ''}
-          <div style="margin-top:16px;font-size:12px;color:#aaa;">
-            💡 上述链接为第三方平台公开入口，实际订单/价格以第三方平台为准
-          </div>
-        </div>
-
-        <div class="section">
-          <h2>📋 行程信息</h2>
-          <div style="font-size:14px;line-height:2;">
-            <div>📍 目的地：<strong>${destination}</strong></div>
-            <div>🗓️ 天数：<strong>${days}</strong></div>
-            <div>👥 人数：<strong>${travelers}人</strong></div>
-            <div>💰 预算：<strong>¥${budget || '待定'}</strong></div>
-            ${preferences ? '<div>🏷️ 偏好：' + preferences.map(p => '<span class="tag">' + p + '</span>').join('') + '</div>' : ''}
-            ${transport ? '<div>🚄 交通：' + transport.airport + '<br>' + transport.tips + '</div>' : ''}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    // 加载二维码
-    (function() {
-      var container = document.getElementById('qrcode-container');
-      var url = '${costs && costs.paymentUrls ? costs.paymentUrls[0] : 'https://example.com'}';
-      if (url && url !== 'https://example.com') {
-        var img = document.createElement('img');
-        img.src = '/api/qrcode?url=' + encodeURIComponent(url) + '&t=' + Date.now();
-        img.alt = '第三方平台跳转二维码';
-        img.onerror = function() {
-          container.innerHTML = '<p style="color:#999;font-size:13px;">二维码加载失败<br>请直接点击下方支付按钮</p>';
-        };
-        container.innerHTML = '';
-        container.appendChild(img);
-      } else {
-        container.innerHTML = '<p style="color:#999;font-size:13px;">示例二维码<br>（实际使用时替换为真实支付链接）</p>';
-      }
-    })();
-  </script>
-</body>
-</html>`;
+<html lang="${zh ? 'zh-CN' : 'en'}"><head><meta charset="UTF-8">${CSP}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${e(d.title || d.destination + ' ' + label)}</title><style>${getCSS()}</style></head>
+<body><div class="container"><div class="header">
+<h1>🗺️ ${e(d.title || d.destination + ' ' + label)}</h1>
+<div class="subtitle">${e(d.subtitle || `${d.days} ${l('天','days')} · ${d.travelers} ${l('人','travelers')} · ${money(d.budget)}`)}</div>
+${d.mock ? `<p role="note">${l('模拟演示数据 · 非实时报价','MOCK DATA · Not live prices')}</p>` : ''}
+</div><div class="main-grid"><div class="left-column">
+<div class="section"><h2>💰 ${l('预算概览','Budget overview')}</h2><table class="budget-table">
+<tr><th>${l('项目','Item')}</th><th>${l('金额','Amount')}</th><th>${l('占比','Share')}</th></tr>
+${(d.costs?.items || []).map(item => `<tr><td>${e(item.name)}</td><td>${money(item.amount)}</td><td>${e(item.pct)}</td></tr>`).join('')}
+<tr><td>${l('预估合计','Estimated total')}</td><td>${money(d.costs?.total)}</td><td></td></tr></table></div>
+${d.attractions?.length ? `<div class="section"><h2>🏆 ${l('推荐景点','Attractions')}</h2>
+${d.attractions.map((a,i) => `<div class="attraction-card"><div class="name">${i+1}. ${e(a.name)}</div>
+<div class="info">${a.type.map(t => `<span class="tag">${e(t)}</span>`).join('')}
+<span class="tag">${a.ticketPrice === 0 ? l('免费','Free') : money(a.ticketPrice)}</span> ⭐ ${a.rating ?? l('待核实','Unknown')}</div>
+<div class="info">${e(a.estimatedDuration)} | ${e(a.openingHours)}</div>
+<div class="info">${e(a.description)}</div><div class="reason">${e(a._reason)}</div></div>`).join('')}</div>` : ''}
+${(d.itinerary || []).map((day,i) => `<div class="section"><h2>🗓️ ${l('第','Day ')}${i+1}${l('天','')} — ${e(day.date)}</h2>
+${day.items.map(item => `<div class="itinerary-item"><div class="time">${e(item.time)}</div><div class="content">${e(item.icon || '📍')} <strong>${e(item.title)}</strong>
+${item.detail ? '<br>' + e(item.detail) : ''}${item.cost ? '<br><span class="highlight">' + e(item.cost) + '</span>' : ''}</div></div>`).join('')}
+${day.notes ? '<p>' + e(day.notes) + '</p>' : ''}</div>`).join('')}
+${d.hotels?.length ? `<div class="section"><h2>🏨 ${l('住宿推荐','Hotels')}</h2>
+${d.hotels.map(h => `<div class="attraction-card"><div class="name">${e(h.name)}</div><div class="info">${e(h.area)} | ⭐ ${h.rating ?? l('待核实','Unknown')} | ${money(h.price)} / ${l('晚','night')}</div>
+<div class="info">${e(h.features)}</div><div class="info">${e(h.distance)}</div></div>`).join('')}</div>` : ''}
+${d.tips?.length ? `<div class="section"><h2>💡 ${l('出行提示','Travel tips')}</h2><ul class="tips-list">${d.tips.map(t => '<li>'+e(t)+'</li>').join('')}</ul></div>` : ''}
+</div><div class="right-column">
+${links.length ? `<div class="section qr-section"><h2>🔗 ${l('平台公开首页','Platform homepages')}</h2>
+<p>${l('以下链接和二维码仅打开第三方公开首页。本页不创建订单或收款，请在平台内自行搜索。','These links and QR codes open third-party public homepages only. This page creates no orders and collects no payments. Search independently on the platform.')}</p>
+${links.join('')}</div>` : ''}
+<div class="section"><h2>📋 ${l('行程信息','Trip details')}</h2>
+<p>${l('目的地','Destination')}: ${e(d.destination)}</p><p>${l('天数','Days')}: ${d.days}</p><p>${l('人数','Travelers')}: ${d.travelers}</p><p>${l('预算','Budget')}: ${money(d.budget)}</p>
+${(d.preferences || []).map(p => `<span class="tag">${e(p)}</span>`).join('')}
+${d.transport ? Object.values(d.transport).map(value => '<p>'+e(value)+'</p>').join('') : ''}</div>
+</div></div></div></body></html>`;
 }
-
-// ============================================================
-// Mock 数据生成
-// ============================================================
-
 function generateMockTripData() {
   const city = '重庆';
   const days = 3;
@@ -302,10 +177,7 @@ function generateMockTripData() {
       { name: '🚕 当地交通', amount: 300, pct: '6%' },
       { name: '📦 其他', amount: 420, pct: '8%' }
     ],
-    total: 4000,
-    paymentUrls: [
-      'https://m.tuniu.com/u/order?page=1&filter=0-0-1'
-    ]
+    total: 4000
   };
 
   // 温馨提示
@@ -323,7 +195,10 @@ function generateMockTripData() {
     destination: city,
     days,
     travelers,
-    budget: budget.toString(),
+    budget,
+    language: 'zh-CN',
+    mock: true,
+    platformUrls: ['https://www.tuniu.com/'],
     preferences: ['美食', '自然', '网红打卡', '人文'],
     attractions,
     itinerary,
@@ -334,75 +209,22 @@ function generateMockTripData() {
   };
 }
 
-// ============================================================
-// 主入口
-// ============================================================
 
-function main() {
-  console.log('🚀 Travel Planner — 行程网页生成器');
-  console.log('====================================');
-
-  let tripData;
-
-  if (isMock) {
-    console.log('[Mock mode] Using built-in mock trip data');
-    tripData = generateMockTripData();
-    console.log(`📍 目的地：${tripData.destination}`);
-    console.log(`🗓️  天数：${tripData.days}天`);
-    console.log(`🏆 景点数：${tripData.attractions.length}个`);
-  } else {
-    console.log('[Real mode] Loading from environment...');
-    // 真实模式：从环境变量或 CLI 参数读取行程数据
-    try {
-      const inputData = process.env.TRIP_DATA || '{}';
-      tripData = JSON.parse(inputData);
-    } catch (e) {
-      console.error('❌ 未找到行程数据，使用 Mock 模式回退');
-      tripData = generateMockTripData();
-    }
+async function main(args = process.argv.slice(2)) {
+  let input, mock = false, language;
+  for (let i=0; i<args.length; i++) {
+    if (args[i] === '--mock') mock = true;
+    else if (args[i] === '--input') { input = args[++i]; if (!input || input.startsWith('--')) throw new Error('--input requires a JSON filename.'); }
+    else if (args[i] === '--language') { language = args[++i]; if (!['zh-CN','en'].includes(language)) throw new Error('Use --language zh-CN or en.'); }
+    else throw new Error('Unsupported argument. Use --mock or --input FILE; open results manually.');
   }
-
-  // 生成 HTML
-  const html = getHTML(tripData);
-
-  // 保存文件
-  const outputDir = path.join(process.cwd(), 'output');
-  if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true });
-  }
-  const timestamp = Date.now();
-  const outputPath = path.join(outputDir, `trip-${tripData.destination}-${timestamp}.html`);
-  fs.writeFileSync(outputPath, html, 'utf-8');
-
-  console.log(`✅ HTML 已生成：${outputPath}`);
-
-  // 打开网页 —— 仅 --open 时执行，默认不自动打开（避免无条件启动浏览器/子进程）
-  const shouldOpen = process.argv.includes('--open');
-  if (shouldOpen) {
-    try {
-      const platform = process.platform;
-      // 用 spawnSync + shell:false，避免对路径做 shell 插值
-      if (platform === 'win32') {
-        spawnSync('cmd', ['/c', 'start', '', outputPath], { timeout: 3000, shell: false });
-      } else if (platform === 'darwin') {
-        spawnSync('open', [outputPath], { timeout: 3000, shell: false });
-      } else {
-        spawnSync('xdg-open', [outputPath], { timeout: 3000, shell: false });
-      }
-      console.log('🌐 已打开浏览器（--open）');
-    } catch (e) {
-      console.log(`📂 自动打开失败，请手动打开：${outputPath}`);
-    }
-  } else {
-    console.log('📂 HTML 已保存。如需自动打开浏览器，请添加 --open 参数。');
-    console.log(`   文件路径：${outputPath}`);
-  }
-
-  return outputPath;
+  if (mock && input) throw new Error('Choose either --mock or --input.');
+  const data = mock ? generateMockTripData() : input ? readTrip(input) : parseTripJson(process.env.TRIP_DATA);
+  if (language) data.language = language;
+  const html = await getHTML(data);
+  const output = writeOutput(html, 'trip', 'html');
+  console.log('HTML saved:', output);
+  return output;
 }
-
-if (require.main === module) {
-  main();
-}
-
+if (require.main === module) main().catch(e => { console.error(e.message); process.exitCode = 1; });
 module.exports = { getHTML, generateMockTripData, main };

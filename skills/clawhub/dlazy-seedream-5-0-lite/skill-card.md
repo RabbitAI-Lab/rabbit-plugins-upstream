@@ -1,45 +1,60 @@
-## Description: <br>
-Fast image generation with Doubao Seedream 5.0 Lite, supporting text-to-image and image-to-image workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+文生图 Seedream 5.0 Lite helps agents generate images from text prompts or transform images with reference inputs using Doubao Seedream 5.0 Lite through the dLazy CLI.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to generate images through the dLazy hosted Seedream 5.0 Lite API from text prompts or reference images. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local image inputs are sent to dLazy cloud services for generation. <br>
-Mitigation: Avoid submitting confidential or restricted content unless the user has approved dLazy as a provider for that data. <br>
-Risk: The dLazy CLI may store an API key in a local config file. <br>
-Mitigation: Use the per-invocation DLAZY_API_KEY environment variable or verify config-file permissions on shared machines. <br>
-Risk: Generated assets are hosted by dLazy and returned as external URLs. <br>
-Mitigation: Review generated output links before sharing them outside the intended workflow. <br>
+## Use Case:
 
+Developers and external users can use this skill to generate new images from text prompts or create image-to-image variations with optional reference images through the dLazy hosted service.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-seedream-5-0-lite) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated image results are returned as dLazy-hosted URLs; async runs may return a task identifier for later polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and local media paths provided to the CLI may be uploaded to dLazy's hosted API and media storage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sending sensitive prompts or media unless the user accepts dLazy's hosted-service handling for that content.
+
+Risk: Authentication can store a dLazy API key in the user's local CLI configuration.
+
+Mitigation: Use the documented login or auth flow, protect the local config file, and rotate or revoke the key from the dLazy dashboard when needed.
+
+Risk: A global CLI install persists third-party executable code on the system.
+
+Mitigation: Use the pinned npx invocation for one-off runs or review the referenced package and source before installing globally.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-seedream-5-0-lite)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration guidance, JSON, Image URLs, Files]
+
+**Output Format:** [JSON responses containing generated image URLs, with optional downloaded image files when a save path is provided]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports asynchronous generation status polling and optional local file download.]
+
+## Skill Version(s):
+
+1.3.17 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

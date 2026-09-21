@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/huawei-cloud-terraform-installer",
   "slug": "huawei-cloud-terraform-installer",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1784670069775,
-  "contentHash": "5bedc13a3c4c6fe0b9560292851a83e8933b300c937d5b7ae51a1871be83fbe7",
-  "fetchedAt": "2026-07-26T18:08:40.090Z"
+  "version": "1.0.1",
+  "updatedAt": 1789972098215,
+  "contentHash": "e812790aacbb3c40b4908e6e9e9c97fa613606728a4353f67800b5ec1b9515ba",
+  "fetchedAt": "2026-09-21T15:29:52.723Z"
 }

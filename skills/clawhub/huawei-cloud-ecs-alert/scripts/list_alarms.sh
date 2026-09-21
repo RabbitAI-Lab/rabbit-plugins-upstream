@@ -48,7 +48,7 @@ while [[ $# -gt 0 ]]; do
             echo ""
             echo "Options:"
             echo "  --name, -n NAME     Filter alarms by name (supports partial match)"
-            echo "  --format, -f FORMAT Output format: table (default), json"
+            echo "  --format, -f FORMAT Output format: table (default), json, ids"
             echo "  --region, -r REGION Huawei Cloud region (default: cn-north-4)"
             echo "  --help, -h          Show this help message"
             exit 0
@@ -82,7 +82,7 @@ main() {
     result=$(hcloud CES ListAlarmRules \
         --cli-region="$REGION" \
         --limit="$PAGE_SIZE" \
-        ${NAME_FILTER:+--alarm_name="$NAME_FILTER"} \
+        ${NAME_FILTER:+--name="$NAME_FILTER"} \
         2>/dev/null)
     
     # Validate hcloud output before parsing
@@ -99,6 +99,19 @@ main() {
     
     if [[ "$OUTPUT_FORMAT" == "json" ]]; then
         echo "$result"
+    elif [[ "$OUTPUT_FORMAT" == "ids" ]]; then
+        # Output only alarm ID list
+        echo "$result" | python3 -c "
+import sys, json
+try:
+    data = json.loads(sys.stdin.read())
+    alarms = data.get('alarms', [])
+    ids = [alarm.get('alarm_id', '') for alarm in alarms if alarm.get('alarm_id')]
+    for id_ in ids:
+        print(id_)
+except Exception:
+    sys.exit(1)
+"
     else
         # Parse and display as table
         echo "================================================================================"
@@ -126,10 +139,15 @@ try:
     
     for alarm in alarms:
         alarm_id = alarm.get('alarm_id', 'N/A')[:36]
-        name = alarm.get('alarm_name', 'N/A')[:30]
-        metric = alarm.get('metric_name', 'N/A')
-        level = alarm.get('alarm_level', 'N/A')
-        status = alarm.get('alarm_enabled', False)
+        # CRITICAL FIX: This script calls the v2 ListAlarmRules API, whose response uses
+        # 'name' / 'enabled' / 'policies[].metric_name' / 'policies[].level'.
+        # The previous code read v1 ListAlarms field names (alarm_name / metric_name /
+        # alarm_level / alarm_enabled), which are absent in the v2 response → all N/A.
+        name = alarm.get('name', 'N/A')[:30]
+        policies = alarm.get('policies', []) or []
+        metric = policies[0].get('metric_name', 'N/A') if policies else 'N/A'
+        level = policies[0].get('level', 'N/A') if policies else 'N/A'
+        status = alarm.get('enabled', False)
         status_str = 'Enabled' if status else 'Disabled'
         
         # Truncate long IDs with ellipsis

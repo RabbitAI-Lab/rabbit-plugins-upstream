@@ -8,18 +8,18 @@ UCS policy instances enforce governance rules on managed clusters and fleet grou
 
 | Operation                     | Method | Description              | Key Parameters                                  |
 | ----------------------------- | ------ | ------------------------ | ----------------------------------------------- |
-| `CreateClusterPolicyInstance` | POST   | 创建集群策略实例         | `--clusterid`, `--constraintTemplateID`, `--enforcementAction`, `--namespaces.[N]`, `--parameters` |
-| `CreateClusterGroupPolicyInstance` | POST | 创建舰队组策略实例      | `--clustergroupid`, `--constraintTemplateID`, `--enforcementAction`, `--namespaces.[N]`, `--parameters` |
-| `UpdatePolicyInstance`        | PUT    | 更新策略实例             | `--policyinstanceid`, `--constraintTemplateID`, `--enforcementAction`, `--namespaces.[N]`, `--parameters` |
-| `ShowPolicyInstance`          | GET    | 获取策略实例详情         | `--policyinstanceid`                            |
-| `DeletePolicyInstance`        | DELETE | 删除策略实例             | `--policyinstanceid`                            |
-| `ListPolicyInstances`         | GET    | 列出策略实例             | `--cli-region` only (no filter params)          |
-| `ListPolicyDefinitions`       | GET    | 列出策略定义             | `--cli-region` only (no filter params)          |
-| `ShowPolicyDefinition`        | GET    | 获取策略定义详情         | `--policydefinitionid`                          |
-| `EnableClusterPolicy`         | POST   | 启用集群策略             | `--clusterid`, `--retry`                        |
-| `EnableClusterGroupPolicy`    | POST   | 启用舰队组策略           | `--clustergroupid`, `--retry`                   |
-| `DisableClusterPolicy`        | POST   | 禁用集群策略             | `--clusterid`                                   |
-| `DisableClusterGroupPolicy`   | POST   | 禁用舰队组策略           | `--clustergroupid`                              |
+| `CreateClusterPolicyInstance` | POST   | Create cluster policy instance         | `--clusterid`, `--constraintTemplateID`, `--enforcementAction`, `--namespaces.[N]`, `--parameters` |
+| `CreateClusterGroupPolicyInstance` | POST | Create fleet group policy instance      | `--clustergroupid`, `--constraintTemplateID`, `--enforcementAction`, `--namespaces.[N]`, `--parameters` |
+| `UpdatePolicyInstance`        | PUT    | Update policy instance             | `--policyinstanceid`, `--constraintTemplateID`, `--enforcementAction`, `--namespaces.[N]`, `--parameters` |
+| `ShowPolicyInstance`          | GET    | Show policy instance details         | `--policyinstanceid`                            |
+| `DeletePolicyInstance`        | DELETE | Delete policy instance             | `--policyinstanceid`                            |
+| `ListPolicyInstances`         | GET    | List policy instances             | `--cli-region` only (no filter params)          |
+| `ListPolicyDefinitions`       | GET    | List policy definitions             | `--cli-region` only (no filter params)          |
+| `ShowPolicyDefinition`        | GET    | Show policy definition details         | `--policydefinitionid`                          |
+| `EnableClusterPolicy`         | POST   | Enable cluster policy             | `--clusterid`, `--retry`                        |
+| `EnableClusterGroupPolicy`    | POST   | Enable fleet group policy           | `--clustergroupid`, `--retry`                   |
+| `DisableClusterPolicy`        | DELETE | Disable cluster policy             | `--clusterid`                                   |
+| `DisableClusterGroupPolicy`   | DELETE | Disable fleet group policy           | `--clustergroupid`                              |
 
 ## Workflows
 
@@ -32,21 +32,21 @@ Before creating a policy instance, review available definitions:
 hcloud UCS ListPolicyDefinitions --cli-region=cn-north-4
 
 # Show definition details to understand parameters
-hcloud UCS ShowPolicyDefinition --policydefinitionid=<definition-id> --cli-region=cn-north-4
+# NOTE: --policydefinitionid requires metadata.uid (UUID), NOT the definition name.
+# Use ListPolicyDefinitions first to get the UID, then query with ShowPolicyDefinition.
+hcloud UCS ShowPolicyDefinition --policydefinitionid=<metadata.uid> --cli-region=cn-north-4
 ```
 
-**Policy Definition Categories**:
-- `security`: Security baseline, pod security standards, privileged container restrictions
-- `compliance`: CIS benchmarks, regulatory compliance, audit logging
-- `resource`: Resource quotas, resource limits, cost optimization
-- `network`: Network policies, ingress/egress restrictions, service mesh rules
+**Policy Definition Categories** (verified via `ListPolicyDefinitions`, 33 definitions):
+- `security`: Container and application security policies (officialTag: `Container/ApplicationSecurityPolicies`)
+- `general`: Cluster security policies (officialTag: `ClusterSecurityPolicies`)
 
 ### W2: Create a Policy Instance for a Cluster
 
 **Pre-creation Checklist**:
 1. Verify cluster is registered in UCS: `hcloud UCS ShowClusterList --name=<cluster-name> --cli-region=cn-north-4`
 2. Identify the appropriate policy definition: `hcloud UCS ListPolicyDefinitions --cli-region=cn-north-4`
-3. Verify definition details: `hcloud UCS ShowPolicyDefinition --policydefinitionid=<id> --cli-region=cn-north-4`
+3. Verify definition details: `hcloud UCS ShowPolicyDefinition --policydefinitionid=<metadata.uid> --cli-region=cn-north-4` (use `metadata.uid` from ListPolicyDefinitions, not the name)
 
 ```bash
 # Create a cluster-level policy instance
@@ -168,7 +168,7 @@ Expected: Returns 404 error (policy instance not found).
 
 ```bash
 # 1. Ensure fleet group exists for production clusters
-hcloud UCS CreateClusterGroup --name=production-fleet --description="Production fleet" --cli-region=cn-north-4
+hcloud UCS RegisterClusterGroup --metadata.name=production-fleet --spec.description="Production fleet" --cli-region=cn-north-4
 
 # 2. Find the security baseline definition
 hcloud UCS ListPolicyDefinitions --cli-region=cn-north-4
@@ -224,5 +224,6 @@ hcloud UCS ListPolicyInstances --cli-region=cn-north-4
 hcloud UCS ListPolicyJobs --kind=EnablePolicy --cli-region=cn-north-4
 
 # Review definitions being used
-hcloud UCS ShowPolicyDefinition --policydefinitionid=<template-id> --cli-region=cn-north-4
+# Use metadata.uid from ListPolicyDefinitions (not the name)
+hcloud UCS ShowPolicyDefinition --policydefinitionid=<metadata.uid> --cli-region=cn-north-4
 ```

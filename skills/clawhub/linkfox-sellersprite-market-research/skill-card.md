@@ -1,45 +1,63 @@
-## Description: <br>
-Screens and ranks Amazon category markets with SellerSprite data across market size, competition, concentration, seller structure, new-product share, pricing, ratings, and profit filters. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses SellerSprite market-research data to screen Amazon category markets by market size, competition, concentration, seller structure, new-product share, pricing, ratings, and margin filters.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External developers and agents use this skill to research Amazon category opportunities with SellerSprite data, compare candidate markets, and guide product-selection decisions before making paid API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Paid-credit API calls can incur costs. <br>
-Mitigation: Confirm the user wants to proceed before repeat calls, retries, pagination, or broadened searches. <br>
-Risk: API credentials and request routing are sensitive. <br>
-Mitigation: Use trusted LinkFox/SellerSprite credentials and keep LINKFOX_TOOL_GATEWAY unset unless the destination is controlled and expected. <br>
-Risk: Full market-research responses are stored locally. <br>
-Mitigation: Review saved response files for sensitive business data and remove them when they are no longer needed. <br>
-Risk: Automatic feedback reporting and onboarding installation may send data or add another skill. <br>
-Mitigation: Review or disable feedback behavior and install the onboarding package only when intentionally needed. <br>
+## Use Case:
 
+E-commerce operators, marketplace analysts, and agents use this skill to evaluate Amazon category opportunities and shortlist markets with SellerSprite metrics. It can also guide LinkFox authentication, billing, and API-key setup when access or balance errors block use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-sellersprite-market-research) <br>
-- [SellerSprite market research API reference](artifact/references/api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance, shell command examples, and JSON API responses or summarized JSON output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are saved locally; responses over 8 KB are summarized unless inline output is requested; repeated calls may consume paid credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: Market-research inputs and session metadata are sent to LinkFox/SellerSprite services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use the skill only when those data flows are acceptable, and avoid sending sensitive or unnecessary business information in requests.
+
+Risk: Onboarding can handle SMS login codes, API keys, billing orders, and payment QR codes.
+
+Mitigation: Paste SMS codes only when intentionally linking the account, confirm any order before payment, and store API keys in a secret manager rather than shell startup files or logs.
+
+Risk: Full market-research responses are written to local LinkFox session directories.
+
+Mitigation: Review output locations before use, limit sensitive query content, and clean up saved response files according to the user's retention requirements.
+
+Risk: Endpoint override environment variables can redirect requests away from the default LinkFox services.
+
+Mitigation: Use default endpoints unless an administrator has reviewed and approved the override values.
+
+## Reference(s):
+
+- [SellerSprite Market Research API Reference](artifact/references/api.md)
+- [LinkFox Authentication and Billing Onboarding](artifact/references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-sellersprite-market-research)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON files]
+
+**Output Format:** [Markdown guidance with shell commands, JSON API responses, and local JSON result files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full market-research responses are saved under a LinkFox session data directory; large responses are summarized on stdout, and repeated parameter combinations may use a 24-hour local cache.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

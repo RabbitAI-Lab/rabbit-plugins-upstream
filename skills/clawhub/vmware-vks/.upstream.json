@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/vmware-vks",
   "slug": "vmware-vks",
   "ownerHandle": null,
-  "version": "1.8.8",
-  "updatedAt": 1784668732662,
-  "contentHash": "f17517c86145faf4b03ed3f529dac344ded45e6f0a550a3efd86d15ac71da5b7",
-  "fetchedAt": "2026-07-26T18:08:52.450Z"
+  "version": "1.12.0",
+  "updatedAt": 1789916138814,
+  "contentHash": "0f1b28acfbd9451e5d3f0e88ab9b7dbd5c67c22db5241d4b84a69c72c918119f",
+  "fetchedAt": "2026-09-21T15:32:10.089Z"
 }

@@ -1,42 +1,56 @@
-## Description: <br>
-DocuGenerate operates DocuGenerate through an OOMOL-connected account to list templates and documents, generate documents from templates, retrieve documents, rename documents, and delete documents. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+DocuGenerate operates a connected DocuGenerate account through OOMOL's oo CLI to read, create, update, and delete templates and generated documents.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to operate DocuGenerate from an OOMOL-connected account, including reading templates and documents, generating documents with JSON merge data, renaming documents, and deleting documents after confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can act on a DocuGenerate account, including generating, renaming, and permanently deleting documents. <br>
-Mitigation: Approve write or delete commands only after checking the exact template, document ID, and payload. <br>
-Risk: First-time setup may require installing the oo CLI. <br>
-Mitigation: Install the oo CLI only from the documented OOMOL source when setup is needed. <br>
+## Use Case:
 
+Developers and operators use this skill to manage DocuGenerate templates and generated documents through an OOMOL-connected account, including listing, retrieving, generating, renaming, and deleting documents.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-docugenerate) <br>
-- [DocuGenerate Homepage](https://www.docugenerate.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence release.version and SKILL.md metadata.version) <br>
+Risk: Fallback setup recommends running remotely fetched oo CLI installer scripts without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installation path before use and prefer official documentation, versioned packages, or verified downloads.
+
+Risk: The skill can generate, rename, or permanently delete DocuGenerate documents.
+
+Mitigation: Confirm write or destructive actions with the user after checking the exact target and payload.
+
+## Reference(s):
+
+- [DocuGenerate ClawHub skill page](https://clawhub.ai/oomol/skills/oo-docugenerate)
+- [DocuGenerate homepage](https://www.docugenerate.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Runs oo connector commands that return JSON responses containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.4 (source: evidence.release.version and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

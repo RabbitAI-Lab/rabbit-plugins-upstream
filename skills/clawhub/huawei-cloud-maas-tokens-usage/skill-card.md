@@ -1,45 +1,64 @@
-## Description: <br>
-Query Huawei Cloud MaaS tokens usage statistics, including total tokens, prompt tokens, completion tokens, total requests, and total errors for preset service, my service, or custom endpoints over configured time ranges. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Query Huawei Cloud MaaS token usage statistics, including total tokens, prompt tokens, completion tokens, request counts, and error counts for preset service, my service, or custom endpoints over supported time ranges.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and cloud operators use this skill to query Huawei Cloud MaaS token consumption, request counts, and error rates for usage monitoring and troubleshooting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The release security summary reports that the bundled script disables TLS certificate verification while handling Huawei Cloud credentials. <br>
-Mitigation: Review before installing, use least-privilege Huawei Cloud credentials, avoid sharing AK/SK values in chat, and do not run the bundled script unless TLS verification is restored or replaced with a secure CA-bundle option. <br>
+## Use Case:
 
+Developers and cloud operations teams use this skill to check Huawei Cloud MaaS token consumption, request volume, and error counts from the MaaS ShowStatistics API. It supports routine usage monitoring for preset service, my service, and custom endpoint workloads.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-maas-tokens-usage) <br>
-- [MaaS ShowStatistics API](https://support.huaweicloud.com/api-maas/ShowStatistics.html) <br>
-- [Task Query Tokens Usage](references/task-query-tokens-usage.md) <br>
-- [Related APIs](references/related-apis.md) <br>
-- [IAM Permission Policy](references/iam-policies.md) <br>
-- [MaaS Monitoring Metrics Reference](references/maas-metrics.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Troubleshooting and Practical Experience](references/troubleshooting.md) <br>
+### Deployment Geography for Use:
 
+Global, with runtime API access limited to Huawei Cloud MaaS Southwest-Guiyang-1 (cn-southwest-2).
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with shell commands and optional tabular command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May invoke a bundled Python script that calls Huawei Cloud APIs and can print raw JSON responses when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill reads Huawei Cloud credentials from environment variables or a user-specified credentials file to sign MaaS API requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use temporary or least-privilege read-only IAM credentials, avoid pasting secrets into chat, and protect any credentials file with restrictive file permissions.
+
+Risk: Dependency installation may use a selected pip package index or mirror.
+
+Mitigation: Choose the package index deliberately and install only the documented Python dependencies needed for Huawei SDK signing and HTTPS requests.
+
+Risk: Incorrect MaaS region, service type, or time range can produce failed or misleading usage queries.
+
+Mitigation: Use the documented cn-southwest-2 region, supported service_type values 1, 2, or 4, and verify returned usage against the Huawei Cloud console when needed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-maas-tokens-usage)
+- [Publisher Profile](https://clawhub.ai/user/huaweicloudskill)
+- [Huawei Cloud MaaS ShowStatistics API](https://support.huaweicloud.com/api-maas/ShowStatistics.html)
+- [Task: Query MaaS Tokens Usage Statistics](references/task-query-tokens-usage.md)
+- [Security Design: Credential Lifecycle and Tool Separation](references/security-design.md)
+- [IAM Permission Policies](references/iam-policies.md)
+- [Verification Method](references/verification-method.md)
+- [MaaS Monitoring Metrics Reference](references/maas-metrics.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash commands and tabular usage statistics]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May invoke a bundled Python script that reads Huawei credentials from environment variables or a user-specified credentials file and prints aggregate MaaS usage metrics.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

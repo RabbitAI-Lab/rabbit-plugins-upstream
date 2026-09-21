@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cn-csv-to-json",
   "slug": "cn-csv-to-json",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1783735263959,
-  "contentHash": "10be9756f77e783d9d7f23a8da627113d9cf928469fda3e3fcbb0cacb844a4ce",
-  "fetchedAt": "2026-07-26T18:16:58.559Z"
+  "version": "1.0.1",
+  "updatedAt": 1789914901046,
+  "contentHash": "b299033f4eb7dda5a05ee21f1b596e679f65cb8c0461a728cbdf04bb0868c66c",
+  "fetchedAt": "2026-09-21T15:32:16.710Z"
 }

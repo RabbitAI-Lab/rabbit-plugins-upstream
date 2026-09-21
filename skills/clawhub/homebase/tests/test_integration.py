@@ -12,25 +12,17 @@ import os
 import sys
 from datetime import date, timedelta
 from pathlib import Path
-from unittest.mock import MagicMock, patch, call
-from contextlib import contextmanager
+from unittest.mock import MagicMock, patch
 
-import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-for mod in ("google", "google.oauth2", "google.oauth2.credentials",
-            "google.auth", "google.auth.transport", "google.auth.transport.requests",
-            "googleapiclient", "googleapiclient.discovery"):
-    sys.modules.setdefault(mod, MagicMock())
 
-with patch("core.keychain_secrets.load_google_secrets", return_value=None), \
-     patch("core.config_loader._load_config") as _mc:
+with patch("core.config_loader._load_config") as _mc:
     from conftest import MINIMAL_CONFIG, SAMPLE_MEAL_SUGGESTIONS, SAMPLE_WEEKLY_PLAN, MockSnackManager
     from core.config_loader import Config
     _mc.return_value = Config(MINIMAL_CONFIG)
     import features.briefing.morning_briefing as morning_briefing
-    import features.dining.restaurant_tracker as restaurant_tracker
     import features.meals.weekly_meal_planner as wmp
     import features.dining.media_watcher as media_watcher
 
@@ -95,6 +87,34 @@ class TestMorningBriefingPipeline:
         assert "Weather" in data["weather"]
         assert data["meal_suggestions"]["aria"]["breakfast"] == "Oats"
         assert "dropoffs" in data and len(data["dropoffs"]) == 1
+
+    def test_untitled_work_calendar_events_excluded_from_payload(self, tmp_skill_dir):
+        """Work-calendar busy blocks with no summary sync as title 'Untitled'
+        (calendar_aggregator.sync_with_google_calendar). They must never
+        reach the family-facing briefing payload, even though the
+        aggregator itself still tracks them (conflict checks against real
+        busy time need the time slot)."""
+        calendar_mock = MagicMock()
+        calendar_mock.get_events_for_today.return_value = [
+            {"title": "Untitled", "time": "09:00", "description": ""},
+            {"title": "Doctor appointment", "time": "10:00", "description": ""},
+        ]
+        calendar_mock.sync_with_google_calendar.return_value = None
+
+        snacks_mock = MockSnackManager(school_closed=True)
+
+        with patch("features.briefing.morning_briefing.SKILL_DIR", str(tmp_skill_dir)), \
+             patch("features.briefing.morning_briefing.FamilyCalendarAggregator", return_value=calendar_mock), \
+             patch("features.briefing.morning_briefing.MealTracker", return_value=MagicMock(
+                 get_meal_suggestions=MagicMock(return_value=SAMPLE_MEAL_SUGGESTIONS)
+             )), \
+             patch("features.briefing.morning_briefing.SnackManager", return_value=snacks_mock), \
+             patch("features.briefing.morning_briefing.get_weather_briefing", return_value=None), \
+             patch("features.meals.weekly_meal_planner.get_todays_meals_from_locked_plan", return_value=None):
+            data = morning_briefing.get_briefing_data()
+
+        assert len(data["events"]) == 1
+        assert data["events"][0]["title"] == "Doctor appointment"
 
     def test_briefing_with_no_events_and_no_weather(self, tmp_skill_dir):
         calendar_mock = MagicMock()
@@ -276,7 +296,7 @@ class TestMealPlanRevisionFlow:
         assert pending_v1["status"] == "pending"
 
         # Step 3: Family approves revised plan
-        approve_result = wmp.cmd_approve()
+        wmp.cmd_approve()
 
         # Locked file should be written
         assert locked_file.exists()
@@ -301,7 +321,7 @@ class TestMealPlanRevisionFlow:
             "expires_at": "2026-03-23T21:00:00"
         }))
 
-        result = wmp.cmd_revise("one more change")
+        wmp.cmd_revise("one more change")
 
         # Plan should be locked (not revised)
         assert locked_file.exists()

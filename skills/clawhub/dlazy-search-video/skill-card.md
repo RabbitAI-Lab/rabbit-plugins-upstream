@@ -1,43 +1,60 @@
-## Description: <br>
-Video search tool: queries Pixabay video API by keywords and returns stock video URLs and metadata for footage sourcing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Video search tool: queries Pixabay video API by keywords and returns stock video URLs and metadata for footage sourcing.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, creators, and agents use this skill to search for stock video footage by keyword and retrieve video URLs and metadata for media sourcing workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries are sent to dLazy and a dLazy API key may be stored locally by the CLI. <br>
-Mitigation: Use DLAZY_API_KEY for per-invocation credentials when local key storage is not desired, and rotate or revoke keys from dLazy if needed. <br>
-Risk: The --save option writes returned assets to a caller-provided local path. <br>
-Mitigation: Use explicit trusted output paths and review downloaded files before reuse. <br>
+## Use Case:
 
+Developers, creators, and content production agents use this skill to search for stock video footage by keyword and retrieve video URLs and metadata for sourcing workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-search-video) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Files, Guidance] <br>
-**Output Format:** [JSON result envelope with video result metadata and URLs; optional local asset file when --save is used.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Async mode can return a generateId and status for later polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: The skill uses a third-party cloud CLI and sends prompts and parameters to dLazy API endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting sensitive prompts or files unless they are intended to be processed by dLazy.
+
+Risk: The skill depends on the pinned @dlazy/cli npm package and requires npm or npx execution.
+
+Mitigation: Review the pinned package before installation, or use npx for on-demand execution when a global install is not desired.
+
+Risk: Authentication requires a dLazy API key stored in local configuration or supplied through DLAZY_API_KEY.
+
+Mitigation: Store keys with appropriate local access controls, rotate or revoke keys from the dLazy dashboard when needed, and avoid exposing API keys in logs.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-search-video)
+- [dLazy CLI Source](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm Package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy Homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns stock video result metadata and URLs; async mode can return a generateId for later polling.]
+
+## Skill Version(s):
+
+1.3.19 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,64 @@
-## Description: <br>
-Powerful video generation with Kling v3 for high-quality text-to-video and image-to-video through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates high-quality text-to-video and image-to-video outputs through dLazy's hosted Kling v3 service.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to generate videos from text prompts or image inputs via the dLazy-hosted Kling v3 service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, parameters, and local media paths are sent to the dLazy hosted API and media storage. <br>
-Mitigation: Use the skill only for media that may be processed by dLazy, and review inputs before invoking the CLI. <br>
-Risk: The dLazy API key may be stored in the local user configuration file. <br>
-Mitigation: Protect the local config file and rotate or revoke the key from the dLazy dashboard if exposure is suspected. <br>
-Risk: Video generation consumes dLazy credits. <br>
-Mitigation: Monitor credit usage and use dry-run or explicit parameters when cost awareness is needed. <br>
+## Use Case:
 
+External users and developers use this skill to ask an agent to generate videos from text prompts or up to two reference images using Kling v3 through the dLazy CLI and hosted API.
 
-## Reference(s): <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-kling-v3) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON command responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated media is returned as hosted output URLs; asynchronous runs may return a task ID for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release and skill frontmatter) <br>
+Risk: Prompts, parameters, and explicitly provided media files may be sent to dLazy's hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when cloud processing by dLazy is intended and the submitted content is appropriate for that service.
+
+Risk: The dLazy CLI can save an API key in the local user configuration file.
+
+Mitigation: Use DLAZY_API_KEY per run when avoiding persistent local credential storage, and rotate or revoke keys from the dLazy dashboard when needed.
+
+Risk: Generated outputs are hosted by dLazy and returned as media URLs.
+
+Mitigation: Treat generated URLs and downloaded assets according to the user's data handling requirements.
+
+Risk: A global CLI install persists the pinned dLazy command on the system.
+
+Mitigation: Use the pinned npx invocation when a per-run execution path is preferred.
+
+## Reference(s):
+
+- [dLazy CLI project](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service homepage](https://dlazy.com)
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-kling-v3)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, JSON, Files]
+
+**Output Format:** [Markdown guidance with CLI commands and JSON service responses containing generated media URLs or async task identifiers.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated assets are returned as hosted URLs and may be downloaded locally with the CLI save option.]
+
+## Skill Version(s):
+
+1.3.18 (source: server release metadata; artifact frontmatter reports 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

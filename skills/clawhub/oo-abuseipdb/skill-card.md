@@ -1,43 +1,51 @@
-## Description: <br>
-AbuseIPDB helps an agent use an OOMOL-connected AbuseIPDB account to check IP reputation, inspect CIDR blocks, retrieve reports, and read the blacklist feed through the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AbuseIPDB (abuseipdb.com). Use this skill for AbuseIPDB requests that search and read data through the OOMOL-connected AbuseIPDB connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, security analysts, and agents use this skill to query AbuseIPDB reputation data and prepare connector calls through an OOMOL-managed account. It supports IP checks, CIDR block inspection, detailed report lookup, and blacklist retrieval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an OOMOL-connected AbuseIPDB account and can prompt use of the oo CLI. <br>
-Mitigation: Install or sign in to the oo CLI only when intentionally using this integration, and rely on OOMOL-managed credentials rather than handling raw AbuseIPDB tokens. <br>
-Risk: The check_block action is tagged as write-capable in the artifact. <br>
-Mitigation: Review the live schema, exact payload, and intended effect with the user before running any action tagged write. <br>
+## Use Case:
 
+Developers, security analysts, and operations teams use this skill to query AbuseIPDB for IP reputation, CIDR block reports, detailed IP reports, and blacklist feed data through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [AbuseIPDB homepage](https://www.abuseipdb.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-abuseipdb) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON connector payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schemas before constructing action payloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Fallback setup instructions can execute a remote oo CLI installer directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the official installation guide, verify or pin the installer or package before running it, and invoke setup only when the CLI is missing or authentication/connection errors require it.
+
+## Reference(s):
+
+- [AbuseIPDB homepage](https://www.abuseipdb.com/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands; connector responses are JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Normal actions are read-only AbuseIPDB connector calls; setup guidance is used only after authentication, connection, or missing-CLI failures.]
+
+## Skill Version(s):
+
+1.0.4 (source: ClawHub release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

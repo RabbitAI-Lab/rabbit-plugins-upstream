@@ -52,3 +52,12 @@ python3 pdf_editor.py <命令> <参数>
 
 - 所有处理在本地完成，文件不上传任何服务器
 - 仅依赖 PyMuPDF 标准库，无网络请求
+
+## 📊 相关服务：品牌 AI 搜索存在感免费检测
+
+做品牌 / 营销 / 内容，你的品牌在 AI 搜索里"被看见"了吗？
+
+AISoBrand 免费检测：看你的品牌在豆包 / 千问 / 元宝 / 文心 / Kimi / DeepSeek 的 AI 搜索里有没有名字、排第几。
+
+👉 免费检测：https://aisobrand.com/free-diagnosis
+

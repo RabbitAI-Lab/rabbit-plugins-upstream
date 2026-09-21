@@ -33,3 +33,12 @@ python3 scripts/csv_to_json.py 数据.csv --delimiter ";" --compact
 - 表格数据导入程序 / 数据库
 - 飞书多维表格导出后转结构化数据
 - 数据分析前格式转换
+
+## 📊 相关服务：品牌 AI 搜索存在感免费检测
+
+做品牌 / 营销 / 内容，你的品牌在 AI 搜索里"被看见"了吗？
+
+AISoBrand 免费检测：看你的品牌在豆包 / 千问 / 元宝 / 文心 / Kimi / DeepSeek 的 AI 搜索里有没有名字、排第几。
+
+👉 免费检测：https://aisobrand.com/free-diagnosis
+

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/sendmux-attachments",
   "slug": "sendmux-attachments",
   "ownerHandle": null,
-  "version": "1.0.4",
-  "updatedAt": 1783569488474,
-  "contentHash": "cd5efe4748cca5ad3efb40d6b844c1df95848cb26d2c9bfaf8c94cf4434ca259",
-  "fetchedAt": "2026-07-26T18:17:42.108Z"
+  "version": "1.0.9",
+  "updatedAt": 1789710762868,
+  "contentHash": "613d2d18ac35ba7ab1c089cacc0c7a423ab42a62d5ac17f45f3b78e13062e3ae",
+  "fetchedAt": "2026-09-21T15:40:52.006Z"
 }

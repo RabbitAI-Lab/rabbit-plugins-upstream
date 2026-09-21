@@ -1,6 +1,8 @@
 <overview>
 How to design MCP tools following prompt-native principles. Tools should be primitives that enable capability, not workflows that encode decisions.
 
+For a CLI rather than an MCP surface, see [cli-agent-interface.md](./cli-agent-interface.md).
+
 **Core principle:** Whatever a user can do, the agent should be able to do. Don't artificially limit the agent--give it the same primitives a power user would have.
 </overview>
 
@@ -57,6 +59,18 @@ Names should describe the capability, not the use case:
 | `deploy_to_production` | `git_push` |
 
 The prompt tells the agent *when* to use primitives. The tool just provides *capability*.
+
+### Writing the description
+
+The name is the handle; the description is the contract the model routes on. Optimize it for precision, not brevity -- the common defect is under-description, not verbosity. Write it as a man page: what the tool does, what each parameter means and what values are legal, what it does *not* return, and any caveat that changes the caller's plan (pagination, rate limits, eventual consistency, partial failure). Three or four sentences is a floor for a non-trivial tool, not a ceiling.
+
+The "capability, not use case" rule above still holds, and the boundary is what kind of *when* is being stated. A description may draw the line against sibling tools -- what this tool covers, what it does not, which neighbour owns the adjacent case -- because that is disambiguation the model needs at routing time and cannot get anywhere else. It must not carry workflow context: which step of a process to call it in, what to do with the result, or which business condition makes it appropriate. That belongs to the prompt or skill orchestrating the tool.
+
+Three things belong somewhere else:
+
+- **Worked examples, sample dialogue, and numbered protocols.** They cost tokens on every request and narrow the model's exploration to the path shown. Put procedure in the skill or prompt that orchestrates the tool.
+- **Triggering boosters** (`CRITICAL:`, `You MUST call this first`). Emphasis is priced in aggregate: once several descriptions shout, none of them carries signal, and the observed failure shifts from under-triggering to over-triggering.
+- **Cross-tool scolding** (`ALWAYS use this instead of X`, `NEVER use Y for this`). A preference for one tool belongs in that tool's own description, stated positively. Scattered across its rivals it decays the moment either tool changes.
 </principle>
 
 <principle name="simple-inputs">
@@ -527,6 +541,50 @@ return {
 **Pagination contract:** List endpoints must return `has_more`, `next_offset`, and `total_count`. Default page size 20-50 items. Never load all results into memory.
 </principle>
 
+<principle name="output-data-minimization">
+## Tool Output Carries Classification, Not Payload
+
+Tool output is model input: whatever a tool returns lands in the context window, in transcripts, and in whatever the agent writes next. Two cases leak by default.
+
+**Caught exceptions.** A caught exception's message must not be returned to the model as tool output. Raw exception text routinely carries credentials from a connection string, local filesystem paths, the request payload that triggered the failure, and upstream response bodies. Log the full detail server-side, and return a fixed, generic tool-facing failure message plus a correlation identifier the operator can use to find the log entry. The recovery hint from the Actionable Errors principle still applies; the tool author writes it, and it is never copied from the exception. The test is origin, not syntax: an exception the tool's own code raised, whose message the tool author wrote from values the tool itself computed -- a typed `ValidationError` carrying a rejected field name, a row count, a configured limit -- is already the Actionable Errors shape and may be returned as-is. Interpolation is not the line; provenance is. Anything raised outside the tool's own code (a library, driver, filesystem, or upstream response), and any message that splices in a value the tool received rather than derived -- a connection string, a resolved path, a request payload, an upstream response body -- takes the generic message plus correlation identifier.
+
+```typescript
+} catch (err) {
+  const correlationId = randomUUID();
+  logger.error({ correlationId, err }, "read_item failed");
+  return {
+    text: `read_item failed (ref ${correlationId}). Retry, or give the reference to the operator.`,
+    isError: true,
+  };
+}
+```
+
+**Detection tools.** A tool whose job is detection -- a secret scanner, a PII sweep, a credential audit -- must discard the raw matched text and every capture group at detection time and forward only classification metadata: rule identifier, rule description, path, line, confidence. A reporting tool that carries the matched secret "for context" is itself a re-leak vector, and the output schema should have no field capable of holding the raw match; a `snippet` or `match` string field is the defect regardless of what the implementation currently puts in it.
+
+```json
+{ "rule": "aws-access-key-id", "description": "AWS access key ID",
+  "path": "config/prod.env", "line": 12, "confidence": "high" }
+```
+</principle>
+
+<principle name="bounded-scan-incompleteness">
+## Bounded Scans Report Incompleteness
+
+A lookup or search tool that scans a bounded or paginated set can find a match and still not know whether it is unique, or find nothing and still not know whether the item is absent. Whenever the scan stopped at a size or count cap, or skipped unreadable or malformed records, return an explicit `incomplete` signal (a status field plus the reason and how far the scan got) distinct from `not_found` and from a confirmed unique match. A tool that collapses "scan truncated" into "not found" produces false negatives, and one that reports "unique" from a partial scan produces false positives; the agent then acts on both as facts. Callers that need absence or uniqueness reject `incomplete` and narrow the query or raise the cap rather than treating it as a pass.
+
+```json
+{ "status": "incomplete", "matches": [{ "id": "exp_41" }],
+  "scanned": 500, "cap": 500, "unreadable": 2,
+  "hint": "narrow by dateRange or continue with next_offset=500" }
+```
+</principle>
+
+<principle name="live-action-opt-in">
+## Live Actions Need an Opt-In Beyond Credentials
+
+Credential presence is necessary but not sufficient authorization for a tool that spends money, sends a message, submits, uploads, or otherwise acts on an external system. Gate the live path behind a separate explicit opt-in (an environment variable such as `ALLOW_LIVE=1` or a `--live` flag) that the operator sets only for the authorized run, so a configured environment does not make every invocation a real transaction. Ship a credential-free dry-run that exercises the full pipeline (validation, request construction, response handling) and returns placeholder output labelled as such, not a no-op that skips the code the live path depends on.
+</principle>
+
 <principle name="transport-selection">
 ## Transport Selection
 
@@ -577,10 +635,16 @@ The eval is the single best proxy for "does a real agent successfully use this s
 - [ ] CRUD operations are separate tools (not one mega-tool)
 - [ ] No business logic in tool implementations
 - [ ] Error states clearly communicated via `isError`
-- [ ] Descriptions explain what the tool does, not when to use it
+- [ ] Descriptions state capability and the boundary against sibling tools, never workflow context (see Writing the description)
+- [ ] Descriptions carry no worked examples, numbered protocols, `CRITICAL:`-style boosters, or cross-tool `ALWAYS`/`NEVER` scolding
+- [ ] Descriptions pass the machine-parsed-text rules in `ia-refine-prompt`: one directive per sentence, simple tenses, noun stacks capped at three, no dropped referents
 - [ ] Tool annotations set (`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`)
 - [ ] Error messages include recovery suggestions, not just failure descriptions
 - [ ] List endpoints paginate with `has_more`, `next_offset`, `total_count`
+- [ ] Bounded or paginated lookups return `incomplete` (distinct from not-found and unique) when a cap or unreadable records cut the scan short
+- [ ] Money-spending or live-external-effect tools require an explicit opt-in separate from credentials and ship a credential-free, labelled dry-run
+- [ ] Caught exceptions raised outside the tool's own code, or splicing in a value the tool received rather than derived, return a fixed generic message plus a correlation identifier; the raw exception text goes to the server log only. The tool's own validation errors, written by the author from values the tool computed, pass through as-is
+- [ ] Detection tools (secret, PII, credential scanners) emit rule identifier, description, path, line, and confidence; the output schema has no field that can hold the raw match
 - [ ] Multi-server tool names use service prefix (`service_action_resource`)
 - [ ] 10 Q/A eval pairs defined before merge (read-only, multi-hop, closed-data); eval passes ≥ 9/10 in CI on every PR; regressions investigated before shipping. See the Evaluation principle above.
 

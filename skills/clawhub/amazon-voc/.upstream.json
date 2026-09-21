@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/amazon-voc",
   "slug": "amazon-voc",
   "ownerHandle": null,
-  "version": "0.1.0",
-  "updatedAt": 1785055916118,
-  "contentHash": "f05fddeec0fd9bc4e9d479c677fc3a26b3fc1766dce5ed467e57e8c19a9d1685",
-  "fetchedAt": "2026-07-26T18:03:40.800Z"
+  "version": "1.4.13",
+  "updatedAt": 1789627679732,
+  "contentHash": "0b1d25453cef88ca8ab495688d7424d8479199ba5a32dc10c2b76ab1db0d2963",
+  "fetchedAt": "2026-09-21T15:43:23.134Z"
 }

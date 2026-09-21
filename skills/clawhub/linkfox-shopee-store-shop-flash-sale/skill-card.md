@@ -1,42 +1,69 @@
-## Description: <br>
-Helps agents manage authorized Shopee Shop Flash Sale campaigns through LinkFox scripts for time-slot lookup, creation, listing, item management, updates, and deletion. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage Shopee Shop Flash Sale campaigns for authorized stores, including time-slot lookup, campaign creation, listing, item management, updates, and deletion.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, marketplace operators, and developers use this skill to administer Shop Flash Sale activity for already authorized Shopee stores. It is suited for retrieving eligible time slots and campaign details, adding or updating sale items, and deleting campaigns or items when explicitly requested. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, add to, or delete Shopee Shop Flash Sale campaigns for an authorized store. <br>
-Mitigation: Confirm every write or delete action, including target shop, campaign, item list, and requested payload, before running the corresponding script. <br>
-Risk: Full API responses may be persisted locally and can include operational store or campaign data. <br>
-Mitigation: Use a controlled workspace and periodically delete generated linkfox response archives, especially on shared, backed-up, or reused machines. <br>
+## Use Case:
 
+External marketplace operators and their agents use this skill to operate Shopee Shop Flash Sale workflows for authorized stores. It supports reading available sale slots and campaign data, creating or changing flash sale events, managing items, deleting campaigns or items, and resolving LinkFox authentication or billing setup issues.
 
-## Reference(s): <br>
-- [Skill API Reference](references/api.md) <br>
-- [Shopee Shop Flash Sale API](https://open.shopee.com/documents/v2/v2.shop_flash_sale.get_time_slot_id?module=123&type=1) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-shop-flash-sale) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Files, Shell commands, Guidance] <br>
-**Output Format:** [JSON responses saved to local files with stdout summaries or full inline JSON when requested] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts may call LinkFox gateway APIs for an authorized Shopee store and write response archives under a local linkfox directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill can act on store authority and account credentials while creating, updating, or deleting Shopee flash sale campaigns and items.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only in a controlled environment, and require explicit human confirmation before create, update, or delete operations.
+
+Risk: LinkFox endpoint environment variables can redirect API traffic if set to untrusted destinations.
+
+Mitigation: Keep LINKFOX_* endpoint variables unset unless the destination is trusted and expected for the current deployment.
+
+Risk: Saved LinkFox response files may contain sensitive merchant or campaign data.
+
+Mitigation: Treat saved linkfox response files as sensitive merchant data and restrict access to the workspace and session output directories.
+
+Risk: The onboarding flow can create payment orders for billing remediation.
+
+Mitigation: Require explicit human confirmation before payment-order commands and avoid unattended order creation or polling.
+
+Risk: Workspace paths and SESSION_ID influence where response files are grouped and saved.
+
+Mitigation: Run the skill from trusted workspaces and avoid attacker-controlled SESSION_ID or workspace path values.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-shop-flash-sale)
+- [Publisher profile](https://clawhub.ai/user/linkfox-ai)
+- [Shopee Shop Flash Sale API index](https://open.shopee.com/documents/v2/v2.shop_flash_sale.get_time_slot_id?module=123&type=1)
+- [API field reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands; API responses are JSON saved to session data files and printed or summarized on stdout.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a LinkFox API key and the linkfox-shopee-store-auth dependency; saved responses may contain merchant data and should be treated as sensitive.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

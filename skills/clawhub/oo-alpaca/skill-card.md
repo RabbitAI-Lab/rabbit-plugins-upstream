@@ -1,42 +1,57 @@
-## Description: <br>
-Alpaca (alpaca.markets) helps agents read, create, and update data through Alpaca by using the OOMOL oo CLI connector instead of direct API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Alpaca helps agents access an OOMOL-connected Alpaca account for account, market data, order, position, asset, watchlist, news, and portfolio-history queries.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate Alpaca accounts and market data through an OOMOL-connected account, including account details, portfolio history, orders, positions, watchlists, market calendars, and stock or crypto market data. It is suited for agent-assisted workflows where the connector schema is checked before actions run. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose sensitive Alpaca account, order, position, and portfolio data. <br>
-Mitigation: Install it only for intended OOMOL-connected Alpaca accounts and treat returned financial data as sensitive. <br>
-Risk: Some proposed connector actions could create, update, cancel, or otherwise affect trading or account state. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running any state-changing action. <br>
+## Use Case:
 
+Developers and external users use this skill to let an agent inspect Alpaca trading-account information and market data through the OOMOL oo CLI connector. It is suited to read-oriented workflows such as checking account details, portfolio history, assets, market calendar data, news, orders, positions, and watchlists.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-alpaca) <br>
-- [Alpaca homepage](https://alpaca.markets/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector actions return JSON when executed with the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill can expose sensitive Alpaca account data, including orders, positions, activities, watchlists, and portfolio history.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only from the trusted publisher, connect only the intended Alpaca account, and review agent requests before sharing or acting on account data.
+
+Risk: The setup guidance includes a conditional remote pipe-to-shell installer for the oo CLI.
+
+Mitigation: Do not let an agent run the remote installer automatically; review the install source and prefer a verified installation path before authenticating.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-alpaca)
+- [Publisher Profile](https://clawhub.ai/user/oomol)
+- [Alpaca Homepage](https://alpaca.markets/)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill directs agents to fetch live action schemas before sending JSON payloads through the oo CLI.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

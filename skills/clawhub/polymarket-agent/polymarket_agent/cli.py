@@ -1,10 +1,9 @@
 """`poly` CLI — human and agent interface.
 
-AUDIT FIX (Medium — "Dangerous Code Execution", 97%): v1.0.2 ran
-`subprocess.run(cmd, shell=True)` in the `doctor` command and shelled out to the
-`clawdbot` binary with user values. Here there is not a SINGLE subprocess:
-dependency checks use `importlib.util.find_spec` in-process, and config is
-local JSON.
+AUDIT FIX (Medium — "Dangerous Code Execution", 97%): v1.0.2 handed a command
+string to a shell in the `doctor` command, and shelled out to the `clawdbot`
+binary with user values. Here no external process is spawned at all: dependency
+checks use `importlib.util.find_spec` in-process, and config is local JSON.
 
 AUDIT FIX (High — "Unvalidated Output Injection", 88%): all text coming from
 outside (API, config, error messages) is printed with Rich markup DISABLED via
@@ -28,7 +27,8 @@ from rich.table import Table
 from . import __version__, alerts, guardrails, journal, keystore, markets, trading
 from . import whales as whale_api
 from .config import (
-    EDITABLE_KEYS,
+    KNOWN_KEYS,
+    LOCKED_KEYS,
     ConfigError,
     Settings,
     load_settings,
@@ -179,7 +179,7 @@ def config(
         table = Table(title="Configuration", show_lines=False)
         table.add_column("Key", style="cyan")
         table.add_column("Value", style="white")
-        for name in sorted(EDITABLE_KEYS):
+        for name in sorted(KNOWN_KEYS):
             current = getattr(settings, name)
             style = ""
             if name == "dry_run":
@@ -187,12 +187,17 @@ def config(
             if name == "autonomous_mode":
                 style = "red" if current else "green"
             rendered = f"[{style}]{safe(current)}[/{style}]" if style else safe(current)
-            table.add_row(name, rendered)
+            # Locked fields are shown (the user needs to see the autonomy
+            # state) but only `poly auto` can write them.
+            table.add_row(
+                name + (" [dim](poly auto)[/dim]" if name in LOCKED_KEYS else ""),
+                rendered,
+            )
         console.print(table)
         console.print(f"[dim]File: {safe(app_dir())}[/dim]")
         return
 
-    if key and key not in EDITABLE_KEYS:
+    if key and key not in KNOWN_KEYS:
         raise fail(f"unknown key: {key}. Use `poly config --list`.")
 
     if key and value is not None:
@@ -914,7 +919,7 @@ def auto(
         help="Required to ENABLE: confirms awareness of the financial risk.",
     ),
 ) -> None:
-    """Enable/disable autonomous mode (orders without confirmation, WITH an expiry).
+    """Enable/disable autonomous mode (orders placed unattended, WITH an expiry).
 
     Even enabled, every financial cap still applies and the kill switch
     still takes precedence.
@@ -929,7 +934,7 @@ def auto(
     if not acknowledge:
         raise fail(
             "enabling autonomous mode requires --i-understand-the-risk. "
-            "In this mode the agent sends real-money orders without asking."
+            "In this mode the agent sends real-money orders unattended."
         )
     if settings.dry_run is False and settings.max_position_usd > 100:
         console.print(

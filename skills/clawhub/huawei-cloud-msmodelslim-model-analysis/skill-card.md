@@ -1,46 +1,56 @@
-## Description: <br>
-Analyze candidate models before adapter implementation by determining implementation source, structural features, layer-by-layer loading requirements, and MoE fused weight risks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes candidate models before msModelSlim adapter implementation by identifying implementation source, model structure, layer-loading needs, and MoE fused-weight risks.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and engineers use this skill to assess whether candidate LLM or VLM text-backbone models can be adapted for msModelSlim quantization workflows. It helps identify implementation-source, structure, MoE, quantization, and MTP risks before adapter creation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Following the troubleshooting path with trust_remote_code=True can execute model-provided Python code. <br>
-Mitigation: Prefer static inspection of config.json and model code; use trust_remote_code=True only after the model repository is trusted and reviewed. <br>
-Risk: The skill may suggest package upgrades or model file downloads as part of troubleshooting. <br>
-Mitigation: Require user confirmation before upgrading packages or downloading model files, and download only the non-weight files needed for analysis when possible. <br>
-Risk: Incorrect model-source, MoE, quantization, or MTP classification can lead to unsuitable adapter work. <br>
-Mitigation: Verify the generated analysis report against the bundled checklist, acceptance criteria, and verification methods before proceeding to adapter creation. <br>
+## Use Case:
 
+Developers and engineers use this skill to assess whether decoder-only LLMs and VLM text backbones are suitable for msModelSlim adapter work before implementation. It produces a structured analysis of implementation source, architecture, MoE layout, quantization and MTP risks, and next steps.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-msmodelslim-model-analysis) <br>
-- [Analysis Checklist](references/analysis_checklist.md) <br>
-- [Acceptance Criteria](references/acceptance-criteria.md) <br>
-- [Verification Methods](references/verification-method.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown analysis report with structured findings and inline code or shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires readable model configuration and, when needed, local model implementation files for source and structure analysis.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The workflow may involve inspecting model-local Python files or troubleshooting with trust_remote_code=True, which can execute code from a model repository.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with trusted or reviewed model repositories, prefer static inspection of config.json and modeling files, and run any required remote-code execution in a disposable sandbox without secrets or writable host access.
+
+Risk: The analysis can be incomplete when model implementation files, dequantization scripts, or MTP implementation code are unavailable.
+
+Mitigation: Stop or mark the analysis as blocked when required files are missing, and require the user to provide readable implementation code or dequantization/MTP handling before continuing adapter work.
+
+## Reference(s):
+
+- [Analysis Checklist](references/analysis_checklist.md)
+- [Acceptance Criteria](references/acceptance-criteria.md)
+- [Verification Method](references/verification-method.md)
+- [Troubleshooting](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, guidance]
+
+**Output Format:** [Markdown analysis report with inline code and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a model path or repository identifier and config.json; may request model-local implementation files when source detection cannot proceed.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

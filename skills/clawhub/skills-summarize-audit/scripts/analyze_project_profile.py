@@ -20,6 +20,7 @@ IGNORE_DIRS = {
     ".git", "node_modules", ".venv", "__pycache__", "dist", "build", ".next", "target", "vendor",
     "fixture-data", "fixtures", ".audit-snapshots", ".tmp", "tmp", "backups", "archives",
     "archived_sessions", "sessions", "worktrees", ".archived", "memories", "snapshots",
+    ".codegraph", "browser_data", ".pytest_cache", ".mypy_cache", ".ruff_cache", ".cache", ".webassets-cache",
 }
 IGNORE_FILES = {"tech-fingerprints.yaml", "project-types.yaml"}
 
@@ -28,17 +29,21 @@ def iter_files(project: Path, max_files: int, max_depth: int) -> tuple[list[Path
     found: list[Path] = []
     if not project.exists():
         return found, False
+    depth_truncated = False
     for current, directories, files in os.walk(project, topdown=True, followlinks=False):
         base = Path(current)
         depth = len(base.relative_to(project).parts)
-        directories[:] = [name for name in directories if name not in IGNORE_DIRS and not (base / name).is_symlink() and depth < max_depth]
+        eligible = [name for name in directories if name not in IGNORE_DIRS and not (base / name).is_symlink()]
+        depth_truncated = depth_truncated or (depth >= max_depth and bool(eligible))
+        directories[:] = eligible if depth < max_depth else []
         for name in files:
             path = base / name
-            if path.is_file() and name not in IGNORE_FILES:
+            # SQLite indexes and browser stores are runtime/cache evidence, not project technology evidence.
+            if path.is_file() and name not in IGNORE_FILES and path.suffix.lower() not in {".db", ".sqlite", ".sqlite3"}:
                 found.append(path)
                 if len(found) >= max_files:
                     return found, True
-    return found, False
+    return found, depth_truncated
 
 
 def load_yaml(path: Path):
@@ -50,19 +55,58 @@ def matching_files(files: list[Path], project: Path, patterns: list[str]) -> lis
     return [path for path in files if any(path.relative_to(project).match(pattern) for pattern in patterns)]
 
 
-def package_version(project: Path, tech: dict) -> str | None:
+def package_version(project: Path, tech: dict, package_files: list[Path] | None = None) -> str | None:
     probe = tech.get("version_probe") or {}
     if probe.get("file") != "package.json":
         return None
-    package = project / "package.json"
-    if not package.exists():
-        return None
-    try:
-        data = json.loads(package.read_text(encoding="utf-8-sig"))
-    except (OSError, json.JSONDecodeError):
-        return None
     dependency = str(probe.get("jsonpath", "")).split(".")[-1]
-    return (data.get("dependencies") or {}).get(dependency) or (data.get("devDependencies") or {}).get(dependency)
+    candidates = list(package_files or [])
+    if not candidates:
+        candidates = [project / "package.json"]
+    # Prefer the root manifest while still supporting independently versioned nested packages.
+    candidates.sort(key=lambda path: (path != project / "package.json", len(path.parts)))
+    for package in candidates:
+        if not package.exists():
+            continue
+        try:
+            data = json.loads(package.read_text(encoding="utf-8-sig"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        version = (data.get("dependencies") or {}).get(dependency) or (data.get("devDependencies") or {}).get(dependency)
+        if version:
+            return version
+    return None
+
+
+def package_records(files: list[Path], project: Path) -> list[tuple[Path, dict, set[str]]]:
+    records: list[tuple[Path, dict, set[str]]] = []
+    for path in files:
+        if path.name != "package.json":
+            continue
+        try:
+            data = json.loads(path.read_text(encoding="utf-8-sig"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        dependencies = set((data.get("dependencies") or {})) | set((data.get("devDependencies") or {}))
+        records.append((path, data, dependencies))
+    return records
+
+
+def candidate_skills(skills: list[dict]) -> list[dict]:
+    """Keep compatibility fields while preventing unverified effect claims from being facts."""
+    result = []
+    for skill in skills:
+        if not isinstance(skill, dict):
+            continue
+        item = dict(skill)
+        item["priority"] = "candidate"
+        item["why"] = "项目特征命中内置候选规则；仍需核验具体需求、来源和已安装替代项。"
+        item["fact_status"] = "inferred"
+        item["availability"] = "unavailable"
+        if "effect" in item:
+            item["effect"] = "效果未验证（需结合项目实际评估）"
+        result.append(item)
+    return result
 
 
 def detect(project: Path, max_files: int = 2000, max_depth: int = 10) -> dict:
@@ -94,7 +138,9 @@ def detect(project: Path, max_files: int = 2000, max_depth: int = 10) -> dict:
             if evidence:
                 rank = {"high": 3, "medium": 2, "low": 1}
                 confidence = max(evidence, key=lambda item: rank.get(item["confidence"], 0))["confidence"]
-                detected.append({"id": tech.get("id"), "name": tech.get("name"), "category": tech.get("category", category), "confidence": confidence, "version": package_version(project, tech), "evidence": evidence, "tags": tech.get("tags", [])})
+                package_evidence = [project / item["path"] for item in evidence if item["path"].endswith("package.json")]
+                version = package_version(project, tech, package_evidence)
+                detected.append({"id": tech.get("id"), "name": tech.get("name"), "category": tech.get("category", category), "confidence": confidence, "version": version, "version_status": "declared_range" if version else "unavailable", "evidence": evidence, "tags": tech.get("tags", [])})
     ids = {item["id"] for item in detected}
     types: list[dict] = []
     for rule in (database.get("matching_rules", {}).get("project_type_inference", []) or []):
@@ -104,14 +150,7 @@ def detect(project: Path, max_files: int = 2000, max_depth: int = 10) -> dict:
 
     project_types = load_yaml(ROOT / "references" / "project-types.yaml") or []
     recommendations: list[dict] = []
-    package_data = {}
-    package_path = project / "package.json"
-    if package_path.exists():
-        try:
-            package_data = json.loads(package_path.read_text(encoding="utf-8-sig"))
-        except (OSError, json.JSONDecodeError):
-            package_data = {}
-    dependencies = set((package_data.get("dependencies") or {})) | set((package_data.get("devDependencies") or {}))
+    packages = package_records(files, project)
     matched_recommendations = 0
     for entry in project_types:
         pattern = entry.get("pattern", {}) if isinstance(entry, dict) else {}
@@ -137,17 +176,19 @@ def detect(project: Path, max_files: int = 2000, max_depth: int = 10) -> dict:
             evidence.extend(found_dirs)
         required = set(pattern.get("contains_deps", []) or [])
         if required:
-            checks.append(required <= dependencies)
-            if required <= dependencies:
-                evidence.append("package.json dependencies: " + ", ".join(sorted(required)))
+            scope = [record for record in packages if not file_patterns or record[0] in matching_files(files, project, file_patterns)]
+            matching_packages = [record for record in scope if required <= record[2]]
+            checks.append(bool(matching_packages))
+            for path, _, _ in matching_packages[:8]:
+                evidence.append(f"{path.relative_to(project)} dependencies: " + ", ".join(sorted(required)))
         if checks and all(checks):
-            recommendations.append({"project_type": entry.get("type"), "description": entry.get("description"), "skills": entry.get("skills", []), "evidence": list(dict.fromkeys(evidence))})
+            recommendations.append({"project_type": entry.get("type"), "description": entry.get("description"), "skills": candidate_skills(entry.get("skills", [])), "evidence": list(dict.fromkeys(evidence)), "status": "rule_based_candidate", "fact_status": "inferred", "availability": "installable_unverified", "market_status": "not_verified"})
             matched_recommendations += 1
 
     if not matched_recommendations:
         fallback = next((entry for entry in project_types if isinstance(entry, dict) and (entry.get("pattern") or {}).get("fallback")), None)
         if fallback:
-            recommendations.append({"project_type": fallback.get("type"), "description": fallback.get("description"), "skills": fallback.get("skills", []), "evidence": ["未命中更具体的 project-types 规则"]})
+            recommendations.append({"project_type": fallback.get("type"), "description": fallback.get("description"), "skills": candidate_skills(fallback.get("skills", [])), "evidence": ["未命中更具体的 project-types 规则"], "status": "rule_based_candidate", "fact_status": "inferred", "availability": "installable_unverified", "market_status": "not_verified"})
     merged_recommendations: dict[str, dict] = {}
     for recommendation in recommendations:
         project_type = str(recommendation.get("project_type"))
@@ -166,6 +207,10 @@ def detect(project: Path, max_files: int = 2000, max_depth: int = 10) -> dict:
 
 
 def main() -> int:
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
     parser = argparse.ArgumentParser(description="Scan project technology fingerprints without writing files.")
     parser.add_argument("project", type=Path)
     parser.add_argument("--max-files", type=int, default=2000)
@@ -186,7 +231,7 @@ def main() -> int:
         for tech in report["detected_technologies"]:
             print(f"- {tech['name']} [{tech['confidence']}] version={tech['version'] or 'unavailable'}")
         for recommendation in report["recommendations"]:
-            print(f"推荐技能组：{recommendation['project_type']} ({len(recommendation['skills'])} 项)")
+            print(f"规则候选组（未验证安装/市场）：{recommendation['project_type']} ({len(recommendation['skills'])} 项)")
     return 0
 
 

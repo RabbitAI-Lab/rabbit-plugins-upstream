@@ -1,44 +1,60 @@
-## Description: <br>
-ElevenLabs Instant Voice Cloning (IVC) uploads a clean voice sample to create a custom voice usable with ElevenLabs text-to-speech. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates an ElevenLabs Instant Voice Cloning voice from a clean speaker sample for use with ElevenLabs text-to-speech.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to invoke the pinned dLazy CLI for ElevenLabs voice cloning from an authorized clean voice sample. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User-supplied audio may be uploaded to dLazy-hosted services for processing. <br>
-Mitigation: Use only audio that is appropriate to send to dLazy services and review the service terms before using sensitive material. <br>
-Risk: Voice cloning can misuse a person's voice if authorization is unclear. <br>
-Mitigation: Clone only voices the user is authorized to clone. <br>
-Risk: The skill depends on a third-party CLI package and hosted API. <br>
-Mitigation: Review the pinned @dlazy/cli package before installation in sensitive environments. <br>
+## Use Case:
 
+Developers and content-production agents use this skill to invoke the dLazy CLI for ElevenLabs voice cloning from a user-provided audio sample, then use the resulting custom voice with text-to-speech workflows.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown instructions with shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires npm or npx, a dLazy API key, and the pinned @dlazy/cli 1.2.3 package.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: Voice samples can include sensitive speaker identity data and may be processed by dLazy or ElevenLabs infrastructure.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only samples from speakers who gave informed consent, avoid sensitive recordings, and review the applicable privacy, retention, and deletion terms before upload.
+
+Risk: A persistent dLazy API key may be stored in the local CLI configuration.
+
+Mitigation: Use the per-run DLAZY_API_KEY environment variable when persistent storage is not desired, and rotate or revoke organization keys when access should change.
+
+Risk: The security evidence flags inconsistent documentation and unclear voice privacy and consent warnings.
+
+Mitigation: Review the skill before installing, confirm current CLI behavior with dlazy elevenlabs-voice-clone -h, and require clearer privacy, consent, retention, and deletion guidance before treating the release as cleanly documented.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-voice-clone)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with bash commands and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The CLI can return hosted result URLs or an asynchronous task identifier when no-wait mode is used.]
+
+## Skill Version(s):
+
+1.3.16 (source: server release metadata; artifact frontmatter shows 1.3.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

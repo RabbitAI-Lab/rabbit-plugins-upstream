@@ -1,6 +1,13 @@
 /**
  * Shadow Binance Bot - Binance API Connection
  * Handles all communication with Binance API
+ *
+ * Improvements:
+ * - Query parameter encoding (URLSearchParams)
+ * - recvWindow on signed requests
+ * - Time-window pagination for Futures income
+ * - backwards endTime pagination for Spot trades
+ * - Symbol validation
  */
 
 const crypto = require('crypto');
@@ -13,6 +20,25 @@ const BASE_FUTURES_URL = 'fapi.binance.com';
 // Retry configuration
 const MAX_RETRIES = 3;
 const BASE_DELAY_MS = 500;
+
+// Request defaults
+const DEFAULT_RECV_WINDOW = 5000;
+const FUTURES_INCOME_WINDOW_MS = 7 * 24 * 60 * 60 * 1000; // 7 days per window
+const FUTURES_INCOME_MAX_AGE_MS = 90 * 24 * 60 * 60 * 1000; // Binance retains ~3 months
+const SPOT_TRADES_PAGE_SIZE = 1000;
+const SYMBOL_REGEX = /^[A-Z0-9]{4,25}$/;
+
+// Rate-limit awareness. Binance returns the account's current 1-minute
+// request-weight usage in the `x-mbx-used-weight-1m` response header on
+// every call. These are the standard default weight budgets (VIP tiers can
+// raise them, but treating these as the ceiling is a safe, conservative
+// default for a read-only tool with no way to know the account's actual tier).
+const WEIGHT_LIMIT_PER_MIN = {
+  [BASE_SPOT_URL]: 6000,
+  [BASE_FUTURES_URL]: 2400
+};
+const RATE_LIMIT_WARN_THRESHOLD = 0.8; // proactively back off at 80% of budget
+const RATE_LIMIT_BACKOFF_MS = 1000;
 
 /**
  * Delay utility for retry backoff
@@ -34,6 +60,40 @@ function generateSignature(queryString, secret) {
 }
 
 /**
+ * Validate a trading symbol (prevents query injection)
+ * @param {string} symbol
+ * @returns {boolean}
+ */
+function isValidSymbol(symbol) {
+  return typeof symbol === 'string' && SYMBOL_REGEX.test(symbol);
+}
+
+/**
+ * Build a signed query string with proper encoding and recvWindow
+ * @param {object} params - Key/value pairs (values must be strings or numbers)
+ * @param {string} secret - API secret
+ * @returns {string} - Encoded query string including signature
+ */
+function buildSignedQuery(params, secret) {
+  const search = new URLSearchParams();
+  const keys = Object.keys(params).sort();
+  for (const key of keys) {
+    const value = params[key];
+    if (value === undefined || value === null) continue;
+    search.append(key, String(value));
+  }
+  if (!search.has('recvWindow')) {
+    search.append('recvWindow', String(DEFAULT_RECV_WINDOW));
+  }
+  if (!search.has('timestamp')) {
+    search.append('timestamp', String(Date.now()));
+  }
+  const queryString = search.toString();
+  const signature = generateSignature(queryString, secret);
+  return `${queryString}&signature=${signature}`;
+}
+
+/**
  * Check if a Binance API response is an error
  * @param {object} data - Response data
  * @returns {boolean} - True if error
@@ -48,16 +108,14 @@ function isBinanceError(data) {
  * @returns {boolean} - True if safe to retry
  */
 function isRetryable(error) {
-  // Network/transport errors are retryable
   if (error instanceof Error) {
     const msg = error.message.toLowerCase();
     if (msg.includes('timeout') || msg.includes('econnreset') || msg.includes('econnrefused') || msg.includes('socket')) {
       return true;
     }
   }
-  // Binance error codes that are retryable
-  // -1003 = RATE_LIMIT, -1023 = Maintenance, -1001 = DISCONNECTED
-  if (error && error.code && [-1003, -1023, -1001].includes(error.code)) {
+  // -1003 = RATE_LIMIT, -1023 = Maintenance, -1001 = DISCONNECTED, -1021 = timestamp
+  if (error && error.code && [-1003, -1023, -1001, -1021].includes(error.code)) {
     return true;
   }
   return false;
@@ -66,23 +124,37 @@ function isRetryable(error) {
 /**
  * Make HTTP request to Binance API with automatic retry
  * @param {string} hostname - API hostname
- * @param {string} path - API path
+ * @param {string} path - API path (including query)
  * @param {string} method - HTTP method
  * @param {object} headers - Request headers
  * @returns {Promise<object>} - API response
  */
-async function makeRequest(hostname, path, method, headers = {}) {
+async function makeRequest(hostname, pathOrFactory, method, headers = {}) {
   let lastError;
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    // A function factory is required for signed requests so timestamp/signature
+    // can be regenerated after a retry. A string remains supported for callers
+    // that already have an immutable path.
+    const path = typeof pathOrFactory === 'function' ? pathOrFactory() : pathOrFactory;
+
     try {
       const result = await _doRequest(hostname, path, method, headers);
 
-      // If Binance returned a retryable error, retry
+      const usedWeight = result && result._usedWeight1m;
+      const weightLimit = WEIGHT_LIMIT_PER_MIN[hostname];
+      if (weightLimit && Number.isFinite(usedWeight) && usedWeight / weightLimit >= RATE_LIMIT_WARN_THRESHOLD) {
+        console.error(`[Rate Limit] Used ${usedWeight}/${weightLimit} request weight (1m) on ${hostname}. Slowing down to avoid a ban...`);
+        await delay(RATE_LIMIT_BACKOFF_MS);
+      }
+
       if (isRetryable(result)) {
         if (attempt < MAX_RETRIES) {
-          const backoffMs = BASE_DELAY_MS * Math.pow(2, attempt - 1);
-          console.error(`[Retry ${attempt}/${MAX_RETRIES}] Rate-limited. Waiting ${backoffMs}ms...`);
+          const retryAfterMs = Number(result.retryAfterMs);
+          const backoffMs = Number.isFinite(retryAfterMs) && retryAfterMs >= 0
+            ? retryAfterMs
+            : BASE_DELAY_MS * Math.pow(2, attempt - 1);
+          console.error(`[Retry ${attempt}/${MAX_RETRIES}] Rate-limited or transient. Waiting ${backoffMs}ms...`);
           await delay(backoffMs);
           continue;
         }
@@ -104,14 +176,8 @@ async function makeRequest(hostname, path, method, headers = {}) {
 
   throw lastError;
 }
-
 /**
  * Internal: perform a single HTTP request
- * @param {string} hostname - API hostname
- * @param {string} path - API path
- * @param {string} method - HTTP method
- * @param {object} headers - Request headers
- * @returns {Promise<object>} - API response
  */
 function _doRequest(hostname, path, method, headers = {}) {
   return new Promise((resolve, reject) => {
@@ -119,48 +185,56 @@ function _doRequest(hostname, path, method, headers = {}) {
 
     const req = https.request(options, (res) => {
       let data = '';
+      res.setEncoding('utf8');
       res.on('data', (chunk) => data += chunk);
       res.on('end', () => {
+        let parsed;
         try {
-          const parsed = JSON.parse(data);
-          resolve(parsed);
+          parsed = JSON.parse(data);
         } catch (e) {
-          reject(new Error(`Failed to parse response: ${data}`));
+          const error = new Error(`Failed to parse response: ${data.slice(0, 200)}`);
+          error.statusCode = res.statusCode;
+          reject(error);
+          return;
         }
+
+        if (res.statusCode === 429 || res.statusCode === 418) {
+          const retryAfterHeader = res.headers['retry-after'];
+          const retryAfterSeconds = Number(retryAfterHeader);
+          if (Number.isFinite(retryAfterSeconds) && retryAfterSeconds >= 0) {
+            parsed.retryAfterMs = retryAfterSeconds * 1000;
+          }
+        }
+
+        // Track used request-weight for proactive rate-limit backoff.
+        // Non-enumerable so it doesn't show up in JSON.stringify/Object.keys
+        // of what is otherwise treated as the raw Binance response body.
+        const usedWeightHeader = res.headers['x-mbx-used-weight-1m'];
+        const usedWeight = Number(usedWeightHeader);
+        if (parsed && typeof parsed === 'object' && Number.isFinite(usedWeight)) {
+          Object.defineProperty(parsed, '_usedWeight1m', { value: usedWeight, enumerable: false });
+        }
+
+        resolve(parsed);
       });
     });
 
-    req.on('error', (err) => {
-      // Wrap as retryable if it's a network error
-      if (isRetryable(err)) {
-        reject(err);
-      } else {
-        reject(new Error(`Network error: ${err.message}`));
-      }
-    });
-
-    req.setTimeout(10000, () => {
+    req.on('error', (err) => reject(err));
+    req.setTimeout(15000, () => {
       req.destroy();
-      reject(new Error('Request timed out after 10 seconds'));
+      reject(new Error('Request timed out after 15 seconds'));
     });
-
     req.end();
   });
 }
-
 /**
  * Get Spot Account Balance
- * @param {string} apiKey - Your Binance API Key
- * @param {string} apiSecret - Your Binance API Secret
- * @returns {Promise<object>} - Account balances
  */
 async function getSpotBalance(apiKey, apiSecret) {
-  const timestamp = Date.now();
-  const queryString = `timestamp=${timestamp}`;
-  const signature = generateSignature(queryString, apiSecret);
-
-  const path = `/api/v3/account?${queryString}&signature=${signature}`;
-  const data = await makeRequest(BASE_SPOT_URL, path, 'GET', {
+  const data = await makeRequest(BASE_SPOT_URL, () => {
+    const query = buildSignedQuery({}, apiSecret);
+    return `/api/v3/account?${query}`;
+  }, 'GET', {
     'X-MBX-APIKEY': apiKey
   });
 
@@ -173,17 +247,12 @@ async function getSpotBalance(apiKey, apiSecret) {
 
 /**
  * Get Futures Account Balance
- * @param {string} apiKey - Your Binance API Key
- * @param {string} apiSecret - Your Binance API Secret
- * @returns {Promise<object>} - Futures account data
  */
 async function getFuturesBalance(apiKey, apiSecret) {
-  const timestamp = Date.now();
-  const queryString = `timestamp=${timestamp}`;
-  const signature = generateSignature(queryString, apiSecret);
-
-  const path = `/fapi/v2/account?${queryString}&signature=${signature}`;
-  const data = await makeRequest(BASE_FUTURES_URL, path, 'GET', {
+  const data = await makeRequest(BASE_FUTURES_URL, () => {
+    const query = buildSignedQuery({}, apiSecret);
+    return `/fapi/v2/account?${query}`;
+  }, 'GET', {
     'X-MBX-APIKEY': apiKey
   });
 
@@ -195,69 +264,179 @@ async function getFuturesBalance(apiKey, apiSecret) {
 }
 
 /**
- * Get Futures Income/PNL History
- * @param {string} apiKey - Your Binance API Key
- * @param {string} apiSecret - Your Binance API Secret
- * @param {number} daysBack - How many days back to fetch
- * @returns {Promise<array>} - Income history
+ * Fetch one page of Futures income for a time window
+ * @private
  */
-async function getFuturesIncome(apiKey, apiSecret, daysBack = 365) {
-  const timestamp = Date.now();
-  const startTime = timestamp - (daysBack * 24 * 60 * 60 * 1000);
-  const queryString = `startTime=${startTime}&timestamp=${timestamp}&limit=1000`;
-  const signature = generateSignature(queryString, apiSecret);
-
-  const path = `/fapi/v1/income?${queryString}&signature=${signature}`;
-  const data = await makeRequest(BASE_FUTURES_URL, path, 'GET', {
+async function _fetchIncomeWindow(apiKey, apiSecret, startTime, endTime, limit = 1000) {
+  const data = await makeRequest(BASE_FUTURES_URL, () => {
+    const query = buildSignedQuery({ startTime, endTime, limit }, apiSecret);
+    return `/fapi/v1/income?${query}`;
+  }, 'GET', {
     'X-MBX-APIKEY': apiKey
   });
 
   if (isBinanceError(data)) {
     throw new Error(`Binance API Error [${data.code}]: ${data.msg}`);
+  }
+
+  if (!Array.isArray(data)) {
+    throw new Error('Unexpected income response shape');
   }
 
   return data;
 }
 
 /**
- * Get Spot Trade History
- * @param {string} apiKey - Your Binance API Key
- * @param {string} apiSecret - Your Binance API Secret
- * @param {string} symbol - Trading pair (e.g., 'BTCUSDT')
- * @param {number} limit - Number of trades to fetch (max 1000)
- * @returns {Promise<array>} - Trade history
+ * Get Futures Income/PNL History with time-window pagination.
+ * Binance retains ~3 months of income data. We walk 7-day windows
+ * from (now - maxAge) to now and merge results.
+ *
+ * @param {string} apiKey
+ * @param {string} apiSecret
+ * @param {number} daysBack - Requested lookback (capped at ~90 days by API)
+ * @returns {Promise<array>}
  */
-async function getSpotTrades(apiKey, apiSecret, symbol = 'BTCUSDT', limit = 100) {
-  const timestamp = Date.now();
-  const queryString = `symbol=${symbol}&timestamp=${timestamp}&limit=${limit}`;
-  const signature = generateSignature(queryString, apiSecret);
+async function getFuturesIncome(apiKey, apiSecret, daysBack = 90) {
+  const now = Date.now();
+  const requestedMs = Math.min(
+    daysBack * 24 * 60 * 60 * 1000,
+    FUTURES_INCOME_MAX_AGE_MS
+  );
+  let cursor = now - requestedMs;
+  const all = [];
+  const seen = new Set();
 
-  const path = `/api/v3/myTrades?${queryString}&signature=${signature}`;
-  const data = await makeRequest(BASE_SPOT_URL, path, 'GET', {
-    'X-MBX-APIKEY': apiKey
-  });
+  while (cursor < now) {
+    const windowEnd = Math.min(cursor + FUTURES_INCOME_WINDOW_MS, now);
+    let pageStart = cursor;
+    let safety = 0;
 
-  if (isBinanceError(data)) {
-    throw new Error(`Binance API Error [${data.code}]: ${data.msg}`);
+    while (pageStart < windowEnd && safety < 50) {
+      safety++;
+      const batch = await _fetchIncomeWindow(apiKey, apiSecret, pageStart, windowEnd, 1000);
+
+      if (batch.length === 0) break;
+
+      for (const row of batch) {
+        const key = `${row.tranId || ''}|${row.time}|${row.incomeType}|${row.income}`;
+        if (!seen.has(key)) {
+          seen.add(key);
+          all.push(row);
+        }
+      }
+
+      if (batch.length < 1000) break;
+
+      const lastTime = batch[batch.length - 1].time;
+      if (typeof lastTime !== 'number' || lastTime <= pageStart) break;
+      pageStart = lastTime + 1;
+    }
+
+    cursor = windowEnd;
   }
 
-  return data;
+  all.sort((a, b) => a.time - b.time);
+  return all;
 }
 
+/**
+ * Get Spot Trade History for one symbol with backwards endTime pagination
+ * @param {string} apiKey
+ * @param {string} apiSecret
+ * @param {string} symbol
+ * @param {number} maxTrades - Soft cap (default 5000)
+ * @returns {Promise<array>}
+ */
+async function getSpotTrades(apiKey, apiSecret, symbol = 'BTCUSDT', maxTrades = 5000) {
+  if (!isValidSymbol(symbol)) {
+    throw new Error(`Invalid symbol: ${symbol}. Expected format like BTCUSDT.`);
+  }
+
+  if (!Number.isInteger(maxTrades) || maxTrades <= 0) {
+    throw new Error(`Invalid maxTrades: ${maxTrades}. Expected a positive integer.`);
+  }
+
+  const allTrades = [];
+  const seenIds = new Set();
+  // /myTrades without fromId returns the newest records. To walk backwards,
+  // use endTime based pagination from the oldest record in each page.
+  let endTime;
+  let safety = 0;
+
+  while (allTrades.length < maxTrades && safety < 100) {
+    safety++;
+    const params = {
+      symbol,
+      limit: Math.min(SPOT_TRADES_PAGE_SIZE, maxTrades - allTrades.length)
+    };
+    if (endTime !== undefined) params.endTime = endTime;
+
+    const data = await makeRequest(BASE_SPOT_URL, () => {
+      const query = buildSignedQuery(params, apiSecret);
+      return `/api/v3/myTrades?${query}`;
+    }, 'GET', {
+      'X-MBX-APIKEY': apiKey
+    });
+
+    if (isBinanceError(data)) {
+      throw new Error(`Binance API Error [${data.code}]: ${data.msg}`);
+    }
+
+    if (!Array.isArray(data) || data.length === 0) break;
+
+    // Keep ascending order within the final result and de-duplicate boundary rows.
+    const page = data
+      .filter(t => t && Number.isInteger(t.id))
+      .filter(t => !seenIds.has(t.id));
+
+    for (const trade of page) {
+      seenIds.add(trade.id);
+      allTrades.push(trade);
+    }
+
+    if (data.length < SPOT_TRADES_PAGE_SIZE) break;
+
+    const oldestTime = data.reduce((min, t) => {
+      const time = Number(t && t.time);
+      return Number.isFinite(time) ? Math.min(min, time) : min;
+    }, Infinity);
+
+    if (!Number.isFinite(oldestTime)) {
+      throw new Error('Spot trade pagination stopped: response contained no valid trade timestamps');
+    }
+
+    const nextEndTime = oldestTime - 1;
+    if (endTime !== undefined && nextEndTime >= endTime) {
+      throw new Error('Spot trade pagination made no progress');
+    }
+    endTime = nextEndTime;
+  }
+
+  allTrades.sort((a, b) => a.time - b.time || a.id - b.id);
+  return allTrades.slice(0, maxTrades);
+}
 /**
  * Get all Spot trades for multiple symbols
- * @param {string} apiKey - Your Binance API Key
- * @param {string} apiSecret - Your Binance API Secret
- * @param {array} symbols - Array of trading pairs to fetch
- * @returns {Promise<object>} - All trades grouped by symbol, plus errors array
+ * @returns {Promise<object>} - { trades, errors }
  */
 async function getAllSpotTrades(apiKey, apiSecret, symbols = ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'SOLUSDT']) {
   const allTrades = {};
   const errors = [];
 
-  for (const symbol of symbols) {
+  const cleaned = [];
+  for (const raw of symbols) {
+    const symbol = String(raw).trim().toUpperCase();
+    if (!isValidSymbol(symbol)) {
+      errors.push({ symbol: raw, error: `Invalid symbol format: ${raw}` });
+      console.error(`Skipping invalid symbol: ${raw}`);
+      continue;
+    }
+    cleaned.push(symbol);
+  }
+
+  for (const symbol of cleaned) {
     try {
-      const trades = await getSpotTrades(apiKey, apiSecret, symbol, 100);
+      const trades = await getSpotTrades(apiKey, apiSecret, symbol);
       if (Array.isArray(trades) && trades.length > 0) {
         allTrades[symbol] = trades;
       }
@@ -267,23 +446,39 @@ async function getAllSpotTrades(apiKey, apiSecret, symbols = ['BTCUSDT', 'ETHUSD
     }
   }
 
-  return { trades: allTrades, errors };
+  return {
+    trades: allTrades,
+    errors,
+    requestedSymbols: cleaned,
+    successfulSymbols: Object.keys(allTrades),
+    complete: errors.length === 0
+  };
 }
 
 /**
- * Test API Connection
- * @param {string} apiKey - Your Binance API Key
- * @param {string} apiSecret - Your Binance API Secret
- * @returns {Promise<boolean>} - Connection successful?
+ * Test API Connection.
+ *
+ * Tries Spot first (cheap, common case), then falls back to Futures.
+ * A key scoped to only one product (e.g. Futures-only, a realistic
+ * permission choice) should not be treated as "disconnected" just
+ * because the other product's endpoint rejects it.
  */
 async function testConnection(apiKey, apiSecret) {
-  try {
-    const balance = await getSpotBalance(apiKey, apiSecret);
-    return balance && !balance.code;
-  } catch (e) {
-    console.error('Connection test failed:', e.message);
-    return false;
-  }
+  const spotResult = await getSpotBalance(apiKey, apiSecret).then(
+    balance => ({ ok: !!(balance && !balance.code) }),
+    e => ({ ok: false, error: e })
+  );
+  if (spotResult.ok) return true;
+
+  const futuresResult = await getFuturesBalance(apiKey, apiSecret).then(
+    account => ({ ok: !!(account && !account.code) }),
+    e => ({ ok: false, error: e })
+  );
+  if (futuresResult.ok) return true;
+
+  console.error('Connection test failed (Spot):', spotResult.error && spotResult.error.message);
+  console.error('Connection test failed (Futures):', futuresResult.error && futuresResult.error.message);
+  return false;
 }
 
 module.exports = {
@@ -293,5 +488,7 @@ module.exports = {
   getSpotTrades,
   getAllSpotTrades,
   testConnection,
-  generateSignature
+  generateSignature,
+  isValidSymbol,
+  buildSignedQuery
 };

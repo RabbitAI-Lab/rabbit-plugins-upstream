@@ -1,41 +1,56 @@
-## Description: <br>
-Looks up, searches, and manages Google Contacts and broader Google People API profiles through the gogcli Contacts MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when the user asks to look up, search, or manage Google Contacts, Workspace directory users, profile fields, manager/reports relations, or other People API data.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Developers and agent users use this skill to configure an MCP-backed assistant for Google Contacts and Workspace directory lookups, including contact search, profile retrieval, and manager or reports relations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can involve sensitive Google Workspace and Contacts access. <br>
-Mitigation: Install only when the publisher is trusted with Google Workspace access and review enabled scopes with `google-workspace config show`. <br>
-Risk: Write-capable Workspace actions can modify data if enabled. <br>
-Mitigation: Keep Docs, Sheets, Drive, and other write modes off unless needed, and avoid Drive readwrite unless broad Drive-file token access is acceptable. <br>
+## Use Case:
 
+Employees, external users, and developers use this skill to let an agent search Google Contacts, inspect Google Workspace People directory records, and manage contact records through an authenticated gogcli setup.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/gogcli-mcp-contacts) <br>
-- [gogcli dependency](https://github.com/openclaw/gogcli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, shell commands, guidance] <br>
-**Output Format:** [Markdown with JSON configuration blocks and inline command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include MCP server configuration and Google Workspace tool-use guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.8.0 (source: server release metadata) <br>
+Risk: Destructive contact operations can create, update, merge, or delete Google Contacts without an enforced confirmation step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for trusted users and clients, keep GOG_READONLY=1 unless write access is required, and add an approval layer before enabling mutation tools.
+
+Risk: Authentication and health tools may reveal account or token-status details in shared or prompt-injection-prone environments.
+
+Mitigation: Limit auth-status and auth-health exposure to trusted clients and avoid enabling them in shared agent environments without additional access controls.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/gogcli-mcp-contacts)
+- [Publisher profile](https://clawhub.ai/user/chrischall)
+- [gogcli project](https://github.com/openclaw/gogcli)
+- [Model Context Protocol](https://modelcontextprotocol.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, files, configuration]
+
+**Output Format:** [MCP tool responses, JSON People API dumps, and optional vCard export files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the configured Google account and gogcli authentication state.]
+
+## Skill Version(s):
+
+4.2.4 (source: server release metadata and package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

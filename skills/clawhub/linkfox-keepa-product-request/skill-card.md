@@ -1,45 +1,63 @@
-## Description: <br>
-Retrieves structured Amazon product details for one or more ASINs through the LinkFox Keepa product request API, including pricing, images, listing dates, dimensions, FBA fees, rankings, and optional monthly sales history. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Retrieves structured Amazon product details by ASIN through LinkFox's Keepa product request API, including pricing, title, Item Highlights, images, listing date, dimensions, FBA fees, sales rank, and monthly sales history when requested.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Amazon sellers, analysts, and developers use this skill to retrieve and summarize structured product data for specified ASINs across supported Amazon marketplaces. It is suited to price checks, product comparisons, monthly sales trend review, category lookup, dimensions, fees, and other ASIN-level analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, with product queries limited to the supported Amazon marketplaces listed in the skill documentation. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a LinkFox API key and may make paid product-data requests that consume credits. <br>
-Mitigation: Use it only with an approved LinkFox account, confirm credit-consuming lookups before running them, and rely on the 24-hour cache for repeated identical parameters. <br>
-Risk: Automatic feedback reporting can send conversation-derived feedback content to LinkFox. <br>
-Mitigation: Disable or avoid automatic feedback reporting unless the user explicitly wants that feedback sent, and review feedback content before submission. <br>
-Risk: Full API responses are stored locally and cached, which can persist product research data in the workspace. <br>
-Mitigation: Run the skill in a trusted workspace and review or clean the linkfox output and cache directories after sensitive analysis. <br>
-Risk: LINKFOX_TOOL_GATEWAY can redirect API traffic if set in the environment. <br>
-Mitigation: Leave the default gateway in place or set LINKFOX_TOOL_GATEWAY only to a trusted LinkFox-compatible endpoint. <br>
+## Use Case:
 
+External Amazon sellers, ecommerce analysts, and agent users use this skill to retrieve and compare ASIN-level product data across supported Amazon marketplaces. It is suited for product-detail lookup, competitor comparison, pricing review, sales trend checks, physical specification review, category checks, and FBA fee inspection when users provide one or more ASINs.
 
-## Reference(s): <br>
-- [Keepa API reference](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-keepa-product-request) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown summaries, shell command examples, and saved JSON response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are saved under a local linkfox session data directory; small responses print full JSON, larger responses print summaries unless --inline is used; repeated parameters are cached for 24 hours.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+Risk: The skill can handle product queries, onboarding data, API credentials, billing actions, local response files, and automatic feedback submissions through LinkFox services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only when those data flows are acceptable for the task and organization.
+
+Risk: Phone/SMS login and payment flows may be initiated through an agent when resolving authentication or billing issues.
+
+Mitigation: Use those flows only after explicit user intent is confirmed, and prefer self-service account management when appropriate.
+
+Risk: API keys and session-related environment variables affect authentication, storage grouping, and outbound requests.
+
+Mitigation: Rotate any API key exposed in transcripts and avoid running with untrusted LINKFOX_* or SESSION_ID environment variables.
+
+Risk: Full API responses are persisted locally in a linkfox session data directory.
+
+Mitigation: Review saved response files for sensitive product or account-adjacent data and manage retention according to local policy.
+
+## Reference(s):
+
+- [Keepa-亚马逊-商品详情 API 参考](references/api.md)
+- [解决认证和算力问题](references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-keepa-product-request)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Files, Markdown, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown summaries and tables with saved JSON response files and optional inline JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Queries accept up to 5 ASINs per request, use numeric Amazon marketplace IDs, may include optional history, cache responses for 24 hours, and write full responses under a local linkfox session data directory.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

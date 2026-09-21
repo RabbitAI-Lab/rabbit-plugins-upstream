@@ -8,14 +8,35 @@ UCS access management covers obtaining cluster kubeconfig, accessing cluster inf
 
 | Operation                   | Method | Description              | Key Parameters                    |
 | --------------------------- | ------ | ------------------------ | --------------------------------- |
-| `ShowClusterAccessInfo`     | GET    | 获取集群接入信息         | `--clusterid`, `--region` (optional), `--vpcendpoint` (optional) |
-| `CreateClusterKubeconfig`   | POST   | 创建集群kubeconfig       | `--clusterid`                     |
-| `CreateClusterConf`         | POST   | 创建集群配置             | `--clusterid`                     |
-| `DownloadFederationKubeconfig` | GET | 下载联邦kubeconfig    | `--clustergroupid` (REQUIRED), `--duration` (REQUIRED) |
+| `ShowClusterAccessInfo`     | GET    | Get cluster access info (**only for category=onpremise**) | `--clusterid`, `--region` (optional), `--vpcendpoint` (optional) |
+| `CreateClusterKubeconfig`   | POST   | Create cluster kubeconfig (**only for category=onpremise**; CCE clusters use CCE `CreateKubernetesClusterCert`) | `--clusterid`                     |
+| `CreateClusterConf`         | POST   | Create cluster configuration  | `--clusterid`                     |
+| `DownloadFederationKubeconfig` | GET | Download federation kubeconfig | `--clustergroupid` (REQUIRED), `--duration` (REQUIRED) |
+
+## API Decision Tree: Obtaining Kubeconfig
+
+```
+Need cluster kubeconfig?
+├── category=self (CCE cluster)
+│   └── CCE CreateKubernetesClusterCert --cluster_id=<cce-cluster-id> --duration=30 --cli-region=cn-north-4
+│       (CCE API, NOT UCS CreateClusterKubeconfig which returns internal error for CCE clusters)
+│       (direct access, no proxy-agent needed)
+│       (ShowClusterAccessInfo NOT supported — returns "Cluster category not supported")
+└── category=onpremise (self-managed cluster)
+    ├── Step 1: ShowClusterAccessInfo --clusterid=<ucs-cluster-id> --cli-region=cn-north-4
+    │   (obtain proxy-agent configuration)
+    ├── Step 2: Deploy proxy-agent in the target cluster
+    └── Step 3: CreateClusterKubeconfig --clusterid=<ucs-cluster-id> --cli-region=cn-north-4
+        (obtain kubeconfig after tunnel is established)
+```
+
+> ⚠️ **Critical**: `CreateClusterKubeconfig` only works for `category=onpremise` clusters. For `category=self` (CCE) clusters, it returns an internal error. Always use CCE API `CreateKubernetesClusterCert` for CCE cluster kubeconfig.
 
 ## Workflows
 
 ### W1: View Cluster Access Information
+
+> ⚠️ **This operation only applies to `category=onpremise` (self-managed) clusters.** For `category=self` (CCE) clusters, it returns "Cluster category not supported". CCE clusters do not need proxy-agent — use CCE API `CreateKubernetesClusterCert` to obtain kubeconfig directly.
 
 ```bash
 hcloud UCS ShowClusterAccessInfo --clusterid=<ucs-cluster-id> --cli-region=cn-north-4
@@ -27,9 +48,9 @@ With optional parameters for specific access details:
 hcloud UCS ShowClusterAccessInfo --clusterid=<ucs-cluster-id> --region=cn-north-4 --vpcendpoint=true --cli-region=cn-north-4
 ```
 
-**Response Example** [to be verified — UCS responses follow k8s-style format based on verified ShowClusterList pattern]:
+**Response Example** [verified for category=onpremise clusters only]:
 
-The exact response format for `ShowClusterAccessInfo` has not been verified. Based on the verified k8s-style pattern from `ShowClusterList`, access info may be returned as a structured object rather than a flat JSON object. The likely fields include:
+The response format for `ShowClusterAccessInfo` has been verified for `category=onpremise` clusters. For `category=self` (CCE) clusters, this API returns "Cluster category not supported" — use CCE API `CreateKubernetesClusterCert` instead. The likely fields for onpremise clusters include:
 
 - API server endpoint address (public and/or private)
 - Access type (`Public`, `Private`, `Both`)
@@ -46,6 +67,15 @@ The exact response format for `ShowClusterAccessInfo` has not been verified. Bas
 - Troubleshoot access issues by checking endpoint availability
 
 ### W2: Create Cluster Kubeconfig
+
+> ⚠️ **Category-specific behavior** (verified):
+> - **`category=onpremise` (self-managed clusters)**: Use `CreateClusterKubeconfig` to obtain kubeconfig after proxy-agent is deployed and tunnel is established.
+> - **`category=self` (CCE clusters)**: `CreateClusterKubeconfig` returns an internal error. Use CCE API `CreateKubernetesClusterCert` instead:
+>   ```bash
+>   hcloud CCE CreateKubernetesClusterCert --cluster_id=<cce-cluster-id> --duration=30 --cli-region=cn-north-4
+>   ```
+
+**For category=onpremise clusters**:
 
 ```bash
 hcloud UCS CreateClusterKubeconfig --clusterid=<ucs-cluster-id> --cli-region=cn-north-4
@@ -130,11 +160,27 @@ Expected: Returns cluster information and node list without errors.
 
 ### S1: Obtain Kubeconfig for New Cluster
 
+**For CCE cluster (category=self)**:
+
 ```bash
-hcloud UCS RegisterCluster --apiVersion=v1 --kind=Cluster --metadata.name=my-cluster --spec.category=self --spec.provider=huaweicloud --spec.type=cce --spec.manageType=grouped --spec.country=CN --spec.city=110000 --metadata.uid=<cce-id> --spec.projectID=<project-id> --spec.region=cn-north-4 --cli-region=cn-north-4
+hcloud UCS RegisterCluster --apiVersion=v1 --kind=Cluster --metadata.name=my-cluster --spec.category=self --spec.provider=huaweicloud --spec.type=turbo --spec.manageType=discrete --spec.country=CN --spec.city=110000 --metadata.uid=<cce-id> --spec.projectID=<project-id> --spec.region=cn-north-4 --cli-region=cn-north-4
 
 hcloud UCS ShowCluster --clusterid=<ucs-cluster-id> --cli-region=cn-north-4
 
+# Use CCE API for CCE cluster kubeconfig (NOT UCS CreateClusterKubeconfig)
+hcloud CCE CreateKubernetesClusterCert --cluster_id=<cce-cluster-id> --duration=30 --cli-region=cn-north-4
+
+kubectl --kubeconfig=<saved-kubeconfig> cluster-info
+```
+
+**For self-managed cluster (category=onpremise)**:
+
+```bash
+hcloud UCS RegisterCluster --apiVersion=v1 --kind=Cluster --metadata.name=my-cluster --spec.category=onpremise --spec.provider=self_managed --spec.type=Kubernetes --spec.manageType=discrete --spec.country=CN --spec.city=110000 --metadata.annotations.kubeconfig=<kubeconfig-content> --cli-region=cn-north-4
+
+hcloud UCS ShowCluster --clusterid=<ucs-cluster-id> --cli-region=cn-north-4
+
+# Use UCS API for onpremise cluster kubeconfig
 hcloud UCS CreateClusterKubeconfig --clusterid=<ucs-cluster-id> --cli-region=cn-north-4
 
 kubectl --kubeconfig=<saved-kubeconfig> cluster-info

@@ -135,7 +135,7 @@ def get_kid_profile(child: str) -> str:
 
 # ─── Calendar helpers ─────────────────────────────────────────────────────────
 
-def list_candidate_events(calendar_service, days_ahead: int = 4) -> List[Dict]:
+def list_candidate_events(events: List[Dict]) -> List[Dict]:
     """
     List upcoming non-recurring calendar events for the agent to judge.
 
@@ -148,25 +148,18 @@ def list_candidate_events(calendar_service, days_ahead: int = 4) -> List[Dict]:
     Each candidate ships with a sent_key and already_sent flag so the agent
     can dedup against trip_prep_sent.json without a second tool call.
 
+    Takes already-fetched events rather than a calendar service (2026-09-07).
+    Fetching moved to the caller so this is a pure function over data: the
+    tests hand it dicts and mock nothing, and it cannot reach the network by
+    accident.
+
     Returns list of dicts: {event_id, title, start_date, end_date, all_day,
     multiday, location, sent_key, already_sent}.
     """
-    now     = datetime.now(timezone.utc)
-    horizon = now + timedelta(days=days_ahead)
-
-    results = calendar_service.events().list(
-        calendarId=_get_calendar_id(),
-        timeMin=now.isoformat(),
-        timeMax=horizon.isoformat(),
-        maxResults=50,
-        singleEvents=True,
-        orderBy="startTime",
-    ).execute()
-
     sent = load_sent_log()
     candidates: List[Dict] = []
 
-    for event in results.get("items", []):
+    for event in events:
         title = event.get("summary", "").strip()
         if not title:
             continue
@@ -225,27 +218,14 @@ def infer_environment_tags(title: str, location: str) -> List[str]:
 
 
 def geocode_location(location: str) -> Optional[Tuple[float, float]]:
+    """Geocode a location string to (lat, lon).
+
+    Thin re-export of features.briefing.weather.geocode_location — this module
+    used to carry a byte-for-byte-equivalent second copy, neither of them
+    cached. One implementation, one cache.
     """
-    Geocode a location string to (lat, lon) using the free Open-Meteo geocoding API.
-    Returns None on failure.
-    """
-    if not location:
-        return None
-    try:
-        import urllib.parse, urllib.request  # noqa: PLC0415 (local import fine)
-        encoded = urllib.parse.quote(location)
-        url = (
-            f"https://geocoding-api.open-meteo.com/v1/search"
-            f"?name={encoded}&count=1&language=en&format=json"
-        )
-        with urllib.request.urlopen(url, timeout=8) as resp:
-            data = json.loads(resp.read().decode())
-        results = data.get("results", [])
-        if results:
-            return results[0]["latitude"], results[0]["longitude"]
-    except Exception as e:
-        print(f"[trip_detector] geocode failed for '{location}': {e}", file=sys.stderr)
-    return None
+    from features.briefing.weather import geocode_location as _geocode
+    return _geocode(location)
 
 
 def fetch_trip_weather(location: str, start_date: str, end_date: str) -> Optional[Dict]:
@@ -261,8 +241,7 @@ def fetch_trip_weather(location: str, start_date: str, end_date: str) -> Optiona
         lat, lon = coords
         # Determine forecast_days needed (at least 1, at most 7)
         try:
-            d0 = datetime.strptime(start_date, "%Y-%m-%d")
-            d1 = datetime.strptime(end_date,   "%Y-%m-%d")
+            d1 = datetime.strptime(end_date, "%Y-%m-%d")
             days_needed = max(1, (d1 - datetime.now()).days + 2)
             days_needed = min(days_needed, 7)
         except ValueError:
@@ -277,7 +256,7 @@ def fetch_trip_weather(location: str, start_date: str, end_date: str) -> Optiona
             f"precipitation_probability_max,relative_humidity_2m_max"
             f"&temperature_unit=fahrenheit"
             f"&wind_speed_unit=mph"
-            f"&timezone=America%2FLos_Angeles"
+            f"&timezone=auto"     # the destination's own local time
             f"&forecast_days={days_needed}"
         )
         try:
@@ -328,43 +307,6 @@ def fetch_trip_weather(location: str, start_date: str, end_date: str) -> Optiona
     return _fetch_local()
 
 
-def _fallback_trip_prep(trip: Dict, weather: Optional[Dict],
-                        env_tags: List[str], profiles: Dict) -> str:
-    """Simple non-LLM fallback message."""
-    title = trip.get("title", "Upcoming Trip")
-    start = trip.get("start_date", "")
-    try:
-        dt     = datetime.strptime(start, "%Y-%m-%d")
-        days   = (dt.date() - datetime.now().date()).days
-        label  = f"{dt.strftime('%a, %b %-d')} · {days} days away"
-    except ValueError:
-        label = start
-
-    lines = [f"🏔️ *Trip Prep — {title} ({label})*\n"]
-    if weather:
-        lines.append(
-            f"🌤️ *Weather there:* {weather['temp_low']}–{weather['temp_high']}°F, "
-            f"{weather['condition']} · Humidity {weather['humidity']}%\n"
-        )
-    # Look up kid emoji from config, fall back to generic child emoji
-    kid_emojis = {}
-    try:
-        from core.config_loader import config
-        for kid in config.kids:
-            kid_emojis[kid.name] = kid.emoji_char
-    except Exception:
-        pass
-    for child, data in profiles.items():
-        obs = data.get("observations", [])
-        emoji = kid_emojis.get(child, "\U0001F9D2")
-        if obs:
-            lines.append(f"{emoji} *{child}*")
-            for o in obs:
-                lines.append(f"• {o['text']}")
-            lines.append("")
-    return "\n".join(lines)
-
-
 # ─── Cron / CLI entrypoint ────────────────────────────────────────────────────
 
 def run_check() -> None:
@@ -375,12 +317,15 @@ def run_check() -> None:
     fetches weather/env tags via tools.py get_trip_data for the chosen one,
     composes a prep note, and calls tools.py mark_trip_prep_sent to dedup.
     """
-    from core.keychain_secrets import load_google_secrets
-    load_google_secrets()
-    from features.calendar.calendar_manager import get_calendar_service
+    from core import gcal
 
-    service    = get_calendar_service()
-    candidates = list_candidate_events(service, days_ahead=4)
+    # The fetch lives here now; list_candidate_events is pure.
+    now     = datetime.now(timezone.utc)
+    horizon = now + timedelta(days=4)
+    events  = gcal.list_events(
+        _get_calendar_id(), now.isoformat(), horizon.isoformat()
+    )
+    candidates = list_candidate_events(events)
     profiles   = load_kid_profiles()
 
     print(json.dumps({

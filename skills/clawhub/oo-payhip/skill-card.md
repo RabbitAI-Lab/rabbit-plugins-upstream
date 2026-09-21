@@ -1,47 +1,56 @@
-## Description: <br>
-Operates Payhip through the OOMOL payhip connector to read, create, update, and delete Payhip data using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Payhip (payhip.com). Use this skill for ANY Payhip request: reading, creating, updating, and deleting Payhip data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Payhip coupons and license keys from an agent session through OOMOL-connected tooling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill enables OOMOL-backed tooling to access a user's Payhip account. <br>
-Mitigation: Install only when Payhip account access through OOMOL is intended, and keep Payhip connected only for approved workflows. <br>
-Risk: Coupon and license actions can change Payhip state. <br>
-Mitigation: Review the live action schema and confirm the exact JSON payload and expected effect before running write actions. <br>
-Risk: Destructive actions can delete Payhip data. <br>
-Mitigation: Require explicit user approval for the target resource before running destructive actions such as coupon deletion. <br>
-Risk: Setup commands install or invoke external CLI tooling. <br>
-Mitigation: Verify the oo CLI installer source before running setup commands. <br>
+## Use Case:
 
+Developers and operators use this skill to manage Payhip account workflows through an OOMOL-connected account, including coupon management and license verification or status changes. It guides agents to inspect live connector schemas before running Payhip actions and to request confirmation for write or destructive operations.
 
-## Reference(s): <br>
-- [Payhip homepage](https://payhip.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-payhip) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector command output is JSON when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md metadata) <br>
+Risk: The first-time setup path asks users to execute remotely fetched oo CLI installer scripts directly in a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installer before running it, and prefer an official package or verified installer when available.
+
+Risk: Payhip write and destructive actions can change coupons or license status.
+
+Mitigation: Fetch the live action schema and confirm the exact payload, target, and effect with the user before running write or destructive commands.
+
+## Reference(s):
+
+- [ClawHub Payhip skill page](https://clawhub.ai/oomol/skills/oo-payhip)
+- [Payhip homepage](https://payhip.com/)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live Payhip connector schemas before execution; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

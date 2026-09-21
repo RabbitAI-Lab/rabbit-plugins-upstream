@@ -1,44 +1,60 @@
-## Description: <br>
-Encodian operates PDF document actions through an OOMOL-connected Encodian account using the oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Encodian helps agents inspect live Encodian action schemas and run PDF-focused Encodian operations through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to compress PDFs, extract pages or text layers, secure PDF documents, and unlock password-protected PDFs through Encodian. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill includes a one-line CLI installer that can execute remote shell content during setup. <br>
-Mitigation: Review or manually install the OOMOL CLI instead of blindly running the pipe-to-shell command. <br>
-Risk: Encodian actions may require connected account credentials and can change document state for write-tagged actions. <br>
-Mitigation: Keep credentials server-side through OOMOL and require explicit confirmation before running create, update, or other write actions. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Encodian connector schemas and run Encodian PDF compression, extraction, text-layer, encryption, and unlock actions through the oo CLI.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-encodian) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Encodian homepage](https://www.encodian.com) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return base64-encoded PDF file content from Encodian connector actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: The skill may ask an agent to run remote shell installation commands for the oo CLI during first-time setup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer first or install the oo CLI manually before allowing the agent to use Encodian actions.
+
+Risk: Encodian actions process user-provided PDF documents through an OOMOL-brokered connected account.
+
+Mitigation: Use the skill only when that document handling model is acceptable for the data involved.
+
+Risk: PDF unlock, extraction, encryption, compression, and other transformations can alter documents or expose their contents.
+
+Mitigation: Require explicit user approval for the exact payload and expected effect before running transformation actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-encodian)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Encodian homepage](https://www.encodian.com)
+- [OOMOL Encodian connection settings](https://console.oomol.com/app-connections?provider=encodian)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, JSON, Files, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands; connector responses are JSON and may include base64 PDF file content.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires the oo CLI and an OOMOL-connected Encodian account; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

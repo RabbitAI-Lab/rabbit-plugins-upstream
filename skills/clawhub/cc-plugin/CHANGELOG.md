@@ -1,5 +1,66 @@
 # Changelog
 
+## [0.7.2](https://github.com/es6kr/skills/compare/cc-plugin-v0.7.1...cc-plugin-v0.7.2) (2026-09-20)
+
+
+### Bug Fixes
+
+* address code review feedback ([0c08bfb](https://github.com/es6kr/skills/commit/0c08bfbf2b5b737fdce685c8f15ead56c64290f4))
+* **cc-plugin:** eliminate eval-based command injection in dev-reflect.sh ([097aafe](https://github.com/es6kr/skills/commit/097aafea4adcdf39df8c4825d69ea83a66fbd4fa))
+* **cc-plugin:** sync dev-reflect.sh changes into cached plugin version dirs ([#510](https://github.com/es6kr/skills/issues/510)) ([28824f6](https://github.com/es6kr/skills/commit/28824f643b32ab05b766cdf99ddb626ffc5e3f95))
+
+## [0.7.1](https://github.com/es6kr/skills/compare/cc-plugin-v0.7.0...cc-plugin-v0.7.1) (2026-09-18)
+
+
+### Bug Fixes
+
+* **cleanup:** make the session-end report table self-sufficient ([#487](https://github.com/es6kr/skills/issues/487)) ([c4a0255](https://github.com/es6kr/skills/commit/c4a02557fb8de3b32cf337c549f62535dabf824b))
+
+## [0.7.0](https://github.com/es6kr/skills/compare/cc-plugin-v0.6.2...cc-plugin-v0.7.0) (2026-09-06)
+
+
+### Features
+
+* **cc-plugin:** implement post-commit dev-reflect and cache drift guard ([3f78c05](https://github.com/es6kr/skills/commit/3f78c054e7c00e7c33730d3378c5aff6575566e4))
+* **hooks:** migrate standalone hooks into plugin resources and fix test regressions ([d7b0060](https://github.com/es6kr/skills/commit/d7b0060ddffdd4a7b5f4f9751039ee9a79e049db))
+
+## [0.6.2](https://github.com/es6kr/skills/compare/cc-plugin-v0.6.1...cc-plugin-v0.6.2) (2026-09-01)
+
+
+### Bug Fixes
+
+* staging branch next-fix sync into main ([bbbd460](https://github.com/es6kr/skills/commit/bbbd460bf3b6b1cba4c6d07b3641afa734c89860))
+
+## [0.6.1](https://github.com/es6kr/skills/compare/cc-plugin-v0.6.0...cc-plugin-v0.6.1) (2026-08-29)
+
+
+### Bug Fixes
+
+* **cc-plugin:** remove duplicate cache-cleanup.sh from scripts/ ([1a64d24](https://github.com/es6kr/skills/commit/1a64d2421d6b8f42bd149c6c4bb3b1af0b146965))
+* **hook-kit:** resolve RAG receiver from workspace config instead of mandating --rag ([58e85ec](https://github.com/es6kr/skills/commit/58e85ecbb437557544cd528281aa30b804bd2532))
+* **hook-kit:** scope PR-URL bare-ref check to per-number match, allow force-push in worktrees ([dd50dce](https://github.com/es6kr/skills/commit/dd50dced989eed4847daaf9a0cd4be12a04426e1))
+
+## [0.6.0](https://github.com/es6kr/skills/compare/cc-plugin-v0.5.3...cc-plugin-v0.6.0) (2026-08-20)
+
+
+### Features
+
+* promote next-feat staging (lifecycle guards, triage automation, and workflow safety procedures) ([77d58ac](https://github.com/es6kr/skills/commit/77d58ac3a771a4897043c9eea8b149ea1e8ba2ff))
+
+## [0.5.3](https://github.com/es6kr/skills/compare/cc-plugin-v0.5.2...cc-plugin-v0.5.3) (2026-08-17)
+
+
+### Bug Fixes
+
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([4982364](https://github.com/es6kr/skills/commit/49823641a7b08123ebd0325273892bee41bc3280))
+
+## [0.5.2](https://github.com/es6kr/skills/compare/cc-plugin-v0.5.1...cc-plugin-v0.5.2) (2026-08-05)
+
+
+### Bug Fixes
+
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([951c1e6](https://github.com/es6kr/skills/commit/951c1e6871e78e226757c6a7ae5ae53efeb7bfb0))
+
 ## [0.5.1](https://github.com/es6kr/skills/compare/cc-plugin-v0.5.0...cc-plugin-v0.5.1) (2026-07-23)
 
 

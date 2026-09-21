@@ -9,22 +9,15 @@ Covers:
 """
 import json
 import sys
-from io import BytesIO
 from pathlib import Path
-from unittest.mock import MagicMock, patch, call
+from unittest.mock import MagicMock, patch
 from urllib.error import URLError
 
-import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-for mod in ("google", "google.oauth2", "google.oauth2.credentials",
-            "google.auth", "google.auth.transport", "google.auth.transport.requests",
-            "googleapiclient", "googleapiclient.discovery"):
-    sys.modules.setdefault(mod, MagicMock())
 
-with patch("core.keychain_secrets.load_google_secrets", return_value=None), \
-     patch("core.config_loader._load_config") as _mc:
+with patch("core.config_loader._load_config") as _mc:
     from conftest import MINIMAL_CONFIG
     from core.config_loader import Config
     _mc.return_value = Config(MINIMAL_CONFIG)
@@ -308,3 +301,85 @@ class TestFormatRainTiming:
 
     def test_midnight_hour(self):
         assert "12 AM" in weather_module._format_rain_timing([(0, 0)])
+
+
+class TestGeocodeCaching:
+    """Regression: @lru_cache memoized the None that geocode_location returns
+    on failure, so one transient blip pinned home coordinates for the rest of
+    the process and the briefing reported home weather during a trip."""
+
+    def test_a_transient_failure_is_not_memoized(self):
+        weather_module.geocode_location.cache_clear()
+        with patch("urllib.request.urlopen", side_effect=URLError("boom")):
+            assert weather_module.geocode_location("Seattle, WA") is None
+
+        resp = MagicMock()
+        resp.__enter__.return_value.read.return_value = json.dumps(
+            {"results": [{"latitude": 47.6, "longitude": -122.3}]}).encode()
+        with patch("urllib.request.urlopen", return_value=resp):
+            assert weather_module.geocode_location("Seattle, WA") == (47.6, -122.3), \
+                "the failure was memoized; the whole trip gets home weather"
+
+    def test_a_success_is_memoized(self):
+        weather_module.geocode_location.cache_clear()
+        resp = MagicMock()
+        resp.__enter__.return_value.read.return_value = json.dumps(
+            {"results": [{"latitude": 1.0, "longitude": 2.0}]}).encode()
+        with patch("urllib.request.urlopen", return_value=resp) as m:
+            weather_module.geocode_location("Tokyo")
+            weather_module.geocode_location("Tokyo")
+        assert m.call_count == 1
+
+
+class TestWeatherContextUsesOneDateBasis:
+    """Regression: with timezone=auto the series is indexed in the
+    DESTINATION's local dates, but the daily block was indexed positionally
+    from the MACHINE's date. The returned dict then carried one day's hours
+    and another day's UV/sunrise/sunset, with nothing marking the seam."""
+
+    def _payload(self, days, hours_day, offset_seconds=32400):
+        times, temps = [], []
+        for h in range(24):
+            times.append(f"{hours_day}T{h:02d}:00")
+            temps.append(70)
+        return {
+            "utc_offset_seconds": offset_seconds,
+            "hourly": {
+                "time": times, "temperature_2m": temps,
+                "apparent_temperature": temps,
+                "precipitation_probability": [0] * 24, "wind_speed_10m": [5] * 24,
+            },
+            "daily": {
+                "time": days,
+                "uv_index_max": [float(i) for i in range(len(days))],
+                "sunrise": [f"{d}T06:00" for d in days],
+                "sunset": [f"{d}T19:00" for d in days],
+            },
+        }
+
+    def test_daily_values_come_from_the_same_day_as_the_hours(self):
+        # Dates are relative to today, deliberately. This test pinned
+        # 2026-09-02/03 and started failing on 2026-09-04 — not because the
+        # behaviour broke, but because fetch_weather_context returns None for
+        # any date in the past (documented, and correct). A fixture with an
+        # absolute date in it is a test with an expiry date on it, and this one
+        # sat red for three days looking like a real weather regression.
+        #
+        # The series starts a day AHEAD of the machine, as an eastern
+        # destination does, so the target sits at index 1 and must not be read
+        # from row 0.
+        from datetime import date as _date, timedelta as _td
+        first = _date.today() + _td(days=1)
+        target = first + _td(days=1)
+        data = self._payload([first.isoformat(), target.isoformat()],
+                             target.isoformat())
+        resp = MagicMock()
+        resp.__enter__.return_value.read.return_value = json.dumps(data).encode()
+        with patch("urllib.request.urlopen", return_value=resp):
+            ctx = weather_module.fetch_weather_context(
+                start_hour=6, end_hour=20, location="Tokyo",
+                date=target.isoformat())
+        assert ctx is not None, "the hourly filter matched nothing"
+        assert ctx["uv"]["index_max"] == 1.0, "UV came from the wrong day"
+        assert ctx["sun"]["sunrise"] == "06:00"
+        assert all(h["t"] for h in ctx["hours"])

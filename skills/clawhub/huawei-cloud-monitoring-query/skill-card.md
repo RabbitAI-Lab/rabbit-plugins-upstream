@@ -1,46 +1,59 @@
-## Description: <br>
-Queries Huawei Cloud monitoring and enterprise project resources across CES and EPS, including alarm rules, alarm histories, alarm templates, dashboards, notification masks, resource groups, one-click alarms, and enterprise project details. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries Huawei Cloud monitoring and enterprise project resources (CES/EPS), including alarm rules, alarm histories, alarm templates, dashboards, notification masks, resource groups, one-click alarms, and enterprise projects, without write operations.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers, cloud operators, and support engineers use this skill to inspect Huawei Cloud CES monitoring resources and EPS enterprise project inventory using read-only query scripts. It helps verify alarm status, dashboards, resource groups, enterprise project metadata, quotas, bound resources, migration records, and reusable cloud resource identifiers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The release evidence reports that the skill disables HTTPS verification while using Huawei Cloud credentials. <br>
-Mitigation: Review before installing, enable TLS verification or a trusted CA path before use, and run only with least-privilege Huawei Cloud credentials. <br>
-Risk: The release evidence reports that the environment setup can fetch and run installer code. <br>
-Mitigation: Remove the get-pip download-and-execute fallback or verify it strongly, and prefer preinstalled or pinned dependencies from a trusted package source. <br>
-Risk: The skill performs authenticated IAM, CES, and EPS read queries that may expose cloud inventory, alarm, and enterprise project metadata in outputs. <br>
-Mitigation: Use narrow query filters, avoid printing or storing secrets, cache large outputs only where appropriate, and restrict credentials to the minimum read permissions needed. <br>
-Risk: Dependencies are specified with lower-bound version constraints. <br>
-Mitigation: Pin dependency versions and hashes for repeatable installation before production deployment. <br>
+## Use Case:
 
+Developers and cloud operators use this skill to inspect Huawei Cloud CES monitoring data and EPS enterprise project information, including alarms, dashboards, resource groups, quotas, bound resources, and migration records. It is intended for read-only inventory, verification, troubleshooting, and parameter discovery workflows.
 
-## Reference(s): <br>
-- [CES Python Script Usage Guide](references/ces/guide.md) <br>
-- [Enterprise Project EPS Python Script Usage Guide](references/eps/guide.md) <br>
-- [ClawHub skill page](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-monitoring-query) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, JSON] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON or tabular query results from local Python scripts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Huawei Cloud query output depends on selected CES or EPS script, region, project scope, credentials, and pagination filters.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence) <br>
+Risk: Authenticated Huawei Cloud traffic and credentials could be exposed if setup or network handling is used without fixing the reported TLS verification risk.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privileged Huawei Cloud credentials, avoid sensitive machines, and do not run setup until TLS verification issues are fixed.
+
+Risk: The setup path can execute mutable remote bootstrap code in a fallback path.
+
+Mitigation: Remove or replace the remote get-pip.py bootstrap behavior before installation, or review and pin the setup process in a controlled environment.
+
+Risk: The skill can return broad cloud inventory or monitoring data when queries are not scoped.
+
+Mitigation: Scope queries by region, project, enterprise project, resource name, ID, status, or tag, and avoid exposing credential environment variable values in outputs.
+
+## Reference(s):
+
+- [Huawei Cloud Monitoring Query on ClawHub](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-monitoring-query)
+- [CES Python Script Usage Guide](references/ces/guide.md)
+- [Enterprise Project EPS Python Script Usage Guide](references/eps/guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON query results from local scripts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only Huawei Cloud query workflow; large result sets should be narrowed or cached.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

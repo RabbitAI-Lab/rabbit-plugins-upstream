@@ -51,6 +51,38 @@ _EXTRA_SECRET_PATTERNS = [
         re.DOTALL),
 ]
 
+# C-405: Authorization/bearer/bare-key key names are NOT in
+# SECRET_KEY_RE and so are invisible to `_KV_RE` above. Widening SECRET_KEY_RE
+# itself was considered and rejected: it also feeds `checks._secret_paths`, B1's
+# SCORED, FAIL-capable config-secret detector, and a bare "key" alternative there
+# would match ordinary field names like "primaryKey"/"sortKey" as an unanchored
+# substring, false-firing a scored check on a non-secret (see
+# checks/_config.py::check_redactor_blind_secret_paths, which closes the DETECTION
+# half of this gap with its own narrowly-anchored, whole-key-segment match instead).
+# Redaction has no equivalent false-positive cost — a masked benign value is a minor
+# usability nit, never a false verdict — so widening is safe HERE. Mirrors the exact
+# precedent `_EXTRA_SECRET_PATTERNS` above already set for provider-specific VALUE
+# formats: kept in this file only, not in checks.SECRET_KEY_RE, so it only widens
+# what gets masked before reaching a log, never a config-scan finding. Same
+# unanchored-substring shape as `_KV_RE` itself (a "primaryKey: ..." value getting
+# redacted too is accepted over-redaction, not a defect, for the identical reason
+# `_KV_RE`'s own SECRET_KEY_RE-derived key group is unanchored).
+#
+# The value group deliberately accepts an optional auth-scheme prefix
+# (Bearer/Basic/Token, followed by whitespace) BEFORE the token, unlike `_KV_RE`'s
+# single-word value: "Authorization: Bearer <token>" is the canonical shape this
+# pattern exists for, and `_KV_RE`'s bare `[^\s'\"&;,]{4,}` stops at the first
+# whitespace — reproduced: without this, the FIRST attempt at this pattern redacted
+# only the literal word "Bearer" and left the real token that followed it in plain
+# text, a worse outcome than no redaction at all (false confidence). Caught before
+# committing by testing the exact "Authorization: Bearer <token>" shape directly,
+# not assumed from `_KV_RE`'s own (untested against this shape) behavior.
+_EXTRA_KV_RE = re.compile(
+    r"(?P<key>authorization|bearer|key)\s*[:=]\s*['\"]?"
+    r"(?P<val>(?:bearer|basic|token)\s+[^\s'\"&;,]{4,}|[^\s'\"&;,]{4,})",
+    re.I,
+)
+
 # Candidate credit-card PAN: 13–19 digits with optional single space/hyphen
 # separators, not glued to other digits.  Luhn-validated in _replace_pan so plain
 # long numbers (phone numbers, ids) are left untouched.
@@ -102,6 +134,10 @@ def redact(text: str | None) -> str:
     # Replace key=value pairs where the key looks secret-like.
     # We must not re-redact already-redacted markers.
     result = _KV_RE.sub(_replace_kv, result)
+
+    # C-405: Authorization/bearer/bare-key key=value pairs — see _EXTRA_KV_RE's own
+    # comment for why this is a separate, redaction-only widening.
+    result = _EXTRA_KV_RE.sub(_replace_kv, result)
 
     return result
 
@@ -258,13 +294,24 @@ def get_logger(
     else:
         level = logging.WARNING
 
-    logger.setLevel(level)
+    # B-479: a requested log FILE is never empty. The default level is WARNING and this
+    # tool warns almost never, so `--log run.log` on its own produced no file at all (the
+    # handler creates it lazily, on the first record) — the flag whose whole purpose is
+    # "write log output to PATH" did nothing unless you also happened to pass --verbose.
+    # Asking for a log file is asking for log lines.
+    #
+    # The LOGGER's level drops to INFO so records reach the file, and the STDERR handler
+    # keeps the level the flags actually asked for — so --log changes what is written to
+    # the file, never what is printed at the user. Without the per-handler level, --log
+    # would silently turn on verbose console output nobody requested.
+    logger.setLevel(min(level, logging.INFO) if logfile is not None else level)
 
     fmt = logging.Formatter("%(levelname)s %(name)s: %(message)s")
     filt = _RedactingFilter()
 
     # Handler 1: stderr (always)
     stderr_handler = logging.StreamHandler(sys.stderr)
+    stderr_handler.setLevel(level)
     stderr_handler.setFormatter(fmt)
     stderr_handler.addFilter(filt)
     logger.addHandler(stderr_handler)

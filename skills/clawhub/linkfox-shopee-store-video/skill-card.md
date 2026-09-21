@@ -1,47 +1,56 @@
-## Description: <br>
-Provides agent workflows and Python entry points for authorized Shopee store video publishing, editing, deletion, listing, and performance analytics through the LinkFox Shopee developer proxy. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage and analyze Shopee store videos through LinkFox scripts covering the Shopee Open API Video module.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External merchants, e-commerce operators, and developers use this skill to manage videos and analyze video performance for authorized Shopee shops after LinkFox and Shopee authorization are configured. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact Shopee store video actions, including publishing, editing, and deleting videos. <br>
-Mitigation: Use only with authorized shops and confirm destructive operations, especially delete_video, before running commands. <br>
-Risk: Complete API responses are saved locally and may include store, video, or analytics data. <br>
-Mitigation: Run the skill in an appropriate workspace, restrict access to saved linkfox data, and clear saved response files when they are no longer needed. <br>
-Risk: The skill requires LinkFox API credentials and a separate Shopee store authorization skill. <br>
-Mitigation: Verify LINKFOX_AGENT_API_KEY or LINKFOXAGENT_API_KEY and the linkfox-shopee-store-auth dependency before use, and avoid exposing credentials in prompts or logs. <br>
-Risk: Security evidence flags the release as suspicious because high-impact actions and local response persistence do not have enough guardrails. <br>
-Mitigation: Review commands and parameters before execution and avoid automatic retries or exploratory calls that could consume credits or change store state. <br>
+## Use Case:
 
+External developers and ecommerce operators use this skill to publish, edit, delete, list, and analyze Shopee store videos for authorized shops through agent-driven scripts.
 
-## Reference(s): <br>
-- [Skill API reference](references/api.md) <br>
-- [Shopee Open Platform video module index](https://open.shopee.com/documents/v2/v2.video.get_cover_list?module=129&type=1) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-video) <br>
-- [Publisher profile](https://clawhub.ai/user/linkfox-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, json, files, guidance] <br>
-**Output Format:** [Markdown guidance with Python or curl commands, JSON API responses, and local JSON response files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Small responses print in full; larger responses print summaries while complete responses are saved under linkfox/<date>/<session>/data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server-resolved release evidence) <br>
+Risk: The security verdict is suspicious because the skill can handle LinkFox account setup, phone/SMS authentication, API keys, Shopee shop and video data, billing order creation, automatic feedback calls, and local response files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after reviewing the workflow, use trusted LinkFox HTTPS endpoints, avoid sharing SMS codes unless the workflow is trusted, and clean up saved response files and shell-profile API keys when no longer needed.
+
+Risk: The skill can perform state-changing Shopee video actions such as posting, editing, deleting, and billing-related order creation.
+
+Mitigation: Review delete, edit, post, and order actions before execution, especially when they affect authorized shops or paid account operations.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-video)
+- [Shopee Open Platform Video Module](https://open.shopee.com/documents/v2/v2.video.get_cover_list?module=129&type=1)
+- [API and Field Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, json, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON API responses or saved JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full API responses are persisted under a local linkfox session data directory; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

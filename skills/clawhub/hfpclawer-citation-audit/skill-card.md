@@ -1,42 +1,59 @@
-## Description: <br>
-Verify academic paper citations using a three-tier fallback pipeline across a local FTS5 database, Semantic Scholar, and OpenAlex, with support for single checks and batch reference-list audits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Verify academic paper citations through a fallback pipeline that checks a local FTS5 database, Semantic Scholar, and OpenAlex, supporting both single-citation checks and batch reference-list audits.
 
-## Publisher: <br>
-[diamond2nv](https://clawhub.ai/user/diamond2nv) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[diamond2nv](https://clawhub.ai/user/diamond2nv)
 
-## Use Case: <br>
-Researchers, reviewers, and literature-survey authors use this skill to check whether cited papers exist, including citations from LLM-generated papers or batch reference lists. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Citation titles, arXiv IDs, or batch reference contents may be sent to Semantic Scholar or OpenAlex when remote lookup modes are used. <br>
-Mitigation: Use local source mode for confidential or unpublished reference lists, and use remote API lookup only when sharing those citation details is acceptable. <br>
-Risk: Optional Semantic Scholar and OpenAlex credentials or contact details may be used for higher rate limits. <br>
-Mitigation: Store S2_API_KEY and OPENALEX_POLITE_EMAIL in environment variables, and avoid placing credentials in prompts, shared files, or audit inputs. <br>
-Risk: Short titles, missing local databases, rate limits, or network errors can produce SUSPECTED, NOT_FOUND, or ERROR results. <br>
-Mitigation: Prefer full titles or arXiv IDs, review per-source status details, and retry or cross-check failed remote lookups before relying on the result. <br>
+## Use Case:
 
+Researchers, reviewers, literature-survey authors, and agents use this skill to check whether cited academic papers exist and to audit reference lists for potentially hallucinated or unavailable citations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/diamond2nv/hfpclawer-citation-audit) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, code, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, Python snippets, and citation audit status text.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Audit statuses include VERIFIED, SUSPECTED, NOT_FOUND, and ERROR; remote lookups may query Semantic Scholar or OpenAlex unless local-only mode is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.0 (source: server release metadata) <br>
+Risk: Installing and running the external Python CLI introduces normal package-supply-chain and execution risk.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the package source or pin a known version before installation when reproducibility or trust boundaries matter.
+
+Risk: Citation verification can make network calls to public scholarly APIs and may encounter rate limits or upstream availability issues.
+
+Mitigation: Expect network access during verification, handle ERROR statuses, and configure optional API keys or polite-email settings for higher-volume use.
+
+Risk: Initialization, local data paths, and optional Zotero-related features can read or write local files.
+
+Mitigation: Check config and data paths before running init or enabling Zotero write or ingest workflows, and keep private research metadata in local ignored configuration files.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/diamond2nv/skills/hfpclawer-citation-audit)
+- [hfpclawer project homepage](https://github.com/diamond2nv/hfpapers-crawler)
+- [hfpclawer PyPI package](https://pypi.org/project/hfpclawer/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with CLI commands, YAML configuration, Python examples, and human-readable citation status results.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Citation checks can report VERIFIED, SUSPECTED, NOT_FOUND, or ERROR; batch mode can read references from a text file.]
+
+## Skill Version(s):
+
+0.19.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

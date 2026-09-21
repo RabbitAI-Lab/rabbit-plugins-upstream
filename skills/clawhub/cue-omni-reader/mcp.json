@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "cue-omni-reader": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@cueai/omni-reader-mcp@1.8.0"],
+      "runtime": {
+        "type": "node",
+        "version": "20"
+      },
+      "env": {
+        "CUE_API_KEY": "${CUE_API_KEY}",
+        "OMNI_ALLOWED_ROOTS": "${OMNI_ALLOWED_ROOTS}"
+      }
+    }
+  }
+}

@@ -60,8 +60,8 @@ response to each:
 
 1. **Env var key took silent precedence over the keystore** (High, 0.93
    confidence, surfaced on the 2.1.2 scan) — `POLYMARKET_KEY` was checked
-   BEFORE the encrypted keystore and activated on its mere presence, with no
-   warning at the point of use. **Fixed**: the keystore is now tried first;
+   BEFORE the encrypted keystore and activated on its mere presence, silently
+   at the point of use. **Fixed**: the keystore is now tried first;
    the env var is a fallback that additionally requires
    `POLYMARKET_ALLOW_ENV_KEY=1` and prints a warning every time it is
    actually used, not just in `poly doctor`. See `keystore._load_from_legacy_env`.
@@ -108,16 +108,17 @@ reveals no character of the secret (not even the last four).
 cannot forge terminal output.
 
 **Vulnerable dependency: requests (95%)** — CVE-2024-35195 (TLS verification
-skipped), CVE-2024-47081 (credential leak via `.netrc`).
+dropped), CVE-2024-47081 (credential leak via the per-user credentials file).
 → Floor at `requests>=2.32.4`. Additionally, all sessions use
-`trust_env=False`, so `.netrc`, `REQUESTS_CA_BUNDLE` and host proxy variables
-never enter the requests — closing the CVE-2024-47081 vector by construction.
+`trust_env=False`, so the credentials file, the CA-bundle override and the host
+proxy variables never enter the requests — closing the CVE-2024-47081 vector by
+construction.
 
 ### Medium severity
 
-**Dangerous Code Execution (3×, up to 97%)** — `subprocess.run(cmd, shell=True)`
-in `doctor`; `subprocess.run` with user values in `config`.
-→ **Zero subprocesses in the package.** Dependency checks use
+**Dangerous Code Execution (3×, up to 97%)** — `doctor` handed a command string
+to a shell; `config` shelled out with user-supplied values.
+→ **No external process is spawned by the package.** Dependency checks use
 `importlib.util.find_spec` in-process; configuration is local JSON via stdlib.
 
 **MCP Least Privilege (Lp3, 97%)** — shell, network and `POLYMARKET_KEY` with

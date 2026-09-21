@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.3.3](https://github.com/es6kr/skills/compare/repo-v0.3.2...repo-v0.3.3) (2026-09-18)
+
+
+### Bug Fixes
+
+* **cleanup:** make the session-end report table self-sufficient ([#487](https://github.com/es6kr/skills/issues/487)) ([c4a0255](https://github.com/es6kr/skills/commit/c4a02557fb8de3b32cf337c549f62535dabf824b))
+
+## [0.3.2](https://github.com/es6kr/skills/compare/repo-v0.3.1...repo-v0.3.2) (2026-08-17)
+
+
+### Bug Fixes
+
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([4982364](https://github.com/es6kr/skills/commit/49823641a7b08123ebd0325273892bee41bc3280))
+
+## [0.3.1](https://github.com/es6kr/skills/compare/repo-v0.3.0...repo-v0.3.1) (2026-08-05)
+
+
+### Bug Fixes
+
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([951c1e6](https://github.com/es6kr/skills/commit/951c1e6871e78e226757c6a7ae5ae53efeb7bfb0))
+
 ## [0.3.0](https://github.com/es6kr/skills/compare/repo-v0.2.0...repo-v0.3.0) (2026-06-03)
 
 

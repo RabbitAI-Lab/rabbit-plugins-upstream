@@ -8,10 +8,11 @@
 #   conto-check.sh approve <amount> <recipient> <sender> <chain_id> [purpose] [category]
 #   conto-check.sh confirm <payment_request_id> <tx_hash> [approval_token]
 #   conto-check.sh pending-approvals
-#   conto-check.sh approve-request <approval_request_id> [comment]
-#   conto-check.sh deny-request <approval_request_id> [comment]
-#   conto-check.sh x402 <amount> <recipient> <resource_url> [facilitator] [scheme]
-#   conto-check.sh budget
+#   conto-check.sh approve-request <approval_request_id> <human_action_token> [comment]
+#   conto-check.sh deny-request <approval_request_id> <human_action_token> [comment]
+#   conto-check.sh x402 <amount> <recipient> <resource_url> [session_id] [payment_id]
+#   conto-check.sh x402-record <amount> <recipient> <resource_url> <payment_id> <tx_hash> <grant_id> <grant_signature> [session_id]
+#   conto-check.sh budget [session_id]
 #   conto-check.sh services
 #
 # Policy commands (requires admin SDK key):
@@ -97,19 +98,21 @@ EOF
 
   approve-request)
     approval_request_id="${2:?approvalRequestId required}"
-    comment="${3:-}"
+    action_token="${3:?humanActionToken required}"
+    comment="${4:-}"
 
-    payload=$(jq -n --arg decision "APPROVED" --arg comment "$comment" \
-      '{decision: $decision} + (if $comment == "" then {} else {comment: $comment} end)')
+    payload=$(jq -n --arg decision "APPROVED" --arg actionToken "$action_token" --arg comment "$comment" \
+      '{decision: $decision, actionToken: $actionToken} + (if $comment == "" then {} else {comment: $comment} end)')
     _conto_request POST "/api/sdk/approval-requests/$approval_request_id/decide" "$payload"
     ;;
 
   deny-request)
     approval_request_id="${2:?approvalRequestId required}"
-    comment="${3:-}"
+    action_token="${3:?humanActionToken required}"
+    comment="${4:-}"
 
-    payload=$(jq -n --arg decision "REJECTED" --arg comment "$comment" \
-      '{decision: $decision} + (if $comment == "" then {} else {comment: $comment} end)')
+    payload=$(jq -n --arg decision "REJECTED" --arg actionToken "$action_token" --arg comment "$comment" \
+      '{decision: $decision, actionToken: $actionToken} + (if $comment == "" then {} else {comment: $comment} end)')
     _conto_request POST "/api/sdk/approval-requests/$approval_request_id/decide" "$payload"
     ;;
 
@@ -117,25 +120,56 @@ EOF
     amount="${2:?amount required}"
     recipient="${3:?recipientAddress required}"
     resource_url="${4:?resourceUrl required}"
-    facilitator="${5:-}"
-    scheme="${6:-}"
+    session_id="${5:-}"
+    payment_id="${6:-}"
 
-    payload=$(cat <<EOF
-{
-  "amount": $amount,
-  "recipientAddress": "$recipient",
-  "resourceUrl": "$resource_url",
-  "facilitator": $(if [[ -n "$facilitator" ]]; then echo "\"$facilitator\""; else echo "null"; fi),
-  "scheme": $(if [[ -n "$scheme" ]]; then echo "\"$scheme\""; else echo "null"; fi),
-  "category": "API_PROVIDER"
-}
-EOF
-)
+    payload=$(jq -n \
+      --argjson amount "$amount" \
+      --arg recipientAddress "$recipient" \
+      --arg resourceUrl "$resource_url" \
+      --arg sessionId "$session_id" \
+      --arg paymentId "$payment_id" \
+      '{amount: $amount, recipientAddress: $recipientAddress, resourceUrl: $resourceUrl}
+       + (if $sessionId == "" then {} else {sessionId: $sessionId} end)
+       + (if $paymentId == "" then {} else {paymentId: $paymentId} end)')
     _conto_request POST /api/sdk/x402/pre-authorize "$payload"
     ;;
 
+  x402-record)
+    # Records a settled x402 payment with the grant from the approved pre-authorize.
+    # The grant is required here: a record without one is flagged as a policy bypass.
+    amount="${2:?amount required}"
+    recipient="${3:?recipientAddress required}"
+    resource_url="${4:?resourceUrl required}"
+    payment_id="${5:?paymentId required (reuse the same value when retrying)}"
+    tx_hash="${6:?txHash required}"
+    grant_id="${7:?grantId required (from the approved x402 pre-authorize)}"
+    grant_signature="${8:?grantSignature required (from the approved x402 pre-authorize)}"
+    session_id="${9:-}"
+
+    payload=$(jq -n \
+      --argjson amount "$amount" \
+      --arg recipientAddress "$recipient" \
+      --arg resourceUrl "$resource_url" \
+      --arg paymentId "$payment_id" \
+      --arg txHash "$tx_hash" \
+      --arg grantId "$grant_id" \
+      --arg grantSignature "$grant_signature" \
+      --arg sessionId "$session_id" \
+      '{amount: $amount, recipientAddress: $recipientAddress, resourceUrl: $resourceUrl,
+        paymentId: $paymentId, txHash: $txHash, grantId: $grantId, grantSignature: $grantSignature}
+       + (if $sessionId == "" then {} else {sessionId: $sessionId} end)')
+    _conto_request POST /api/sdk/x402/record "$payload"
+    ;;
+
   budget)
-    _conto_request GET /api/sdk/x402/budget
+    session_id="${2:-}"
+    if [[ -n "$session_id" ]]; then
+      encoded_session_id=$(jq -rn --arg value "$session_id" '$value|@uri')
+      _conto_request GET "/api/sdk/x402/budget?sessionId=$encoded_session_id"
+    else
+      _conto_request GET /api/sdk/x402/budget
+    fi
     ;;
 
   services)
@@ -357,10 +391,11 @@ Payment Commands (standard SDK key):
   approve       <amount> <recipient> <sender> <chain_id> [purpose] [category]
   confirm       <payment_request_id> <tx_hash> [approval_token]
   pending-approvals                  List payments awaiting human review
-  approve-request <approval_request_id> [comment]  Approve a pending payment
-  deny-request    <approval_request_id> [comment]  Deny a pending payment
-  x402          <amount> <recipient> <resource_url> [facilitator] [scheme]
-  budget        Check remaining x402 budget and burn rate
+  approve-request <approval_request_id> <human_action_token> [comment]  Approve a pending payment
+  deny-request    <approval_request_id> <human_action_token> [comment]  Deny a pending payment
+  x402          <amount> <recipient> <resource_url> [session_id] [payment_id]
+  x402-record   <amount> <recipient> <resource_url> <payment_id> <tx_hash> <grant_id> <grant_signature> [session_id]
+  budget        [session_id]  Check aggregate or session-specific x402 spend
   services      List x402 services this agent has used
 
 Policy Commands (requires admin SDK key):
@@ -387,7 +422,7 @@ Examples:
 
   # Review and approve a payment from OpenClaw
   bash conto-check.sh pending-approvals
-  bash conto-check.sh approve-request cmrApproval... "Approved by the owner in OpenClaw"
+  bash conto-check.sh approve-request cmrApproval... HUMAN_ACTION_TOKEN "Approved by the owner"
 
   # List policies
   bash conto-check.sh policies

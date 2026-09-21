@@ -1,44 +1,56 @@
-## Description: <br>
-Voiceflow lets an agent read, create, and update Voiceflow data through an OOMOL-connected account instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Voiceflow lets agents operate a connected Voiceflow account through OOMOL, including conversation sessions, environment listing, and knowledge base queries.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and workspace users use this skill to operate Voiceflow conversations, environments, and knowledge base queries through the OOMOL oo connector from an agent session. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill lets Codex act through the user's OOMOL-connected Voiceflow account, including the write-tagged start_session action. <br>
-Mitigation: Install only when that account access is intended, inspect the connector schema, and confirm the exact action payload before write operations. <br>
-Risk: Credential handling and connector execution depend on OOMOL account setup and server-side credential injection. <br>
-Mitigation: Use the documented setup flow only when an auth, connection, scope, credential, or billing error occurs; do not handle raw Voiceflow tokens in the agent session. <br>
+## Use Case:
 
+Developers and operators use this skill to run Voiceflow connector actions from an agent, including starting sessions, sending non-streaming interaction actions, listing environments, and querying the knowledge base. It is intended for users who have an OOMOL account connected to Voiceflow.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-voiceflow) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Voiceflow Homepage](https://www.voiceflow.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON connector payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads; connector responses include data and an execution id.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The first-time setup instructions include remote installer execution for the OOMOL CLI without an embedded verification step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source and prefer a verified package or signed release before installing the CLI.
+
+Risk: Write actions can change Voiceflow conversation state through the connected account.
+
+Mitigation: Confirm the exact payload and expected effect with the user before running write actions.
+
+## Reference(s):
+
+- [ClawHub Voiceflow Skill](https://clawhub.ai/oomol/skills/oo-voiceflow)
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol)
+- [Voiceflow Homepage](https://www.voiceflow.com)
+- [OOMOL CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before action execution; write actions require payload and effect confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

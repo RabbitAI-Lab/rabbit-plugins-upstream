@@ -1,42 +1,71 @@
-## Description: <br>
-Software implementation planning with file-based persistence (.plan/) for code changes that touch multiple files, have ambiguous scope, or require architectural decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Software implementation planning with optional file-based persistence for planning requests, unresolved architecture or scope decisions, and multi-phase implementation that needs recovery state.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering agents use this workflow to turn implementation requests into concrete, verifiable plans before coding. It is aimed at multi-file changes, ambiguous scopes, and work that benefits from persistent session notes in `.plan/`. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Starting a new plan can overwrite existing `.plan` files in the current workspace. <br>
-Mitigation: Review or preserve existing `.plan` files before initializing a new plan when those files contain work that must be kept. <br>
+## Use Case:
 
+Developers and engineering agents use ia-planning to decide when software implementation work needs a durable plan, an inline checklist, or direct implementation. The skill helps produce concrete phases, file ownership, verification steps, handoff posture, and recovery state for context-safe delivery.
 
-## Reference(s): <br>
-- [ia-planning Specification](SPEC.md) <br>
-- [Execution & Decomposition Patterns](references/execution-and-methodology.md) <br>
-- [Operational Patterns](references/operational-patterns.md) <br>
-- [Plan Deepening](references/plan-deepening.md) <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-planning) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown planning files and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update local `.plan/` files and add `.plan/` to `.gitignore` when the initialization script is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: Using the durable plan scaffold can create or update local planning files and .gitignore entries.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the working tree before using the scaffold and confirm that .plan/ is appropriate for the repository.
+
+Risk: Using --force can overwrite an existing plan with unchecked tasks.
+
+Mitigation: Inspect .plan/task_plan.md first and use --force only after deciding which plan should remain authoritative.
+
+Risk: Planning or delegated execution guidance can be mistaken for implementation approval.
+
+Mitigation: Treat plans as proposals and continue implementation or delegation only when the user has authorized that work.
+
+Risk: A weak or stale plan can mislead downstream implementation.
+
+Mitigation: Verify that tasks are concrete, phase deliverables are runnable, and acceptance criteria still match the user's requirements before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-planning)
+- [Publisher profile](https://clawhub.ai/user/iliaal)
+- [Planning workflow](artifact/SKILL.md)
+- [Skill specification](artifact/SPEC.md)
+- [Plan format](artifact/references/plan-format.md)
+- [Execution and decomposition patterns](artifact/references/execution-and-methodology.md)
+- [Execution handoff](artifact/references/execution-handoff.md)
+- [Goal definition](artifact/references/goal-definition.md)
+- [Operational patterns](artifact/references/operational-patterns.md)
+- [Plan deepening](artifact/references/plan-deepening.md)
+- [Task design](artifact/references/task-design.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown plans and checklists with optional shell commands and local planning files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update .plan/task_plan.md and add .plan/ to .gitignore when the durable planning scaffold is used.]
+
+## Skill Version(s):
+
+4.6.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

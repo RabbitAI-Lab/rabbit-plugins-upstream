@@ -1,43 +1,60 @@
-## Description: <br>
-Clone voice and generate new text reading audio with one click using Vidu Audio Clone. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Clone a voice from reference audio and generate spoken audio for new text using Vidu Audio Clone.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to call dLazy's hosted Vidu Audio Clone service to clone a voice from reference audio and generate spoken audio for new text. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can persist a dLazy API key locally, and the scan did not substantiate the claim that the saved key is restricted to only the current OS user. <br>
-Mitigation: Review the dLazy CLI before installing; prefer per-invocation DLAZY_API_KEY or npx when persistent credentials are not needed; check ~/.dlazy/config.json permissions and rotate or revoke any exposed key. <br>
-Risk: Voice cloning requests can upload reference audio and prompts to dLazy-hosted endpoints. <br>
-Mitigation: Use only audio the user is allowed to upload for voice cloning, and disclose that inputs and generated outputs are handled by dLazy hosted services. <br>
+## Use Case:
 
+External users and developers use this skill to invoke dLazy's hosted Vidu Audio Clone workflow for authorized voice cloning and text-to-speech audio generation from reference audio.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-vidu-audio-clone) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Files] <br>
-**Output Format:** [JSON result containing generated output URLs or asynchronous task status] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May upload referenced audio to dLazy media storage and return hosted files.dlazy.com URLs; --no-wait returns a generateId for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and release evidence) <br>
+Risk: The skill enables voice cloning without evidence of built-in consent safeguards.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only with voices and reference audio the user is authorized to clone.
+
+Risk: Reference audio, prompt text, and generated results may be processed by dLazy and hosted on dLazy file services.
+
+Mitigation: Avoid sensitive inputs unless the deployment accepts dLazy processing and hosting terms.
+
+Risk: Authentication may save a dLazy API key in local CLI configuration.
+
+Mitigation: Use per-command DLAZY_API_KEY or npx for lower persistence, and rotate or revoke keys when no longer needed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-vidu-audio-clone)
+- [dLazy CLI Source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy Homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, JSON, Guidance]
+
+**Output Format:** [Markdown instructions with CLI commands and JSON responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return hosted generated-result URLs or an asynchronous task identifier for later polling.]
+
+## Skill Version(s):
+
+1.3.17 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

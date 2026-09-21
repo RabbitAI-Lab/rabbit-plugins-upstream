@@ -8,14 +8,19 @@ UNKNOWN when the config cannot tell us (excluded from score — honesty).
 
 from __future__ import annotations
 
+import ast
 import base64
 import binascii
 import html
+import inspect
 import ipaddress
 import json
+import logging
 import os
 import re
 import shutil
+import textwrap
+import traceback
 import unicodedata
 from pathlib import Path
 from urllib.parse import unquote, urlparse
@@ -76,59 +81,76 @@ from ..textnorm import (
 # via the aggregator (CLAUDE.md §3.1-a: no __all__ here).
 from . import _shared
 from ._shared import (
-    _is_posix,
-    _perms_loose,
-    LOOPBACK,
-    _LoopbackHostSet,
-    _loopback_ip,
-    EXPOSED_BINDS,
-    parse_bind_host,
     # B-288: root-`hooks` session-key/agent-routing policy family + the gateway
     # remote-exposure label RISK-20 composes it with.
+    _active_channels,
+    _agent_is_powerful,
+    _agent_legs,
+    _agent_tools_widenings,
+    _agents_without_exec_gate,
+    _bind_mentions_docker_sock,
+    _bind_mode_is_ro,
+    _canon_tool,
     _canonical_ipv4,
+    _channel_has_implicit_default_account,
+    _channels,
+    _channels_with_context_visibility_all,
+    _config_unreadable,
+    _CRED_RE,
+    _DESTRUCTIVE_HINTS,
+    _enabled_tools,
+    _EXFIL_RE,
+    EXPOSED_BINDS,
+    _external_input_channels,
+    _finding,
+    _exec_policy_is_gated,
     _gateway_remote_exposure_reason,
+    _has_approval_gate,
+    _hint,
+    _layer_exec_policy,
     _hooks_agent_ids_unrestricted,
     _hooks_allowed_session_key_prefixes,
     _hooks_session_key_exposures,
-    SECRET_KEY_RE,
-    SECRET_PATTERNS,
-    _CRED_RE,
-    _EXFIL_RE,
-    _KNOWN_EXFIL_HOST_RE,
-    _SECRET_PATH_RE,
+    _IMPLICIT_DEFAULT_ACCOUNT_KEYS,
     INPUT_TOOL_HINTS,
-    SENSITIVE_TOOL_HINTS,
-    OUTBOUND_TOOL_HINTS,
+    _is_own_source,
+    _is_posix,
+    _is_public_ip,
+    _is_secret_reference,
+    _KNOWN_EXFIL_HOST_RE,
+    _LEG_KEYS,
+    LOOPBACK,
+    _loopback_ip,
+    _LoopbackHostSet,
+    _MAX_WALK_DEPTH,
     _meta,
-    _finding,
-    _config_unreadable,
-    _channels,
-    _UNTRUSTED_INPUT_POLICIES,
     _norm_group_policy,
     _open_channels,
-    _external_input_channels,
-    _channels_with_context_visibility_all,
-    _MAX_WALK_DEPTH,
-    _is_secret_reference,
-    _secret_paths,
-    _enabled_tools,
-    _hint,
+    OUTBOUND_TOOL_HINTS,
+    OUTBOUND_TOOL_IDS,
+    _OWN_ENGINE_MARKERS,
+    parse_bind_host,
+    _perms_loose,
     _POWERFUL_PROFILES,
     _profile_is_powerful,
     _real_exec_enabled,
-    _web_fetch_enabled,
-    _active_channels,
-    _untrusted_input_channels,
-    _agent_legs,
-    _LEG_KEYS,
-    _has_approval_gate,
-    _is_public_ip,
-    _OWN_ENGINE_MARKERS,
-    _is_own_source,
-    _DESTRUCTIVE_HINTS,
-    _agent_is_powerful,
-    _TIER_NAME,
+    _resolve_sandbox_scope,
     _safe_mtime,
+    _sandbox_docker_binds,
+    _sandbox_has_writable_bind,
+    SECRET_KEY_RE,
+    _SECRET_PATH_RE,
+    _secret_paths,
+    SECRET_PATTERNS,
+    SENSITIVE_TOOL_HINTS,
+    _skill_corpus_complete,
+    _surface_absent,
+    _TIER_NAME,
+    _unclassified_leg_verbs,
+    _untrusted_input_channels,
+    _UNTRUSTED_INPUT_POLICIES,
+    _username_safe_path,
+    _web_fetch_enabled,
 )
 
 from ._shared import (_plugins,)
@@ -148,6 +170,7 @@ from ._host import (
     check_host_egress_posture,
     check_incident_readiness,
     check_systemd_persistence,
+    check_host_scheduled_persistence,
     check_bundled_root_override,
     check_unit_embedded_gateway_secret,
     check_audit_trail_signals,
@@ -155,7 +178,7 @@ from ._host import (
 )
 
 from ._shared import (_JSONL_SCAN_CAP, _MCP_REMOTE_TRANSPORTS, _custom, _mcp_has_remote, _mcp_servers, _mcp_tool_texts, _mcp_url_is_local, _read_jsonl_tail, correlation_indicators, _CORR_INDICATOR_CAP,)
-from ._shared import (_MCP_DATA_CAP_RE, _MCP_FS_PKG_RE, _MCP_BROAD_FS_ROOTS, _mcp_fs_root_is_broad, _mcp_sensitive_reason, _mcp_leg_contributions,)
+from ._shared import (_key_advice, _openclaw_generation, _retired_key_note, _MCP_DATA_CAP_RE, _MCP_FS_PKG_RE, _MCP_BROAD_FS_ROOTS, _mcp_fs_root_is_broad, _mcp_sensitive_reason, _mcp_leg_contributions, _node_commands,)
 from ._shared import (_MCP_INTAKE_CAP_RE, _mcp_intake_reason,)
 # B-297: the wildcard-group ingress predicate — risk.py's ingress leg reaches it only
 # through this aggregator (CLAUDE.md §3.1-a), never by importing a topic module.
@@ -171,10 +194,18 @@ from ._egress import (
     check_browser_evaluate_enabled,
     check_browser_executable_path,
     check_browser_existing_session_profile,
+    check_browser_cdp_control_port,
     _cdp_url_classify,
     _cdp_url_display,
+    _cdp_allow_origins_findings,
+    _offhost_cdp_endpoints,
+    _chrome_switch_name,
+    _remote_debug_bind_class,
+    _whatwg_url,
     check_outbound_proxy,
     check_provider_baseurl,
+    check_otel_content_capture_egress,
+    check_memory_search_remote_egress,
     check_cachetrace_redaction,
     check_config_audit_log,
     check_config_health_integrity,
@@ -190,7 +221,23 @@ from ._egress import (
     check_webfetch_redirects,
 )
 
-from ._shared import (_trifecta_legs,)
+from ._shared import (_trifecta_legs, _trifecta_leg_sources,)  # B-493
+from ._shared import (  # C-462
+    _FS_GOVERNED_TOOL_IDS,
+    _fs_reads_are_confined,
+)
+from ._shared import (  # B-667
+    SENSITIVE_TOOL_IDS,
+    _attested_tool_id_sources,
+    _tool_id_sources,
+)
+from ._shared import (  # B-666
+    _CRED_STORE_MAX_BYTES,
+    _CRED_STORE_MAX_FILES,
+    _CRED_STORE_MAX_NAMES,
+    _credential_store_state,
+)
+from ._shared import (_unpolicied_open_wildcard_group_channels,)  # B-371
 from ._agents import (
     _B21_OBEY_RE,
     _B21_SAFE_STANCE_RE,
@@ -205,9 +252,15 @@ from ._agents import (
     _reassembly,
     check_embedded_agent_project_settings_policy,
     check_agent_separation,
+    check_agent_to_agent_pivot,
+    check_channel_allow_bots,
+    check_channel_mention_gate_bypass,
+    check_cross_context_send,
     check_delegation_reassembly,
     check_multiagent_exposure,
     check_sender_identity,
+    check_session_reset_triggers,
+    check_session_scope_global,
     check_session_visibility,
     check_subagent_spawn_limits,
     check_subagents,
@@ -218,24 +271,40 @@ from ._agents import (
 )
 
 from ._capability import (
+    _b352_effective_prepends,
+    _b352_risky,
+    check_exec_path_prepend,
+    _b351_normalize_agent_id,
+    _b351_resolvable_agents,
+    _b351_enabled,
+    _b351_raw_code_mode,
+    check_code_mode_tool_surface,
     _AUTO_GATE_BLAST,
     _B31_BYPASS_CANDIDATES,
     _B31_WRITE_CLASS,
+    _B55_FS_WRITE_TOOLS,
     _B71_INEFFECTIVE_RE,
     _FS_WRITE_TOOL_HINTS,
+    _ToolPolicyView,
+    _agent_profile_widenings,
     _approval_bypass_actors,
     _b31_collect_deny_lists,
+    _b55_write_tools_granted,
     _b68_fs_tools_granted,
     _has_heartbeat_signal,
+    _tool_policy_view,
     check_attestation_mismatch,
     check_capability_blast_radius,
     check_declared_effective_proven,
     check_effective_tools,
+    check_elevated_default_full,
     check_exec_applypatch_workspace,
     check_exec_strict_inline_eval,
     check_fs_write_exposure,
     check_node_denycommands_ineffective,
     check_path_safety,
+    _b378_normalize_path_for_compare,
+    check_agent_cwd_relocation,
 )
 
 from ._config import (
@@ -247,6 +316,8 @@ from ._config import (
     _C015_TEXT_EXTS,
     _DANGER_AGENT_SANDBOX,
     _DANGER_FIXED,
+    _is_owner_wildcard_allow_from,
+    _DANGER_FIXED_2026_8_1,
     _MISSING_LEG_ACTIVATORS,
     _c015_candidate_files,
     _c015_has_secret,
@@ -256,6 +327,7 @@ from ._config import (
     _meaningful_tool_surface,
     _model_names,
     _multi_agent_note,
+    _persistence_note,
     _net_is_private,
     _pattern_hits_real_secret,
     _peragent_sandbox_evidence,
@@ -263,26 +335,34 @@ from ._config import (
     _NATIVE_UNCONDITIONAL_CRITICAL_CHECK_IDS,
     _is_native_unconditional_critical_check_id,
     _ENV6_TOGGLES,
-    _b323_parse_env_token_at,
-    _b323_contains_env_var_reference,
     _b323_is_literal_path_override,
     check_env_vars_path_override,
     check_audit_target_divergence,
     check_audit_suppressions,
+    check_cloudworkers_prepared_pool,
     check_control_plane_mutation,
     check_env_breakglass_toggles,
     check_shell_env_fallback,
+    check_chat_completions_endpoint,
+    check_control_ui_embed_sandbox,
     check_controlui_origins,
     check_credential_blast_radius,
+    check_config_externally_managed,
     check_dangerous_overrides,
+    check_effective_bind,
     check_gateway,
+    check_gateway_operator_terminal,
     check_gateway_rate_limit,
+    check_gateway_remote_ssh_host_key_policy,
     check_hook_template_content,
+    check_hook_transform_modules,
     check_hooks_enable_toggles,
     check_least_privilege,
     check_local_first,
+    check_local_model_service_command,
     check_privileged_commands_exposure,
     check_proxy_header_forging,
+    check_redactor_blind_secret_paths,
     check_sandbox,
     check_secrets,
     check_secrets_at_rest_home,
@@ -292,6 +372,8 @@ from ._config import (
 )
 
 from ._shared import (INJECTION_PATTERNS, LOG_SCAN_INJECTION_PATTERNS, _FM_BLOCK_BARE_RE, _FM_BLOCK_HEADERED_RE, _HOOK_EXEC_RE, _skill_frontmatter_block,)
+from ._shared import (_B323_ENV_VAR_NAME_RE, _b323_parse_env_token_at, _b323_contains_env_var_reference,)  # B-397: relocated from _config (reused by B326 too)
+from ._shared import (_SYMLINK_KNOB_RETIRED_MIN, _workshop_symlink_knob,)  # B-783
 from ._lifecycle import (
     _APPROVAL_BYPASS_RE,
     _B182_ENV_OVERRIDES,
@@ -336,6 +418,7 @@ from ._lifecycle import (
     check_cron_run_log_orphans,
     check_cron_scheduler,
     check_declared_skill_reconciliation,
+    check_dependency_tree_hooks,
     check_exec_approvals_grants,
     check_hook_policy_bypass,
     check_human_approval,
@@ -343,16 +426,21 @@ from ._lifecycle import (
     check_install_policy_gate,
     check_secrets_provider_exec,
     check_known_vulns,
+    check_legacy_state_migration_pending,
     check_memory_poisoning,
     check_memory_reconsumption_injection,
     check_offboarding_hygiene,
     check_paired_device_operator_authority,
     check_pending_device_pairing_scope,
+    check_restart_handoff_stale,
     check_self_modification,
     check_clawhub_token_store,
     check_session_approval_policy,
     check_skill_install_tamper,
+    check_skill_library_reachability,
     check_skill_workshop_autonomy,
+    check_skill_symlink_target_writability,
+    check_skill_load_hot_reload,
     check_supply_chain,
     check_update_pinning,
     check_version,
@@ -415,7 +503,9 @@ from ._content import (
     _B65_QUERY_RE,
     _B65_TRIGGER_RE,
     _B65_WINDOW,
+    _B66_AUTHORITY_NEUTRALIZE_RE,
     _B66_CORE_RE,
+    _B66_MODE_DECLARATION_RE,
     _B66_RESET_RE,
     _B66_ROLE_START_RE,
     _B66_WEAK_RE,
@@ -439,6 +529,7 @@ from ._content import (
     _CLICKFIX_PROXIMITY_WINDOW,
     _CLICKFIX_REMOTE_FETCH_RE,
     _CLICKFIX_TRUSTED_INSTALLERS,
+    _clickfix_public_ip_fetch,
     _clickfix_trusted_installer,
     _DECODED_BAD_RE,
     _DECODED_STRONG_RE,
@@ -525,6 +616,7 @@ from ._content import (
     _b64_classify,
     _b64_reported_or_quoted,
     _b65_scan,
+    _b66_authority_override_scan,
     _b66_scan,
     _b67_has_source_contract,
     _b74_forged_turn_has_directive,
@@ -572,15 +664,19 @@ from ._content import (
     _whole_text_is_defensive,
     check_agent_snooping,
     check_capability_intent_mismatch,
+    check_chunked_file_assembly_exec,
     check_clickfix_setup_section,
+    check_cloud_metadata_credential_fetch,
     check_conditional_sleeper_trigger,
     check_config_trust_widening,
     check_cross_file_boundary_payload,
     check_cross_file_payload,
     check_cross_file_plaintext_payload,
     check_cross_skill_combined_effect,
+    check_deaddrop_resolver,
     check_dependency_confusion,
     check_dormant_capability,
+    check_dotfile_exfil_directive,
     check_dynamic_dispatch_obfuscation,
     check_event_hook_interceptor,
     check_forged_provenance,
@@ -595,19 +691,27 @@ from ._content import (
     check_lifecycle_hooks_extended,
     check_manifest_absent,
     check_markdown_image_exfil,
+    check_model_artifact_provenance,
+    check_offensive_tooling_directive,
     check_overt_secret_exfil,
     check_per_source_trust_contracts,
     check_persona_jailbreak,
     check_prompt_self_replication,
     check_pth_persistence,
+    check_python_runtime_persist_install,
     check_prose_bulk_exfil,
     check_remote_code_dependency,
+    check_self_erase_directive,
+    check_self_modification_directive,
     check_self_privesc_directive,
     check_silent_instruction,
+    check_sitecustomize_pythonstartup_scoped_install,
     check_social_engineering_phishing,
     check_symlink_escape,
     check_tool_output_trust_inversion,
     check_trigger_homoglyph,
+    check_tunnel_enrollment,
+    check_undocumented_helper_directive,
     check_unicode_obfuscation,
     check_unsafe_deserialization,
 )
@@ -675,26 +779,58 @@ from ._vet import (
     _url_matches_own_host,
     check_installed_skills,
     detect_vet_type,
+    detect_vet_type_with_reason,
+    resolve_skill_target,
     vet_skill,
     vet_source,
 )
 
 from ._mcp import (
     _C038_COMMENT_RE,
+    _B331_AUTHORITY_BASE_RE,
+    _B331_CONFIDENTIAL_RE,
+    _B331_DATA_URI_RE,
+    _B331_DATA_URI_SAFE_MIME_RE,
+    _B331_DISREGARD_FORGET_RE,
+    _B331_EXFIL_PARAM_RE,
+    _B331_PREAMBLE_RE,
+    _B331_ROLE_TAG_RE,
     _C038_DATA_URI_RE,
     _C038_HIDDEN_INSTR_RE,
     _C038_PARAM_INJECT_RE,
+    _HOST_SANITIZE_DISREGARD_RE,
+    _HOST_SANITIZE_IGNORE_RE,
+    _HOST_SANITIZE_PLACEHOLDER,
+    _HOST_SANITIZE_TEXT_LIMIT,
+    _INSTR_OVERRIDE_SRC,
     _LP_CAP_FAMILIES,
     _LP_SCOPE_READONLY_RE,
     _LP_SCOPE_WRITE_RE,
     _MCP_AXIS_BEHAVIOR,
     _MCP_AXIS_BUILD,
     _MCP_AXIS_CONNECTIONS,
+    _B332_CLONE_JACCARD,
+    _B332_CLONE_MIN_NAMES,
+    _B332_GENERIC_TOOL_NAMES,
+    _B332_MAX_TOTAL_NAMES,
+    _B332_MIN_SPECIFIC_LEN,
+    _B332_MIN_WARN_LEN,
+    _B332_ZERO_WIDTH_RE,
+    _B333_HINT_KEYS,
     _MCP_CONN_STRING_CREDENTIAL_RE,
     _MCP_CURL_RE,
     _MCP_META_IP_RE,
+    _MCP_RING_SKIP_IDS,
+    _MCP_RING_SKIP_STATUSES,
     _MCP_SECRET_ENV_RE,
+    _MCP_SURFACE_SENTINEL_HOME,
     _MCP_UNPINNED_RE,
+    _PARAM_EXFIL_DEST_RE,
+    _PARAM_OVERRIDE_INSTR_RE,
+    _PARAM_OVERRIDE_LOOSE_RE,
+    _PARAM_JAILBREAK_PERSONA,
+    _PARAM_ROLE_FORGERY_RE,
+    _PARAM_SENTENCE_SPLIT_RE,
     _PLUGIN_FILE_CAP,
     _PLUGIN_MCP_SKIP,
     _PLUGIN_SKIP_DIRS,
@@ -702,31 +838,73 @@ from ._mcp import (
     _VET_MCP_BROAD_SCOPE_RE,
     _VET_MCP_DANGEROUS_CMDS,
     _VET_MCP_RUNNER_CMDS,
+    _VET_MCP_SCOPE_LIST_SEP_RE,
+    _VET_MCP_SCOPE_SEGMENT_SEP_RE,
     _VET_MCP_UNPINNED_PKG_RE,
     _VET_RANK_STATUS,
+    _b331_authority_hit,
+    _b331_authority_verdict,
+    _b331_data_uri_hit,
+    _b331_exfil_param_hit,
+    _b331_findings,
+    _b331_secrecy_hit,
+    _b331_tool_findings,
+    _b332_bare_tool_name,
+    _b332_clone_server_pairs,
+    _b332_collisions,
+    _b332_finding_from_surfaces,
+    _b332_homoglyph_signal,
+    _b332_is_generic,
+    _b332_unique_names,
+    _b333_hinted_tool_names,
+    _b333_modern_surface_verdict,
+    _b333_waived_tool_names,
+    _mcp_codex_annotations,
+    _mcp_codex_approval_mode,
+    _mcp_codex_is_loopback_server,
+    _mcp_codex_normalize_mode,
+    _mcp_codex_requires_approval,
+    _mcp_is_per_requester,
+    _mcp_normalize_tool_filter,
+    _mcp_tool_allowed,
+    _mcp_tool_filter_matches,
+    _b333_surface_verdict,
+    _host_sanitize_simulated,
     _load_mcp_spec_file,
     _lp_detect_caps,
     _mcp_has_tool_restrictions,
     _mcp_reason_axis,
     _mcp_server_risks,
     _mcp_value_looks_secret,
+    _merge_mcp_surface_ring,
+    _param_override_reason,
     _plugin_finding,
     _vet_mcp_least_privilege,
+    _vet_mcp_scope_is_broad,
     _vet_mcp_server,
     _vet_mcp_tool_poisoning,
+    check_acp_backend_inventory,
+    check_agent_runtime_id_inventory,
     check_mcp,
     check_mcp_bypass_highblast,
     check_mcp_external_endpoint,
     check_mcp_hardening,
+    check_mcp_host_sanitizer_gap,
     check_mcp_server_exfil_host_in_args,
     check_mcp_tool_inheritance,
+    check_mcp_tool_name_shadowing,
+    check_mcp_codex_preapproved_tools,
+    check_mcp_unenforced_annotations,
     check_plugin_app_server_command,
     check_plugin_clawhub_trust,
+    check_plugin_hook_grants,
     check_plugin_permission_mode,
+    check_plugin_slots_and_deny,
     check_plugin_tool_result_middleware,
     check_codex_plugin_hooks,
     check_compiled_tool_poisoning,
     check_orphaned_plugin_caches,
+    check_undeclared_plugin_load_path,
     vet_mcp,
     vet_plugin,
 )
@@ -900,7 +1078,13 @@ _B30_PROVIDERS_WITH_NAME_MATCH = ("discord", "slack")
 # browser.ssrfPolicy.dangerouslyAllowPrivateNetwork (bool) — lets the agent browser
 # reach internal/metadata IPs (cloud-credential theft via 169.254.169.254).
 # browser.noSandbox (bool) — browser runs without OS sandbox.
-# browser.ssrfPolicy.hostnameAllowlist (array) — restrict outbound browser targets.
+# browser.ssrfPolicy.allowedHostnames (array) — restrict outbound browser targets.
+#   B-515: the installed dist honours TWO sibling keys under ssrfPolicy and merges
+#   them at runtime — allowedHostnames (current) and hostnameAllowlist (which the
+#   vendor itself labels legacy/alternate). B38 reads BOTH and combines them, so an
+#   allowlist counts as present when EITHER holds a non-empty list; keying on the
+#   legacy field alone warned at operators who had configured the current one.
+#   See check_browser_ssrf in checks/_egress.py.
 # browser.headless (bool) — informational; headless adds stealth but not a FAIL alone.
 
 
@@ -1123,6 +1307,8 @@ _B26_SAFE_VALUES = frozenset({"allowlist", "allowlist_quote"})
 
 # ---------------------------------------------------------------------------
 # SKILL_CONTENT_RING — single source of truth for content-security ring checks.
+# Defined in checks/_vet.py, imported above, spliced into CHECKS below. This block
+# explains it; the tuple itself is not here.
 #
 # Most of these read ctx.installed_skills (and optionally ctx.bootstrap,
 # ctx.installed_skill_py, ctx.effect_profiles) and are therefore meaningful
@@ -1147,6 +1333,7 @@ CHECKS = [
     check_trifecta,
     check_secrets,
     check_secrets_at_rest_home,
+    check_redactor_blind_secret_paths,  # B381 — secret-shaped value at a redactor-blind config path (C-405)
     check_gateway,
     check_least_privilege,
     check_sandbox,
@@ -1166,6 +1353,16 @@ CHECKS = [
     check_mcp_hardening,
     check_mcp_external_endpoint,
     check_mcp_server_exfil_host_in_args,
+    check_mcp_unenforced_annotations,  # B333 — MCP safety-hint annotations, per build (F-143/W2.1)
+    check_mcp_codex_preapproved_tools,  # B353 — MCP server pre-approves every tool (F-185)
+    check_mcp_host_sanitizer_gap,  # B331 — MCP tool-description injection past the host sanitizer (F-144/W2.2)
+    check_mcp_tool_name_shadowing,  # B332 — cross-server tool-name collision/homoglyph/near-miss (F-145/W2.3)
+    # B369-B370 (C-413) — runtime-exec inventory: acp.backend routes agent turns to a
+    # plugin backend; agentRuntime.id names the external process that runs a model's
+    # turns (real path corrected from the filed task's models.providers.*.agentRuntime.id
+    # to agents.{defaults,entries.<id>}.models.<ref>.agentRuntime.id).
+    check_acp_backend_inventory,
+    check_agent_runtime_id_inventory,
     check_proxy_header_forging,
     check_monitoring,
     check_autonomy,
@@ -1176,6 +1373,11 @@ CHECKS = [
     check_bootstrap_write_protection,
     check_self_modification,
     check_skill_workshop_autonomy,  # B175 — skills.workshop autonomous authoring + approvalPolicy=auto
+    # B367-B368 (C-413) — skills.load.allowSymlinkTargets widens where executable skill
+    # code loads from via a symlink; skills.load.watch hot-reloads skill definitions with
+    # no gateway restart to interrupt a planted/mutated file.
+    check_skill_symlink_target_writability,
+    check_skill_load_hot_reload,
     check_backups,
     check_version,
     check_tool_output_trust,
@@ -1187,11 +1389,34 @@ CHECKS = [
     check_browser_ssrf,
     check_outbound_proxy,
     check_provider_baseurl,  # B178 — models.providers.<id>.baseUrl cleartext http:// leak
+    # B365-B366 (C-412) — raw-content egress: diagnostics.otel content capture ships full
+    # model turns to a network collector (gated on a 4-key conjunction traced from the
+    # runtime, not the schema description); memory.search.remote sends every embedded
+    # memory chunk to a configured third-party endpoint (global + per-agent scope).
+    check_otel_content_capture_egress,
+    check_memory_search_remote_egress,
     check_session_visibility,
+    # B361-B364 (C-411) — remote-ingress / multi-user session hardening: unrestricted
+    # cross-agent session-tool access reachable from an open channel; session.scope
+    # sharing one session across senders; cross-provider message egress (global +
+    # per-agent, since an agent can widen past a safe global default); disclosure of
+    # any inbound-phrase session-reset trigger.
+    check_agent_to_agent_pivot,
+    check_session_scope_global,
+    check_cross_context_send,
+    check_session_reset_triggers,
+    # B371/B372 (C-525, split out of C-411) — requireMention/chatmode mention-gate
+    # bypass and allowBots bot-authored-input admission, both scoped to channels
+    # that admit non-owner senders; nesting is genuinely heterogeneous per
+    # provider (root/account/groups/rooms/guilds.channels/groups.topics/channels),
+    # see _mention_gate_scopes in checks/_shared.py for the grounding trail.
+    check_channel_mention_gate_bypass,
+    check_channel_allow_bots,
     check_untrusted_context,
     check_wildcard_group_ingress,
     check_known_vulns,
     check_credential_blast_radius,
+    check_config_externally_managed,  # B373 — OPENCLAW_CONFIG_READONLY / Nix mode (C-527)
     check_effective_tools,
     check_host_network_ids,
     check_host_audit,
@@ -1200,6 +1425,7 @@ CHECKS = [
     check_host_firewall,
     check_host_egress_posture,
     check_capability_blast_radius,
+    check_elevated_default_full,  # B326 — agents.defaults.elevatedDefault="full" bypasses approval
     check_attestation_mismatch,
     check_declared_effective_proven,
     check_agent_separation,
@@ -1209,18 +1435,24 @@ CHECKS = [
     check_dangerous_overrides,
     check_privileged_commands_exposure,  # B171 — commands.bash/config/mcp/plugins gate (B-235)
     check_hook_template_content,  # B169 — hooks.mappings[] template content scan (B-231)
+    check_hook_transform_modules,  # B380 — hooks.mappings[].transform.module inventory/writability (C-406)
     check_fs_write_exposure,
     check_controlui_origins,
     check_plugin_permission_mode,
     check_plugin_app_server_command,  # B167 — plugin appServer.command remote-fetch scan (B-231)
+    check_plugin_hook_grants,  # B341 — per-plugin-entry prompt-mutation / transcript-read grants
+    check_plugin_slots_and_deny,  # B342 — plugin slot ownership + allow/deny contradiction
     check_hook_policy_bypass,
     check_cron_scheduler,
     check_cron_job_content,  # B168 — cron job store payload.message/trigger.script scan (B-231)
     check_cron_run_log_orphans,  # B189 — cron run log without a surviving job definition (B-294)
     check_exec_approvals_grants,  # B172 — standing exec-approvals.json allow-always grant inventory (B-236)
     # Content-security ring — single source of truth (also consumed by vet_skill).
-    # SKILL_CONTENT_RING is defined just above; changing it updates both the full audit
-    # and the --vet path so they can never drift apart.
+    # SKILL_CONTENT_RING is DEFINED in checks/_vet.py and imported at the top of this
+    # file; the block above documents it, it does not declare it. Splicing it here is
+    # what keeps the full audit and the --vet path from drifting apart.
+    # (Said precisely because the earlier wording — "defined just above" — sent a reader
+    # looking for the tuple in this file, where it is not.)
     *SKILL_CONTENT_RING,
     # B105 — cross-skill Signal-A/Signal-B combined effect (B-096). Deliberately OUTSIDE
     # SKILL_CONTENT_RING: it correlates across ctx.installed_skills, which only ever has
@@ -1239,6 +1471,38 @@ CHECKS = [
     check_config_health_integrity,
     check_session_approval_policy,
     check_gateway_rate_limit,
+    check_effective_bind,  # B340 — corroborate declared gateway.bind against the actual listening socket (F-156)
+    # B350 — the gateway operator terminal: a PTY-backed shell carrying the gateway
+    # process environment, served to Control UI and mobile clients. WARN-only.
+    check_gateway_operator_terminal,
+    # B351 — code mode: the model is handed exec+wait over a catalog bridge instead of
+    # the ordinary tool surface. Walks agents.list, which can enable it independently.
+    check_code_mode_tool_surface,
+    # B352 — tools.exec.pathPrepend: what OpenClaw exports ahead of $PATH for every
+    # exec run. Skips scopes where host=node, which the runtime ignores.
+    check_exec_path_prepend,
+    # B378 — agents.defaults.cwd / agents.entries.<id>.cwd (new
+    # in OpenClaw 2026.9.1): relocates the task/exec working directory away from the
+    # workspace, which OpenClaw's own sandbox guard rejects unless the run is
+    # unsandboxed. WARN-only; PASS only when cwd provably matches that scope's own
+    # declared workspace.
+    check_agent_cwd_relocation,
+    # B355 (C-408) — models.providers.*.localService.command: a binary OpenClaw spawns
+    # at provider startup. WARN when writable by another account; the relative-path
+    # case the original stub worried about is refuted (the runtime refuses to spawn
+    # a relative command at all) and is not reported here.
+    check_local_model_service_command,
+    # B358 (C-410) — gateway.http.endpoints.chatCompletions: WARN on the OpenAI-shaped
+    # remote ingress; WARN (never FAIL) when images.allowUrl is also on — the vendor's
+    # own SSRF guard unconditionally blocks private/internal/metadata targets, so an
+    # absent urlAllowlist is open-proxy-shaped (any public host), not SSRF.
+    check_chat_completions_endpoint,
+    # B359 (C-410) — gateway.remote.sshHostKeyPolicy: WARN when host-key verification
+    # for the remote-gateway SSH tunnel is delegated to OpenSSH instead of pinned.
+    check_gateway_remote_ssh_host_key_policy,
+    # B360 (C-410) — gateway.controlUi.embedSandbox="trusted": WARN when a hosted
+    # Control UI embed gets allow-same-origin (XSS in the embed reaches the operator).
+    check_control_ui_embed_sandbox,
     check_subagent_spawn_limits,
     check_cachetrace_redaction,
     # B-281/B-282 (ENV-1/ENV-6): is the audited file the one the agent loads, and is a
@@ -1256,15 +1520,21 @@ CHECKS = [
     check_pending_device_pairing_scope,  # B138 — dangling high-scope pending device pairing
     check_paired_device_operator_authority,  # B176 — standing operator authority in devices/paired.json (B-243)
     check_systemd_persistence,  # B150 — systemd user-unit Restart=always persistence
+    check_host_scheduled_persistence,  # B379 — systemd timer / system cron naming OpenClaw, outside C048's scope (F-178)
     check_codex_plugin_hooks,  # B151 — codex connector shell hooks in the plugin doc-cache
     check_orphaned_plugin_caches,  # B152 — on-disk plugin cache not in plugins.entries
+    check_undeclared_plugin_load_path,  # B348 — plugins.load.paths entry not in plugins.entries (F-161)
     check_clawhub_lock_verification,  # B135 — accepted-despite-failed-verification install
     check_skill_install_tamper,  # B181 — installed skill modified since its recorded install hash (B-257)
     check_clawhub_token_store,  # B182 — ClawHub CLI plaintext token store perms, outside the OpenClaw home (B-259)
+    check_legacy_state_migration_pending,  # B356 — unmigrated allowFrom/device-auth legacy state files (C-409)
+    check_restart_handoff_stale,  # B357 — supervisor restart-handoff file outlived its own expiry (C-409)
     check_clawhub_registry_provenance,  # B184 — WHICH ClawHub issued the B135/B177/B181 verdicts (B-291, ENV-5)
     check_declared_skill_reconciliation,  # B158 — declared-but-unresolved skill-load source (F-119)
+    check_skill_library_reachability,  # B354 — shared skill-library/upload surface bypasses filesystem discovery (B-725)
     check_audit_suppressions,  # B173 — security.audit.suppressions self-blinds native audit (B-237)
     check_install_policy_gate,  # B174 — security.installPolicy.* gate + exec-hook escape flags (B-238)
+    check_dependency_tree_hooks,  # B349 — obfuscated install-lifecycle hook target in the dependency tree (F-167)
     check_hooks_enable_toggles,  # B179 — hooks.enabled / hooks.internal(.load.extraDirs) enable-toggle inventory (B-250)
     check_plugin_clawhub_trust,  # B177 — OpenClaw's own persisted per-plugin ClawHub trust verdict (B-240)
     check_plugin_tool_result_middleware,  # B187 — non-bundled plugin declares agentToolResultMiddleware (B-292, RT-2)
@@ -1273,8 +1543,9 @@ CHECKS = [
     check_secrets_provider_exec,  # B194 — secrets.providers.* exec-source escape flags (E-060 item 1)
     check_browser_extra_args,  # B195 — browser.extraArgs dangerous Chrome launch flags (E-060 item 2)
     check_browser_evaluate_enabled,  # B196 — browser.evaluateEnabled arbitrary-JS sink (E-060 item 3)
-    check_browser_executable_path,  # B321 — browser.executablePath / profiles.*.executablePath / mcpCommand (E-060 item 4)
+    check_browser_executable_path,  # B321 — browser.executablePath / profiles.*.executablePath / mcpCommand / mcpArgs (E-060 item 4, B-653)
     check_browser_existing_session_profile,  # B322 — browser.profiles.*.userDataDir / cdpUrl / driver:"existing-session" (E-060 item 5)
+    check_browser_cdp_control_port,  # B330 — unauthenticated CDP control port: off-host cdpUrl / --remote-allow-origins (C-298)
     check_marketplace_feed_provenance,  # B325 — marketplaces.feeds non-canonical registry (E-060 item 8)
     check_exec_safe_bin_trusted_dirs,  # B328 — tools.exec.safeBinTrustedDirs writable-dir promotion (E-060 item 11)
     # B191 (F-134, DISK-1) is DELIBERATELY NOT REGISTERED HERE. It is cataloged in
@@ -1293,7 +1564,86 @@ CHECKS = [
     # vetted skill — a category error that adds no signal to a pre-install verdict. It
     # belongs to the full audit only, the same reasoning B105 records for itself.
     check_compiled_tool_poisoning,  # B185 — poisoned tool description already delivered to the model (F-133, RT-1)
+    check_cloudworkers_prepared_pool,  # B374 — cloudWorkers 9.4 prepared-pool default-on warm reserve (C-526)
 ]
+
+
+# C-523: static (never executed) finding-id -> check-function map, for --explain/--retest.
+#
+# catalog.BY_ID maps an id to its CheckMeta (metadata only) — nothing anywhere maps an id
+# to the CALLABLE that produces it. Building that by running every check to see what id it
+# emits would cost exactly what --retest exists to avoid paying. Instead this reads each
+# check's own SOURCE for the literal id it constructs a Finding with — the same technique
+# scripts/gen_checks_docs.py already uses (AST over source, never exec) for risk.py's
+# RiskPath extraction.
+#
+# Verified against all 190 functions in CHECKS (2026-09, C-523), and cross-checked by hand
+# against catalog.BY_ID (not just trusted from a read): every one passes its id as a plain
+# string literal to _finding(...)/_custom(...)/_config_unreadable(...)/_host_finding(...) —
+# the four _shared.py/_host.py helpers that construct or forward a Finding's id — with the
+# SAME id on every branch. A couple (check_markdown_image_exfil, check_unicode_obfuscation,
+# check_subagents' _disk_subagent_disclosure helper) delegate to a same-module helper
+# function instead of calling one of those four directly; _finding_ids_for recurses into a
+# same-module callee (bounded by _seen) exactly for that shape.
+#
+# CHECKS_BY_ID's key set is a PROPER SUBSET of catalog.BY_ID's, not equal to it: B191 and
+# T1-T3 are real catalog ids (behavioral.py's detectors) that, per that module's own
+# docstring, are "never in CHECKS" by design — they run only under --behavioral, and a
+# fired one is folded into the score as a cap-only signal rather than appearing in CHECKS'
+# per-run findings list. --explain/--retest give those ids a distinct, accurate error
+# rather than a bare "unknown id" (cli.py). tests/test_c523_checks_by_id_completeness.py
+# pins the exact expected gap set — if a future check doesn't fit any of the four shapes
+# above, or the gap set grows for an undocumented reason, it fails loudly there.
+_ID_CARRYING_CALLS = frozenset({"_finding", "_custom", "_config_unreadable", "_host_finding"})
+
+
+def _literal_ids_in_tree(tree) -> "set[str]":
+    ids: "set[str]" = set()
+    for node in ast.walk(tree):
+        if (isinstance(node, ast.Call) and isinstance(node.func, ast.Name)
+                and node.func.id in _ID_CARRYING_CALLS and node.args):
+            first = node.args[0]
+            if isinstance(first, ast.Constant) and isinstance(first.value, str):
+                ids.add(first.value)
+    return ids
+
+
+def _finding_ids_for(fn, module, _seen=None) -> "set[str]":
+    """The finding id(s) *fn*'s own source shows it can produce. Never calls *fn*."""
+    _seen = _seen if _seen is not None else set()
+    if fn in _seen:
+        return set()
+    _seen.add(fn)
+    try:
+        source = textwrap.dedent(inspect.getsource(fn))
+        tree = ast.parse(source)
+    except (OSError, TypeError, SyntaxError):
+        return set()
+    ids = _literal_ids_in_tree(tree)
+    if ids:
+        return ids
+    # No direct _finding/_custom/_config_unreadable call in *fn*'s own body -- it may
+    # DELEGATE its whole verdict to a same-module helper. Recurse into any locally-defined
+    # function it calls (bounded by _seen so a cycle or a large fan-out can't loop/explode).
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Name):
+            callee = getattr(module, node.func.id, None)
+            if callable(callee) and inspect.getmodule(callee) is module:
+                found = _finding_ids_for(callee, module, _seen)
+                if found:
+                    return found
+    return set()
+
+
+def _build_checks_by_id() -> "dict[str, object]":
+    mapping: "dict[str, object]" = {}
+    for chk in CHECKS:
+        for fid in _finding_ids_for(chk, inspect.getmodule(chk)):
+            mapping[fid] = chk
+    return mapping
+
+
+CHECKS_BY_ID = _build_checks_by_id()
 
 
 def _check_error_finding(chk, exc: BaseException) -> Finding:
@@ -1323,6 +1673,10 @@ def _check_error_finding(chk, exc: BaseException) -> Finding:
         framework="Engine robustness",
         scored=False,
         evidence=[f"error type: {type(exc).__name__}"],
+        # B-399: redundant with the `ERR:` id prefix `_degraded_signal` already keys on,
+        # set anyway so the flag stays the single source of truth for "this UNKNOWN is
+        # engine-side" across every producer, not just this one.
+        engine_degraded=True,
     )
 
 
@@ -1353,20 +1707,43 @@ def _check_budget_finding(chk, kind: str, seconds: float | None = None) -> Findi
         framework="Engine robustness",
         scored=False,
         evidence=[f"scan budget: {kind}"],
+        # B-399: see the matching note in _check_error_finding above.
+        engine_degraded=True,
     )
 
 
 def run_all(ctx: Context, check_budget_s: float = DEFAULT_CHECK_BUDGET_S,
-            audit_budget_s: float = DEFAULT_AUDIT_BUDGET_S) -> list[Finding]:
+            audit_budget_s: float = DEFAULT_AUDIT_BUDGET_S,
+            on_check_done=None) -> list[Finding]:
+    # C-510 item 2: a plain audit gives no progress feedback while it can
+    # spend up to ~3 minutes on hostile content (a slow check, or several, chewing
+    # through their own check_budget_s) -- a silent terminal for that long is
+    # indistinguishable from a hang, and a user who kills what they believe is a stuck
+    # process is exactly the mid-write condition that produces corrupt monitor/baseline
+    # state elsewhere in this tool. `on_check_done`, when given, is called as
+    # `on_check_done(done_count, total_count)` after EVERY check completes -- normally,
+    # budget-exceeded, or crashed alike, so a caller narrating progress sees the true
+    # count including degraded checks, never a lower one that reads as "fewer checks
+    # than the catalog". Optional and default None (a no-op call is skipped entirely,
+    # not just silenced) so every existing caller -- every test in this suite calls
+    # `audit()`/`run_all()` directly -- is byte-for-byte unaffected; only the CLI's
+    # interactive default-audit path installs one (cli.py).
+    #
     # Per-check isolation (B-101) + wall-clock budget (C-159): a crashing OR hanging
-    # check degrades to one UNKNOWN finding instead of aborting the audit. Catch
-    # ScanBudgetExceeded before the generic Exception; catch Exception (not
-    # BaseException) so KeyboardInterrupt / SystemExit still propagate.
+    # check degrades to one UNKNOWN finding instead of aborting the audit. This is the
+    # DESIGNATED handler for a per-check deadline: ScanBudgetExceeded derives from
+    # BaseException (B-352), so it reaches here past every inner `except Exception` in
+    # the check's call graph rather than being swallowed into a lying PASS, and the
+    # generic `except Exception` below (deliberately not BaseException, so
+    # KeyboardInterrupt / SystemExit still propagate) can no longer shadow it.
     findings: list[Finding] = []
     deadline = audit_deadline(audit_budget_s)
-    for chk in CHECKS:
+    total = len(CHECKS)
+    for done, chk in enumerate(CHECKS, start=1):
         if audit_budget_exceeded(deadline):
             findings.append(_check_budget_finding(chk, "audit"))
+            if on_check_done is not None:
+                on_check_done(done, total)
             continue
         try:
             with check_deadline(check_budget_s):
@@ -1374,5 +1751,24 @@ def run_all(ctx: Context, check_budget_s: float = DEFAULT_CHECK_BUDGET_S,
         except ScanBudgetExceeded:
             findings.append(_check_budget_finding(chk, "check", check_budget_s))
         except Exception as exc:  # noqa: BLE001 — a bad check must not sink the audit
+            # B-767: the finding tells the user to "re-run with --debug for the
+            # traceback", but nothing ever wrote one -- the exception is caught right
+            # here and never reaches main()'s top-level `--debug: raise`. logger.debug
+            # is a no-op unless --debug set the logger to DEBUG (logsafe.get_logger),
+            # so this costs nothing on a normal run.
+            #
+            # traceback.format_exc() is rendered to a plain string and passed as a %s
+            # ARG, never via exc_info=True: logsafe._RedactingFilter redacts
+            # record.getMessage() (the formatted message, args included), but a
+            # Formatter renders exc_info SEPARATELY via formatException() and appends
+            # it after the filter has already run -- exc_info=True would ship an
+            # unredacted traceback straight past the one thing that exists to stop it.
+            logging.getLogger("clawseccheck").debug(
+                "check %s crashed:\n%s",
+                getattr(chk, "__name__", "unknown_check"),
+                traceback.format_exc(),
+            )
             findings.append(_check_error_finding(chk, exc))
+        if on_check_done is not None:
+            on_check_done(done, total)
     return findings

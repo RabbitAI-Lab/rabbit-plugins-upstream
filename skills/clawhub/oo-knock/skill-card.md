@@ -1,45 +1,60 @@
-## Description: <br>
-Operate Knock through an OOMOL-connected account for user lookup, user identification, permanent user deletion, and workflow triggering. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Knock lets an agent manage Knock users and trigger workflows through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Knock action schemas, manage Knock users, and trigger Knock workflows through the OOMOL oo CLI connector. It is intended for Knock-connected accounts where read actions can run directly and state-changing actions are reviewed before execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change Knock user records or trigger workflows for one or more recipients. <br>
-Mitigation: Confirm the exact action, recipients, and payload with the user before running write operations. <br>
-Risk: The delete_user action permanently deletes a Knock user and associated data. <br>
-Mitigation: Require explicit approval for the target user before running destructive deletion. <br>
-Risk: Authentication, connector, or billing failures may require setup steps before actions can run. <br>
-Mitigation: Use setup or connection steps only after the corresponding command failure occurs. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect Knock connector schemas, list or retrieve Knock users, identify or update users, delete users with explicit approval, and trigger workflows from an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub Knock skill page](https://clawhub.ai/oomol/skills/oo-knock) <br>
-- [Knock homepage](https://knock.app/) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Schema-first action execution through oo connector commands; write and destructive actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence metadata and release) <br>
+Risk: The fallback setup path can execute an unpinned remote installer script for the oo CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the official installer or install the oo CLI manually from official documentation before using the skill.
+
+Risk: The skill can manage Knock users and trigger workflows through OOMOL-connected tooling.
+
+Mitigation: Install only when that access is acceptable, and confirm exact payloads before write or delete actions.
+
+Risk: The delete_user action permanently deletes a Knock user and associated data.
+
+Mitigation: Require explicit approval of the target user before running destructive actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-knock)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [Knock Homepage](https://knock.app/)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.3 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

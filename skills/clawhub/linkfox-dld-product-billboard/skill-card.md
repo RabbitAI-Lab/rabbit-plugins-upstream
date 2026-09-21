@@ -1,45 +1,63 @@
-## Description: <br>
-Queries weekly and monthly 1688 product bestseller rankings to help users discover wholesale products, compare suppliers, and research sourcing opportunities. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries 1688 weekly and monthly bestseller billboard data to help sellers identify hot wholesale products, suppliers, and sourcing opportunities.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, sourcing teams, and commerce researchers use this skill to query 1688 bestseller data, filter product and supplier attributes, and present product-ranking results for wholesale sourcing decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends 1688 query parameters, API-authenticated requests, and session metadata headers to LinkFox services. <br>
-Mitigation: Use it only when users are comfortable sharing those request details with LinkFox, and avoid submitting sensitive sourcing plans or confidential product identifiers. <br>
-Risk: The artifact includes automatic feedback reporting behavior for quality, dissatisfaction, praise, or improvement opportunities. <br>
-Mitigation: Review or disable feedback reporting when explicit consent is required before secondary network calls. <br>
-Risk: The artifact includes onboarding behavior that may install a helper skill when authentication or credit issues occur. <br>
-Mitigation: Require user approval before downloading or installing helper skill content, and review the helper source before use. <br>
+## Use Case:
 
+External sellers, sourcing teams, and cross-border commerce operators use this skill to query 1688 bestseller rankings, compare wholesale suppliers, and research product opportunities.
 
-## Reference(s): <br>
-- [1688 Product Billboard API Reference](artifact/references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-dld-product-billboard) <br>
-- [LinkFox Skill Guide](https://skill.linkfox.com/linkfoxskills/guide.htm) <br>
-- [LinkFox Account and Credits](https://os.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Markdown, Files, Guidance] <br>
-**Output Format:** [Markdown tables and JSON summaries, with full API responses saved as JSON files when the script is used.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can include product links, shop links, image URLs, pagination guidance, and error guidance; API use consumes 9 credits per call.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill sends ranking queries and authentication credentials to LinkFox-operated services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated, revocable API key and review what query data is sent before calling the API.
+
+Risk: The skill includes account onboarding and billing flows that can involve phone/SMS registration and payment actions.
+
+Mitigation: Prefer completing account setup and billing directly through trusted LinkFox account pages, and require explicit user approval before starting any payment flow.
+
+Risk: The skill writes full API responses and cached results to local linkfox data/cache directories.
+
+Mitigation: Review, restrict, or clear generated files when product research data should not persist locally.
+
+Risk: The server security verdict is suspicious because account, billing, credential, storage, and automatic feedback behaviors are broader than the core ranking query use case.
+
+Mitigation: Install only after reviewing the security summary and disable or avoid optional flows that are not needed for the task.
+
+## Reference(s):
+
+- [1688 Product Billboard API Reference](artifact/references/api.md)
+- [Authentication and Billing Onboarding](artifact/references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-dld-product-billboard)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Markdown, JSON, Files, Shell commands, Guidance]
+
+**Output Format:** [Markdown summaries and tables with JSON result files for full API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes full responses under a local linkfox data directory and may summarize large responses in stdout.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

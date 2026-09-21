@@ -1,69 +1,19 @@
-# Actions JSON Schema — Skills-Summarize-Audit v8.2.4
+# Actions JSON Schema — Skills-Summarize-Audit v9.2.2
 
-> 对接 Skills Manager（xingkongliang 桌面应用）的桥梁格式。
-> 步骤⑦执行时输出，Skills Manager 读取并执行操作。
+本格式只交接建议，不由 Audit 执行。代码实现：scripts/recommendation_contract.py。
 
-## Schema
+每项必需字段：
+- target / priority（P0/P1/P2）/ problem / evidence / judgment / suggested_action。
+- steps：按顺序列具体步骤；来源未定位先取证，不能提前填写入命令。
+- execution_agent：所需能力，不臆造宿主 Agent 名称或模型。
+- verification：同目标复查与适用测试。
+- rollback：实施前快照、失败恢复和复验；没有实际变更时明确未执行。
+- status：默认 suggested，实际实施与验收完成后才由执行 Agent 更新。
+- fact_status：observed/inferred/estimated/unavailable。
+- install_scope：project/global/plugin/defer；target_path；scope_reason。
+- market：source_url、license、stars、last_commit、last_release、maintenance_status、security_statement、price、price_verified、checked_at、confidence、scoring_basis。
+- exposure：executes_local_commands、requires_network、requires_token、arbitrary_shell、offline_review、upstream_overwrite；各含 status/value。
 
-```json
-{
-  "source": "skills-summarize-audit v8.2.0",
-  "timestamp": "2026-06-28T23:59:00Z",
-  "project": "ZCodeProject",
-  "actions": [
-    {
-      "skill": "legacy-helper",
-      "action": "archive",
-      "reason": "T3技能，与画像零匹配",
-      "confidence": 9,
-      "priority": "high",
-      "install_scope": "project",
-      "target_path": ".agents/skills/skill-spector",
-      "scope_reason": "仅服务当前仓库的审计 CI",
-      "compatibility": {"agent": "codex", "verified": true},
-      "evidence_urls": ["https://github.com/example/skill-spector"],
-      "confirmation_required": true
-    },
-    {
-      "skill": "skill-spector",
-      "action": "install",
-      "source": "npm",
-      "package": "@nvidia/skillspector",
-      "reason": "安全扫描缺失，26.1%技能含漏洞",
-      "confidence": 8,
-      "priority": "high"
-    },
-    {
-      "skill": "caveman",
-      "action": "install",
-      "source": "github",
-      "repo": "gtbwpkwjnb-alt/caveman-skill",
-      "reason": "输出压缩节省65-75% token",
-      "confidence": 7,
-      "priority": "medium"
-    }
-  ]
-}
-```
-
-## 字段说明
-
-| 字段 | 类型 | 说明 |
-|:---|:---|:---|
-| `source` | string | 生成来源标识 |
-| `timestamp` | ISO8601 | 审计时间 |
-| `project` | string | 项目名称 |
-| `actions[].skill` | string | 技能名称 |
-| `actions[].action` | enum | `archive` / `install` / `update` / `fix_description` |
-| `actions[].reason` | string | 操作原因 |
-| `actions[].confidence` | int 0-10 | 信心指数 |
-| `actions[].priority` | enum | `high` / `medium` / `low` |
-| `actions[].source` | string | (install时) 安装来源: `npm` / `github` / `pip` / `url` |
-| `actions[].package` | string | (install时) 包名 |
-| `actions[].repo` | string | (install时) GitHub 仓库 |
-| `actions[].install_scope` | enum | `project` / `global` / `plugin` / `defer` |
-| `actions[].target_path` | string | project/global 安装目标；plugin/defer 留空 |
-| `actions[].scope_reason` | string | 作用域决策证据 |
-| `actions[].compatibility` | object | 目标 Agent 与已验证状态 |
-| `actions[].evidence_urls` | string[] | 来源、许可证、安装或对比证据 |
-| `actions[].confirmation_required` | boolean | 安装/更新必须为 true |
+evidence_urls 是外部证据 URL 的概念集合，可在 market.source_url 及 evidence 中记录。
+confirmation_required 由执行 Agent 按已有用户授权判断；本报告不以建议为外部写入许可。
+未知字段为 null/unavailable。禁止复制虚构包名、下载量、漏洞比例或 ROI。

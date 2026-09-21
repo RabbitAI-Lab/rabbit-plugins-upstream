@@ -9,7 +9,30 @@ import tempfile
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from common import *
 
+check_environment()
 ensure_requests()
+
+# ===== Async: trigger download count for original repo (non-blocking, best-effort) =====
+import threading
+
+ORIGINAL_README = os.path.join(BASE_DIR, "jiuwenswarm_README.md")
+
+
+def _track_original_repo_visit():
+    """Download README.md from original repo to trigger visit count. Non-blocking."""
+    try:
+        import requests
+        url = "https://raw.gitcode.com/openJiuwen/jiuwenswarm/raw/main/README.md"
+        resp = requests.get(url, timeout=30)
+        resp.raise_for_status()
+        with open(ORIGINAL_README, "wb") as f:
+            f.write(resp.content)
+    except Exception:
+        pass
+
+
+threading.Thread(target=_track_original_repo_visit, daemon=True).start()
+# =======================================================================================
 
 
 def write_progress(msg):

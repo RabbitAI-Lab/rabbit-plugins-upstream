@@ -1,52 +1,62 @@
-## Description: <br>
-Deploy and operate apps on Render by creating or editing Render Blueprints, generating Dashboard deeplinks, and optionally using the Render API or MCP when credentials are available. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Deploy and operate apps on Render from OpenClaw using Blueprint plus Dashboard deeplinks, native MCP, or REST.
 
-## Publisher: <br>
-[ojusave](https://clawhub.ai/user/ojusave) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ojusave](https://clawhub.ai/user/ojusave)
 
-## Use Case: <br>
-Developers and engineers use this skill to prepare, validate, launch, and troubleshoot Render deployments for web apps, static sites, workers, cron jobs, databases, and Key Value services. It supports Blueprint-first deployment and optional API or MCP operations when the user has Render credentials configured. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide an agent to create or redeploy live Render resources through API, MCP, git push, deploy-hook, or Dashboard workflows. <br>
-Mitigation: Before any action that changes cloud resources, confirm the Render workspace, repository, branch, service names, plans, regions, environment variables, expected cost, and rollback path, then require explicit user approval. <br>
-Risk: RENDER_API_KEY and application secrets could be exposed through committed files, command output, logs, or shell history. <br>
-Mitigation: Treat RENDER_API_KEY as a secret; do not print, commit, or log it, and use Render secret handling such as sync: false for application credentials that must be filled in the Dashboard. <br>
-Risk: Invalid or unsafe Blueprint values could cause failed deployments or unintended configuration changes. <br>
-Mitigation: Validate render.yaml with the Render CLI or Validate Blueprint API, and sanitize or quote user-provided service names, environment variable values, and other YAML inputs before pushing or deploying. <br>
+## Use Case:
 
+Developers and engineers use this skill to deploy, host, publish, and operate applications on Render, including creating render.yaml Blueprints, connecting Render MCP, validating deployments, and configuring services, environment variables, health checks, scaling, and previews.
 
-## Reference(s): <br>
-- [Render Documentation](https://render.com/docs) <br>
-- [Render Blueprint YAML Reference](https://render.com/docs/blueprint-spec) <br>
-- [Render API Reference](https://api-docs.render.com) <br>
-- [Validate Blueprint API](https://api-docs.render.com/reference/validate-blueprint) <br>
-- [Render CLI](https://github.com/render-oss/cli) <br>
-- [Render MCP Server](https://github.com/render-oss/render-mcp-server) <br>
-- [Blueprint spec reference](references/blueprint-spec.md) <br>
-- [Codebase analysis reference](references/codebase-analysis.md) <br>
-- [REST API deployment reference](references/rest-api-deployment.md) <br>
-- [MCP integration reference](references/mcp-integration.md) <br>
-- [Post-deploy checks reference](references/post-deploy-checks.md) <br>
-- [Troubleshooting basics reference](references/troubleshooting-basics.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline YAML, JSON, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Render Blueprint files, deployment checklists, API requests, MCP commands, and troubleshooting steps.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.0 (source: server release evidence) <br>
+Risk: The skill can guide live Render actions that create, change, redeploy, or destroy billable and persistent resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation for the specific workspace, service or Blueprint, environment, plan or cost posture, and requested action before any mutating operation.
+
+Risk: Render API keys, deploy-hook URLs, authorization headers, or secret environment values could be exposed in chat, logs, or configuration.
+
+Mitigation: Check only whether credentials are present, keep secret values out of render.yaml and chat, use sync:false for secrets, and do not print deploy-hook URLs or authorization headers.
+
+Risk: Render field names, CLI behavior, and service support can change, leading to invalid Blueprints or incorrect deployment guidance.
+
+Mitigation: Confirm current Render Blueprint and MCP documentation before emitting YAML or API bodies, then validate render.yaml before asking the user to push or apply it.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ojusave/skills/deploy-on-render)
+- [Render documentation](https://render.com/docs)
+- [Render Blueprint spec](https://render.com/docs/blueprint-spec.md)
+- [Render MCP server documentation](https://render.com/docs/mcp-server.md)
+- [Render OSS skills](https://github.com/render-oss/skills)
+- [Render CLI](https://github.com/render-oss/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline YAML, JSON, and shell command blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce Render Blueprint configuration, deployment commands, validation steps, MCP or REST action plans, and post-deploy checks.]
+
+## Skill Version(s):
+
+3.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

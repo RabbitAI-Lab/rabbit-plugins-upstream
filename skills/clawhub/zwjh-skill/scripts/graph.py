@@ -61,15 +61,17 @@ def mention_link(text: str, limit: int = 10) -> list[dict]:
 
 
 def _clean_entity(name: str) -> str:
-    """清理实体名：去标点、去首尾连接动词（对接/负责…）、去多余『的』。"""
+    """清理实体名：去标点、去首尾连接动词、去开头泛化修饰、去结尾无意义后缀。"""
     name = name.strip().strip("，。；;、, ：:").strip()
-    # 去开头泛化修饰（客户/我的/这个…）
-    for pre in ["客户", "用户", "我的", "我们", "你们", "他们", "这个", "那个", "该", "此"]:
+    # 去开头泛化修饰
+    for pre in ["客户", "用户", "我的", "我们", "你们", "他们", "这个", "那个", "该", "此",
+               "现在", "目前", "之前", "原来", "其实", "实际上", "确实", "是", "在"]:
         if name.startswith(pre) and len(name) > len(pre):
             name = name[len(pre):]
-    # 去结尾连接动词
+    # 去结尾连接动词和无意义后缀
     for suf in ["对接", "负责", "处理", "管理", "跟进", "联系", "支持", "推进",
-                "协调", "参与", "创建", "开发", "维护", "运营"]:
+                "协调", "参与", "创建", "开发", "维护", "运营", "其实", "实际上",
+                "现在", "目前", "之前"]:
         if name.endswith(suf) and len(name) > len(suf):
             name = name[: -len(suf)]
     if name.endswith("的"):
@@ -171,6 +173,43 @@ def render_mermaid() -> str:
         if s and t:
             lines.append(f'  {s} -->|{l["relation"]}| {t}')
     return "\n".join(lines)
+
+
+def find_shortest_path(from_name: str, to_name: str) -> dict | None:
+    """BFS 查找两实体间的最短路径。"""
+    from . import store
+    f = store.find_entity(None, from_name)
+    t = store.find_entity(None, to_name)
+    if not f or not t:
+        return None
+    if f["id"] == t["id"]:
+        return {"path": [f["name"]], "text": f["name"], "hops": 0}
+    from collections import deque
+    queue = deque([(f["id"], [f["id"]])])
+    visited = {f["id"]}
+    while queue:
+        cur, path = queue.popleft()
+        rels = store.relations_of(cur, direction="both")
+        for r in rels:
+            nid = r["from_id"] if r["to_id"] == cur else r["to_id"]
+            if nid in visited:
+                continue
+            visited.add(nid)
+            new_path = path + [nid]
+            if nid == t["id"]:
+                # 构建可读路径
+                names = []
+                conn = store.get_conn()
+                for pid in new_path:
+                    row = conn.execute("SELECT name FROM entities WHERE id=?", (pid,)).fetchone()
+                    names.append(row["name"] if row else "?")
+                return {
+                    "path": names,
+                    "hops": len(names) - 1,
+                    "text": " → ".join(names),
+                }
+            queue.append((nid, new_path))
+    return None
 
 
 if __name__ == "__main__":

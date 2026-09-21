@@ -1,43 +1,60 @@
-## Description: <br>
-One-click deployment tool for Hermes on Huawei Cloud Flexus L instances, with ModelArts large model configuration and Feishu or WeCom channel configuration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+One-click deployment tool for Hermes on Huawei Cloud Flexus L instances that supports deployment, ModelArts model configuration, robot channel configuration, and gateway management.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and cloud operators use this skill to deploy Hermes on Huawei Cloud Flexus L instances, configure ModelArts model access, manage bot channels, restart the Hermes gateway, and check UniAgent or COC execution status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Huawei Cloud regions supported by the skill: cn-north-4, cn-east-3, cn-south-1, and cn-southwest-2. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses powerful Huawei Cloud credentials and can create cloud resources or execute COC scripts on target instances. <br>
-Mitigation: Review before installing, use dedicated least-privilege temporary credentials, and inspect COC script behavior before allowing non-interactive execution on production instances. <br>
-Risk: Deployment can incur cost because the artifact creates Flexus L resources and includes auto-pay and auto-renew behavior. <br>
-Mitigation: Use a test account or budget controls first, confirm billing settings before deployment, and closely monitor or disable auto-pay and auto-renew resources after use. <br>
-Risk: Credentials and bot secrets are sensitive, and examples include command-line parameters for AK/SK, ModelArts API keys, and channel secrets. <br>
-Mitigation: Prefer environment-based secret handling where possible, avoid exposing secrets in chat or shell history, and rotate credentials after testing. <br>
+## Use Case:
 
+Developers and cloud operators use this skill to deploy the Hermes AI Agent platform on Huawei Cloud Flexus L instances, configure ModelArts models, connect Feishu or WeCom channels, manage the gateway, and query deployment status.
 
-## Reference(s): <br>
-- [IAM policy reference](references/iam-policies.md) <br>
-- [Verification method](references/verification-method.md) <br>
+### Deployment Geography for Use:
 
+Global, subject to Huawei Cloud regional availability and the skill's supported deployment regions.
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands and JSON-shaped command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Huawei Cloud credentials, Python 3, uv, and supported Huawei Cloud regions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and pyproject.toml) <br>
+Risk: The skill can create paid Huawei Cloud resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review billing settings before deployment and use a test account or budget controls when validating the skill.
+
+Risk: The skill requires Huawei Cloud credentials that can create resources and run remote scripts.
+
+Mitigation: Use temporary least-privilege credentials and avoid passing secrets on the command line.
+
+Risk: Bot and gateway access may be broadly open after channel setup.
+
+Mitigation: Manually restrict Feishu, WeCom, and gateway user access before exposing the bot.
+
+## Reference(s):
+
+- [IAM Permissions Policy Reference](artifact/references/iam-policies.md)
+- [Skill Verification Method](artifact/references/verification-method.md)
+- [Huawei Cloud PyPI Mirror](https://repo.huaweicloud.com/repository/pypi/simple)
+- [ModelArts MaaS API Endpoint](https://api.modelarts-maas.com/v2)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command results.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands may create cloud resources, configure remote services, and return instance IDs, execution IDs, status values, and error messages.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence; artifact package metadata is 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

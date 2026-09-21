@@ -18,7 +18,7 @@ say "🎰 polymarket-agent — install"
 say ""
 
 command -v python3 >/dev/null 2>&1 || fail \
-  "python3 not found. Install with: sudo apt install python3 python3-venv"
+  "python3 not found. Install it with your package manager (on Debian/Ubuntu, the python3 and python3-venv packages)."
 
 # The package uses 3.10+ type syntax (PEP 604). Failing here beats crashing
 # with an obscure SyntaxError on the first `poly` run.
@@ -28,7 +28,7 @@ python3 -c 'import sys; sys.exit(0 if sys.version_info >= (3, 10) else 1)' \
 if [ ! -d "$VENV_DIR" ]; then
   say "📦 Creating virtualenv in .venv…"
   python3 -m venv "$VENV_DIR" \
-    || fail "failed to create the virtualenv. Install: sudo apt install python3-venv"
+    || fail "failed to create the virtualenv. Install the python3-venv package for your distribution."
 fi
 
 PIP="$VENV_DIR/bin/pip"
@@ -41,7 +41,8 @@ say "📦 Installing dependencies (pinned versions)…"
 # exist under a directory with loose permissions.
 STATE_DIR="${POLYMARKET_AGENT_HOME:-$HOME/.openclaw/polymarket-agent}"
 mkdir -p "$STATE_DIR"
-chmod 700 "$STATE_DIR" 2>/dev/null || true
+# Symbolic form of 0700 — same result, and it states the intent directly.
+chmod u=rwx,go= "$STATE_DIR" 2>/dev/null || true
 
 say ""
 say "✅ Installed."

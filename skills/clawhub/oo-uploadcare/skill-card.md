@@ -1,43 +1,56 @@
-## Description: <br>
-Uploadcare (uploadcare.com). Use this skill for ANY Uploadcare request - reading, creating, updating, and deleting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uploadcare helps agents inspect and manage Uploadcare projects, files, and groups through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and external users use this skill to operate Uploadcare through an OOMOL-connected account for file, group, and project reads, plus approved file storage and deletion actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change Uploadcare state, including permanently storing files and deleting files by UUID. <br>
-Mitigation: Confirm the exact target, payload, and expected effect with the user before write or destructive actions. <br>
-Risk: The connected Uploadcare account may expose project, file, and group data through OOMOL's oo CLI. <br>
-Mitigation: Connect only an Uploadcare account whose access level is appropriate for agent operation. <br>
+## Use Case:
 
+Developers and external users use this skill when an agent needs to inspect Uploadcare project, file, or group metadata, or perform file lifecycle actions through an OOMOL-connected Uploadcare account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-uploadcare) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Uploadcare homepage](https://uploadcare.com) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions return JSON data with execution metadata when run through the oo CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Fallback setup includes remote installer commands that pipe downloaded scripts directly to a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI manually from a trusted source, verify it where possible, and do not let an agent run curl|bash or irm|iex installer commands automatically.
+
+Risk: The skill can store files permanently or delete Uploadcare files when write or destructive actions are requested.
+
+Mitigation: Require explicit user confirmation of the exact action, target, and payload before any store_file or delete_file command runs.
+
+## Reference(s):
+
+- [ClawHub Uploadcare Skill](https://clawhub.ai/oomol/skills/oo-uploadcare)
+- [Uploadcare Homepage](https://uploadcare.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector command responses are expected as JSON containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,59 @@
-## Description: <br>
-TextRazor (textrazor.com). Use this skill for ANY TextRazor request - searching and reading data. Whenever a task involves TextRazor, use this skill instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TextRazor provides actions for account and quota lookup, text analysis, classification, named-entity extraction, and management of custom classifiers and entity dictionaries through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate TextRazor through an OOMOL-connected account for account lookup, text analysis, classification, entity extraction, and managed TextRazor custom resources. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access through an OOMOL-connected TextRazor account. <br>
-Mitigation: Install only when that account access is acceptable, and keep credentials managed through the connected account flow. <br>
-Risk: Some TextRazor classifier and dictionary manager actions can modify, overwrite, or delete resources. <br>
-Mitigation: Require explicit confirmation of the exact operation, payload, and target before running state-changing or destructive actions. <br>
-Risk: First-time setup examples include installing the oo CLI from a remote installer. <br>
-Mitigation: Prefer a verified package or reviewed installer path before running installation commands. <br>
+## Use Case:
 
+Developers and agent users use this skill to operate TextRazor from an agent workflow through the oo CLI. It supports natural-language processing tasks such as content analysis, classification, entity extraction, and managed updates to TextRazor custom classifiers or dictionaries.
 
-## Reference(s): <br>
-- [ClawHub TextRazor skill page](https://clawhub.ai/oomol/oo-textrazor) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [TextRazor homepage](https://www.textrazor.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON command payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands call the OOMOL TextRazor connector and can return JSON data from TextRazor actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and release evidence) <br>
+Risk: Fallback setup may run remote installer scripts directly in a shell without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation path before installing, prefer official signed packages or verified downloads, and require explicit approval before setup commands.
+
+Risk: Some TextRazor actions can remove or overwrite custom classifiers or entity dictionaries.
+
+Mitigation: Confirm the target, payload, and intended effect with the user before running any action tagged as destructive.
+
+Risk: Authentication, connection changes, and billing-related setup can affect the user's OOMOL or TextRazor account state.
+
+Mitigation: Do not run login, connection, recharge, or setup commands proactively; run them only after a matching failure and with explicit user approval.
+
+## Reference(s):
+
+- [TextRazor homepage](https://www.textrazor.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-textrazor)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return TextRazor connector JSON responses that include data and execution metadata.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

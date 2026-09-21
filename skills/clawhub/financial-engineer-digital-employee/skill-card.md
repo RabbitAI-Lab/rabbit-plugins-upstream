@@ -1,42 +1,57 @@
-## Description: <br>
-Provides an end-to-end financial modeling reference workflow covering data profiling, univariate analysis, feature engineering, LR scorecards, XGBoost and DNN modeling, tuning, explainability, model comparison, segmentation, and DeepModel integration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a financial modeling reference workflow covering data profiling, univariate and feature analysis, LR scorecards, XGBoost and DNN modeling, tuning, interpretation, model comparison, segmentation, and DeepModel integration.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Financial analysts, model developers, and risk professionals use this skill to structure end-to-end credit risk and machine learning modeling workflows. It helps agents draft analysis steps, shell commands, configuration patterns, reports, model artifacts, and comparison guidance that require qualified human review before business use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill states that it does not use persistent storage while its workflows may write reports, logs, models, and other artifacts to disk. <br>
-Mitigation: Choose explicit output directories, set compute and round limits, review generated files for sensitive or regulated data, and delete reports, models, and logs when they are no longer needed. <br>
-Risk: Generated financial modeling outputs may be mistaken for business, investment, legal, insurance, or compliance advice. <br>
-Mitigation: Treat all outputs as draft analytical artifacts and require review by qualified professionals before business, regulatory, or customer-facing use. <br>
-Risk: The workflows can operate on sensitive or regulated financial datasets. <br>
-Mitigation: Run the skill only on datasets the user is authorized to use and follow applicable internal data handling and retention policies. <br>
+## Use Case:
 
+Developers, analysts, and financial modeling teams use this skill as an advisory reference for structuring machine learning workflows from dataset review through model comparison, interpretation, and review-ready reporting.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/financial-engineer-digital-employee) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON examples, and generated analysis artifact descriptions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct agents to create reports, result.json manifests, serialized models, logs, and output directories; all outputs should be treated as draft analytical artifacts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Financial modeling datasets and generated reports or model artifacts may contain sensitive financial data or PII.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only authorized, minimized datasets; redact or generalize sensitive fields before analysis; review artifacts before saving or sharing.
+
+Risk: Advisory modeling outputs could be mistaken for financial, legal, insurance, or automated decision advice.
+
+Mitigation: Require qualified human review before applying outputs to real-world decisions or external communications.
+
+Risk: Illustrative commands and code snippets may be adapted and run in user environments.
+
+Mitigation: Run adapted examples only in authorized environments and inspect commands, inputs, outputs, and model artifacts before use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/financial-engineer-digital-employee)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with illustrative shell commands, code and configuration snippets, report outlines, and JSON result examples.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory-only outputs require human review; generated reports, model artifacts, feature lists, and charts may contain sensitive financial or personal data.]
+
+## Skill Version(s):
+
+2.0.4 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

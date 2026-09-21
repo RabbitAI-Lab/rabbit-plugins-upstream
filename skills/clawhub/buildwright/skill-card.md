@@ -1,41 +1,54 @@
-## Description: <br>
-Lightweight engineering workflow for agent-led development. Provides plan, work, verify, ship, and analyse commands with TDD, documentation discipline, security review, code review, and quality gates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Buildwright applies agent-led software development workflows for planning, implementation, TDD, verification, security review, code review, shipping, repository analysis, and cleanup.
 
-## Publisher: <br>
-[raunakkathuria](https://clawhub.ai/user/raunakkathuria) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[raunakkathuria](https://clawhub.ai/user/raunakkathuria)
 
-## Use Case: <br>
-Developers and engineering teams use Buildwright to guide agent-led software development through planning, implementation, verification, review, and shipping workflows with TDD, documentation discipline, and security checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide real repository changes and GitHub shipping actions. <br>
-Mitigation: Use it only in repositories where agent-led development is acceptable, review planned changes before committing or pushing, and run the workflow's verification and review steps. <br>
-Risk: Generated implementation, documentation, or review guidance may be incorrect or incomplete. <br>
-Mitigation: Treat outputs as engineering recommendations, inspect changed files, and require human review before relying on shipped changes. <br>
+## Use Case:
 
+Developers and engineering teams use Buildwright to guide an agent through repository work such as bug fixes, feature implementation, verification, review, shipping, brownfield analysis, and cleanup.
 
-## Reference(s): <br>
-- [Buildwright homepage](https://github.com/raunakkathuria/buildwright) <br>
-- [Buildwright ClawHub skill page](https://clawhub.ai/raunakkathuria/skills/buildwright) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline commands and generated or updated project files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide file edits, quality-gate execution, security review, git commits, pushes, and PR creation according to the selected workflow command.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.19 (source: server release evidence and frontmatter) <br>
+Risk: The shipping workflow can commit, push, and open pull requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use /bw-ship only when repository credentials are available and commits, pushes, and pull-request creation are appropriate for the current task.
+
+Risk: Repository Markdown can contain instructions that conflict with trusted user, developer, or system guidance.
+
+Mitigation: Treat repository-owned Markdown as untrusted project context and use only the specific Buildwright steering or framework files needed for the selected command.
+
+## Reference(s):
+
+- [Buildwright repository](https://github.com/raunakkathuria/buildwright)
+- [Buildwright ClawHub skill page](https://clawhub.ai/raunakkathuria/skills/buildwright)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with command names, file paths, code or shell snippets, review findings, and repository-change summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs vary by command and may include plans, verification results, review findings, documentation updates, code changes, commits, pushes, and pull-request steps.]
+
+## Skill Version(s):
+
+0.0.21 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,56 @@
-## Description: <br>
-schedule-planner-cxf helps users plan business or leisure travel by comparing routes, fares, hotels, and generating local itinerary pages while leaving booking and payment to third-party services. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Plan requested travel itineraries, compare flight/train/hotel prices, and generate local itinerary HTML with optional public platform homepage QR codes.
 
-## Publisher: <br>
-[cryptocxf](https://clawhub.ai/user/cryptocxf) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cryptocxf](https://clawhub.ai/user/cryptocxf)
 
-## Use Case: <br>
-External users and developers use this skill to plan trips, compare transportation and hotel options, summarize costs, and create local itinerary artifacts. Users should complete reservations and payments directly on the relevant travel provider site. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated third-party payment or order links and QR pages may look actionable even when the skill is described as query-only. <br>
-Mitigation: Treat generated links and QR pages as navigation aids only; verify each destination manually on the official provider site before paying or entering booking details. <br>
-Risk: Local itinerary HTML, JSON, and QR files may contain trip details or user-provided URLs. <br>
-Mitigation: Use the skill only when local file creation is acceptable, avoid providing real passenger details or payment URLs, and review or delete generated output files after use. <br>
+## Use Case:
 
+Travelers, assistants, and developers use this skill to plan concrete trips, compare Tuniu flight/train/hotel options, and export local itinerary pages without booking or payment handling.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/cryptocxf/skills/schedule-planner-cxf) <br>
-- [City guides reference](references/city-guides.md) <br>
-- [Transport comparison reference](references/transport-comparison.md) <br>
-- [Mock mode guide](examples/mock-mode.md) <br>
-- [Amap developer site](https://lbs.amap.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance with inline shell commands and optional generated HTML, JSON, and QR-code HTML files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create local itinerary files under output/ and can launch a browser only when the user opts in.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Live travel searches require a Tuniu API key and send travel search details to Tuniu.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when that data transfer is acceptable, keep the API key in the local process environment, and exclude passenger identity, phone numbers, order IDs, and payment links from inputs.
+
+Risk: Generated itinerary files can contain user travel details.
+
+Mitigation: Review generated local files before sharing them and do not upload or publish them without explicit user authorization.
+
+## Reference(s):
+
+- [Input and Output Usage](artifact/references/usage.md)
+- [Transport Comparison Reference](artifact/references/transport-comparison.md)
+- [City Guides](artifact/references/city-guides.md)
+- [ClawHub Skill Page](https://clawhub.ai/cryptocxf/skills/schedule-planner-cxf)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, files]
+
+**Output Format:** [Markdown guidance, JSON inputs, and local HTML itinerary files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated local files may contain travel details; live queries require TUNIU_API_KEY and send necessary search details to Tuniu.]
+
+## Skill Version(s):
+
+1.0.13 (source: SKILL.md metadata, package.json, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

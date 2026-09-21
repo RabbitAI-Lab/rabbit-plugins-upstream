@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/sendmux-mailbox-agent",
   "slug": "sendmux-mailbox-agent",
   "ownerHandle": null,
-  "version": "1.0.3",
-  "updatedAt": 1783569511261,
-  "contentHash": "956abe6cbcad32ba2121e76eaa889b2f5b1ed36659e18dcb9a5190baf43f0e54",
-  "fetchedAt": "2026-07-26T18:17:41.730Z"
+  "version": "1.0.8",
+  "updatedAt": 1789710819514,
+  "contentHash": "b9e2fc4aeb43e407219262f48b96a77c40c7745fd822b0472df802d50ab7fe91",
+  "fetchedAt": "2026-09-21T15:40:51.213Z"
 }

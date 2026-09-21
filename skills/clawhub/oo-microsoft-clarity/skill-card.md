@@ -1,44 +1,58 @@
-## Description: <br>
-Provides Microsoft Clarity analytics access through the OOMOL oo CLI connector for reading and exporting live insights. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to work with Microsoft Clarity data through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, analysts, and site operators use this skill to export recent Microsoft Clarity live insights from an OOMOL-connected account without handling raw API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: First-time setup may ask the user to install the oo CLI through shell or PowerShell installer commands. <br>
-Mitigation: Inspect or verify the installer before running it, and install only if the user trusts OOMOL. <br>
-Risk: The skill requires a connected Microsoft Clarity account through OOMOL. <br>
-Mitigation: Use an OOMOL account and Microsoft Clarity connection that the user trusts, and avoid exposing raw credentials in prompts or local files. <br>
-Risk: Future connector actions could include write or destructive operations even though the current action is read-only. <br>
-Mitigation: Confirm the exact payload and effect with the user before executing any action tagged write or destructive. <br>
+## Use Case:
 
+Developers and operators use this skill to inspect the live Microsoft Clarity connector schema and run supported Clarity actions from an OOMOL-connected account. It is intended for reading, creating, and updating Microsoft Clarity data through governed CLI commands.
 
-## Reference(s): <br>
-- [Microsoft Clarity homepage](https://clarity.microsoft.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-microsoft-clarity) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution and returns connector responses as JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+Risk: The setup path may run a remote installer when the oo CLI is missing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the oo CLI through a verified method and avoid letting an agent execute the remote installer automatically.
+
+Risk: OOMOL mediates access to the connected Microsoft Clarity account.
+
+Mitigation: Use this skill only when that access pattern is acceptable for the workspace and account involved.
+
+Risk: Write-tagged actions can change Microsoft Clarity state or export data.
+
+Mitigation: Review the live schema, exact payload, target account, and expected effect before any write-tagged action runs.
+
+## Reference(s):
+
+- [Microsoft Clarity](https://clarity.microsoft.com)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown instructions with bash commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector action responses are JSON objects containing data and meta.executionId.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

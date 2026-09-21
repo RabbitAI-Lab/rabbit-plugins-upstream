@@ -1,43 +1,60 @@
-## Description: <br>
-Exa helps agents search the web, generate citation-backed answers, find similar pages, and retrieve page contents through OOMOL-connected Exa actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Exa lets agents read, create, and update Exa data through the OOMOL-connected Exa connector instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to perform Exa web search, citation-backed answering, similar-page discovery, and content retrieval without handling raw Exa API tokens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive service credentials through an OOMOL-connected Exa account. <br>
-Mitigation: Use the managed OOMOL connection flow, avoid exposing raw API tokens, and reconnect only when an authentication or connection error requires it. <br>
-Risk: The skill runs shell commands that access external Exa and OOMOL services. <br>
-Mitigation: Inspect the live connector schema and payload before execution, and review the skill files before use when high assurance is required. <br>
+## Use Case:
 
+Developers and agent users use this skill to search the web with Exa, retrieve page contents, find similar pages, and generate citation-backed answers through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-exa) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [Exa homepage](https://exa.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON when commands are run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and skill frontmatter) <br>
+Risk: The first-time setup path includes remote installer commands that execute shell content directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer source and prefer a verified package manager or checksum/signature-validated installer before installing the oo CLI.
+
+Risk: Exa actions are routed through OOMOL's connector service using a connected account.
+
+Mitigation: Connect an Exa account only when that routing model is acceptable for the intended workspace and data.
+
+Risk: Some actions are labeled write or destructive and may change account state.
+
+Mitigation: Confirm the exact action payload and intended effect with the user before running state-changing actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-exa)
+- [Exa homepage](https://exa.ai)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The connector can return Exa search results, retrieved page contents, similar-page results, or citation-backed answers.]
+
+## Skill Version(s):
+
+1.0.4 (source: evidence.release.version and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

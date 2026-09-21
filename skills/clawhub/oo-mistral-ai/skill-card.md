@@ -1,41 +1,56 @@
-## Description: <br>
-Mistral AI (mistral.ai). Use this skill for ANY Mistral AI request - reading, creating, updating, and deleting data through the OOMOL-connected Mistral AI connector instead of calling the API directly. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mistral AI lets agents operate Mistral AI through an OOMOL-connected account using the oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and agents use this skill to operate Mistral AI through an OOMOL-connected account, including chat, agents, embeddings, moderation, OCR, audio transcription, files, libraries, conversations, batch jobs, and fine-tuning job workflows. The skill is intended for Mistral AI account operations that need schema inspection before execution and explicit review for write or destructive actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate a Mistral AI account through OOMOL and includes write, upload, sharing, and destructive actions. <br>
-Mitigation: Review the action, target resource, and JSON payload before approving any write, upload, sharing, or delete request. <br>
-Risk: First-time setup includes pipe-to-shell installer commands for the oo CLI. <br>
-Mitigation: Install the oo CLI manually from trusted documentation with verification instead of letting an agent run installer commands. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect Mistral AI action schemas and run reads, writes, and administrative operations through an OOMOL-connected Mistral AI account.
 
-## Reference(s): <br>
-- [Mistral AI homepage](https://mistral.ai) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the oo CLI to inspect live connector schemas and run Mistral AI actions with JSON inputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: The skill exposes broad write and destructive actions through the connected Mistral AI account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact Mistral resource, action, and payload with the user before running write or delete operations.
+
+Risk: Fallback setup includes remote installer commands for the oo CLI.
+
+Mitigation: Do not let an agent run the remote installer automatically; install through trusted OOMOL documentation or verify the installer before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-mistral-ai)
+- [Mistral AI homepage](https://mistral.ai)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses OOMOL-connected credentials; write and destructive actions require explicit user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

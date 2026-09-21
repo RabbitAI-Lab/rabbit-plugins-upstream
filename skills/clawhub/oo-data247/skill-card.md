@@ -1,44 +1,55 @@
-## Description: <br>
-Data247 lets agents perform Data247 lookup and account actions through an OOMOL-connected oo CLI workflow without handling raw API tokens. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Data247 helps agents operate the Data247 connector through an OOMOL-connected account for phone verification, Do-Not-Call checks, carrier lookup, balance checks, and gender append actions.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to run Data247 phone intelligence, Do-Not-Call, account balance, and first-name gender inference actions through their connected OOMOL account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Phone numbers and names used with this skill may be sensitive data sent through the OOMOL oo connector for Data247 lookups. <br>
-Mitigation: Confirm the user intends to use OOMOL as an intermediary, treat lookup inputs as sensitive, and run actions only through the connected account. <br>
-Risk: First-time setup can involve installing the oo CLI or opening account connection and billing flows. <br>
-Mitigation: Review the oo CLI installer and OOMOL connection flow before first use, and run setup steps only after a matching command failure. <br>
-Risk: Using an outdated or assumed action payload can produce incorrect requests. <br>
-Mitigation: Inspect the live connector schema for the selected Data247 action before constructing the JSON payload. <br>
+## Use Case:
 
+External users and developers use this skill to run Data247 account and phone-data actions through OOMOL's connected account flow without handling raw API credentials.
 
-## Reference(s): <br>
-- [ClawHub Data247 Skill](https://clawhub.ai/oomol/skills/oo-data247) <br>
-- [Data247 Homepage](https://www.data247.com/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, json] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON connector responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses include data and meta.executionId when run with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: evidence release and frontmatter metadata) <br>
+Risk: First-time setup instructions include remote installer scripts run through a shell without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installation source before installing, prefer a verified package or installer with checksum or signature validation, and avoid running setup steps unless an auth or connection failure requires them.
+
+Risk: Data247 actions that change data or spend account balance can affect the connected account.
+
+Mitigation: Confirm the exact action, payload, and expected effect with the user before allowing write actions or balance-affecting operations to run.
+
+## Reference(s):
+
+- [Data247 homepage](https://www.data247.com/)
+- [oo CLI repository](https://github.com/oomol-lab/oo-cli)
+- [Data247 skill listing](https://clawhub.ai/oomol/skills/oo-data247)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Inspect the live connector schema before building payloads and confirm write or destructive actions before execution.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,170 +1,108 @@
-"""
-compute_value_scores.py — v9.0.0 修复 B3：实现 ecosystem-optimization.md 的 value_score 计算
-
-独立模块，供 audit_skill_plugin_issues.py 的 audit_ecosystem 调用。
-计算每个 skill/mcp/agent 的综合价值分，输出保留/观察/隐藏/卸载分层建议。
-"""
+"""Evidence-gated recommendation scores; missing data is never a zero score."""
 from __future__ import annotations
 
-from typing import Iterable
+import math
+from datetime import datetime, timezone
+
+
+def number(value):
+    return value if isinstance(value, (int, float)) and not isinstance(value, bool) and math.isfinite(value) and 0 <= value <= 10 else None
 
 
 def normalize_usage(raw_count: int, max_count: int) -> float:
-    """归一化到 0-10。"""
-    if max_count <= 0:
-        return 0.0
-    return min(10.0, (raw_count / max_count) * 10)
+    return min(10.0, max(0, raw_count) / max_count * 10) if max_count > 0 else 0.0
 
 
-def value_score(usage: float, alignment: float, health: float, market: float = 0.0) -> float:
-    """
-    综合价值分（0-10）。
-    权重见 ecosystem-optimization.md §2。
-    """
-    return round(
-        usage * 0.40 + alignment * 0.25 + health * 0.20 + market * 0.15,
-        2,
-    )
+def value_score(usage, alignment, health, market=None):
+    values = [number(v) for v in (usage, alignment, health, market)]
+    if any(v is None for v in values):
+        return None
+    return round(sum(v * w for v, w in zip(values, (0.4, 0.25, 0.2, 0.15))), 2)
 
 
 def confidence_level(has_local_usage: bool, has_market: bool, has_alignment: bool) -> str:
-    """返回 high/medium/low。"""
-    if has_local_usage:
+    if has_local_usage and has_market and has_alignment:
         return "high"
-    if has_market or has_alignment:
-        return "medium"
-    return "low"
+    return "medium" if has_local_usage or has_market or has_alignment else "low"
 
 
-def recommendation_layer(score: float) -> str:
-    """分层建议。"""
-    if score >= 7.0:
-        return "keep"
-    if score >= 4.0:
-        return "watch"
-    if score >= 2.0:
-        return "hide"
-    return "uninstall_candidate"
+def recommendation_layer(score):
+    if score is None:
+        return "pending_evidence"
+    return "keep" if score >= 7 else "watch" if score >= 4 else "hide" if score >= 2 else "uninstall_candidate"
 
 
-def assess_skills_optimization(
-    skill_scores: list[dict],
-    skill_usage: dict[str, dict],
-) -> list[dict]:
-    """
-    计算 skill 层的配置优化建议。
-    skill_scores: 来自 audit() 的 skill_scores 字段
-    skill_usage: 来自 extract_usage_signals.py 的 skill_invocation_evidence
-    """
-    # 找出最大使用次数用于归一化
-    max_usage = max((u.get("invocations", 0) for u in skill_usage.values()), default=0)
-    usage_by_id = {k: v.get("invocations", 0) for k, v in skill_usage.items()}
-
-    results = []
-    for s in skill_scores:
-        sid = s.get("id", "")
-        usage_raw = usage_by_id.get(sid, 0)
-        usage_norm = normalize_usage(usage_raw, max_usage) if max_usage > 0 else 0.0
-        alignment = (s.get("profile_alignment") or {}).get("score", 0) or 0
-        health = s.get("health_score", 0) or 0
-        # market 暂为 0（联网补全由用户 Agent 执行）
-        market = 0.0
-        score = value_score(usage_norm, alignment, health, market)
-        layer = recommendation_layer(score)
-        conf = confidence_level(
-            has_local_usage=usage_raw > 0,
-            has_market=False,
-            has_alignment=alignment > 0,
-        )
-        results.append({
-            "target": sid,
-            "type": "skill",
-            "value_score": score,
-            "layer": layer,
-            "confidence": conf,
-            "breakdown": {
-                "usage": round(usage_norm, 2),
-                "alignment": round(alignment, 2),
-                "health": round(health, 2),
-                "market": round(market, 2),
-            },
-            "evidence": {
-                "usage_count": usage_raw,
-                "has_local_evidence": usage_raw > 0,
-                "market_evidence": "unavailable (需用户 Agent 联网补全)",
-            },
-        })
-    results.sort(key=lambda x: x["value_score"], reverse=True)
-    return results
+def market_score(evidence):
+    """Accept dated, attributable inputs, never stars or an unqualified numeric score."""
+    if not isinstance(evidence, dict):
+        return None
+    try:
+        stamp = datetime.fromisoformat(evidence.get("checked_at", "").replace("Z", "+00:00"))
+        age = (datetime.now(timezone.utc) - stamp).total_seconds() / 86400
+    except (ValueError, TypeError, AttributeError):
+        return None
+    if not (0 <= age <= 30) or evidence.get("status") != "market_observed":
+        return None
+    if not str(evidence.get("source_url", "")).startswith("https://") or not evidence.get("license") or not evidence.get("scoring_basis"):
+        return None
+    return number(evidence.get("score"))
 
 
-def assess_mcp_optimization(
-    mcp_health: list[dict],
-    mcp_usage: list[dict],
-) -> list[dict]:
-    """计算 MCP 层的配置优化建议。"""
-    usage_by_server = {m["mcp_server"]: m.get("tool_calls", 0) for m in mcp_usage}
-    max_usage = max(usage_by_server.values(), default=0)
-
-    results = []
-    for m in mcp_health:
-        server = m["server"]
-        usage_raw = usage_by_server.get(server, 0)
-        usage_norm = normalize_usage(usage_raw, max_usage) if max_usage > 0 else 0.0
-        health = m.get("health_score", 0)
-        # alignment 暂用 health 近似（MCP 没有画像匹配）
-        alignment = health * 0.5
-        market = 0.0
-        score = value_score(usage_norm, alignment, health, market)
-        layer = recommendation_layer(score)
-        # 对 MCP 卸载建议特别谨慎：必须 [需确认]
-        if layer == "uninstall_candidate":
-            layer = "hide_review"  # 降级为隐藏并复查
-        conf = confidence_level(
-            has_local_usage=usage_raw > 0,
-            has_market=False,
-            has_alignment=False,
-        )
-        results.append({
-            "target": server,
-            "type": "mcp",
-            "value_score": score,
-            "layer": layer,
-            "confidence": conf,
-            "breakdown": {
-                "usage": round(usage_norm, 2),
-                "alignment": round(alignment, 2),
-                "health": round(health, 2),
-                "market": round(market, 2),
-            },
-            "evidence": {
-                "usage_count": usage_raw,
-                "has_local_evidence": usage_raw > 0,
-                "market_evidence": "unavailable (需用户 Agent 联网补全)",
-            },
-        })
-    results.sort(key=lambda x: x["value_score"], reverse=True)
-    return results
-
-
-def ecosystem_optimization_summary(
-    skill_recs: list[dict],
-    mcp_recs: list[dict],
-) -> dict:
-    """汇总三层建议数量。"""
-    def count(items, layer):
-        return sum(1 for i in items if i["layer"] == layer)
-
-    all_recs = skill_recs + mcp_recs
+def assess_one(target, kind, health, alignment, usage, count_key, maximum, market):
+    raw = usage.get(count_key)
+    valid_count = isinstance(raw, int) and not isinstance(raw, bool) and raw >= 0
+    # Zero only has meaning when collection coverage is explicitly established.
+    has_usage = valid_count and (raw > 0 or (usage.get("coverage_complete") is True and usage.get("status") == "observed"))
+    use = normalize_usage(raw, maximum) if has_usage else None
+    align = number(alignment.get("score")) if alignment.get("status") in {"observed", "inferred"} else None
+    health = number(health)
+    market_value = market_score(market)
+    breakdown = {"usage": use, "alignment": align, "health": health, "market": market_value}
+    gaps = [key for key, val in breakdown.items() if val is None]
+    score = value_score(use, align, health, market_value)
+    layer = recommendation_layer(score)
+    if layer in {"hide", "uninstall_candidate"}:
+        # Low score alone cannot establish absence of value or safe removability.
+        if not (raw == 0 and usage.get("coverage_complete") is True and usage.get("dependency_review_complete") is True):
+            layer = "watch"
+        elif layer == "hide" and usage.get("ui_visible") is not True:
+            layer = "watch"
     return {
-        "total_tools": len(all_recs),
-        "keep": count(all_recs, "keep"),
-        "watch": count(all_recs, "watch"),
-        "hide": count(all_recs, "hide") + count(all_recs, "hide_review"),
-        "uninstall_candidates": count(all_recs, "uninstall_candidate"),
-        "data_gaps": [
-            "market_signal 全部为 0：需用户 Agent 通过 firecrawl/rival-search 联网补全（参考 mcp-marketplaces.md URL 模板）",
-            "MCP 调用证据仅来自 ZCode transcript；用户在 Codex/Claude Code 中的调用未计入",
-            "skill_invocation_evidence 仅捕获显式 Skill tool 调用；通过其他路径触发的技能未计入",
-        ],
+        "target": target, "type": kind, "value_score": score, "layer": layer,
+        "fact_status": "inferred" if score is not None else "unavailable",
+        "confidence": confidence_level(has_usage, market_value is not None, align is not None),
+        "breakdown": breakdown, "missing_evidence": gaps,
+        "evidence_coverage": {"available": 4 - len(gaps), "total": 4},
+        "evidence": {"usage_count": raw if has_usage else None, "has_local_evidence": has_usage,
+                     "market_evidence": market if market_value is not None else "unavailable",
+                     "usage_source": usage.get("source", "structured usage signals"),
+                     "coverage_complete": usage.get("coverage_complete") is True},
     }
+
+
+def assess_skills_optimization(skill_scores, skill_usage, market_evidence=None):
+    maximum = max((u.get("invocations", 0) for u in skill_usage.values() if isinstance(u.get("invocations", 0), int)), default=0)
+    results = [assess_one(s.get("id", ""), "skill", s.get("health_score"),
+                         s.get("profile_alignment") or {}, skill_usage.get(s.get("id"), {}),
+                         "invocations", maximum, (market_evidence or {}).get("skill:" + s.get("id", ""), {})) for s in skill_scores]
+    return sorted(results, key=lambda r: r["value_score"] if r["value_score"] is not None else -1, reverse=True)
+
+
+def assess_mcp_optimization(mcp_health, mcp_usage, market_evidence=None):
+    usage = {m["mcp_server"]: m for m in mcp_usage}
+    maximum = max((m.get("tool_calls", 0) for m in mcp_usage if isinstance(m.get("tool_calls", 0), int)), default=0)
+    results = [assess_one(m["server"], "mcp", m.get("health_score"), m.get("profile_alignment") or {},
+                         usage.get(m["server"], {}), "tool_calls", maximum,
+                         (market_evidence or {}).get("mcp:" + m["server"], {})) for m in mcp_health]
+    return sorted(results, key=lambda r: r["value_score"] if r["value_score"] is not None else -1, reverse=True)
+
+
+def ecosystem_optimization_summary(skill_recs, mcp_recs):
+    items = skill_recs + mcp_recs
+    counts = {key: sum(r["layer"] == key for r in items) for key in ("keep", "watch", "hide", "uninstall_candidate", "pending_evidence")}
+    counts["uninstall_candidates"] = counts.pop("uninstall_candidate")
+    return {"total_tools": len(items), **counts,
+            "evidence_coverage": {"available": sum(r["evidence_coverage"]["available"] for r in items), "total": 4 * len(items)},
+            "data_gaps": ["缺失维度为 unavailable，不补零、不参与排序。",
+                          "未观察到调用不等于未使用；需核对客户端、时间窗和采集覆盖。",
+                          "完整评分也不能替代依赖检查、实际运行验证或用户决策。"]}

@@ -1,48 +1,66 @@
-## Description: <br>
-Huawei Cloud UCS Policy Governor helps agents manage Huawei Cloud UCS policy instances, policy definitions, enforcement state, enforcement jobs, and compliance audits through hcloud CLI guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Huawei Cloud UCS (Ubiquitous Cloud Native Service) policy governance and compliance management skill using hcloud CLI.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers, cloud platform engineers, and compliance operators use this skill to create, update, enable, disable, delete, and audit Huawei Cloud UCS policy instances across clusters and fleet groups. It is intended for UCS policy governance workflows that require hcloud CLI commands, IAM permissions, and compliance review steps. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Audit workflows and administrative write workflows are both present, which can lead an agent from observation into live UCS policy changes. <br>
-Mitigation: Use read-only IAM permissions for audit sessions and grant write permissions only for explicitly approved create, update, delete, enable, disable, or deny operations. <br>
-Risk: Delete, disable, enable, and deny policy commands can change enforcement behavior for clusters or fleet groups. <br>
-Mitigation: Require explicit user confirmation before these commands, prefer staging validation first, and start with warn enforcement before switching to deny in production. <br>
-Risk: Generated kubeconfig files and Huawei Cloud AK/SK or security token values are sensitive credentials. <br>
-Mitigation: Keep credentials out of chat and source control, use masked verification commands, apply restrictive file permissions to kubeconfig files, and remove temporary credential files after use. <br>
+## Use Case:
 
+Developers, platform engineers, and cloud administrators use this skill to manage Huawei Cloud UCS policy instances, policy definitions, policy enforcement, and fleet compliance audits through hcloud CLI workflows.
 
-## Reference(s): <br>
-- [UCS Policy API Guide](references/ucs-policy-api-guide.md) <br>
-- [IAM Permission Policies](references/iam-policies.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Common Pitfalls](references/common-pitfalls.md) <br>
-- [Task: Policy Management](references/task-policy-management.md) <br>
-- [Task: Compliance Audit](references/task-compliance-audit.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-ucs-policy-governor) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, Markdown] <br>
-**Output Format:** [Markdown guidance with inline hcloud CLI commands and JSON IAM policy examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include read-only audit steps and privileged UCS write operations; requires hcloud CLI and Huawei Cloud credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The skill can guide live Huawei Cloud UCS mutations, including create, update, delete, enable, and disable operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for UCS administration, require explicit human confirmation before write actions, and prefer read-only checks when the goal is compliance review.
+
+Risk: Credential and kubeconfig handling can expose sensitive cloud or cluster access if stored or echoed carelessly.
+
+Mitigation: Use least-privilege IAM, prefer temporary credentials, avoid printing secrets, and avoid storing kubeconfig or AK/SK files unless operationally necessary.
+
+Risk: Audit workflows include remediation steps that may apply changes to live clusters.
+
+Mitigation: Review proposed kubectl apply or policy mutation commands before execution and validate target cluster or fleet identifiers first.
+
+## Reference(s):
+
+- [Huawei Cloud UCS Policy Governor](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-ucs-policy-governor)
+- [CLI Installation Guide](references/cli-installation-guide.md)
+- [IAM Permission Policies](references/iam-policies.md)
+- [Task: Policy Management](references/task-policy-management.md)
+- [Task: Compliance Audit](references/task-compliance-audit.md)
+- [UCS Policy API Reference Guide](references/ucs-policy-api-guide.md)
+- [Verification Method](references/verification-method.md)
+- [Common Pitfalls & Solutions](references/common-pitfalls.md)
+- [Acceptance Criteria](references/acceptance-criteria.md)
+- [hcloud CLI installer](https://obs.cn-north-4.myhuaweicloud.com/hcloud/client/hcloud_install.sh)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with hcloud CLI command blocks and JSON policy examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands may create, update, delete, enable, or disable Huawei Cloud UCS policy resources and may require explicit confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

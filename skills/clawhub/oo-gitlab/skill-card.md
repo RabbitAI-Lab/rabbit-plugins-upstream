@@ -1,44 +1,60 @@
-## Description: <br>
-GitLab (gitlab.com) skill for reading, creating, and updating GitLab data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides GitLab project, issue, and merge request workflows through an OOMOL-connected account using the oo CLI.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and teams use this skill to inspect GitLab user, project, and issue data and to create project issues through their connected OOMOL GitLab account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an OOMOL-connected GitLab account and can access GitLab data through that connection. <br>
-Mitigation: Confirm the connected account and OOMOL CLI trust boundary before use, and review returned data according to the user's access expectations. <br>
-Risk: Issue creation changes GitLab project state. <br>
-Mitigation: Fetch the live connector schema, show the exact payload and intended effect, and get explicit user confirmation before running write actions. <br>
-Risk: First-time setup may require running an external OOMOL CLI installation command. <br>
-Mitigation: Run installation only when the CLI is missing and only after the user confirms they trust the OOMOL CLI source. <br>
+## Use Case:
 
+Developers and teams use this skill to read and manage GitLab projects, issues, and merge requests from an agent session through their connected OOMOL account.
 
-## Reference(s): <br>
-- [GitLab](https://gitlab.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before execution; write actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill metadata) <br>
+Risk: The skill can create, update, merge, and delete GitLab resources through the connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact target, payload, and expected effect before running write, merge, update, or destructive actions.
+
+Risk: The first-time setup path includes a remote shell installer.
+
+Mitigation: Prefer a verified package or inspect the installer and validate checksum or signature information before execution.
+
+Risk: GitLab operations are routed through OOMOL using the connected account's granted permissions.
+
+Mitigation: Install only when this routing model is acceptable and grant the connected account only the GitLab permissions needed for the intended workflow.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-gitlab)
+- [GitLab homepage](https://gitlab.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an installed and authenticated oo CLI with GitLab connected through OOMOL.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

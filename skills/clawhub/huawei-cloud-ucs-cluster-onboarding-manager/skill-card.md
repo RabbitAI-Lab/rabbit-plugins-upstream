@@ -1,50 +1,64 @@
-## Description: <br>
-Huawei Cloud UCS (Universal Cloud Service) cluster onboarding, lifecycle, and fleet grouping management skill using hcloud CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Huawei Cloud UCS cluster onboarding, lifecycle, and fleet management via hcloud CLI, including cluster registration, querying, removal, fleet groups, kubeconfig retrieval, and quota checks.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and cloud platform engineers use this skill to register Huawei Cloud CCE and self-managed Kubernetes clusters with UCS, manage cluster lifecycle and fleet groups, retrieve kubeconfig access, and check UCS quotas. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles powerful Huawei Cloud UCS administration workflows, including cluster credentials and destructive cluster-management commands. <br>
-Mitigation: Use temporary or least-privilege IAM credentials, avoid cluster-admin kubeconfigs unless required, and manually confirm every delete or deregistration command against the exact target IDs. <br>
-Risk: Kubeconfig and federation kubeconfig output can expose cluster access if pasted into chat, command arguments, logs, or public repositories. <br>
-Mitigation: Do not paste kubeconfig content into chat or command arguments; write kubeconfig output only to protected files and restrict file permissions. <br>
+## Use Case:
 
+Developers and cloud platform engineers use this skill to administer Huawei Cloud UCS clusters with hcloud CLI guidance, including onboarding CCE or self-managed clusters, managing fleet groups, obtaining kubeconfigs, checking quotas, and handling common UCS failures.
 
-## Reference(s): <br>
-- [UCS Cluster Onboarding API Guide](references/ucs-cluster-onboarding-api-guide.md) <br>
-- [Task: Cluster Registration](references/task-cluster-registration.md) <br>
-- [Task: Fleet Management](references/task-fleet-management.md) <br>
-- [Task: Access Management](references/task-access-management.md) <br>
-- [IAM Permission Policies](references/iam-policies.md) <br>
-- [Output Format](references/output-format.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Common Pitfalls](references/common-pitfalls.md) <br>
-- [Huawei Cloud UCS Documentation](https://support.huaweicloud.com/ucs/index.html) <br>
-- [hcloud CLI Documentation](https://support.huaweicloud.com/cli/index.html) <br>
-- [Huawei Cloud API Explorer](https://apiexplorer.developer.huaweicloud.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline bash commands and JSON/YAML examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose hcloud CLI commands that create, update, delete, or retrieve UCS cluster, fleet, quota, and kubeconfig resources.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The skill can guide sensitive Huawei Cloud UCS administration, including cluster registration, deregistration, fleet changes, quota checks, and kubeconfig retrieval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a least-privilege IAM user, prefer temporary credentials, confirm every paid or destructive command before execution, and install the skill only for UCS administration use cases.
+
+Risk: Kubeconfig files, access tokens, AK/SK values, and security tokens are sensitive and may grant cluster or cloud access.
+
+Mitigation: Treat generated kubeconfig files and credential values as secrets, avoid printing them in conversation or logs, and rotate credentials according to the organization's policy.
+
+## Reference(s):
+
+- [UCS Cluster Onboarding API Reference Guide](references/ucs-cluster-onboarding-api-guide.md)
+- [Task: Cluster Registration & Deregistration](references/task-cluster-registration.md)
+- [Task: Fleet Management](references/task-fleet-management.md)
+- [Task: Access Management](references/task-access-management.md)
+- [IAM Permission Policies - UCS Cluster Onboarding Manager Skill](references/iam-policies.md)
+- [Parameter Reference](references/parameter-reference.md)
+- [Common Pitfalls & Solutions](references/common-pitfalls.md)
+- [Verification Method - UCS Cluster Onboarding Manager Skill](references/verification-method.md)
+- [UCS Cluster Onboarding Manager - Output Format](references/output-format.md)
+- [CLI Installation Guide](references/cli-installation-guide.md)
+- [KooCLI Command Format Standard](references/kocli-command-format.md)
+- [Acceptance Criteria](references/acceptance-criteria.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline bash code blocks and command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce Huawei Cloud CLI commands and kubeconfig handling guidance; generated kubeconfig material and credential values should be treated as sensitive.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

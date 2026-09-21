@@ -1,44 +1,59 @@
-## Description: <br>
-Feishu App Bot (open.feishu.cn) helps agents read, create, update, and delete Feishu/Lark app bot data through the OOMOL connector and oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Feishu App Bot helps agents read, create, update, and delete Feishu/Lark resources through the OOMOL oo connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to manage Feishu/Lark app bot chats, messages, reactions, pins, and file or image workflows through an OOMOL-connected account. It supports both read operations and state-changing message actions when the user confirms the intended payload and effect. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write actions can change Feishu/Lark bot message state. <br>
-Mitigation: Confirm the exact payload and expected effect with the user before running actions tagged as write operations. <br>
-Risk: Destructive actions can remove reactions or pin state. <br>
-Mitigation: Require explicit user approval for the target and action before running commands tagged as destructive. <br>
-Risk: Publisher maintenance and connector behavior are third-party controlled. <br>
-Mitigation: Install only when the OOMOL publisher and connected Feishu/Lark workspace are trusted, and use the documented authentication and audit paths for state-changing actions. <br>
+## Use Case:
 
+Developers and agent users use this skill to manage Feishu/Lark messages, Drive, Wiki, Docs, Sheets, Slides, Base, calendars, tasks, OKRs, mail, and slash commands through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/oomol/oo-feishu-app-bot) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Feishu App Bot homepage](https://open.feishu.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, API Calls, Files] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before action execution; command responses may include JSON data and an execution id.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill can write, overwrite, or delete Feishu/Lark data through many actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact target, payload, and expected effect before write actions, and require explicit approval before destructive actions.
+
+Risk: The setup guidance includes running a remote installer directly in a shell.
+
+Mitigation: Prefer a trusted or manual oo CLI installation path and review the installer source before execution.
+
+Risk: Connected Feishu app scopes and workspaces determine what data the agent can access or change.
+
+Mitigation: Review requested scopes and connect only the workspaces and accounts the agent is intended to manage.
+
+## Reference(s):
+
+- [Feishu App Bot homepage](https://open.feishu.cn)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-feishu-app-bot)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, JSON, Configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.]
+
+## Skill Version(s):
+
+1.0.6 (source: evidence release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

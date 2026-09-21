@@ -1,0 +1,11 @@
+{
+  "id": "cinema-wxamp-mode-8",
+  "name": "Cinema Agent",
+  "description": "通过 OpenClaw 入口调用本地 Cinema Agent 的 mode-8 H5 能力。",
+  "runtimeTargets": [
+    "openclaw",
+    "cinema-agent"
+  ],
+  "cinemaAgentPackageId": "bagbot.wxamp-mode-8",
+  "cinemaAgentPackageVersion": "1.0.0-openclaw.1"
+}

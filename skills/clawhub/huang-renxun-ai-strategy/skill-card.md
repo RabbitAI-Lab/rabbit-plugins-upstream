@@ -1,40 +1,55 @@
-## Description: <br>
-以黄仁勋的战略思维和AI行业洞察为核心，帮助用户分析AI技术趋势、算力战略、行业竞争格局，并参考2026年GTC主题演讲相关内容。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+以黄仁勋的战略思维和AI行业洞察为核心，帮助分析AI技术趋势、算力战略、行业竞争格局。适用于AI战略规划、技术投资判断、行业分析等场景。2026更新：整合黄仁勋GTC2026主题演讲。
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users and analysts use this skill to frame NVIDIA, GPU, AI compute, and AI industry strategy questions through Jensen Huang-inspired strategic models. Outputs should support research and planning, with human review before business or investment decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may produce broader market or investment-style analysis beyond NVIDIA strategy. <br>
-Mitigation: Keep prompts tied to the intended NVIDIA and AI strategy scope, and treat financial outputs as research support rather than investment advice. <br>
-Risk: Strategy and industry guidance can be incomplete, outdated, or misleading when market conditions change. <br>
-Mitigation: Require human review and verification against current authoritative sources before real-world business or investment use. <br>
+## Use Case:
 
+Employees and external users can use this skill to frame AI strategy, compute infrastructure, technology investment, and industry competition questions through a Jensen Huang and NVIDIA strategy lens. Outputs are educational analysis and require human review before business or investment decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/huang-renxun-ai-strategy) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory-only strategy analysis; not financial, legal, or insurance advice.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.2.1 (source: frontmatter and server release evidence) <br>
+Risk: The skill discusses market, investment, and AI industry developments that may be time-sensitive or become outdated.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify current claims with authoritative sources before using the output for planning, investment, or governance decisions.
+
+Risk: The skill provides educational strategic analysis that may be mistaken for financial, legal, insurance, or investment advice.
+
+Mitigation: Treat outputs as commentary only and require qualified human review before any real-world decision.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/huang-renxun-ai-strategy)
+- [Publisher profile](https://clawhub.ai/user/gechengling)
+- [Source skill definition](artifact/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown or plain text analytical guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only educational and advisory output; no tools, code execution, persistence, credential access, or hidden background behavior.]
+
+## Skill Version(s):
+
+5.2.2 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

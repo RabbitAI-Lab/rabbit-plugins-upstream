@@ -87,7 +87,7 @@ IdentyClaw Passports are cryptographically verifiable, but DN fields (name, crea
 
 IdentyClaw proves continuity for a given Passport ID; it does not by itself prove that a passport belongs to a particular person or brand. **Public attestation on official channels closes that gap.**
 
-For on-chain uniqueness guarantees (facial checksum, Sybil resistance, lifecycle), see [Uniqueness and exclusivity](token-metadata.md#uniqueness-and-exclusivity). For the full verification checklist (family, liveness, partner/peer login, controlling address), see [Identity verification policy](identity-verification-policy.md).
+For on-chain universal uniqueness guarantees (facial checksum, Sybil resistance, lifecycle), see [Uniqueness and exclusivity](token-metadata.md#uniqueness-and-exclusivity). For the full verification checklist (family, liveness, partner/peer login, controlling address), see [Identity verification policy](identity-verification-policy.md).
 
 ### If you are verifying a claimed identity
 

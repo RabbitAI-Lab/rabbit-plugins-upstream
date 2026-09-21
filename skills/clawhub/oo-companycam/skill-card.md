@@ -1,43 +1,55 @@
-## Description: <br>
-Use this skill for CompanyCam requests, including reading, creating, updating, and deleting data through the OOMOL connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CompanyCam (companycam.com). Use this skill for ANY CompanyCam request - reading, creating, updating, and deleting data. Whenever a task involves CompanyCam, use this skill instead of calling the API directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and agents use this skill to operate a connected CompanyCam account through OOMOL, including reading company, user, project, and tag data and managing projects or tags when explicitly requested. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, archive, restore, or delete CompanyCam data. <br>
-Mitigation: Require explicit confirmation of the exact target and payload before running write or destructive actions. <br>
-Risk: Authentication, connection scope, credential expiry, or billing errors can block CompanyCam actions. <br>
-Mitigation: Use the documented setup or billing fallback only after a command fails with the matching error. <br>
+## Use Case:
 
+External users and developers use this skill to operate CompanyCam through an OOMOL-connected account, including reading company, user, project, and tag data and performing confirmed project or tag changes.
 
-## Reference(s): <br>
-- [CompanyCam Skill on ClawHub](https://clawhub.ai/oomol/skills/oo-companycam) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [CompanyCam Homepage](https://companycam.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions run through the OOMOL oo CLI and may return connector data with an execution id.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: First-time setup may run remote installer scripts when the oo CLI is missing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval before installing the oo CLI, and prefer a verified package or manually reviewed installer.
+
+Risk: Write, archive, delete, login, and connection setup actions can change account state or authentication state.
+
+Mitigation: Confirm the exact target, payload, and expected effect with the user before running those actions.
+
+## Reference(s):
+
+- [CompanyCam homepage](https://companycam.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payload or response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the live connector schema before constructing action payloads; write and destructive actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: evidence release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,63 @@
-## Description: <br>
-Queries and analyzes recent Google Trends hot searches for a selected time window and supported country or region. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries and analyzes recent Google Trends hot searches for a selected time window and supported country or region.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users, developers, and commerce or content teams use this skill to discover recent Google search trends, breakout topics, and regional hot searches across supported markets. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global; trend queries are limited to the 18 supported regions listed in the skill. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill makes external Google Trends and LinkFox API calls using an API key from the environment. <br>
-Mitigation: Install and run it only when those external calls are expected, keep the API key scoped to this use, and confirm the region and time window before paid queries. <br>
-Risk: The security summary notes that the skill stores and transmits more session-linked data than users may expect. <br>
-Mitigation: Review or disable feedback submission where appropriate, avoid sensitive trend queries, and periodically delete saved local response artifacts that are no longer needed. <br>
-Risk: Repeated queries can consume LinkFox credits. <br>
-Mitigation: Tell users before repeated calls and rely on the built-in same-parameter cache when the prior result is still suitable. <br>
+## Use Case:
 
+External users, analysts, and agents use this skill to discover recent Google search trends, breakout queries, and regional hot topics across supported markets.
 
-## Reference(s): <br>
-- [API reference](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-google-trend-get-trend-by-time) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON files] <br>
-**Output Format:** [Markdown guidance with JSON examples, stdout summaries, and saved JSON API responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a LinkFox API key, consumes credits per query, supports days and region parameters, caches matching requests for 24 hours, and saves full responses locally.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Trend queries, session metadata, and feedback content may be sent to LinkFox services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when this data sharing is acceptable, and avoid including sensitive or unnecessary information in queries or feedback.
+
+Risk: The skill supports account login, API-key issuance, and payment-order creation.
+
+Mitigation: Use the self-service LinkFox website for credentials when possible, do not share SMS codes unnecessarily, and confirm billing choices before creating an order.
+
+Risk: API keys may be exposed if stored carelessly in shell profiles or logs.
+
+Mitigation: Store credentials in the recommended environment variable only in trusted environments, avoid printing keys, and rotate credentials if exposure is suspected.
+
+Risk: LINKFOX_* endpoint environment variables can redirect requests if controlled by another party.
+
+Mitigation: Run the skill only where endpoint environment variables are trusted and review those variables before use.
+
+## Reference(s):
+
+- [API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-google-trend-get-trend-by-time)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration guidance]
+
+**Output Format:** [Markdown summaries, tables, JSON responses, and shell commands for API and onboarding workflows]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Trend calls save the full JSON response to a local linkfox session data file; small responses may also print in full, and large responses print a summary unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
