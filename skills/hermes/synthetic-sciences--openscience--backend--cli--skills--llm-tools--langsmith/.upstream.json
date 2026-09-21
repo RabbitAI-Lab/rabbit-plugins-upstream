@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/langsmith",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/langsmith",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/langsmith",
+  "branch": "main",
+  "pushedAt": "2026-09-21T10:28:09Z",
+  "contentHash": "687abd52b18ae2198b009185ce718b5208915764fdd4064fcdca8170a58ab863",
+  "fetchedAt": "2026-09-21T14:16:31.286Z"
+}

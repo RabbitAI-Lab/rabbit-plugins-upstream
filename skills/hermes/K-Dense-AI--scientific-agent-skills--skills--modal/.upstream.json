@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/modal",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/modal",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/modal",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "f8cf915abf5e7b8fd0a2ddec7b2a81a4521ac25ac2ba72be1fbaf52480f1bc81",
+  "fetchedAt": "2026-09-21T14:16:46.884Z"
+}

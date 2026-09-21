@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/scikit-bio",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/scikit-bio",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/scikit-bio",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "e76884ba5ee7576fe8dd5f058e438560b72da36a6bac8e92f645149b443e84f9",
+  "fetchedAt": "2026-09-21T14:16:46.938Z"
+}

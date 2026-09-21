@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/geomaster",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/geomaster",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/geomaster",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "efafc8ca0d710b8925e997f34ac8f745b3f1ecd608347347dc8f6ad45f231bd8",
+  "fetchedAt": "2026-09-21T14:16:46.860Z"
+}

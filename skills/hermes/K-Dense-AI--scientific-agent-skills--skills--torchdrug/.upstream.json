@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/torchdrug",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/torchdrug",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/torchdrug",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "9ce8c8b44c001e530fae7e61a99262648268b18cdd7cc390d22bf19a05d59bab",
+  "fetchedAt": "2026-09-21T14:16:46.954Z"
+}
