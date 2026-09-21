@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/energy-systems",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/energy-systems",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/energy-systems",
+  "branch": "main",
+  "pushedAt": "2026-09-21T10:28:09Z",
+  "contentHash": "0c8533d2c826af64c6a1b3c05f94ffe851d84e962d4df0183b20b8516dad1f49",
+  "fetchedAt": "2026-09-21T14:16:31.255Z"
+}

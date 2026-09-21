@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/other/hugging-face-jobs",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/other/hugging-face-jobs",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/other/hugging-face-jobs",
+  "branch": "main",
+  "pushedAt": "2026-09-21T10:28:09Z",
+  "contentHash": "9e84965448c22c96066b77d125bd5d61af2be04532d23a1c387ba5a1951a2141",
+  "fetchedAt": "2026-09-21T14:16:31.274Z"
+}

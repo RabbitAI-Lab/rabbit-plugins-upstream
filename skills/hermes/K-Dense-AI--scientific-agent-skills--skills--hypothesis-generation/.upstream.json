@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/hypothesis-generation",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/hypothesis-generation",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/hypothesis-generation",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "34e79f7db9259843f7ec143151ccae22d5abd06234a9d2f93211ec85e22016fe",
+  "fetchedAt": "2026-09-21T14:16:46.867Z"
+}

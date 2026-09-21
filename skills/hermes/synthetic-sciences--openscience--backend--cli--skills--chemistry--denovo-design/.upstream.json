@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/denovo-design",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/denovo-design",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/denovo-design",
+  "branch": "main",
+  "pushedAt": "2026-09-21T10:28:09Z",
+  "contentHash": "17a41cf4a4d5e165a5d854b8f4cc9352af34e326a006706d7dad15ff34cc8cc2",
+  "fetchedAt": "2026-09-21T14:16:31.246Z"
+}
