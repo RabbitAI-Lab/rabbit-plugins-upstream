@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/elevenlabs-voice-isolator",
+  "repo": "inference-sh/skills",
+  "skillId": "elevenlabs-voice-isolator",
+  "branch": "main",
+  "pushedAt": "2026-09-20T20:13:33Z",
+  "contentHash": "dab9d011d735be8c224b7d8de0abad3e2ea201207ee92d6e03b1ceb0418e5441",
+  "fetchedAt": "2026-09-22T12:40:26.674Z"
+}

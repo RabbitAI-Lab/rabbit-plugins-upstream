@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/elevenlabs-dialogue",
+  "repo": "inference-sh/skills",
+  "skillId": "elevenlabs-dialogue",
+  "branch": "main",
+  "pushedAt": "2026-09-20T20:13:33Z",
+  "contentHash": "d443efef5dd70186dca45051ed48002541a4f7efd068a7a21047bd5ee90cb7db",
+  "fetchedAt": "2026-09-22T12:40:26.670Z"
+}
