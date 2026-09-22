@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/open-notebook",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/open-notebook",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/open-notebook",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "4e0ca81ee920f909e23f622fffa0d732be08e14523b0214cb10592cd61723870",
+  "fetchedAt": "2026-09-22T12:40:55.563Z"
+}

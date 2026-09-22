@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/clinical-decision-support",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/clinical-decision-support",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/clinical-decision-support",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "d2409f81ff9e7872a7b2683459c998912834971b7cfa9569d2d30bb55bdce7f5",
+  "fetchedAt": "2026-09-22T12:40:55.512Z"
+}

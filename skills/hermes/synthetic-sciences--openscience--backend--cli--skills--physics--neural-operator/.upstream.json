@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/neural-operator",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/neural-operator",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/neural-operator",
+  "branch": "main",
+  "pushedAt": "2026-09-22T03:14:32Z",
+  "contentHash": "75ba3f36bb06337d43efa5c3373490a6c0c65eaf2781db587fb758a449882e74",
+  "fetchedAt": "2026-09-22T12:40:41.664Z"
+}

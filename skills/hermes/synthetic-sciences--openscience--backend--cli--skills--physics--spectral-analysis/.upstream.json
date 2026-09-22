@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/spectral-analysis",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/spectral-analysis",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/spectral-analysis",
+  "branch": "main",
+  "pushedAt": "2026-09-22T03:14:32Z",
+  "contentHash": "8dcbb0c0e2eb40f452f15c100ae7f882fbc2f92ce0206d43408ed22df3f51b31",
+  "fetchedAt": "2026-09-22T12:40:41.715Z"
+}

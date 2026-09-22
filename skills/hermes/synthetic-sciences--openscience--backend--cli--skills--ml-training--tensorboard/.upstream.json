@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/tensorboard",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/tensorboard",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/tensorboard",
+  "branch": "main",
+  "pushedAt": "2026-09-22T03:14:32Z",
+  "contentHash": "b0cbbc528088f448a4a27107bd7814e813fd8f6f309bbf193a6648ac5f06c0fe",
+  "fetchedAt": "2026-09-22T12:40:41.720Z"
+}
