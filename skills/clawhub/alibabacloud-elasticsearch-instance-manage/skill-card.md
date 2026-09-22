@@ -1,53 +1,66 @@
-## Description: <br>
-Manages Alibaba Cloud Elasticsearch instance lifecycle, configuration, snapshots, analyzer dictionaries, Kibana settings, cluster YML settings, and plugins through Aliyun CLI guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Alibaba Cloud Elasticsearch Instance & Config Management Skill for managing Elasticsearch instance lifecycle, instance-side configuration, analyzer dictionaries, Kibana settings, cluster YML configuration, and plugins through the Aliyun CLI.
 
-## Publisher: <br>
-[sdk-team](https://clawhub.ai/user/sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sdk-team](https://clawhub.ai/user/sdk-team)
 
-## Use Case: <br>
-Cloud operators and developers use this skill to generate Aliyun CLI workflows for administering Alibaba Cloud Elasticsearch instances, including lifecycle changes, configuration updates, snapshot and dictionary management, and plugin operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide broad Elasticsearch administration actions that affect service availability. <br>
-Mitigation: Require explicit human approval before restarts, upgrades, YML changes, or custom plugin upload and installation. <br>
-Risk: The skill can guide billing-impacting or credential-impacting actions. <br>
-Mitigation: Require explicit human approval before billing conversion or password reset operations. <br>
-Risk: Overbroad RAM permissions could allow unnecessary access across Elasticsearch resources. <br>
-Mitigation: Use least-privilege RAM policies scoped to the exact instance and module instead of the full union policy unless required. <br>
-Risk: Dictionary or plugin workflows can introduce unsafe external artifacts or storage exposure. <br>
-Mitigation: Avoid public OSS buckets for dictionaries when a private service-role pattern is available, and do not run curl-to-shell installation commands blindly. <br>
+## Use Case:
 
+Developers and cloud operators use this skill to generate and verify Aliyun CLI workflows for Alibaba Cloud Elasticsearch instance lifecycle, configuration, plugin, snapshot, dictionary, and upgrade operations.
 
-## Reference(s): <br>
-- [Elasticsearch Instance Management](references/instance-manage.md) <br>
-- [Elasticsearch Config Management](references/config-manage.md) <br>
-- [Elasticsearch Plugin Management](references/plugin-manage.md) <br>
-- [RAM Policies](references/ram-policies.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Acceptance Criteria](references/acceptance-criteria.md) <br>
-- [Aliyun CLI Installation Guide](references/cli-installation-guide.md) <br>
-- [Elasticsearch Node Specifications and Region Support](references/node-specifications-by-region.md) <br>
-- [Alibaba Cloud Elasticsearch Product Page](https://www.aliyun.com/product/bigdata/elasticsearch) <br>
-- [Alibaba Cloud Elasticsearch API Reference](https://next.api.aliyun.com/product/elasticsearch) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, markdown] <br>
-**Output Format:** [Markdown with inline bash code blocks and Aliyun CLI commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands may include region, instance ID, idempotency token, timeouts, and per-command user-agent parameters.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.5 (source: server release metadata) <br>
+Risk: Remote CLI setup and automatic plugin updates can install or change local tooling unexpectedly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup manually, avoid piping remote installers into bash, and prefer pinned, verified Aliyun CLI and plugin versions.
+
+Risk: Generated commands can perform broad cloud administration changes, including password, billing, restart, plugin, YML, and upgrade operations.
+
+Mitigation: Use least-privilege RAM permissions for only the modules needed and require explicit confirmation before state-changing commands.
+
+Risk: Snapshot and dictionary workflows can expose sensitive data if OSS buckets or credentials are handled poorly.
+
+Mitigation: Use restricted OSS access or service-role access where possible, and rely on environment variables or configured CLI profiles without exposing access keys in conversation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/sdk-team/skills/alibabacloud-elasticsearch-instance-manage)
+- [Instance lifecycle APIs](references/instance-manage.md)
+- [Instance configuration APIs](references/config-manage.md)
+- [Plugin management APIs](references/plugin-manage.md)
+- [RAM permission policies](references/ram-policies.md)
+- [Verification methods](references/verification-method.md)
+- [Aliyun CLI installation guide](references/cli-installation-guide.md)
+- [Alibaba Cloud Elasticsearch product page](https://www.aliyun.com/product/bigdata/elasticsearch)
+- [Alibaba Cloud Elasticsearch API reference](https://next.api.aliyun.com/product/elasticsearch)
+- [Alibaba Cloud CLI documentation](https://help.aliyun.com/zh/cli/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline bash commands and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands require user-provided region, instance identifiers, configured Alibaba Cloud credentials, and review before state-changing operations.]
+
+## Skill Version(s):
+
+0.0.5 (source: server evidence release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

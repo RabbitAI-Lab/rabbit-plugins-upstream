@@ -1,40 +1,54 @@
-## Description: <br>
-A one-stop AI travel assistant that helps agents plan trips and search flights, hotels, trains, attractions, food, weather, taxi links, buses, tours, cruises, and vacation products using travel and map service data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+一站式AI旅行助手，16项工具覆盖机票/酒店/火车票/景点/美食/天气全场景。途牛+高德+同程多源数据直连，零配置即装即用。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External users and agents use this skill to answer travel-planning and booking-search questions, including itinerary planning, transport options, lodging, attractions, dining, weather, and packaged travel products. It is suited for travel discovery and comparison workflows where final booking details should be confirmed with the linked provider. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Travel-related queries, such as cities, routes, dates, hotel preferences, and nearby-place requests, are sent through the publisher's cloud proxy to travel and map services. <br>
-Mitigation: Avoid entering sensitive personal details that are not needed for the search, and install only if this proxy-based data flow is acceptable. <br>
-Risk: Prices, availability, schedules, routes, and weather results can change after the skill returns them. <br>
-Mitigation: Confirm important details on the linked provider page or an authoritative source before booking or traveling. <br>
+## Use Case:
 
+External users and travel assistants use this skill to plan trips and search Chinese-language travel information including flights, trains, hotels, attractions, food, weather, local transport, taxis, buses, tours, cruises, and holiday packages.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/travel-skills/skills/smart-travel) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or plain text travel results with prices, schedules, routes, weather summaries, tips, and booking links when available.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include real-time provider data and links; prices, availability, schedules, and weather can change.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.2.3 (source: server release evidence) <br>
+Risk: Travel searches are sent through cloud proxy services to travel and map providers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid entering sensitive personal details, account credentials, payment data, or exact private addresses unless necessary.
+
+Risk: Prices, availability, and booking links can change after the skill returns results.
+
+Mitigation: Verify prices and booking links on the provider page before purchasing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/smart-travel)
+- [ClawHub publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, links, guidance]
+
+**Output Format:** [Chinese markdown-like text with travel search results, prices, availability, route details, warnings, and provider links when available]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include real-time travel data from cloud proxy services; prices, availability, and booking links should be verified on the provider page before purchase.]
+
+## Skill Version(s):
+
+3.2.9 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

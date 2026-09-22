@@ -17,7 +17,49 @@ All commands accept:
 | `--no-pager`      | Disable automatic paging                 |
 | `--offline`       | Use cached models only                   |
 
+Index names use 1–64 UTF-16 code units, start with a letter or number, and
+reject trailing space/dot, `..`, separators, controls, and platform-invalid
+punctuation. NFC/case-equivalent spellings share one identity. See
+`docs/CLI.md` under Global Options for the complete canonical-byte contract.
+
 ## Initialization
+
+### Optional index-wide chunking
+
+User YAML can set `chunking: { maxTokens: 256, overlapPercent: 0.15 }`.
+Defaults remain 800 approximate tokens and 0.15 overlap; unchanged/default
+config does not force a rebuild. The token estimate uses four characters per
+token, and overlap accepts a fraction from 0 through 0.5.
+
+After changing policy, `gno index` rechunks cached mirrors and embeds changed
+chunks. `gno update` performs the rechunking without embedding. The policy
+applies across the index even for targeted source sync; original files are not
+read merely to rechunk. `gno status --json` reports configured/applied policy,
+pending mirrors/documents, and a separate embedding backlog. On
+`CHUNKING_POLICY_CONFLICT`, reopen the client with the intended configuration.
+Compare policies with separate `--config` files and `--index` names, holding
+corpus, models, query set, and type boosts constant.
+
+### gno setup
+
+Preferred activation path: add one folder, prove a real exact lexical result,
+then continue semantic indexing in the background.
+
+```bash
+gno setup <folder> --name <collection> [options]
+```
+
+| Option                    | Description                                               |
+| ------------------------- | --------------------------------------------------------- |
+| `--exclude <pattern>`     | Repeatable literal exclusion                              |
+| `--authorize-secret-risk` | Explicitly allow likely-secret files                      |
+| `--connector <id>`        | Install and smoke-test a connector; repeatable            |
+| `--apply-profile`         | Apply a valid `.gno/index.yml` before setup               |
+| `--no-semantic`           | Stop after lexical retrieval proof; start no model worker |
+| `--json`                  | Structured activation receipt                             |
+
+Setup is idempotent. Success means a corpus-derived BM25 query returned a
+cited result; it does not imply that background semantic work already finished.
 
 ### gno init
 
@@ -111,6 +153,107 @@ Generate embeddings only.
 gno embed [--force] [--model <uri>] [--batch-size <n>] [--dry-run]
 ```
 
+## Project Profiles
+
+Project-local `.gno/index.yml` files describe portable collection, context,
+content-type, source-metadata, and retrieval-default intent. They never relocate
+the database into the repository and are never applied implicitly.
+
+```bash
+gno profile check [path]
+gno profile show [path]
+gno profile diff [path]
+gno profile apply [path]
+gno setup . --apply-profile
+```
+
+`check` validates only. `show` emits normalized state. `diff` compares the
+profile with local configuration. `apply` is additive/update-oriented and does
+not infer deletions. Profile project roots are trusted local affinity inputs;
+MCP/SDK/REST hints remain opaque and cannot become filesystem paths.
+
+## Capture
+
+### gno capture
+
+Capture a note into an editable collection with provenance.
+
+```bash
+gno capture "thought to remember"
+gno capture --stdin --collection notes --preset source-summary --tags inbox,gno
+gno capture --file ./clip.md --source-url https://example.com --source-kind web --json
+gno capture "meeting note" --quiet
+```
+
+Preset IDs: `blank`, `project-note`, `research-note`, `decision-note`,
+`prompt-pattern`, `source-summary`, `idea-original`, `person`,
+`company-project`, `meeting`.
+
+Second-brain presets keep current synthesis above `## Timeline` and dated
+evidence below it. Use `idea-original` for exact idea wording, `person` for
+relationship/current-state notes, `company-project` for organizations or active
+workstreams, and `meeting` for analysis above transcript/raw notes/action items.
+
+Important behavior:
+
+- Inline content, `--stdin`, and `--file` are mutually exclusive.
+- Capture accepts text only; binary-like file/stdin content is rejected before
+  writing.
+- Without `--path`, `--folder`, or `--title`, captures use
+  `inbox/YYYY-MM-DD/capture-<body-hash>.md` in UTC.
+- Capture writes fail instead of replacing a late-arriving file.
+- `--json` returns a capture receipt with separate write, sync, and embed status.
+- Capture syncs the file into FTS but does not imply embedding unless
+  `embed.status` is `completed`.
+
+## Memory
+
+Fact-granular agent memory in a collection configured with
+`memoryManaged: true`. Use `gno capture` for documents; use `remember` for one
+fact that may later be superseded. Full contract: `docs/MEMORY.md`.
+
+### gno remember
+
+Store one fact, or propose candidates without writing.
+
+```bash
+gno remember "Prod deploys from main only" --scope project:gno            # candidates only, no write
+gno remember "Prod deploys from main only" --scope project:gno --add      # write a new fact
+gno remember "Prod deploys from release/*" --scope project:gno \
+  --supersede gno://memory/facts/... --predecessor-hash <hash> --json     # replace a fact
+gno remember "..." --scope family --scope shared --collection memory --add --source "standup 2026-09-03"
+```
+
+- `--scope` is required and repeatable (1-8); there is no implicit global
+  scope. `--collection` may be omitted only when exactly one memory-managed
+  collection exists.
+- No decision flag returns `outcome: "candidates"` (likely matches in scope)
+  and writes nothing. Decide with `--add`, or `--supersede <uri>` plus
+  `--predecessor-hash <hash>` taken from `gno recall`.
+- An exact duplicate returns `existing`; a lost supersede race exits 4
+  (`MEMORY_SUPERSEDE_CONFLICT`): recall again and decide again.
+- `--receipt <recall.json>` fences replays of recalled spans;
+  `--derived-from gno://...` is rejected. `--source <text>` stores evidence.
+- `--caller` / `--session` default from `$GNO_MEMORY_CALLER` /
+  `$GNO_MEMORY_SESSION`, then `cli:<user>` / `ppid:<pid>`.
+
+### gno recall
+
+Budgeted, cited recall of current facts (superseded ones excluded).
+
+```bash
+gno recall "deploy branch" --scope project:gno
+gno recall "kindergarten" --scope family --max-facts 3 --max-tokens 256 --json > receipt.json
+```
+
+- Same `--scope` / `--collection` / identity rules as `remember`.
+- Each fact carries its `gno://` URI, `contentHash`, scopes, identity, and
+  egress lineage; the result includes a content-free `receipt` to hand back
+  to `remember --receipt`.
+- Retrieval is hybrid when the embedding model is already cached, else
+  lexical with the reason; recall never downloads a model.
+- Nothing in scope prints the self-teaching line naming `gno remember`.
+
 ## Search Commands
 
 ### gno search
@@ -154,17 +297,19 @@ gno query <query> [options]
 
 | Flag         | Time  | Description                    |
 | ------------ | ----- | ------------------------------ |
-| `--fast`     | ~0.7s | Skip expansion and reranking   |
-| (default)    | ~2-3s | Skip expansion, with reranking |
-| `--thorough` | ~5-8s | Full pipeline with expansion   |
+| `--fast`     | ~0.7s | Skip expansion, graph, rerank  |
+| (default)    | ~2-3s | Balanced, graph + reranking    |
+| `--thorough` | ~5-8s | Wider expansion + graph/rerank |
 
 Additional options:
 
-| Option        | Description                       |
-| ------------- | --------------------------------- |
-| `--no-expand` | Disable query expansion           |
-| `--no-rerank` | Disable reranking                 |
-| `--explain`   | Print retrieval details to stderr |
+| Option        | Description                                |
+| ------------- | ------------------------------------------ |
+| `--no-expand` | Disable query expansion                    |
+| `--no-rerank` | Disable reranking                          |
+| `--graph`     | Explicitly enable default graph candidates |
+| `--no-graph`  | Disable graph-neighbor candidates          |
+| `--explain`   | Print retrieval details to stderr          |
 
 ### gno ask
 
@@ -179,9 +324,18 @@ gno ask <question> [options]
 | `--fast`                  | Skip expansion and reranking (fastest) |
 | `--thorough`              | Enable query expansion (better recall) |
 | `--answer`                | Generate grounded answer               |
+| `--verify`                | Closed-Capsule answer or abstention    |
 | `--no-answer`             | Retrieval only                         |
 | `--max-answer-tokens <n>` | Cap answer length                      |
+| `--context-budget-tokens` | Global verified-Capsule token budget   |
+| `--context-budget-bytes`  | Global verified-Capsule byte budget    |
 | `--show-sources`          | Show all sources                       |
+
+`--verify` is distinct from `--answer`: generation receives only a closed
+Context Capsule, every substantive claim is checked against exact retained
+spans, and GNO releases the answer only at 100% support coverage. Failed or
+unavailable semantic verification forces an explicit abstention. This proves
+support against retained evidence, not corpus completeness or source truth.
 
 ## Document Retrieval
 
@@ -196,6 +350,7 @@ gno get <ref> [--from <line>] [-l <lines>] [--line-numbers] [--source]
 Ref formats:
 
 - `gno://collection/path` — Full URI
+- `gno://collection/path?index=name` — Full URI emitted from a non-default index
 - `collection/path` — Relative path
 - `#docid` — Document ID
 - `gno://docs/file.md:120` — With line number
@@ -250,6 +405,113 @@ Validate context configuration.
 gno context check [--json]
 ```
 
+### gno context build
+
+Compile one deterministic, extractive evidence bundle under global token and
+byte budgets:
+
+```bash
+gno context build "<goal>" --budget 12000 --json --output capsule.json
+gno context build "compare proposals" --budget 16000 --collection work --md
+gno context build "release evidence" --budget 12000 --fast --json
+```
+
+The Capsule retains exact URI/heading/line spans, source/mirror/passage hashes,
+normalized retrieval inputs, fingerprints, capability outcomes, omissions,
+coverage, and explicit gaps. Selection collapses overlaps and rewards uncovered
+facets. `--fast` avoids model loading; `--thorough` widens retrieval. GNO writes
+only to stdout or an explicit `--output`; it never persists Capsules implicitly.
+
+### gno context verify
+
+Recheck a saved canonical JSON Capsule without rebuilding or mutating it:
+
+```bash
+gno context verify capsule.json --json
+cat capsule.json | gno context verify - --md
+```
+
+The receipt classifies evidence as unchanged, stale, or missing; ranking as
+unchanged, reranked, or unavailable; and reports fingerprint drift separately.
+Verification uses the Capsule's index and refuses an explicitly mismatched
+global `--index`.
+
+### Saved Capsule watches
+
+Register a caller-owned Capsule file for evidence-triggered reverification:
+
+```bash
+gno context watch capsule.json --question "Who owns launch?" --notify --json
+gno context watches --json
+gno context reverify <registration-id> --json
+gno context unwatch <registration-id> --json
+```
+
+GNO stores only bounded registration metadata and evidence hashes—not Capsule
+or passage bytes. `serve`/`daemon` reverify after relevant settled index
+changes. Watch lifecycle operations are CLI-only. Reverification never rebuilds
+or overwrites the saved Capsule.
+
+## Knowledge Delta
+
+Inspect retained metadata-only change history and bounded dependency impact:
+
+```bash
+gno changes --since 2026-07-20T00:00:00Z --json
+gno diff gno://notes/plan.md --json
+gno impact gno://notes/plan.md --max-depth 3 --json
+```
+
+`changes` accepts an ISO time or opaque cursor and optional collection/limit.
+`diff` reports structural headings, links, and typed-relationship changes for
+one retained change. `impact` follows inbound evidence edges with explicit
+depth/node/edge/frontier/visited bounds. Expired journal history is reported,
+not reconstructed.
+
+## Private Retrieval Traces
+
+Trace recording is local and off by default. Metadata mode excludes raw
+query/goal/filter values; replay mode is separate explicit consent.
+
+```bash
+gno trace list --json
+gno trace show <trace-id> --json
+gno trace label <trace-id> --label relevant --target <uri> \
+  --target-kind document
+gno trace export <trace-id> --format qrels --output qrels.json
+gno trace replay <export-id> --candidate hybrid --md
+gno trace delete <trace-id>
+gno trace purge
+```
+
+Only append relevance labels the user explicitly supplied. Export, delete, and
+purge are explicit mutations. Replay compares one candidate with an immutable
+local baseline and always reports `applied: false`; it never changes live
+ranking.
+
+## Collection Egress
+
+Collections can be restricted to `local_only`, `lan`, or `remote`. Egress is
+checked before non-loopback serving, remote model calls, network export, or
+publishing and remains separate from authentication or write permission.
+
+```bash
+gno collection policy get work
+gno collection policy check --action remote_model \
+  --destination remote --content-class internal -c work --explain-egress
+gno collection policy set work remote --confirm-relaxation <revision>
+gno egress-audit list
+gno egress-audit show <audit-id>
+gno egress-audit status
+gno egress-audit delete <audit-id>
+gno egress-audit purge
+```
+
+Denied egress is terminal for that route; do not retry through another network
+surface. Relaxing policy requires the current revision; tightening to
+`local_only` does not. Audit receipts are local and content-free.
+Deletion/purge must remain explicit.
+
 ## Note Linking
 
 ### gno links
@@ -260,12 +522,13 @@ List outgoing links from a document.
 gno links <ref> [options]
 ```
 
-| Option       | Description                          |
-| ------------ | ------------------------------------ |
-| `--type`     | Filter: `wiki`, `markdown`, or `all` |
-| `--resolved` | Only show resolved links             |
-| `--broken`   | Only show broken links               |
-| `--json`     | JSON output                          |
+| Option        | Description                  |
+| ------------- | ---------------------------- |
+| `--type`      | Filter: `wiki` or `markdown` |
+| `--edge-type` | Filter by semantic edge type |
+| `--relation`  | Alias for `--edge-type`      |
+| `--json`      | JSON output                  |
+| `--md`        | Markdown output              |
 
 ### gno backlinks
 
@@ -275,10 +538,43 @@ Find documents linking TO a target.
 gno backlinks <ref> [options]
 ```
 
-| Option   | Description               |
-| -------- | ------------------------- |
-| `-n`     | Max results (default: 20) |
-| `--json` | JSON output               |
+| Option             | Description                  |
+| ------------------ | ---------------------------- |
+| `-c, --collection` | Filter by collection         |
+| `--edge-type`      | Filter by semantic edge type |
+| `--relation`       | Alias for `--edge-type`      |
+| `--json`           | JSON output                  |
+| `--md`             | Markdown output              |
+
+`gno links` and `gno backlinks` also accept `--edge-type <type>` or
+`--relation <type>` to query semantic typed edges instead of positional
+wiki/markdown links. Do not combine `--type` with `--edge-type`.
+
+### gno graph query
+
+Bounded typed-edge traversal from a document.
+
+```bash
+gno graph query <ref> [--edge-type <type>] [--max-depth <n>] [--direction out|in|both] [--json]
+```
+
+Use this when relation meaning matters:
+
+```bash
+gno graph query gno://notes/people/alice.md --edge-type works_at --max-depth 2 --json
+```
+
+### gno query diagnose
+
+Explain why a target document did or did not surface for a query.
+
+```bash
+gno query diagnose "<query>" --target <ref> [--fast|--thorough] [--json]
+```
+
+The JSON output reports target status, filters, typed metadata, and per-stage
+presence across BM25, vector, fusion, graph expansion, and rerank. Use `--fast`
+for BM25-only diagnosis without vector/rerank startup.
 
 ### gno similar
 
@@ -303,20 +599,27 @@ Generate knowledge graph of document connections.
 
 ```bash
 gno graph [options]
+gno graph --neighbors <ref> [--direction both|out|in]
+gno graph --from <ref> --to <ref> [--max-depth 6]
 ```
 
-| Option             | Default | Description                    |
-| ------------------ | ------- | ------------------------------ |
-| `-c, --collection` | all     | Filter to single collection    |
-| `--limit`          | 2000    | Max nodes                      |
-| `--edge-limit`     | 10000   | Max edges                      |
-| `--similar`        | false   | Include similarity edges       |
-| `--threshold`      | 0.7     | Similarity threshold (0-1)     |
-| `--linked-only`    | true    | Exclude isolated nodes         |
-| `--similar-top-k`  | 5       | Similar docs per node (max 20) |
-| `--json`           | -       | JSON output                    |
+| Option               | Default | Description                    |
+| -------------------- | ------- | ------------------------------ |
+| `-c, --collection`   | all     | Filter to single collection    |
+| `--limit`            | 2000    | Max nodes                      |
+| `--edge-limit`       | 10000   | Max edges                      |
+| `--include-similar`  | false   | Include similarity edges       |
+| `--threshold`        | 0.7     | Similarity threshold (0-1)     |
+| `--include-isolated` | false   | Include isolated nodes         |
+| `--similar-top-k`    | 5       | Similar docs per node (max 20) |
+| `--neighbors`        | -       | Show graph neighbors for ref   |
+| `--direction`        | both    | Neighbor direction             |
+| `--from`, `--to`     | -       | Find shortest graph path       |
+| `--max-depth`        | 6       | Max path hops                  |
+| `--json`             | -       | JSON output                    |
 
 **Edge types**: `wiki` (wiki links), `markdown` (md links), `similar` (vector similarity).
+JSON edges include `confidence` (`explicit`, `inferred`, `ambiguous`, `similarity`) and `audit` metadata so agents can prefer exact links over fallback or collision-prone matches.
 
 **Web UI**: Access interactive graph at `http://localhost:3000/graph` via `gno serve`.
 
@@ -370,13 +673,18 @@ gno models list [--json|--md]
 gno models use <preset>
 ```
 
-Presets: `slim` (~1GB), `balanced` (~2GB), `quality` (~2.5GB)
+Built-ins: `slim-tuned` (default), `slim`, `balanced`, `quality`. Actual
+download/cache use depends on the selected artifacts and existing shared cache.
 
 ### gno models pull
 
 ```bash
 gno models pull [--all|--embed|--rerank|--gen] [--force]
 ```
+
+Cached/local model files are validated as GGUF before use. If the cache contains
+HTML or another non-GGUF response, rerun with `--force` after fixing network
+access.
 
 ### gno models clear
 
@@ -391,6 +699,15 @@ gno models path [--json]
 ```
 
 ## Maintenance
+
+### gno peek
+
+Cheap counts, backlog, recent files, and serve liveness. Same `peek@1.0`
+snapshot as MCP `gno_peek`. Do not compose `status` + `ls` + `changes`.
+
+```bash
+gno peek [--json]
+```
 
 ### gno status
 
@@ -441,12 +758,19 @@ Install GNO as MCP server in client configurations.
 gno mcp install [options]
 ```
 
-| Option         | Default        | Description                                      |
-| -------------- | -------------- | ------------------------------------------------ |
-| `-t, --target` | claude-desktop | Target: `claude-desktop`, `claude-code`, `codex` |
-| `-s, --scope`  | user           | Scope: `user`, `project`                         |
-| `-f, --force`  | false          | Overwrite existing config                        |
-| `--dry-run`    | false          | Preview changes                                  |
+| Option           | Default        | Description                                                                                                                                                            |
+| ---------------- | -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `-t, --target`   | claude-desktop | Target client (see below)                                                                                                                                              |
+| `-s, --scope`    | target default | Scope: `user`, `project`                                                                                                                                               |
+| `-f, --force`    | false          | Overwrite existing config                                                                                                                                              |
+| `--dry-run`      | false          | Preview changes                                                                                                                                                        |
+| `--enable-write` | false          | Registered server starts with write tools enabled                                                                                                                      |
+| `--tool-profile` | full           | Advertised tool set the registration starts with: `core` (7 read tools, plus `gno_capture` and `gno_remember` with `--enable-write`) or `full`; omitted writes no flag |
+
+Targets: `claude-desktop`, `claude-code`, `codex`, `cursor`, `zed`,
+`windsurf`, `opencode`, `amp`, `lmstudio`, and `librechat`. Project scope is
+supported by Claude Code, Codex, Cursor, OpenCode, and LibreChat.
+LibreChat is project-only; all other targets default to user scope.
 
 Examples:
 
@@ -456,6 +780,12 @@ gno mcp install
 
 # Claude Code (user scope)
 gno mcp install -t claude-code
+
+# Claude Code on the slim core profile, with capture and remember enabled
+gno mcp install -t claude-code --tool-profile core --enable-write
+
+# Switch an existing registration to core (nothing migrates on its own)
+gno mcp install -t cursor --tool-profile core --force
 
 # Claude Code (project scope)
 gno mcp install -t claude-code -s project
@@ -490,7 +820,6 @@ gno serve [options]
 | Option       | Default | Description      |
 | ------------ | ------- | ---------------- |
 | `-p, --port` | 3000    | Port to serve on |
-| `--host`     | 0.0.0.0 | Host to bind     |
 
 Features: Dashboard, search, browse collections, document viewer, AI Q&A with citations.
 
@@ -639,10 +968,18 @@ export pipeline runs a sanitizer over each note's markdown. It:
   `_internal/` convention is treated as never-publish)
 - converts `[[Target|Alias]]` to the alias text, and `[[Target]]` to the
   tail segment of the target
-- drops `![[image.png]]` embeds (attachments are not bundled yet) with a
-  warning so the author can migrate to `![alt](url)` or wait for bundling
+- resolves local `![[image.png]]` / Markdown image refs for PNG/JPEG/GIF/WebP/
+  AVIF (AVIF must be AV1-decodable at producer ingress) into content-addressed
+  `gno-asset:<sha256>` sentinels (deduped; exact 100 MiB serialized ceiling;
+  ciphertext field bounds align to that envelope); preserves external HTTPS
+  images; skips fenced code (backtick and tilde); drops unsupported/missing/
+  unsafe refs with diagnostics
 - refuses to export a note whose frontmatter contains `publish: false`
   (single-note export errors; collection export silently skips)
+
+Successful exports include `assetSummary` in `--json`. Encrypted visibility
+keeps raster bytes inside ciphertext only. Hosted invite-only image delivery
+is currently fail-closed on gno.sh.
 
 Every sanitizer decision surfaces in the CLI output as a "Preprocessor
 notes" section, on the `--json` response under `warnings`, and on
@@ -658,12 +995,11 @@ Install GNO skill for AI coding assistants.
 gno skill install [options]
 ```
 
-| Option         | Default | Description                                              |
-| -------------- | ------- | -------------------------------------------------------- |
-| `-t, --target` | claude  | Target: `claude`, `codex`, `opencode`, `openclaw`, `all` |
-| `-s, --scope`  | user    | Scope: `user`, `project`                                 |
-| `-f, --force`  | false   | Overwrite existing                                       |
-| `--dry-run`    | false   | Preview changes                                          |
+| Option         | Default | Description                                                        |
+| -------------- | ------- | ------------------------------------------------------------------ |
+| `-t, --target` | claude  | Target: `claude`, `codex`, `opencode`, `openclaw`, `hermes`, `all` |
+| `-s, --scope`  | project | Scope: `project`, `user`                                           |
+| `-f, --force`  | false   | Overwrite existing                                                 |
 
 Examples:
 
@@ -671,6 +1007,7 @@ Examples:
 gno skill install --target claude --scope project
 gno skill install --target codex --scope user
 gno skill install --target openclaw --scope user
+gno skill install --target hermes --scope user
 gno skill install --target all --force   # Install to all targets
 ```
 
@@ -687,7 +1024,7 @@ gno skill uninstall [-t <target>] [-s <scope>]
 Preview skill files that would be installed.
 
 ```bash
-gno skill show [--json]
+gno skill show [--file <name>] [--all]
 ```
 
 ### gno skill paths
@@ -705,7 +1042,7 @@ gno skill paths [--json]
 Delete all GNO data (database, embeddings, config). Use with caution.
 
 ```bash
-gno reset [--force]
+gno reset --confirm [--keep-config] [--keep-cache]
 ```
 
 ### gno completion
@@ -714,7 +1051,7 @@ Install shell tab completion.
 
 ```bash
 gno completion install [--shell <bash|zsh|fish>]
-gno completion uninstall
+gno completion output <bash|zsh|fish>
 ```
 
 ## Exit Codes

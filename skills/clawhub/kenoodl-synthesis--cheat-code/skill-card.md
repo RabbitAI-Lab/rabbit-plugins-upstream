@@ -1,44 +1,62 @@
-## Description: <br>
-Cheat Code lets an agent call kenoodl.com for synthesis when it needs a new framing for an open-ended task. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Makes your agent's talents limitless. Tell your agent what you want. Watch it deliver.
 
-## Publisher: <br>
-[kenoodl-synthesis](https://clawhub.ai/user/kenoodl-synthesis) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[kenoodl-synthesis](https://clawhub.ai/user/kenoodl-synthesis)
 
-## Use Case: <br>
-Developers and agent users use Cheat Code to let an agent submit selected task context to kenoodl.com for synthesis when it is stuck, circling, or needs a new conceptual structure. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Selected prompts, task context, and agent reasoning may be sent to kenoodl.com for processing. <br>
-Mitigation: Use the skill only with approved context and strip secrets, credentials, regulated personal data, confidential business material, and proprietary source context before calling the service. <br>
-Risk: The required KENOODL_TOKEN authorizes access to the external service. <br>
-Mitigation: Provide the token only through runtime environment or agent settings, avoid storing it in skill files, and rotate it if exposure is suspected. <br>
+## Use Case:
 
+Developers and external agent users use this skill to configure an agent with a Kenoodl token and call the Kenoodl synthesis service when the agent is stuck, looping, or needs signal beyond its training data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kenoodl-synthesis/cheat-code) <br>
-- [Publisher profile](https://clawhub.ai/user/kenoodl-synthesis) <br>
-- [kenoodl](https://kenoodl.com) <br>
-- [README](artifact/README.md) <br>
-- [Agent instructions](artifact/instructions.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with HTTP request examples and JSON response snippets.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires KENOODL_TOKEN and outbound HTTPS access to kenoodl.com.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: server release metadata and claw.json) <br>
+Risk: The skill can send broad task context to kenoodl.com.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Preview the exact context before each call and avoid confidential business data, personal data, regulated data, unreleased security details, and proprietary code unless disclosure is separately approved.
+
+Risk: The skill text includes local-only privacy language that may understate external disclosure.
+
+Mitigation: Treat any selected task context as externally disclosed to the Kenoodl service and redact sensitive details beyond API keys before use.
+
+Risk: Returned synthesis may be incorrect, misleading, or unsuitable to execute directly.
+
+Mitigation: Review returned synthesis as untrusted advice and validate it before applying it to code, configuration, business decisions, or operational workflows.
+
+## Reference(s):
+
+- [Cheat Code on ClawHub](https://clawhub.ai/kenoodl-synthesis/skills/cheat-code)
+- [kenoodl-synthesis publisher profile](https://clawhub.ai/user/kenoodl-synthesis)
+- [Kenoodl service](https://kenoodl.com)
+- [Kenoodl synthesis submit endpoint](https://kenoodl.com/api/cli/drop)
+- [Kenoodl synthesis status endpoint](https://kenoodl.com/api/cli/status/<jobId>)
+- [Kenoodl balance endpoint](https://kenoodl.com/api/cli/balance)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with HTTP request examples and JSON response snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a KENOODL_TOKEN and network access to kenoodl.com.]
+
+## Skill Version(s):
+
+1.0.11 (source: evidence.release.version and artifact/claw.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,61 @@
-## Description: <br>
-Multi Agent Dev guides agents through a multi-agent development workflow that routes simple tasks to OpenClaw, medium tasks to subagents, and complex iterative work to Ralph Loop with configurable coding executors. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Multi Agent Dev helps agents route coding work across OpenClaw, sub-agents, and Ralph Loop with configurable AI coding executors for iterative software development.
 
-## Publisher: <br>
-[hehe973781230](https://clawhub.ai/user/hehe973781230) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[hehe973781230](https://clawhub.ai/user/hehe973781230)
 
-## Use Case: <br>
-Developers and maintainers use this skill to structure coding tasks, choose an execution path, and generate Ralph Loop prompts and commands for iterative code changes, testing, documentation updates, and skill refactoring. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Agent-driven development workflows can run commands or create directories in a project. <br>
-Mitigation: Specify the project directory and task explicitly, and review proposed command execution or directory creation before allowing changes. <br>
-Risk: Generated development guidance or proposed code changes may be incorrect or too broad for the target project. <br>
-Mitigation: Review generated plans, file changes, and test results before relying on the output or deploying changes. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to classify coding tasks, choose between direct execution, sub-agent delegation, and Ralph Loop iteration, and produce structured implementation prompts and commands.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/hehe973781230/skills/multi-agent-dev) <br>
-- [Ralph Wiggum](https://github.com/Th0rgal/open-ralph-wiggum) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with YAML and bash command blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes task templates, executor selection guidance, and completion markers for Ralph Loop workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence) <br>
+Risk: Broad coding requests may be routed into external iterative agents with limited confirmation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require user confirmation before spawning agents, creating directories, or running Ralph Loop for broad tasks.
+
+Risk: The workflow depends on an unpinned global Ralph Wiggum npm package.
+
+Mitigation: Pin and verify the Ralph Wiggum package before installation, and avoid elevated global npm installs when possible.
+
+Risk: External coding agents may run outside the intended project scope.
+
+Mitigation: Use the skill only inside intended project workspaces and review generated commands before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/hehe973781230/skills/multi-agent-dev)
+- [Ralph Wiggum](https://github.com/Th0rgal/open-ralph-wiggum)
+- [README](artifact/README.md)
+- [Skill source](artifact/SKILL.md)
+- [Changelog](artifact/CHANGELOG.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with code blocks, shell commands, task templates, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose external agent execution through Ralph Loop and configurable coding CLIs.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata; artifact changelog lists v1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,5 +1,5 @@
 ## Description: <br>
-Api Connect Hub helps agents design and operate enterprise API integrations, including connector orchestration, data synchronization, OAuth2 token refresh, webhook handling, monitoring alerts, connector marketplace workflows, tenant isolation, and batch API calls. <br>
+api-connect-hub helps agents plan and generate enterprise API integration workflows, data synchronization pipelines, webhook handling, OAuth2 token refresh, monitoring, connector marketplace actions, multi-tenant credential isolation, and batch API call aggregation. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, integration engineers, and SaaS platform teams use this skill to generate guidance, commands, and configuration for multi-service API workflows, data sync pipelines, OAuth credential refresh, webhook processing, and monitoring. It is intended for normal ClawHub commercial use with review before applying changes to real systems. <br>
+Developers, platform architects, data engineers, and SaaS operators use this skill to design, configure, and troubleshoot API integrations across workflow orchestration, data sync, webhook processing, OAuth2 refresh, monitoring, and tenant-isolated credential handling. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill requests broad command execution and can affect API connectors, marketplace packages, credentials, and remote systems. <br>
-Mitigation: Require explicit approval before running CLI commands, installing or publishing connectors, refreshing credentials, or modifying remote systems. <br>
-Risk: Credential handling and multi-tenant integrations can expose secrets or mix tenant data if used without scoped controls. <br>
-Mitigation: Use Vault or another tenant-scoped secret store in production, avoid pasting secrets into prompts, and review tenant isolation paths before deployment. <br>
-Risk: The security scan verdict is suspicious because enterprise credential and execution workflows need additional review before use with real credentials or multiple tenants. <br>
-Mitigation: Review the skill before installing it in sensitive environments and limit use to trusted workspaces with appropriate access controls. <br>
+Risk: The skill requests broad command and write authority for API integration setup and connector marketplace workflows. <br>
+Mitigation: Require explicit user approval before shell commands, connector installs or publishes, webhook registration, OAuth refresh setup, or data sync runs. <br>
+Risk: The skill may handle long-lived credentials, OAuth refresh tokens, and tenant-specific secrets. <br>
+Mitigation: Use least-privilege credentials, avoid production tokens until tested, store secrets in approved secret managers, and review generated configuration before use. <br>
+Risk: Generated integration plans or configuration may affect real systems if applied without review. <br>
+Mitigation: Test in a non-production environment first and scan generated configs for endpoints, scopes, tenant paths, and retry behavior before deployment. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/api-connect-hub) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
+- [ClawHub publisher profile](https://clawhub.ai/user/thcjp) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
 **Output Format:** [Markdown with JSON, YAML, and shell command examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include execution logs, connector configuration, workflow snippets, and troubleshooting guidance.] <br>
+**Other Properties Related to Output:** [May propose connector definitions, workflow and sync pipeline configuration, webhook/OAuth setup steps, monitoring guidance, and execution logs for agent review.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

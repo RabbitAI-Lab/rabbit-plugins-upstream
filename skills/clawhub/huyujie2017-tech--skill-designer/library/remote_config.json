@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0",
+  "_说明": [
+    "远程知识服务配置模板（ADR-001 阶段2 用）。**本文件只存环境变量名，不存地址/token 明文**——",
+    "与 skill-paid 的安全红线一致（私钥/token 只经环境变量注入，绝不落包）。",
+    "阶段1 只落模板；未设置环境变量时 knowledge_remote.py 不产生任何网络请求（离线完备 I1 不受影响）。"
+  ],
+  "baseUrlEnv": "KNOWLEDGE_REMOTE_URL",
+  "tokenEnv": "KNOWLEDGE_REMOTE_TOKEN",
+  "payKeyEnv": "SKILLHUB_RSA_PRIVATE_KEY",
+  "deviceAuthUrlEnv": "KNOWLEDGE_DEVICE_AUTH_URL",
+  "timeoutSec": 8,
+  "maxRetry": 1,
+  "endpoints": {
+    "index": "/index",
+    "get": "/get/{id}",
+    "search": "/search",
+    "verify": "/verify"
+  },
+  "payContract": {
+    "_说明": "与 skill-paid 注入的支付触发模块对齐；三个阶段不可混为一谈",
+    "httpStatus": 402,
+    "requiredHeader": "WeixinPay-Required",
+    "retryHeader": "X-Out-Trade-No",
+    "retrySemantics": "支付完成后凭 retryHeader 重试同一请求（Body 与首次一致）→ HTTP 200 + content",
+    "notifyUrlRule": "notify_url 必须是**真实 HTTPS**，不得填 example.com 占位（skill-paid M16）；主链路不经过它（走查询重试）"
+  },
+  "versionNegotiation": {
+    "_说明": "第四处一致性面：远程库声明 minFlowVersion，本地流程低于它即熔断 + 给升级指引",
+    "minFlowVersion": "3.18.0"
+  },
+  "policy": {
+    "autoModeRule": "auto = 远程优先 + 本地兜底 + **不静默降级**：远程故障必须打印告警；本地也没有该条 → 熔断报缺口 + 给动作（DP-210）",
+    "forbidModelMemory": "禁止用模型记忆补远程缺口 —— 那会产出「看起来成功的错误答案」，比报错危险得多"
+  }
+}

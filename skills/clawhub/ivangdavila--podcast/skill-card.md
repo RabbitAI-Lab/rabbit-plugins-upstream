@@ -1,47 +1,63 @@
-## Description: <br>
-Create and grow podcasts by planning episodes, producing audio or video, generating clips, and building audience across formats. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create and grow podcasts by planning episodes, producing audio or video, generating clips, and building audience across formats.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-External creators, podcast producers, and content teams use this skill to plan show formats, prepare episodes, improve production workflows, create clips, and grow audiences across audio and video channels. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Consent-sensitive interview material may be recorded or published without clear permission. <br>
-Mitigation: Get explicit consent before recording pre-show conversation or publishing any interview material. <br>
-Risk: Media processing commands can overwrite, alter, or degrade important audio and video files if run on originals. <br>
-Mitigation: Review commands before execution, work on copies, and keep backups of source recordings. <br>
-Risk: Private, copyrighted, or sensitive recordings may be exposed through AI, transcription, or hosting providers. <br>
-Mitigation: Use external services only after confirming the content can be uploaded under the provider terms and the creator's privacy requirements. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub Podcast Release](https://clawhub.ai/ivangdavila/podcast) <br>
-- [Podcast Formats](artifact/formats.md) <br>
-- [Production - Audio and Video](artifact/production.md) <br>
-- [AI-Generated Podcasts](artifact/ai-generation.md) <br>
-- [Growth - Audience, SEO, Monetization](artifact/growth.md) <br>
-- [Episodes - Planning, Scripting, Show Notes](artifact/episodes.md) <br>
-- [Tools and Platforms](artifact/tools.md) <br>
+## Use Case:
 
+Podcast creators, producers, and marketing teams use this skill to plan show formats, prepare episodes, produce audio or video, generate clips, publish episodes, and grow an audience.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with templates, checklists, command examples, and code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include podcast outlines, scripts, show notes, production commands, tool recommendations, and growth plans.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Interview guidance may encourage recording pre-show conversation before participants understand that recording has begun.
+
+Mitigation: Record only after every participant has clearly agreed, announce recording status, and obtain separate approval before transcribing, uploading, or publishing any pre-show material.
+
+Risk: AI voice generation workflows can misuse cloned voices or private source material.
+
+Mitigation: Confirm consent, copyright status, and vendor data policies before cloning voices or uploading private material to AI tools.
+
+Risk: AI-generated scripts or synthetic podcast segments can contain inaccurate claims or insufficient disclosure.
+
+Mitigation: Review generated content for accuracy and disclose synthetic voices or AI-created podcast material where required or appropriate.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/ivangdavila/skills/podcast)
+- [SKILL.md](artifact/SKILL.md)
+- [Podcast Formats](artifact/formats.md)
+- [Production - Audio and Video](artifact/production.md)
+- [AI-Generated Podcasts](artifact/ai-generation.md)
+- [Growth - Audience, SEO, Monetization](artifact/growth.md)
+- [Episodes - Planning, Scripting, Show Notes](artifact/episodes.md)
+- [Tools - Platforms, Software, APIs](artifact/tools.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline templates, checklists, command examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include podcast outlines, scripts, show notes, production checklists, ffmpeg or transcription commands, platform recommendations, and growth plans.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

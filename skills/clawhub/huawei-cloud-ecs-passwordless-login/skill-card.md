@@ -1,46 +1,66 @@
-## Description: <br>
-Configure passwordless SSH login to Huawei Cloud ECS instances using COC by automating IAM agency authorization, SSH key generation, COC script deployment, SSH connection testing, and timed key cleanup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Configure passwordless SSH login to Huawei Cloud ECS instances using COC by automating IAM agency authorization, SSH key generation, COC script deployment, SSH testing, and timed key cleanup.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and cloud operators use this skill to set up short-lived passwordless SSH access to Huawei Cloud ECS instances through COC, verify connectivity, and clean up deployed keys after the workflow completes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill creates temporary root SSH credentials and may preserve active SSH access after key cleanup through ControlMaster. <br>
-Mitigation: Require explicit opt-in for ControlMaster persistence, prefer a least-privileged SSH user where possible, keep ControlPersist short, and verify remote authorized_keys cleanup succeeds. <br>
-Risk: The workflow changes local SSH behavior by appending an SSH config entry and creating a ControlMaster socket. <br>
-Mitigation: Review the SSH config entry before use, remove the entry and socket after the session is no longer needed, and keep persistence settings aligned with the operational need. <br>
-Risk: Huawei Cloud AK/SK credentials and generated private keys could be exposed through shared shells, logs, or agent output. <br>
-Mitigation: Avoid shared shell history and logs, never print private key content, store keys only in the temporary location for the cleanup window, and confirm local key deletion. <br>
+## Use Case:
 
+Developers and cloud operators use this skill to establish temporary passwordless SSH access to Huawei Cloud ECS instances through COC, including agency setup, script execution, connection verification, and cleanup guidance.
 
-## Reference(s): <br>
-- [CLI Installation Guide](references/cli-installation-guide.md) <br>
-- [IAM Policies](references/iam-policies.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Acceptance Criteria](references/acceptance-criteria.md) <br>
-- [Huawei Cloud KooCLI documentation](https://support.huaweicloud.com/intl/en-us/usermanual-hcli/hcli_01_001.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Structured Markdown progress reports with inline shell commands, JSON command files, SSH configuration snippets, status values, and cleanup guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses ECS instance or IP, region, SSH user, cleanup delay, and ControlPersist timeout; creates temporary SSH keys and COC JSON files during execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The workflow creates privileged SSH access to a Huawei Cloud ECS instance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a test or tightly scoped account first and install only when root-level SSH access is intended.
+
+Risk: SSH access can survive key cleanup through ControlMaster configuration and socket state.
+
+Mitigation: Manually remove the SSH config entry and socket after use, and confirm authorized_keys and temporary keys are deleted.
+
+Risk: Existing COC scripts or broad agency permissions can expand the impact of execution.
+
+Mitigation: Verify any existing COC script before execution and avoid broad FOREVER agency permissions where possible.
+
+Risk: Host-key verification is weakened by the workflow's SSH options.
+
+Mitigation: Restore SSH host-key verification after setup and use normal known_hosts checks for ongoing access.
+
+## Reference(s):
+
+- [CLI Installation Guide](references/cli-installation-guide.md)
+- [IAM Policies](references/iam-policies.md)
+- [Verification Method](references/verification-method.md)
+- [Acceptance Criteria](references/acceptance-criteria.md)
+- [Huawei Cloud KooCLI Documentation](https://support.huaweicloud.com/intl/en-us/usermanual-hcli/hcli_01_001.html)
+- [ClawHub Skill Page](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-ecs-passwordless-login)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash commands and structured status output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes IAM, COC, SSH, and cleanup steps for a single target ECS workflow.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

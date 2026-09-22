@@ -1,41 +1,57 @@
-## Description: <br>
-Blog Writer Tool Free helps agents create, list, update, delete, draft, and publish Markdown blog posts through API-key-protected REST endpoints. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+博客写作助手基础版 helps users draft 800-1500 word blog posts, match personal writing-style examples, integrate research materials, and iterate on titles, structure, and paragraphs.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External creators, independent developers, and agent developers use this skill to manage a personal or local blog workflow, including Markdown authoring, tag organization, draft review, publishing, and post deletion. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can publish or delete real blog content when used with a capable API key. <br>
-Mitigation: Prefer a limited API key, create drafts by default, confirm exact slugs before deletion, and keep backups or soft-delete recovery available. <br>
-Risk: API key exposure could allow unauthorized changes to blog content. <br>
-Mitigation: Store API keys outside public code, pass them through protected configuration, and rotate any leaked key promptly. <br>
+## Use Case:
 
+External users and individual creators use this skill to turn topics, research links, and writing-style samples into draft blog or marketing content for review and revision.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/blog-writer-tool-free) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, REST API examples, and optional JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create, modify, publish, or delete blog content through API-key-authenticated endpoints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The security scan flags broad file, shell, and network/API behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only with human supervision and restrict the agent to the files, commands, and network destinations needed for the writing task.
+
+Risk: The skill includes credential-related setup and environment inspection examples.
+
+Mitigation: Do not allow the agent to enumerate unrelated environment variables or handle credentials outside the specific API keys required by the task.
+
+Risk: The skill claims local-only data handling while also describing callback URLs and external APIs.
+
+Mitigation: Treat the local-data privacy claim as incomplete and review any callback or external API use before sending user content or research materials.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/blog-writer-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, shell commands, guidance]
+
+**Output Format:** [Markdown and text with optional JSON configuration examples and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference input_params, output_format, callback_url, style samples, research links, and local agent configuration.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence; artifact frontmatter lists 1.0.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

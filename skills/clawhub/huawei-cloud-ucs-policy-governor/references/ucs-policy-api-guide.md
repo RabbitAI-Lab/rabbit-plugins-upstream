@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document provides API reference information for Huawei Cloud UCS (Universal Cloud Service) policy governance operations using hcloud CLI. All commands follow the standard format: `hcloud UCS <Operation> --param=value --cli-region=<region>`.
+This document provides API reference information for Huawei Cloud UCS (Ubiquitous Cloud Native Service) policy governance operations using hcloud CLI. All commands follow the standard format: `hcloud UCS <Operation> --param=value --cli-region=<region>`.
 
 ## Authentication
 
@@ -130,11 +130,11 @@ hcloud UCS ListPolicyInstances --cli-region=cn-north-4
 
 **Response Example** (verified for empty result):
 
-When no instances exist, returns `{ "items": null }`. When populated, likely k8s-style objects based on verified UCS pattern:
+When no instances exist, returns `{ "items": [] }` (empty array). When populated, returns k8s-style objects based on verified UCS pattern:
 
 ```json
 {
-  "items": null
+  "items": []
 }
 ```
 
@@ -304,11 +304,11 @@ hcloud UCS ListPolicyJobs --kind=EnablePolicy --cli-region=cn-north-4
 
 **Response Example** (verified for empty result):
 
-When no jobs exist, returns `{ "items": null }`. When populated, likely k8s-style objects based on verified UCS pattern:
+When no jobs exist, returns `{ "items": [] }` (empty array). When populated, returns k8s-style objects based on verified UCS pattern:
 
 ```json
 {
-  "items": null
+  "items": []
 }
 ```
 

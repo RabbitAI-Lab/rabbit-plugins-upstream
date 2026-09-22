@@ -1,38 +1,62 @@
-## Description: <br>
-Complete cybersecurity assessment, threat modeling, and hardening system for security audits, penetration testing methodology, incident response, and building security programs across technology stacks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cybersecurity Engine provides a stack-agnostic methodology for security assessment, threat modeling, hardening, vulnerability management, incident response, penetration testing, supply-chain review, and security program design.
 
-## Publisher: <br>
-[1kalin](https://clawhub.ai/user/1kalin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[1kalin](https://clawhub.ai/user/1kalin)
 
-## Use Case: <br>
-Developers, security engineers, and technical teams use this skill to assess security posture, create threat models, review application and infrastructure security, plan incident response, and prioritize remediation work. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Dual-use security assessment and penetration-testing guidance could be misapplied to systems without authorization. <br>
-Mitigation: Use the skill only for systems you own or are explicitly authorized to assess, and define the target and scope before requesting audits, hardening, or testing methodology. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/1kalin/afrexai-cybersecurity-engine) <br>
-- [Publisher profile](https://clawhub.ai/user/1kalin) <br>
+## Use Case:
 
+Developers, security engineers, and technical teams use this skill to structure security audits, STRIDE-style threat models, hardening plans, vulnerability reports, incident response playbooks, and security program roadmaps. Penetration-testing guidance should be used only on systems the user owns or is explicitly authorized to test.
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with checklists, YAML templates, code snippets, shell commands, and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Instruction-only skill with no bundled code execution or external dependencies.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill includes penetration-testing methodology and active reconnaissance guidance.
+
+Mitigation: Use testing guidance only for owned systems or explicitly authorized scopes, and define targets, exclusions, and rules of engagement before testing.
+
+Risk: Security remediation, incident response, and hardening recommendations can be context-dependent and may affect production availability or compliance obligations.
+
+Mitigation: Have qualified security, infrastructure, legal, or compliance owners review plans before applying changes to live systems or sending incident communications.
+
+Risk: The license for this release is not available in the provided evidence.
+
+Mitigation: Confirm license and terms of use before redistribution, commercial adoption, or inclusion in regulated workflows.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/1kalin/skills/afrexai-cybersecurity-engine)
+- [AfrexAI context packs](https://afrexai-cto.github.io/context-packs/)
+- [AfrexAI Compliance Engine](https://clawhub.com/skills/afrexai-compliance-engine)
+- [AfrexAI Risk Management](https://clawhub.com/skills/afrexai-risk-management)
+- [AfrexAI DevOps Engine](https://clawhub.com/skills/afrexai-devops-engine)
+- [AfrexAI API Architect](https://clawhub.com/skills/afrexai-api-architect)
+- [AfrexAI Code Reviewer](https://clawhub.com/skills/afrexai-code-reviewer)
+
+## Skill Output:
+
+**Output Type(s):** [text, guidance, markdown, configuration, shell commands, code]
+
+**Output Format:** [Markdown with checklists, YAML templates, configuration snippets, and command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No external dependencies are required by the artifact; outputs are advisory and should be reviewed before use.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

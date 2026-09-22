@@ -1,46 +1,61 @@
-## Description: <br>
-Queries Huawei Cloud ECS, BMS, IMS, and AS resources through packaged Python SDK scripts for inventory, specification, image, quota, and status lookup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries Huawei Cloud computing resources across ECS, BMS, IMS, and AS for read-only inventory, details, quotas, available specifications, images, console URLs, and scaling status.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and cloud operators use this skill to query existing Huawei Cloud compute resources, available specifications, images, quotas, identifiers, and status data for inventory, verification, and automation planning. It is intended for read-only lookup workflows, although some scripts can return sensitive server passwords or console login URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires Huawei Cloud AK/SK credentials and can access account resource data. <br>
-Mitigation: Use least-privilege credentials, prefer temporary credentials where available, and avoid exposing credential values in prompts, logs, or transcripts. <br>
-Risk: Some query scripts can retrieve sensitive server passwords or VNC console login URLs. <br>
-Mitigation: Run password and console scripts only when explicitly needed, limit who can view outputs, and keep returned secrets out of shared logs and transcripts. <br>
-Risk: The setup path can install dependencies and persist a local project ID. <br>
-Mitigation: Review the environment setup step before execution and clean up generated local state such as .venv or .project_id when it is no longer needed. <br>
+## Use Case:
 
+Developers, cloud operators, and infrastructure engineers use this skill to query Huawei Cloud compute inventory and supporting resource metadata without creating, modifying, or deleting resources. It helps collect reusable IDs, names, flavors, images, network attachments, quotas, and scaling configuration details for verification, automation planning, and environment inventory.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-computing-query) <br>
-- [Huawei Cloud Auto Scaling query guide](artifact/references/as/guide.md) <br>
-- [BMS bare metal server query guide](artifact/references/bms/guide.md) <br>
-- [ECS query guide](artifact/references/ecs/guide.md) <br>
-- [IMS query guide](artifact/references/ims/guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and summarized JSON query results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include Huawei Cloud resource identifiers, configuration details, quotas, passwords, or console URLs depending on the script invoked.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Setup behavior disables TLS verification and may fall back to a remote installer download.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Fix TLS verification before routine use, install dependencies from trusted sources, and run setup only on trusted networks.
+
+Risk: Some query scripts can return server passwords or console access URLs.
+
+Mitigation: Invoke password and console scripts only when explicitly needed, redact outputs before sharing, and use least-privilege Huawei Cloud credentials.
+
+Risk: The skill relies on Huawei Cloud access keys and secret keys supplied through environment variables.
+
+Mitigation: Use scoped or temporary credentials where possible and avoid logging or displaying credential environment variable values.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-computing-query)
+- [ECS Python Script Usage Guide](artifact/references/ecs/guide.md)
+- [BMS Query Guide](artifact/references/bms/guide.md)
+- [IMS Python Script Usage Guide](artifact/references/ims/guide.md)
+- [Huawei Cloud Auto Scaling Query Guide](artifact/references/as/guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON query results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only query outputs may include cloud resource identifiers, metadata, passwords, or console URLs depending on the selected script.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

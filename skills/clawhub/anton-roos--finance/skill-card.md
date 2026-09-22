@@ -1,42 +1,59 @@
-## Description: <br>
-Track stocks, ETFs, indices, crypto (where available), and FX pairs with caching + provider fallbacks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Track stocks, ETFs, indices, crypto where available, and FX pairs with caching and provider fallbacks.
 
-## Publisher: <br>
-[anton-roos](https://clawhub.ai/user/anton-roos) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[anton-roos](https://clawhub.ai/user/anton-roos)
 
-## Use Case: <br>
-External users and developers use this skill to fetch market quotes, generate stock, ETF, and index series, maintain a local watchlist, and summarize finance data with provider caveats. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill contacts public finance APIs and may be affected by provider rate limits, unofficial access changes, or delayed FX updates. <br>
-Mitigation: Use caching and throttling, avoid claiming real-time data unless the selected provider supports it, and consider a paid provider for frequent or high-volume access. <br>
-Risk: The skill writes local cache and watchlist state, and the documented metadata state directory differs from the script path. <br>
-Mitigation: Run it in a dedicated virtual environment or workspace and review local state under .cache/market-tracker before sharing or packaging. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub finance skill](https://clawhub.ai/anton-roos/skills/finance) <br>
-- [Publisher profile](https://clawhub.ai/user/anton-roos) <br>
-- [Provider and symbol formats](providers.md) <br>
-- [ExchangeRate-API Open Access endpoint](https://open.er-api.com/v6/latest/) <br>
+## Use Case:
 
+External users and developers use this skill to fetch market quotes, generate stock or ETF series, maintain a local watchlist, and summarize finance data with provider caveats.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown summaries with shell commands; scripts can emit JSON quotes, CSV series, and JSON watchlist summaries.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses a local cache and watchlist; public finance providers may rate-limit and FX open access data updates daily.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.1.2 (source: server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Third-party market providers may rate-limit requests, change behavior, or provide delayed data.
+
+Mitigation: Use the skill's cache and throttling guidance, report provider caveats in summaries, and avoid claiming real-time data unless the provider supports it.
+
+Risk: Dependency versions are ranges rather than locked versions.
+
+Mitigation: Install in an isolated Python virtual environment and pin or lock dependencies before operational use.
+
+Risk: Crypto coverage, provider fallbacks, and historical FX series are limited or may be inaccurate.
+
+Mitigation: Treat these capabilities as best-effort, explain unsupported historical FX requests, and add a suitable paid provider before relying on high-frequency or historical FX workflows.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/anton-roos/skills/finance)
+- [Publisher profile](https://clawhub.ai/user/anton-roos)
+- [providers.md](providers.md)
+- [ExchangeRate-API Open Access endpoint](https://open.er-api.com/v6/latest/<BASE>)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands; helper scripts emit JSON or CSV.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses local cache and watchlist files; quote freshness depends on upstream providers.]
+
+## Skill Version(s):
+
+1.1.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

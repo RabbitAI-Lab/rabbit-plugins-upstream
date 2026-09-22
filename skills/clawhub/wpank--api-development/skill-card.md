@@ -1,39 +1,47 @@
-## Description: <br>
-Meta-skill that orchestrates the full API development lifecycle from design through documentation by coordinating specialized skills, agents, and commands into a build workflow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Meta-skill that orchestrates the full API development lifecycle from design through documentation by coordinating specialized skills, agents, and commands into a seamless build workflow.
 
-## Publisher: <br>
-[wpank](https://clawhub.ai/user/wpank) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[wpank](https://clawhub.ai/user/wpank)
 
-## Use Case: <br>
-Developers and engineers use this skill to plan, build, test, document, version, and deploy REST, GraphQL, or gRPC APIs through a structured lifecycle workflow. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Downstream implementation, deployment, CI/CD, database, or production API actions may use credentials or affect live systems. <br>
-Mitigation: Review downstream skills before use and use scoped credentials for deployment, CI/CD, database, and production API operations. <br>
-Risk: Generated API designs, schemas, code, or documentation can encode incorrect security, authorization, error handling, or versioning decisions. <br>
-Mitigation: Review generated outputs against the API checklist, run tests, and validate OpenAPI or contract artifacts before deployment. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page: api-development](https://clawhub.ai/wpank/api-development) <br>
+## Use Case:
+
+Developers and engineers use this skill to plan and run an end-to-end API development workflow, including design, OpenAPI specification, endpoint scaffolding, implementation, testing, documentation, versioning, and deployment.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The security review found that the README's unpinned install command and the deployment step deserve review before use.
+
+Mitigation: Review the install path, prefer a pinned and verified install method, and only allow deployment after confirming the target environment, credentials, approvals, tests, and rollback plan.
+
+## Reference(s):
 
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with checklists, code blocks, generated API artifacts, and implementation steps.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Instruction-only orchestration skill; no hidden execution, credential collection, persistence, or destructive behavior was reported in the security evidence.] <br>
+## Skill Output:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+**Output Format:** [Markdown guidance with checklists, tables, deliverable descriptions, and inline command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Coordinates API lifecycle tasks and routes the agent toward related skills when available.]
+
+## Skill Version(s):
+
+1.0.0 (source: server evidence release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

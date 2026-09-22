@@ -1,41 +1,55 @@
-## Description: <br>
-Cron Worker Guardrails helps agents harden OpenClaw cron and background workers against brittle shell execution, cwd/env drift, false pipeline failures, and noisy success output. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents harden OpenClaw cron and background workers with POSIX-focused reliability guardrails for quoting, deterministic working directories and environments, pipeline behavior, and silent-on-success operation.
 
-## Publisher: <br>
-[phenomenoner](https://clawhub.ai/user/phenomenoner) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[phenomenoner](https://clawhub.ai/user/phenomenoner)
 
-## Use Case: <br>
-Developers and operators use this skill to design or review cron and background worker prompts, wrappers, and scripts so scheduled jobs are deterministic, low-noise, idempotent, and safer to rerun. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Generated cron or background worker changes could delete data, alter persistent configuration, or mutate control-plane settings without enough review. <br>
-Mitigation: Require explicit approval for deletion, persistent configuration changes, or control-plane mutations before applying the skill to real scheduled jobs. <br>
-Risk: Scheduled jobs can become brittle or noisy if generated scripts and commands are not reviewed for scope, idempotency, cwd/env assumptions, and success output. <br>
-Mitigation: Review any scripts an agent creates, keep jobs narrowly scoped and idempotent, document required environment, and use silent-on-success behavior. <br>
+## Use Case:
 
+Developers and automation maintainers use this skill to make OpenClaw cron and background workers more reliable, low-noise, and safe by default. It is suited to execution-wrapper hardening rather than application logic debugging.
 
-## Reference(s): <br>
-- [Cron Agent Contract](references/cron-agent-contract.md) <br>
-- [Cron exec pitfalls](references/pitfalls.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration instructions] <br>
-**Output Format:** [Markdown guidance with inline shell command patterns and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Instruction-only; no executable code is included in the skill artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Unattended cron payloads can make unclear, noisy, or destructive changes if the generated job scope is not reviewed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review actual cron payloads for clear scope, documented environment variables, rollback behavior, and no destructive actions without explicit approval.
+
+Risk: Cron output may expose secrets or create unnecessary alerts when debug logging is copied into unattended jobs.
+
+Mitigation: Redact secrets by default and keep successful runs silent, using only short actionable failure messages.
+
+## Reference(s):
+
+- [Cron Agent Contract](references/cron-agent-contract.md)
+- [Cron exec pitfalls -> safer replacements](references/pitfalls.md)
+- [ClawHub skill page](https://clawhub.ai/phenomenoner/skills/cron-worker-guardrails)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline shell and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces concise hardening checklists and safe execution patterns for unattended jobs.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter and server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

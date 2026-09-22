@@ -1,49 +1,68 @@
-## Description: <br>
-Huawei Cloud SWR enterprise instance lifecycle management via hcloud CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manages Huawei Cloud SWR enterprise instance lifecycle workflows with hcloud CLI and a Python SDK helper for instance creation.
 
-## Publisher: <br>
-[pintudeyudi](https://clawhub.ai/user/pintudeyudi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pintudeyudi](https://clawhub.ai/user/pintudeyudi)
 
-## Use Case: <br>
-Developers and cloud operators use this skill to manage Huawei Cloud SWR enterprise registry resources, including instances, namespaces, registries, repositories, artifacts, credentials, endpoints, domains, and verification workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide changes to powerful cloud registry permissions and resources. <br>
-Mitigation: Use least-privilege IAM policies where possible and require explicit human confirmation before creating, updating, or deleting SWR resources. <br>
-Risk: Broad public access settings can expose registries or artifacts. <br>
-Mitigation: Avoid public 0.0.0.0/0 access and use narrow IP allowlists or private VPC endpoints for registry access. <br>
-Risk: Huawei Cloud AK/SK credentials and registry secrets can be exposed through command lines, logs, or conversation text. <br>
-Mitigation: Use environment variables or secure configuration, avoid printing secrets, and do not pass real secrets directly in command arguments. <br>
-Risk: Insecure registry or TLS settings can weaken transport and registry trust. <br>
-Mitigation: Prefer validated TLS, avoid insecure registry options unless explicitly required, and review certificate and domain configuration before use. <br>
+## Use Case:
 
+Developers and cloud operations engineers use this skill to administer Huawei Cloud SWR enterprise instances, namespaces, registries, credentials, endpoints, custom domains, image artifacts, and verification workflows.
 
-## Reference(s): <br>
-- [Command Reference](references/command-reference.md) <br>
-- [IAM Permission Policies](references/iam-policies.md) <br>
-- [SWR Instance API Guide](references/swr-instance-api-guide.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Huawei Cloud SWR Documentation](https://support.huaweicloud.com/swr/index.html) <br>
-- [Huawei Cloud API Explorer](https://apiexplorer.developer.huaweicloud.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples, Python helper invocations, and JSON configuration examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Huawei Cloud region settings, IAM policy examples, credential-handling guidance, and confirmation steps for destructive operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release evidence) <br>
+Risk: The skill can delete SWR instances, namespaces, repositories, artifacts, credentials, endpoints, domains, and job records.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit human confirmation for destructive actions and verify the target resource before execution.
+
+Risk: Credential workflows can create or expose long-term and temporary registry credentials.
+
+Mitigation: Use least-privileged IAM users, keep secrets in approved secret stores, avoid inline secret values, and rotate credentials regularly.
+
+Risk: Public registry access or skipped TLS verification can expose registries or weaken transport security.
+
+Mitigation: Require reviewed IP allowlists, avoid 0.0.0.0/0 except under documented exception, and keep TLS verification enabled.
+
+Risk: The Python helper depends on Huawei Cloud SDK packages to perform instance creation.
+
+Mitigation: Pin and review SDK dependencies before running the helper in a production environment.
+
+## Reference(s):
+
+- [Huawei Cloud SWR Enterprise Console](https://console.huaweicloud.com/swr-instance)
+- [SWR Enterprise Instance - Command Reference](references/command-reference.md)
+- [SWR Instance API Reference Guide](references/swr-instance-api-guide.md)
+- [IAM Permission Policies - SWR Enterprise Instance Skill](references/iam-policies.md)
+- [SWR Enterprise Instance - Parameter Reference](references/parameter-reference.md)
+- [SWR Enterprise Instance - Output Format](references/output-format.md)
+- [Verification Method - SWR Enterprise Instance Skill](references/verification-method.md)
+- [Common Pitfalls & Solutions](references/common-pitfalls.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose hcloud CLI commands, Python helper invocations, IAM policy snippets, and verification steps.]
+
+## Skill Version(s):
+
+0.1.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

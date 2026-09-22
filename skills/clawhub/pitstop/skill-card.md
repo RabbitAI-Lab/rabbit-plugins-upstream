@@ -1,43 +1,58 @@
-## Description: <br>
-Pitstop helps agents answer Italy-specific fuel-station price and EV charging station lookup questions using MIMIT fuel data, OpenStreetMap Overpass, and ISTAT municipality coordinates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+pitstop helps agents query Italian fuel-station prices and EV charging stations by municipality, province, brand, or coordinates using MIMIT Osservaprezzi Carburanti, OpenStreetMap, and ISTAT data.
 
-## Publisher: <br>
-[galjos](https://clawhub.ai/user/galjos) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[galjos](https://clawhub.ai/user/galjos)
 
-## Use Case: <br>
-Agents and developers use Pitstop to find cheaper Italian fuel stations, compare station prices by place, brand, fuel, or coordinates, and locate nearby EV chargers. It is useful for Italy-focused travel, logistics, and route-planning assistance where daily public fuel data and public charger listings are sufficient. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Italy <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Fuel price data is daily public data and may not reflect live or intraday station prices. <br>
-Mitigation: Tell users the data is not live and prefer recent results or freshness checks before recommending a station. <br>
-Risk: EV charger results rely on public mapping services and do not include per-station kWh tariffs. <br>
-Mitigation: Surface operator tariff links instead of estimating charging prices, and handle mapping service failures explicitly. <br>
-Risk: The skill installs and runs an external pitstop CLI that may download or cache public datasets and call OpenStreetMap services. <br>
-Mitigation: Install from the disclosed package path, review the CLI before deployment, and run it in an environment where network and cache behavior is acceptable. <br>
+## Use Case:
 
+External users, developers, and agents use pitstop to answer Italy-focused fuel-price, fuel-station, and EV-charger lookup questions while preserving source freshness, quality, and tariff caveats.
 
-## Reference(s): <br>
-- [Pitstop ClawHub page](https://clawhub.ai/galjos/skills/pitstop) <br>
-- [Publisher profile](https://clawhub.ai/user/galjos) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Text] <br>
-**Output Format:** [Markdown with inline shell commands and JSON or GeoJSON output expectations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Agents should request JSON or GeoJSON output when consuming pitstop programmatically and surface navigation or tariff links when available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill depends on running the pitstop CLI and allowing it to fetch and cache public fuel and charger data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in environments where that CLI dependency and data access are acceptable.
+
+Risk: EV charger results do not provide per-station kWh tariffs.
+
+Mitigation: Use the returned operator tariff link and avoid quoting charging prices unless verified from that source.
+
+Risk: Fuel prices come from daily open data and may include stale, unscreened, outlier, or suspect-coordinate records.
+
+Mitigation: Surface freshness, quality, outlier, and coordinate warnings from the tool output when answering users.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/galjos/skills/pitstop)
+- [Project homepage](https://github.com/galjos/pitstop-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with CLI command examples and JSON or GeoJSON result interpretation]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agent responses should surface stale-cache, partial-result, outlier, coordinate, and charger-tariff caveats when present.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

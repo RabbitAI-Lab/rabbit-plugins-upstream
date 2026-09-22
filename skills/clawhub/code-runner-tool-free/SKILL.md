@@ -1,86 +1,50 @@
 ---
-slug: code-runner-tool-free
-name: code-runner-tool-free
-version: 1.0.0
-displayName: 代码执行工具免费版
-summary: "通过PTY方式在非交互环境中执行编程任务,支持自动应答与文件同步。面向个人开发者的代码执行工具,在非交互环境中以 PTY 方式运行编程任务。核心能力:"
+name: "code-runner-tool-free"
+description: "通过PTY方式在非交互环境中执行编程任务,支持自动应答与文件同步。Use when 需要代码生成、编程辅助、调试测试、开发部署时使用。不适用于无明确技术栈的模糊需求。适用于独立开发者、企业团队和自动化工作流场景。支持中文交互，无需复杂配置即开即用。输出结果可直接使用，减少二次加工成本。提供结构化输出和错误处理机制。"
 license: Proprietary
-edition: free
-description: 面向个人开发者的代码执行工具,在非交互环境中以 PTY 方式运行编程任务。核心能力:，可自动提升工作效率
-
-  - PTY 伪终端执行,适配非 TTY 环境
-
-  - 自动应答确认提示
-
-  - 项目文件同步与结果回传
-
-  - 可配置超时与清理机制
-
-  适用场景:
-
-  - 自动化代码审查
-
-  - 重构任务执行
-
-  - 功能开发与 Bug 修复
-
-  差异化:
-
-  - 免费版提供单任务 PTY 执行能力
-
-  - 适配容器、CI/CD 等非交互环境
-
-  - 自动处理确认提示,无需人工干预
-
-  适用关键词: runner, code, pty, execute, non-in...'
-tags:
-  - 开发工具
-  - 代码执行
-  - 自动化
-  - PTY
-  - 代码生成
-  - 编程辅助
-  - python
-  - path
-  - prompt
-  - run_code_task
-  - developer
+allowed-tools: read exec
+compatibility: "Requires LLM with tool-use capability"
+metadata:
+  displayName: "代码执行工具免费版"
+  version: "1.0.0"
+  summary: "通过PTY方式在非交互环境中执行编程任务,支持自动应答与文件同步"
+  tags:
+    - "开发工具"
+    - "代码执行"
+    - "自动化"
+    - "PTY"
+  source: "SkillHub"
+  converted_at: "2026-07-22T17:58:36"
 tools:
-  - read
   - exec
+  - read
   - write
-  - glob
-  - grep
-homepage: ""
-category: "Development"
 ---
+
+> **功能说明**: 本技能涵盖 中文交互、化工作流场景 等核心能力。
+
 # 代码执行工具免费版
 
 ## 概述
 
-代码执行工具免费版为个人开发者提供在非交互环境中执行编程任务的能力。工具使用 PTY(伪终端)方式运行,适配容器、CI/CD、后台进程等非 TTY 环境,并自动应答执行过程中的确认提示.
-免费版聚焦单任务执行,提供文件同步、超时控制、输出捕获等核心能力.
+代码执行工具免费版为个人开发者提供在非交互环境中执行编程任务的能力。工具使用 PTY(伪终端)方式运行,适配容器、CI/CD、后台进程等非 TTY 环境,并自动应答执行过程中的确认提示。
+
+免费版聚焦单任务执行,提供文件同步、超时控制、输出捕获等核心能力。
+
 ## 核心能力
 
 ### 1. PTY 伪终端执行
 
 | 特性 | 说明 |
-|---|---|
+|:-----|:-----|
 | 非 TTY 适配 | 在容器、CI/CD、后台进程等环境运行 |
 | 自动应答 | 自动回答执行过程中的确认提示 |
 | 完整输出 | 捕获并返回完整的 stdout/stderr |
 | 文件同步 | 复制项目到临时目录执行,完成后同步回 |
 
-**处理**: 解析PTY 伪终端执行的输入参数,完成核心逻辑,返回结构化响应.
-**输出**: 返回PTY 伪终端执行的响应数据,包含状态码、结果和日志.
-### 2. 执行流程
+**输出**: 返回PTY 伪终端执行的执行结果,包含操作状态和输出数据。
 
-## 输入格式
-| 参数名 | 类型 | 必填 | 说明 |
-|:-----|:-----|:-----|:-----|
-| input | string | 是 | 代码执行工具免费版处理的输入数据或指令 |
-| options | object | 否 | 附加配置选项,如模式选择、格式偏好等 |
-| callback_url | string | 否 | 异步处理完成后的回调通知URL |
+### 2. 执行流程
 
 ```text
 1. 复制项目到临时目录
@@ -91,8 +55,7 @@ category: "Development"
 6. 清理临时文件
 ```
 
-**处理**: 解析执行流程的输入参数,完成核心逻辑,返回结构化响应.
-**输出**: 返回执行流程的响应数据,包含状态码、结果和日志.
+**输出**: 返回执行流程的执行结果,包含操作状态和输出数据。
 - 执行此能力时使用`input_params`参数,支持创建/查询/导出操作
 
 ### 3. 自动应答机制
@@ -109,32 +72,33 @@ if b'Continue?' in output:
     os.write(master_fd, b'y\n')
 ```
 
-**处理**: 解析自动应答机制的输入参数,完成核心逻辑,返回结构化响应.
-**输出**: 返回自动应答机制的响应数据,包含状态码、结果和日志.
-**能力覆盖范围**：本skill的核心能力覆盖以下场景关键词：方式在非交互环境、中执行编程任务、支持自动应答与文、面向个人开发者的、代码执行工具、在非交互环境中以、方式运行编程任务、核心能力、适配非、项目文件同步与结、果回传、可配置超时与清理等。这些关键词对应description中声明的使用场景,均已在上述能力点中提供对应的操作支持.
+**输出**: 返回自动应答机制的执行结果,包含操作状态和输出数据。
+**能力覆盖范围**：本skill的核心能力覆盖以下场景关键词：方式在非交互环境、中执行编程任务、支持自动应答与文、面向个人开发者的、代码执行工具、在非交互环境中以、方式运行编程任务、核心能力、适配非、项目文件同步与结、果回传、可配置超时与清理等。这些关键词对应description中声明的使用场景,均已在上述能力点中提供对应的操作支持。
 - 执行此能力时使用`input_params`参数,支持创建/查询/导出操作
 
 ## 使用场景
 
 ### 场景一: 自动化代码审查
 
-对项目自动执行代码审查,识别潜在问题.
+对项目自动执行代码审查,识别潜在问题。
+
 ```python
 from code_runner import run_code_task
-# ...
+
 result = run_code_task(
     workdir='/path/to/project',
     prompt='审查代码库,识别潜在 Bug 和改进点',
     user='developer',
     timeout=300
 )
-# ...
+
 print(result)
 ```
 
 ### 场景二: 重构任务
 
-自动执行代码重构任务.
+自动执行代码重构任务。
+
 ```python
 result = run_code_task(
     workdir='/path/to/legacy-app',
@@ -146,7 +110,8 @@ result = run_code_task(
 
 ### 场景三: 功能开发
 
-添加新功能并自动测试.
+添加新功能并自动测试。
+
 ```python
 result = run_code_task(
     workdir='/path/to/api-service',
@@ -164,17 +129,17 @@ result = run_code_task(
 
 ## 快速开始
 
-### 第一步: 环境准备
+### 领先步: 环境准备
 
 ```bash
 # 确认 Python 版本
 python3 --version  # 需要 3.8+
-# ...
+
 # 依赖说明
 which claude
-# ...
+
 # 赋予脚本执行权限
-chmod +x （请参考skill目录中的脚本文件）
+chmod +x scripts/run_code.py
 ```
 
 ### 第二步: 基本用法
@@ -183,21 +148,21 @@ chmod +x （请参考skill目录中的脚本文件）
 
 ```python
 from code_runner import run_code_task
-# ...
+
 result = run_code_task(
     workdir='/path/to/project',
     prompt='实现一个简单的健康检查端点',
     user='developer',
     timeout=300
 )
-# ...
+
 print(result)
 ```
 
 **通过命令行:**
 
 ```bash
-python3 （请参考skill目录中的脚本文件） /path/to/project "实现健康检查端点"
+python3 scripts/run_code.py /path/to/project "实现健康检查端点"
 ```
 
 ### 第三步: 高级选项
@@ -228,7 +193,7 @@ run_code_task(workdir, prompt, user='developer', timeout=300)
 **参数说明:**
 
 | 参数 | 类型 | 默认值 | 说明 |
-|---:|---:|---:|---:|
+|:-----|:-----|:-------|:-----|
 | `workdir` | str | 必需 | 项目工作目录 |
 | `prompt` | str | 必需 | 自然语言任务描述 |
 | `user` | str | 'developer' | 执行用户 |
@@ -237,7 +202,7 @@ run_code_task(workdir, prompt, user='developer', timeout=300)
 **返回值:**
 
 | 类型 | 说明 |
-|:---:|:---:|
+|:-----|:-----|
 | str | 合并的 stdout 和 stderr 输出 |
 
 ### 环境变量配置
@@ -245,10 +210,10 @@ run_code_task(workdir, prompt, user='developer', timeout=300)
 ```bash
 # 默认执行用户
 export CODE_RUNNER_USER="developer"
-# ...
+
 # 默认超时时间
 export CODE_RUNNER_TIMEOUT="300"
-# ...
+
 # 临时目录位置(可选)
 export CODE_RUNNER_TEMP_DIR="/tmp/code-runner"
 ```
@@ -256,12 +221,12 @@ export CODE_RUNNER_TEMP_DIR="/tmp/code-runner"
 ### 配置项说明
 
 | 配置项 | 默认值 | 说明 |
-|:------|------:|:------|
+|:-------|:-------|:-----|
 | `CODE_RUNNER_USER` | developer | 默认执行用户 |
 | `CODE_RUNNER_TIMEOUT` | 300 | 默认超时(秒) |
 | `CODE_RUNNER_TEMP_DIR` | /tmp/code-runner | 临时目录 |
 
-## 最佳实践
+## 优选实践
 
 ### 1. 任务描述规范
 
@@ -276,7 +241,7 @@ prompt='''
 - 增加异常日志记录
 - 遵循 PEP 8 规范
 '''
-# ...
+
 # 不好的描述(过于模糊)
 prompt='修复登录问题'
 ```
@@ -284,7 +249,7 @@ prompt='修复登录问题'
 ### 2. 超时设置建议
 
 | 任务类型 | 建议超时 |
-|---:|:---|
+|:---------|:---------|
 | 简单修改 | 300 秒(5分钟) |
 | 功能开发 | 600 秒(10分钟) |
 | 大规模重构 | 1200 秒(20分钟) |
@@ -294,11 +259,11 @@ prompt='修复登录问题'
 
 ```bash
 # 创建专用执行用户(推荐)
-sudo useradd -m -s /（请参考skill目录中的脚本文件） code-runner
-# ...
+sudo useradd -m -s /bin/sh code-runner
+
 # 已知限制
 sudo chown -R code-runner:code-runner /path/to/projects
-# ...
+
 # 使用该用户执行
 export CODE_RUNNER_USER="code-runner"
 ```
@@ -330,7 +295,7 @@ if os.path.exists(temp_dir):
 
 ```bash
 # 以 root 或 sudo 运行
-sudo python3 （请参考skill目录中的脚本文件） /path/to/project "任务描述"
+sudo python3 scripts/run_code.py /path/to/project "任务描述"
 ```
 
 ### Q2: 找不到代码 CLI 怎么办?
@@ -360,14 +325,15 @@ result = run_code_task(
 在脚本中添加新的提示模式:
 
 ```python
-# 编辑 （请参考skill目录中的脚本文件）
+# 编辑 scripts/run_code.py
 if b'new prompt text' in output:
     os.write(master_fd, b'y\n')
 ```
 
 ### Q5: 免费版支持 Windows 吗?
 
-免费版需要 Unix-like 环境(Linux/macOS),因为使用 PTY 功能。Windows 建议在 WSL 中使用.
+免费版需要 Unix-like 环境(Linux/macOS),因为使用 PTY 功能。Windows 建议在 WSL 中使用。
+
 ## 依赖说明
 
 ### 运行环境
@@ -380,7 +346,7 @@ if b'new prompt text' in output:
 ### 第三方依赖
 
 | 依赖项 | 类型 | 是否必需 | 获取方式 |
-|:------:|--------|:-------|:------:|
+|:-------|:-----|:---------|:---------|
 | Python 3.8+ | 运行时 | 必需 | python.org |
 | 代码 CLI | CLI 工具 | 必需 | `npm install -g @anthropic-ai/claude-code` |
 | LLM API | API | 必需 | 由代码 CLI 内置 LLM 提供 |
@@ -392,7 +358,7 @@ if b'new prompt text' in output:
 - 如需在自动化场景使用,配置环境变量:
 
 ```bash
-export ANTHROPIC_API_KEY="your-api-key"
+export ANTHROPIC_API_KEY="${API_KEY:?请设置环境变量}"
 ```
 
 ### 可用性分类
@@ -404,7 +370,7 @@ export ANTHROPIC_API_KEY="your-api-key"
 ## 错误处理
 
 | 错误场景 | 原因 | 处理方式 |
-|----|:--:|---:|
+|---------|------|---------|
 | 配置错误 | 参数缺失或格式错误 | 检查依赖说明中的配置要求 |
 | 运行时错误 | 运行环境不满足 | 确认运行环境符合依赖说明 |
 | 网络错误 | 连接超时或不可达 | 执行ping命令测试网络连通性,检查防火墙和代理设置连接后执行ping命令测试网络连通性,检查防火墙和代理设置连接后重新执行命令，参考国内替代方案 |
@@ -421,19 +387,21 @@ Skill: 正在执行核心功能...
 Skill: 执行完成,结果如下: 操作成功
 ```
 
-## 输出格式
-```json
-{
-  "success": true,
-  "data": {
-    "result": "代码执行工具免费版处理结果",
-    "execution_time": "0.5s",
-    "metadata": {
-      "version": "1.0",
-      "processor": "code runner"
-    }
-  },
-  "execution_log": ["解析输入参数", "执行核心处理", "格式化输出结果"],
-  "error": null
-}
-```
+## 安全注意事项
+
+| 风险类型 | 防范措施 |
+|----------|---------|
+| API密钥泄露 | 通过环境变量配置，禁止硬编码到代码或配置文件中 |
+| 命令执行风险 | 仅执行白名单命令，避免拼接用户输入到命令行参数中 |
+| 网络通信安全 | 使用HTTPS协议，验证SSL证书有效性 |
+| 敏感数据暴露 | 输出结果中不包含密钥、令牌等敏感信息 |
+
+使用前请确认已阅读依赖说明章节，确保运行环境满足安全要求。
+
+## 核心功能
+
+- **自动化执行**: 基于指令驱动的自动化流程
+- **文件处理**: 支持多种文件格式的读取、解析和写入操作
+- **API集成**: 通过标准化接口调用外部服务并处理响应
+- **命令执行**: 在安全沙箱中执行系统命令并收集结果
+- **信息检索**: 快速搜索和过滤目标数据

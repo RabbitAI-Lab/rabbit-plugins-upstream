@@ -1,42 +1,62 @@
-## Description: <br>
-Analyzes pet toy-area videos or video URLs through server-side APIs to summarize interaction frequency, duration, toy preference, daily activity curves, trend comparisons, and activity-decline alerts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet toy-area videos or video URLs through cloud APIs to report toy interaction frequency, duration, preferences, daily activity curves, trend comparisons, and activity-decline alerts.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to submit pet toy-area media for interaction activity analysis and to retrieve prior activity reports. The skill is intended for descriptive pet interaction monitoring rather than veterinary or emotional diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends pet media, video URLs, and user identifiers to a backend service. <br>
-Mitigation: Review the publisher's privacy and retention terms before use; avoid submitting media or URLs containing people, private home details, signed links, internal network resources, or a personally identifying open-id. <br>
-Risk: Server security evidence reports that documented and implemented outputs include unrelated face and health analysis that do not fit the stated pet-toy purpose. <br>
-Mitigation: Treat results as descriptive pet interaction data only, review outputs for off-purpose health or face-analysis content, and do not rely on the skill for diagnosis or wellness decisions. <br>
+## Use Case:
 
+External users and agents use this skill to submit pet toy-area video files or public video URLs for descriptive interaction activity analysis. It can also query saved cloud history and return standardized report tables.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/smyx-pet-toy-interaction-activity-analysis) <br>
-- [Pet Toy Interaction API Documentation](artifact/references/api_doc.md) <br>
-- [Shared Analysis API Documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown tables and structured text or JSON returned from API-backed analysis scripts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include links to exported report images for historical reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill sends pet videos or public video URLs to Life Emergence cloud APIs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only when cloud processing of the submitted pet video content is acceptable.
+
+Risk: The skill requires an open-id, username, or phone number for saved reports and cloud history.
+
+Mitigation: Provide only an intended account identifier and review whether cloud history storage is appropriate before running analysis or history queries.
+
+Risk: The security evidence reports possible remote account creation or use and local SQLite token retention.
+
+Mitigation: Review credential-retention behavior before installation and remove local stored credentials when they are no longer needed.
+
+Risk: Activity-decline alerts may be mistaken for medical or emotional diagnosis.
+
+Mitigation: Treat outputs as descriptive behavior observations only and do not use them as diagnostic conclusions.
+
+## Reference(s):
+
+- [Pet Toy Interaction Activity Analysis API Documentation](artifact/references/api_doc.md)
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-toy-interaction-activity-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration]
+
+**Output Format:** [Markdown reports and tables, JSON or text command output, and optional saved result files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [History queries are formatted as Markdown tables with report links; analysis results are descriptive and not diagnostic.]
+
+## Skill Version(s):
+
+1.0.0 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

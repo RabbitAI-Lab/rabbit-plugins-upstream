@@ -1,39 +1,54 @@
-## Description: <br>
-旅行途中紧急情况行动指南，覆盖护照丢失、航班取消、医疗急救、被盗被抢、自然灾害、交通事故、法律纠纷7大场景，内置55国紧急电话和中国驻外使领馆联系方式，零配置即用。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Chinese-language offline guide for travelers facing emergencies, covering emergency numbers, Chinese embassy or consulate contacts, and action steps for seven common scenarios.
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-Travelers use this skill to look up emergency phone numbers, Chinese embassy or consulate contacts, and step-by-step guidance for urgent situations while abroad. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Emergency phone numbers, embassy procedures, medical guidance, and police processes can become outdated or vary by jurisdiction. <br>
-Mitigation: Use this skill to organize next steps, then verify critical details with official local emergency services, embassy or consulate channels, medical professionals, or legal counsel. <br>
+## Use Case:
 
+External travelers and agents assisting Chinese-speaking travelers use this skill to look up local emergency numbers, Chinese consular contacts, and step-by-step guidance during travel disruptions or emergencies.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/travel-emergency-guide) <br>
-- [中国领事服务网](http://cs.mfa.gov.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown text for successful lookups; JSON error messages for unsupported commands or missing inputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Static local travel-emergency knowledge; no external requests are described by the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: server release evidence) <br>
+Risk: Emergency and consular contact details may change or be incomplete for a user's location.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify phone numbers, embassy contacts, and official instructions against current official sources before relying on them in a real emergency.
+
+Risk: The declared PROXY_TOKEN environment field appears unnecessary for the inspected local-only behavior.
+
+Mitigation: Avoid providing a sensitive token unless a deployment requires it, and keep any configured value secret.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/travel-emergency-guide)
+- [Chinese Consular Service](http://cs.mfa.gov.cn)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Guidance]
+
+**Output Format:** [Plain text or JSON command responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Local-only reference responses; no observed network calls, data collection, persistence, or system modification.]
+
+## Skill Version(s):
+
+2.0.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

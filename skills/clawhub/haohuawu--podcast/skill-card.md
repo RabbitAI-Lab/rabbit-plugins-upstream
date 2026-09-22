@@ -1,49 +1,68 @@
-## Description: <br>
-Turns an article, blog post, text, URL, or batch of source material into a generated and published podcast episode, and supports metadata-only maintenance for published episodes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns article, blog, text, or batch source material into a scripted, synthesized, and published podcast episode with shownotes, images, RSS metadata, resumable TTS caching, and metadata update workflows.
 
-## Publisher: <br>
-[haohuawu](https://clawhub.ai/user/haohuawu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[haohuawu](https://clawhub.ai/user/haohuawu)
 
-## Use Case: <br>
-Developers and content creators use this skill to convert source articles or text into two-host podcast scripts, shownotes, synthesized audio, published episode assets, and an RSS feed. It is also used to update shownotes, covers, and feed metadata for existing episodes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Episode text is sent to Doubao/ByteDance for TTS synthesis. <br>
-Mitigation: Use only source material that the user has approved for third-party TTS processing, and avoid private or access-controlled content unless explicit permission and cleanup steps are confirmed. <br>
-Risk: The skill publishes generated podcast assets, state files, and RSS metadata to a configured TOS bucket. <br>
-Mitigation: Confirm TOS credentials, bucket, region, slug, shownotes, and dry-run output before publishing; use metadata-only update commands when only descriptions or feed metadata change. <br>
-Risk: The source-fetching guide includes a Chrome proxy-credential recipe for difficult pages and image downloads. <br>
-Mitigation: Avoid the proxy-credential flow unless necessary, treat proxy credentials as sensitive, and remove any temporary files or logs that could expose them. <br>
+## Use Case:
 
+External creators, developers, and agents use this skill to convert source articles or provided text into a two-host podcast episode, validate the script and notes, synthesize audio, publish assets, and maintain episode metadata. It is also used for safe reruns, timeline calibration, and RSS/feed updates after publication.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/haohuawu/skills/podcast) <br>
-- [Script format spec](artifact/references/script-spec.md) <br>
-- [Shownotes format spec](artifact/references/notes-spec.md) <br>
-- [Source fetching guide](artifact/references/source-fetching-guide.md) <br>
-- [Images guide](artifact/references/images-guide.md) <br>
-- [Podcast channel config schema](artifact/assets/config.schema.json) <br>
-- [Doubao speech console](https://console.volcengine.com/speech) <br>
-- [Mic tap source sample](https://freesound.org/people/susychristiansen/sounds/149034/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files, Audio, Guidance] <br>
-**Output Format:** [Markdown scripts and shownotes, JSON configuration, shell commands, RSS XML, MP3 audio files, and published episode assets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python, ffmpeg/ffprobe, Doubao TTS credentials, and TOS publishing credentials; supports dry-run estimates, resume caching, validation, and metadata-only updates.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The source-fetching fallback can expose browser proxy credentials if followed literally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid the proxy-credential extraction workflow, do not paste proxy passwords into shell commands, and use safer browser-mediated fetching or user-approved alternatives.
+
+Risk: Publishing requires cloud storage credentials and can update podcast state and RSS metadata.
+
+Mitigation: Use narrowly scoped TOS credentials limited to the intended podcast bucket or prefix, review proposed changes before publishing, and rely on the bundled validation and metadata update scripts.
+
+Risk: Article images may be copied into published shownotes and feeds.
+
+Mitigation: Review images before publishing and confirm that notes reference intended stable TOS-hosted image URLs.
+
+Risk: Runtime dependencies and service clients may change behavior if installed without a lockfile.
+
+Mitigation: Run the scripts in a pinned or locked environment where practical, and review dependency versions before production use.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/haohuawu/skills/podcast)
+- [Script Specification](artifact/references/script-spec.md)
+- [Notes Specification](artifact/references/notes-spec.md)
+- [Images Guide](artifact/references/images-guide.md)
+- [Source Fetching Guide](artifact/references/source-fetching-guide.md)
+- [Podcast Channel Config Schema](artifact/assets/config.schema.json)
+- [Doubao Speech Console](https://console.volcengine.com/speech)
+- [Mic Tap Source Sample](https://freesound.org/people/susychristiansen/sounds/149034/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files, Guidance]
+
+**Output Format:** [Markdown scripts and notes, JSON channel configuration, shell commands, MP3 audio files, image assets, and RSS/feed metadata.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces script.md, notes.md, optional article.md and images, podcast MP3 output, timeline data, episode state, and feed updates; upload behavior depends on configured TOS credentials.]
+
+## Skill Version(s):
+
+1.0.0 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

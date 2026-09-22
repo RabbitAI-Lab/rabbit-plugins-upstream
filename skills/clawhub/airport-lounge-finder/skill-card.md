@@ -1,40 +1,53 @@
-## Description: <br>
-机场贵宾厅查询可按机场、信用卡权益或准入方式检索全球 50+ 机场贵宾厅，返回位置、准入条件、设施和评分等本地参考信息。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+全球50+机场贵宾厅查询，支持按机场/信用卡权益/准入方式三维度搜索，覆盖PP卡/龙腾出行/航司休息室，零配置即装即用。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External travelers and travel-planning agents use this skill to find airport lounges by airport, credit-card benefit, or access method. It is best used as static planning guidance before verifying current rules with the airport, lounge operator, airline, or bank. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Airport lounge access rules and credit-card benefits may be outdated because the skill uses static reference data. <br>
-Mitigation: Verify current access rules with the airport, lounge operator, airline, or bank before relying on the information for travel. <br>
-Risk: The skill cannot book lounges or provide real-time crowding information. <br>
-Mitigation: Use the output as planning guidance only, then complete reservations or access checks through the relevant provider. <br>
+## Use Case:
 
+External travelers and agents use this skill to look up airport lounge options by airport, credit-card benefit, or lounge access method. It returns location, access conditions, facilities, ratings, and related informational guidance from a bundled local dataset.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/airport-lounge-finder) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON] <br>
-**Output Format:** [Markdown lookup summaries for successful results; JSON status messages for errors or empty results.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local static reference data with no evidence of network access, data collection, or persistence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Airport lounge access rules, credit-card benefits, locations, and facility details may be outdated or incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat results as informational and verify current access rules with the airport, airline, bank, or lounge provider before relying on them.
+
+Risk: The bundled data and user-facing output are primarily Chinese-language, which may limit usability for some users.
+
+Mitigation: Use the skill where Chinese-language lookup output is acceptable, or review and adapt responses for the intended audience before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/airport-lounge-finder)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, guidance]
+
+**Output Format:** [Markdown lookup results with JSON status messages for errors or empty results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses a locally bundled Chinese-language reference dataset and does not require network access.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release evidence and target metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

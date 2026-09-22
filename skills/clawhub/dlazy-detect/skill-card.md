@@ -1,43 +1,56 @@
-## Description: <br>
-Detect whether an image, video, or audio file is AI-generated, including visual deepfakes and the likely generator model, and return confidence scores for threshold-based decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects whether an image, video, or audio file is AI-generated, including visual deepfakes and likely generator attribution, and returns confidence scores for decisioning.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, analysts, and other external users use this skill to check image, video, or audio media for signs of AI generation, visual deepfakes, and likely generator attribution. It is intended for media analysis workflows where a structured verdict and confidence scores help inform human review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Local images, videos, or audio files can be uploaded to dLazy hosted services for analysis. <br>
-Mitigation: Use public URLs for less sensitive material when possible, and avoid sending private, biometric, or otherwise sensitive media unless the user has accepted that data handling. <br>
-Risk: The CLI can store a dLazy API key in the user's local configuration. <br>
-Mitigation: Use a per-invocation DLAZY_API_KEY environment variable for short-lived access or log out after use when persistent local credentials are not appropriate. <br>
+## Use Case:
 
+Developers and agents use this skill to check image, video, or audio inputs for AI generation, deepfake indicators, and likely generator attribution before acting on or reporting media authenticity.
 
-## Reference(s): <br>
-- [Dlazy Detect on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-detect) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Text, Guidance] <br>
-**Output Format:** [JSON detection result plus a human-readable text summary] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires exactly one image, video, or audio input. Local files may be uploaded to dLazy media storage for hosted analysis; asynchronous runs may return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Risk: Local images, videos, or audio may be uploaded to dLazy-hosted media storage and analyzed by remote services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid confidential or private media unless the user understands the provider's retention and privacy terms; prefer public URLs or explicit confirmation before local uploads.
+
+Risk: The dLazy API key may be stored in a local CLI configuration file.
+
+Mitigation: Protect the local config file, use per-invocation credentials when appropriate, and remove or rotate the key if the environment is shared or compromised.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-detect)
+- [dLazy CLI homepage](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, json, shell commands, configuration, guidance]
+
+**Output Format:** [JSON detection result plus a human-readable text summary, with Markdown command examples in the skill documentation.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires exactly one image, video, or audio input; asynchronous mode may return a task id for later polling.]
+
+## Skill Version(s):
+
+1.0.18 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

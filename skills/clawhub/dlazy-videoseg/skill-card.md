@@ -1,45 +1,64 @@
-## Description: <br>
-Video human segmentation tool that invokes Aliyun's async SegmentVideoBody to return a same-length black-and-white mask video for downstream compositing or matting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Video human segmentation tool that invokes Aliyun's async SegmentVideoBody service through the dLazy CLI and returns a same-length black/white mask video for downstream compositing or matting.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creators use this skill to run cloud video human segmentation from an agent workflow and obtain mask video outputs for compositing or matting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected videos and request parameters are sent to the dLazy cloud service for processing. <br>
-Mitigation: Use the skill only with media appropriate for third-party cloud processing and confirm before uploading sensitive or restricted video content. <br>
-Risk: The skill requires a dLazy API key that may be stored in local CLI configuration or supplied through an environment variable. <br>
-Mitigation: Store credentials in protected user configuration or per-invocation environment variables, and rotate or revoke keys from the dLazy dashboard if exposure is suspected. <br>
-Risk: The security review notes documentation mistakes around command usage and output format. <br>
-Mitigation: Validate the actual `dlazy videoseg -h` output and returned media type before wiring this skill into automation. <br>
+## Use Case:
 
+Developers and video-production agents use this skill to submit a video URL or local video path to dLazy and receive a segmentation mask asset for downstream compositing or matting workflows.
 
-## Reference(s): <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
-- [Dlazy Videoseg on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-videoseg) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Files, Guidance] <br>
-**Output Format:** [Shell commands and JSON responses containing generated media URLs or async task status.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires npm or npx plus a dLazy API key; async mode returns a generateId for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: server release evidence and frontmatter) <br>
+Risk: The workflow sends videos, parameters, and generated assets to the third-party dLazy service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for content approved for dLazy processing and confirm that the dLazy service terms and data handling meet the deployment requirements.
+
+Risk: The dLazy CLI may store an API key in the local user configuration.
+
+Mitigation: Prefer scoped organization keys, rotate or revoke keys from the dLazy dashboard when needed, and use per-invocation environment variables where persistent local credentials are not desired.
+
+Risk: The artifact documentation has rough edges around exact command arguments and output media type.
+
+Mitigation: Run `dlazy videoseg -h` before use and validate expected inputs and returned asset types in a dry run or low-risk test.
+
+Risk: Installing the pinned package globally persists a third-party binary on the host.
+
+Mitigation: Review the pinned package or source before installation, or use the documented `npx @dlazy/cli@1.2.3` form to avoid a persistent global install.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-videoseg)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The invoked CLI returns hosted media URLs for generated mask assets and may return async task metadata when no-wait mode is used.]
+
+## Skill Version(s):
+
+1.3.20 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,53 @@
-## Description: <br>
-DNS配置工具免费版 helps personal developers and small sites prepare DNS migrations, tune TTL values, configure SPF/DKIM/DMARC records, handle apex and www domains, and run basic DNS validation commands. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+DNS配置工具免费版 helps users plan basic DNS record changes, TTL updates, email authentication records, www/apex handling, and DNS propagation checks for personal and small-site deployments.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and site operators use this skill for DNS configuration guidance on personal blogs, project sites, and small business email authentication. It produces TTL migration steps, SPF/DKIM/DMARC record guidance, apex/www handling advice, and command-line checks for DNS propagation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security verdict is suspicious because the skill requests broad agent tools and contains overbroad or inconsistent instructions. <br>
-Mitigation: Keep invocation limited to DNS tasks and review suggested actions before execution. <br>
-Risk: Incorrect DNS changes can interrupt site availability or email delivery. <br>
-Mitigation: Back up current DNS records, review changes manually in the DNS provider dashboard, and require explicit confirmation before changing TTL, A/AAAA, MX, TXT, SPF, DKIM, or DMARC records. <br>
-Risk: The artifact includes unrelated messaging/API limitation text that may confuse users about the skill's scope. <br>
-Mitigation: Treat DNS guidance as the supported scope and have the publisher clean up unrelated limitation text before broader deployment. <br>
+## Use Case:
 
+External developers, site owners, and small teams use this skill to plan DNS TTL changes, configure SPF/DKIM/DMARC records, handle www and apex domain variants, and run basic DNS checks before site or mail-service changes.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/dns-config-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with DNS record examples, bash commands, and structured JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill may suggest DNS record changes, TTL values, validation commands, and manual checks in a DNS provider dashboard.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The skill declares write capability and broad routing text that could cause use outside DNS guidance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for DNS record lookup, TTL planning, email authentication records, and propagation checks; require explicit confirmation before any DNS or file-changing action.
+
+Risk: Incorrect DNS or email authentication advice can disrupt service availability or mail delivery.
+
+Mitigation: Review proposed record changes before applying them, validate against the DNS or mail provider's authoritative documentation, and check multiple resolvers after changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/dns-config-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with inline DNS record examples and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include DNS record values, TTL planning steps, verification commands, and cautionary notes for manual DNS-provider changes.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

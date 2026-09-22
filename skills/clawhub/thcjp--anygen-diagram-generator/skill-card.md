@@ -1,5 +1,5 @@
 ## Description: <br>
-Anygen Diagram Generator helps agents use the AnyGen CLI and AnyGen server to turn natural-language diagram descriptions into flowcharts, architecture diagrams, sequence diagrams, mind maps, and related visual outputs. <br>
+Anygen Diagram Generator helps agents use the AnyGen CLI and smart_draw workflow to turn natural-language descriptions into flowcharts, architecture diagrams, sequence diagrams, mind maps, and related visual diagrams rendered by www.anygen.io. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, technical writers, product teams, and other external users use this skill to generate diagrams from structured text for architecture documentation, process review, API design, and knowledge organization. <br>
+Developers, engineers, product teams, and documentation authors use this skill to convert written process, architecture, API, and knowledge-structure descriptions into visual diagrams for technical documents, reviews, and planning. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Diagram prompts and generated diagram content are sent to AnyGen's service. <br>
-Mitigation: Avoid including secrets, regulated data, or sensitive proprietary architecture unless this external processing is approved. <br>
-Risk: The skill uses AnyGen authentication through an API key or browser login. <br>
-Mitigation: Prefer managed environment variables or browser login, and avoid pasting real API keys into chats, scripts, logs, or version control. <br>
-Risk: Diagram generation depends on network access and availability of the AnyGen service. <br>
-Mitigation: Confirm service access before relying on the skill in a workflow, and keep source descriptions so diagrams can be regenerated if rendering fails. <br>
+Risk: Diagram descriptions and related context may be sent to AnyGen's cloud service. <br>
+Mitigation: Avoid credentials, regulated data, and confidential architecture details unless the organization has approved that data flow. <br>
+Risk: The skill may install the anygen-workflow-generate dependency non-interactively. <br>
+Mitigation: Manually verify the AnyGen CLI, dependency source and version, and authentication storage behavior before first use. <br>
+Risk: Authentication uses API keys or browser authorization that may expire or be stored locally. <br>
+Mitigation: Use approved secret-management practices, avoid logging tokens, and re-authenticate through approved channels when credentials expire. <br>
 
 
 ## Reference(s): <br>
-- [Anygen Diagram Generator on ClawHub](https://clawhub.ai/thcjp/skills/anygen-diagram-generator) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/anygen-diagram-generator) <br>
 - [AnyGen service](https://www.anygen.io) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Files, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON-style execution summaries; generated diagrams may be returned as image links or downloaded files.] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands and JSON-style result examples; generated diagrams are returned as image links or downloaded files.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires AnyGen authentication and sends diagram prompts to AnyGen's remote service for rendering.] <br>
+**Other Properties Related to Output:** [May return PNG, SVG, or PDF diagram artifacts depending on AnyGen account permissions and request options.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+1.0.3 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

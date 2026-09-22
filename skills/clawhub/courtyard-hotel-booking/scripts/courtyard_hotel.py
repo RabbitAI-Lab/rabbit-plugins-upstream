@@ -16,7 +16,7 @@ BRAND_NAME = "万怡"
 
 # ===== 代理配置 =====
 PROXY_URL = os.environ.get("PROXY_URL", "")
-PROXY_TOKEN = os.environ.get("PROXY_TOKEN", "tp_8k2mX9vQ4z")
+PROXY_TOKEN = os.environ.get("PROXY_TOKEN", "")
 
 
 def _request(api_type, params, timeout=30):

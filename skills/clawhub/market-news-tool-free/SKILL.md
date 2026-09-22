@@ -4,46 +4,20 @@ name: market-news-tool-free
 version: 1.0.1
 displayName: 财经资讯助手免费版
 summary: "自动搜索和总结最新财经新闻与市场动态，适合个人投资者快速获取每日市场要点。财经资讯助手免费版，面向个人投资者与独立研究者提供基础财经新闻摘要能力。核心能力:"
-license: Proprietary
+license: MIT
 edition: free
-description: '财经资讯助手免费版，面向个人投资者与独立研究者提供基础财经新闻摘要能力。核心能力:
-
-  - 自动搜索并汇总最新财经新闻与市场动态
-
-  - 将长篇财经新闻提炼为简洁要点摘要
-
-  - 解读经济政策、央行政策对市场的潜在影响
-
-  - 提供每日市场综述与热点板块概览
-
-  适用场景:
-
-  - 个人投资者每日资讯浏览与快速决策
-
-  - 学生及研究人员收集财经资料
-
-  - 独立开发者获取行业动态
-
-  差异化:
-
-  - 免费版聚焦核心摘要能力，满足日常财经资讯需求
-
-  - 纯指令驱动，无需复杂配置即可使用
-
-  - 与PRO版本完全兼容...'
+description: "财经资讯助手免费版，面向个人投资者与独立研究者包含基础财经新闻摘要能力。核心能力:. 适用于需要market news tool相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量. 适用于需要market news tool相关能力的开发场景,包含结构化的工作流程和配置指引."
 tags:
   - 财经
+  - market
+  - news
+  - automation
+  - productivity
   - 资讯
   - 研究
   - 投资
   - 搜索
   - 检索
-  - 工具
-  - agent
-  - text
-  - 版本
-  - llm
-  - type
 tools:
   - read
   - exec
@@ -51,6 +25,8 @@ tools:
   - grep
 homepage: ""
 category: "Knowledge"
+pricing_tier: free
+
 ---
 # 财经资讯助手（免费版）
 
@@ -197,8 +173,8 @@ Agent：
 可在用户目录下创建简单的关注列表文件，方便 Agent 了解用户偏好.
 ```bash
 # 创建个人关注配置
-mkdir -p ~/market-news
-cat > ~/market-news/preferences.md << 'EOF'
+mkdir -p ./market-news
+cat > ./market-news/preferences.md << 'EOF'
 # 我的关注列表
 # ...
 ## 关注行业
@@ -242,7 +218,7 @@ limits:
   max_topics_per_query: 3
 ```
 
-## 最佳实践
+## 优秀实践
 
 ### 1. 明确查询范围
 
@@ -258,11 +234,11 @@ limits:
 
 先获取概览，再针对感兴趣的主题深入分析.
 ```text
-# 第一步：获取概览
+# 领先步：获取概览
 今天的财经新闻有哪些重点？
 # ...
 # 第二步：深入分析
-详细解读一下第一条关于降准的新闻
+详细解读一下领先条关于降准的新闻
 ```
 
 ### 3. 交叉验证
@@ -296,7 +272,7 @@ limits:
 ```bash
 # 手动保存查询结果示例
 # 将Agent输出复制到本地文件
-cat > ~/market-news/$(date +%Y%m%d).md << 'EOF'
+cat > ./market-news/$(date +%Y%m%d).md << 'EOF'
 # 在此粘贴Agent输出内容
 EOF
 ```

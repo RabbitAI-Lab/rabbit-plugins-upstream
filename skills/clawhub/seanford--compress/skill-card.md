@@ -1,40 +1,57 @@
-## Description: <br>
-Compress natural language memory files such as CLAUDE.md, todos, and preferences into caveman format to save input tokens while preserving technical substance, code, URLs, and structure. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Compress natural-language memory files into shorter caveman-style Markdown while preserving technical details, code, URLs, and document structure.
 
-## Publisher: <br>
-[seanford](https://clawhub.ai/user/seanford) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[seanford](https://clawhub.ai/user/seanford)
 
-## Use Case: <br>
-Developers and agent users use this skill to reduce token usage in natural language memory files while keeping code blocks, inline code, URLs, file paths, commands, headings, and markdown structure intact. The skill backs up the original file before replacing it with a compressed version. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected markdown or text memory content may be sent to Claude/Anthropic during compression. <br>
-Mitigation: Use the skill only on non-sensitive notes and invoke it with an explicit filepath. <br>
-Risk: The compressed result replaces the original file. <br>
-Mitigation: Keep and review the generated .original.md backup until the compressed output has been checked. <br>
+## Use Case:
 
+Developers and agent users use Compress to shorten natural-language memory files such as CLAUDE.md, todos, and preferences while retaining technical anchors needed by downstream agents.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/seanford/skills/compress) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown and CLI status text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Overwrites the selected natural language file after creating a .original.md backup; validation checks preserved anchors before completion.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Selected file contents may be sent to Claude/Anthropic during compression.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only on intentionally selected non-sensitive files and avoid files containing credentials, secrets, or private data.
+
+Risk: The active file can be replaced by compressed output.
+
+Mitigation: Keep the generated .original.md backup and review the diff before relying on the compressed memory file.
+
+Risk: Compressed memory text may omit nuance or introduce misleading guidance for future agent sessions.
+
+Mitigation: Review compressed output before treating it as authoritative agent memory.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/seanford/skills/compress)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown and CLI status text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May overwrite the selected natural-language file and create a .original.md backup after validation.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

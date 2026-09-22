@@ -1,49 +1,68 @@
-## Description: <br>
-Huawei Cloud CCI (Cloud Container Instance) full lifecycle management using hcloud CLI for namespaces, networks, deployments, stateful sets, pods, EIPPools, logs, and metrics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Huawei Cloud CCI (Cloud Container Instance) full lifecycle management using hcloud CLI for Namespace, Network, Deployment, StatefulSet, Pod, EIPPool, logs, metrics, and status workflows.
 
-## Publisher: <br>
-[pintudeyudi](https://clawhub.ai/user/pintudeyudi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pintudeyudi](https://clawhub.ai/user/pintudeyudi)
 
-## Use Case: <br>
-Developers and cloud operators use this skill to plan and run Huawei Cloud CCI lifecycle tasks through hcloud CLI commands and the bundled network helper. It supports creating, inspecting, updating, scaling, logging, and deleting CCI namespaces, networks, workloads, pods, and EIPPools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide high-impact Huawei Cloud CCI administration, including destructive deletes and broader operations than its stated lifecycle purpose. <br>
-Mitigation: Use a least-privilege Huawei Cloud profile in a non-critical or tightly scoped project, and require explicit two-step confirmation before any delete action. <br>
-Risk: The bundled Python helper performs direct CCI API calls for network create, delete, and status operations and has command-safety concerns noted by the security evidence. <br>
-Mitigation: Review the helper before running it, avoid untrusted region values, and independently confirm delete targets before using the helper delete action. <br>
-Risk: Logs, events, and secret-related operations can expose sensitive operational data. <br>
-Mitigation: Treat status, event, log, and credential-adjacent outputs as sensitive; do not expose Huawei Cloud AK/SK values in prompts, commands, or responses. <br>
+## Use Case:
 
+Developers and cloud operators use this skill to manage Huawei Cloud CCI serverless container resources through hcloud CLI workflows, including creation, status inspection, logs, scaling, updates, and cleanup. It is intended for command-line CCI administration where destructive operations require explicit confirmation.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/pintudeyudi/huawei-cloud-cci-instance-management) <br>
-- [CCI Common Workflows](references/common-workflows.md) <br>
-- [CCI Operation Catalog](references/cci-operation-catalog.md) <br>
-- [IAM Permission Policies for CCI Operations](references/iam-policies.md) <br>
-- [CCI Parameter Format Rules](references/parameter-format.md) <br>
-- [Step-by-Step Verification Process for CCI Skill Functionality](references/verification-method.md) <br>
-- [Troubleshooting Guide for CCI hcloud CLI Issues](references/troubleshooting.md) <br>
-- [Huawei Cloud CCI Network API Documentation](https://support.huaweicloud.com/api-cci/createNetworkingCciIoV1beta1NamespacedNetwork.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash and Python command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include hcloud CLI commands, JSON output recommendations, confirmation steps for destructive operations, and Python helper usage.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server-resolved release evidence) <br>
+Risk: The helper script includes unsafe shell execution while auto-detecting the Huawei Cloud project ID.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Replace shell=True with an argument list, validate the region value before invocation, and review the helper before installation or use.
+
+Risk: The skill can guide broad or destructive cloud actions, including namespace deletion, network deletion, public IP allocation, Secret and RBAC operations, and bulk cleanup.
+
+Mitigation: Use least-privilege Huawei credentials scoped to the intended project and region, preview commands and resource scope first, and require explicit confirmation for every delete or bulk cleanup path.
+
+Risk: Cloud credentials could be exposed if users paste AK/SK values or commands echo secrets.
+
+Mitigation: Check only credential presence, prefer configured profiles or environment variables, and do not display AK/SK values in conversation, commands, logs, or output.
+
+Risk: Incorrect CCI parameters can fail deployments or create resources in an unintended state.
+
+Mitigation: Run hcloud CCI operation help before command construction and verify required namespace, network, region, VPC, subnet, security group, resource request, and limit parameters.
+
+## Reference(s):
+
+- [Huawei Cloud CCI Container Instance Lifecycle Management](artifact/SKILL.md)
+- [CCI Common Workflows](artifact/references/common-workflows.md)
+- [CCI Operation Catalog](artifact/references/cci-operation-catalog.md)
+- [CCI Parameter Format Rules](artifact/references/parameter-format.md)
+- [Network Lifecycle Management](artifact/references/task-network-management.md)
+- [IAM Permission Policies for CCI Operations](artifact/references/iam-policies.md)
+- [Troubleshooting Guide for CCI hcloud CLI Issues](artifact/references/troubleshooting.md)
+- [Step-by-Step Verification Process for CCI Skill Functionality](artifact/references/verification-method.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, code snippets, checklists, and operational guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include destructive cloud administration commands only after preview, risk warning, and explicit user confirmation.]
+
+## Skill Version(s):
+
+0.1.0 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

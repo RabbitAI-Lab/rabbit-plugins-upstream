@@ -1,42 +1,57 @@
-## Description: <br>
-Use when designing cloud architectures, planning migrations, or optimizing multi-cloud deployments. Invoke for Well-Architected Framework, cost optimization, disaster recovery, landing zones, security architecture, serverless design. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when designing cloud architectures, planning migrations, or optimizing multi-cloud deployments. Invoke for Well-Architected Framework, cost optimization, disaster recovery, landing zones, security architecture, serverless design.
 
-## Publisher: <br>
-[lhwa8685](https://clawhub.ai/user/lhwa8685) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[lhwa8685](https://clawhub.ai/user/lhwa8685)
 
-## Use Case: <br>
-Developers, platform engineers, DevOps teams, and cloud architects use this skill to design secure, reliable, cost-aware cloud architectures across AWS, Azure, GCP, hybrid, and multi-cloud environments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Cloud architecture guidance and copied examples could affect cost, availability, retention, or production resources if applied without review. <br>
-Mitigation: Before applying any suggested cloud command, lifecycle policy, purchase, deletion, or termination step, confirm the target account, production impact, retention obligations, backups, rollback path, and owner approval. <br>
+## Use Case:
 
+Developers, platform engineers, and cloud architects use this skill to design, review, and optimize AWS, Azure, GCP, and multi-cloud architectures, including migrations, landing zones, disaster recovery, security architecture, and cost optimization.
 
-## Reference(s): <br>
-- [AWS Architecture Reference](references/aws.md) <br>
-- [Azure Architecture Reference](references/azure.md) <br>
-- [GCP Architecture Reference](references/gcp.md) <br>
-- [Multi-Cloud Architecture Reference](references/multi-cloud.md) <br>
-- [Cloud Cost Optimization Reference](references/cost.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with architecture guidance, rationale, diagrams, code blocks, shell commands, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include service selection rationale, security architecture, cost strategy, deployment approach, and rollback planning.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: ClawHub release metadata) <br>
+Risk: Cloud cleanup or purchasing recommendations could affect live resources, retention obligations, availability, or spend if followed without validation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm resource ownership, dependencies, retention needs, backups, change windows, and approvals before acting on cleanup or purchasing recommendations.
+
+Risk: The AWS Spot interruption example may need updates before reuse in production environments.
+
+Mitigation: Update copied Spot interruption handling examples to use AWS IMDSv2 before deployment.
+
+## Reference(s):
+
+- [AWS Architecture Reference](references/aws.md)
+- [Azure Architecture Reference](references/azure.md)
+- [GCP Architecture Reference](references/gcp.md)
+- [Multi-Cloud Architecture Reference](references/multi-cloud.md)
+- [Cloud Cost Optimization Reference](references/cost.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with architecture diagrams, rationale, security design, cost strategy, deployment guidance, and inline code or shell examples when relevant]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory cloud architecture material; review cloud-impacting recommendations before execution.]
+
+## Skill Version(s):
+
+0.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

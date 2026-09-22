@@ -1,37 +1,50 @@
-## Description: <br>
-Provides coding style standards, security guidelines, and accessibility requirements for writing and reviewing code. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Coding style standards, security guidelines, and accessibility requirements for writing and reviewing code.
 
-## Publisher: <br>
-[urbantech](https://clawhub.ai/user/urbantech) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[urbantech](https://clawhub.ai/user/urbantech)
 
-## Use Case: <br>
-Developers and reviewers use this skill as advisory guidance when writing new code, reviewing code for style and security, implementing UI/UX features, and checking accessibility expectations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill references additional detailed guide files that were not included in the inspected artifact. <br>
-Mitigation: Treat the included SKILL.md checklist as the available guidance unless those reference files are added and reviewed. <br>
+## Use Case:
 
+Developers and code-reviewing agents use this skill to apply coding style, security, accessibility, and responsive design standards while implementing or reviewing software.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory checklist content; no executable code or tool calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill references supplemental files that are missing from the release artifact, so detailed guidance may be less complete than advertised.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the bundled SKILL.md as the authoritative installed guidance and verify any missing supplemental checklist requirements before relying on them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/urbantech/skills/code-quality)
+- [Publisher profile](https://clawhub.ai/user/urbantech)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with code, command, and configuration recommendations when relevant]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No executable code is bundled; referenced supplemental files are not included in the release artifact.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,48 +1,68 @@
-## Description: <br>
-室内智能设计skill，分步式对话完成户型确认→风格选择→布局确认→渲染出图。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-assisted interior design skill that guides a staged conversation through floor-plan confirmation, style selection, layout confirmation, and rendered design output.
 
-## Publisher: <br>
-[wuweiqi1993](https://clawhub.ai/user/wuweiqi1993) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wuweiqi1993](https://clawhub.ai/user/wuweiqi1993)
 
-## Use Case: <br>
-External users and design-assistant agents use this skill to guide an interior design workflow: find or upload a floor plan, confirm style preferences, trigger Kujiale layout and rendering jobs, and return design images, panorama links, and design highlights. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Kujiale access token that can create designs, upload floor-plan images, and run layout or render jobs. <br>
-Mitigation: Store the token only in a local .kjlconfig.json file, keep it out of shared workspaces and logs, and rotate it if it is exposed. <br>
-Risk: Layout and rendering jobs may consume the user's Kujiale quota or account credits. <br>
-Mitigation: Require explicit user confirmation before triggering intelligent layout or rendering work that may use quota. <br>
-Risk: Uploaded floor-plan images may contain private property or household information. <br>
-Mitigation: Confirm the exact local image path with the user before upload and avoid uploading unrelated or sensitive files. <br>
+## Use Case:
 
+External users and design agents use this skill to create Kujiale interior design outputs by selecting or uploading a floor plan, choosing style preferences, triggering layout generation, and collecting rendered images, panorama links, design highlights, and a design-detail link.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/wuweiqi1993/ai-kujiale-design) <br>
-- [Publisher profile](https://clawhub.ai/user/wuweiqi1993) <br>
-- [Kujiale skill token setup](https://www.kujiale.com/skills) <br>
-- [Floor plan search API documentation](docs/planSearch.md) <br>
-- [Floor plan upload API documentation](docs/upload.md) <br>
-- [Intelligent layout API documentation](docs/layout.md) <br>
-- [Rendering result API documentation](docs/renderResult.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with image links, panorama links, design detail links, and inline shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Final answer follows artifact/outputs/result.md and prioritizes render images, panorama links, and design highlights.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.6 (source: frontmatter and release evidence) <br>
+Risk: The skill handles a Kujiale access token.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a scoped or short-lived token when possible, keep .kjlconfig.json out of source control, and rotate the token after testing.
+
+Risk: The skill uploads local images to Kujiale services.
+
+Mitigation: Confirm the exact image file before upload and avoid uploading sensitive floor plans unless the account and service terms are appropriate.
+
+Risk: The skill can trigger layout and rendering actions that may consume account quota or credits.
+
+Mitigation: Do not proceed with layout or rendering until the user understands and confirms any quota, credit, or account effects.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wuweiqi1993/skills/ai-kujiale-design)
+- [Kujiale skill token page](https://www.kujiale.com/skills)
+- [Skill workflow](artifact/SKILL.md)
+- [Floor-plan search API](artifact/docs/planSearch.md)
+- [Floor-plan information API](artifact/docs/floorplanInfo.md)
+- [Design creation API](artifact/docs/createDesign.md)
+- [Image upload API](artifact/docs/upload.md)
+- [Bitmap import API](artifact/docs/planUrlCreate.md)
+- [Layout API](artifact/docs/layout.md)
+- [Layout result API](artifact/docs/layoutResult.md)
+- [Render result API](artifact/docs/renderResult.md)
+- [Version check API](artifact/docs/versionCheck.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, API calls, guidance]
+
+**Output Format:** [Markdown with rendered-image links, panorama links, design highlights, and inline shell commands during execution.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a Kujiale access token and can trigger layout or rendering actions that affect account quota or credits.]
+
+## Skill Version(s):
+
+0.0.6 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

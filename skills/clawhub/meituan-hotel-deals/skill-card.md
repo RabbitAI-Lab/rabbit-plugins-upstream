@@ -1,42 +1,58 @@
-## Description: <br>
-搜索美团全国连锁品牌酒店特价套餐，支持按城市和品牌筛选，并按折扣或价格排序返回实时套餐信息和预订链接。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches Meituan chain-hotel package deals for Chinese cities, with filtering by city, brand, and discount or price sorting, and returns booking links for completing purchases on Meituan.
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External travelers use this skill to find Meituan hotel package deals by city, brand, discount, or price before completing booking on Meituan. It is useful for comparing limited domestic hotel deal results when the user is comfortable using Meituan links. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Hotel search terms such as city, brand, and sort order are sent to the skill's Tencent Cloud proxy. <br>
-Mitigation: Use the skill only when sharing those limited search terms with the proxy is acceptable; avoid entering sensitive personal or booking details. <br>
-Risk: The skill returns Meituan booking links and does not complete or validate purchases itself. <br>
-Mitigation: Confirm price, inventory, terms, and cancellation details on Meituan before booking. <br>
-Risk: The skill is focused on Meituan hotel deals and is not a neutral all-provider hotel comparison tool. <br>
-Mitigation: Use additional sources when a broader market comparison or provider-neutral recommendation is required. <br>
+## Use Case:
 
+External travelers and travel-shopping agents use this skill to find discounted Meituan hotel packages, compare current deal prices, and open Meituan booking links. It is scoped to domestic Chinese cities and brand-hotel package search rather than general travel planning.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/meituan-hotel-deals) <br>
+### Deployment Geography for Use:
 
+China (domestic cities only)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-formatted hotel deal list with images, prices, city and brand details, validity information, and booking links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns up to 20 hotel package deals per request; prices and inventory may change on the Meituan booking page.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Hotel search details are sent to a Tencent Cloud proxy.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when users accept that city, brand, and sort parameters are transmitted to that proxy.
+
+Risk: Returned prices, inventory, and booking availability may change before purchase.
+
+Mitigation: Have users confirm final price, availability, and terms on the Meituan booking page before ordering.
+
+Risk: The skill is scoped to domestic Meituan hotel package search and may not satisfy broader travel-planning requests.
+
+Mitigation: Route international, non-Meituan, or full-itinerary requests to a more appropriate travel-planning source.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/meituan-hotel-deals)
+- [Publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown-formatted hotel deal list with images, prices, ratings, validity notes, and booking links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns up to 20 hotel package results per query; prices and inventory are real-time and must be confirmed on the Meituan booking page.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,56 @@
-## Description: <br>
-TranscriptAPI helps agents retrieve YouTube transcripts and related video, channel, playlist, and search data through TranscriptAPI.com. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TranscriptAPI lets agents retrieve YouTube transcripts, search videos and channels, browse channel and playlist videos, and support video-based research through transcriptapi.com.
 
-## Publisher: <br>
-[therohitdas](https://clawhub.ai/user/therohitdas) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[therohitdas](https://clawhub.ai/user/therohitdas)
 
-## Use Case: <br>
-Developers, researchers, and end users use this skill when an agent needs YouTube transcript retrieval, video search, channel browsing, playlist inspection, or summarization support from video content. It is not intended for YouTube uploads, account management, or written-source-only research. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: YouTube queries and related API requests are sent to the third-party TranscriptAPI service. <br>
-Mitigation: Use the skill only for content that can be shared with that service, and avoid sending sensitive private context in request parameters. <br>
-Risk: The setup flow may involve creating an account, handling OTPs, and storing a TranscriptAPI API key. <br>
-Mitigation: Create the account yourself when possible, provide the key through an approved secret manager, and avoid persistent shell-profile storage unless it matches the local environment policy. <br>
+## Use Case:
 
+External users, developers, and agents use this skill to fetch and summarize YouTube transcripts, search and browse videos, channels, and playlists, and compare video content when YouTube sources are relevant.
 
-## Reference(s): <br>
-- [TranscriptAPI homepage](https://transcriptapi.com) <br>
-- [TranscriptAPI OpenAPI specification](https://transcriptapi.com/openapi.json) <br>
-- [TranscriptAPI authentication setup](references/auth-setup.md) <br>
-- [ClawHub skill page](https://clawhub.ai/therohitdas/skills/transcriptapi) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, API calls, Configuration] <br>
-**Output Format:** [Markdown with curl examples and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires internet access, a TRANSCRIPT_API_KEY secret, and a User-Agent header; requests are sent to the third-party TranscriptAPI service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.0 (source: frontmatter and server release evidence) <br>
+Risk: The setup flow may expose sensitive credentials, email addresses, OTP codes, API keys, and temporary auth files if the agent handles or stores them carelessly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer creating the account yourself, entering OTPs directly on the provider site, and storing TRANSCRIPT_API_KEY in a dedicated secret manager rather than chat, shell profiles, or temporary files.
+
+Risk: The skill makes TranscriptAPI requests for YouTube lookups using a TranscriptAPI key.
+
+Mitigation: Install only if you are comfortable letting the agent use TranscriptAPI for YouTube lookup tasks, and restrict use to the documented transcript, search, channel, and playlist workflows.
+
+## Reference(s):
+
+- [TranscriptAPI homepage](https://transcriptapi.com)
+- [TranscriptAPI OpenAPI specification](https://transcriptapi.com/openapi.json)
+- [TranscriptAPI auth setup](references/auth-setup.md)
+- [ClawHub skill page](https://clawhub.ai/therohitdas/skills/transcriptapi)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with curl examples and JSON API response shapes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires TRANSCRIPT_API_KEY and internet access to transcriptapi.com; most API requests consume TranscriptAPI credits.]
+
+## Skill Version(s):
+
+1.5.4 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

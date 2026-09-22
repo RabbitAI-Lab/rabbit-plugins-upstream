@@ -1,37 +1,48 @@
-## Description: <br>
-Build a personal music system for tracking discoveries, favorites, concerts, and listening memories. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build a personal music system for tracking discoveries, favorites, concerts, and listening memories.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-Individuals use this skill to have an agent maintain local music notes for discoveries, favorites, playlists, concerts, physical collections, and listening memories. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill can save personal music history, concert details, preferences, and memories in local markdown files. <br>
-Mitigation: Ask for user confirmation before first creating files and before saving personal music history under ~/music/. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ivangdavila/music) <br>
+## Use Case:
 
+External users use this skill to maintain a personal music journal for discoveries, favorites, playlists, concerts, collection notes, and listening memories.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Guidance] <br>
-**Output Format:** [Markdown notes and conversational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates and updates local notes under ~/music/ when the user asks the agent to save music information.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill may store personal music preferences, concert notes, collection details, and listening memories in a local ~/music/ folder.
+
+Mitigation: Tell the agent to use a different folder if preferred, and review saved markdown files before sharing or syncing them.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/ivangdavila/skills/music)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Files]
+
+**Output Format:** [Markdown notes and concise text guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create and maintain local markdown files under ~/music/ unless the user requests another location.]
+
+## Skill Version(s):
+
+1.0.0 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

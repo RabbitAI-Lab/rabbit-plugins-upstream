@@ -1,0 +1,190 @@
+{
+  "schemaVersion": "1.0",
+  "kind": "dedup_index",
+  "libraryVersion": "kb-2026.09.12.176",
+  "frozenAt": "2026-09-12",
+  "purpose": "吸收查重的**机器可判**登记册（ADR-001 §9.3）：能力指纹 → 已有对等物。原以表格形式散落在 example/design-blocks/*/README 与 CHANGELOG 里，查重靠 agent 读文档比对——数据化后无人参与的吸收也能自己判重（K1）。",
+  "verdictEnum": {
+    "already-covered": "本库已有对等条目 → 不收，直接引用 equivalent 的 ID",
+    "applied-not-new": "属**参数/阈值类应用**，不是新机制 → 不收，不新增机制条目",
+    "out-of-scope": "**场景不相关**（元 skill 不做领域数据服务等）→ 不收",
+    "over-engineering": "**补了是过度设计**（我方形态不需要）→ 不收"
+  },
+  "rules": [
+    "命中 signals 任一即进入人工/机器裁决；裁决结果只允许 verdictEnum 四值之一。",
+    "verdict ∈ {already-covered, applied-not-new} ⇒ equivalent / equivalentRef 至少一项非空，且**必须能在当前库中解析到**（否则报 E015 登记腐烂）。",
+    "verdict ∈ {out-of-scope, over-engineering} ⇒ reason 必填（说明为什么不相关）。",
+    "本文件是**登记册**，不是知识条目库：它不参与编译，不进 references/*.md，只被 absorb_intake.py 与知识检索读取。",
+    "凡「不收」的裁决一经登记不得静默撤销；确需改判，改 verdict 并在 source 里注明改判轮次。"
+  ],
+  "signatures": [
+    {
+      "key": "state-script-aggregate",
+      "label": "状态脚本：一次调用聚合全部状态（探测 + 决策）",
+      "signals": ["状态脚本", "一次调用聚合", "cli-state", "探测与决策合一"],
+      "verdict": "already-covered",
+      "equivalent": ["D-075"],
+      "equivalentRef": [],
+      "reason": "",
+      "provenance": "verified",
+      "source": "tencent-news 1.2.3 吸收轮（README「已覆盖不收」表首行）",
+      "registeredAt": "3.16.0"
+    },
+    {
+      "key": "references-split-by-intent",
+      "label": "references 按能力 / 查询意图切分 + 意图路由表",
+      "signals": ["按能力切分", "按意图切分 references", "意图路由表", "分片加载"],
+      "verdict": "already-covered",
+      "equivalent": ["D-086"],
+      "equivalentRef": [],
+      "reason": "",
+      "provenance": "verified",
+      "source": "tencent-news 1.2.3 吸收轮",
+      "registeredAt": "3.16.0"
+    },
+    {
+      "key": "error-code-with-suggestion",
+      "label": "错误码表 + 建议处理列 / 拒绝时给正确渠道指引",
+      "signals": ["错误码表", "建议处理列", "fail-with-direction", "拒绝时给替代", "引导动作"],
+      "verdict": "already-covered",
+      "equivalent": ["D-084", "D-083"],
+      "equivalentRef": [],
+      "reason": "",
+      "provenance": "verified",
+      "source": "tencent-news 1.2.3 吸收轮；与 westock-data 轮的「失败给替代 → A-409」同一裁决",
+      "registeredAt": "3.16.0"
+    },
+    {
+      "key": "hide-internal-ids",
+      "label": "隐藏内部 ID / traceid / 原始命令（UX 输出精简）",
+      "signals": ["隐藏内部 ID", "traceid", "不暴露原始命令", "内部标识不展示"],
+      "verdict": "already-covered",
+      "equivalent": ["D-122", "D-029"],
+      "equivalentRef": [],
+      "reason": "",
+      "provenance": "verified",
+      "source": "tencent-news 1.2.3 吸收轮",
+      "registeredAt": "3.16.0"
+    },
+    {
+      "key": "pagination-limit-threshold",
+      "label": "分页 / 展示性能门禁（单面板 ≤N 卡片一类阈值）",
+      "signals": ["分页性能门禁", "单面板卡片上限", "展示条数上限", "≤20 卡片"],
+      "verdict": "applied-not-new",
+      "equivalent": ["D-052", "D-048"],
+      "equivalentRef": [],
+      "reason": "阈值类条目已有多个，属 D-052「纪律带可数上限」的应用实例而非新机制。",
+      "provenance": "verified",
+      "source": "tencent-news 1.2.3 吸收轮",
+      "registeredAt": "3.16.0"
+    },
+    {
+      "key": "input-fingerprint-cache",
+      "label": "输入指纹做缓存失效判据（requestedStarts 一类）",
+      "signals": ["输入指纹", "缓存失效判据", "requestedStarts", "指纹比对缓存"],
+      "verdict": "already-covered",
+      "equivalent": ["D-080"],
+      "equivalentRef": [],
+      "reason": "",
+      "provenance": "verified",
+      "source": "tencent-news 1.2.3 吸收轮",
+      "registeredAt": "3.16.0"
+    },
+    {
+      "key": "dual-platform-script-pair",
+      "label": "双平台脚本对（sh + ps1 各写一份）",
+      "signals": ["双平台脚本", "sh 与 ps1", "同时提供 shell 和 PowerShell", "平台等价脚本对"],
+      "verdict": "out-of-scope",
+      "equivalent": [],
+      "equivalentRef": [],
+      "reason": "场景不相关：`sd_cli.py` 是跨平台 Python，本 skill 不依赖 shell 包装器。补了即过度设计。",
+      "provenance": "verified",
+      "source": "tencent-news 1.2.3 吸收轮",
+      "registeredAt": "3.16.0"
+    },
+    {
+      "key": "domain-business-capability",
+      "label": "领域业务能力（新闻 / 天气 / 高考志愿等数据服务）",
+      "signals": ["新闻检索", "天气查询", "高考志愿", "领域数据服务", "业务数据集"],
+      "verdict": "out-of-scope",
+      "equivalent": [],
+      "equivalentRef": [],
+      "reason": "场景不相关：本 skill 是**元 skill**，教怎么设计积木，不做领域数据服务。",
+      "provenance": "verified",
+      "source": "tencent-news 1.2.3 吸收轮",
+      "registeredAt": "3.16.0"
+    },
+    {
+      "key": "capability-boundary-matrix",
+      "label": "能力边界矩阵（显式写明「不做什么」）",
+      "signals": ["能力边界矩阵", "不做什么", "Do NOT use", "非目标清单"],
+      "verdict": "already-covered",
+      "equivalent": [],
+      "equivalentRef": ["references/capability-boundary.md"],
+      "reason": "",
+      "provenance": "reconstructed",
+      "source": "westock-data 吸收轮登记（原登记表在 example/absorbed/README.md，该文件已于 3.11.0 随目录改名为 example/design-blocks/ 而重组）；等价物为 reference 文件而非条目",
+      "registeredAt": "3.9.0（3.18.0 复核）"
+    },
+    {
+      "key": "easy-confusable-disambiguation",
+      "label": "易混淆消歧（近义 skill / 近义意图的消歧规则）",
+      "signals": ["易混淆消歧", "近义 skill 消歧", "消歧表", "相似触发词区分"],
+      "verdict": "already-covered",
+      "equivalent": ["D-004"],
+      "equivalentRef": [],
+      "reason": "",
+      "provenance": "reconstructed",
+      "source": "原登记为旧编号 A-401；按库内「旧编号映射表」A-401 → D-004（已逐条核对存在）",
+      "registeredAt": "3.9.0（3.18.0 复核）"
+    },
+    {
+      "key": "two-layer-error-taxonomy",
+      "label": "双层错误分类体系（区分「谁的问题」两层）",
+      "signals": ["双层错误分类", "错误分类体系", "两层错误", "错误归因分层"],
+      "verdict": "already-covered",
+      "equivalent": ["D-082"],
+      "equivalentRef": [],
+      "reason": "",
+      "provenance": "reconstructed",
+      "source": "原登记为旧编号 A-408；按旧编号映射表 A-408 → D-082（已核对存在）",
+      "registeredAt": "3.9.0（3.18.0 复核）"
+    },
+    {
+      "key": "dependency-declare-reason",
+      "label": "运行时依赖声明带 reason（为什么需要这个依赖）",
+      "signals": ["依赖声明带 reason", "依赖理由", "为什么需要该依赖", "dependency reason"],
+      "verdict": "already-covered",
+      "equivalent": ["D-123"],
+      "equivalentRef": [],
+      "reason": "",
+      "provenance": "reconstructed",
+      "source": "原登记为旧编号 A-414；按旧编号映射表 A-414 → D-123（已核对存在）",
+      "registeredAt": "3.9.0（3.18.0 复核）"
+    },
+    {
+      "key": "default-no-interrupt",
+      "label": "默认不打扰（非关键确认不打断用户）",
+      "signals": ["默认不打扰", "非关键不确认", "不打断用户", "静默执行"],
+      "verdict": "already-covered",
+      "equivalent": ["D-028", "D-032"],
+      "equivalentRef": [],
+      "reason": "D-032 是本项的可判据化升级（把「为什么不问用户」写成三要素判据），故两条并列登记。",
+      "provenance": "reconstructed",
+      "source": "原登记为旧编号 A-404（升级项 A-518）；按旧编号映射表 A-404 → D-028、A-518 → D-032（均已核对存在）",
+      "registeredAt": "3.9.0（3.18.0 复核）"
+    },
+    {
+      "key": "sandbox-poc-validation",
+      "label": "沙箱 PoC 先验证再落地（隔离环境试跑）",
+      "signals": ["沙箱 PoC", "隔离环境试跑", "先在沙箱验证", "PoC 验证"],
+      "verdict": "over-engineering",
+      "equivalent": [],
+      "equivalentRef": [],
+      "reason": "本 skill 的产物是**蓝图文档**而非可运行系统，无「运行环境」可搭沙箱；补了是为不存在的场景付成本。",
+      "provenance": "reconstructed",
+      "source": "smart-charts 8.1.1 吸收轮的「已评估·不吸收清单」（原登记表随 example/absorbed/README.md 于 3.11.0 重组）",
+      "registeredAt": "3.10.0（3.18.0 复核）"
+    }
+  ]
+}

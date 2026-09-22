@@ -1,44 +1,64 @@
-## Description: <br>
-Detects estrus behavior in female livestock from continuous barn videos, including mounting acceptance, standing reflex, restlessness, appetite drop, and vulva changes, and outputs an estrus recognition result with an optimal mating time window. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects estrus behavior in female livestock from continuous barn videos, including mounting acceptance, standing reflex, restlessness, appetite drop and vulva changes, and outputs an estrus recognition result with an optimal mating time window.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Farm operators, livestock reproduction specialists, and developers use this skill to submit barn images, videos, or URLs for estrus behavior detection. It returns structured recognition results, observed behavior lists, estrus-stage assessment, an optimal mating-time window, and report links. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Barn video files or submitted media URLs can be sent to Lifeemergence cloud services for analysis. <br>
-Mitigation: Use the skill only when cloud processing is acceptable, and avoid private or signed media URLs unless sharing them with the backend service is intended. <br>
-Risk: The skill can silently create or reuse an internal identity and store account tokens in the local workspace database. <br>
-Mitigation: Review workspace data and database access before installation, and clear stored identity or token data before sharing the workspace. <br>
-Risk: History queries can retrieve cloud report records tied to the current identity. <br>
-Mitigation: Verify the active identity and workspace before running report-list actions, and restrict access to generated report outputs. <br>
+## Use Case:
 
+External livestock operators and farm-management agents use this skill to analyze barn camera images or videos for female livestock estrus indicators, estrus-stage classification, historical report lookup, and a suggested mating time window. Results are intended as behavioral evidence for breeding workflows, not as standalone veterinary or reproductive-management advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-estrus-mating-behavior-detect-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with JSON-style structured results and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May upload local media or submit media URLs to Lifeemergence cloud APIs; history queries return report records tied to the current identity.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter is 1.0.3) <br>
+Risk: Barn media, report metadata, and identifiers are sent to configured backend services for analysis and history lookup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review endpoint configuration and data-handling expectations before use, and submit only media appropriate for the configured service.
+
+Risk: The skill silently creates or reuses a local identity and stores returned auth tokens in the workspace data area.
+
+Mitigation: Run in a workspace where local identity and token storage are acceptable, and clear workspace data when rotating identities or decommissioning access.
+
+Risk: Bundled development configuration references plain HTTP private-network addresses.
+
+Mitigation: Confirm production endpoints and transport security before deployment.
+
+Risk: Estrus recognition and mating-window output may be incomplete or unreliable when video quality, camera angle, lighting, duration, or occlusion are poor.
+
+Mitigation: Use stable fixed-camera footage that meets the documented capture requirements and review outputs with farm procedures or qualified reproductive specialists.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-estrus-mating-behavior-detect-analysis)
+- [Publisher Profile](https://clawhub.ai/user/smyx-sunjinhui)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [API Documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands]
+
+**Output Format:** [Markdown or JSON analysis reports, including structured behavior findings, estrus-stage labels, suggested mating time windows, report links, and optional saved result files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Historical report lookup is returned as a Markdown table; detailed analysis can be requested with basic, standard, or json detail levels.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata; artifact frontmatter states 1.0.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

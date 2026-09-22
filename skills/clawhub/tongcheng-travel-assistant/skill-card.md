@@ -1,41 +1,53 @@
-## Description: <br>
-同程旅行助手 searches Tongcheng travel products across hotels, flights, trains, buses, attraction tickets, transport comparisons, and vacation packages, returning prices, availability details, and booking links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+同程旅行全品类搜索，酒店/机票/火车票/汽车票/景点门票/综合交通/度假线路7大品类全覆盖，含预订链接和实时价格，零配置即装即用。暑期同程旅行特惠，景点酒店一站预订
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External users use this skill to search and compare Tongcheng travel options for lodging, tickets, routes, attractions, and vacation packages. The skill returns search results and booking links, but does not place orders, process payments, or manage existing bookings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Travel destinations, dates, routes, and preferences are sent to the skill publisher's cloud proxy before reaching Tongcheng services. <br>
-Mitigation: Install only if this data flow is acceptable, and avoid entering account details, identity documents, payment data, or private booking records. <br>
-Risk: Search results include real-time prices and booking links that may change after the skill returns them. <br>
-Mitigation: Confirm price, availability, and terms on the final Tongcheng booking page before making travel decisions. <br>
+## Use Case:
 
+External users and travel assistants use this skill to search Tongcheng travel products across hotels, flights, trains, buses, scenic tickets, multimodal transport, and vacation packages. It returns current options, prices, ratings, schedules, and booking links while leaving booking and payment to Tongcheng.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/tongcheng-travel-assistant) <br>
-- [Publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown search results with prices, availability details, and booking links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Results are limited by category-specific caps in the artifact and prices may change before booking.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.2 (source: server release evidence) <br>
+Risk: Travel search text, including destinations, dates, route preferences, and similar details, is sent through a cloud proxy to Tongcheng.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid unnecessary personal or confidential details in queries, and complete booking or payment only on the destination Tongcheng page or app.
+
+Risk: Prices, availability, and schedules can change after results are returned.
+
+Mitigation: Confirm final pricing, route details, and availability on Tongcheng before booking.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/tongcheng-travel-assistant)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown travel search results with prices, schedules, ratings, and booking links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on Tongcheng availability and may change before booking.]
+
+## Skill Version(s):
+
+1.2.4 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

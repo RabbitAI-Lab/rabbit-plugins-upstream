@@ -1,43 +1,59 @@
-## Description: <br>
-Windows desktop control skill for screenshots, window management, mouse and keyboard control, process management, system information, OCR, UI Automation, and local agent-driven desktop workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Desktop Control lets OpenClaw agents operate a trusted Windows desktop with screenshots, window management, mouse and keyboard control, OCR, UI automation, and script orchestration.
 
-## Publisher: <br>
-[sunsettide](https://clawhub.ai/user/sunsettide) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[sunsettide](https://clawhub.ai/user/sunsettide)
 
-## Use Case: <br>
-Developers and agent users use this skill to let an authorized OpenClaw agent operate a local Windows desktop through mouse, keyboard, screenshots, OCR, UI Automation, window management, scripting, and function-calling tools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can control mouse and keyboard input, inspect screen/OCR/UIA content, use the clipboard, and optionally record or replay global input. <br>
-Mitigation: Install and run it only on authorized local Windows desktops, keep user confirmation enabled for sensitive workflows, review generated scripts before execution, and shut down the daemon when desktop control is not needed. <br>
-Risk: The security scan says local-only privacy claims conflict with code that can send prompts to remote LLM services. <br>
-Mitigation: Keep LLM_API_KEY and LLM_BASE_URL unset unless remote LLM use is intentional, and avoid helper scripts that download resources when validating offline operation. <br>
+## Use Case:
 
+Developers and external users can give an agent controlled access to their own trusted Windows desktop for local automation tasks such as screenshots, window control, text entry, OCR-based clicking, and multi-step scripts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sunsettide/skills/desktop-control) <br>
-- [Project homepage](https://github.com/sunsettide/desktop-control) <br>
-- [README](README.md) <br>
-- [Security policy](SECURITY.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Files, Guidance] <br>
-**Output Format:** [Command-line invocations with JSON parameters and JSON or file outputs such as screenshots] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runs on Windows 10/11 with Python 3.9+ and local desktop access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.3 (source: frontmatter and server release metadata) <br>
+Risk: The skill grants an agent full interactive control of mouse, keyboard, screenshots, windows, scripts, and macros on the host desktop.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only on a trusted Windows machine and use it only for authorized sessions where this level of control is acceptable.
+
+Risk: Generated scripts and goal-driven automation may perform broad desktop actions and should be treated as potentially network-enabled despite local-only claims.
+
+Mitigation: Prefer confirm or review modes before running generated scripts, and inspect proposed actions before execution.
+
+Risk: Prompts, context, macros, logs, screenshots, or cached desktop data may expose sensitive information.
+
+Mitigation: Avoid placing secrets in prompts, context, macros, or automated input, and inspect DesktopControl logs and cache directories if sensitive data may have been used.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/sunsettide/skills/desktop-control)
+- [Desktop Control homepage](https://github.com/sunsettide/desktop-control)
+- [README](README.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Files, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON parameters; command responses may include JSON, text, base64 screenshots, or saved files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Targets Windows 10/11 with Python 3.9+ and local desktop session access.]
+
+## Skill Version(s):
+
+1.1.3 (source: SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

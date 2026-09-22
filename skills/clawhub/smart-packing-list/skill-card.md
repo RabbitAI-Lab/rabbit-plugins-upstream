@@ -1,41 +1,50 @@
-## Description: <br>
-Generates personalized travel packing checklists using destination weather, trip length, trip type, traveler makeup, packing progress, and travel tips. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates personalized packing checklists from destination weather, trip length, trip type, travel scene, and traveler composition, with packing progress checks and travel tips.
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External travelers and travel-planning agents use this skill to generate weather-aware packing lists, check packed items against the list, and produce a quick checklist when live weather is not needed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Destination and travel-context inputs may be sent to an external weather proxy despite contradictory privacy language in the artifact. <br>
-Mitigation: Install only if that data flow is acceptable, use quick mode when live weather is unnecessary, and prefer a corrected release with consistent privacy disclosure. <br>
-Risk: The manifest and actual commands are not fully aligned. <br>
-Mitigation: Confirm command wiring before deployment and prefer a corrected release whose manifest matches the generate, check, and quick commands. <br>
+## Use Case:
 
+External travelers and travel-planning agents use this skill to generate categorized packing lists, identify essential and optional items, and check packing progress before a trip.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/smart-packing-list) <br>
-- [Publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Guidance] <br>
-**Output Format:** [JSON objects with weather summaries, categorized checklist items, essential/optional flags, packing progress, alerts, and travel tips.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The generate command may use an external weather proxy for destination weather; quick mode produces a checklist from local rules.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Destination queries and itinerary hints may be sent to a third-party weather proxy when weather-aware list generation is used, despite artifact wording that claims all data stays local.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing if this data flow is unacceptable, update the privacy wording before release, and use quick-list behavior when external weather lookup is not needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/smart-packing-list)
+- [ClawHub publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown-oriented text generated from structured JSON checklist results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a weather summary, trip metadata, categorized checklist items, essential flags, item counts, progress percentage, alerts, and travel tips.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence; artifact frontmatter reports 1.0.2 and artifact _meta.json reports 1.0.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

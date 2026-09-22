@@ -1,45 +1,61 @@
-## Description: <br>
-掘金工具 helps agents query Juejin hot article rankings, download Juejin articles as Markdown, and create Markdown-based Juejin drafts with login-cookie handling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+掘金工具帮助个人用户查询掘金热门内容、下载文章为 Markdown，并以登录会话创建 Markdown 草稿。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and developers use this skill for personal Juejin workflows: browsing hot articles, saving selected articles as Markdown, and preparing draft posts without public publishing by default. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security summary reports unrelated database triggers and vague CRUD-style authority that could activate the skill outside its stated Juejin purpose. <br>
-Mitigation: Use the skill only for explicit Juejin tasks and reject database, SQL, or unrelated storage requests. <br>
-Risk: Juejin login stores a local cookie file and draft publishing uses the user's account session. <br>
-Mitigation: Avoid logging in on shared or CI environments, keep cookie access restricted, and remove the cookie when finished. <br>
-Risk: Draft creation can affect a real Juejin account session. <br>
-Mitigation: Keep draft-only behavior as the default and require explicit confirmation before any public publishing action. <br>
+## Use Case:
 
+个人用户和开发者在明确的掘金任务中使用该技能查询热门文章、下载单篇或少量作者文章，并将本地 Markdown 创建为掘金草稿。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/juejin-tool-free) <br>
-- [Juejin category briefs API](https://api.juejin.cn/tag_api/v1/query_category_briefs) <br>
-- [Juejin category recommendation feed API](https://api.juejin.cn/recommend_api/v1/article/recommend_cate_feed) <br>
-- [Juejin all recommendation feed API](https://api.juejin.cn/recommend_api/v1/article/recommend_all_feed) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, API calls] <br>
-**Output Format:** [Markdown responses with JSON-like status data and saved Markdown files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create files under ./output/ and use a local Juejin cookie for authenticated draft creation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata; artifact frontmatter reports 1.0.0) <br>
+Risk: Broad or contradictory activation instructions could cause the skill to be invoked for unrelated database, SQL, ETL, or general automation tasks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enable and use the skill only for explicit Juejin tasks, and correct trigger text before broader deployment.
+
+Risk: The skill carries command, file, login-cookie, and publishing capabilities.
+
+Mitigation: Review before installing, run only in trusted environments, require explicit paths for file operations, and keep publishing in draft mode unless the user provides the required confirmation.
+
+Risk: Login-based publishing stores a Juejin session cookie at $HOME/.juejin_cookie.json.
+
+Mitigation: Treat the cookie as sensitive session data, avoid shared or CI environments, keep file permissions restricted, and remove the cookie after use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/juejin-tool-free)
+- [ClawHub publisher profile](https://clawhub.ai/user/thcjp)
+- [Juejin category briefs API](https://api.juejin.cn/tag_api/v1/query_category_briefs)
+- [Juejin category feed API](https://api.juejin.cn/recommend_api/v1/article/recommend_cate_feed)
+- [Juejin all feed API](https://api.juejin.cn/recommend_api/v1/article/recommend_all_feed)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown files, plain text status messages, draft links, and command/API call guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Downloaded articles are saved under ./output/; publishing workflows default to draft creation and may use a local Juejin session cookie.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

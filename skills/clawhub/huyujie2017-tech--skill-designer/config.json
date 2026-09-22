@@ -1,0 +1,9 @@
+{
+  "slug": "high-quality-skill-guidance",
+  "namespace": "user_4894573e",
+  "homepage": "https://skillhub.cn/skills/user_4894573e/high-quality-skill-guidance",
+  "api": "https://api.skillhub.cn/api/v1/skills/high-quality-skill-guidance",
+  "registry": "skillhub",
+  "version": "3.19.0",
+  "note": "SkillHub 官方没有供 CLI 消费的 per-skill 更新清单端点（/api/v1/skills/{slug} 只给 latestVersion.version，不含 zip_url），因此这里不设 update_url —— 设了会让 skillhub upgrade 报「清单缺字段」。版本检查请用 scripts/check_update.py（sd_cli update-check）。"
+}

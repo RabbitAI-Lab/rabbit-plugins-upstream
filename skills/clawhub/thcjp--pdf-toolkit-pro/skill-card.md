@@ -1,42 +1,54 @@
-## Description: <br>
-PDF工具箱Pro helps agents extract text, tables, and images from PDFs, use OCR, merge, split, rotate, fill forms, annotate, watermark, sign, and generate PDFs from HTML, Markdown, or code. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PDF工具包（专业版） helps agents guide PDF creation, editing, conversion, merging, splitting, compression, encryption, watermarking, OCR, table extraction, batch processing, and audit-report workflows.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers, document operations teams, and agent users use this skill to automate PDF extraction, conversion, form filling, annotation, merging, splitting, and report generation workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Optional callback and cloud OCR paths may expose sensitive PDF contents if used without review. <br>
-Mitigation: Keep contracts, financial files, and other sensitive PDFs in local-only workflows unless cloud OCR or callback notifications are explicitly approved. <br>
-Risk: The skill expects read, write, and command execution access for document processing and may generate scripts or bulk file outputs. <br>
-Mitigation: Review generated commands, scripts, and output paths before execution, especially before bulk edits or writes. <br>
-Risk: OCR and table extraction can be inaccurate for low-quality scans, handwriting, complex layouts, or cross-page tables. <br>
-Mitigation: Manually verify important extracted text and tables before relying on them for contracts, financial records, or operational decisions. <br>
+## Use Case:
 
+Developers, operators, and document-processing teams use this skill to guide local PDF processing tasks such as transforming files, extracting content, adding protection, running batches, and producing audit records.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/pdf-toolkit-pro) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code snippets, shell commands, configuration notes, and file path conventions for generated PDF artifacts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce or describe generated files such as extracted text, CSV or Excel tables, images, filled PDFs, annotated PDFs, merged PDFs, split page directories, metadata JSON, and helper scripts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence; artifact frontmatter says 1.1.0) <br>
+Risk: Local PDF operations can overwrite, alter, or expose important documents if paths or batches are chosen carelessly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use explicit input and output paths, keep backups of important PDFs, and review batch targets before running operations on sensitive folders.
+
+Risk: Weak or example encryption passwords can leave protected PDFs vulnerable.
+
+Mitigation: Use a unique strong password for encryption workflows and do not reuse the example default password shown in the artifact.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/pdf-toolkit-pro)
+- [ClawHub publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with Python, YAML, bash, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose local output artifacts such as processed PDFs, converted documents, extracted text or tables, and audit JSON when executed by an agent.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata); artifact frontmatter lists 1.0.0
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

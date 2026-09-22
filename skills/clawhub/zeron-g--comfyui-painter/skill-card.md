@@ -1,45 +1,66 @@
-## Description: <br>
-ComfyUI Painter controls a local ComfyUI image-generation workflow, integrates CivitAI model search, downloads, update checks, and parameter tuning, and can send generated images to Discord. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ComfyUI Painter controls a local ComfyUI image-generation workflow, supports text-to-image and image-to-video generation, and integrates CivitAI model search, downloads, update checks, and parameter tuning.
 
-## Publisher: <br>
-[zeron-G](https://clawhub.ai/user/zeron-G) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[zeron-g](https://clawhub.ai/user/zeron-g)
 
-## Use Case: <br>
-Developers and image-generation users use this skill to run local ComfyUI text-to-image and image-to-video workflows, manage CivitAI checkpoints, tune generation settings, and share generated outputs through Discord. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill can control a local ComfyUI instance and may expose it beyond the local machine if remote binding is enabled. <br>
-Mitigation: Restrict activation to explicit image-generation commands and bind ComfyUI to localhost unless remote access is intentional. <br>
-Risk: The skill can download third-party model files and write local configuration. <br>
-Mitigation: Require confirmation before downloads or persistent config changes, and reject absolute paths or path separators in requested filenames. <br>
-Risk: The shutdown helper can terminate Python processes too broadly. <br>
-Mitigation: Use PID-specific shutdown for the ComfyUI process instead of a blanket Python process kill command. <br>
-Risk: Generated images may be sent to Discord and the skill uses a CivitAI API key. <br>
-Mitigation: Confirm intended sharing destinations before posting outputs and keep API credentials scoped and protected. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/zeron-G/comfyui-painter) <br>
-- [CivitAI API](https://civitai.com/api/v1) <br>
-- [Local design notes](artifact/DESIGN.md) <br>
+## Use Case:
 
+Developers and agent operators use this skill to run a local ComfyUI workflow, select configured checkpoint aliases, generate images from prompts, and manage CivitAI model metadata and downloads.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python and shell command examples, plus JSON-like result objects from helper scripts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May trigger local API calls, file writes, model downloads, ComfyUI process management, and Discord image sharing when executed by an agent.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-2.0.0 (source: SKILL.md frontmatter and server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Chat-triggered workflows can start local processes and use network, credential, and file-write capabilities with broad authority.
+
+Mitigation: Use only in a controlled local environment, review the skill before installation, and scope triggers to explicit image-generation requests.
+
+Risk: The configured ComfyUI startup command listens on all interfaces, which can expose the local generation service beyond localhost.
+
+Mitigation: Bind ComfyUI to localhost unless remote access is intentionally required and protected by network controls.
+
+Risk: CivitAI downloads and API calls can use an API token and write model files to the local checkpoint directory.
+
+Mitigation: Send tokens only to approved CivitAI hosts and constrain downloads so files cannot be written outside the intended model directory.
+
+Risk: The shutdown helper stops all Python processes, which can terminate unrelated local workloads.
+
+Mitigation: Replace broad process shutdown with PID-scoped ComfyUI process management.
+
+Risk: Generated images are posted to a configured Discord workflow.
+
+Mitigation: Make Discord posting opt-in and verify the destination channel before sharing outputs.
+
+## Reference(s):
+
+- [ComfyUI Painter on ClawHub](https://clawhub.ai/zeron-g/skills/comfyui-painter)
+- [CivitAI API](https://civitai.com/api/v1)
+- [Local ComfyUI API endpoint](http://localhost:8188)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline Python and shell examples, JSON results, and generated image file paths.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce local image file paths and CivitAI model metadata; generated images are sent through the configured Discord workflow when used in that environment.]
+
+## Skill Version(s):
+
+2.0.0 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

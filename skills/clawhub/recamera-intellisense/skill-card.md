@@ -1,43 +1,59 @@
-## Description: <br>
-Register and control reCamera Pro devices from an agent, including camera onboarding, AI and sound-event detection, rule-based triggers, event polling, image and video capture, recorded clip browsing, storage management, and GPIO control. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Register and control reCamera Pro devices from an agent, including camera onboarding, AI and sound detection, rule-based triggers, event polling with snapshots, media capture, storage management, app control, notification settings, video settings, and GPIO control.
 
-## Publisher: <br>
-[ichizer0](https://clawhub.ai/user/ichizer0) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ichizer0](https://clawhub.ai/user/ichizer0)
 
-## Use Case: <br>
-Developers and operators use this skill to connect an agent to owned reCamera Pro hardware for device setup, model selection, detection rules, event monitoring, capture workflows, storage tasks, and GPIO operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can control camera hardware, read and write camera files, format storage, change retention, and drive GPIO pins. <br>
-Mitigation: Use it only with hardware you own and require explicit user approval before destructive storage changes, file deletion, retention changes, or GPIO writes. <br>
-Risk: Long-lived bearer tokens and device profiles can grant access to registered cameras. <br>
-Mitigation: Protect ~/.recamera/devices.json, avoid logging token values, and keep the profile file permission-restricted. <br>
-Risk: Disabling TLS verification with allow_unsecured weakens transport security. <br>
-Mitigation: Use allow_unsecured only for trusted LAN or self-signed local devices, and prefer HTTPS with trusted certificates on untrusted networks. <br>
+## Use Case:
 
+Developers and operators use this skill to connect reCamera Pro hardware to agent workflows: registering devices, configuring AI or sound-triggered recording, retrieving events and media, and managing device settings.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ichizer0/skills/recamera-intellisense) <br>
-- [Seeed Studio reCamera Pro getting started](https://wiki.seeedstudio.com/recamera_pro_getting_started/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON command examples, shell commands, and Python snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands use a single JSON object argument and may return JSON, inline base64 media, URLs for larger files, or no stdout for some mutating operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.10 (source: server release evidence) <br>
+Risk: The skill can send and persist camera bearer tokens over unverified or plaintext local discovery paths.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only cameras you own on trusted networks, prefer explicit registration with HTTPS and verified TLS, avoid RECAMERA_TOKEN auto-discovery unless transport behavior is understood, and protect or remove ~/.recamera/devices.json when finished.
+
+Risk: Device operations can format storage, delete files, reboot cameras, change app lifecycle, control GPIO, and alter notify or recording rules.
+
+Mitigation: Ask for explicit user confirmation before storage, reboot, file deletion, app lifecycle, GPIO, notify, or rule changes; rely on confirm=true gates only after that approval.
+
+Risk: Captured media and relay URLs may expose camera content or short-lived unauthenticated access to large recordings.
+
+Mitigation: Fetch imagery only when needed, avoid sharing relay URLs publicly, and treat returned snapshots, videos, and device paths as sensitive.
+
+## Reference(s):
+
+- [reCamera Pro Getting Started](https://wiki.seeedstudio.com/recamera_pro_getting_started/)
+- [recamera-pysdk skill](https://github.com/Seeed-Studio/recamera-pro-ext-api/tree/main/skill/recamera-pysdk)
+- [ClawHub skill page](https://clawhub.ai/ichizer0/skills/recamera-intellisense)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands invoke a bundled stdlib-only Python CLI; successful command executions return JSON on stdout.]
+
+## Skill Version(s):
+
+2.2.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

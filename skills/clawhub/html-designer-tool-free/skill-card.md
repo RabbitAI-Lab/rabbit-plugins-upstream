@@ -1,41 +1,53 @@
-## Description: <br>
-HTML设计工具免费版 helps individual developers generate professional HTML/CSS pages from natural-language design requests, including layout, typography, color, responsive structure, and accessibility guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HTML设计工具免费版 helps agents produce HTML/CSS page designs with visual hierarchy, color, typography, responsive layout, and accessibility guidance for small web projects.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External developers and individual creators use this agent skill to design static HTML/CSS pages such as portfolios, blogs, product landing pages, and campaign pages from natural-language briefs. It is suited for generating design guidance, page structure, styling, and basic accessibility and responsive-design recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requests file-writing and command-execution capabilities for a static HTML/CSS design helper. <br>
-Mitigation: Use it only for explicit page-design tasks, inspect proposed file changes, and require confirmation before any shell command is executed. <br>
-Risk: Broad activation wording may cause the skill to be selected outside its intended HTML/CSS page-design scope. <br>
-Mitigation: Limit use to HTML/CSS page design, branding, marketing-page, and visual-layout requests. <br>
+## Use Case:
 
+Developers, designers, and small teams use this skill to draft portfolio pages, blogs, product landing pages, and marketing pages. It provides design guidance, HTML structure, CSS-oriented configuration examples, and review checklists for responsive and accessible static pages.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/html-designer-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with HTML/CSS snippets, configuration examples, and occasional shell command suggestions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write HTML/CSS files or propose local commands when the host agent permits those tools.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter lists 1.0.0) <br>
+Risk: The skill describes command, browser, file, and API-style capabilities that are broader than its static HTML/CSS design purpose clearly requires.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only in workspaces where file changes and command execution are acceptable; prefer a revised version that narrows allowed tools and documents any external API use precisely.
+
+Risk: Generated page designs and code may include incorrect, incomplete, or project-inappropriate accessibility, compatibility, or implementation guidance.
+
+Mitigation: Review generated HTML and CSS before use, test in the target browsers, and validate accessibility requirements against the project's own standards.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/html-designer-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with HTML, CSS, YAML, Python, text, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The artifact describes json, text, and csv output options; the free version is limited to three preset color schemes, basic templates, five example components, and no batch generation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact frontmatter reports 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

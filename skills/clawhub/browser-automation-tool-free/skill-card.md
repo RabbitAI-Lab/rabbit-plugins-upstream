@@ -1,40 +1,58 @@
-## Description: <br>
-Browser Automation Tool Free helps agents drive local Chrome browser interactions from natural-language instructions for navigation, actions, observation, screenshots, and structured extraction. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-language browser automation skill that lets an agent use natural-language commands to navigate pages, act on elements, extract data, observe page structure, and capture screenshots with local Chrome or an optional remote browser service.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and individual automation users use this skill to prototype browser workflows, collect webpage information, explore page elements, and run lightweight Chrome-based automation without writing selectors or scripts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can act on webpages and forms, inspect screenshots, and extract page data with broad activation and limited privacy guardrails. <br>
-Mitigation: Review the skill before installing, use it only for explicit browser automation tasks, and avoid passwords or sensitive personal or business data unless the browser session and data handling are understood. <br>
-Risk: If remote Browserbase credentials are configured, page content or screenshots may be processed outside the local machine. <br>
-Mitigation: Configure remote browser credentials only when needed, confirm where the session runs, and verify the remote provider's data handling before using sensitive pages. <br>
+## Use Case:
 
+Developers, automation users, and agent operators use this skill to drive browser workflows from natural-language instructions, especially quick page navigation, form interaction, element discovery, data extraction, and screenshot-based verification.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/browser-automation-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct the agent to navigate webpages, execute browser actions, observe page elements, capture screenshots, extract structured data, and close the browser session.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill requests broad browser and execution authority, which can affect real accounts or local workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for intended browser automation tasks, review each browser action before submission, and keep unrelated local command execution out of scope.
+
+Risk: Optional remote browser mode creates a separate privacy boundary for page content, credentials, and extracted data.
+
+Mitigation: Avoid sensitive accounts or confidential data in remote mode unless explicitly approved, and confirm Browserbase credentials and project settings before use.
+
+Risk: The documented instructions are broad and can encourage automation beyond the specific page task.
+
+Mitigation: Constrain prompts to a specific site, action, and expected output, then verify results with observe or screenshot before continuing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/browser-automation-tool-free)
+- [ClawHub publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and command-oriented text with browser operation results, extracted data, and optional screenshot output.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May operate through local Chrome by default or a separately configured remote browser service.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

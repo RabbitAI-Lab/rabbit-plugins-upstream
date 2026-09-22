@@ -1,0 +1,4014 @@
+{
+  "schemaVersion": "1.0",
+  "libraryVersion": "kb-2026.09.12.176",
+  "counts": {
+    "entry": 147,
+    "principle": 17,
+    "lesson": 12
+  },
+  "blocks": {
+    "B01": 15,
+    "B02": 7,
+    "B03": 6,
+    "B04": 16,
+    "B05": 7,
+    "B06": 22,
+    "B07": 41,
+    "B08": 14,
+    "B09": 6,
+    "B10": 13
+  },
+  "total": 176,
+  "entries": [
+    {
+      "id": "D-001",
+      "kind": "entry",
+      "block": "B01",
+      "blocks": [
+        "B01"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "Hub/套件架构准入",
+      "abstract": "当领域足够大且子域正交时，不做一个\"巨型 skill\"，而做套件：一个路由器 + N 个自治子 skill。路由器只留意图路由 + 全局护栏，领域细节全部下沉子 skill。",
+      "tags": [],
+      "trigger": "目标 skill 覆盖多个正交子域（auth / 数据库 / 云函数 / AI / ops…），单 SKILL.md 装不下、知识总量 > 50K",
+      "source": "references/blocks/design-blocks-b01.md",
+      "anchor": "### D-001 · Hub/套件架构准入",
+      "line": 13,
+      "hash": "sha256:87062b598c620c9e8aeaf552a677b22f8b944ee2d25fdc58cbcc1ee518488a71",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-002",
+      "kind": "entry",
+      "block": "B01",
+      "blocks": [
+        "B01"
+      ],
+      "themes": [
+        "T9"
+      ],
+      "title": "把运营成本做成一等公民功能",
+      "abstract": "给 skill 定位时先问「它的运营成本是什么」，把成本项（token/时间/存储）提升为一等功能（预算灯、趋势、节流阀），而不是事后补丁",
+      "tags": [],
+      "trigger": "设计任何输出会进上下文或消耗 token 的 skill 时",
+      "source": "references/blocks/design-blocks-b01.md",
+      "anchor": "### D-002 · 把运营成本做成一等公民功能",
+      "line": 20,
+      "hash": "sha256:63bb1c91c9a46b295c317a88111a147272573684e9da6ae009d107ac957dda57",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-003",
+      "kind": "entry",
+      "block": "B01",
+      "blocks": [
+        "B01"
+      ],
+      "themes": [
+        "T7"
+      ],
+      "title": "给定时破坏性动作设预览默认",
+      "abstract": "无人确认场景的默认行为必须是 dry-run，破坏性执行永远 opt-in；且把这条护栏写进 SKILL.md 让评审/用户看得见",
+      "tags": [],
+      "trigger": "用户要求定时自动化且任务含删除/归档等破坏性动作时",
+      "source": "references/blocks/design-blocks-b01.md",
+      "anchor": "### D-003 · 给定时破坏性动作设预览默认",
+      "line": 27,
+      "hash": "sha256:c049ac7f0883f5df6480e229f88d9330dc71c04acbefc54333c8718463f7bc25",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-004",
+      "kind": "entry",
+      "block": "B01",
+      "blocks": [
+        "B01"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "三层路由决策表（正向/消歧/跨模块）",
+      "abstract": "路由表不只答\"去哪\"，还答\"像去哪但其实不是去哪\"（易混淆消歧）和\"要去多个地方\"（读取顺序）；正向命中 + 反向消歧 + 组合任务三层覆盖约 90% 误路由。",
+      "tags": [],
+      "trigger": "设计多模块/多功能 skill 的路由层时",
+      "source": "references/blocks/design-blocks-b01.md",
+      "anchor": "### D-004 · 三层路由决策表（正向/消歧/跨模块）",
+      "line": 34,
+      "hash": "sha256:ab863fc0d8ec41b458e471b1f704985f5e63edde806dee7d4869d98352bebdfd",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-005",
+      "kind": "entry",
+      "block": "B01",
+      "blocks": [
+        "B01"
+      ],
+      "themes": [
+        "T3"
+      ],
+      "title": "description 写意图扩展触发条款",
+      "abstract": "description 显式列出间接意图信号词，把触发判断从 agent 推理变成查表，降低漏触发率（呼应 designer-guide §五关键词覆盖五维）。",
+      "tags": [],
+      "trigger": "写 skill description / 触发词设计时",
+      "source": "references/blocks/design-blocks-b01.md",
+      "anchor": "### D-005 · description 写意图扩展触发条款",
+      "line": 41,
+      "hash": "sha256:212d57b595b61cac80c8e80e2c0f33ce88269c41d1a7f60d7a9355a1a703b921",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-006",
+      "kind": "entry",
+      "block": "B01",
+      "blocks": [
+        "B01"
+      ],
+      "themes": [
+        "T3"
+      ],
+      "title": "description 内嵌边界指针 + 禁止替代声明",
+      "abstract": "description 不只写「能做什么」，还要写「边界在哪找」+「不许用什么替代」——在 SKILL.md 加载之前就开始防误路由，把最贵的错误拦在最便宜的位置",
+      "tags": [],
+      "trigger": "写 description / frontmatter 时（这是 agent 唯一必然读到的字段）",
+      "source": "references/blocks/design-blocks-b01.md",
+      "anchor": "### D-006 · description 内嵌边界指针 + 禁止替代声明",
+      "line": 48,
+      "hash": "sha256:68bcacfe7cc44b3cb5887da85d612d6998860a3f06d2ae7b28f1e941042cf2f0",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-007",
+      "kind": "entry",
+      "block": "B01",
+      "blocks": [
+        "B01"
+      ],
+      "themes": [
+        "T8"
+      ],
+      "title": "外部依赖必须声明「缺失时处置」，只写依赖名等于没写",
+      "abstract": "依赖声明必须三件套：依赖名 + 缺失时处置 + 验证命令。回照自己：blueprint-template L123「资源约束：______（依赖、许可、密钥纪律）」只填依赖名，不填缺失处置——同样的坑（P1-2）",
+      "tags": [],
+      "trigger": "文档/蓝图中出现需要调用外部 skill / CLI / MCP 的降级路径时",
+      "source": "references/blocks/design-blocks-b01.md",
+      "anchor": "### D-007 · 外部依赖必须声明「缺失时处置」，只写依赖名等于没写",
+      "line": 55,
+      "hash": "sha256:bbbf77c36f9201df94049a6009df09d7270f3938e23a4d2b8e3c813031c1f2df",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-008",
+      "kind": "entry",
+      "block": "B01",
+      "blocks": [
+        "B01"
+      ],
+      "themes": [
+        "T7"
+      ],
+      "title": "能力边界声明带可数阈值，且按 Supported / Not supported / 环境要求 / 安全 四段分列",
+      "abstract": "边界要么给数字，要么给枚举清单——「大文件可能有问题」不可判，「>100MB 不支持」可判。分四段（能力/不支持/环境/安全）比单列一段更不易漏。环境要求与安全独立成段这一点尤其值得搬进我们的 capability-boundary 模板",
+      "tags": [],
+      "trigger": "写 skill 的能力边界 / 适用范围时",
+      "source": "references/blocks/design-blocks-b01.md",
+      "anchor": "### D-008 · 能力边界声明带可数阈值，且按 Supported / Not supported / 环境要求 / 安全 四段分列",
+      "line": 62,
+      "hash": "sha256:71933cb3a06322de8dc0ee20b1fbc51c6868fdd8b64f78d2a0daa6675877e40f",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-009",
+      "kind": "entry",
+      "block": "B01",
+      "blocks": [
+        "B01"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "作用域与优先级",
+      "abstract": "Skill 有四级作用域——企业 > 个人 > 项目 > Plugin；触发冲突按此优先级。能复用的能力优先做 Skill，而非塞进全量常驻的 System Prompt。",
+      "tags": [
+        "适用: 跨平台复用"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b01.md",
+      "anchor": "### D-009 · 作用域与优先级",
+      "line": 69,
+      "hash": "sha256:08b53b551354158516d296566c9a4035594cbd43047c4dad1e3c751339a836ef",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-010",
+      "kind": "entry",
+      "block": "B01",
+      "blocks": [
+        "B01"
+      ],
+      "themes": [
+        "T9"
+      ],
+      "title": "Token 管理专项 Checklist（用户侧 9 条）",
+      "abstract": "把下面 9 条当成开工前的自检——勾上的越多，一轮会话的 token 就越接近「只付该付的」。",
+      "tags": [],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b01.md",
+      "anchor": "### D-010 · Token 管理专项 Checklist（用户侧 9 条）",
+      "line": 77,
+      "hash": "sha256:5cc8e8abe84e602e8fdfa0ac577a2f570bf235bf17a39b7cc7f6b410ddefd4e6",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-127",
+      "kind": "entry",
+      "block": "B01",
+      "blocks": [
+        "B01"
+      ],
+      "themes": [
+        "T3"
+      ],
+      "title": "双层触发证据（有限资源分层承载）",
+      "abstract": "触发设计分两层——一等放规则（description：一等口令 + 判定口诀，受 1024 字符硬限），二等放实例（长尾路由表：槽位匹配 + 真实语料，无容量上限），再用用例集把两者变成可复跑断言…",
+      "tags": [
+        "适用: 触发面广",
+        "适用: 面向中文用户",
+        "适用: 需可验证证据",
+        "适用: 需多语言触发"
+      ],
+      "trigger": "触发词写不下时；或需要证明「用户说了某句话就该触发我」时",
+      "source": "references/blocks/design-blocks-b01.md",
+      "anchor": "### D-127 · 双层触发证据（有限资源分层承载）",
+      "line": 126,
+      "hash": "sha256:218fa5148724b7407f4738c8092f3a0fad89e8dfe2f6e7a42b462bf8f9b7c676",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-129",
+      "kind": "entry",
+      "block": "B01",
+      "blocks": [
+        "B01"
+      ],
+      "themes": [
+        "T1"
+      ],
+      "title": "可移植性作为设计约束（不绑定单一宿主）",
+      "abstract": "在准入四问之前先定一条：这个 skill 是「平台绑定型」还是「跨平台型」。定跨平台则加三条硬约束——① 核心路径只用开放标准字段（name / description）…",
+      "tags": [
+        "适用: 跨平台复用",
+        "适用: 需要外部调用",
+        "适用: 流程复杂"
+      ],
+      "trigger": "Phase 0 三问答「平台」时；或 B02 画像出现「多人复用 / 要分发 / 要开源 / 跨平台」任一信号",
+      "source": "references/blocks/design-blocks-b01.md",
+      "anchor": "### D-129 · 可移植性作为设计约束（不绑定单一宿主）",
+      "line": 142,
+      "hash": "sha256:51775e95cd3c25965cdb3fe2c9d733b438853c1e8c31f8a554baf4f5613f0c26",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-130",
+      "kind": "entry",
+      "block": "B01",
+      "blocks": [
+        "B01"
+      ],
+      "themes": [
+        "T1"
+      ],
+      "title": "元 skill 形态先于体量（查用型 vs 生产型）",
+      "abstract": "元 skill 有两种合法形态，先定形态再定体量，别反过来：",
+      "tags": [
+        "适用: 创意/开放任务",
+        "适用: 流程复杂",
+        "适用: 知识密集"
+      ],
+      "trigger": "设计对象是元 skill（教怎么做 X / 规范 / 指南 / 方法论）时；或纠结\"该写多长\"时",
+      "source": "references/blocks/design-blocks-b01.md",
+      "anchor": "### D-130 · 元 skill 形态先于体量（查用型 vs 生产型）",
+      "line": 152,
+      "hash": "sha256:f0598529c2a6f50d713590f0001a8d23444b81cac82588dfea78cd9550c1e5c2",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-133",
+      "kind": "entry",
+      "block": "B01",
+      "blocks": [
+        "B01"
+      ],
+      "themes": [
+        "T3"
+      ],
+      "title": "平台适配矩阵：能力文档首部给「平台 → 状态检查 / 调用模板」单一映射表",
+      "abstract": "跨平台支持常见写法是「每个示例写两遍」（正文立刻膨胀一倍，且两遍必然漂移）。它的做法是一次映射表 + 一条机械替换规则——成本从 O(示例数×平台数) 降到 O(1)，且不会漂移（示例只有一份权威）…",
+      "tags": [
+        "适用: 涉及脚本",
+        "适用: 需要多工具协同"
+      ],
+      "trigger": "skill 含平台相关命令（shell 包装器 / 路径分隔符 / 权限位）且需跨平台分发时",
+      "source": "references/blocks/design-blocks-b01.md",
+      "anchor": "### D-133 · 平台适配矩阵：能力文档首部给「平台 → 状态检查 / 调用模板」单一映射表",
+      "line": 165,
+      "hash": "sha256:f197ff7f61969aec2f3d8c68c8082a32fff3867af262ad06b5855da1ed0389fe",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-134",
+      "kind": "entry",
+      "block": "B01",
+      "blocks": [
+        "B01"
+      ],
+      "themes": [
+        "T3"
+      ],
+      "title": "双语元数据字段对 + 风险披露独立成卡（frontmatter 只管路由，商城展示另立载体）",
+      "abstract": "两件事拆开——frontmatter 是给 agent 路由用的（越短越准），商城卡片是给人审查用的（越全越好）。混在一起会出现「为过审写长 → 触发精度被稀释」…",
+      "tags": [
+        "适用: 发布上架",
+        "适用: 涉及外部调用"
+      ],
+      "trigger": "skill 要上架到有 i18n 展示与合规审查的商城（SkillHub / ClawHub 类）时",
+      "source": "references/blocks/design-blocks-b01.md",
+      "anchor": "### D-134 · 双语元数据字段对 + 风险披露独立成卡（frontmatter 只管路由，商城展示另立载体）",
+      "line": 174,
+      "hash": "sha256:01441ad8656fdb2d51218b84d9fb6e4ce632478104f717794a2fa45356c5c729",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-011",
+      "kind": "entry",
+      "block": "B02",
+      "blocks": [
+        "B02"
+      ],
+      "themes": [
+        "T5"
+      ],
+      "title": "专家经验萃取追问五问",
+      "abstract": "别问\"你的方法论是什么\"（得到经验散文），改问具体动作五问：①拿到材料先看哪里→Workflow 第一步；②什么信号会停下来追问→澄清协议/分支点；③新人常犯什么错→Gotchas/MISTAKES…",
+      "tags": [],
+      "trigger": "用户在 B02 表达\"我有领域经验\"，或该 skill 依赖专家隐性经验（非 LLM 通用知识）",
+      "source": "references/blocks/design-blocks-b02.md",
+      "anchor": "### D-011 · 专家经验萃取追问五问",
+      "line": 13,
+      "hash": "sha256:c8fd6b0ff37e243c48d4658d38cc5f3017ff5ad1d62df6bba00fe4cbdfbe4642",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-012",
+      "kind": "entry",
+      "block": "B02",
+      "blocks": [
+        "B02"
+      ],
+      "themes": [
+        "T5"
+      ],
+      "title": "多信号画像",
+      "abstract": "构建画像不只问一句，综合用户已有 skill、环境、工作场景、README 等多信号；画像信号越足，最佳实践命中越准。",
+      "tags": [],
+      "trigger": "目标 skill 面向特定人群 / 场景复杂，单问一句画像不够",
+      "source": "references/blocks/design-blocks-b02.md",
+      "anchor": "### D-012 · 多信号画像",
+      "line": 20,
+      "hash": "sha256:87301186af5d0ac959f21a59cd02e0768f7f47983c735d272aadcca8b4d744f7",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-013",
+      "kind": "entry",
+      "block": "B02",
+      "blocks": [
+        "B02"
+      ],
+      "themes": [
+        "T8"
+      ],
+      "title": "能力嗅探顺序 + 禁止中途横跳",
+      "abstract": "多依赖任务先写死能力嗅探顺序（先探什么、后探什么、何时锁定唯一方案），并禁止中途横跳——避免\"选型摇摆\"浪费整轮会话。",
+      "tags": [],
+      "trigger": "任务依赖多个外部能力且存在选型（DB 选型、SDK、工具链）",
+      "source": "references/blocks/design-blocks-b02.md",
+      "anchor": "### D-013 · 能力嗅探顺序 + 禁止中途横跳",
+      "line": 27,
+      "hash": "sha256:6aaef6353dc1e7cb50b548054fba52769fd516a040761bd2c8ceef233730f6cf",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-014",
+      "kind": "entry",
+      "block": "B02",
+      "blocks": [
+        "B02"
+      ],
+      "themes": [
+        "T3"
+      ],
+      "title": "AI 受众立场（写给另一个 agent 实例）",
+      "abstract": "skill 的最终读者是另一个 agent 实例而非人——只收\"对 AI 有益且非显然\"的程序性知识；每格内容取舍多问一句\"这条它执行时会用到吗？\"；面向人的部分（白话注释 / FAQ）与指令体分层不混写…",
+      "tags": [],
+      "trigger": "起草/打磨蓝图任何格时犹豫\"这条要不要写\"；内容人类看着精彩但 AI 执行用不上",
+      "source": "references/blocks/design-blocks-b02.md",
+      "anchor": "### D-014 · AI 受众立场（写给另一个 agent 实例）",
+      "line": 34,
+      "hash": "sha256:5ac2f81516868fa0797acdee9bf832ec29e1ea30f259c3e19c0201bb469cca6b",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-015",
+      "kind": "entry",
+      "block": "B02",
+      "blocks": [
+        "B02"
+      ],
+      "themes": [
+        "T3"
+      ],
+      "title": "文件目录自述图",
+      "abstract": "SKILL.md 里放一张「文件树 + 每文件一句话职责」的自述图，agent 免去 ls 猜测，一次读完全图；validate 可低成本校验「目录图与实际清单一致」（也见 B07）",
+      "tags": [],
+      "trigger": "skill 文件数 > 10，agent 需要定位「去哪找什么」时",
+      "source": "references/blocks/design-blocks-b02.md",
+      "anchor": "### D-015 · 文件目录自述图",
+      "line": 41,
+      "hash": "sha256:65f9e4524e4600190d02458ddcfc3a0dfd1fd798cdcb5ba4b8a0dcea5a762ce6",
+      "origin": "tencent-docs SKILL.md L94-129（T-A01）",
+      "explains": []
+    },
+    {
+      "id": "D-016",
+      "kind": "entry",
+      "block": "B02",
+      "blocks": [
+        "B02"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "品类能力总表带推荐度",
+      "abstract": "可选方案表不只列「有什么」，还列推荐度——agent 无需逐个试错即可按推荐档位选型（也见 B06）",
+      "tags": [],
+      "trigger": "同一诉求有多种可选载体（如 9 种 doc_type）时",
+      "source": "references/blocks/design-blocks-b02.md",
+      "anchor": "### D-016 · 品类能力总表带推荐度",
+      "line": 55,
+      "hash": "sha256:e93409608c32a5eaccd590c744513c9a607603caf3a8d069f5c708d42fb45115",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-017",
+      "kind": "entry",
+      "block": "B02",
+      "blocks": [
+        "B02"
+      ],
+      "themes": [
+        "T3"
+      ],
+      "title": "分级设计触发词体系",
+      "abstract": "触发词按「用户语气明确度」分级而不是罗列关键词，排除规则防误触；每条触发词都要能映射到具体命令和例句",
+      "tags": [],
+      "trigger": "写 SKILL.md 触发设计或 description 时",
+      "source": "references/blocks/design-blocks-b02.md",
+      "anchor": "### D-017 · 分级设计触发词体系",
+      "line": 62,
+      "hash": "sha256:c1bcc85fdf5285d1752e0fc5def33299c30bd31ad04d9ca698229e7ca83bd1f0",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-018",
+      "kind": "entry",
+      "block": "B03",
+      "blocks": [
+        "B03"
+      ],
+      "themes": [
+        "T8"
+      ],
+      "title": "分层设计依赖并优雅降级",
+      "abstract": "依赖分「核心零依赖+增强可选」两层，每个可选依赖都要写明降级路径并把降级声明写进兼容性说明——降级后功能不受影响才是真零依赖",
+      "tags": [],
+      "trigger": "skill 需要跨环境分发或目标机器可能离线时",
+      "source": "references/blocks/design-blocks-b03.md",
+      "anchor": "### D-018 · 分层设计依赖并优雅降级",
+      "line": 13,
+      "hash": "sha256:1ccb7b36328f0e499cb88f4f58c65bb0c8cc4291bfb1e5853b7f5d3650e7d90a",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-019",
+      "kind": "entry",
+      "block": "B03",
+      "blocks": [
+        "B03"
+      ],
+      "themes": [
+        "T1"
+      ],
+      "title": "六大设计模式 A–F",
+      "abstract": "六大设计模式 A–F",
+      "tags": [],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b03.md",
+      "anchor": "### D-019 · 六大设计模式 A–F",
+      "line": 20,
+      "hash": "sha256:ce01570845f0d1bda38bf91320abed4f9c6213fe0c091bad0454e4324426d4dc",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-020",
+      "kind": "entry",
+      "block": "B03",
+      "blocks": [
+        "B03"
+      ],
+      "themes": [
+        "T1"
+      ],
+      "title": "SCK 五模式（交互结构视角）",
+      "abstract": "SCK 五模式（交互结构视角）",
+      "tags": [],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b03.md",
+      "anchor": "### D-020 · SCK 五模式（交互结构视角）",
+      "line": 23,
+      "hash": "sha256:ce01570845f0d1bda38bf91320abed4f9c6213fe0c091bad0454e4324426d4dc",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-021",
+      "kind": "entry",
+      "block": "B03",
+      "blocks": [
+        "B03"
+      ],
+      "themes": [
+        "T1"
+      ],
+      "title": "融合：交互模式 × 内容模式 双轴",
+      "abstract": "在 B03 观点积木，同时给出两个轴的答案。",
+      "tags": [
+        "适用: 流程复杂",
+        "适用: 需要外部调用"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b03.md",
+      "anchor": "### D-021 · 融合：交互模式 × 内容模式 双轴",
+      "line": 26,
+      "hash": "sha256:54af32326b2ff53a57363ae2f89c7c66f800b3cd44cc19a3dee7bd76450697f4",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-022",
+      "kind": "entry",
+      "block": "B03",
+      "blocks": [
+        "B03"
+      ],
+      "themes": [
+        "T1"
+      ],
+      "title": "五类 skill 模式 + 自由度三档",
+      "abstract": "创建前先定类型，它决定 SKILL.md 写作侧重。",
+      "tags": [
+        "适用: 涉及脚本",
+        "适用: 创意/开放任务"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b03.md",
+      "anchor": "### D-022 · 五类 skill 模式 + 自由度三档",
+      "line": 34,
+      "hash": "sha256:8ab946f00328dc9914650f6c05930b9f30b73adcbade707d03fa67b67caa93ad",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-023",
+      "kind": "entry",
+      "block": "B03",
+      "blocks": [
+        "B03"
+      ],
+      "themes": [
+        "T1"
+      ],
+      "title": "四类 skill 结构（与五类模式互补）",
+      "abstract": "按类型选章节骨架，比\"每个 skill 都同一套模板\"更快。",
+      "tags": [
+        "适用: 流程复杂",
+        "适用: 创意/开放任务"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b03.md",
+      "anchor": "### D-023 · 四类 skill 结构（与五类模式互补）",
+      "line": 42,
+      "hash": "sha256:bbf3084bb6a35d1c01c56dddcee5addbdd8e1ea310ea00cde10b54f8e5b0212b",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-024",
+      "kind": "entry",
+      "block": "B04",
+      "blocks": [
+        "B04"
+      ],
+      "themes": [
+        "T5"
+      ],
+      "title": "澄清协议四型",
+      "abstract": "只写\"缺信息时询问用户\"不够，必须逐型判定适用条件——一次性追问（缺多个独立配置项）/ 逐步澄清（需求本身模糊、据首轮回答定后续）/ 选项式（2–4 个、每项注明影响）/ 关键假设确认（覆盖/删除/迁移/发布前复述动作等确认）。",
+      "tags": [
+        "适用: 流程复杂",
+        "适用: 涉及文件产出"
+      ],
+      "trigger": "目标 skill 需要向最终用户收集信息（几乎一切非单次任务）",
+      "source": "references/blocks/design-blocks-b04.md",
+      "anchor": "### D-024 · 澄清协议四型",
+      "line": 13,
+      "hash": "sha256:ac8e2a7982f439d67353da92675017cbe0a16a166fc6c060b83c1dcf255a3e7a",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-025",
+      "kind": "entry",
+      "block": "B04",
+      "blocks": [
+        "B04"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "EARS 验收标准句式",
+      "abstract": "验收标准用 EARS 句式写（While/When/the system shall），从\"模糊期望\"变成\"可机器判定的触发→响应\"，直接喂给测试用例。",
+      "tags": [],
+      "trigger": "spec/需求类工作流要写\"可测试的验收标准\"",
+      "source": "references/blocks/design-blocks-b04.md",
+      "anchor": "### D-025 · EARS 验收标准句式",
+      "line": 26,
+      "hash": "sha256:ecffd9d25add674d60424a49fc2945b2b49c31722038b551a40bee84789dec6b",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-026",
+      "kind": "entry",
+      "block": "B04",
+      "blocks": [
+        "B04"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "能力缺口静默遥测",
+      "abstract": "把「做不了」从死路变成数据通路：结构化上报（意图原话 + 场景类型）回流上游，且不打断用户体验（也见 B10）",
+      "tags": [],
+      "trigger": "用户意图在工具集里找不到对应能力时",
+      "source": "references/blocks/design-blocks-b04.md",
+      "anchor": "### D-026 · 能力缺口静默遥测",
+      "line": 33,
+      "hash": "sha256:2f034d73492790bbc7ca8f87ef87ece05567ce29b9e89639cd4793e79ea28332",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-027",
+      "kind": "entry",
+      "block": "B04",
+      "blocks": [
+        "B04"
+      ],
+      "themes": [
+        "T7"
+      ],
+      "title": "GATE 安全门模式",
+      "abstract": "把安全规则编号成 GATE 序列：每门一个检查点 + 明确终止动作 + 适用范围声明；禁止\"do you still want to try?\"式软化话术（元设计 DP-001）。",
+      "tags": [],
+      "trigger": "skill 含写入/上传/覆盖等不可逆操作时",
+      "source": "references/blocks/design-blocks-b04.md",
+      "anchor": "### D-027 · GATE 安全门模式",
+      "line": 40,
+      "hash": "sha256:0955ec9f77be984c71f9bae6540a99d0ac10022a2482df23ba747c8bdfa901bb",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-028",
+      "kind": "entry",
+      "block": "B04",
+      "blocks": [
+        "B04"
+      ],
+      "themes": [
+        "T5"
+      ],
+      "title": "可逆性决定确认等级（新建 vs 追加）",
+      "abstract": "不可逆操作 = 敏感操作：配信号词表把\"问不问用户\"变成可判定规则，模糊场景强制询问并列出候选（元设计 DP-001）。",
+      "tags": [],
+      "trigger": "存在两个相似但破坏力不同的操作时",
+      "source": "references/blocks/design-blocks-b04.md",
+      "anchor": "### D-028 · 可逆性决定确认等级（新建 vs 追加）",
+      "line": 47,
+      "hash": "sha256:880f515264a0faf5372148adb3c67cacca65deae2fe7200e6ef2f511f202a769",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-029",
+      "kind": "entry",
+      "block": "B04",
+      "blocks": [
+        "B04"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "隐私输出按场景分级",
+      "abstract": "一句话可执行的输出降级规则：同一内容在私聊/群聊场景用不同展示粒度（元设计 DP-001/DP-003）。",
+      "tags": [],
+      "trigger": "skill 触达用户私密内容且输出可能进群聊/公开场景时",
+      "source": "references/blocks/design-blocks-b04.md",
+      "anchor": "### D-029 · 隐私输出按场景分级",
+      "line": 54,
+      "hash": "sha256:04a6f9c1b10cae5d47819e284677f6a5f950319df62810e903f8eaa6d093f333",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-030",
+      "kind": "entry",
+      "block": "B04",
+      "blocks": [
+        "B04"
+      ],
+      "themes": [
+        "T10"
+      ],
+      "title": "可验证性决定严格度：同一检查在可验证/不可验证下给不同默认",
+      "abstract": "不一律放行（等于没门禁）、也不一律拒绝（可用性崩溃），而是按「能否验证」自适应强度。回照自己：validate_skill.py 半软 WARN 的降级判据是「是否历史产物」，而非「该项是否机器可判」——判据错位（P0-2）",
+      "tags": [],
+      "trigger": "设计校验 / 安全检查门禁，且校验能力可能缺失时",
+      "source": "references/blocks/design-blocks-b04.md",
+      "anchor": "### D-030 · 可验证性决定严格度：同一检查在可验证/不可验证下给不同默认",
+      "line": 61,
+      "hash": "sha256:7c0403b39b5a1d6985d26e1f4ebb6b3510c85d5b4cd6ef81b573eec5e990a477",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-031",
+      "kind": "entry",
+      "block": "B04",
+      "blocks": [
+        "B04"
+      ],
+      "themes": [
+        "T6"
+      ],
+      "title": "失败分级：空结果与能力不支持必须分开处置",
+      "abstract": "每级给「动作 + 禁令」；空结果（数据缺失、可换时点）与能力不支持（能力边界、需降级）混为一谈，会让 agent 在能力边界上反复重试",
+      "tags": [],
+      "trigger": "写异常处理章节时",
+      "source": "references/blocks/design-blocks-b04.md",
+      "anchor": "### D-031 · 失败分级：空结果与能力不支持必须分开处置",
+      "line": 68,
+      "hash": "sha256:cec5f93f787e9569365b01327ceab7bdecfe1346d423fcc41002f9ca2d9868c3",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-032",
+      "kind": "entry",
+      "block": "B04",
+      "blocks": [
+        "B04"
+      ],
+      "themes": [
+        "T5"
+      ],
+      "title": "可逆性判据三要素：把「为什么不问用户」写成可判据的理由",
+      "abstract": "「少打扰用户」是口号，「廉价 + 可逆 + 零外部副作用」才是判据——三者可逐条验证。配套动作是「事后显式列出关键假设」，把事前询问改成事后审阅…",
+      "tags": [],
+      "trigger": "决定某个环节要不要打断用户确认时",
+      "source": "references/blocks/design-blocks-b04.md",
+      "anchor": "### D-032 · 可逆性判据三要素：把「为什么不问用户」写成可判据的理由",
+      "line": 75,
+      "hash": "sha256:90afc2ae412e0bc1652d48fe0856fab2284fb0eb8a01b1191a951aedfec64665",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-033",
+      "kind": "entry",
+      "block": "B04",
+      "blocks": [
+        "B04"
+      ],
+      "themes": [
+        "T5"
+      ],
+      "title": "显式声明「唯一必须的用户介入点」",
+      "abstract": "「尽量少打扰」不可执行，「全链路只有这一个点必须打断」可执行——而且它同时封死了兜底路径（不得静默绕开），防止 agent 用「自己写脚本」消解掉这个介入点",
+      "tags": [],
+      "trigger": "写 Exit Criteria / 失败分级时",
+      "source": "references/blocks/design-blocks-b04.md",
+      "anchor": "### D-033 · 显式声明「唯一必须的用户介入点」",
+      "line": 82,
+      "hash": "sha256:ac299de90e2751fe9d93301f1422ed0fd72a70b548f6ed2e727028c2a8c61492",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-034",
+      "kind": "entry",
+      "block": "B04",
+      "blocks": [
+        "B04"
+      ],
+      "themes": [
+        "T5"
+      ],
+      "title": "二选一",
+      "abstract": "给两个互斥选项 + 各自后果。",
+      "tags": [
+        "适用: 创意/开放任务"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b04.md",
+      "anchor": "### D-034 · 二选一",
+      "line": 89,
+      "hash": "sha256:a30515f617cbc2176240e8f3479ce8b2f92a80b27e324a3059c9bf224734020f",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-035",
+      "kind": "entry",
+      "block": "B04",
+      "blocks": [
+        "B04"
+      ],
+      "themes": [
+        "T5"
+      ],
+      "title": "权衡型",
+      "abstract": "列出每个选项的收益与代价，让用户权衡。",
+      "tags": [
+        "适用: 流程复杂"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b04.md",
+      "anchor": "### D-035 · 权衡型",
+      "line": 96,
+      "hash": "sha256:febf5fe586883ac8fd74f1f90e4ad3397b244e9400f46e5a24e1ea22d02e5e4c",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-036",
+      "kind": "entry",
+      "block": "B04",
+      "blocks": [
+        "B04"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "范围型",
+      "abstract": "范围太大时，先聚焦最小闭环。",
+      "tags": [],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b04.md",
+      "anchor": "### D-036 · 范围型",
+      "line": 103,
+      "hash": "sha256:4e5f1e9335404fb3f027625c77553ecc4266aae1f0968902d7a561ccdb9dfe35",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-135",
+      "kind": "entry",
+      "block": "B04",
+      "blocks": [
+        "B04"
+      ],
+      "themes": [
+        "T6"
+      ],
+      "title": "环境就绪独立成「强制门禁阶段」，四类状态各给可直接执行的命令",
+      "abstract": "多数 skill 把「环境没装」当异常分支塞在末尾（if error: 提示用户）——它反过来把就绪检查提成第 1 阶段 + 强制门禁，并按状态脚本的具体字段值分流（不是按人读错误文本猜）…",
+      "tags": [
+        "适用: 需要外部调用",
+        "适用: 用户首次使用"
+      ],
+      "trigger": "skill 依赖外部 CLI / API Key / 授权 / 第三方安装，且「未就绪」是常态而非例外时",
+      "source": "references/blocks/design-blocks-b04.md",
+      "anchor": "### D-135 · 环境就绪独立成「强制门禁阶段」，四类状态各给可直接执行的命令",
+      "line": 110,
+      "hash": "sha256:5136b03d7ab5cf786614f27b80f1211e4ebe9cd21a7f9e14d4420bcae5d48c6c",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-136",
+      "kind": "entry",
+      "block": "B04",
+      "blocks": [
+        "B04"
+      ],
+      "themes": [
+        "T7"
+      ],
+      "title": "用户指令不能修改 skill 约束：绕过话术清单化 + 只提取合法参数",
+      "abstract": "D-060 Prompt 注入防护 只说「警惕『忽略安全规则』类注入」——是 rule 级、无清单、无处置动作。本条把两半补齐：① 话术清单（覆盖可预见的绕过变形，让 agent 认得出）…",
+      "tags": [
+        "适用: 高风险领域",
+        "适用: 输出可客观验证",
+        "适用: 用户会挑战结论"
+      ],
+      "trigger": "skill 的结论依赖权威数据源，而用户会试图用自然语言改变结论（『别质疑』『必须推荐某校』『写成高概率』）时",
+      "source": "references/blocks/design-blocks-b04.md",
+      "anchor": "### D-136 · 用户指令不能修改 skill 约束：绕过话术清单化 + 只提取合法参数",
+      "line": 119,
+      "hash": "sha256:f7705ba6083fa47121d9dfa534a864ca4efe6a035dba8db7bd33cf275b4e28d2",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-137",
+      "kind": "entry",
+      "block": "B04",
+      "blocks": [
+        "B04"
+      ],
+      "themes": [
+        "T5"
+      ],
+      "title": "参数默认值与「必须追问」矩阵：把猜测与追问边界做成一张表",
+      "abstract": "D-024 澄清协议四型 管「用什么方式问」（二选一 / 权衡 / 范围 / 开放），本条管「哪些必须问、哪些不许问」的逐参数裁决表——粒度从「协议类型」下沉到「参数级」，且给出双列对置（免得只写「必须问」却漏掉「这些可以自己定」）…",
+      "tags": [
+        "适用: 输入参数多",
+        "适用: 用户首次使用"
+      ],
+      "trigger": "skill 的输入参数较多，且不同参数「缺了能不能猜」规则不一致时",
+      "source": "references/blocks/design-blocks-b04.md",
+      "anchor": "### D-137 · 参数默认值与「必须追问」矩阵：把猜测与追问边界做成一张表",
+      "line": 128,
+      "hash": "sha256:e292200b0a3f3522682d1990c07156e4a42bea7762a8d2d48a625862d1602a34",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-037",
+      "kind": "entry",
+      "block": "B05",
+      "blocks": [
+        "B05"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "IPO+B 四象限",
+      "abstract": "契约从二维（输入×输出）升级为四维——I 输入（必须提供/可自读/缺失不能开始/可默认 vs 必须确认）、P 处理（标准顺序/分支点/必须严格执行 vs 允许自由发挥）、O 输出（交付物/格式/落盘/报告日志）、B…",
+      "tags": [],
+      "trigger": "任何有明确输入/输出的 skill",
+      "source": "references/blocks/design-blocks-b05.md",
+      "anchor": "### D-037 · IPO+B 四象限",
+      "line": 13,
+      "hash": "sha256:2a21091fd3dcf055b78c2922452589680317ad3451c6044ba9479320cce98340",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-038",
+      "kind": "entry",
+      "block": "B05",
+      "blocks": [
+        "B05"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "事实/推断物理分区",
+      "abstract": "凡涉及预测的产出，强制分「关键事实（带出处）」「影响推断（标注）」两区，推断区禁止出现原文没有的精确数字——防止 AI 编数字。",
+      "tags": [],
+      "trigger": "涉及预测/推断/影响分析类输出（投资、决策、展望）",
+      "source": "references/blocks/design-blocks-b05.md",
+      "anchor": "### D-038 · 事实/推断物理分区",
+      "line": 20,
+      "hash": "sha256:259cb464f0641c407ea6eb27d3d36999fdb6b9056e85ca0df27c7431f430f723",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-039",
+      "kind": "entry",
+      "block": "B05",
+      "blocks": [
+        "B05"
+      ],
+      "themes": [
+        "T1"
+      ],
+      "title": "BaaS-first 默认最小化",
+      "abstract": "默认走最简能力路径，复杂组件默认禁用并写明\"唯一允许升级的条件\"（双条件都满足才升级）。反过度工程的设计决策。",
+      "tags": [],
+      "trigger": "同一目标有\"简单路径 vs 复杂路径\"（如直接 SDK CRUD vs 云函数中转）",
+      "source": "references/blocks/design-blocks-b05.md",
+      "anchor": "### D-039 · BaaS-first 默认最小化",
+      "line": 27,
+      "hash": "sha256:ebed796a6f7f1000d220e81e697947ec04dd59891f705fe528ac0af4711ef92d",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-040",
+      "kind": "entry",
+      "block": "B05",
+      "blocks": [
+        "B05"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "使用例反推资源清单",
+      "abstract": "先逼出 2–3 个真实使用例（\"用户会说什么来触发它\"），逐例从零推演执行过程，把重复出现的动作沉淀为 scripts / references / assets 候选清单——\"例 → 资源\"的推导桥比抽象追问更落地…",
+      "tags": [],
+      "trigger": "①只有抽象描述、给不出 B7 具体样例；或 B05 契约粗糙无从下手",
+      "source": "references/blocks/design-blocks-b05.md",
+      "anchor": "### D-040 · 使用例反推资源清单",
+      "line": 34,
+      "hash": "sha256:a3d48e660afad9c42180991489fe146f0b00c8bdd66976eb0fd442426146ad62",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-041",
+      "kind": "entry",
+      "block": "B05",
+      "blocks": [
+        "B05"
+      ],
+      "themes": [
+        "T7"
+      ],
+      "title": "收敛安全原语到单点迭代器",
+      "abstract": "安全校验必须收敛为单一 choke point，散在 N 处必有 1 处漏；任务分析阶段就识别「哪些操作要过同一道闸」",
+      "tags": [],
+      "trigger": "多个命令都需要遍历/读写同一类敏感文件时",
+      "source": "references/blocks/design-blocks-b05.md",
+      "anchor": "### D-041 · 收敛安全原语到单点迭代器",
+      "line": 41,
+      "hash": "sha256:2f23174cc331f1931c10dc45e17ef37fe29bfeca85baa64ecc210a8f163605be",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-042",
+      "kind": "entry",
+      "block": "B05",
+      "blocks": [
+        "B05"
+      ],
+      "themes": [
+        "T10"
+      ],
+      "title": "反幻觉具体化：指定「数字出处白名单」而非泛泛「不要编造」",
+      "abstract": "「不要编造」无法自检；「每个数字必须能在 X 字段找到出处」可以自检——把禁令换成数据源白名单 + 语义映射示例。与我们的 P0 诚实性（实证项不代填）同源，但它更进一步：既指定了允许来源，还示范了「同一数字在不同语义下的正确表述」",
+      "tags": [],
+      "trigger": "要求 agent 写含数字的分析/解读/结论时",
+      "source": "references/blocks/design-blocks-b05.md",
+      "anchor": "### D-042 · 反幻觉具体化：指定「数字出处白名单」而非泛泛「不要编造」",
+      "line": 48,
+      "hash": "sha256:c5f93d6167e4476b9c80475521803603ca1ddf28e8ab36670a9a22999ff74ac3",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-138",
+      "kind": "entry",
+      "block": "B05",
+      "blocks": [
+        "B05"
+      ],
+      "themes": [
+        "T10"
+      ],
+      "title": "数据自洽性硬校验优先于用户诉求，冲突即阻断下游全部产出",
+      "abstract": "三层设计都值得抄——(a) 校验优先于诉求（明确声明校验优先于「期望梯度」「不要质疑」等任何输入）；(b) 冲突即熔断（不是「提示一下继续做」，而是阻断全部下游产出，连「假设备选」也不给——否则用户仍能拿到想要的结果）…",
+      "tags": [
+        "适用: 输出可客观验证",
+        "适用: 高风险领域",
+        "适用: 用户会挑战结论"
+      ],
+      "trigger": "skill 同时接收「用户自报数据」与「权威源可查数据」，且两者可能不一致时",
+      "source": "references/blocks/design-blocks-b05.md",
+      "anchor": "### D-138 · 数据自洽性硬校验优先于用户诉求，冲突即阻断下游全部产出",
+      "line": 55,
+      "hash": "sha256:cc65e4a0f842e96a8e0a474f4661f5480d43729688b6a686ab3194e68e58ab13",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-043",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "评分双轨 score_reason",
+      "abstract": "AI 单独决定重要事项必跨次漂移。确定性部分下沉脚本出建议值，AI 可覆盖但必须留痕理由（score_reason），并设计抽检/校准回路。",
+      "tags": [],
+      "trigger": "skill 含评分、分级、分类、阈值等\"AI 判断 + 结果影响决策\"的逻辑",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-043 · 评分双轨 score_reason",
+      "line": 13,
+      "hash": "sha256:8e20344ebb178d7b0d6757d895bf13450af78568c4fab8e9a7996359e0077c0c",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-044",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T7"
+      ],
+      "title": "冲突仲裁五序",
+      "abstract": "冲突仲裁五序——用户明确要求 > 安全和数据保护 > 主任务 Skill > 更具体的 Skill > 仍无法判断则询问用户。Skill 不说明边界，复杂任务中会多 skill 抢主导、指令冲突、上下文浪费。",
+      "tags": [
+        "适用: 需要多工具协同",
+        "适用: 跨平台复用"
+      ],
+      "trigger": "目标 skill 会与多个 skill / 工具协作、可能抢主导",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-044 · 冲突仲裁五序",
+      "line": 20,
+      "hash": "sha256:417b22e9d39617e8b7d34a90fd9bf194e97c292b5d9f077dd9f80c4c0ede432f",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-045",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "工具选择决策表（多工具易混淆时）",
+      "abstract": "易混淆的多工具，用决策表固化\"什么需求 → 用哪个工具 → 带什么参数 → 什么目的\"，再补\"关键判断线索\"（看到什么词该选哪个），彻底消灭\"猜工具\"。",
+      "tags": [],
+      "trigger": "多个工具/API 名字相近、职责易混（安全域名 vs 自定义域名 vs 复用域名）",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-045 · 工具选择决策表（多工具易混淆时）",
+      "line": 36,
+      "hash": "sha256:2cb805649448e94db809f8470551258d073cef1d263a0c2758d6960a2dbf2f6c",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-046",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T7"
+      ],
+      "title": "权限模型选型表",
+      "abstract": "权限档位用表格列出\"每档含义 + 平台兼容约束 + 适用场景\"，并标注哪个组合会踩坑（Web SDK 写 ADMINWRITE → 失败）——把权限设计从\"自由发挥\"变成\"查表\"。",
+      "tags": [],
+      "trigger": "涉及权限/安全规则设计，且有预定义权限档位",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-046 · 权限模型选型表",
+      "line": 43,
+      "hash": "sha256:076b015d1ef5d56dbce041dce57f954625541f4bbe046b573ed8077a9bab7a19",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-047",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "正负双路由 + 错误码互证",
+      "abstract": "路由不只说「该用什么」，还说「千万别用什么」；且负向规则有对应错误码兜底——文档纪律与运行时校验互相印证，双重防线（也见 B07）",
+      "tags": [],
+      "trigger": "多品类/多工具易混淆、需要防品类横跳时",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-047 · 正负双路由 + 错误码互证",
+      "line": 50,
+      "hash": "sha256:4f3c3ad03e9f77068494a7a906763cf5470c0eaaef9ffe7d1922472409971121",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-048",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T10"
+      ],
+      "title": "量化触发条件的硬纪律",
+      "abstract": "纪律写成「可判定阈值 + 强制动词 + 违规后果」，不写「建议尽量」——agent 能自检是否触线，规则才可执行（也见 B08）",
+      "tags": [
+        "适用: 流程复杂",
+        "适用: 需要外部调用",
+        "适用: 涉及文件产出"
+      ],
+      "trigger": "想把性能/成本纪律写进 skill 时",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-048 · 量化触发条件的硬纪律",
+      "line": 57,
+      "hash": "sha256:2d8465ab278190d80f7c9b96d78e2b809b1740581e33f0948c0ceae9c3aff2ec",
+      "origin": "tencent-docs SKILL.md L187（T-A05）",
+      "explains": []
+    },
+    {
+      "id": "D-049",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T7"
+      ],
+      "title": "建立四级操作门禁矩阵",
+      "abstract": "把操作风险做成显式矩阵（默认行为+覆盖方式）而非散落的 if 判断；「非 TTY 自动拒绝 + --force opt-in」是自动化友好与安全的平衡解",
+      "tags": [],
+      "trigger": "skill 含任何写操作、删除或配置修改时",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-049 · 建立四级操作门禁矩阵",
+      "line": 71,
+      "hash": "sha256:4768815eaa299f968adf8262728606429a536f7fb074225625b9e0d996741610",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-050",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T10"
+      ],
+      "title": "否定式纪律 + 禁止软化话术",
+      "abstract": "纪律用 NEVER/绝不要 + 具体行为写出，并预防 agent 好心软化（替用户再问一遍）；比\"建议不要\"可判定可验收。",
+      "tags": [],
+      "trigger": "写纪律/规则条款时",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-050 · 否定式纪律 + 禁止软化话术",
+      "line": 78,
+      "hash": "sha256:343a9180571e6f0902d7336b44e01a9cbd47493bb2997acf898f6cb472b0eabc",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-051",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T3"
+      ],
+      "title": "环境陷阱前置文档化",
+      "abstract": "隐蔽环境缺陷三件套：升级为强制规则 + 给出首调前检测代码 + 明确定性\"只能绕开不能修复\"，防止 agent 误判重试。",
+      "tags": [],
+      "trigger": "发现平台/环境的隐蔽缺陷影响 skill 核心功能时",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-051 · 环境陷阱前置文档化",
+      "line": 85,
+      "hash": "sha256:fe072f1ee1c4a957b0c1bd8e3bb19d409979e1f22d00ad901132c00b3c92bbb2",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-052",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T10"
+      ],
+      "title": "纪律带可数上限，让 agent 能自检是否触线",
+      "abstract": "每条探索/重试纪律必须带一个可数上限 + 到顶后的动作，否则 agent 会无限试探或过早放弃。回照自己：skill-designer SKILL.md grep「至多|最多|不超过」= 0 命中…",
+      "tags": [],
+      "trigger": "写「重试 / 回退 / 探索 / 澄清」类纪律时",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-052 · 纪律带可数上限，让 agent 能自检是否触线",
+      "line": 92,
+      "hash": "sha256:82587c873ab25176af0719bfda2425044fef012a98e9104a2e8985398995ed33",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-053",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T9"
+      ],
+      "title": "把成本写进纪律的理由栏",
+      "abstract": "一条纪律给三条不同性质的理由（成本 / 正确性 / 一致性），比单说「要批量」更能让 agent 自觉遵守——agent 是在理解「为什么」之后复现规则，不是硬背规则",
+      "tags": [],
+      "trigger": "要求 agent 改变调用习惯（批量 / 少读文件 / 少调命令）时",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-053 · 把成本写进纪律的理由栏",
+      "line": 99,
+      "hash": "sha256:2534333aac0ffbfcb4cde57768fb33e5e33f14cb12617428a45db85589ad4467",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-054",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "正负双向路由：选型表必须有「不要」列，且负例要具体到可复现",
+      "abstract": "负向列写的是具体会犯的那个错（「默认 search 只搜股票，所以搜不到板块」），不是抽象的「注意」——负例要具体到可复现，才有防呆价值",
+      "tags": [],
+      "trigger": "写命令 / 工具 / 文档选型表时",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-054 · 正负双向路由：选型表必须有「不要」列，且负例要具体到可复现",
+      "line": 106,
+      "hash": "sha256:e86f25b3e25dde2f50a453d48057dfcfc217e0b147716e8906653645d354d78f",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-055",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T1"
+      ],
+      "title": "选型决策表：从输入形态直查输出类型，每行含 Required Format 与关键词",
+      "abstract": "三层路由（关键词 → 类型 → 该类型的输入格式要求）压进一张表，agent 一次查完不用跳转。表前的「量纲提示」是典型的认知盲区索引（不写就会出看不见的错误）…",
+      "tags": [],
+      "trigger": "设计「多选项该如何选」的环节时（图表类型/模板/策略/工具）",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-055 · 选型决策表：从输入形态直查输出类型，每行含 Required Format 与关键词",
+      "line": 113,
+      "hash": "sha256:e1fa940599ee4c0cd3b08ae7c4b2871383c17e5cbdad2bd7abf232129f1a088e",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-056",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T3"
+      ],
+      "title": "Description 关键词覆盖五维",
+      "abstract": "写触发词时覆盖五维——核心词 / 同义词 / 场景词 / 口语表达 / 中英混杂。",
+      "tags": [
+        "适用: 需多语言触发",
+        "适用: 面向中文用户"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-056 · Description 关键词覆盖五维",
+      "line": 120,
+      "hash": "sha256:bcf651ead7cc3c1aef0c192e64b8b458d48d23f959f84df4d6638ea3062bbd47",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-057",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T7"
+      ],
+      "title": "allowed-tools 最小化",
+      "abstract": "SKILL.md 只声明真正需要的工具。",
+      "tags": [
+        "适用: 涉及脚本",
+        "适用: 高风险领域"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-057 · allowed-tools 最小化",
+      "line": 127,
+      "hash": "sha256:c80a774d5715945d15f018aa0597b4a5660ab42f25c041faba590e68bcae3479",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-058",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T7"
+      ],
+      "title": "凭据管理（不硬编码密钥）",
+      "abstract": "密钥、token、密码绝不写进 skill 文件。",
+      "tags": [
+        "适用: 需要外部调用",
+        "适用: 涉及脚本"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-058 · 凭据管理（不硬编码密钥）",
+      "line": 134,
+      "hash": "sha256:f3b38faff1aaad6f1b7040abe516f36146092d41884e2e77eb9511bc461ae25a",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-059",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T5"
+      ],
+      "title": "危险操作确认",
+      "abstract": "删除、覆盖、发消息、付费等危险操作要确认。",
+      "tags": [
+        "适用: 高风险领域"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-059 · 危险操作确认",
+      "line": 141,
+      "hash": "sha256:568a4c2cd7dd9933925c5dda75b7c5d8c09d84a663d00d572c8b7685e0a3bdb1",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-060",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T7"
+      ],
+      "title": "Prompt 注入防护",
+      "abstract": "skill 读取外部内容时，警惕\"忽略安全规则\"类注入。",
+      "tags": [
+        "适用: 需要外部调用",
+        "适用: 高风险领域"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-060 · Prompt 注入防护",
+      "line": 148,
+      "hash": "sha256:b91115dd340e54b7b321999fa3d211465bff4d49fb9d610a363454cf64d4d74f",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-061",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T7"
+      ],
+      "title": "模块级工具隔离（权限最小化级联）",
+      "abstract": "skill 级 allowed-tools 之外，再给每个模块配 tools.md 白名单；危险接口（万能 HTTP 等）全局禁用；模块间接口隔离。",
+      "tags": [
+        "适用: 涉及脚本",
+        "适用: 需要多工具协同",
+        "适用: 高风险领域"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-061 · 模块级工具隔离（权限最小化级联）",
+      "line": 155,
+      "hash": "sha256:bbbcf1189d8d421a4b4f18ac5e9e3193d18f1ab0a610e4c33d87161ea3d738fe",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-139",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "纪律冲突时声明优先级：两条规则同时命中且要求相反，谁赢写清楚",
+      "abstract": "纪律越写越多必然出现冲突对，而 agent 遇到冲突时的默认行为是「挑一条好走的执行」（通常挑不展示命令那条，因为更省事）——结果就是环境坏了却不说。它在冲突点显式裁决并点名被压制的三条，把「agent 自由裁量」变成「按声明顺序执行」…",
+      "tags": [
+        "适用: 流程复杂",
+        "适用: 纪律条目多"
+      ],
+      "trigger": "skill 写的纪律数量 ≥10，且存在「守 A 就会违反 B」的组合时",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-139 · 纪律冲突时声明优先级：两条规则同时命中且要求相反，谁赢写清楚",
+      "line": 163,
+      "hash": "sha256:c3546730c8ef351ada39c22c3c7d0f1ad69f3ebfc17d83926bdec3eeb4acd516",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-140",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T6"
+      ],
+      "title": "单一数据源纪律：失败不重试、不换源、不用模型记忆补做",
+      "abstract": "agent 最常见的失败模式不是「报错」，而是报错后不吭声、改用模型记忆/WebSearch 把答案凑出来——输出形态完全正常，事实全错…",
+      "tags": [
+        "适用: 需要外部调用",
+        "适用: 高风险领域"
+      ],
+      "trigger": "skill 依赖外部数据源，且该数据源的缺失会造成「看起来也对但其实编的」输出时",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-140 · 单一数据源纪律：失败不重试、不换源、不用模型记忆补做",
+      "line": 172,
+      "hash": "sha256:a00b12108939c619be2c52e3b47969958a5a872a4400d3f61d90fb3c4aedfa06",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-141",
+      "kind": "entry",
+      "block": "B06",
+      "blocks": [
+        "B06"
+      ],
+      "themes": [
+        "T6"
+      ],
+      "title": "错误归因不得降级：最可能的业务原因优先于技术原因",
+      "abstract": "技术症状 → 业务原因是一对多映射，而 agent 的默认归因是「最省事的那条」（「没有数据」），因为不需要用户做任何事。它做了两件互补的事：(a) 指定归因优先级（先按最高频的业务原因解释，并给替代路径）…",
+      "tags": [
+        "适用: 需要外部调用",
+        "适用: 输出可客观验证"
+      ],
+      "trigger": "同一技术症状（空输出 / 报错）可能对应多种业务原因（额度用完 / 无数据 / 鉴权失败 / 网络故障）时",
+      "source": "references/blocks/design-blocks-b06.md",
+      "anchor": "### D-141 · 错误归因不得降级：最可能的业务原因优先于技术原因",
+      "line": 181,
+      "hash": "sha256:5ded93262cc353827c8879cab48c4b4ca535e065c73f5b30885921bbf7341f17",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-062",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "五段章节骨架逐段填出",
+      "abstract": "施工图 = 选框架 → 画目录（文件层）→ 五段骨架逐段填出（内容层） → 资源分配。Workflow / Clarification / Resource Routing / Failure Handling / Validation…",
+      "tags": [],
+      "trigger": "进入 B07 画目录时；用户拿到目录树却不知道 SKILL.md 该写哪几段",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-062 · 五段章节骨架逐段填出",
+      "line": 13,
+      "hash": "sha256:8f30775b54b195a229b355f9f10a4a181ac11f9ea9de6d44147f27156a333445",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-063",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "强路由句式",
+      "abstract": "❌ 弱路由 For AWS details, see references/aws.md；✅ 强路由 If the user mentions AWS deployment, load references/aws.md before…",
+      "tags": [],
+      "trigger": "skill 有 references/ 知识文件需要按需加载",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-063 · 强路由句式",
+      "line": 20,
+      "hash": "sha256:41c3fd298df965f9c8ff6ec72e5159b696d16fea476a376ff84d3269c7d9a027",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-064",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T5"
+      ],
+      "title": "四状态失败机",
+      "abstract": "Not started / In progress / Partial success（最常被漏——必须说清完成了什么、未完成什么） / Failed safely…",
+      "tags": [
+        "适用: 涉及文件产出",
+        "适用: 高风险领域"
+      ],
+      "trigger": "长链条任务 / 涉及文件产出 / 批量操作",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-064 · 四状态失败机",
+      "line": 27,
+      "hash": "sha256:0eeb52408085b44a0b5fc91aec06c00e8ebf41cc5e578b32f780ccf66cc2b953",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-065",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "结构化场景路由契约（activation-map）",
+      "abstract": "意图路由从\"两列表\"升级为结构化契约：触发信号（用户语言）+ 优先级 + 首读/再读/禁读 + 动作前检查 + 常见错误。单一数据源（yaml）→ 自动生成路由表，路由可维护、可机器校验。",
+      "tags": [],
+      "trigger": "skill 有 5+ 个可区分场景需要路由",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-065 · 结构化场景路由契约（activation-map）",
+      "line": 40,
+      "hash": "sha256:af8f5678abfa2b8f12545ddf3eb2a6e80046346333ba116ee41b76be33f6ed00",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-066",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "Hub 套件目录架构（第七种 archetype 候选）",
+      "abstract": "在 minimal/pipeline/tool/knowledge/template/full 之外增加 suite（套件）：顶层只做路由 + 全局护栏 + 工程宪法…",
+      "tags": [],
+      "trigger": "领域大到需要 10+ 个自治子 skill",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-066 · Hub 套件目录架构（第七种 archetype 候选）",
+      "line": 47,
+      "hash": "sha256:1f198536b562b2438427992147d0da39c6f317b86391d1536063f6624dce6e0a",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-067",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "显式负向路由 doNotUse",
+      "abstract": "路由表加 \"Do NOT route to\" 列——不只说\"该读什么\"，还说\"千万别路由到哪\"，把最常见的误路由直接堵死（正面路由 + 负向路由双向约束）。",
+      "tags": [],
+      "trigger": "不同场景容易误路由到\"看起来相关实则错误\"的 skill",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-067 · 显式负向路由 doNotUse",
+      "line": 54,
+      "hash": "sha256:582c87b01d1127e9b661418e15ed7231ed2636e8942f204fc1c8d06a85a84d7c",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-068",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "commonMistakes 前置注入",
+      "abstract": "把\"常见错误\"写进路由表，agent 一进场景就先看到\"别这么做\"——比让 agent 自己摸索省 10× 试错成本（呼应负向约束优先，且前置到路由层）。",
+      "tags": [],
+      "trigger": "领域有反复踩坑的已知错误",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-068 · commonMistakes 前置注入",
+      "line": 61,
+      "hash": "sha256:b3f40d6c9f52e684833e73b91c4b257d25e088b2067d1d62b8a4aa062ebd5dd8",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-069",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "mustCheckBeforeAction 动作前检查",
+      "abstract": "路由到场景后、写代码前，强制先跑资格检查清单——把\"运行时才发现缺资格\"提前到\"动手前\"。",
+      "tags": [],
+      "trigger": "动手前有必须完成的资格/前置检查（权限是否开启、资源包是否开通）",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-069 · mustCheckBeforeAction 动作前检查",
+      "line": 68,
+      "hash": "sha256:a6c4b67bb44323e200e5d1d31c23e42119f9a181e0b4287351f446d2430dfe68",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-070",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "三层横切协议层",
+      "abstract": "跨场景的强制约束独立成协议层（references/protocols/），由路由器统一声明\"任何改动前必读\"——不散落在各子 skill，避免漏执行。",
+      "tags": [],
+      "trigger": "skill 有跨所有子场景的强制红线（变更安全、部署门禁、敏感数据）",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-070 · 三层横切协议层",
+      "line": 75,
+      "hash": "sha256:4b20cc5c8dc614c9161feee63b8471db3c04b245e2c83a219c3a204cc3100b5d",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-071",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T6"
+      ],
+      "title": "tooling-fallback 降级决策树",
+      "abstract": "工具不可用时的降级路径写成决策树：探测 → 降级 → 顺手为下次铺路。纪律：失败 1–2 次即降级不反复重试、不假装工具可用、等待期间并行预热。",
+      "tags": [],
+      "trigger": "主工具（MCP）可能未就绪，但任务不能阻塞",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-071 · tooling-fallback 降级决策树",
+      "line": 82,
+      "hash": "sha256:1943aac6f7ed1b95064b9c604580c3ee89757e7ba588ae72590a8dc6881eeeb7",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-072",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T1"
+      ],
+      "title": "正文四结构模式（与 archetype 正交）",
+      "abstract": "7 套 archetype 管目录架构（文件怎么分），四模式管正文层级（章节怎么排）——两层正交，补齐\"body 怎么组织\"空白；默认建议：流程型为主干 + 复杂操作嵌流程；混搭合法。",
+      "tags": [],
+      "trigger": "B07 画目录时用户追问\"SKILL.md 正文章节怎么组织\"",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-072 · 正文四结构模式（与 archetype 正交）",
+      "line": 89,
+      "hash": "sha256:04d9fa2fa0c96158a67699ed198ec887f033cb3baadc45685366a55a3f0a2eff",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-073",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "大 reference 内嵌 grep 检索模式",
+      "abstract": "在 SKILL.md 路由条目旁内嵌 grep 检索模式串，agent 不加载全文也能精准命中段落；与\"索引行/词数 diff\"体检项互补——索引管发现，grep 管检索。",
+      "tags": [],
+      "trigger": "某份 reference 预计超过约 1 万词，全文加载 token 代价过高",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-073 · 大 reference 内嵌 grep 检索模式",
+      "line": 96,
+      "hash": "sha256:b7084c7e20ed29447446998bfde4ed8ca3e294200c9eb46517f761b3fab7b0a4",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-074",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "三级渐进披露（品类模块变体）",
+      "abstract": "比 cloudbase D-066 的「子 skill 套件」更轻的 suite 变体：路由器 + N 个 entry.md 品类模块 + 组件级规范，token 成本按需发生",
+      "tags": [],
+      "trigger": "领域含 2–8 个正交子域、全塞 SKILL.md 装不下时",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-074 · 三级渐进披露（品类模块变体）",
+      "line": 103,
+      "hash": "sha256:3ce25b8825d7eb54710eded23f324a10721d3c5b7b6296b5ee46c58d788ff76a",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-075",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T8"
+      ],
+      "title": "状态脚本模式（探测+决策一次调用）",
+      "abstract": "把「探测+决策」封装成一个脚本：输出单行机器可判定 JSON + 文档层查表，agent 不读大 JSON、不做自由判断（也见 B08）",
+      "tags": [],
+      "trigger": "写类操作前需要先探查外部系统状态再分支时",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-075 · 状态脚本模式（探测+决策一次调用）",
+      "line": 110,
+      "hash": "sha256:e8e29cb425ed7ceb92da7b2378f1509f55a5d9c9746f2eb544bead4430d7facf",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-076",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "设计契约模式（DESIGN 前置 + 自检门禁）",
+      "abstract": "复杂写类操作前置一份结构化契约（不是叙事），契约末尾带可判定的自检门禁；契约只回答「应该长什么样」，内容大纲与契约分离",
+      "tags": [],
+      "trigger": "复杂产出物（PPT/报告/蓝图）质量依赖前置设计时",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-076 · 设计契约模式（DESIGN 前置 + 自检门禁）",
+      "line": 117,
+      "hash": "sha256:e084a2767ed1482784314ec872075c866e50129192f5cdd5b1e20d5c899b1655",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-077",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T5"
+      ],
+      "title": "人机协作时序硬规则（⛔ 停止点）",
+      "abstract": "凡需要用户动作的等待，显式声明停止点（⛔ AI 注意），列出每个输出分支的去向话术——防 agent 抢跑轮询，把时序协议写成文档内硬约束（也见 B08）",
+      "tags": [
+        "适用: 需要外部调用",
+        "适用: 自动化/长流程"
+      ],
+      "trigger": "工作流包含「需要用户在真实世界完成动作再继续」的环节时",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-077 · 人机协作时序硬规则（⛔ 停止点）",
+      "line": 124,
+      "hash": "sha256:e308e9863bd4f7efb6197faff2b116e5b376c1aaa22ba1c9dc7062c2cc1b15bc",
+      "origin": "tencent-docs references/auth.md（T-A09）",
+      "explains": []
+    },
+    {
+      "id": "D-078",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T6"
+      ],
+      "title": "失败降级路径明文化",
+      "abstract": "每条工作流写明首选通路 + 触发条件 + 降级去向 + 禁止行为，降级是有向边，不是「自行想办法」",
+      "tags": [],
+      "trigger": "每条工作流的故障模式可预知时",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-078 · 失败降级路径明文化",
+      "line": 138,
+      "hash": "sha256:c155bb04962a8815576728df29368452c45a59d50f4d582c0c1a80edd02f2928",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-079",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "外置 prompt 资源化",
+      "abstract": "第三条瘦身路径——不是删内容，而是把长 prompt/模板移成按需读取的资源文件，路由层留一句指引；模板 schema 自描述（字段含义写进 JSON），agent 读一个文件即能生成（也见 B02）",
+      "tags": [],
+      "trigger": "SKILL.md body 逼近 token 红线但内容必须保留时",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-079 · 外置 prompt 资源化",
+      "line": 145,
+      "hash": "sha256:22099a885a6d8bbba1f36c016b66915e28a38bab37a9486c097b0ed278879c9e",
+      "origin": "tencent-docs doc/doc_format/（T-A15）",
+      "explains": []
+    },
+    {
+      "id": "D-080",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T8"
+      ],
+      "title": "用输入指纹做缓存失效判据",
+      "abstract": "缓存失效判据=全部输入的决定论指纹；踩坑推理写进代码注释，防止后人改回有缺陷的实现",
+      "tags": [],
+      "trigger": "命令存在重复计算（排序/扫描/打分）且输入可枚举时",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-080 · 用输入指纹做缓存失效判据",
+      "line": 159,
+      "hash": "sha256:67d2ae408ddbb173965153f85d86697f938fe70306c817ea4e96ee62fc77dcaa",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-081",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T6"
+      ],
+      "title": "在冷路径写穿透填充缓存",
+      "abstract": "只读路径可以有非致命写副作用——「顺手把缓存填热」；前提是失败语义清晰：降级为下次重算，绝不影响本次结果",
+      "tags": [],
+      "trigger": "冷加载慢、缓存可后置生成且写入失败不致命时",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-081 · 在冷路径写穿透填充缓存",
+      "line": 166,
+      "hash": "sha256:16d3fe88efe502e3542e2796517c63ae2d6b61708e8bda6c06955fa653956e90",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-082",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T6"
+      ],
+      "title": "双层错误分类体系",
+      "abstract": "进程退出层与业务响应层分开叙述，每层枚举全部取值与对应处理动作，agent 排错不用猜（元设计 DP-002）。",
+      "tags": [],
+      "trigger": "封装脚本有进程级与业务级两类失败来源时",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-082 · 双层错误分类体系",
+      "line": 173,
+      "hash": "sha256:6a697f8de6a4d3d69d4fa9a1a8573c89e298abef1c3d69f6c65d68c741365a54",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-083",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T6"
+      ],
+      "title": "拒绝时给正确渠道指引（fail-with-direction）",
+      "abstract": "失败输出不是\"不支持\"三个字，而是\"不支持 + 应该用什么替代\"，把死路变指路牌（元设计 DP-001/DP-002/DP-003 交汇点）。",
+      "tags": [],
+      "trigger": "校验失败/功能不支持而终止时",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-083 · 拒绝时给正确渠道指引（fail-with-direction）",
+      "line": 180,
+      "hash": "sha256:27061e914afb42c9c6592a1dc2e4905eded267bc2570b2ba175427be23bb9023",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-084",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T6"
+      ],
+      "title": "错误码表带建议处理列",
+      "abstract": "建议处理列写动作而非解释（\"拆分写入\"不是\"内容太大了\"），agent 查表即可行动（元设计 DP-002/DP-003）。",
+      "tags": [],
+      "trigger": "对接的后端有自定义错误码体系时",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-084 · 错误码表带建议处理列",
+      "line": 187,
+      "hash": "sha256:7876fb90f57b1583b30516a0fc7a0f1183ad9a3eb5196209d3013c626c3ccf40",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-085",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "为「不可推断」建认知盲区索引：先给规律，再单列例外",
+      "abstract": "先给可推断的规律（省 token），再单独列「不可推断」清单（防猜错）——两者分开比全量枚举省一半 token，且把「不知道」变成可检索对象。回照自己：我们有「易混淆消歧」（管两个概念像），但没有「单个概念就不可推断」的清单（P1-1）",
+      "tags": [],
+      "trigger": "领域内存在 AI 无法从命名推断语义的标识符（缩写 / 拼音 / 截断英文）时",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-085 · 为「不可推断」建认知盲区索引：先给规律，再单列例外",
+      "line": 194,
+      "hash": "sha256:84edba39e23b6ea0cd5ff077813db137b0e4239b1094de0524eb4060e1556b19",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-086",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "按「查询意图」而非「数据域」切分 references",
+      "abstract": "切分依据是「agent 那一刻在问什么」（选命令？查语法？找模板？认字段？），而非数据属于哪个域；每份必须显式声明加载触发条件与不加载条件",
+      "tags": [],
+      "trigger": "references 超过 3 份，且按数据域切分导致 agent 不知该读哪份时",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-086 · 按「查询意图」而非「数据域」切分 references",
+      "line": 201,
+      "hash": "sha256:27dcd25e10b6efd8ee3ec8edeac1f3e7e5bdec79ac0eaeb089a11097f6f54603",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-087",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T10"
+      ],
+      "title": "双消费同一内核：抽 stats_kernels 作单一事实来源，并在模块头写死「不得私改公式」",
+      "abstract": "「两处必须一致」的正解不是写「记得同步」，而是把它们接到同一个内核上——人工同步必然漂移，import 不会。回照自己：我们记忆里「蓝图有两套骨架（blocks.py 字段 vs blueprint-template.md 模板）…",
+      "tags": [],
+      "trigger": "设计里出现「两处消费同一数据/同一算法」时（画图 vs 报告、模板 vs 脚本、文档 vs 代码）",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-087 · 双消费同一内核：抽 stats_kernels 作单一事实来源，并在模块头写死「不得私改公式」",
+      "line": 208,
+      "hash": "sha256:9f93267618711d8d8ed3fc9b2a0bf034cf0b1396dc7e7f01f234232e97acab61",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-088",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T10"
+      ],
+      "title": "跨落点字段在落点处声明「唯一权威来源 + 谁负责校验」",
+      "abstract": "即使校验暂未实现，把「谁是权威源 + 谁负责校验」写在字段旁边，也让意图可被发现、可被后续补实现。反面实证：全库 grep 无任何脚本读 SKILL.md frontmatter…",
+      "tags": [],
+      "trigger": "同一字段出现在 ≥2 处文件时（版本号、displayName、slug、计数）",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-088 · 跨落点字段在落点处声明「唯一权威来源 + 谁负责校验」",
+      "line": 215,
+      "hash": "sha256:e621f407c557b2c9ed56c086aa1a5aeb46c8899a6825207c8cd99e631c2c06d0",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-089",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T1"
+      ],
+      "title": "模块头架构契约：每个文件 docstring 声明职责边界与「不得做什么」",
+      "abstract": "架构约定写在文档里会漂移，写在每个模块头里则每次打开文件都可见。关键是它写的不是「本模块做什么」，而是「不得做什么」（不得各自维护副本 / 不得散落硬编码 / 不得私改公式）——否定式约束才是防漂移的那一半…",
+      "tags": [],
+      "trigger": "写多模块 skill 的任一源文件时",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-089 · 模块头架构契约：每个文件 docstring 声明职责边界与「不得做什么」",
+      "line": 222,
+      "hash": "sha256:44199e0d23ff98e83481e80d83508ee710ad31beec10bd2efaaebe7265db8cd2",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-090",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T3"
+      ],
+      "title": "Gotchas 段写法（最高 ROI）",
+      "abstract": "在 SKILL.md 里写 ## Gotchas，每条 = 症状 + 原因 + 隐含修复。",
+      "tags": [
+        "适用: 高风险领域",
+        "适用: 涉及脚本"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-090 · Gotchas 段写法（最高 ROI）",
+      "line": 229,
+      "hash": "sha256:39e355e4253023053cf242ad9ddd35d9bafd3f1fd11dfb3159fb311c82a08fd0",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-091",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "三层渐进披露",
+      "abstract": "SKILL.md body 精简（只主流程），细节拆 references/，脚本放 scripts/，模板放 assets/。",
+      "tags": [],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-091 · 三层渐进披露",
+      "line": 236,
+      "hash": "sha256:e2850c5364349a33c3250a909d4c23b9d6e023140e0c6c613801e43873eb7ce7",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-092",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "Before/After 示例",
+      "abstract": "关键写法给 Before/After 对比示例。",
+      "tags": [
+        "适用: 流程复杂"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-092 · Before/After 示例",
+      "line": 243,
+      "hash": "sha256:d5bbf0b4c8c5e44b495fa6f470a065e91da2d146bc6ea52f016eb7d80c4bfece",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-093",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T3"
+      ],
+      "title": "讲 why 不堆 must",
+      "abstract": "少写\"必须……\"，多解释\"为什么这么做\"。",
+      "tags": [
+        "适用: 创意/开放任务"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-093 · 讲 why 不堆 must",
+      "line": 250,
+      "hash": "sha256:b18afd80c6566f9f77fb8c4eb13035953701bf3ab5f7dd572142565486d12e4d",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-094",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T3"
+      ],
+      "title": "FAQ 写法",
+      "abstract": "把高频疑问写成 FAQ，而不是散落在正文。",
+      "tags": [
+        "适用: 流程复杂"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-094 · FAQ 写法",
+      "line": 257,
+      "hash": "sha256:d6e14556f07ca9f3911f1003075e7689f0ad3d9ddc4444d7e5d7e036b5ce4fff",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-095",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T8"
+      ],
+      "title": "脚本封装判定",
+      "abstract": "让 LLM 做有概率出错、脚本做能 100% 确定的逻辑 → 封装成脚本；在 SKILL.md 里写公式让 Agent 跑计算 → 挪到脚本。",
+      "tags": [
+        "适用: 涉及脚本"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-095 · 脚本封装判定",
+      "line": 264,
+      "hash": "sha256:8a6578325cd7b08ab16ecc63338884191e514a7529afa790e98103c7c13f570c",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-096",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "参数快照与偏好持久化",
+      "abstract": "多阶段 skill 用「快照（Snapshot）」作跨阶段参数载体，阶段门卡查参数完整性；成功后将关键参数写入 user-prefs.json 下次自动注入。",
+      "tags": [
+        "适用: 流程复杂",
+        "适用: 需要外部调用"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-096 · 参数快照与偏好持久化",
+      "line": 272,
+      "hash": "sha256:0d03598d914336315dc9c9d4c10aeed73d8088f76a845d2129604746663ec1f8",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-097",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T4"
+      ],
+      "title": "知识分层阈值（何时拆文件）",
+      "abstract": "单个文件 >300 行 或 单 Step >100 行 → 拆；按使用频率分层——越频繁越近入口（SKILL.md 顶层 > 模块主文件 > Step 级 > 末梢 tools/safety）。",
+      "tags": [],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-097 · 知识分层阈值（何时拆文件）",
+      "line": 280,
+      "hash": "sha256:89f22a87619abf7eed22578993d3971975edaf876d85e09ebd9663efaf7d94c6",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-098",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T6"
+      ],
+      "title": "行动分层（1秒/1周/1月）",
+      "abstract": "行为改变类 / 习惯养成类 skill，把\"行动建议\"升级为行动分层：一秒行动（立即做 <1min）+ 一周行动（7 天形成习惯）+ 一月行动（30 天固化），并配反馈记录与调整机制。",
+      "tags": [
+        "适用: 行为改变类"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-098 · 行动分层（1秒/1周/1月）",
+      "line": 288,
+      "hash": "sha256:247beead09f203792e59c3df550a0201c43d9b43752eb028bceaf69aecc5bed5",
+      "origin": "chenlin-skillcreator action-template.md / template-type-b.md",
+      "explains": []
+    },
+    {
+      "id": "D-099",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T1"
+      ],
+      "title": "降门槛：翻译层 + 导航层 + 去重（文档友好度）",
+      "abstract": "任何面向\"写 skill 的人\"的指南，都必须先过\"新手能不能看懂\"这一关——方法论再好，读不进去就零价值。",
+      "tags": [],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-099 · 降门槛：翻译层 + 导航层 + 去重（文档友好度）",
+      "line": 296,
+      "hash": "sha256:99027bb8cefd0167953e46435c37a492977ebad4aa826ed2facc7137269fa462",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-100",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T6"
+      ],
+      "title": "升级条件五条",
+      "abstract": "比\"停止条件\"更可操作——它是可逐条判定的清单，不是原则。",
+      "tags": [
+        "适用: 高风险领域",
+        "适用: 自动化/长流程"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-100 · 升级条件五条",
+      "line": 307,
+      "hash": "sha256:1cc2d5ff8d20195fcae2799cac9d070cb8bafe8dfcfcfdeabbc96201775d554e",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-142",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T8"
+      ],
+      "title": "能力协商式参数注入：版本闸门 + 自动注入 + 拒绝手填，三点合一",
+      "abstract": "三点缺一不可——没有①，调用方标识靠 agent 每次手填（必然漏填/填错）；没有②，新参数打到旧版二进制上直接报错（前后端版本不能同频时不可用）；没有③，agent 可以伪造身份（遥测数据被污染，且「手填一次成功」后就会一直手填）…",
+      "tags": [
+        "适用: 涉及脚本",
+        "适用: 需要外部调用",
+        "适用: 版本频繁变化"
+      ],
+      "trigger": "包装脚本需要向外部二进制注入「调用方身份」类参数，且外部二进制版本不齐时",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-142 · 能力协商式参数注入：版本闸门 + 自动注入 + 拒绝手填，三点合一",
+      "line": 320,
+      "hash": "sha256:0e568d44e0b9b6ee969e63937c2a3bb42c9cee1e58a4bd049533dd49a68b9370",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-143",
+      "kind": "entry",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [
+        "T8"
+      ],
+      "title": "分页终止按「响应实际返回条数」，不按请求参数或累计值",
+      "abstract": "分页 bug 的根因几乎都是把「请求参数」当权威（我请求了 100 条，返回 100 条就是满页）——服务端截断后这个假设立刻失效，表现为「只抓到第一页就停了」…",
+      "tags": [
+        "适用: 需要外部调用",
+        "适用: 数据量大"
+      ],
+      "trigger": "消费任何分页 / 批量接口，且服务端可能截断请求条数时",
+      "source": "references/blocks/design-blocks-b07.md",
+      "anchor": "### D-143 · 分页终止按「响应实际返回条数」，不按请求参数或累计值",
+      "line": 329,
+      "hash": "sha256:3c735c245abd61f2fee79ff85332aebd5be02fed1281d8f1902317386898f4a4",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-101",
+      "kind": "entry",
+      "block": "B08",
+      "blocks": [
+        "B08"
+      ],
+      "themes": [
+        "T10"
+      ],
+      "title": "双轨审查规则库",
+      "abstract": "审查/自检规则沉淀成规则库，每条统一格式（确定性规则给正则、判断性规则给 LLM 提示、都带修复指引），配规则索引矩阵——把\"实现后自检\"从临场发挥变成可累积的资产。",
+      "tags": [],
+      "trigger": "需要\"实现后自检\"且审查项可分成确定性 + 语义两层",
+      "source": "references/blocks/design-blocks-b08.md",
+      "anchor": "### D-101 · 双轨审查规则库",
+      "line": 13,
+      "hash": "sha256:61fc5bdb1dbcd6d39043e0a57f9faf5d181bfd4a77582e289d8db5c3ac2f18db",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-102",
+      "kind": "entry",
+      "block": "B08",
+      "blocks": [
+        "B08"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "读-改配对协议",
+      "abstract": "所有写操作强制「先读后改」配对：锚点必须来自最近一次真实读取，杜绝盲改；只读对象显式标注并禁用作锚点",
+      "tags": [],
+      "trigger": "编辑型操作有锚点/版本一致性风险时",
+      "source": "references/blocks/design-blocks-b08.md",
+      "anchor": "### D-102 · 读-改配对协议",
+      "line": 20,
+      "hash": "sha256:97bccb70059ed00147e8edcd69ed6f75b1cbb5023fc262ed8ce5c1f27e794fb7",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-103",
+      "kind": "entry",
+      "block": "B08",
+      "blocks": [
+        "B08"
+      ],
+      "themes": [
+        "T10"
+      ],
+      "title": "边界场景规范节",
+      "abstract": "长尾边界不靠 agent 试错，独立成节前置成文档，每条带反例 JSON 示范错误做法",
+      "tags": [
+        "适用: 涉及文件产出",
+        "适用: 高风险领域",
+        "适用: 需要外部调用"
+      ],
+      "trigger": "工具有长尾边界（容器删空、嵌套删除、只读块）时",
+      "source": "references/blocks/design-blocks-b08.md",
+      "anchor": "### D-103 · 边界场景规范节",
+      "line": 27,
+      "hash": "sha256:b9df2de49821fe687f5670ca2349d7cde17b79c8e30ffbd1b44941407b0e5fa3",
+      "origin": "tencent-docs smartcanvas/entry.md 边界场景处理规范（T-A12）",
+      "explains": []
+    },
+    {
+      "id": "D-104",
+      "kind": "entry",
+      "block": "B08",
+      "blocks": [
+        "B08"
+      ],
+      "themes": [
+        "T8"
+      ],
+      "title": "串行纪律 + 显式参数防并发错乱",
+      "abstract": "把分布式写入的顺序风险在调用纪律层解决：强制串行 + 显式序号 + 预计算区间，不依赖隐式默认行为",
+      "tags": [],
+      "trigger": "底层写入有顺序/锁敏感性时",
+      "source": "references/blocks/design-blocks-b08.md",
+      "anchor": "### D-104 · 串行纪律 + 显式参数防并发错乱",
+      "line": 41,
+      "hash": "sha256:a1277b5a909ef688b6d1496044a73c26b9bf13784de9dc4abb38ce46dbc56b9d",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-105",
+      "kind": "entry",
+      "block": "B08",
+      "blocks": [
+        "B08"
+      ],
+      "themes": [
+        "T7"
+      ],
+      "title": "用内置自检验证安全声称",
+      "abstract": "安全声称要配「可执行的证明」而非文档表格；self-test 输出结构化 JSON，评审和自动化都能直接消费",
+      "tags": [],
+      "trigger": "SKILL.md 声称了安全能力（注入防护/路径防御）需要给出证据时",
+      "source": "references/blocks/design-blocks-b08.md",
+      "anchor": "### D-105 · 用内置自检验证安全声称",
+      "line": 48,
+      "hash": "sha256:6a715c6692fd9b4f6f13aa3c95b4323cbf7b9acc38adebda9e57b407b503dae3",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-106",
+      "kind": "entry",
+      "block": "B08",
+      "blocks": [
+        "B08"
+      ],
+      "themes": [
+        "T8"
+      ],
+      "title": "内置自更新机制（版本自感知）",
+      "abstract": "skill 从静态文件变\"有版本的活物\"：daily-once 限成本、fail-open 保可用、短路保一致性、instruction 让 agent 自己引导更新（立项详见…",
+      "tags": [],
+      "trigger": "skill 依赖外部 API/会演进，或接入 skillhub update_url 通道时",
+      "source": "references/blocks/design-blocks-b08.md",
+      "anchor": "### D-106 · 内置自更新机制（版本自感知）",
+      "line": 55,
+      "hash": "sha256:bad077a71d8b5aab4680d45d9816d1abc57ca50227b1ae0f8cf14bf7c05238f0",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-107",
+      "kind": "entry",
+      "block": "B08",
+      "blocks": [
+        "B08"
+      ],
+      "themes": [
+        "T7"
+      ],
+      "title": "凭证双通道 + 安全声明进元数据",
+      "abstract": "凭证来源声明优先级链；把数据流向写成机器可审计的元数据声明（发去哪、不发去哪、域名白名单）。",
+      "tags": [],
+      "trigger": "skill 需要凭证且涉及多端点传输时",
+      "source": "references/blocks/design-blocks-b08.md",
+      "anchor": "### D-107 · 凭证双通道 + 安全声明进元数据",
+      "line": 62,
+      "hash": "sha256:c71b50ecf3260413a4a579f9ed247696bebfe2d00280a872b20c1e467f652637",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-108",
+      "kind": "entry",
+      "block": "B08",
+      "blocks": [
+        "B08"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "参数取值提到主路由 + 显式禁止自创参数",
+      "abstract": "把参数取值枚举提到主路由并显式禁止「猜」，是防参数幻觉最省 token 的手段——一次枚举胜过多次试错",
+      "tags": [],
+      "trigger": "CLI 参数多、agent 易凭直觉捏造参数名时",
+      "source": "references/blocks/design-blocks-b08.md",
+      "anchor": "### D-108 · 参数取值提到主路由 + 显式禁止自创参数",
+      "line": 69,
+      "hash": "sha256:2900dab01212e758e0bef9ad980dccdfc81bcaa84631ffb0c1d1a4dd200653f9",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-109",
+      "kind": "entry",
+      "block": "B08",
+      "blocks": [
+        "B08"
+      ],
+      "themes": [
+        "T10"
+      ],
+      "title": "端到端自检走真实子进程，且文档写明跑法、项数、退出码语义",
+      "abstract": "自检三要素缺一不可：真实子进程（非 mock）+ 文档写明跑法 + 退出码语义。回照自己：我们有 scripts/run_user_tests.py + 25 用例且实测全过（本次实跑验证）…",
+      "tags": [],
+      "trigger": "为 skill 写自检脚本时",
+      "source": "references/blocks/design-blocks-b08.md",
+      "anchor": "### D-109 · 端到端自检走真实子进程，且文档写明跑法、项数、退出码语义",
+      "line": 76,
+      "hash": "sha256:eb6042f1c655d58c8dd152f51584cd6c2aee4573e464043d6480cc926d77662e",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-110",
+      "kind": "entry",
+      "block": "B08",
+      "blocks": [
+        "B08"
+      ],
+      "themes": [
+        "T7"
+      ],
+      "title": "安全 PoC 反驱动：把攻击向量本身变成回归用例，断言到字段名",
+      "abstract": "PoC 进用例说明这套黑名单是被真攻击过才补的，不是拍脑袋列的关键字。安全类纪律若没有配套攻击用例，就是不可验证的承诺。断言到 violations 字段名而非仅「报错了」，才挡得住「改个错误码蒙混过关」的假实现",
+      "tags": [],
+      "trigger": "设计沙箱 / 黑名单 / 权限校验类机制时",
+      "source": "references/blocks/design-blocks-b08.md",
+      "anchor": "### D-110 · 安全 PoC 反驱动：把攻击向量本身变成回归用例，断言到字段名",
+      "line": 83,
+      "hash": "sha256:47368ab592805760bb77fe329bff7ef5dd314e3f11d5464aa0260ad4e14a0549",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-111",
+      "kind": "entry",
+      "block": "B08",
+      "blocks": [
+        "B08"
+      ],
+      "themes": [
+        "T10"
+      ],
+      "title": "拦截类机制必须内置「零误报」正例（黄金集）",
+      "abstract": "拦截器的两个失败方向：漏拦（放行危险）+ 误拦（拒绝合法）。只测前者会让「一律拒绝」的实现拿到满分。回照自己：我们 validate 第 11/12 项做了反向测试夹具（outputs/_fixture_check12），方向对…",
+      "tags": [],
+      "trigger": "写任何会拒绝/拦截/报错的检查时（黑名单、校验器、lint）",
+      "source": "references/blocks/design-blocks-b08.md",
+      "anchor": "### D-111 · 拦截类机制必须内置「零误报」正例（黄金集）",
+      "line": 90,
+      "hash": "sha256:d573457d089935a96714bb5a3775492a98183ea8326185ad0a83d8e33e3d28b4",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-112",
+      "kind": "entry",
+      "block": "B08",
+      "blocks": [
+        "B08"
+      ],
+      "themes": [
+        "T3"
+      ],
+      "title": "两步法：dry-run 取事实 → agent 写作 → 正式生成注入（并声明 dry-run 不算交付）",
+      "abstract": "把「AI 写内容」拆成取数 → 写作 → 注入三步，且取数与最终渲染同源（保证一致）；同时显式声明中间态不算交付，防止 agent 拿 dry-run 结果当成品。可迁移到我们的 B08 产物生成段（先出事实骨架 → 补解读 → 合成终稿）",
+      "tags": [],
+      "trigger": "设计「需要 AI 产出内容再回填进产物」的流程时（解读/注释/摘要/说明）",
+      "source": "references/blocks/design-blocks-b08.md",
+      "anchor": "### D-112 · 两步法：dry-run 取事实 → agent 写作 → 正式生成注入（并声明 dry-run 不算交付）",
+      "line": 97,
+      "hash": "sha256:d9b10ec51655a5f20517d52bf47113e7704266705c50340bb6062d8334b72277",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-113",
+      "kind": "entry",
+      "block": "B08",
+      "blocks": [
+        "B08"
+      ],
+      "themes": [
+        "T8"
+      ],
+      "title": "脚本工程纪律",
+      "abstract": "确定性逻辑写脚本；接口稳定、错误码明确、输出结构化。",
+      "tags": [
+        "适用: 涉及脚本"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b08.md",
+      "anchor": "### D-113 · 脚本工程纪律",
+      "line": 104,
+      "hash": "sha256:cc51946cf401ea80802d48e557b44482ed170dcc36689d6eca9c3395be7b6874",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-144",
+      "kind": "entry",
+      "block": "B08",
+      "blocks": [
+        "B08"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "单次快照 + 完整性证据绑定：一次查询一份内存快照，全下游只读，禁跨阶段二次查询",
+      "abstract": "数据被消费 N 次，就有 N 次「两边不一致」的机会。它的解法是把 N 次消费收敛到 1 次获取 + 1 份快照，并给快照配可验证的出生证明（字节长 / 哈希 / 解析标记）——任何「看起来不对」都能回溯到「是不是同一份」…",
+      "tags": [
+        "适用: 数据量大",
+        "适用: 涉及脚本",
+        "适用: 需要外部调用"
+      ],
+      "trigger": "同一批外部数据要被多处消费（渲染 / 分页 / 筛选 / 摘要 / 验收）时",
+      "source": "references/blocks/design-blocks-b08.md",
+      "anchor": "### D-144 · 单次快照 + 完整性证据绑定：一次查询一份内存快照，全下游只读，禁跨阶段二次查询",
+      "line": 111,
+      "hash": "sha256:3a495ffbca55910fd106c94f863c13370d0d53dbc2f8e93cc54419d8f07b9e42",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-114",
+      "kind": "entry",
+      "block": "B09",
+      "blocks": [
+        "B09"
+      ],
+      "themes": [
+        "T9"
+      ],
+      "title": "搜索评估框架（改进/自动优化时用）",
+      "abstract": "用户想\"自动优化 / 找改进方向\"时，用适用性 / 可实施性 / 风险 / 影响力四维评估每个候选改进。",
+      "tags": [
+        "适用: 需要外部调用",
+        "适用: 流程复杂"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b09.md",
+      "anchor": "### D-114 · 搜索评估框架（改进/自动优化时用）",
+      "line": 13,
+      "hash": "sha256:67b486c48c8b20be3243ddc185b1f04f72c104a951fd8a235c67776a294a444f",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-115",
+      "kind": "entry",
+      "block": "B09",
+      "blocks": [
+        "B09"
+      ],
+      "themes": [
+        "T9"
+      ],
+      "title": "SemVer + CHANGELOG + stability",
+      "abstract": "版本号语义化（major.minor.patch），关键改动写 CHANGELOG，标注 stability。",
+      "tags": [],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b09.md",
+      "anchor": "### D-115 · SemVer + CHANGELOG + stability",
+      "line": 20,
+      "hash": "sha256:739f55213fada815209c84dcf0a6b94a81527bab15eaf1065610aa90d7a0f7f4",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-116",
+      "kind": "entry",
+      "block": "B09",
+      "blocks": [
+        "B09"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "性能对比测试（第三测试维度）",
+      "abstract": "在触发测试 + 效果测试之外，加性能对比——同一任务\"无 Skill\" vs \"有 Skill\" 各跑 5 次，对比 Token 用量与完成质量。",
+      "tags": [
+        "适用: 输出可客观验证"
+      ],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b09.md",
+      "anchor": "### D-116 · 性能对比测试（第三测试维度）",
+      "line": 27,
+      "hash": "sha256:f8900f69b4ab58b9e16a4f27f1f7169bbba988a647e84ac16ddff8bf568b7897",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-128",
+      "kind": "entry",
+      "block": "B09",
+      "blocks": [
+        "B09"
+      ],
+      "themes": [
+        "T3"
+      ],
+      "title": "frontmatter 引号卫生（冒号陷阱 · 发布前必扫）",
+      "abstract": "frontmatter 标量值里只要可能出现 : （冒号+空格）就必须整值加引号，否则 YAML 解析直接失败（mapping values are not allowed in this context）…",
+      "tags": [
+        "适用: 面向中文用户",
+        "适用: 跨平台复用",
+        "适用: 输出可客观验证"
+      ],
+      "trigger": "SKILL.md 起草完成 / 发布前校验；description 里出现冒号、箭头、→、中文引号时",
+      "source": "references/blocks/design-blocks-b09.md",
+      "anchor": "### D-128 · frontmatter 引号卫生（冒号陷阱 · 发布前必扫）",
+      "line": 35,
+      "hash": "sha256:69c1820687464f347bf539c25dd7b8a25e53071214853f399b519ef8bad0c67c",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-131",
+      "kind": "entry",
+      "block": "B09",
+      "blocks": [
+        "B09"
+      ],
+      "themes": [
+        "T9"
+      ],
+      "title": "发布包完整性校验（打完包再验一次）",
+      "abstract": "打包不等于可发布。发布前对产物本身（而非源目录）跑三查：① zipfile.testzip() 验包完整性（返回首个损坏文件名，正常为 None）；② 解包后重跑一次 validate（验的是包内那份，不是源那份——二者可能不同步）…",
+      "tags": [
+        "适用: 需要外部调用",
+        "适用: 输出可客观验证"
+      ],
+      "trigger": "生成 zip / 打包完成、发布平台之前",
+      "source": "references/blocks/design-blocks-b09.md",
+      "anchor": "### D-131 · 发布包完整性校验（打完包再验一次）",
+      "line": 48,
+      "hash": "sha256:dfbb0458f84c5a8bfa12cce45b317ac2a19cea004574a2ce07dc2bd9c2e65c63",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-145",
+      "kind": "entry",
+      "block": "B09",
+      "blocks": [
+        "B09"
+      ],
+      "themes": [
+        "T10"
+      ],
+      "title": "验收清单必须匹配执行者能力：做不到就换成等价的静态判定",
+      "abstract": "我们已有 严格度判据 = 是否机器可判（validate 1/2/3/4/7/13/14 FAIL，5/8/9/10/11/12 WARN）。本条补的是另一个前置问题：判据「能不能判」之外，还要问「执行者（agent）做不做得到」…",
+      "tags": [
+        "适用: 有交付产物",
+        "适用: 输出可客观验证"
+      ],
+      "trigger": "为 skill 写交付前验收清单时",
+      "source": "references/blocks/design-blocks-b09.md",
+      "anchor": "### D-145 · 验收清单必须匹配执行者能力：做不到就换成等价的静态判定",
+      "line": 58,
+      "hash": "sha256:14059c6fed2126d4064910e9552f58b2b06c7d0df33f9ce7a9450b0285e4a47a",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-117",
+      "kind": "entry",
+      "block": "B10",
+      "blocks": [
+        "B10"
+      ],
+      "themes": [
+        "T6"
+      ],
+      "title": "负向约束优先 MISTAKES",
+      "abstract": "配一份 append-only 错误台账（MISTAKES.md）：列全\"已知错误做法（NEVER）+ 后果 + 正确做法（改为 Y）\"，TOP 5 高危注入 SKILL.md…",
+      "tags": [],
+      "trigger": "skill 准备交付/发布，或运行中发现新失败",
+      "source": "references/blocks/design-blocks-b10.md",
+      "anchor": "### D-117 · 负向约束优先 MISTAKES",
+      "line": 13,
+      "hash": "sha256:07370787d1aec959b6462e2be2ea339fb1388b55d63e4f52d88a3df9c6f70e57",
+      "origin": "chenlin-skillcreator 铁律 8 / template-mistakes-ledger.md",
+      "explains": []
+    },
+    {
+      "id": "D-118",
+      "kind": "entry",
+      "block": "B10",
+      "blocks": [
+        "B10"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "停止条件四件套",
+      "abstract": "Loop 必须有界——## 停止条件 四件套：质量门（输出至少 X 条 / 置信度 > Y%）+ 资源限制（最大轮次 / Token 预算）+ 用户干预（用户说\"停止\"→输出当前最佳）+ 失败处理（未满足→输出 + 标注不确定性）。",
+      "tags": [
+        "适用: 自动化/长流程",
+        "适用: 流程复杂"
+      ],
+      "trigger": "自动化 / 长流程 / 循环类 skill",
+      "source": "references/blocks/design-blocks-b10.md",
+      "anchor": "### D-118 · 停止条件四件套",
+      "line": 27,
+      "hash": "sha256:43a643cfe54e25033093c0ab607bca62cf6556a10e785cea61f02eec7301255e",
+      "origin": "chenlin-skillcreator Loop Thinking / template-type-a.md 停止条件",
+      "explains": []
+    },
+    {
+      "id": "D-119",
+      "kind": "entry",
+      "block": "B10",
+      "blocks": [
+        "B10"
+      ],
+      "themes": [
+        "T6"
+      ],
+      "title": "规则边界纪律（防经验库被特例污染）",
+      "abstract": "经验晋升为规则要过准入标准（稳定来源 / 反复失败 / 确定性行为），case-specific 只留归因报告不入库——与 lessons 的三问晋升检查同构，但更强调\"防特例污染\"。",
+      "tags": [],
+      "trigger": "把失败/成功经验沉淀为规则时",
+      "source": "references/blocks/design-blocks-b10.md",
+      "anchor": "### D-119 · 规则边界纪律（防经验库被特例污染）",
+      "line": 41,
+      "hash": "sha256:bc94956433443eaba7cfe2991a6bdd1dc555d03a34a4a9f68d38d7419f341270",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-120",
+      "kind": "entry",
+      "block": "B10",
+      "blocks": [
+        "B10"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "完成后校验清单 + 强制回复规范",
+      "abstract": "交付确定性双保险——验收有清单（不一致先修正再回复「完成」）+ 回复有格式（说什么、不说什么、链接从哪来）",
+      "tags": [],
+      "trigger": "写类工作流的交付验收环节",
+      "source": "references/blocks/design-blocks-b10.md",
+      "anchor": "### D-120 · 完成后校验清单 + 强制回复规范",
+      "line": 48,
+      "hash": "sha256:7e48a3fd938bd63f5958ff3d37a3d5a52b085eba809d2b5bc5db7d605ba28961",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-121",
+      "kind": "entry",
+      "block": "B10",
+      "blocks": [
+        "B10"
+      ],
+      "themes": [
+        "T10"
+      ],
+      "title": "把量化质量门写进版本复盘",
+      "abstract": "复盘记三件事：量化指标行（可机器复核）、修了什么+为什么、遗留项清单——下次迭代从遗留项开始而非从零开始",
+      "tags": [],
+      "trigger": "版本发布复盘或质量收尾时",
+      "source": "references/blocks/design-blocks-b10.md",
+      "anchor": "### D-121 · 把量化质量门写进版本复盘",
+      "line": 55,
+      "hash": "sha256:b85955eeabe5ba9b0c7daf992a30b7d4e887139926a761552b0db9ba9620a436",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-122",
+      "kind": "entry",
+      "block": "B10",
+      "blocks": [
+        "B10"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "UX 输出规范（隐藏内部 ID + 精简进度 + 批量汇总）",
+      "abstract": "对用户的自然语言输出也写成可判定规则 + 模板样例，而不是留给 agent 即兴发挥（元设计 DP-003）。",
+      "tags": [],
+      "trigger": "设计\"agent 对用户说什么\"时",
+      "source": "references/blocks/design-blocks-b10.md",
+      "anchor": "### D-122 · UX 输出规范（隐藏内部 ID + 精简进度 + 批量汇总）",
+      "line": 62,
+      "hash": "sha256:07cf5a98c752163c888c893f2aa705877005b3437826f3f98f457a0c11e19888",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-123",
+      "kind": "entry",
+      "block": "B10",
+      "blocks": [
+        "B10"
+      ],
+      "themes": [
+        "T8"
+      ],
+      "title": "运行时依赖声明带 reason",
+      "abstract": "依赖声明附\"为什么要它\"，预检失败时能给出人话解释，也为依赖裁剪决策提供依据（元设计 DP-002）。",
+      "tags": [],
+      "trigger": "声明 skill 的外部二进制/环境依赖时",
+      "source": "references/blocks/design-blocks-b10.md",
+      "anchor": "### D-123 · 运行时依赖声明带 reason",
+      "line": 69,
+      "hash": "sha256:940ca2115ed73eb564f8b592017a928fa7d9d0cd34e18a7fd365c3141902f46d",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-124",
+      "kind": "entry",
+      "block": "B10",
+      "blocks": [
+        "B10"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "输出契约 + 禁止二次解析：声明形态同时禁止 shell 二次加工",
+      "abstract": "既声明输出形态，也禁止 agent 用 shell 二次加工——防丢字段、防跨命令套用参数（不同命令支持的 flag 不同）",
+      "tags": [],
+      "trigger": "工具输出已是结构化格式（表格 / JSON）时",
+      "source": "references/blocks/design-blocks-b10.md",
+      "anchor": "### D-124 · 输出契约 + 禁止二次解析：声明形态同时禁止 shell 二次加工",
+      "line": 76,
+      "hash": "sha256:4f3171011c3d54bad5c7fc898cf87f76ea44f43423e8c446f16d4fc3c452692f",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-125",
+      "kind": "entry",
+      "block": "B10",
+      "blocks": [
+        "B10"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "格式化规范独立成节 + 显式「不可伪造」条款",
+      "abstract": "单位与精度写成可逐条检查的清单，且显式写「不可伪造」——把主观表述变成可验收条款",
+      "tags": [],
+      "trigger": "输出含金额 / 单位 / 精度 / 日期时",
+      "source": "references/blocks/design-blocks-b10.md",
+      "anchor": "### D-125 · 格式化规范独立成节 + 显式「不可伪造」条款",
+      "line": 83,
+      "hash": "sha256:6ac3df6821c17ffcea767d6bec7c30374b640e7ee60dc9d33f359bd2b6cd2d59",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-126",
+      "kind": "entry",
+      "block": "B10",
+      "blocks": [
+        "B10"
+      ],
+      "themes": [
+        "T1"
+      ],
+      "title": "常见病症库 9 种",
+      "abstract": "先对症下药找根因，再动手修。",
+      "tags": [],
+      "trigger": "",
+      "source": "references/blocks/design-blocks-b10.md",
+      "anchor": "### D-126 · 常见病症库 9 种",
+      "line": 90,
+      "hash": "sha256:f258deb139032377efdba3e16f197b9cb876f8d76f2b3267b23eac9c6b416e43",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-132",
+      "kind": "entry",
+      "block": "B10",
+      "blocks": [
+        "B10"
+      ],
+      "themes": [
+        "T9"
+      ],
+      "title": "教训必须落检查项（回流不断裂）",
+      "abstract": "复盘收尾两道必答项，缺一不可： ① 教训 → 检查项：本轮踩的坑能不能写成一条机器可判定的检查（正则 / 枚举 / 文件存在性）？能 → 当天加进 validate_skill.py 或 check_blueprint.py 并注明检查名…",
+      "tags": [
+        "适用: 流程复杂",
+        "适用: 需要外部调用",
+        "适用: 输出可客观验证"
+      ],
+      "trigger": "复盘时记录了失败 / 教训 / 踩坑 / 根因；或刚给脚本加了新能力 / 开关",
+      "source": "references/blocks/design-blocks-b10.md",
+      "anchor": "### D-132 · 教训必须落检查项（回流不断裂）",
+      "line": 109,
+      "hash": "sha256:ea5ba403a810a786f851bd01a5dacd8ecf1ce7f75dec43f8fd523c818d735d73",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-146",
+      "kind": "entry",
+      "block": "B10",
+      "blocks": [
+        "B10"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "产物范围门禁：单文件白名单 + 交付前后文件清单 diff",
+      "abstract": "三个设计点：(a) 白名单而非黑名单（「只许 1 个」比「不许 6 种」更难绕过——黑名单永远列不全）；(b) 约束过程而非只约束交付物（否则 agent 会「先造后删」，而删除常失败）…",
+      "tags": [
+        "适用: 有交付产物",
+        "适用: 涉及脚本",
+        "适用: 自动化/长流程"
+      ],
+      "trigger": "skill 的交付物是「一个成品文件」，但生成过程天然会想造中间文件时",
+      "source": "references/blocks/design-blocks-b10.md",
+      "anchor": "### D-146 · 产物范围门禁：单文件白名单 + 交付前后文件清单 diff",
+      "line": 122,
+      "hash": "sha256:5b4a77d968a6612a55fead77805c51c167295522c49ec83ea051893ddd92fbbf",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "D-147",
+      "kind": "entry",
+      "block": "B10",
+      "blocks": [
+        "B10"
+      ],
+      "themes": [
+        "T2"
+      ],
+      "title": "合规文案逐字固定 + 位置约束，并二次进验收清单",
+      "abstract": "合规文案的失效方式不是「忘了写」，而是三种看起来更像样的改写：合并（把来源和免责声明拼成一句）、缩写（省掉「请自行核验」）、藏起来（放进默认隐藏的 Tab 面板里——DOM 里有，用户看不见）…",
+      "tags": [
+        "适用: 有交付产物",
+        "适用: 高风险领域",
+        "适用: 输出可客观验证"
+      ],
+      "trigger": "产物含法定 / 合规 / 免责类定稿文案（不得改写）时",
+      "source": "references/blocks/design-blocks-b10.md",
+      "anchor": "### D-147 · 合规文案逐字固定 + 位置约束，并二次进验收清单",
+      "line": 131,
+      "hash": "sha256:f4936287bbadddef958dc599355303393fbdef995fc4de9b7e4ca64d5182e52c",
+      "origin": "",
+      "explains": []
+    },
+    {
+      "id": "DP-001",
+      "kind": "principle",
+      "block": "B04",
+      "blocks": [
+        "B04",
+        "B07"
+      ],
+      "themes": [],
+      "title": "不可逆优先门禁",
+      "abstract": "操作的可逆性决定确认等级——不可逆 → 前置硬门（GATE 编号 + STOP 语义 + 默认拒绝 + 禁止软化话术）+ 语义消歧必问；可逆 → 放行。判据（可逆性）比清单更有产能。",
+      "tags": [
+        "`写操作",
+        "上传",
+        "覆盖",
+        "删除",
+        "自动化`。"
+      ],
+      "trigger": "标签 写操作/上传/覆盖/删除/自动化。触发信号：skill 含任何写入/上传/覆盖等破坏力不同的相似操作时；两个操作只差\"新建 vs 追加\"时。",
+      "source": "references/design-principles-library.md",
+      "anchor": "### DP-001 · 不可逆优先门禁",
+      "line": 63,
+      "hash": "sha256:d87a901e502fafba9ccb6f3e59fd3c6dd61ea1d458ed84c7b53cfbfea5d2a7ce",
+      "origin": "ima-skills-1.1.9 的设计切片；支撑条目 D-027 GATE 安全门 / D-028 可逆性决定确认等级 / D-029 隐私输出分级 /…",
+      "explains": [
+        "D-027",
+        "D-028",
+        "D-029",
+        "D-051",
+        "D-083"
+      ]
+    },
+    {
+      "id": "DP-002",
+      "kind": "principle",
+      "block": "B07",
+      "blocks": [
+        "B07",
+        "B08"
+      ],
+      "themes": [],
+      "title": "错误即修复指引",
+      "abstract": "每一层错误的 msg 都是给 agent 的行动指令：原因 + 修复动作 +替代渠道——拒绝永远带指路，把死路变指路牌（fail-with-direction）。",
+      "tags": [
+        "`脚本封装",
+        "API 对接",
+        "错误处理`。"
+      ],
+      "trigger": "标签 脚本封装/API 对接/错误处理。触发信号：封装脚本有两类失败来源（进程退出 vs 业务响应）；对接的后端有自定义错误码体系。",
+      "source": "references/design-principles-library.md",
+      "anchor": "### DP-002 · 错误即修复指引",
+      "line": 70,
+      "hash": "sha256:46d37042a050d95fb6733f415ee1429ece0b770cc41b379fdb1e1643ce8fbda3",
+      "origin": "ima-skills-1.1.9 的设计切片；支撑条目 D-082 双层错误分类 / D-083 fail-with-direction / D-084…",
+      "explains": [
+        "D-082",
+        "D-083",
+        "D-084",
+        "D-106",
+        "D-123"
+      ]
+    },
+    {
+      "id": "DP-003",
+      "kind": "principle",
+      "block": "B06",
+      "blocks": [
+        "B06",
+        "B07"
+      ],
+      "themes": [],
+      "title": "内外语言分层",
+      "abstract": "面向用户的输出永远用用户语言（名称/批量汇总/人话错误/按场景降级隐私粒度），面向系统的处理永远用系统语言（内部 ID/cursor/JSON），两者绝不混流。",
+      "tags": [
+        "`UX 输出",
+        "多端场景",
+        "隐私`。"
+      ],
+      "trigger": "标签 UX 输出/多端场景/隐私。触发信号：设计\"agent 对用户说什么\"；同一内容可能出现在私聊与群聊等公开度不同的场景。",
+      "source": "references/design-principles-library.md",
+      "anchor": "### DP-003 · 内外语言分层",
+      "line": 77,
+      "hash": "sha256:cc336f17c2ced85f8d85f16b8515fee1c491dd20151bed5e995879c8f4f56b91",
+      "origin": "ima-skills-1.1.9 的设计切片；支撑条目 D-029 隐私输出分级 / D-083 fail-with-direction / D-084…",
+      "explains": [
+        "D-029",
+        "D-083",
+        "D-084",
+        "D-122"
+      ]
+    },
+    {
+      "id": "DP-101",
+      "kind": "principle",
+      "block": "B01",
+      "blocks": [
+        "B01",
+        "B07"
+      ],
+      "themes": [],
+      "title": "成本感知设计",
+      "abstract": "设计任何会进上下文/消耗 token/占存储的 skill 时，先问\"它的运营成本是什么\"，把成本项提升为一等功能（预算灯、趋势、节流阀、缓存判据），而非事后补丁。",
+      "tags": [
+        "`token 预算",
+        "定时任务",
+        "缓存`。"
+      ],
+      "trigger": "标签 token 预算/定时任务/缓存。触发信号：skill 输出会进上下文；存在重复计算或冷加载慢。",
+      "source": "references/design-principles-library.md",
+      "anchor": "### DP-101 · 成本感知设计",
+      "line": 84,
+      "hash": "sha256:ea60b5e35964b97018bcaa93e5363161b776514f7f563ce4f84cfa6bde4682f8",
+      "origin": "memory-manager-v2-3.9.0 的设计切片；支撑条目 D-002 运营成本一等公民 / D-080 输入指纹缓存判据 / D-081…",
+      "explains": [
+        "D-002",
+        "D-080",
+        "D-081"
+      ]
+    },
+    {
+      "id": "DP-102",
+      "kind": "principle",
+      "block": "B06",
+      "blocks": [
+        "B06",
+        "B05"
+      ],
+      "themes": [],
+      "title": "自动化安全默认",
+      "abstract": "无人确认场景的默认行为必须是 dry-run/预览，破坏性执行永远显式 opt-in（--execute / --force + 非 TTY 自动拒绝），并把这条护栏写进 SKILL.md 让评审看得见。",
+      "tags": [
+        "`定时",
+        "清理",
+        "写库",
+        "配置变更`。"
+      ],
+      "trigger": "标签 定时/清理/写库/配置变更。触发信号：定时自动化任务含删除/归档/覆盖；skill 含任何写操作。",
+      "source": "references/design-principles-library.md",
+      "anchor": "### DP-102 · 自动化安全默认",
+      "line": 91,
+      "hash": "sha256:300c0b225e2e2c85a5c721002bbb21753a9f894bf55d57744c585941288ec6e3",
+      "origin": "memory-manager-v2-3.9.0 的设计切片；支撑条目 D-003 定时破坏性动作预览默认 / D-049 四级操作门禁矩阵 / D-041…",
+      "explains": [
+        "D-003",
+        "D-049",
+        "D-041"
+      ]
+    },
+    {
+      "id": "DP-103",
+      "kind": "principle",
+      "block": "B08",
+      "blocks": [
+        "B08",
+        "B10"
+      ],
+      "themes": [],
+      "title": "证据自证文化",
+      "abstract": "安全与质量声称必须配\"可执行的证明\"（内置 self-test 输出结构化 JSON / 量化质量门进 CHANGELOG）——评审和自动化能直接消费，不靠文档表格自说自话。",
+      "tags": [
+        "`安全声称",
+        "发布复盘",
+        "评审`。"
+      ],
+      "trigger": "标签 安全声称/发布复盘/评审。触发信号：SKILL.md 声称了防护能力；版本发布做质量收尾。",
+      "source": "references/design-principles-library.md",
+      "anchor": "### DP-103 · 证据自证文化",
+      "line": 98,
+      "hash": "sha256:76f008dc3286fc0699b27c808fcbfa22ee11bfa9d8bd301210e53e1fffc9785c",
+      "origin": "memory-manager-v2-3.9.0 的设计切片；支撑条目 D-105 内置自检验证安全声称 / D-121 量化质量门进复盘 / D-119…",
+      "explains": [
+        "D-105",
+        "D-121",
+        "D-119"
+      ]
+    },
+    {
+      "id": "DP-201",
+      "kind": "principle",
+      "block": "B06",
+      "blocks": [
+        "B06",
+        "B08"
+      ],
+      "themes": [],
+      "title": "失败模式驱动设计",
+      "abstract": "写每条纪律前先问「不写这条，agent 会犯什么具体的错」，答不出来就不写——纪律的来源是观察到的失败，不是推导出的最佳实践。反推出的纪律天然带触发条件与停止点；正推的纪律容易退化成\"注意性能、尽量批量\"这类无法执行的空话。",
+      "tags": [
+        "`纪律撰写",
+        "防呆",
+        "反模式`。"
+      ],
+      "trigger": "标签 纪律撰写/防呆/反模式。触发信号：写\"重试 / 回退 / 探索 / 澄清\"类纪律时；想写\"要尽量 XX\"这类无上限祈使句时。",
+      "source": "references/design-principles-library.md",
+      "anchor": "### DP-201 · 失败模式驱动设计",
+      "line": 105,
+      "hash": "sha256:d32887caa3b4ad73998c6c94ad1636633e232d0f4762bcc160184352c2063260",
+      "origin": "westock-data-1.0.7 的设计切片；支撑条目 D-052 纪律带可数上限 / D-054 正负双向路由 / D-031 失败分级 / D-124…",
+      "explains": [
+        "D-052",
+        "D-054",
+        "D-031",
+        "D-124",
+        "D-108"
+      ]
+    },
+    {
+      "id": "DP-202",
+      "kind": "principle",
+      "block": "B06",
+      "blocks": [
+        "B06",
+        "B07"
+      ],
+      "themes": [],
+      "title": "成本显性化",
+      "abstract": "每条要求 agent 改变行为的纪律，都要写出\"不这么做的代价是什么\"——理由栏不是解释，是执行动力。一条纪律给出多种性质的理由（成本 / 正确性 / 一致性），agent 才能在新场景自行推导，而非硬背规则。",
+      "tags": [
+        "`token 成本",
+        "调用经济性",
+        "批量`。"
+      ],
+      "trigger": "标签 token 成本/调用经济性/批量。触发信号：要求 agent 改变调用习惯（批量 / 少读文件 / 少调命令）时。",
+      "source": "references/design-principles-library.md",
+      "anchor": "### DP-202 · 成本显性化",
+      "line": 113,
+      "hash": "sha256:683184031c9ad39d3d576c29613243adcaa9455d280da192db2d5627adbad1b4",
+      "origin": "westock-data-1.0.7 的设计切片；支撑条目 D-085 认知盲区索引（先规律后例外…",
+      "explains": [
+        "D-085",
+        "D-086",
+        "D-053"
+      ]
+    },
+    {
+      "id": "DP-203",
+      "kind": "principle",
+      "block": "B01",
+      "blocks": [
+        "B01",
+        "B08"
+      ],
+      "themes": [],
+      "title": "约束前置 + 完整性自检",
+      "abstract": "最容易被违反的约束，必须放在 agent 一定会读到的位置（description / 主路由首屏）；且多落点的约束必须能机器校验一致性——漏项的前置比不前置更危险，因为 agent 会因看到摘要里有表而不再去翻完整源。",
+      "tags": [
+        "`约束布局",
+        "摘要与源同步",
+        "边界声明`。"
+      ],
+      "trigger": "标签 约束布局/摘要与源同步/边界声明。触发信号：某限制在多份文档各写一份；主路由放了一张\"速查表\"并附一句\"完整见 XX\"。",
+      "source": "references/design-principles-library.md",
+      "anchor": "### DP-203 · 约束前置 + 完整性自检",
+      "line": 121,
+      "hash": "sha256:35ea7cf74c4b0eeffd7f8f593e9745f372f2dff9523ef284e18cbac47a522e3b",
+      "origin": "westock-data-1.0.7 的设计切片；支撑条目 D-086 主路由承载铁律 / D-006 description 内嵌边界指针 / D-007…",
+      "explains": [
+        "D-086",
+        "D-006",
+        "D-007"
+      ]
+    },
+    {
+      "id": "DP-204",
+      "kind": "principle",
+      "block": "B07",
+      "blocks": [
+        "B07",
+        "B08"
+      ],
+      "themes": [],
+      "title": "单一事实来源优先于同步纪律",
+      "abstract": "凡出现「两处必须保持一致」的需求，第一解法是把两处接到同一个内核（import / 引用 / 一侧生成另一侧），而不是写一条「记得同步」的纪律。判据：能否用引用替代人工同步？能就必须做。人工同步的纪律无论写得多严厉，都会在第三次修改时失效",
+      "tags": [
+        "`同步",
+        "一致性",
+        "单一事实来源`。"
+      ],
+      "trigger": "标签 同步/一致性/单一事实来源。触发信号：出现「改 A 必须同步改 B」的人工纪律；同一数据被两处消费。",
+      "source": "references/design-principles-library.md",
+      "anchor": "### DP-204 · 单一事实来源优先于同步纪律",
+      "line": 129,
+      "hash": "sha256:fd9ca141d5a6d944dcbc6556d56369511c4b2dab434fcb0ee9b5d5eb7914b95b",
+      "origin": "smart-charts-8.1.1 的设计切片；支撑条目 D-087、D-088、D-089。",
+      "explains": [
+        "D-087",
+        "D-088",
+        "D-089"
+      ]
+    },
+    {
+      "id": "DP-205",
+      "kind": "principle",
+      "block": "B04",
+      "blocks": [
+        "B04",
+        "B05"
+      ],
+      "themes": [],
+      "title": "可打断性由可逆性判定，不由礼貌判定",
+      "abstract": "「要不要问用户」的正当理由是可逆性三要素（廉价 / 可逆 / 零外部副作用），不是「尽量少打扰」。三要素成立 → 自主决策 + 事后列出假设供审阅；不成立 → 必须确认。并显式声明全链路唯一必须介入点，同时封死绕开它的兜底路径",
+      "tags": [
+        "`澄清协议",
+        "确认等级",
+        "用户介入点`。"
+      ],
+      "trigger": "标签 澄清协议/确认等级/用户介入点。触发信号：纠结某环节要不要问用户；写了「尽量少打扰」这类不可执行的话。",
+      "source": "references/design-principles-library.md",
+      "anchor": "### DP-205 · 可打断性由可逆性判定，不由礼貌判定",
+      "line": 136,
+      "hash": "sha256:ebabb97d05768726f9efa6477db7d16ff5d14517bfa99767051d4e79474cb5a0",
+      "origin": "smart-charts-8.1.1 的设计切片；支撑条目 D-032、D-033、D-112。",
+      "explains": [
+        "D-032",
+        "D-033",
+        "D-112"
+      ]
+    },
+    {
+      "id": "DP-206",
+      "kind": "principle",
+      "block": "B09",
+      "blocks": [
+        "B09"
+      ],
+      "themes": [],
+      "title": "安全与质量机制必须有对立面用例",
+      "abstract": "任何拦截/生成/断言类机制都要配方向相反的用例：拦截器配零误报正例（防「一律拒绝」拿满分）、生成类配数字出处白名单（防编造）、PoC 类配真实攻击向量（防拍脑袋列关键字）。只测一个方向的机制，会奖励极端实现",
+      "tags": [
+        "`自检",
+        "安全",
+        "反幻觉",
+        "质量门`。"
+      ],
+      "trigger": "标签 自检/安全/反幻觉/质量门。触发信号：写了拦截器、黑名单、校验器、或要求 agent 产出含数字的结论。",
+      "source": "references/design-principles-library.md",
+      "anchor": "### DP-206 · 安全与质量机制必须有对立面用例",
+      "line": 143,
+      "hash": "sha256:d1dece56326c0d5a2955b965c6e27fa9da1120501b9041d3e784016fda69a575",
+      "origin": "smart-charts-8.1.1 的设计切片；支撑条目 D-110、D-111、D-042。",
+      "explains": [
+        "D-110",
+        "D-111",
+        "D-042"
+      ]
+    },
+    {
+      "id": "DP-207",
+      "kind": "principle",
+      "block": "B01",
+      "blocks": [
+        "B01"
+      ],
+      "themes": [],
+      "title": "有限资源分层承载：一等放规则，二等放实例，第三层留可跑断言",
+      "abstract": "任何容量硬受限且决定召回的字段（典型是 skill 的 description，1024 字符），都不应试图装下全部内容。正确做法是按抽象层级拆三层：一等放规则（少量固定口令 + 一条判定口诀…",
+      "tags": [
+        "`触发词",
+        "有限容量字段",
+        "召回精度",
+        "可验证证据`。"
+      ],
+      "trigger": "标签 触发词/有限容量字段/召回精度/可验证证据。触发信号：① 容量接近上限还在往里加词；② 需要向评审/用户证明\"这个能力真的覆盖了\"…",
+      "source": "references/design-principles-library.md",
+      "anchor": "### DP-207 · 有限资源分层承载：一等放规则，二等放实例，第三层留可跑断言",
+      "line": 150,
+      "hash": "sha256:b55b7dce0eb25dcda459f4a302a38f0110037161b5920147a90e3a480804dec9",
+      "origin": "skill-designer 自身实践（2026-09-10 A 维冲刺：description 995/1024 撞墙 → 拆双层 + 65 条用例）…",
+      "explains": [
+        "D-127",
+        "D-005",
+        "D-006"
+      ]
+    },
+    {
+      "id": "DP-208",
+      "kind": "principle",
+      "block": "B07",
+      "blocks": [
+        "B07",
+        "B06"
+      ],
+      "themes": [],
+      "title": "源头拦截优先于终点修补",
+      "abstract": "质量控制与防错的干预时机决定效果——能挡在动作发生前（事前门槛 + 事中规范），就别拖到动作发生后（事后检测）。事后检测只能改表面（改句式），改不了已经定型的结构（如\"3 条观点灌成十几段\"的 AI 式骨架）；源头拦截才能阻止结构成型…",
+      "tags": [
+        "`质量门",
+        "去 AI 味",
+        "防错时机",
+        "校验时机`。"
+      ],
+      "trigger": "标签 质量门/去 AI 味/防错时机/校验时机。触发信号：skill 的设计把纠错放在\"产出后统一检查\"；发现\"写完再查\"式的事后修补。",
+      "source": "references/design-principles-library.md",
+      "anchor": "### DP-208 · 源头拦截优先于终点修补",
+      "line": 158,
+      "hash": "sha256:9b571236b5037dec6bc5fa7ac867a7d8d6bf8d3b672da47efed9590028ec2ae5",
+      "origin": "human-writing 文章（知识库「神圣凯莎知识宝库」《遇到好 Skill 别急着装》），经 skill-rebuild 元设计升维提炼…",
+      "explains": [
+        "D-027",
+        "D-068",
+        "D-069"
+      ]
+    },
+    {
+      "id": "DP-209",
+      "kind": "principle",
+      "block": "B06",
+      "blocks": [
+        "B06",
+        "B07"
+      ],
+      "themes": [],
+      "title": "权威源唯一化：其余全是引用或被拒",
+      "abstract": "任何数据 / 规则 / 身份 / 代码都只允许有一处权威来源，其他所有出现处一律降格为引用（能自动生成就别手写）或被拒绝（伪造即报错）…",
+      "tags": [
+        "`一致性",
+        "双落点",
+        "单一事实来源",
+        "遥测可信",
+        "防漂移`。"
+      ],
+      "trigger": "标签 一致性/双落点/单一事实来源/遥测可信/防漂移。触发信号：① 同一内容/字段/参数出现在 ≥2 处；② 发现自己在写「记得同步…」；③ 同一事实需多处消费…",
+      "source": "references/design-principles-library.md",
+      "anchor": "### DP-209 · 权威源唯一化：其余全是引用或被拒",
+      "line": 165,
+      "hash": "sha256:441653d6288be62d0adf1abb38cdca78f58f5f5924166c97b55be04c4d4a4791",
+      "origin": "tencent-news 1.2.3（SkillHub 商城安装），经 skill-rebuild 反向吸收 + 元设计升维（解释力 6 条，超准入线 3）…",
+      "explains": [
+        "D-133",
+        "D-135",
+        "D-138",
+        "D-140",
+        "D-142",
+        "D-144"
+      ]
+    },
+    {
+      "id": "DP-210",
+      "kind": "principle",
+      "block": "B04",
+      "blocks": [
+        "B04",
+        "B06"
+      ],
+      "themes": [],
+      "title": "失败即熔断，不得向右兜底",
+      "abstract": "外部依赖出错时，agent 有两个方向可走——向左：停下来、说清、给可执行的替代动作；向右：重试 / 换数据源 / 用模型记忆补 / 把 A 类错误解释成 B 类…",
+      "tags": [
+        "`失败处理",
+        "熔断",
+        "数据源唯一",
+        "错误归因",
+        "兜底禁令`。"
+      ],
+      "trigger": "标签 失败处理/熔断/数据源唯一/错误归因/兜底禁令。触发信号：① skill 依赖外部 CLI/API/授权；② 失败后「没有输出」会显得任务没完成（压力全在向右）…",
+      "source": "references/design-principles-library.md",
+      "anchor": "### DP-210 · 失败即熔断，不得向右兜底",
+      "line": 173,
+      "hash": "sha256:648d98782b49bf0e5992b4f74e37b3fbd766571a78fee9656c145ccad12d4ab6",
+      "origin": "tencent-news 1.2.3（解释力 4 条）。支撑条目 D-135 D-138 D-140 D-141。",
+      "explains": [
+        "D-135",
+        "D-138",
+        "D-140",
+        "D-141"
+      ]
+    },
+    {
+      "id": "DP-211",
+      "kind": "principle",
+      "block": "B09",
+      "blocks": [
+        "B09"
+      ],
+      "themes": [],
+      "title": "验收先问执行者能力：做不到就换成等价的静态判定",
+      "abstract": "写一条验收项之前，先问两个问题，而不是一个：① 能不能判（是否机器可判）——我们已有（validate 严格度判据）；② 执行者做不做得到——本条补的那一半…",
+      "tags": [
+        "`验收设计",
+        "自检",
+        "可执行率",
+        "静态判定",
+        "能力前提`。"
+      ],
+      "trigger": "标签 验收设计/自检/可执行率/静态判定/能力前提。触发信号：① 写交付前验收清单；② 某条验收需要「人眼/浏览器/运行时环境」；③ 验收项数看起来很多但没人跑过全量。",
+      "source": "references/design-principles-library.md",
+      "anchor": "### DP-211 · 验收先问执行者能力：做不到就换成等价的静态判定",
+      "line": 181,
+      "hash": "sha256:859a21c8307059f2013004bf5025cee4be7c0c6e73104be994bdd78724b5352b",
+      "origin": "tencent-news 1.2.3（解释力 4 条）。支撑条目 D-143 D-145 D-146 D-147。",
+      "explains": [
+        "D-143",
+        "D-145",
+        "D-146",
+        "D-147"
+      ]
+    },
+    {
+      "id": "L1",
+      "kind": "lesson",
+      "block": "B02",
+      "blocks": [
+        "B02"
+      ],
+      "themes": [],
+      "title": "先诊断再设计",
+      "abstract": "动手前先搜生态（已装 skills + connectors + 蓝图库），确认是否已有 skill 承担部分职责——能复用就升级/延伸，而非新建。",
+      "tags": [],
+      "trigger": "用户表达\"创建新 skill\"意图，且该领域较常见",
+      "source": "references/lessons.md",
+      "anchor": "### L1 · 先诊断再设计",
+      "line": 44,
+      "hash": "sha256:7202e104e73767dca7ac893db6f84a35c10742c3c8feea8e751c9ceb273fce8b",
+      "origin": "fin-information-pipeline（2026-08-28）。发现已有 info-collector v0.1.0…",
+      "explains": [],
+      "refs": 0
+    },
+    {
+      "id": "L2",
+      "kind": "lesson",
+      "block": "B05",
+      "blocks": [
+        "B05",
+        "B06"
+      ],
+      "themes": [],
+      "title": "实证优先于假设",
+      "abstract": "凡写进蓝图的外部行为假设（检索语法可用性、字段完整性、URL 存在性），先实测再出施工蓝图；不可实测的必须在 B05 标注\"未验证假设\"并给降级策略。",
+      "tags": [],
+      "trigger": "设计涉及外部数据源、网络行为、第三方 API 返回格式",
+      "source": "references/lessons.md",
+      "anchor": "### L2 · 实证优先于假设",
+      "line": 50,
+      "hash": "sha256:accdb1d1ec575b9ad2e758c6bb9bafbd07ab73f2d41329fc941daaa09e8790ca",
+      "origin": "fin-information-pipeline。一次实搜推翻两个假设：site:x.com 完全失效（零命中）、公众号源 5 条结果 2 条 URL…",
+      "explains": [],
+      "refs": 0
+    },
+    {
+      "id": "L3",
+      "kind": "lesson",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [],
+      "title": "沙箱文件纪律：rename 不 delete",
+      "abstract": "脚本内禁止 unlink / rmtree / del（沙箱 SAFE_DELETE 拦截会让正常逻辑崩溃），需要移走文件一律 rename 到 processed/expired 等留底目录；清理动作交给定时任务 + 用户确认。",
+      "tags": [],
+      "trigger": "skill 含文件处理脚本，且运行在沙箱/托管环境（Windows 沙箱、云 IDE）",
+      "source": "references/lessons.md",
+      "anchor": "### L3 · 沙箱文件纪律：rename 不 delete",
+      "line": 56,
+      "hash": "sha256:69ea1b810653aa1efe8ba64f8b871dc0351e4d9105810ee2256e1b049734cc03",
+      "origin": "fin-information-pipeline。process_cards.py 的 f.unlink() 触发…",
+      "explains": [],
+      "refs": 0
+    },
+    {
+      "id": "L4",
+      "kind": "lesson",
+      "block": "B03",
+      "blocks": [
+        "B03",
+        "B06"
+      ],
+      "themes": [],
+      "title": "判断类逻辑用双轨",
+      "abstract": "AI 单独决定重要事项必跨次漂移。确定性部分（可枚举规则）下沉脚本出建议值，AI 可覆盖但必须留痕理由（如 score_reason），并设计抽检/校准回路。",
+      "tags": [],
+      "trigger": "skill 含评分、分级、分类、阈值等\"AI 判断 + 结果影响决策\"的逻辑",
+      "source": "references/lessons.md",
+      "anchor": "### L4 · 判断类逻辑用双轨",
+      "line": 62,
+      "hash": "sha256:6a97696a6d633e164940f0e8262280d9e833d0c28f614f2b7ea70f161aadac03",
+      "origin": "fin-information-pipeline。评分双轨：脚本建议 73.5 → AI 复核 79.3（差异源于脚本漏判 breadth）…",
+      "explains": [],
+      "refs": 0
+    },
+    {
+      "id": "L5",
+      "kind": "lesson",
+      "block": "B09",
+      "blocks": [
+        "B09",
+        "B10"
+      ],
+      "themes": [],
+      "title": "真实任务切片反哺 example",
+      "abstract": "补案例不要新造假样例——从最近一次真实任务切片（蓝图节选 + 成品原件 + 真实产物），每片标注\"学什么\"与完整物料路径，附隐私扫描（用户名/路径/密钥匿名化）。",
+      "tags": [],
+      "trigger": "收到\"例子不够/想看成品\"类反馈，或 skill 准备发布",
+      "source": "references/lessons.md",
+      "anchor": "### L5 · 真实任务切片反哺 example",
+      "line": 68,
+      "hash": "sha256:e1456e992e34d73b4508fea46c32c457ecb393a248886ce28d7da18266db715f",
+      "origin": "skill-designer v2.8.0（2026-08-29）。SkillHub 反馈\"例子不够多\"后…",
+      "explains": [],
+      "refs": 0
+    },
+    {
+      "id": "L6",
+      "kind": "lesson",
+      "block": "B01",
+      "blocks": [
+        "B01",
+        "B07"
+      ],
+      "themes": [],
+      "title": "依赖声明必须写「缺失时处置」",
+      "abstract": "依赖声明三件套——依赖名 + 缺失时处置 + 验证命令。只写依赖名，等于把\"依赖没装\"这个必然发生的场景留给 agent 即兴发挥；降级路径写了却不可执行，比不写更糟。",
+      "tags": [],
+      "trigger": "蓝图或文档里出现外部依赖（CLI / 另一个 skill / MCP / 第三方库），或写了\"A 做不了就交给 B\"的降级路径",
+      "source": "references/lessons.md",
+      "anchor": "### L6 · 依赖声明必须写「缺失时处置」",
+      "line": 74,
+      "hash": "sha256:18c4aeee4a8b85bb978dcb235c493209bcb27e2b153db60ab3982e006f695068",
+      "origin": "westock-data-1.0.7 缺陷 D2（2026-09-07 回照）。其边界表 8 处把活儿甩给另一个…",
+      "explains": [],
+      "refs": 0
+    },
+    {
+      "id": "L7",
+      "kind": "lesson",
+      "block": "B06",
+      "blocks": [
+        "B06",
+        "B07"
+      ],
+      "themes": [],
+      "title": "主路由必须有「可触线规则」",
+      "abstract": "每条探索/重试类纪律必须带可数上限 + 到顶后动作。「至多重试 2 次，第 3 次转人工」agent 能自检是否触线；「失败后重试」会无限打转。模糊规则等于没有规则。",
+      "tags": [],
+      "trigger": "写\"重试 / 回退 / 澄清 / 加载 / 探索\"类纪律时；评审任何 skill 的主路由时",
+      "source": "references/lessons.md",
+      "anchor": "### L7 · 主路由必须有「可触线规则」",
+      "line": 80,
+      "hash": "sha256:914e062cfa9f2be862edceb18d904d3b2b6924b7718b480aead7b417218d0ece",
+      "origin": "skill-designer v3.6.0（2026-09-07，自我照镜子）。对照 westock-data 时回照自己发现：主路由…",
+      "explains": [],
+      "refs": 0
+    },
+    {
+      "id": "L8",
+      "kind": "lesson",
+      "block": "B07",
+      "blocks": [
+        "B07"
+      ],
+      "themes": [],
+      "title": "分型要下沉到「字段粒度」，只到「段落粒度」等于没分型",
+      "abstract": "archetype 分型若只写\"这一段最值钱\"（段落粒度），该段具体必填哪些字段仍然落空——设计师仍然靠自由发挥。必须下沉到专项字段清单（该 archetype 必填哪几项、写在哪个文件、缺了会怎样）。",
+      "tags": [],
+      "trigger": "多个同类缺口集中出现在同一 archetype / 同一段骨架时；评审 archetype 选型表时",
+      "source": "references/lessons.md",
+      "anchor": "### L8 · 分型要下沉到「字段粒度」，只到「段落粒度」等于没分型",
+      "line": 87,
+      "hash": "sha256:b1c3011d26354829bce6ebcd11dd891b5ba8ae55a454a56fb85c3205a7840b33",
+      "origin": "skill-designer v3.7.0（2026-09-07，westock-data 正向对标）…",
+      "explains": [],
+      "refs": 0
+    },
+    {
+      "id": "L9",
+      "kind": "lesson",
+      "block": "B09",
+      "blocks": [
+        "B09",
+        "B10"
+      ],
+      "themes": [],
+      "title": "「造得出」≠「活得下去」：验收必须含运行期存活度",
+      "abstract": "机制/知识/闭环三层问的全是设计期，全 ✓ 只证明\"造得出来\"。必须再加一层运行期存活度：L1 最后产物距今天数 / L2 教训回流时差＋未回流条数 / L3 待办悬空数 / L4 产物按日曲线是否断崖…",
+      "tags": [],
+      "trigger": "复评自家产物时；对照表全项 ✓ 却直觉\"哪里不对\"时；判断\"这个 skill 好不好\"时",
+      "source": "references/lessons.md",
+      "anchor": "### L9 · 「造得出」≠「活得下去」：验收必须含运行期存活度",
+      "line": 94,
+      "hash": "sha256:94a9d41987e484b454e61de375341fd7910fa6cccfd5966d8e8d737ce6f71f57",
+      "origin": "skill-designer v3.8.0（2026-09-07，fin-information-pipeline 外部视角复评）…",
+      "explains": [],
+      "refs": 0
+    },
+    {
+      "id": "L10",
+      "kind": "lesson",
+      "block": "B10",
+      "blocks": [
+        "B10",
+        "B09"
+      ],
+      "themes": [],
+      "title": "教训与能力必须接进执行链（防回流断裂）",
+      "abstract": "两问必答——① 教训：写进 CHANGELOG 不算闭环，还得问\"这条能不能变成机器检查项\"，能就当天加；② 能力：脚本有了开关（如 --sync-dist）不算闭环，还得问\"主流程调用了没\"…",
+      "tags": [],
+      "trigger": "刚踩完一个坑准备写进 CHANGELOG；或刚给脚本加了一个能力/开关但主流程没调用",
+      "source": "references/lessons.md",
+      "anchor": "### L10 · 教训与能力必须接进执行链（防回流断裂）",
+      "line": 103,
+      "hash": "sha256:268e7dc4bb16033cdb12f367b6d9228b1f4f21e17c052aa20929b20ff926df35",
+      "origin": "姊妹分支 high-quality-skill-guidance v4.4.0（2026-09-10）吸收官方 skill-authoring-guide…",
+      "explains": [],
+      "refs": 1
+    },
+    {
+      "id": "L11",
+      "kind": "lesson",
+      "block": "B09",
+      "blocks": [
+        "B09",
+        "B10"
+      ],
+      "themes": [],
+      "title": "检查项「实现完」不等于「会生效」——必须在真实样本上验收",
+      "abstract": "加完检查项必须做三件事 —— ① 用真实样本跑，不用精心构造的 happy path；② 查它是否被 gate 在罕见条件里（如 if errors == 0，逐格迭代时永不成立）…",
+      "tags": [],
+      "trigger": "刚给脚本加完一条检查项 / 门槛，准备宣布完成；或某个门槛\"从上线起一次都没报过警\"（最危险的信号：它可能不是没问题，而是根本没跑）",
+      "source": "references/lessons.md",
+      "anchor": "### L11 · 检查项「实现完」不等于「会生效」——必须在真实样本上验收",
+      "line": 111,
+      "hash": "sha256:72b81fae274520fb01bfaae90b0a454b6c335f45e7bd5af533557391d4b62da3",
+      "origin": "姊妹分支 v4.4.1（2026-09-11）给 C8 补自动登记时连带发现；本工作空间 3.15.0 移植时复现了同款 KeyError:…",
+      "explains": [],
+      "refs": 0
+    },
+    {
+      "id": "L12",
+      "kind": "lesson",
+      "block": "B10",
+      "blocks": [
+        "B10",
+        "B09"
+      ],
+      "themes": [],
+      "title": "立的原则必须在自己流程里落地（否则原则只是文案）",
+      "abstract": "每条新立的设计原则，必须当场回答两个问题——① 我们自己的流程里，哪一处体现了它？（指到具体文件/检查项）② 能不能给它配一条自检？（哪怕只是\"本轮有没有出现\"的清单项）…",
+      "tags": [],
+      "trigger": "刚把一条原则/设计观写进 design-principles-library，准备收工；或某条原则\"讲得很漂亮\"但从没在自己的检查项里出现过",
+      "source": "references/lessons.md",
+      "anchor": "### L12 · 立的原则必须在自己流程里落地（否则原则只是文案）",
+      "line": 120,
+      "hash": "sha256:90ef7e81f07af1acb92749335dcabbfdecec0230763acb3de4c54274a420bcf4",
+      "origin": "tencent-news 1.2.3 正向验证（2026-09-11，example/design-blocks/tencent-news/4-self-ben…",
+      "explains": [],
+      "refs": 0
+    }
+  ]
+}

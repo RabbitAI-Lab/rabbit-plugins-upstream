@@ -1,0 +1,57 @@
+[
+  {
+    "type": "function",
+    "function": {
+      "name": "get_me",
+      "description": "获取当前 API Key 上下文：userId、keyId、当前生效的交易环境（sim 或 live），以及权限档位 scope（SIM=模拟盘，SIM_LIVE=模拟盘+实盘）、canTradeLive 与 liveUpgradeSteps。用于验证鉴权是否正常、确认所处交易环境，以及在下实盘单前确认是否具备实盘权限。",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_account_summary",
+      "description": "获取交易账户资金摘要。**数据按环境分字段嵌套，且两个环境的字段名完全不同**：sim → data.simAccount（SimAccountStatisticsModel）：全部资金 equity（= accountEquity）、可用 availableEquity、持仓占用保证金 usedMargin、委托冻结 frozenEquity、持仓浮动盈亏 positionProfit、月累计盈亏 totalProfitLoss、月收益率 profitRate(%)、风险度 riskRate(%)、是否有首单 hasFirstTrade。**sim 没有 balance / available / margin 这三个字段**。live → data.liveTradeAccount（CTP TradeAccountModel）：账户权益 balance、可用 available、当前占用保证金 currMargin（**不是 margin**）、持仓盈亏 positionProfit、平仓盈亏 closeProfit、冻结 frozenMargin/frozenCash/frozenCommission、手续费 commission、accountId、tradingDay、prevTradingDay；金额已保留 2 位小数。所以「账户还有多少钱」sim 读 equity、live 读 balance；「可用」sim 读 availableEquity、live 读 available。解析前先看 data.tradingEnv，**不要猜字段名、不要假设两边一样**。sim 无需事先在 App 开户，服务端会幂等自动开通；live 未绑定实盘 CTP 凭据时报 10413。",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    }
+  },
+  {
+    "type": "function",
+    "function": {
+      "name": "get_account_pnl_history",
+      "description": "获取账户历史盈亏（日/周序列 + 区间合计）。用户问「我这个月赚了多少」「最近一周盈亏」「收益率多少」时用它，不要自己去拉成交记录手工累加——那样算不出盯市盈亏，结果一定和 App 对不上。区间用 preset 或 startTradingDay+endTradingDay 二选一，两者都不传默认 last90d。响应字段：periodTotalProfit=区间内各日「平仓盈亏+持仓盯市盈亏」之和（元）；periodTotalRate=区间收益率（%），仅 sim 有值，live 恒为 null（实盘没有统一初始资金口径，不要自己编一个去算）；detail.dailyData / detail.weeklyData=日/周明细，detail.summary 仅 sim 有。sim 与 App 盈亏二级页同源；live 来自服务端已落库的结算单解析，**区间内没落库结算单的交易日就是没有数据，不代表那天没交易或没盈亏**，此时按 liveNote 如实说明，不要补零也不要外推。",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "preset": {
+            "type": "string",
+            "enum": [
+              "last7d",
+              "last30d",
+              "last90d",
+              "monthToDate"
+            ],
+            "description": "可选。区间预设，仅在未传 startTradingDay+endTradingDay 时生效，不传默认 last90d。last7d/last30d/last90d=从当前交易日往前推 7/30/90 个自然日（含边界）；monthToDate=当月 1 日至当前交易日。"
+          },
+          "startTradingDay": {
+            "type": "string",
+            "description": "可选。自定义区间起始交易日，yyyyMMdd 或 yyyy-MM-dd。必须与 endTradingDay 成对传，只传一个会报参数错误。传了则 preset 被忽略。"
+          },
+          "endTradingDay": {
+            "type": "string",
+            "description": "可选。自定义区间结束交易日（含），格式同 startTradingDay。必须与 startTradingDay 成对传。"
+          }
+        },
+        "required": []
+      }
+    }
+  }
+]

@@ -1,49 +1,72 @@
-## Description: <br>
-Deploys the JiuwenSwarm/JiuwenClaw multi-agent collaboration platform on Huawei Cloud Flexus L instances, including instance creation, remote installation, model configuration, and Xiaoyi, Feishu, or DingTalk channel setup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automates deployment of JiuwenSwarm or JiuwenClaw on Huawei Cloud Flexus L instances, including instance creation, remote service deployment, verification, model configuration, and message channel setup.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and cloud operators use this skill to provision or target a Huawei Cloud Flexus L instance, deploy JiuwenSwarm, verify the service, and configure model or messaging-channel credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China (Huawei Cloud cn-north-4) <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create paid Huawei Cloud resources. <br>
-Mitigation: Require explicit user approval for resource creation, verify estimated costs and auto-renew settings, and avoid noninteractive confirmation unless the exact resource has already been approved. <br>
-Risk: The skill can run root-level remote commands on cloud servers through Huawei Cloud COC. <br>
-Mitigation: Use temporary, least-privilege credentials; review generated commands before execution; and monitor COC execution UUIDs and logs. <br>
-Risk: The deployed web service and default CORS settings may expose a public interface. <br>
-Mitigation: Restrict security group ingress for port 5173, narrow allowed origins, and close public access when the web UI is not needed. <br>
-Risk: Model, Huawei Cloud, and messaging-channel credentials may be exposed through files, prompts, or logs. <br>
-Mitigation: Use STS credentials where possible, redact secrets from logs, avoid printing credentials, and tighten file permissions for API keys and channel secrets. <br>
+## Use Case:
 
+Developers and cloud operators use this skill to provision Huawei Cloud Flexus L infrastructure and deploy JiuwenSwarm with model and messaging integrations. It is intended for users who need a guided, phased deployment workflow with verification and troubleshooting references.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-flexus-l-deploy-jiuwenswarm) <br>
-- [API Specification](references/api_specs.md) <br>
-- [Deployment Checklist](references/deployment_checklist.md) <br>
-- [IAM Permission Policies](references/iam_policies.md) <br>
-- [Troubleshooting Guide](references/troubleshooting.md) <br>
-- [Huawei Cloud IAM FAQ](https://support.huaweicloud.com/iam_faq/iam_01_0620.html) <br>
+### Deployment Geography for Use:
 
+Huawei Cloud China regions supported by the skill: cn-north-4, cn-east-3, cn-south-1, and cn-southwest-2.
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code, markdown] <br>
-**Output Format:** [Markdown guidance with shell commands, status text, generated configuration, and JSON status files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces instance, order, public IP, COC execution UUID, deployment status, web access URL, and troubleshooting outputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill requires Huawei Cloud credentials with permissions that can create resources and execute remote commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use temporary least-privilege credentials, review the IAM permissions before execution, and rotate credentials that may have been printed or stored with broad permissions.
+
+Risk: Deployment can create billable cloud resources and run remote root-level changes through Huawei Cloud COC.
+
+Mitigation: Confirm target region, flavor, estimated cost, instance IDs, and customer approval before creating or modifying resources.
+
+Risk: Opening inbound access to the JiuwenSwarm web interface can expose the service publicly.
+
+Mitigation: Restrict security group access to port 5173, open it only when needed, and close or narrow the rule after verification.
+
+Risk: Model and messaging credentials may be written to remote configuration files or appear in generated output.
+
+Mitigation: Avoid sharing COC logs or generated configuration output, keep file permissions restrictive, and rotate model or messaging credentials after exposure.
+
+Risk: The security review flags the release as suspicious because it handles secrets and remote root changes.
+
+Mitigation: Install only after reviewing the skill behavior and accepting the required cloud permissions and operational risks.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-flexus-l-deploy-jiuwenswarm)
+- [API Specification](references/api-specs.md)
+- [IAM Permission Policies](references/iam-policies.md)
+- [Deployment Checklist](references/deployment-checklist.md)
+- [Verification Method](references/verification-method.md)
+- [Acceptance Criteria](references/acceptance-criteria.md)
+- [Troubleshooting Guide](references/troubleshooting.md)
+- [Huawei Cloud IAM FAQ](https://support.huaweicloud.com/iam_faq/iam_01_0620.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, status text, configuration values, and deployment URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May report COC execution UUIDs, instance identifiers, public IP addresses, service status, health-check results, and configuration guidance.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; SKILL.md frontmatter says 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

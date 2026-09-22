@@ -1,5 +1,5 @@
 ## Description: <br>
-A Chinese-language model routing guide for individual developers that recommends Flash, Standard, or Plus / 32B model tiers based on task complexity and API cost goals. <br>
+模型路由工具(免费版) gives individual developers a three-tier model routing guide that starts with lower-cost models and escalates only when task complexity requires it. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and individual builders use this skill to choose between Flash, Standard, and Plus / 32B model tiers for routine chat, coding, agent task distribution, and scheduled tasks while controlling API cost. <br>
+External developers and individual agent users use this skill to choose Flash, Standard, or Plus / 32B model tiers for daily chat, code work, sub-agent routing, and scheduled tasks. It is intended to reduce API cost while preserving higher-capability models for complex reasoning and architecture decisions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Broad execution and write permissions could allow actions beyond model-routing advice. <br>
-Mitigation: Install with least privilege and require review before granting command execution or file-writing authority. <br>
-Risk: State-changing configuration operations are described but not tightly scoped. <br>
-Mitigation: Require explicit confirmation before modifying, importing, deleting, or resetting configuration. <br>
-Risk: The skill may recommend a model tier that is too weak for critical or high-stakes decisions. <br>
-Mitigation: Use the guidance only for routing support and avoid relying on it for medical, legal, or fully deterministic decisions. <br>
+Risk: The skill is mostly a model-routing guide but requests broad write and command execution authority. <br>
+Mitigation: Review before installing, restrict write and exec use to explicit user-controlled tasks, and scan the skill before deployment. <br>
+Risk: Model-routing recommendations may be inappropriate for critical or regulated decisions. <br>
+Mitigation: Do not use the skill for medical diagnosis, legal judgment, or decisions requiring complete determinism; require human review for high-impact use cases. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/model-routing-tool-free) <br>
+- [ClawHub publisher profile](https://clawhub.ai/user/thcjp) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with text, code snippets, and JSON examples] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with text, JSON, and JavaScript examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include model-tier recommendations, decision trees, structured response examples, and execution logs.] <br>
+**Other Properties Related to Output:** [Produces model-tier recommendations and configuration examples; users should review any command or write operation before execution.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+1.0.3 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

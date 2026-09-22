@@ -1,43 +1,53 @@
-## Description: <br>
-Piper TTS Pro helps agents generate local text-to-speech audio with voice selection, long-text splitting and merging, batch generation, SSML-style controls, and WAV or MP3 output. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Piper TTS helps an agent generate local text-to-speech voice messages with Piper and return the resulting audio path for supported channels.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and agent users use this skill to turn text, articles, dialogue, and batch prompts into local speech outputs for voice messages, audio content, accessibility reading, and localization workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill documentation mixes local-only claims with callback URLs and external message delivery, which can expose source text or generated audio outside the local environment. <br>
-Mitigation: Use only non-sensitive text unless local-only operation is confirmed, avoid callback_url, and explicitly control Telegram, Discord, or other external delivery. <br>
-Risk: Referenced execution scripts are not included in the artifact, so their behavior cannot be reviewed from this release package alone. <br>
-Mitigation: Inspect and scan the referenced scripts before installation or use, especially in privacy-sensitive environments. <br>
-Risk: Voice setup can require network access for first-time model downloads despite later offline inference. <br>
-Mitigation: Pre-download and approve required voice files in a controlled environment before using the skill for production workflows. <br>
+## Use Case:
 
+Developers and agent users use this skill when they want an agent to create on-demand local TTS voice messages from provided text. It is intended for explicit local TTS requests that may involve setup commands, voice model downloads, and generated MP3 files.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/beware-piper-tts) <br>
-- [Skill homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples, audio file paths, and voice-message markup.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce MP3 or WAV files through referenced local scripts; generated audio can be delivered through external channels when configured.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: The security summary reports vague trigger rules and missing referenced shell scripts, creating risk of unintended or uninspectable command execution.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installation and only allow setup or speech-generation commands after verifying the exact script files being executed.
+
+Risk: Completing setup may install local packages, download voice models, and create MP3 files.
+
+Mitigation: Run setup only in an approved local environment and confirm storage, network, and package-installation expectations before execution.
+
+## Reference(s):
+
+- [Piper Voices on Hugging Face](https://huggingface.co/rhasspy/piper-voices)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Files, Markdown, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and voice media path markup]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce local MP3 files after setup and speech generation commands are run.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

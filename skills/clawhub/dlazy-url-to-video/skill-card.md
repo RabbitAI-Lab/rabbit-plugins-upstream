@@ -1,41 +1,59 @@
-## Description: <br>
-Paste a URL and use the dLazy hosted URL-to-video workflow to create a promo, ad, or product demo video. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns a supplied URL or webpage link into a promo, social ad, or product demo video workflow through the dLazy hosted URL-to-video service.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to turn a webpage or landing-page URL into a video by invoking the dLazy website-to-video CLI workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, URLs, and explicitly attached files are sent to dLazy's hosted service, and login stores a local dLazy API key. <br>
-Mitigation: Review the data being submitted before use, prefer npx when avoiding a persistent global install, and rotate or revoke the API key from the dLazy dashboard when needed. <br>
+## Use Case:
 
+Developers, creators, and marketing teams use this skill when they want an agent to turn a webpage URL into a promotional, advertising, or product-demo video workflow. The skill is a wrapper around the dLazy hosted service and requires dLazy CLI authentication.
 
-## Reference(s): <br>
-- [Dlazy Url To Video on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-url-to-video) <br>
-- [dLazy CLI GitHub repository](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Guidance] <br>
-**Output Format:** [Terminal text with shell commands and streamed agent responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference project ids for continuing multi-turn video generation sessions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and attached files can be sent to the dLazy hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with data approved for dLazy processing and review local policy before attaching files.
+
+Risk: Authentication stores a dLazy API key in local CLI configuration.
+
+Mitigation: Rely on OS-user file permissions, avoid sharing configuration files, and rotate or revoke keys when needed.
+
+Risk: The workflow depends on a pinned npm CLI package and hosted endpoints.
+
+Mitigation: Review the pinned @dlazy/cli package or source before installation in strict supply-chain environments.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-url-to-video)
+- [dLazy CLI homepage](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown-style agent guidance with inline shell commands and hosted-service responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference dLazy project ids, authentication state, uploaded files, and streamed service responses.]
+
+## Skill Version(s):
+
+1.0.15 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
