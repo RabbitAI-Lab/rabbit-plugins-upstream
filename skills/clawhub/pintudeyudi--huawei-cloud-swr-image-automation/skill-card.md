@@ -1,50 +1,70 @@
-## Description: <br>
-Huawei Cloud SWR (Software Repository for Container) image automation and operations skill using hcloud CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Huawei Cloud SWR Image Automation helps agents guide cross-region image synchronization, sync job checks, and CCE/CCI auto-deploy trigger management with the hcloud CLI.
 
-## Publisher: <br>
-[pintudeyudi](https://clawhub.ai/user/pintudeyudi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pintudeyudi](https://clawhub.ai/user/pintudeyudi)
 
-## Use Case: <br>
-Developers and platform engineers use this skill to generate and review hcloud CLI commands for Huawei Cloud SWR cross-region image replication, sync job checks, and CCE/CCI trigger automation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: SWR sync, trigger, create, update, delete, syncAuto=true, override=true, and trigger enablement commands can make real cloud changes. <br>
-Mitigation: Require explicit human review before running changing commands, start in test namespaces or non-production clusters, and confirm target regions, namespaces, repositories, and trigger settings. <br>
-Risk: Broad tag patterns such as .* can cause unintended automatic deployments or image replication in production. <br>
-Mitigation: Use narrow tag conditions for production, prefer manual sync when releases need approval, and disable triggers before deleting or reconfiguring them. <br>
-Risk: Huawei Cloud AK/SK credentials could be exposed or over-privileged during command execution. <br>
-Mitigation: Use least-privilege IAM users, environment variables, MFA for sensitive operations, regular credential rotation, and never print, hardcode, or commit AK/SK values. <br>
+## Use Case:
 
+Developers and platform engineers use this skill to operate Huawei Cloud SWR image replication and deployment triggers, including read-only checks before creating, updating, or deleting sync and trigger configurations.
 
-## Reference(s): <br>
-- [SWR Automation API Reference Guide](references/swr-automation-api-guide.md) <br>
-- [Task: Image Sync](references/task-image-sync.md) <br>
-- [Task: Trigger Management](references/task-trigger-management.md) <br>
-- [IAM Permission Policies](references/iam-policies.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Common Pitfalls & Solutions](references/common-pitfalls.md) <br>
-- [Huawei Cloud SWR Documentation](https://support.huaweicloud.com/swr/index.html) <br>
-- [hcloud CLI Documentation](https://support.huaweicloud.com/cli/index.html) <br>
-- [Huawei Cloud API Explorer](https://apiexplorer.developer.huaweicloud.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with hcloud CLI command examples and JSON policy snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include verification checklists, IAM policy JSON, and cautions for cloud-changing operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: Mutating Huawei Cloud SWR commands can create, update, or delete sync and trigger configurations that affect live workloads.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege IAM scoped to specific SWR namespaces, repositories, and regions, begin with read-only checks, and require explicit human approval before create, update, or delete commands.
+
+Risk: Enabled auto-deploy triggers and broad conditions such as condition=.* can update CCE or CCI workloads whenever matching images are pushed.
+
+Mitigation: Start with triggers disabled where possible, prefer narrow tag or regex conditions, and verify the target cluster, namespace, workload, and container before enabling automation.
+
+Risk: Image synchronization with override=true can overwrite existing images in target regions.
+
+Mitigation: Default to override=false and use override=true only after verifying the target images and confirming overwrite intent.
+
+Risk: Auto-sync with syncAuto=true persists and continues replicating future image pushes until removed.
+
+Mitigation: Start with syncAuto=false for validation, audit sync configurations, and delete unwanted auto-sync rules when they are no longer needed.
+
+## Reference(s):
+
+- [SWR Automation API Reference Guide](references/swr-automation-api-guide.md)
+- [IAM Permission Policies](references/iam-policies.md)
+- [Task: Image Sync](references/task-image-sync.md)
+- [Task: Trigger Management](references/task-trigger-management.md)
+- [Verification Method](references/verification-method.md)
+- [Common Pitfalls and Solutions](references/common-pitfalls.md)
+- [Huawei Cloud SWR Documentation](https://support.huaweicloud.com/swr/index.html)
+- [hcloud CLI Documentation](https://support.huaweicloud.com/cli/index.html)
+- [Huawei Cloud API Explorer](https://apiexplorer.developer.huaweicloud.com/)
+- [ClawHub Skill Page](https://clawhub.ai/pintudeyudi/skills/huawei-cloud-swr-image-automation)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline hcloud CLI commands and JSON policy examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include cloud operations that require explicit user confirmation and least-privilege Huawei Cloud IAM permissions.]
+
+## Skill Version(s):
+
+0.1.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

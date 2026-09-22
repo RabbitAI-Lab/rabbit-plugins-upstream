@@ -1,45 +1,61 @@
-## Description: <br>
-Transform AI agents from task-followers into proactive partners that anticipate needs and continuously improve with persistent memory, proactive check-ins, security hardening, self-healing patterns, and verification habits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Transforms task-following agents into proactive partners that anticipate needs, preserve working memory, verify outcomes, and improve through guarded routines.
 
-## Publisher: <br>
-[wuzhuhai](https://clawhub.ai/user/wuzhuhai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wuzhuhai](https://clawhub.ai/user/wuzhuhai)
 
-## Use Case: <br>
-Developers and agent users use this skill to configure an AI agent that maintains durable workspace memory, asks useful follow-up questions, performs proactive checks, and applies security and verification routines before reporting work complete. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Durable memory files can retain secrets, sensitive personal details, or stale profile information. <br>
-Mitigation: Set retention limits before use, avoid storing secrets or sensitive personal details, and regularly review, prune, or delete retained memory files. <br>
-Risk: Proactive checks, autonomous work, and spawned agents can exceed the user's intended scope. <br>
-Mitigation: Require approval for calendar, web, account, spawned-agent, public, external, or irreversible actions, and keep spawned agents tracked until completion. <br>
-Risk: External content can contain prompt-injection instructions that conflict with the user's goals. <br>
-Mitigation: Treat fetched content as data rather than instructions, scan for injection patterns, and require human approval before acting on suspicious content. <br>
+## Use Case:
 
+Developers and agent operators use this skill to install a proactive operating pattern for AI agents, including onboarding, memory capture, heartbeat checks, reverse prompting, security checks, and guarded self-improvement.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/wuzhuhai/skills/proactive-agent) <br>
-- [Security Patterns Reference](references/security-patterns.md) <br>
-- [Onboarding Flow Reference](references/onboarding-flow.md) <br>
-- [Hal 9001 Author Profile](https://x.com/halthelobster) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline code blocks, workspace file templates, checklists, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces operating guidance for an agent; generated actions should be reviewed before external, irreversible, or sensitive use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Persistent memory capture may retain sensitive personal, project, or workspace information longer than intended.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Disable or narrow automatic memory capture, exclude secrets and sensitive identifiers, and periodically review retained memory files.
+
+Risk: Updates to operating files such as AGENTS.md, TOOLS.md, or skill files can change future agent behavior.
+
+Mitigation: Require human review before updating operating rules or skill instructions, and keep changes small enough to audit.
+
+Risk: Heartbeat routines, scheduled prompts, and cleanup workflows may encourage autonomous action in areas that need user approval.
+
+Mitigation: Treat scheduled crons, app or tab cleanup, deletion, external messages, posts, purchases, and other public or irreversible actions as opt-in and approval-gated.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/wuzhuhai/skills/proactive-agent)
+- [Publisher Profile](https://clawhub.ai/user/wuzhuhai)
+- [Onboarding Flow Reference](artifact/references/onboarding-flow.md)
+- [Security Patterns Reference](artifact/references/security-patterns.md)
+- [Source Author Profile](https://x.com/halthelobster)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and starter configuration files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes optional workspace memory files and a security audit shell script.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata; artifact frontmatter states 3.1.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

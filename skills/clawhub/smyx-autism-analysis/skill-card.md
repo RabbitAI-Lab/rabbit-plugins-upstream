@@ -1,45 +1,54 @@
-## Description: <br>
-Performs video-based analysis of autism-related child behavior characteristics, identifies core symptom features, and returns structured reports with intervention recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Performs special video analysis on behavioral characteristics of children with autism, identifies core symptom features, provides structured analysis reports and intervention recommendations.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, caregivers, educators, and professionals can use this skill to submit child video files or URLs for preliminary autism spectrum behavior analysis, structured screening-style reports, and intervention guidance. The output is for early screening support and does not replace professional medical diagnosis or clinical evaluation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may send child videos or video URLs to the publisher's remote service for analysis. <br>
-Mitigation: Use only with proper guardian consent and only when the publisher's privacy, retention, deletion, and access-control terms are acceptable. <br>
-Risk: The skill can create or reuse an internal identity, query cloud-stored report history, and persist local authentication tokens. <br>
-Mitigation: Run in a controlled environment, review local token storage before deployment, and clear local credentials and report access when no longer needed. <br>
-Risk: The analysis is autism-related screening support and may be mistaken for a clinical diagnosis. <br>
-Mitigation: Present outputs as preliminary screening information and direct users to qualified medical professionals for diagnosis or clinical evaluation. <br>
+## Use Case:
 
+External users and care-related professionals use this skill to submit child behavior videos or URLs for ASD-oriented screening support, structured analysis reports, and intervention suggestions. The output is screening guidance only and does not replace professional medical diagnosis or clinical evaluation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-autism-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
-- [API interface documentation](artifact/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON structured analysis report with recommendations and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save analysis output to a local file when an output path is provided.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata; artifact frontmatter reports 1.0.7) <br>
+Risk: The security review flags this skill as suspicious because it handles children's health videos with under-disclosed cloud upload, automatic identity/account handling, local token storage, and insecure HTTP endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review carefully before installing; do not use real child videos or identifiable health-related media unless the publisher documents recipients, retention and deletion terms, HTTPS-only transport, token protection, and explicit consent or authorization.
+
+Risk: The skill produces ASD screening-oriented analysis that may be mistaken for clinical diagnosis.
+
+Mitigation: Use outputs as early screening support only and refer suspected ASD cases to qualified medical or clinical professionals for evaluation.
+
+## Reference(s):
+
+- [API Interface Documentation](references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown summaries or JSON-formatted structured analysis results, depending on detail level.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can return ASD behavior analysis findings, risk or screening indicators, intervention suggestions, historical report lists, and report links.]
+
+## Skill Version(s):
+
+1.0.13 (source: server release evidence; artifact frontmatter reports 1.0.14)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

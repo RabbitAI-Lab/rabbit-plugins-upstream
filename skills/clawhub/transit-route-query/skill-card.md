@@ -1,40 +1,54 @@
-## Description: <br>
-市内公交地铁路线查询，自动规划最优换乘方案，地铁优先展示，支持最快/少换乘/少步行三种策略，零配置即装即用。暑期城市出行导航。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries urban bus and metro routes, prioritizes metro options, and returns transfer plans for fastest, fewer-transfer, or less-walking strategies.
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External users use this skill to query same-city bus and metro routes, compare transfer options, and choose fastest, fewer-transfer, or shorter-walking transit plans. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Route queries include origin, destination, and city and are sent through the publisher's cloud proxy. <br>
-Mitigation: Use the skill only when that data sharing is acceptable for the intended users and environment. <br>
-Risk: Transit times, fares, and operating details are estimates that may differ from current local service conditions. <br>
-Mitigation: Confirm time-sensitive travel details with the local transit operator or a live maps application before relying on the result. <br>
+## Use Case:
 
+External users use this skill to ask for same-city public transit directions between an origin and destination, with route plans organized around metro, bus, walking, estimated duration, and transfer details.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/transit-route-query) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API Calls, Guidance] <br>
-**Output Format:** [Markdown text with route summaries, transit segments, walking distances, estimated duration, and estimated fare] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns estimated same-city bus and metro route guidance; route results depend on the publisher cloud proxy and upstream map data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata) <br>
+Risk: User-entered origin, destination, and city information is sent to the skill publisher's cloud proxy for route lookup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid entering sensitive private locations and use the skill only when sharing route query details with the publisher's proxy is acceptable.
+
+Risk: Transit times, fares, and route options are estimates and do not provide real-time official arrival guarantees.
+
+Mitigation: Verify time-sensitive trips, last trains, fares, and service disruptions against local transit operators or a live map application before traveling.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/transit-route-query)
+- [Disclosed cloud proxy endpoint](https://1439498936-bl10af74fl.ap-guangzhou.tencentscf.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown-formatted route summary with transit segments, walking steps, estimated duration, fare estimates, and caveats]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns one route-planning response per query; inputs include origin, destination, city, and optional route strategy.]
+
+## Skill Version(s):
+
+1.0.9 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

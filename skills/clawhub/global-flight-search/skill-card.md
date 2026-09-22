@@ -1,41 +1,58 @@
-## Description: <br>
-全球航班搜索与出境旅行一站式助手，11个工具覆盖国际机票、酒店、签证、安全、插头、退税、汇率、航班座位行李、紧急求助，零配置即装即用。暑假出境航班查询。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Global Flight Search helps agents search international flights and hotels, check seats and baggage, and provide outbound travel guidance for visas, safety, plug standards, tax refunds, exchange rates, and emergency help.
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External travelers and travel-planning agents use this skill to search international flights and hotels, compare baggage and seat details, and check visa, safety, plug, tax-refund, exchange-rate, and emergency information for outbound trips. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Flight, hotel, flight-number, route, date, hotel ID, and currency-pair lookups may send travel-search details to the skill's cloud proxy or a public exchange-rate API. <br>
-Mitigation: Avoid sensitive or confidential itineraries, and only override RG_PROXY or PROXY_TOKEN when the endpoint is controlled and trusted. <br>
-Risk: Visa rules, safety conditions, booking availability, exchange rates, and refund amounts can change or differ from estimates. <br>
-Mitigation: Confirm important travel, payment, visa, safety, and tax-refund decisions with the relevant airline, hotel, government, embassy, or refund provider before acting. <br>
+## Use Case:
 
+External travelers and travel-planning agents use this skill to compare itinerary options and retrieve supporting travel details before booking or departure.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/global-flight-search) <br>
-- [Publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Guidance] <br>
-**Output Format:** [JSON strings and concise travel guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include booking URLs, prices, itinerary details, visa requirements, safety ratings, refund estimates, exchange-rate conversions, and emergency contact information.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.3 (source: server release evidence) <br>
+Risk: Travel, visa, safety, tax refund, and exchange-rate information may be stale or incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify visa, safety, embassy, tax, and exchange details against official sources before acting.
+
+Risk: Flight, hotel, route, date, and itinerary details are sent to a configured RG cloud proxy, and currency codes are sent to a public exchange-rate API.
+
+Mitigation: Install only where those data flows are acceptable; avoid entering sensitive personal data beyond itinerary parameters needed for lookup.
+
+Risk: Booking links and prices are informational and may change.
+
+Mitigation: Complete payments only on trusted booking sites after reviewing provider terms and current prices.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/global-flight-search)
+- [Publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, guidance]
+
+**Output Format:** [JSON-formatted text returned by tool calls, with concise travel details, disclaimers, and follow-up tips.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include booking URLs, prices, local emergency contacts, and travel disclaimers; does not complete purchases, bookings, or payments.]
+
+## Skill Version(s):
+
+1.3.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

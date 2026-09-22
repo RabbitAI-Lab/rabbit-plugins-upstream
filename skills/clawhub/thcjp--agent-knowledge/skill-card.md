@@ -11,29 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to aggregate content from URLs, videos, articles, papers, and social posts into structured knowledge for an agent. The artifact states it is not suitable for copyright-protected media processing or complex decisions that require human judgment. <br>
+Developers and external agent users use this skill to capture, structure, and retrieve knowledge from URLs, videos, articles, papers, and social posts within an agent workflow. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The security evidence says the skill has vague and contradictory scope, requests command execution, and implies network-based content aggregation. <br>
-Mitigation: Constrain tool access before installation, avoid sensitive content and secrets, and require publisher clarification on scope and data handling before trusted use. <br>
+Risk: The security review flags broad command execution and file-writing authority for a generic knowledge workflow. <br>
+Mitigation: Review proposed commands, file writes, and API calls before execution, and run the skill in a supervised or sandboxed agent environment. <br>
+Risk: The security guidance cautions against giving the skill sensitive local data unless storage and handling are clear. <br>
+Mitigation: Avoid sharing secrets or sensitive documents with the skill unless the data handling path is understood and approved. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/agent-knowledge) <br>
-- [Homepage](https://skillhub.cn) <br>
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/agent-knowledge) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, guidance] <br>
-**Output Format:** [Markdown or JSON structured result] <br>
+**Output Type(s):** [Text, Markdown, JSON, Guidance] <br>
+**Output Format:** [Structured text, Markdown, or JSON depending on the requested mode] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include metadata such as template_used, word_count, and style when returning JSON.] <br>
+**Other Properties Related to Output:** [May include structured processing results and metadata about the generated response.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+1.0.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,45 +1,65 @@
-## Description: <br>
-Comprehensive Alibaba Cloud ECS instance diagnostics skill that performs systematic troubleshooting across cloud platform status checks and optional guest OS diagnostics via Cloud Assistant. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Comprehensive Alibaba Cloud ECS instance diagnostics skill that performs systematic troubleshooting for cloud platform status, connectivity, performance, disk, and GuestOS issues via Aliyun CLI, Cloud Monitor, Cloud Assistant, and optional EBS diagnosis APIs.
 
-## Publisher: <br>
-[sdk-team](https://clawhub.ai/user/sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sdk-team](https://clawhub.ai/user/sdk-team)
 
-## Use Case: <br>
-Developers, SREs, and cloud operators use this skill to diagnose Alibaba Cloud ECS connectivity, performance, disk, status, and system-event issues by combining read-only platform checks with optional Cloud Assistant guest OS diagnostics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill combines diagnostics with high-impact remediation paths and remote command execution on ECS instances. <br>
-Mitigation: Start with the read-only RAM policy, use a dedicated least-privilege role, keep Cloud Assistant execution disabled unless needed, and require explicit review before firewall, EIP, instance lifecycle, password, reboot, or guest OS commands. <br>
-Risk: Diagnostic access can expose sensitive cloud environment details if commands or reports are handled carelessly. <br>
-Mitigation: Review commands before execution, never print access keys or secrets, and keep sensitive values out of diagnostic reports. <br>
+## Use Case:
 
+Developers and cloud operations engineers use this skill to diagnose Alibaba Cloud ECS instances that are unreachable, slow, out of disk space, reporting high CPU or memory usage, affected by system events, or experiencing disk IO performance issues.
 
-## Reference(s): <br>
-- [Related Commands](references/related-commands.md) <br>
-- [RAM Policies](references/ram-policies.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [CLI Installation Guide](references/cli-installation-guide.md) <br>
-- [Acceptance Criteria](references/acceptance-criteria.md) <br>
-- [Remote Connection Diagnose Design](references/remote-connection-diagnose-design.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown diagnostic report with inline shell commands and remediation recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires confirmed Alibaba Cloud region and ECS instance identifiers; deep diagnostics require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.3 (source: server release evidence) <br>
+Risk: Installer and plugin-update steps can execute or install code from external Alibaba Cloud distribution paths.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and independently trust the installer and plugin sources before use; prefer documented package-manager or manual installation paths when available.
+
+Risk: Deep diagnostics can run commands inside cloud servers through Cloud Assistant.
+
+Mitigation: Require explicit approval before executing Cloud Assistant commands, review the exact commands first, and use a least-privilege Alibaba Cloud identity.
+
+Risk: Alibaba Cloud AccessKey secrets may be exposed if entered or printed in command lines or chat.
+
+Mitigation: Use existing credential profiles, environment configuration, STS, OAuth, or RAM roles; do not paste, echo, or place AccessKey secrets in examples.
+
+## Reference(s):
+
+- [Aliyun CLI Installation & Configuration Guide](references/cli-installation-guide.md)
+- [Related CLI Commands](references/related-commands.md)
+- [RAM Policies for ECS Diagnostics Skill](references/ram-policies.md)
+- [Verification Methods for ECS Diagnostics](references/verification-method.md)
+- [Alibaba Cloud ECS Remote Connection / Service Access Diagnostic Guide](references/remote-connection-diagnose-design.md)
+- [Alibaba Cloud ECS Disk Performance / IO Bottleneck Diagnostic Guide](references/ebs-disk-performance-diagnose-design.md)
+- [EBS Performance Diagnosis Events Reference](references/ebs-diagnosis-events.md)
+- [Acceptance Criteria: alibabacloud-ecs-diagnose](references/acceptance-criteria.md)
+- [ClawHub skill page](https://clawhub.ai/sdk-team/skills/alibabacloud-ecs-diagnose)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, markdown, code, configuration]
+
+**Output Format:** [Markdown diagnostic guidance with Aliyun CLI commands, optional Python fallback instructions, and structured findings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires user-confirmed Alibaba Cloud region and instance or disk identifiers; Cloud Assistant commands and cloud API calls require appropriate RAM permissions.]
+
+## Skill Version(s):
+
+0.0.4 (source: server release metadata and references/manifest.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

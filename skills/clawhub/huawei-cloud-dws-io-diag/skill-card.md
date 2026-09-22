@@ -1,52 +1,63 @@
-## Description: <br>
-DWS cluster I/O overload root cause diagnosis skill based on KooCLI v3.2.0+ and DWS Autopilot MCP Server that collects I/O metrics, analyzes customer-side or system-side root causes with a three-stage decision tree, and outputs a standardized diagnosis report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+DWS cluster I/O overload root cause diagnosis skill that uses KooCLI and DWS Autopilot MCP Server telemetry to collect metrics, analyze customer-side or system-side root causes with a three-stage decision tree, and output a standardized diagnosis report.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and cloud operations engineers use this skill to investigate Huawei Cloud DWS cluster I/O alarms, high I/O usage, and disk I/O load anomalies. It guides metric collection through KooCLI or the DWS Autopilot MCP Server and produces a diagnosis summary and report grounded in returned monitoring data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may run local hcloud and Python commands and use tools beyond the declared list. <br>
-Mitigation: Review the skill before installation, run it in a scoped environment, and allow only the commands and DWS tools needed for the diagnostic workflow. <br>
-Risk: The workflow handles cloud credential configuration in ways that can expose AK/SK values if used carelessly. <br>
-Mitigation: Use interactive credential setup or a secret manager, avoid putting AK/SK values in command lines or committed YAML files, and restrict configuration file permissions. <br>
-Risk: DWS monitoring data, active-query data, and generated HTML reports can contain sensitive operational information. <br>
-Mitigation: Run the skill only for authorized clusters and treat generated reports as sensitive files with appropriate access controls and retention. <br>
+## Use Case:
 
+Database operators, support engineers, and developers use this skill to investigate Huawei Cloud DWS high I/O alarms, disk I/O load anomalies, and user-initiated I/O diagnosis requests. It gathers DWS metrics, checks host and business activity signals, and produces a tool-grounded diagnosis report.
 
-## Reference(s): <br>
-- [Skill Page](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-dws-io-diag) <br>
-- [CLI Installation Guide - Huawei Cloud DWS I/O Diagnosis](references/cli-installation-guide.md) <br>
-- [DWS Autopilot MCP Server](references/dws-mcp-installation-guide.md) <br>
-- [IAM Policies - DWS I/O Overload Diagnosis](references/iam-policies.md) <br>
-- [Metric Reference - DWS I/O Overload Diagnosis](references/metric-reference.md) <br>
-- [I/O Background Knowledge - DWS I/O Overload Diagnosis](references/io-background.md) <br>
-- [Output Format - DWS I/O Overload Diagnosis](references/output-format.md) <br>
-- [diagnosis_json Output Format Reference](references/diagnosis-json-format.md) <br>
-- [DWS I/O Diagnosis - Scenario Routing and Full Investigation Direction Reference](references/IO_DIAGNOSIS_REF.md) <br>
-- [hcloud Installation Guide](https://support.huaweicloud.com/cli/cli_hcloud_install.html) <br>
-- [DWS API Reference](https://support.huaweicloud.com/api-dws/dws_02_0023.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Structured diagnosis summary plus HTML diagnosis report, with supporting command and configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill requires conclusions to come from actual tool results and marks failed or empty metric queries as unavailable.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The skill handles cloud credentials and detailed DWS production telemetry, including SQL text and operational reports.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only where the operator is authorized to view DWS production telemetry and SQL text, and treat generated HTML reports as sensitive operational records.
+
+Risk: Credential exposure can occur if AK/SK values are placed in command lines, conversations, plaintext files, or readable configuration files.
+
+Mitigation: Use interactive or secret-manager credential setup where possible, avoid putting AK/SK values in command lines or plaintext files, and restrict file permissions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-dws-io-diag)
+- [I/O Background Knowledge - DWS I/O Overload Diagnosis](references/io-background.md)
+- [Metric Reference - DWS I/O Overload Diagnosis](references/metric-reference.md)
+- [DWS I/O Diagnosis - Scenario Routing and Full Investigation Direction Reference](references/IO_DIAGNOSIS_REF.md)
+- [Output Format - DWS I/O Overload Diagnosis](references/output-format.md)
+- [diagnosis_json Output Format Reference](references/diagnosis-json-format.md)
+- [IAM Policies - DWS I/O Overload Diagnosis](references/iam-policies.md)
+- [CLI Installation Guide - Huawei Cloud DWS I/O Diagnosis](references/cli-installation-guide.md)
+- [DWS Autopilot MCP Server](references/dws-mcp-installation-guide.md)
+- [hcloud Installation Guide](https://support.huaweicloud.com/cli/cli_hcloud_install.html)
+- [DWS API Reference](https://support.huaweicloud.com/api-dws/dws_02_0023.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [HTML diagnosis report plus diagnosis_json summary data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The report is generated from live tool results and may include sensitive operational telemetry, SQL text, host details, and timing data.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,54 @@
-## Description: <br>
-Associative memory with spreading activation for persistent, intelligent recall across sessions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Neural Memory Enhanced provides associative memory with spreading activation for persistent recall across agent sessions.
 
-## Publisher: <br>
-[zhuyu28](https://clawhub.ai/user/zhuyu28) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[zhuyu28](https://clawhub.ai/user/zhuyu28)
 
-## Use Case: <br>
-Developers and agent users use this skill to persist, recall, and manage local memories such as decisions, errors, preferences, TODOs, and context across sessions. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Persistent memory can save and automatically reuse conversation context without sufficient consent, scoping, or retention controls. <br>
-Mitigation: Install only when persistent agent memory is intended, keep separate brains for different projects or users, and require confirmation before saving or auto-processing conversation content. <br>
-Risk: Stored memories may include secrets or regulated personal data. <br>
-Mitigation: Avoid storing secrets or regulated personal data, and review memory contents before sharing, transplanting, or reusing a brain. <br>
-Risk: The skill installs and runs a package-managed local memory tool. <br>
-Mitigation: Verify the intended package source before installation and confirm the configured brain name before use. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhuyu28/neural-memory-enhanced) <br>
-- [Declared NeuralMemory project homepage](https://github.com/nhadaututtheky/neural-memory) <br>
+## Use Case:
 
+Developers and external agent users use this skill to retain decisions, facts, errors, preferences, TODOs, and recent context across sessions through local associative memory tools.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON configuration, and tool-call examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides agents to store and retrieve local SQLite-backed memories through NeuralMemory tools.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill can persist conversation details across sessions, including secrets, personal data, regulated information, or client and business details.
+
+Mitigation: Use an isolated environment and store only information that is approved for local retention.
+
+Risk: The release installs unpinned external package code and initialization may change agent configuration.
+
+Mitigation: Pin and verify the neural-memory package version, then inspect configuration changes made by nmem init before enabling the memory server.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zhuyu28/skills/neural-memory-enhanced)
+- [NeuralMemory GitHub project](https://github.com/nhadaututtheky/neural-memory)
+- [ClawHub publisher profile](https://clawhub.ai/user/zhuyu28)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline code blocks and command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides use of local memory tools and MCP configuration; persisted memory content is stored outside the rendered response.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata and artifact _meta.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

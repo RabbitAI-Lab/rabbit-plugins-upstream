@@ -1,52 +1,65 @@
-## Description: <br>
-Provides guidance for Huawei Cloud KooCLI command-line operations, including installation, IAM authentication, credential configuration, command construction, and common error troubleshooting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides guidance for Huawei Cloud KooCLI command-line tool operations, including installation, IAM authentication configuration, access credential configuration, command construction, and common error troubleshooting.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and cloud operators use this skill to install and configure KooCLI, construct Huawei Cloud hcloud commands, troubleshoot command errors, and manage cloud resources with explicit security checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation triggers may apply Huawei Cloud guidance outside explicit KooCLI work. <br>
-Mitigation: Install and use the skill only for explicit Huawei Cloud KooCLI command-line tasks. <br>
-Risk: Credential examples, inline AK/SK parameters, and debug output can expose sensitive authentication material. <br>
-Mitigation: Prefer scoped IAM users, SSO, ECS agency, or profiles over inline AK/SK, and redact debug or raw logs before sharing. <br>
-Risk: Generated commands can modify production resources, security groups, networks, or delete cloud assets. <br>
-Mitigation: Require explicit confirmation before deletion, network, security group, or production changes, and prefer read-only checks before changes. <br>
-Risk: Remote installer scripts can introduce supply-chain risk if executed without verification. <br>
-Mitigation: Verify installer provenance before running remote scripts. <br>
+## Use Case:
 
+Developers, cloud operators, and support engineers use this skill to install and configure Huawei Cloud KooCLI, construct service commands, format output, and troubleshoot common Huawei Cloud CLI errors.
 
-## Reference(s): <br>
-- [Acceptance Criteria](references/acceptance-criteria.md) <br>
-- [KooCLI Error Troubleshooting and FAQ](references/cli-troubleshooting.md) <br>
-- [Common Operation Workflows](references/common-workflows.md) <br>
-- [Core Commands](references/core-commands.md) <br>
-- [IAM Permission Policies](references/iam-policies.md) <br>
-- [Huawei Cloud KooCLI Installation Guide](references/installation-guide.md) <br>
-- [KooCLI Parameter Format Rules and Examples](references/parameter-format.md) <br>
-- [Huawei Cloud Service Catalog and Command Quick Reference](references/service-catalog.md) <br>
-- [Huawei Cloud KooCLI latest version information](https://support.huaweicloud.com/wtsnew-hcli/index.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include hcloud command examples, profile and IAM guidance, troubleshooting steps, and security reminders.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Remote installer examples can execute downloaded shell scripts, including non-interactive install flows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the installer only when Huawei Cloud KooCLI guidance is needed, independently trust and verify the source, and avoid non-interactive remote installer execution unless that review is complete.
+
+Risk: Cloud resource examples may create, modify, expose, or delete resources if followed without review.
+
+Mitigation: Confirm every resource creation, modification, and deletion step explicitly; restrict SSH ingress to approved IP ranges; and keep SSH host-key checking enabled.
+
+Risk: Example credentials or weak access patterns could be copied into real environments.
+
+Mitigation: Replace all example passwords with unique generated secrets or SSH keys and follow least-privilege IAM guidance before running commands.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-cli-guidance)
+- [Huawei Cloud KooCLI Installation Guide](artifact/references/installation-guide.md)
+- [Huawei Cloud KooCLI Core Commands](artifact/references/core-commands.md)
+- [IAM Permission Policies](artifact/references/iam-policies.md)
+- [KooCLI Parameter Format Rules and Examples](artifact/references/parameter-format.md)
+- [Common Operation Workflows](artifact/references/common-workflows.md)
+- [KooCLI Error Troubleshooting and FAQ](artifact/references/cli-troubleshooting.md)
+- [Huawei Cloud Full Service Catalog and Command Quick Reference](artifact/references/service-catalog.md)
+- [Skill Testing Criteria](artifact/references/acceptance-criteria.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell command examples and configuration steps]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Huawei Cloud KooCLI commands, troubleshooting steps, and security cautions for credential and resource operations.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

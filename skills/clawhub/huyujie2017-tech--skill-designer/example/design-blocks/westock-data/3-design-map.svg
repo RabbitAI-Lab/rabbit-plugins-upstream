@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="720" viewBox="0 0 1160 720" font-family="Microsoft YaHei, PingFang SC, sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#6e7681"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#e05252"/>
+    </marker>
+  </defs>
+
+  <rect width="1160" height="720" fill="#0d1117"/>
+  <text x="40" y="42" fill="#e6edf3" font-size="22" font-weight="bold">westock-data 1.0.7 → skill-designer　设计原则映射地图</text>
+  <text x="40" y="66" fill="#8b949e" font-size="13">元设计（产能）→ 亮点条目（存货）→ 我们的落点（行动）　｜　★ = 最高价值条目</text>
+
+  <!-- Row 1: Meta designs -->
+  <g>
+    <rect x="40" y="88" width="340" height="104" rx="8" fill="#161b22" stroke="#ffa657" stroke-width="2"/>
+    <text x="58" y="116" fill="#ffa657" font-size="16" font-weight="bold">M1　失败模式驱动设计</text>
+    <text x="58" y="140" fill="#c9d1d9" font-size="12.5">先枚举「agent 会怎么错」，再把每条错</text>
+    <text x="58" y="158" fill="#c9d1d9" font-size="12.5">写成可执行边界 —— 纪律来源是观察到的</text>
+    <text x="58" y="176" fill="#8b949e" font-size="12">失败，不是推导出最佳实践</text>
+
+    <rect x="410" y="88" width="340" height="104" rx="8" fill="#161b22" stroke="#7ee787" stroke-width="2"/>
+    <text x="428" y="116" fill="#7ee787" font-size="16" font-weight="bold">M2　成本显性化</text>
+    <text x="428" y="140" fill="#c9d1d9" font-size="12.5">每条纪律写出「不这么做的代价」——</text>
+    <text x="428" y="158" fill="#c9d1d9" font-size="12.5">理由栏不是解释，是执行动力</text>
+    <text x="428" y="176" fill="#8b949e" font-size="12">（与既有「成本感知设计」同源强化）</text>
+
+    <rect x="780" y="88" width="340" height="104" rx="8" fill="#161b22" stroke="#79c0ff" stroke-width="2"/>
+    <text x="798" y="116" fill="#79c0ff" font-size="16" font-weight="bold">M3　约束前置 + 完整性自检</text>
+    <text x="798" y="140" fill="#c9d1d9" font-size="12.5">最易违反的约束放必读层；多落点必须</text>
+    <text x="798" y="158" fill="#c9d1d9" font-size="12.5">能机器校验一致 —— 漏项的前置比不前置</text>
+    <text x="798" y="176" fill="#e05252" font-size="12">更危险（它自己在此翻车：D1）</text>
+  </g>
+
+  <!-- Arrows row1 -> row2 -->
+  <path d="M210,192 L210,222" stroke="#6e7681" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M580,192 L580,222" stroke="#6e7681" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M950,192 L950,222" stroke="#6e7681" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Row 2: highlights -->
+  <g>
+    <rect x="40" y="226" width="340" height="112" rx="8" fill="#11161d" stroke="#30363d"/>
+    <text x="58" y="250" fill="#8b949e" font-size="12">被解释亮点（6 条）</text>
+    <text x="58" y="274" fill="#e6edf3" font-size="13">A-501 ★★ 纪律带可数上限</text>
+    <text x="58" y="294" fill="#e6edf3" font-size="13">A-506 正负双向路由「不要」列</text>
+    <text x="58" y="314" fill="#e6edf3" font-size="13">A-507 失败分级（空结果≠不支持）</text>
+    <text x="58" y="332" fill="#6e7681" font-size="12">A-508 禁止二次解析 · A-509 禁自创参数</text>
+
+    <rect x="410" y="226" width="340" height="112" rx="8" fill="#11161d" stroke="#30363d"/>
+    <text x="428" y="250" fill="#8b949e" font-size="12">被解释亮点（4 条）</text>
+    <text x="428" y="274" fill="#e6edf3" font-size="13">A-505 成本写进理由栏</text>
+    <text x="428" y="294" fill="#e6edf3" font-size="13">A-504 按查询意图切 references</text>
+    <text x="428" y="314" fill="#e6edf3" font-size="13">A-503 ★ 认知盲区索引</text>
+    <text x="428" y="332" fill="#6e7681" font-size="12">A-501 --help 至多 1 次</text>
+
+    <rect x="780" y="226" width="340" height="112" rx="8" fill="#11161d" stroke="#30363d"/>
+    <text x="798" y="250" fill="#8b949e" font-size="12">被解释亮点（3 条）</text>
+    <text x="798" y="274" fill="#e6edf3" font-size="13">A-510 description 内嵌边界指针</text>
+    <text x="798" y="294" fill="#e6edf3" font-size="13">A-504 主路由承载铁律</text>
+    <text x="798" y="314" fill="#e6edf3" font-size="13">A-512 依赖声明含「缺失处置」</text>
+    <text x="798" y="332" fill="#6e7681" font-size="12">反证：D1 批量例外表只列 1/7 条</text>
+  </g>
+
+  <!-- Arrows row2 -> row3 -->
+  <path d="M210,338 L210,368" stroke="#6e7681" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M580,338 L580,368" stroke="#6e7681" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M950,338 L950,368" stroke="#6e7681" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Row 3: skill-designer actions -->
+  <text x="40" y="392" fill="#e6edf3" font-size="15" font-weight="bold">skill-designer 落点（回照自己后的行动）</text>
+
+  <g>
+    <rect x="40" y="406" width="530" height="96" rx="8" fill="#1c1113" stroke="#e05252" stroke-width="2"/>
+    <text x="58" y="432" fill="#e05252" font-size="14" font-weight="bold">🔴 P0-1　主路由补「可触线规则」（回照出的真 bug）</text>
+    <text x="58" y="454" fill="#c9d1d9" font-size="12.5">SKILL.md grep「至多|最多|不超过」= 0 命中；references 里全是验收基准，</text>
+    <text x="58" y="472" fill="#c9d1d9" font-size="12.5">无一条运行时行为上限 —— 我们教「模糊规则等于没有规则」却没做到。</text>
+    <text x="58" y="490" fill="#8b949e" font-size="12">加 4 条：澄清≤2 轮 · 加载≤4 份 · 回退≤2 次 · 打回≤1 次</text>
+
+    <rect x="600" y="406" width="520" height="96" rx="8" fill="#1c1113" stroke="#e05252" stroke-width="2"/>
+    <text x="618" y="432" fill="#e05252" font-size="14" font-weight="bold">🔴 P0-2　validate 加第 12 项「纪律可触线性」</text>
+    <text x="618" y="454" fill="#c9d1d9" font-size="12.5">半软 WARN 的降级判据应是「是否机器可判」，而非「是否历史产物」——</text>
+    <text x="618" y="472" fill="#c9d1d9" font-size="12.5">判据错位。新检查项必做反向测试 + 三布局自检。</text>
+    <text x="618" y="490" fill="#8b949e" font-size="12">源头：A-502 可验证性决定严格度</text>
+  </g>
+
+  <g>
+    <rect x="40" y="516" width="530" height="80" rx="8" fill="#161b22" stroke="#d29922" stroke-width="2"/>
+    <text x="58" y="542" fill="#d29922" font-size="14" font-weight="bold">🟡 P1-1　新建 glossary-traps.md 认知盲区索引</text>
+    <text x="58" y="564" fill="#c9d1d9" font-size="12.5">我们有「易混淆消歧」（管两个概念像），缺「单个概念就不可推断」的清单：</text>
+    <text x="58" y="582" fill="#8b949e" font-size="12">B04 vs B05 · 蓝图两套骨架 · IQS/EVS/TRACE · 设计期 vs 发布期</text>
+
+    <rect x="600" y="516" width="520" height="80" rx="8" fill="#161b22" stroke="#d29922" stroke-width="2"/>
+    <text x="618" y="542" fill="#d29922" font-size="14" font-weight="bold">🟡 P1-2　外部依赖字段扩展（D2 反面教材）</text>
+    <text x="618" y="564" fill="#c9d1d9" font-size="12.5">blueprint-template L123 只填依赖名，不填「缺失时处置」—— 同样的坑。</text>
+    <text x="618" y="582" fill="#8b949e" font-size="12">扩为：依赖__ · 缺失处置__ · 验证命令__</text>
+  </g>
+
+  <!-- Bottom: not absorbed -->
+  <rect x="40" y="616" width="1080" height="72" rx="8" fill="#11161d" stroke="#30363d"/>
+  <text x="58" y="640" fill="#8b949e" font-size="13" font-weight="bold">不收录项（已有对等物，登记防重复入库）</text>
+  <text x="58" y="662" fill="#6e7681" font-size="12">能力边界矩阵 → capability-boundary.md 更强　｜　易混淆消歧 → A-401 三层路由表　｜　失败给替代 → A-409　｜　双层错误分类 → A-408/A-410　｜　SHA256 信任链 → 技术栈不相关　｜　场景库 → design-blocks-library</text>
+</svg>

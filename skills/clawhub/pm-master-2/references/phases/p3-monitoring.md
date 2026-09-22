@@ -2,7 +2,7 @@
 
 > The monitoring phase runs **continuously** while execution progresses: track variance, control risk, protect the baseline, ensure the project runs as expected against the baseline.
 > It runs concurrently with **P2 Execution** within the `operational` state (entering execution ⟺ `lifecycle_state=operational`; monitoring is a sustained activity during that period).
-> State-machine placement: `监控` ⊆ `operational`. Leaving this phase via the **G3→4 closeout gate** flips `closed`.
+> State-machine placement: `monitoring` ⊆ `operational`. Leaving this phase via the **G3→4 closeout gate** flips `closed`.
 
 ## 1. Objectives
 
@@ -40,7 +40,7 @@ Hard gate (G3→4, automated checks, all required):
 - **No pending changes**: All change requests closed (the "change" control item in the control engine does not exceed `open_change_high`).
 - **Accepted deliverables**: `artifacts.closure_report` produced/registered (deliverable acceptance signed off).
 - **Lessons captured**: `artifacts.lessons_learned` produced/registered.
-- Program extra: All benefits realized/closed (`program.benefits[].status` ∈ realized/实现/closed).
+- Program extra: All benefits realized/closed (`program.benefits[].status` ∈ realized/achieved/closed).
 
 ## 6. Phase-Gate Approval (Gate · G3→4 Closeout Gate)
 
@@ -52,9 +52,9 @@ Hard gate (G3→4, automated checks, all required):
 ```bash
 SKILL_DIR=<this skill directory>
 # Assess whether closeout can be entered (lists unmet items, does not change state)
-python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.yaml --to 收尾
-# Approve: flip lifecycle_state → closed, phase → 收尾, record phase gate, produce review report
-python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.yaml --to 收尾 --approve "张三(sponsor)"
+python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.yaml --to closeout
+# Approve: flip lifecycle_state → closed, phase → closeout, record phase gate, produce review report
+python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.yaml --to closeout --approve "Zhang San (sponsor)"
 ```
 
 ## 7. Recommended Scripts
@@ -63,7 +63,7 @@ python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.ya
 - `evm.py`: Rolling EVM (actuals fill ev/ac).
 - `schedule_health.py`: waterfall/hybrid schedule variance.
 - `consistency_check.py`: Final consistency verification before closeout.
-- `gate_engine.py --to 收尾`: Closeout-gate assessment/approval.
+- `gate_engine.py --to closeout`: Closeout-gate assessment/approval.
 
 ## 8. Handoff
 

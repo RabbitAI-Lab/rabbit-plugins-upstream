@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides read-only AWS CLI workflows for cloud inventory, health checks, security audits, cost analysis, and CloudTrail or configuration change investigation. <br>
+aws-infra helps agents run read-only AWS CLI infrastructure checks across resource inventory, health, security, cost, and change-tracking workflows. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, cloud administrators, security teams, and finance operators can use this skill to inspect AWS environments through read-only CLI queries for operations, audit, cost review, and troubleshooting tasks. <br>
+Developers, operations teams, and cloud administrators use this skill to inspect AWS resources, review security posture and costs, and troubleshoot infrastructure state through read-only AWS CLI queries. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: AWS inventory, cost, IAM, and audit metadata may be exposed if callback delivery is enabled to an untrusted destination. <br>
-Mitigation: Use callback URLs only for destinations the operator trusts and is authorized to receive cloud account metadata. <br>
-Risk: Persistent AWS CLI profile or region changes can affect later commands outside the immediate inspection task. <br>
-Mitigation: Prefer per-command --profile and --region flags, short-lived credentials, and least-privilege read-only AWS roles. <br>
-Risk: Some documented workflows inspect sensitive IAM, security group, CloudTrail, and billing data. <br>
-Mitigation: Review the skill before installation and run it only in authorized AWS accounts with read-only permissions. <br>
+Risk: The skill can cause an agent to run AWS CLI commands and write local report files. <br>
+Mitigation: Install only if this execution and file-writing behavior is acceptable for the target environment, and review exported AWS results before committing or sharing them. <br>
+Risk: AWS credential and profile handling is under-disclosed for a skill that performs broad AWS infrastructure inspection. <br>
+Mitigation: Use AWS SSO or short-lived role credentials, avoid pasting secrets into commands or shared terminals, and pass explicit --profile and --region flags where possible. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/aws-infra) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [Skill homepage](https://skillhub.cn) <br>
+- [ClawHub aws-infra Skill Page](https://clawhub.ai/thcjp/skills/aws-infra) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline bash code blocks and tabular AWS CLI output examples] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with inline AWS CLI commands and optional table, JSON, text, or file outputs.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces read-only AWS CLI inspection guidance; command results depend on the user's AWS account, IAM permissions, selected profile, and region.] <br>
+**Other Properties Related to Output:** [May write local report files and depends on caller-provided AWS credentials or profiles, target regions, and AWS read-only permissions.] <br>
 
 ## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+1.0.4 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

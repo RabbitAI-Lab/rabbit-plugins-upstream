@@ -1,0 +1,125 @@
+{
+  "skill": "tencent-docs-1.0.41",
+  "highlights": [
+    {
+      "id": "A-201",
+      "name": "文件目录自述图",
+      "block": "B02",
+      "trigger": "skill 文件数 > 10，agent 需要定位「去哪找什么」时",
+      "evidence": "SKILL.md L94-129 内嵌完整文件树，每行一句话职责（aipage_pack.js  # 本地 HTML 打包成 .aipage）",
+      "point": "SKILL.md 里放一张「文件树 + 每文件一句话职责」的自述图，agent 免去 ls 猜测，一次读完全图；validate 可低成本校验「目录图与实际清单一致」（也见 B07）"
+    },
+    {
+      "id": "A-202",
+      "name": "品类能力总表带推荐度",
+      "block": "B02",
+      "trigger": "同一诉求有多种可选载体（如 9 种 doc_type）时",
+      "evidence": "SKILL.md L14-27 品类表，每类带 doc_type 值 + ⭐ 推荐度 + 一句说明（「Word 传统格式，排版一般 ⭐⭐」）",
+      "point": "可选方案表不只列「有什么」，还列推荐度——agent 无需逐个试错即可按推荐档位选型（也见 B06）"
+    },
+    {
+      "id": "A-203",
+      "name": "能力缺口静默遥测",
+      "block": "B04",
+      "trigger": "用户意图在工具集里找不到对应能力时",
+      "evidence": "references/unsupported_feature_reporting.md——上报时机两条 + 参数规范三字段（feature 动宾短语 / user_prompt 用户原话不改写 / doc_type），「静默调用，无需告知用户」",
+      "point": "把「做不了」从死路变成数据通路：结构化上报（意图原话 + 场景类型）回流上游，且不打断用户体验（也见 B10）"
+    },
+    {
+      "id": "A-204",
+      "name": "正负双路由 + 错误码互证",
+      "block": "B06",
+      "trigger": "多品类/多工具易混淆、需要防品类横跳时",
+      "evidence": "SKILL.md L62「严禁用 A 品类的工具去改 B 品类文档」+ L209 错误码 400016 专指品类误用并给出纠正步骤",
+      "point": "路由不只说「该用什么」，还说「千万别用什么」；且负向规则有对应错误码兜底——文档纪律与运行时校验互相印证，双重防线（也见 B07）"
+    },
+    {
+      "id": "A-205",
+      "name": "量化触发条件的硬纪律",
+      "block": "B06",
+      "trigger": "想把性能/成本纪律写进 skill 时",
+      "evidence": "SKILL.md L187「连续 3 次及以上的数据写入……必须使用批量写入接口，严禁用单条写入接口循环多次调用」",
+      "point": "纪律写成「可判定阈值 + 强制动词 + 违规后果」，不写「建议尽量」——agent 能自检是否触线，规则才可执行（也见 B08）"
+    },
+    {
+      "id": "A-206",
+      "name": "三级渐进披露（品类模块变体）",
+      "block": "B07",
+      "trigger": "领域含 2–8 个正交子域、全塞 SKILL.md 装不下时",
+      "evidence": "SKILL.md（~240 行路由器）→ smartcanvas/doc/slide/sheet 各自 entry.md（品类全工作流）→ component-*.md ×12（单组件语法）；slide/entry.md L163「每页用到什么组件再读哪个文件，不要一次读全」",
+      "point": "比 cloudbase A-075 的「子 skill 套件」更轻的 suite 变体：路由器 + N 个 entry.md 品类模块 + 组件级规范，token 成本按需发生"
+    },
+    {
+      "id": "A-207",
+      "name": "状态脚本模式（探测+决策一次调用）",
+      "block": "B07",
+      "trigger": "写类操作前需要先探查外部系统状态再分支时",
+      "evidence": "get_slide_info.sh 返回单行 JSON {\"action\":\"write_design_md\",\"reason\":\"design_is_empty\",...}，entry.md L49-54 给 reason→下一步决策表；「不把 MCP 原始大 JSON 写入上下文」",
+      "point": "把「探测+决策」封装成一个脚本：输出单行机器可判定 JSON + 文档层查表，agent 不读大 JSON、不做自由判断（也见 B08）"
+    },
+    {
+      "id": "A-208",
+      "name": "设计契约模式（DESIGN 前置 + 自检门禁）",
+      "block": "B07",
+      "trigger": "复杂产出物（PPT/报告/蓝图）质量依赖前置设计时",
+      "evidence": "design-principle.md——8 段必填结构 + 「不满足以下任一项，重写 DESIGN」自检门禁（有具体 hex/字体/母版边界/逐页映射表/视觉锚点/密度约束）",
+      "point": "复杂写类操作前置一份结构化契约（不是叙事），契约末尾带可判定的自检门禁；契约只回答「应该长什么样」，内容大纲与契约分离"
+    },
+    {
+      "id": "A-209",
+      "name": "人机协作时序硬规则（⛔ 停止点）",
+      "block": "B07",
+      "trigger": "工作流包含「需要用户在真实世界完成动作再继续」的环节时",
+      "evidence": "auth.md L17「⛔ 严格禁止：收到 AUTH_REQUIRED 后，必须先向用户展示授权链接，等待用户发送新消息确认……」+ L79「⛔ AI 注意：展示后必须停止等待，不得自动调用任何工具」",
+      "point": "凡需要用户动作的等待，显式声明停止点（⛔ AI 注意），列出每个输出分支的去向话术——防 agent 抢跑轮询，把时序协议写成文档内硬约束（也见 B08）"
+    },
+    {
+      "id": "A-210",
+      "name": "失败降级路径明文化",
+      "block": "B07",
+      "trigger": "每条工作流的故障模式可预知时",
+      "evidence": "SKILL.md L189「文件格式是否支持由后端判定，收到『不支持』错误时再降级到其他通路」；smartcanvas/entry.md L74「图片过大上传失败必须先压缩再传，严禁回退使用 URL」；edit 定位「find 优先→read 降级」",
+      "point": "每条工作流写明首选通路 + 触发条件 + 降级去向 + 禁止行为，降级是有向边，不是「自行想办法」"
+    },
+    {
+      "id": "A-211",
+      "name": "读-改配对协议",
+      "block": "B08",
+      "trigger": "编辑型操作有锚点/版本一致性风险时",
+      "evidence": "smartcanvas/entry.md L349「UPDATE 和 DELETE 操作的 id 参数必须来源于 find 或 read 的返回结果，禁止未获取文档数据直接传入 id」+ readonly 组件禁作锚点",
+      "point": "所有写操作强制「先读后改」配对：锚点必须来自最近一次真实读取，杜绝盲改；只读对象显式标注并禁用作锚点"
+    },
+    {
+      "id": "A-212",
+      "name": "边界场景规范节",
+      "block": "B08",
+      "trigger": "工具有长尾边界（容器删空、嵌套删除、只读块）时",
+      "evidence": "smartcanvas/entry.md L413-497「边界场景处理规范」五节，逐条「场景→操作方式→反例 JSON」（删剩 1 列整体替换、空 Callout 连容器删、TableRow 禁止单独存在）",
+      "point": "长尾边界不靠 agent 试错，独立成节前置成文档，每条带反例 JSON 示范错误做法"
+    },
+    {
+      "id": "A-213",
+      "name": "串行纪律 + 显式参数防并发错乱",
+      "block": "B08",
+      "trigger": "底层写入有顺序/锁敏感性时",
+      "evidence": "slide/entry.md L164-168「严禁并发调用，必须严格串行；每次调用必须显式传 page_index，禁止依赖调用顺序决定页面顺序」+ 末尾追加策略（预计算 page_index = base + k - 1，批内不动态取总数）",
+      "point": "把分布式写入的顺序风险在调用纪律层解决：强制串行 + 显式序号 + 预计算区间，不依赖隐式默认行为"
+    },
+    {
+      "id": "A-214",
+      "name": "完成后校验清单 + 强制回复规范",
+      "block": "B10",
+      "trigger": "写类工作流的交付验收环节",
+      "evidence": "slide/entry.md §6——校验五项（页数/关键文本/残留空白页/DESIGN 符合度/顺序对账）+ 6.1 强制给链接（来源三级优先级）+ 6.2「回复只说：完成了什么/影响了哪些页/链接/风险点，不要输出内部长流程」",
+      "point": "交付确定性双保险——验收有清单（不一致先修正再回复「完成」）+ 回复有格式（说什么、不说什么、链接从哪来）"
+    },
+    {
+      "id": "A-215",
+      "name": "外置 prompt 资源化",
+      "block": "B07",
+      "trigger": "SKILL.md body 逼近 token 红线但内容必须保留时",
+      "evidence": "doc/doc_format/prompt/ 三个 prompt.txt（场景识别/纯文本转 XML/样式解析）+ templates/ 5 个场景 JSON（schema 带 description/required/multiple 字段）；doc/entry.md 仅 60 行纯转发",
+      "point": "第三条瘦身路径——不是删内容，而是把长 prompt/模板移成按需读取的资源文件，路由层留一句指引；模板 schema 自描述（字段含义写进 JSON），agent 读一个文件即能生成（也见 B02）"
+    }
+  ]
+}

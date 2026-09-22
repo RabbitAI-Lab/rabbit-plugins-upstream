@@ -1,0 +1,633 @@
+[
+  {
+    "id": "init-create",
+    "name": "从零创建蓝图（init）",
+    "description": "验证 Phase 0 三问确认后，init_blueprint 能生成完整蓝图骨架。",
+    "command": "init",
+    "args": [
+      "{workdir}/init-test",
+      "--name",
+      "init-test",
+      "--channel",
+      "light",
+      "--entry",
+      "create"
+    ],
+    "checks": {
+      "files_exist": [
+        "{workdir}/init-test/index.md",
+        "{workdir}/init-test/01-条件.md",
+        "{workdir}/init-test/10-复盘.md"
+      ],
+      "content_contains": {
+        "{workdir}/init-test/index.md": [
+          "init-test — 技能蓝图",
+          "平台 | workbuddy"
+        ]
+      }
+    }
+  },
+  {
+    "id": "draft-imagine",
+    "name": "我拟路径生成草稿（draft）",
+    "description": "验证 draft_blueprint 能根据核心回答预填 B01–B10 草稿字段。",
+    "command": "draft",
+    "args": [
+      "{workdir}/draft-test",
+      "--name",
+      "draft-test",
+      "--answers",
+      "{\"problem\":\"从会议纪要自动提取行动项\",\"scenario\":\"每次开完会后把纪要粘贴给AI\",\"platform\":\"workbuddy\",\"entry\":\"create\",\"priority\":\"不要漏掉任何行动项\"}"
+    ],
+    "checks": {
+      "files_exist": [
+        "{workdir}/draft-test/01-条件.md",
+        "{workdir}/draft-test/05-分析.md"
+      ],
+      "content_contains": {
+        "{workdir}/draft-test/01-条件.md": [
+          "【AI 建议】",
+          "结论：做",
+          "（AI 已判定·待复核）"
+        ],
+        "{workdir}/draft-test/05-分析.md": [
+          "输入 I：",
+          "输出 O：",
+          "【AI 建议】"
+        ]
+      }
+    }
+  },
+  {
+    "id": "check-complete",
+    "name": "完整蓝图检查（check）",
+    "description": "生成一个已填充字段的蓝图，验证 check_blueprint 返回完整通过，且机器算出的 IQS 为满分。",
+    "setup": "fill-check-blueprint",
+    "command": "check",
+    "args": [
+      "{workdir}/check-test",
+      "--json"
+    ],
+    "checks": {
+      "stdout_contains": [
+        "\"ok\": true",
+        "\"exit_code\": 0",
+        "\"score\": 100"
+      ]
+    }
+  },
+  {
+    "id": "check-write-iqs",
+    "name": "机器算 IQS 并回填（check --write-iqs）",
+    "description": "验证 check_blueprint 能机器算出 IQS 蓝图完备度并回填进 09-结果.md 的「内部质量分」字段。",
+    "setup": "fill-check-blueprint",
+    "command": "check",
+    "args": [
+      "{workdir}/check-test",
+      "--write-iqs"
+    ],
+    "checks": {
+      "stdout_contains": [
+        "IQS 蓝图完备度：100/100",
+        "已回填"
+      ],
+      "content_contains": {
+        "{workdir}/check-test/09-结果.md": [
+          "内部质量分（IQS，蓝图完备度）：100"
+        ]
+      }
+    }
+  },
+  {
+    "id": "check-iqs-empty",
+    "name": "空蓝图 IQS 应为 0（check --json）",
+    "description": "验证全新未填蓝图（init 后原样）IQS 判为 0——说明型文字与分组标题不得误判为已填。",
+    "setup": "init-empty-blueprint",
+    "command": "check",
+    "args": [
+      "{workdir}/empty-test",
+      "--json"
+    ],
+    "expect_exit_code": 1,
+    "checks": {
+      "stdout_contains": [
+        "\"score\": 0",
+        "\"exit_code\": 1"
+      ]
+    }
+  },
+  {
+    "id": "export-brief",
+    "name": "蓝图交接产物导出（export）",
+    "description": "验证完整蓝图能导出 summary.md / brief.json / SKETCH.md，且三种产物均含决策溯源表（关键决策↔来源格↔类型）。",
+    "setup": "fill-export-blueprint",
+    "command": "export",
+    "args": [
+      "{workdir}/export-test",
+      "--output",
+      "{workdir}/export-test/brief",
+      "--format",
+      "all"
+    ],
+    "checks": {
+      "files_exist": [
+        "{workdir}/export-test/brief/summary.md",
+        "{workdir}/export-test/brief/brief.json",
+        "{workdir}/export-test/brief/SKETCH.md"
+      ],
+      "content_contains": {
+        "{workdir}/export-test/brief/summary.md": [
+          "决策溯源表"
+        ],
+        "{workdir}/export-test/brief/brief.json": [
+          "provenance",
+          "source_block",
+          "schema_version"
+        ],
+        "{workdir}/export-test/brief/SKETCH.md": [
+          "决策溯源"
+        ]
+      }
+    }
+  },
+  {
+    "id": "visualize-blueprint",
+    "name": "蓝图可视化 SVG（visualize）",
+    "description": "验证 visualize_blueprint 能为完整蓝图生成 SVG。",
+    "setup": "fill-export-blueprint",
+    "command": "visualize",
+    "args": [
+      "{workdir}/export-test",
+      "--output",
+      "{workdir}/export-test/blueprint.svg"
+    ],
+    "checks": {
+      "files_exist": [
+        "{workdir}/export-test/blueprint.svg"
+      ],
+      "content_contains": {
+        "{workdir}/export-test/blueprint.svg": [
+          "<svg",
+          "B01"
+        ]
+      }
+    }
+  },
+  {
+    "id": "b09-summary",
+    "name": "B09 结果摘要图（b09-summary）",
+    "description": "验证 b09_summary 能从 09-结果.md 提取分数与 BR-5 五维并生成 SVG。",
+    "setup": "fill-b09-blueprint",
+    "command": "b09-summary",
+    "args": [
+      "{workdir}/b09-test",
+      "--output",
+      "{workdir}/b09-test/b09-summary.svg"
+    ],
+    "checks": {
+      "files_exist": [
+        "{workdir}/b09-test/b09-summary.svg"
+      ],
+      "content_contains": {
+        "{workdir}/b09-test/b09-summary.svg": [
+          "<svg",
+          "综合评分",
+          "BR-5 五维就绪度",
+          "边界可信",
+          "验证可证"
+        ]
+      }
+    }
+  },
+  {
+    "id": "b09-auto-iqs",
+    "name": "只评 BR-5、其余分数机器自动算（b09-summary --json）",
+    "description": "验证 IQS 未填时由 check_blueprint 逐格机器算、EVS 由 BR-5 均分换算、综合分按 IQS×EVS/100 推出。",
+    "setup": "fill-br5-only-blueprint",
+    "command": "b09-summary",
+    "args": [
+      "{workdir}/br5-test",
+      "--json"
+    ],
+    "checks": {
+      "stdout_contains": [
+        "\"iqs\": 100",
+        "\"iqs_source\": \"机器算\"",
+        "\"evs\": 90",
+        "\"evs_source\": \"由 BR-5 换算\"",
+        "\"overall\": 90",
+        "\"overall_source\": \"机器算\""
+      ]
+    }
+  },
+  {
+    "id": "check-iqs-br5-link",
+    "name": "IQS × BR-5 联动：待补格标注涨哪一维（check --json）",
+    "description": "验证待补格能标注它支撑的 BR-5 维度（如 B05→T/R/E），使 IQS 缺口与 BR-5 低分可联动定位。",
+    "setup": "init-empty-blueprint",
+    "command": "check",
+    "args": [
+      "{workdir}/empty-test"
+    ],
+    "expect_exit_code": 1,
+    "checks": {
+      "stdout_contains": [
+        "B05(涨T/R/E)",
+        "B06(涨T/R/A)",
+        "B07(涨C)",
+        "B08(涨E)"
+      ]
+    }
+  },
+  {
+    "id": "structure-list",
+    "name": "结构框架列表（structure --list）",
+    "description": "验证 6 套 archetype 与选型规则能被列出。",
+    "command": "structure",
+    "args": [
+      "--list"
+    ],
+    "checks": {
+      "stdout_contains": [
+        "minimal",
+        "pipeline",
+        "tool",
+        "knowledge",
+        "template",
+        "full",
+        "选型规则"
+      ]
+    }
+  },
+  {
+    "id": "structure-render",
+    "name": "文件结构图 SVG（structure）",
+    "description": "验证 render_structure 能为蓝图生成含目录与五段骨架的结构图。",
+    "setup": "fill-export-blueprint",
+    "command": "structure",
+    "args": [
+      "{workdir}/export-test",
+      "--output",
+      "{workdir}/export-test/structure.svg"
+    ],
+    "checks": {
+      "files_exist": [
+        "{workdir}/export-test/structure.svg"
+      ],
+      "content_contains": {
+        "{workdir}/export-test/structure.svg": [
+          "<svg",
+          "SKILL.md 五段章节骨架"
+        ]
+      }
+    }
+  },
+  {
+    "id": "structure-md",
+    "name": "文件结构图文本树（structure --format md）",
+    "description": "验证 structure 能输出可粘贴的 Markdown 文本树。",
+    "setup": "fill-export-blueprint",
+    "command": "structure",
+    "args": [
+      "{workdir}/export-test",
+      "--format",
+      "md",
+      "--output",
+      "{workdir}/export-test/structure.md"
+    ],
+    "checks": {
+      "files_exist": [
+        "{workdir}/export-test/structure.md"
+      ],
+      "content_contains": {
+        "{workdir}/export-test/structure.md": [
+          "文件结构图",
+          "SKILL.md 五段章节骨架"
+        ]
+      }
+    }
+  },
+  {
+    "id": "infer-design",
+    "name": "设计推断引擎（infer --json）",
+    "description": "验证 infer_design 能从一句话需求推出「交互模式 × 内容模式」与结构框架 archetype，且产出型（Generator）优先于澄清型（Inversion）。读书笔记→template。",
+    "command": "infer",
+    "args": [
+      "--answers",
+      "{\"problem\":\"把读书笔记整理成结构化卡片沉淀到 Obsidian\"}",
+      "--json"
+    ],
+    "checks": {
+      "stdout_contains": [
+        "\"interaction\": \"Generator + 知识路由\"",
+        "\"content\": \"D 模板渲染\"",
+        "\"id\": \"template\"",
+        "\"consistent_with_pattern\": true",
+        "产出型优先"
+      ]
+    }
+  },
+  {
+    "id": "infer-design-tool",
+    "name": "设计推断引擎：外部调用判为 tool（infer）",
+    "description": "验证存在外部 API / 数据调用时，决策表把结构判为 tool（工具编排型），而非被知识信号带偏。",
+    "command": "infer",
+    "args": [
+      "--answers",
+      "{\"problem\":\"拉 A 股实时行情做量能评分并出 HTML 报告\"}",
+      "--json"
+    ],
+    "checks": {
+      "stdout_contains": [
+        "\"id\": \"tool\"",
+        "外部 API"
+      ]
+    }
+  },
+  {
+    "id": "proto-draft",
+    "name": "四步流一键出方案（proto）",
+    "description": "验证 blueprint_proto 按概念讨论最低标准 A 组校验后一键生成完整草稿 + 内容要点总览图；B 组缺失（flow）时标注粗版。",
+    "command": "proto",
+    "args": [
+      "{workdir}/proto-test",
+      "--name",
+      "proto-test",
+      "--answers",
+      "{\"problem\":\"从会议纪要自动提取行动项\",\"audience\":\"产品经理每次开完会后\",\"platform\":\"workbuddy\",\"entry\":\"create\",\"priority\":\"不要漏掉任何行动项\",\"example\":\"把今天的周会纪要粘贴进来，输出待办清单\"}"
+    ],
+    "checks": {
+      "files_exist": [
+        "{workdir}/proto-test/01-条件.md",
+        "{workdir}/proto-test/blueprint.svg"
+      ],
+      "content_contains": {
+        "{workdir}/proto-test/01-条件.md": [
+          "【AI 建议】",
+          "结论：做"
+        ],
+        "{workdir}/proto-test/blueprint.svg": [
+          "<svg",
+          "内容要点总览"
+        ]
+      },
+      "stdout_contains": [
+        "A 组达标",
+        "内容要点总览图",
+        "粗版",
+        "设计模式"
+      ]
+    }
+  },
+  {
+    "id": "proto-a-gate",
+    "name": "概念讨论 A 组缺失拒绝出方案（proto gate）",
+    "description": "验证 A 组硬门槛（problem/audience）缺失时 proto 拒绝出方案并列出缺项。",
+    "command": "proto",
+    "args": [
+      "{workdir}/proto-gate-test",
+      "--name",
+      "proto-gate-test",
+      "--answers",
+      "{\"problem\":\"只说了做什么\"}"
+    ],
+    "expect_exit_code": 1,
+    "checks": {
+      "stdout_contains": [
+        "A 组硬门槛缺失",
+        "A2 给谁用"
+      ]
+    }
+  },
+  {
+    "id": "deepen-accept",
+    "name": "③深化设计：批量采纳 + 拍板 + 勾验收（deepen）",
+    "description": "验证 deepen_blueprint 能一次性完成③深化设计：采纳全部【AI 建议】、给【需用户拍板】字段定向赋值、勾验收 checklist；且不产生「- -」双破折号、不改动 > 开头的说明块。",
+    "setup": "proto-deepen-blueprint",
+    "command": "deepen",
+    "args": [
+      "{workdir}/deepen-test",
+      "--accept-all",
+      "--set",
+      "B02.正交性=与 card-generator 是上下游：它按既定模板渲染，本 skill 负责素材整理",
+      "--tick",
+      "B01,B02,B03,B04,B05,B06,B07,B09,B10"
+    ],
+    "checks": {
+      "files_exist": [
+        "{workdir}/deepen-test/01-条件.md"
+      ],
+      "content_not_contains": {
+        "{workdir}/deepen-test/01-条件.md": [
+          "- - "
+        ],
+        "{workdir}/deepen-test/02-事实.md": [
+          "- - "
+        ]
+      },
+      "content_contains": {
+        "{workdir}/deepen-test/02-事实.md": [
+          "与 card-generator 是上下游"
+        ],
+        "{workdir}/deepen-test/01-条件.md": [
+          "☑ 准入四问全部通过"
+        ]
+      },
+      "stdout_contains": [
+        "采纳",
+        "勾验收",
+        "剩余标记"
+      ]
+    }
+  },
+  {
+    "id": "deepen-scan",
+    "name": "③深化设计：只读扫描待决项（deepen 无参数）",
+    "description": "不带任何写参数时 deepen 只扫描不改动：统计【AI 建议】/【待拍板】/【未勾】数量，且跳过 > 开头的说明块（否则「标【需用户拍板】的必须…」这句说明会被误计为待拍板项）。",
+    "setup": "proto-deepen-blueprint",
+    "command": "deepen",
+    "args": [
+      "{workdir}/deepen-test"
+    ],
+    "checks": {
+      "stdout_contains": [
+        "只读扫描",
+        "AI建议",
+        "待拍板",
+        "未勾",
+        "合计"
+      ]
+    }
+  },
+  {
+    "id": "export-allow-gap",
+    "name": "④施工蓝图：带缺口导出（export --allow-gap）",
+    "description": "B08「真实场景跑过」必须等 skill 落地后才有，硬等 10/10 会让④永远导不出来。验证 --allow-gap 在 IQS ≥ 阈值时放行并把遗留缺口写进产物；同时验证 IQS < 阈值时仍拒绝（见 export-gap-rejected 用例）。",
+    "setup": "deepen-ready-blueprint",
+    "command": "export",
+    "args": [
+      "{workdir}/deepen-test",
+      "--format",
+      "all",
+      "--allow-gap"
+    ],
+    "checks": {
+      "files_exist": [
+        "{workdir}/deepen-test/brief/summary.md",
+        "{workdir}/deepen-test/brief/brief.json"
+      ],
+      "content_contains": {
+        "{workdir}/deepen-test/brief/summary.md": [
+          "遗留缺口",
+          "带缺口导出"
+        ],
+        "{workdir}/deepen-test/brief/brief.json": [
+          "\"gaps\""
+        ]
+      },
+      "stdout_contains": [
+        "带缺口导出",
+        "已生成"
+      ]
+    }
+  },
+  {
+    "id": "export-gap-rejected",
+    "name": "④施工蓝图：缺口过多仍拒绝导出（export --allow-gap 阈值）",
+    "description": "②初步方案阶段 IQS 仅 86，即便加了 --allow-gap 也应被阈值（默认 90）挡下——否则带缺口导出会退化成「随便导出」。",
+    "setup": "proto-deepen-blueprint",
+    "command": "export",
+    "args": [
+      "{workdir}/deepen-test",
+      "--format",
+      "all",
+      "--allow-gap"
+    ],
+    "expect_exit_code": 1,
+    "checks": {
+      "stdout_contains": [
+        "缺口太多",
+        "先补再导出"
+      ]
+    }
+  },
+  {
+    "id": "export-warn-reason-visible",
+    "name": "④施工蓝图：仅警告被拦时，拒绝消息必须回显真实原因（F1）",
+    "description": "C7 边界密度属 warnings（不是 errors）：十格全填齐时 errors==0、IQS 100，check 退出码 2。旧行为下 export_brief 取 `error or next_action`——此刻 error 为空，于是把 next_action（「全部 10 格已完成——跑…进入交接落地」）当成拦截原因打印，用户看到的是**拒绝语 + 鼓励语并存**，真实原因一次都没出现。本用例钉住修复后的行为：必须回显 C7 的真实原因，且不得出现那句鼓励语。",
+    "setup": "fill-noboundary-blueprint",
+    "command": "export",
+    "args": [
+      "{workdir}/noboundary-test",
+      "--format",
+      "json",
+      "--stdout"
+    ],
+    "expect_exit_code": 1,
+    "checks": {
+      "stdout_contains": [
+        "无法导出交接产物",
+        "C7",
+        "边界条目"
+      ],
+      "stdout_not_contains": [
+        "进入交接落地",
+        "全部 10 格已完成"
+      ]
+    }
+  },
+  {
+    "id": "proto-suite-no-cloudbase",
+    "name": "②初步方案：suite 触发词不含外部样本案例领域词（proto）",
+    "description": "suite 型蓝图（多子域工作台）的触发词建议不应混入 cloudbase 外部样本案例的领域词（auth/数据库/云函数）——触发词必须泛化，否则污染用户触发词、伤 A 维触发可辨。",
+    "command": "proto",
+    "args": [
+      "{workdir}/suite-test",
+      "--name",
+      "suite-test",
+      "--answers",
+      "{\"problem\":\"个人投资者需要一个统一工作台，一站式完成信息收集、信息整理、投资组合监控、组合调整\",\"audience\":\"个人投资者（非机构散户）\",\"platform\":\"workbuddy\",\"entry\":\"create\",\"flow\":\"分几个模块独立完成\",\"priority\":\"界面简洁、操作直观、数据准确\",\"example\":\"投资者早上打开工作台看组合涨跌汇总\",\"boundary\":\"不提供投资建议，不代客下单\"}"
+    ],
+    "checks": {
+      "content_not_contains": {
+        "{workdir}/suite-test/06-决策.md": [
+          "云函数",
+          "auth",
+          "数据库"
+        ]
+      },
+      "content_contains": {
+        "{workdir}/suite-test/06-决策.md": [
+          "套件型",
+          "触发词"
+        ]
+      }
+    }
+  },
+  {
+    "id": "export-sketch-no-conclusion-as-nongoal",
+    "name": "④施工蓝图：SKETCH 不做的事取非目标而非结论（export）",
+    "description": "SKETCH 的「不做的事」字段应取 B01 非目标清单，而非「结论：做」——否则语义完全反了。反向断言：不得出现「不做的事：做」，且必须含用户真实非目标。",
+    "setup": "suite-workbench-ready",
+    "command": "export",
+    "args": [
+      "{workdir}/suite-test",
+      "--format",
+      "sketch",
+      "--allow-gap"
+    ],
+    "checks": {
+      "content_not_contains": {
+        "{workdir}/suite-test/brief/SKETCH.md": [
+          "不做的事：做"
+        ]
+      },
+      "content_contains": {
+        "{workdir}/suite-test/brief/SKETCH.md": [
+          "不提供投资建议"
+        ]
+      }
+    }
+  },
+  {
+    "id": "proto-description-five-filled",
+    "name": "②初步方案：description 五件事已程序化生成（proto）",
+    "description": "index.md 的 description 不应留「<五件事 description 初稿…>」空壳占位符，而应含 WHAT/触发词等实质内容——元 skill 教别人五件事填全，自己产物不能留空壳。",
+    "command": "proto",
+    "args": [
+      "{workdir}/suite-test",
+      "--name",
+      "suite-test",
+      "--answers",
+      "{\"problem\":\"个人投资者需要一个统一工作台，一站式完成信息收集、信息整理、投资组合监控、组合调整\",\"audience\":\"个人投资者（非机构散户）\",\"platform\":\"workbuddy\",\"entry\":\"create\",\"flow\":\"分几个模块独立完成\",\"priority\":\"界面简洁、操作直观、数据准确\",\"example\":\"投资者早上打开工作台看组合涨跌汇总\"}"
+    ],
+    "checks": {
+      "content_not_contains": {
+        "{workdir}/suite-test/index.md": [
+          "<五件事 description 初稿"
+        ]
+      },
+      "content_contains": {
+        "{workdir}/suite-test/index.md": [
+          "做什么：",
+          "触发词：",
+          "何时用："
+        ]
+      }
+    }
+  },
+  {
+    "id": "evals-selfcheck",
+    "name": "A 维（触发可辨）机器证据：65 条真实说法用例全部通过",
+    "description": "触发词用例须全部通过——正例证明覆盖用户会说的启动方式，负例证明不该接管的场景已显式排除，且正负之间无同词冲突。这条同时是回归防线：日后谁改 description 删掉某个触发词，这里立刻红。断言刻意不写死「65/65」这类随用例数变化的数字，只断言结构（正例/负例/冲突 0），否则加一条用例就会误红。",
+    "command": "evals",
+    "args": [],
+    "checks": {
+      "stdout_contains": [
+        "正例",
+        "负例",
+        "冲突 0"
+      ]
+    }
+  }
+]

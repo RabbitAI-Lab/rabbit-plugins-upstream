@@ -1,50 +1,65 @@
-## Description: <br>
-Deploy production LangGraph agents on AWS Bedrock AgentCore. Use for (1) multi-agent systems with orchestrator and specialist agent patterns, (2) building stateful agents with persistent cross-session memory, (3) connecting external tools via AgentCore Gateway (MCP, Lambda, APIs), (4) managing shared context across distributed agents, or (5) deploying complex agent ecosystems via CLI with production observability and scaling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Deploy production LangGraph agents on AWS Bedrock AgentCore for multi-agent orchestration, persistent memory, external tools through AgentCore Gateway, shared context, and CLI-based deployment with observability and scaling.
 
-## Publisher: <br>
-[killerapp](https://clawhub.ai/user/killerapp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[killerapp](https://clawhub.ai/user/killerapp)
 
-## Use Case: <br>
-Developers and engineers use this skill to design, deploy, observe, and operate LangGraph-based multi-agent systems on AWS Bedrock AgentCore, including runtime, memory, gateway, and CLI workflows. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Deployment, cleanup, logging, and memory examples can affect AWS account resources. <br>
-Mitigation: Use least-privileged AWS credentials and confirm AWS profile, account, and region before running deploy, logging, memory, or destroy commands. <br>
-Risk: AgentCore memory workflows may store sensitive, personal, or regulated data across sessions. <br>
-Mitigation: Avoid storing secrets, PII, or regulated data unless retention and deletion controls are in place. <br>
-Risk: Production deployment examples may create or modify cloud infrastructure. <br>
-Mitigation: Prefer dry-run or non-production environments before applying changes to production resources. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/killerapp/skills/aws-agentcore-langgraph) <br>
-- [AWS Bedrock AgentCore starter toolkit](https://github.com/aws/bedrock-agentcore-starter-toolkit) <br>
-- [AgentCore CLI Reference](references/agentcore-cli.md) <br>
-- [AgentCore Runtime Patterns](references/agentcore-runtime.md) <br>
-- [AgentCore Memory Integration](references/agentcore-memory.md) <br>
-- [AgentCore Gateway Integration](references/agentcore-gateway.md) <br>
-- [LangGraph 1.0 Patterns](references/langgraph-patterns.md) <br>
-- [AWS AgentCore runtime documentation](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime.html) <br>
-- [AWS AgentCore memory documentation](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/memory.html) <br>
-- [AWS AgentCore gateway documentation](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway.html) <br>
+## Use Case:
 
+Developers and engineers use this skill to design, deploy, inspect, and troubleshoot LangGraph agents running on AWS Bedrock AgentCore. It is suited for multi-agent systems that need runtime deployment, managed memory, Gateway tool integration, CloudWatch observability, and AWS CLI operations.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with Python examples, shell commands, configuration notes, and troubleshooting guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes optional shell scripts that query AWS Bedrock AgentCore resources and CloudWatch logs.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Cloud deployment commands can create AWS resources, persistent memory, and external service integrations.
+
+Mitigation: Use a least-privilege AWS profile, confirm the target account and region, and review what data will be stored or sent before running AgentCore memory or Gateway examples.
+
+Risk: Destroy and delete commands can remove AgentCore resources.
+
+Mitigation: Verify the exact resource identifiers, account, and region before running cleanup commands, and use dry-run or inspection commands when available.
+
+Risk: Unpinned dependencies can change behavior across environments.
+
+Mitigation: Install in a virtual environment and prefer pinned versions or a lockfile for repeatable deployments.
+
+## Reference(s):
+
+- [AgentCore CLI Reference](references/agentcore-cli.md)
+- [AgentCore Runtime Patterns](references/agentcore-runtime.md)
+- [AgentCore Memory Integration](references/agentcore-memory.md)
+- [AgentCore Gateway Integration](references/agentcore-gateway.md)
+- [LangGraph 1.0 Patterns](references/langgraph-patterns.md)
+- [AWS Bedrock AgentCore starter toolkit](https://github.com/aws/bedrock-agentcore-starter-toolkit)
+- [AWS Bedrock AgentCore Runtime documentation](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime.html)
+- [AWS Bedrock AgentCore Memory documentation](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/memory.html)
+- [AWS Bedrock AgentCore Gateway documentation](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway.html)
+- [LangGraph documentation](https://langchain-ai.github.io/langgraph/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline Python and bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes operational helper scripts for AWS AgentCore resource listing, runtime details, memory details, and CloudWatch log tailing.]
+
+## Skill Version(s):
+
+1.0.2 (source: server evidence release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

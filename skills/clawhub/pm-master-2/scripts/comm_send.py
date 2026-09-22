@@ -1,42 +1,64 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PM Master · 对外邮件审批门（Communication Send Gate）
-====================================================
-正式邮件是**对外、不可逆、安全敏感**动作。本脚本是发送前的**硬审批门 + 审计闸**：
-读取安装期策略（技能根 config.yaml）与项目数据（project.yaml.communication），在真正委派给
-邮件后端之前强制校验「是否启用 / 是否经审批 / 收件人是否在联络簿 / 外部邮件是否须 sponsor 会签」，
-通过后才调用所选后端（agent-mail / himalaya / gog / smtp）实际发送，并写一条审计记录到
-governance.communications[]。
+PM Master - Outbound Email Approval Gate (Communication Send Gate)
+===================================================================
 
-分层（policy / data 分离，见 config.yaml 与 project-schema.md）：
-  - 策略/护栏（安装期，不可被项目覆盖）：email.enabled / email.backend / email.default_from /
-    email.requires_send_approval
-  - 数据（项目期）：communication.contacts[]（联络簿）、communication.from、approval_override
+Formal email is an **external, irreversible, security-sensitive** action. This
+script is a **hard approval gate + audit trail** in front of sending: it reads the
+install-time policy (config.yaml at the skill root) and the project data
+(project.yaml -> communication), and before delegating to a mail backend it
+enforces:
 
-安全默认：
-  - requires_send_approval=true 且无 --approve  → exit 1（不发）
-  - approval_override.require_sponsor_cosign=true 且含外部收件人，但 approver 不含 sponsor → exit 1
-  - --dry-run：仅打印将要发送的邮件与后端命令、写审计（status=dry-run），**不真正外发**（便于测试/复核）
+  * whether email is enabled at all,
+  * whether an approval is required and supplied by an authorized approver,
+  * whether recipients are in the contact book,
+  * whether external recipients require a sponsor co-signature.
 
-用法：
-  # 按角色解析收件人（sponsor,pm → 查 communication.contacts[] 得邮箱），审批后发送
-  python3 comm_send.py --project <项目>/project.yaml \\
-      --to "sponsor,pm" --subject "里程碑 M2 达成" --body-file draft.md --approve "张三(PM)"
+Only after these pass does it invoke the selected backend (agent-mail / himalaya
+/ gog / smtp) and write an audit entry to governance.communications[].
 
-  #  dry-run 复核（不真正发送）
-  python3 comm_send.py --project <项目>/project.yaml --to ops@corp.com \\
-      --subject "周报" --body-file draft.md --approve "张三(PM)" --dry-run
+Security model (addresses ClawHub T09):
+  * Approval is NOT proven by the mere presence of a free-form string.
+  * The approver identity must match an entry in the admin-controlled allowlist
+    `email.approvers` (and `email.sponsor_approvers` for external mail).
+  * The requester (who triggered the send) is recorded separately from the
+    approver, and self-approval is forbidden by default.
+  * There is no cryptographic token yet; the allowlist + separation of requester
+    vs approver is the enforceable authorization boundary for a local CLI skill.
+    For a hosted deployment, pass an authenticated identity via the
+    PM_MASTER_REQUESTER / PM_MASTER_APPROVER environment variables instead of
+    trusting --approve from the agent.
 
-  # 外部收件人 + 须 sponsor 会签
-  python3 comm_send.py --project <项目>/project.yaml --to client@external.com \\
-      --subject "验收通知" --body-file draft.md --approve "李四(sponsor)"
+Safe defaults:
+  * requires_send_approval=true and no valid approver -> exit 1 (no send)
+  * approval_override.require_sponsor_cosign=true with external recipients but
+    approver not in sponsor_approvers -> exit 1
+  * --dry-run: prints the would-be email + backend command, writes an audit
+    record (status=dry-run), does NOT actually send.
+
+Usage:
+  # Resolve recipients by role (sponsor,pm -> looked up in communication.contacts[]),
+  # then send after approval
+  python3 comm_send.py --project <project>/project.yaml \
+      --to "sponsor,pm" --subject "Milestone M2 achieved" --body-file draft.md \
+      --approve "zhangsan(pm)" --requester "agent"
+
+  # dry-run review (no real send)
+  python3 comm_send.py --project <project>/project.yaml --to ops@example.com \
+      --subject "Weekly report" --body-file draft.md --approve "zhangsan(pm)" --dry-run
+
+  # external recipient + sponsor co-sign required
+  python3 comm_send.py --project <project>/project.yaml --to client@external.example.com \
+      --subject "Acceptance notice" --body-file draft.md --approve "lisi(sponsor)"
 """
 import os
+import re
 import sys
 import argparse
 import subprocess
 import datetime
+import uuid
 import tempfile
 
 try:
@@ -50,7 +72,7 @@ DEFAULT_CONFIG = os.path.join(os.path.dirname(SCRIPT_DIR), 'config.yaml')
 
 def load(path):
     if yaml is None:
-        raise RuntimeError("需要 PyYAML，请先 pip install pyyaml")
+        raise RuntimeError("PyYAML required: pip install pyyaml")
     with open(path, 'r', encoding='utf-8') as f:
         return yaml.safe_load(f)
 
@@ -65,13 +87,14 @@ def has(path):
 
 
 def die(msg, code=1):
-    print(f"✗ {msg}", file=sys.stderr)
+    print(f"x {msg}", file=sys.stderr)
     sys.exit(code)
 
 
-# ---------- 收件人解析 ----------
+# ---------- Recipient resolution ----------
 def resolve_recipients(tokens, contacts):
-    """tokens: 逗号分隔的角色名/姓名/邮箱。返回 (emails[], external_flags[])。"""
+    """tokens: comma-separated role names / names / emails.
+    Returns (emails[], external_flags[])."""
     emails = []
     external = []
     known = {(str(c.get('role', '')).strip().lower(),
@@ -81,7 +104,7 @@ def resolve_recipients(tokens, contacts):
     known_emails = {e for (_, _, e) in known}
     for tok in [t.strip() for t in tokens.split(',') if t.strip()]:
         low = tok.lower()
-        if '@' in tok:                      # 显式邮箱
+        if '@' in tok:                      # explicit email
             emails.append(tok)
             external.append(tok.strip().lower() not in known_emails)
             continue
@@ -95,15 +118,15 @@ def resolve_recipients(tokens, contacts):
             emails.append(hit)
             external.append(str(hit).strip().lower() not in known_emails)
         else:
-            die(f"未知收件人（不在 communication.contacts[] 且非邮箱格式）：{tok}")
+            die(f"Unknown recipient (not in communication.contacts[] and not an email): {tok}")
     if not emails:
-        die("收件人为空")
+        die("Recipient list is empty")
     return emails, external
 
 
-# ---------- 后端命令构造 ----------
+# ---------- Backend command construction ----------
 def build_backend_cmd(backend, frm, to_csv, subject, body_file, smtp_cfg):
-    """返回后端 CLI 命令列表（best-effort，具体 flag 以所装邮件技能为准）。"""
+    """Return the backend CLI command list, or None for smtp (draft only)."""
     if backend == 'agent-mail':
         return ['agentmail', 'send', '--to', to_csv, '--subject', subject, '--body-file', body_file]
     if backend == 'himalaya':
@@ -113,83 +136,143 @@ def build_backend_cmd(backend, frm, to_csv, subject, body_file, smtp_cfg):
         return ['gog', 'mail', 'send', '--to', to_csv, '--subject', subject, '--body-file', body_file]
     if backend == 'smtp':
         if not (smtp_cfg or {}).get('host'):
-            die("backend=smtp 但未在 config.yaml 配置 smtp.host")
-        # 通用 SMTP 走 sendmail 风格不便内联；此处产出 EML 草稿交用户用邮件客户端发送
+            die("backend=smtp but config.yaml has no smtp.host")
+        # Generic SMTP has no inline CLI; produce an EML draft for the user's client
         return None
-    die(f"未知邮件后端：{backend}（可选 agent-mail/himalaya/gog/smtp）")
+    die(f"Unknown mail backend: {backend} (use agent-mail/himalaya/gog/smtp)")
+
+
+def _base_identity(value):
+    """Normalize a stakeholder identity: drop a trailing (ROLE) qualifier and lowercase.
+
+    'ZhangSan(PM)' -> 'zhangsan'  |  'LiSi(sponsor)' -> 'lisi'  |  'PM' -> 'pm'
+    """
+    text = re.sub(r'\(.*?\)', '', (value or '')).strip()
+    return text.lower()
+
+
+def resolve_approver(approve_arg, email_cfg, requester, data=None):
+    """Enforce the allowlist-based authorization boundary (ClawHub T09-1).
+
+    Returns the normalized approver string, or None when no approval was given
+    (the caller treats that as a dry-run / denied state).
+
+    The authorized approver set is the union of:
+      * config.email.approvers (admin-declared allowlist), and
+      * the project's own declared authorities (project.yaml: project.pm, project.sponsor).
+
+    Membership is matched on the normalized base identity: a trailing "(ROLE)"
+    qualifier is ignored, so "ZhangSan(PM)" matches a declared "ZhangSan".
+    Self-approval is forbidden by default. If no authority can be derived at all
+    the send is rejected (fail-closed) instead of accepting any string.
+    """
+    approver = (approve_arg or '').strip()
+    if not approver:
+        return None
+    allowlist = [_base_identity(x) for x in (email_cfg.get('approvers') or [])]
+    if isinstance(data, dict):
+        proj = data.get('project') or {}
+        for role_key in ('pm', 'sponsor'):
+            declared = proj.get(role_key)
+            if declared:
+                allowlist.append(_base_identity(declared))
+    allowlist = [x for x in allowlist if x]
+    if not allowlist:
+        die("No authorized approver can be derived (set config.email.approvers "
+            "or declare project.pm/project.sponsor). Refusing an unverifiable approval.")
+    if _base_identity(approver) not in allowlist:
+        die(f"Approver '{approver}' is not an authorized approver "
+            f"(config.email.approvers or project.pm/project.sponsor)")
+    if (email_cfg.get('forbid_self_approval', True) and requester
+            and _base_identity(approver) == (requester or '').strip().lower()):
+        die("Self-approval forbidden: approver must differ from requester")
+    return approver
 
 
 def main():
-    ap = argparse.ArgumentParser(description="PM Master 对外邮件审批门（Communication Send Gate）")
+    ap = argparse.ArgumentParser(
+        description="PM Master outbound email approval gate (Communication Send Gate)")
     ap.add_argument('--project', required=True)
-    ap.add_argument('--to', required=True, help='收件人：角色名/姓名（解析自 communication.contacts[]）或邮箱，逗号分隔')
+    ap.add_argument('--to', required=True,
+                    help='Recipients: role name / person name (resolved from communication.contacts[]) or email, comma-separated')
     ap.add_argument('--subject', required=True)
-    ap.add_argument('--body', help='正文（内联字符串）')
-    ap.add_argument('--body-file', help='正文（文件路径，推荐，支持多行）')
-    ap.add_argument('--cc', default='', help='抄送，规则同 --to')
+    ap.add_argument('--body', help='Body (inline string)')
+    ap.add_argument('--body-file', help='Body (file path, recommended for multi-line)')
+    ap.add_argument('--cc', default='', help='Cc, same rules as --to')
     ap.add_argument('--approve', metavar='APPROVER', default=None,
-                    help='审批人（如 "张三(PM)"）。requires_send_approval=true 时必填')
-    ap.add_argument('--dry-run', action='store_true', help='仅打印+审计，不真正外发')
-    ap.add_argument('--config', default=DEFAULT_CONFIG, help='安装期策略文件（默认技能根 config.yaml）')
+                    help='Approver identity (must be in config.email.approvers), e.g. "zhangsan(pm)"')
+    ap.add_argument('--requester', default=None,
+                    help='Identity that requested the send (defaults to $PM_MASTER_REQUESTER); recorded separately')
+    ap.add_argument('--dry-run', action='store_true', help='Print + audit only, do not really send')
+    ap.add_argument('--config', default=DEFAULT_CONFIG, help='Install-time policy file (skill root config.yaml)')
     a = ap.parse_args()
 
-    # ---- 载入策略与数据 ----
+    # ---- Load policy and data ----
     if not has(a.project):
-        die(f"未找到 project.yaml: {a.project}")
+        die(f"project.yaml not found: {a.project}")
     if not has(a.config):
-        die(f"未找到安装期配置 config.yaml: {a.config}（请在技能根创建，定义 email.* 策略）")
+        die(f"Install-time config not found: {a.config} (create config.yaml at skill root defining email.*)")
     data = load(a.project)
     cfg = load(a.config) or {}
     email_cfg = cfg.get('email') or {}
     comm = data.get('communication') or {}
 
-    # ---- 邮件内容 ----
+    # ---- Body content ----
     body = a.body
     if a.body_file:
         if not has(a.body_file):
-            die(f"正文文件不存在: {a.body_file}")
+            die(f"Body file not found: {a.body_file}")
         with open(a.body_file, 'r', encoding='utf-8') as f:
             body = f.read()
     if not body or not body.strip():
-        die("邮件正文为空（需 --body 或 --body-file）")
+        die("Email body is empty (provide --body or --body-file)")
 
-    # ---- 护栏 1：能力开关 ----
+    # ---- Guardrail 1: capability switch ----
     if not email_cfg.get('enabled', False):
-        die("邮件功能未启用（config.email.enabled=false，安装期禁用）")
+        die("Email is disabled (config.email.enabled=false, disabled at install time)")
 
-    # ---- 收件人解析 ----
+    # ---- Recipient resolution ----
     contacts = comm.get('contacts') or []
     to_emails, to_ext = resolve_recipients(a.to, contacts)
     cc_emails, cc_ext = ([], []) if not a.cc else resolve_recipients(a.cc, contacts)
     external_any = any(to_ext) or any(cc_ext)
 
-    # ---- 护栏 2：强制审批 ----
-    if email_cfg.get('requires_send_approval', True) and not a.approve:
-        die("未经审批，禁止发送（config.email.requires_send_approval=true，须带 --approve <审批人>）")
-    # ---- 护栏 3：外部邮件须 sponsor 会签（项目级仅可收紧）----
+    # ---- Guardrail 2 & 3: approval + sponsor co-sign (allowlist-bound) ----
+    requester = (a.requester or os.environ.get('PM_MASTER_REQUESTER') or 'agent').strip().lower()
+    if email_cfg.get('requires_send_approval', True):
+        if not a.approve:
+            die("Approval required but not provided (config.email.requires_send_approval=true; pass --approve <approver>)")
     ov = comm.get('approval_override') or {}
     if ov.get('require_sponsor_cosign') and external_any:
-        if not (a.approve and 'sponsor' in a.approve.lower()):
-            die("含外部收件人且 require_sponsor_cosign=true，审批人须含 sponsor（如 \"李四(sponsor)\"）")
+        sponsor_allow = [_base_identity(x) for x in (email_cfg.get('sponsor_approvers') or [])]
+        declared_sponsor = ((data.get('project') or {}).get('sponsor')
+                            if isinstance(data, dict) else None)
+        if declared_sponsor:
+            sponsor_allow.append(_base_identity(declared_sponsor))
+        sponsor_allow = [x for x in sponsor_allow if x]
+        if not (a.approve and _base_identity(a.approve) in sponsor_allow):
+            die("External recipient(s) present and require_sponsor_cosign=true; "
+                "approver must be in config.email.sponsor_approvers or be the declared project.sponsor")
+    approver = resolve_approver(a.approve, email_cfg, requester, data)
 
     frm = comm.get('from') or email_cfg.get('default_from') or ''
     backend = email_cfg.get('backend', 'agent-mail')
     to_csv = ','.join(to_emails)
     cc_csv = ','.join(cc_emails)
 
-    # ---- 打印草稿（呈现待批/复核）----
-    print("=== 邮件草稿（Communication Send Gate）===")
-    print(f"发件人 : {frm or '(未配置，使用后端默认)'}")
-    print(f"收件人 : {to_csv}")
+    # ---- Show draft (for review) ----
+    print("=== Email Draft (Communication Send Gate) ===")
+    print(f"From    : {frm or '(unset, use backend default)'}")
+    print(f"To      : {to_csv}")
     if cc_csv:
-        print(f"抄送   : {cc_csv}")
-    print(f"主题   : {a.subject}")
-    print(f"后端   : {backend}  | 审批人: {a.approve or '（无）'}")
-    print("---- 正文 ----")
+        print(f"Cc      : {cc_csv}")
+    print(f"Subject : {a.subject}")
+    print(f"Backend : {backend}  | Approver: {approver or '(none)'}")
+    print("---- Body ----")
     print(body.strip())
     print("--------------")
 
-    # ---- 审计记录 ----
+    # ---- Audit record ----
     gov = data.setdefault('governance', {})
     log = gov.setdefault('communications', [])
     record = {
@@ -197,20 +280,24 @@ def main():
         'cc': cc_emails,
         'subject': a.subject,
         'on': datetime.date.today().isoformat(),
-        'approved_by': a.approve,
+        'approved_by': approver,
+        'requested_by': requester,
         'backend': backend,
         'status': 'dry-run' if a.dry_run else 'pending',
     }
 
-    # ---- dry-run：仅审计，不发送 ----
+    # ---- dry-run: audit only, no send ----
     if a.dry_run:
         record['status'] = 'dry-run'
         log.append(record)
         save(a.project, data)
-        print("\n⚠ --dry-run：未真正外发；已写审计记录（governance.communications）。")
+        print("\n! --dry-run: not actually sent; audit record written (governance.communications).")
         sys.exit(0)
 
-    # ---- 实际发送：委派后端 ----
+    if approver is None:
+        die("Approval required before sending (no authorized approver supplied)")
+
+    # ---- Real send: delegate to backend ----
     body_file = None
     try:
         tmp = tempfile.NamedTemporaryFile('w', suffix='.eml', delete=False, encoding='utf-8')
@@ -219,35 +306,41 @@ def main():
         body_file = tmp.name
         cmd = build_backend_cmd(backend, frm, to_csv, a.subject, body_file,
                                 email_cfg.get('smtp'))
-        if cmd is None:   # smtp 无 CLI：落盘 EML 草稿，交用户客户端发送
-            draft = os.path.join(os.path.dirname(os.path.abspath(a.project)),
-                                 'artifacts', f"draft_{a.subject[:20]}_{record['on']}.eml")
-            os.makedirs(os.path.dirname(draft), exist_ok=True)
+        if cmd is None:   # smtp has no CLI: write an EML draft, confined to artifacts/
+            artifact_dir = os.path.realpath(os.path.join(
+                os.path.dirname(os.path.abspath(a.project)), 'artifacts'))
+            os.makedirs(artifact_dir, exist_ok=True)
+            # T05 fix: never derive a filesystem path from the subject; sanitize + confine.
+            safe = re.sub(r'[^A-Za-z0-9_\-]', '_', (a.subject or 'draft'))[:40]
+            candidate = os.path.realpath(os.path.join(artifact_dir, f"draft_{safe}_{uuid.uuid4().hex[:8]}.eml"))
+            if os.path.commonpath([artifact_dir, candidate]) != artifact_dir:
+                die("Draft path escapes the artifact directory (path-traversal defense)")
+            draft = candidate
             with open(draft, 'w', encoding='utf-8') as f:
                 f.write(f"From: {frm}\nTo: {to_csv}\nCc: {cc_csv}\nSubject: {a.subject}\n\n{body}")
             record['status'] = 'draft-saved'
             record['draft'] = os.path.relpath(draft, os.path.dirname(os.path.abspath(a.project)))
             log.append(record)
             save(a.project, data)
-            print(f"\n✓ 已生成 EML 草稿（后端=smtp 无 CLI）：{record['draft']}；请经邮件客户端发送。")
+            print(f"\n> EML draft generated (backend=smtp has no CLI): {record['draft']}; send via your mail client.")
             sys.exit(0)
-        # 执行后端命令
+        # Execute backend command
         p = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
         if p.returncode == 0:
             record['status'] = 'sent'
             log.append(record)
             save(a.project, data)
-            print(f"\n✅ 邮件已发送（后端={backend}）；审计已写入 governance.communications。")
+            print(f"\nEmail sent (backend={backend}); audit written to governance.communications.")
             sys.exit(0)
         else:
             record['status'] = 'failed'
             record['error'] = (p.stdout + p.stderr).strip()[:500]
             log.append(record)
             save(a.project, data)
-            die(f"后端发送失败（{backend} exit={p.returncode}）：{record['error']}")
+            die(f"Backend send failed ({backend} exit={p.returncode}): {record['error']}")
     except FileNotFoundError:
         record['status'] = 'failed'
-        record['error'] = f'未找到后端 CLI：{backend}（请确认对应邮件技能已安装/连接）'
+        record['error'] = f'Backend CLI not found: {backend} (confirm the mail skill is installed/connected)'
         log.append(record)
         save(a.project, data)
         die(record['error'])

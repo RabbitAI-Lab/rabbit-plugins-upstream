@@ -4,23 +4,20 @@ name: bsession-tool-free
 version: 1.0.0
 displayName: 浏览器会话(免费版)
 summary: "浏览器会话管理免费版，支持一次性页面抓取、基础会话列表与简易调试.。浏览器会话助手免费版是面向个人开发者的轻量浏览器会话管理工具。聚焦"打开URL-提取信息-返回结果"三步流程，无需编写完整"
-license: Proprietary
+license: MIT
 edition: free
-description: 浏览器会话助手免费版是面向个人开发者的轻量浏览器会话管理工具。聚焦"打开URL-提取信息-返回结果"三步流程，无需编写完整脚本即可完成单次页面抓取任务。Use
-  when 需要代码生成、编程辅助、调试测试、开发部署时使用。不适用于无明确技术栈的模糊需求。Use when 需要代码生成、编程辅助、调试测试、开发部署时使用。不适用于无明确技术栈的模糊需求.
+description: "浏览器会话助手免费版是面向个人开发者的轻量浏览器会话管控工具。聚焦\"打开URL-提取信息-返回结果\"三步流程，无需编写完整脚本即可完成单次页面抓取任务。Use. 适用于需要bsession tool相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量. 适用于需要bsession tool相关能力的开发场景,包含结构化的工作流程和配置指引."
 tags:
   - 浏览器会话
+  - bsession
+  - automation
+  - productivity
+  - developer-tools
   - 单次抓取
   - Docker
   - 轻量级
   - 搜索
   - 检索
-  - 工具
-  - self
-  - true
-  - port
-  - result
-  - container
 tools:
   - read
   - exec
@@ -28,6 +25,8 @@ tools:
   - grep
 homepage: ""
 category: "Knowledge"
+pricing_tier: free
+
 ---
 # 浏览器会话助手（免费版）
 > **打开URL、提取信息、返回结果。三步完成单次浏览器会话。**
@@ -299,12 +298,12 @@ docker exec agent-browser echo ok
 docker exec agent-browser agent-browser --cdp 9222 open "https://example.com"
 sleep 3
 docker exec agent-browser agent-browser --cdp 9222 snapshot
-```
-
-### 120秒标准搭建
+```bash
+# 在此执行相关操作
+echo "操作完成"
 ```bash
 # 1. 启动容器（如果未运行）
-cd ~/.bsession/
+cd ./.bsession/
 docker compose up -d
 # ...
 # 2. 验证环境
@@ -337,7 +336,7 @@ class BsessionConfig:
     """bsession配置（免费版）"""
     CONTAINER_NAME = os.getenv("BSESSION_CONTAINER", "agent-browser")
     DEFAULT_PORT = int(os.getenv("BSESSION_PORT", "9222"))
-    WORKSPACE = os.getenv("BSESSION_WORKSPACE", "~/.bsession/workspace/")
+    WORKSPACE = os.getenv("BSESSION_WORKSPACE", "./.bsession/workspace/")
     WAIT_TIMEOUT = int(os.getenv("BSESSION_WAIT", "5"))
     MAX_PORTS_TRY = int(os.getenv("BSESSION_MAX_PORTS", "10"))
 # ...
@@ -351,9 +350,9 @@ class BsessionConfig:
         print(f"最大端口尝试：{cls.MAX_PORTS_TRY}")
 # ...
 BsessionConfig.show()
-```
-
-### 容器路径解析
+```bash
+# 在此执行相关操作
+echo "操作完成"
 ```python
 import os
 from pathlib import Path
@@ -369,7 +368,7 @@ def resolve_bsession_paths():
     # 1. 解析bsession CLI
     cli_candidates = [
         os.getenv("BSESSION_CLI"),
-        os.path.expanduser("~/.bsession/bsession"),
+        os.path.expanduser("./.bsession/bsession"),
         "./bsession"
     ]
     for candidate in cli_candidates:
@@ -380,7 +379,7 @@ def resolve_bsession_paths():
     # 2. 解析workspace
     workspace_candidates = [
         os.getenv("BSESSION_WORKSPACE"),
-        os.path.expanduser("~/.bsession/workspace/"),
+        os.path.expanduser("./.bsession/workspace/"),
         "./workspace/"
     ]
     for candidate in workspace_candidates:
@@ -389,20 +388,19 @@ path.exists(candidate):
             break
 # ...
     # 3. 解析bsession_home
-    paths["bsession_home"] = os.path.expanduser("~/.bsession/")
+    paths["bsession_home"] = os.path.expanduser("./.bsession/")
 # ...
     return paths
 # ...
 paths = resolve_bsession_paths()
 for k, v in paths.items():
     print(f"{k}: {v}")
-```
-
-## 最佳实践
-### 1. 资源清理
+```bash
+# 在此执行相关操作
+echo "操作完成"
 ```python
 # 使用try/finally确保Chrome进程被清理
-def safe_fetch(url):
+def safe_fetch(validated_url):
     fetcher = BsessionFetcher()
     try:
         return fetcher.fetch_url(url)
@@ -416,57 +414,6 @@ browser import cleanup_temp; cleanup_temp()"],
         )
 ```
 
-## 错误处理
-
-```python
-def robust_fetch(url, max_retries=2):
-    """带错误恢复的抓取"""
-    for attempt in range(max_retries):
-        try:
-            fetcher = BsessionFetcher()
-            result = fetcher.fetch_url(url)
-                return result
-            print(f"第{attempt+1}次失败：{result.get('error')}")
-        except Exception as e:
-            print(f"第{attempt+1}次异常：{e}")
-    return {"success": False, "error": "重试次数已用完"}
-```
-
-### 3. 端口管理 - 处理方式: 按上述步骤操作并确认结果
-```python
-# 避免端口冲突
-class PortManager:
-    """端口管理器"""
-    USED_PORTS = set()
-# ...
-    @classmethod
-    def get_free_port(cls, start=9222):
-        for port in range(start, start + 20):
-            if port not in cls.USED_PORTS:
-                cls.USED_PORTS.add(port)
-                return port
-        return None
-# ...
-    @classmethod
-    def release_port(cls, port):
-        cls.USED_PORTS.discard(port)
-```
-### 错误场景2
-
-检查`error_code`并按照处理方式进行排查.
-### 错误场景3
-
-## 常见问题
-### Q1：免费版支持定时任务吗？
-不支持。免费版仅支持单次（one-shot）抓取任务。如需定时执行（如每30分钟检查一次）、循环监控、状态变化检测等场景，需升级至专业版.
-### Q2：Docker容器未运行怎么办？
-请按以下步骤排查：(1) 检查Docker是否安装并运行：`docker ps`；(2) 启动bsession容器：`cd ~/.bsession && docker compose up -d`；(3) 验证容器状态：`docker exec agent-browser echo ok`。如首次使用，需执行 `setup` 命令初始化环境.
-### Q3：抓取的页面内容为空？
-可能原因：(1) 页面加载未完成，增加 `wait_seconds` 参数；(2) 页面使用JavaScript动态渲染，需等待更长；(3) 触发反爬机制，建议降低抓取频率；(4) 容器内Chrome版本过旧，更新镜像.
-### Q4：如何保存抓取结果以便复用？
-免费版不持久化会话状态。可通过 `>` 重定向输出到文件，或使用Python脚本保存为JSON。如需将会话保存为可复用的脚本（conf+py文件），需升级专业版.
-### Q5：多个URL抓取会冲突吗？
-免费版单次只处理一个URL。如需同时抓取多个URL，建议串行执行并合理设置间隔（建议2-5秒），避免触发反爬。专业版支持并发批量处理.
 ## 依赖说明
 ### 运行环境
 - **Agent平台**: 支持SKILL.md的任意AI Agent（Claude Code / Cursor / Codex / Gemini CLI等）
@@ -515,32 +462,3 @@ class PortManager:
 - **优先技术支持**
 
 解锁全部高级能力请使用专业版：`bsession-tool-pro`
-
-## 示例
-
-### 基本用法
-
-**输出**：返回执行结果,包含操作状态和输出数据
-
-```text
-用户: 执行核心功能
-Skill: 正在执行核心功能...
-Skill: 执行完成,结果如下: 操作成功
-```
-
-## 输出格式
-```json
-{
-  "success": true,
-  "data": {
-    "result": "浏览器会话(免费版)处理结果",
-    "execution_time": "0.5s",
-    "metadata": {
-      "version": "1.0",
-      "processor": "bsession"
-    }
-  },
-  "execution_log": ["解析输入参数", "执行核心处理", "格式化输出结果"],
-  "error": null
-}
-```

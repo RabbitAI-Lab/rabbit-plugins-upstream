@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/dive-travel-assistant",
   "slug": "dive-travel-assistant",
   "ownerHandle": null,
-  "version": null,
-  "updatedAt": 1783564681725,
-  "contentHash": "32ac973fcb91cbcf0d84c9b85927c445b591ab7c33c0d665fb6fb06fd9da78d0",
-  "fetchedAt": "2026-07-26T18:17:50.964Z"
+  "version": "1.0.9",
+  "updatedAt": 1790070533265,
+  "contentHash": "46a4e5a99eb8b3af3631199c7346ca97fbcfc075f0c0103024346a3673ec8945",
+  "fetchedAt": "2026-09-22T12:45:10.291Z"
 }

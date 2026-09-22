@@ -1,0 +1,574 @@
+{
+  "$comment": "skill-designer 的结构框架范例库（单一数据源）。机器由 scripts/render_structure.py 读取；人类说明见 references/skill-archetypes.md。修改本文件后须跑 python scripts/sd_cli.py validate --self。",
+  "version": "1.0.0",
+  "archetypes": [
+    {
+      "id": "minimal",
+      "name": "极简型 Single-file",
+      "one_liner": "只有一个 SKILL.md —— 知识量小、无脚本、无文件产出。别为「看起来完整」造空目录。",
+      "fit_signals": [
+        "B03 五类模式 = 思维型 / 导航型 / 哲学型",
+        "B05 方法 = LLM 推理为主，无确定性计算",
+        "B05 输出 O 无文件产出",
+        "知识体量 < 5K，SKILL.md ≤ 500 行装得下"
+      ],
+      "anti_signals": [
+        "需要调用外部 API",
+        "涉及文件产出",
+        "知识量大到必须拆分查阅"
+      ],
+      "tree": [
+        {
+          "path": "SKILL.md",
+          "kind": "file",
+          "role": "唯一入口 = 元数据 + 全部指令",
+          "note": "frontmatter（name / description 五件事）+ 五段章节骨架",
+          "fill_from": "skeleton"
+        }
+      ],
+      "tip": "新手最常见的过度工程：给一个纯原则型 skill 硬塞 scripts/ 与 references/。先做单文件，装不下再拆。"
+    },
+    {
+      "id": "pipeline",
+      "name": "流程型 Pipeline",
+      "one_liner": "多步骤带 checkpoint，步骤间有因果 —— 流程细则下沉，主文件只留路由与检查点。",
+      "fit_signals": [
+        "B03 = Pipeline × A 流程配方",
+        "B05 处理 P = 标准执行顺序明确、有分支判断点",
+        "步骤 ≥ 3 且中间需确认或可中断",
+        "B05 边界 B 含「必须暂停并询问」的场景"
+      ],
+      "anti_signals": [
+        "单步直达、无中间状态",
+        "步骤全靠 LLM 自由发挥（应属 minimal）"
+      ],
+      "tree": [
+        {
+          "path": "SKILL.md",
+          "kind": "file",
+          "role": "意图路由 + Workflow + 检查点约定",
+          "note": "frontmatter + 五段章节骨架；失败处理须含四状态与回退",
+          "fill_from": "skeleton"
+        },
+        {
+          "path": "references/",
+          "kind": "dir",
+          "role": "按需加载的流程细则",
+          "note": "一主题一文件；单文件 > 300 行须加目录",
+          "fill_from": "dir:references",
+          "children": [
+            {
+              "path": "README.md",
+              "kind": "file",
+              "role": "agent 索引（非人类教程）",
+              "note": "每份 reference 的「加载条件 / 标签 / 体量」；先读此表再决定是否加载全文"
+            },
+            {
+              "path": "step-guide.md",
+              "kind": "file",
+              "role": "逐步细则",
+              "note": "每步：输入 → 判断规则 → 输出 → 失败怎么办"
+            },
+            {
+              "path": "edge-cases.md",
+              "kind": "file",
+              "role": "例外与边界",
+              "note": "症状 → 原因 → 修复 三段式；不写「注意 X」式模糊警告"
+            }
+          ]
+        },
+        {
+          "path": "scripts/",
+          "kind": "dir",
+          "role": "确定性步骤（可选）",
+          "note": "仅当某步「LLM 做有概率出错、脚本做能 100% 确定」才建",
+          "fill_from": "dir:scripts",
+          "children": []
+        },
+        {
+          "path": "CHANGELOG.md",
+          "kind": "file",
+          "role": "版本追踪（仅发布级）",
+          "note": "放包根；SKILL.md 不得引用它，不进上下文"
+        }
+      ],
+      "tip": "流程型的成败在 checkpoint：每阶段确认产物或状态，批量操作记录已处理/未处理项。"
+    },
+    {
+      "id": "tool",
+      "name": "工具编排型 Tool Wrapper",
+      "one_liner": "编排外部 API / 工具 —— 脚本负责确定性与失败重试，references 负责接口契约。",
+      "fit_signals": [
+        "B03 = Tool Wrapper × C 工具编排",
+        "B05 方法 = 脚本 / 混合",
+        "依赖外部 API、DB、CLI",
+        "B05 风险含「依赖失败」"
+      ],
+      "anti_signals": [
+        "纯推理无外部依赖",
+        "只调一次且逻辑极简"
+      ],
+      "tree": [
+        {
+          "path": "SKILL.md",
+          "kind": "file",
+          "role": "路由 + 调用纪律 + 失败升级",
+          "note": "allowed-tools 最小化；错误路径必须写明，不能只写成功路径",
+          "fill_from": "skeleton"
+        },
+        {
+          "path": "scripts/",
+          "kind": "dir",
+          "role": "确定性调用与预检",
+          "note": "脚本四项要求：参数说明 / 清晰错误 / 非零退出码 / 可重复运行策略",
+          "fill_from": "dir:scripts",
+          "children": [
+            {
+              "path": "call_api.py",
+              "kind": "file",
+              "role": "主调用封装",
+              "note": "统一 JSON 输出 + 异常自处理 + 退出码语义化"
+            },
+            {
+              "path": "precheck.py",
+              "kind": "file",
+              "role": "环境与依赖预检",
+              "note": "启动前检测依赖是否就绪，缺什么报什么"
+            },
+            {
+              "path": "install.sh",
+              "kind": "file",
+              "role": "分发与安装（◎tool 型专项）",
+              "note": "下载后必须校验：哈希/签名二选一 + 校验失败处置；多平台须保持同一套校验语义"
+            }
+          ]
+        },
+        {
+          "path": "references/",
+          "kind": "dir",
+          "role": "接口契约与错误码",
+          "note": "Agent 调接口前才读，不常驻上下文",
+          "fill_from": "dir:references",
+          "children": [
+            {
+              "path": "README.md",
+              "kind": "file",
+              "role": "agent 索引",
+              "note": "加载条件 / 标签 / 体量"
+            },
+            {
+              "path": "api-contract.md",
+              "kind": "file",
+              "role": "接口契约",
+              "note": "端点 / 参数 / 错误码 / 限流 / 重试策略"
+            },
+            {
+              "path": "commands.md",
+              "kind": "file",
+              "role": "命令/接口速查表（◎tool 型专项）",
+              "note": "按能力域分组 + 参数命名约定 + 常见参数速查；SKILL.md 主路由必须留一张压缩速查表"
+            }
+          ]
+        },
+        {
+          "path": "CHANGELOG.md",
+          "kind": "file",
+          "role": "版本追踪（仅发布级）",
+          "note": "放包根；SKILL.md 不引用"
+        }
+      ],
+      "tip": "工具型的头号反模式是「只写成功路径」——超时、限流、鉴权失效、部分成功四种失败必须各有明确动作。◎另必备两项专项：① 命令/接口速查表（commands.md + 主路由压缩速查表）；② 分发信任链（下载后哈希/签名校验 + 失败处置）。"
+    },
+    {
+      "id": "knowledge",
+      "name": "知识密集型 Reference-heavy",
+      "one_liner": "领域知识包 —— SKILL.md 只留路由与核心判断规则，知识全部下沉 references。",
+      "fit_signals": [
+        "B03 = B 领域知识包 / 参考指南型",
+        "B02 专家经验萃取产出大量 tacit knowledge",
+        "LLM 本身不知道这个领域的规则",
+        "知识量远超 5K"
+      ],
+      "anti_signals": [
+        "知识通用、LLM 已知（属教程病）",
+        "知识量小、无需拆分"
+      ],
+      "tree": [
+        {
+          "path": "SKILL.md",
+          "kind": "file",
+          "role": "路由器 + 核心判断规则",
+          "note": "只放：核心工作流 / 资源路由 / 关键约束 / 交互策略 / 失败处理 / 验证要求",
+          "fill_from": "skeleton"
+        },
+        {
+          "path": "references/",
+          "kind": "dir",
+          "role": "知识主体（本型核心）",
+          "note": "一主题一文件；> 300 行须加目录；每份都须在 SKILL.md 有强路由加载条件",
+          "fill_from": "dir:references",
+          "children": [
+            {
+              "path": "README.md",
+              "kind": "file",
+              "role": "agent 索引（本型必备）",
+              "note": "文件 / 一句话摘要 / 典型加载条件 / 关键词标签 / 体量 —— 替代盲目全量加载"
+            },
+            {
+              "path": "domain-a.md",
+              "kind": "file",
+              "role": "主题一（按需命名）",
+              "note": "术语 / 权衡 / 边界 / 判断规则；开头加目录"
+            },
+            {
+              "path": "domain-b.md",
+              "kind": "file",
+              "role": "主题二（按需命名）",
+              "note": "同上；与主题一正交，不重叠"
+            },
+            {
+              "path": "gotchas.md",
+              "kind": "file",
+              "role": "踩坑清单（最高 ROI）",
+              "note": "症状 → 原因 → 修复 三段式；来源见 B02 追问五问之③"
+            }
+          ]
+        },
+        {
+          "path": "CHANGELOG.md",
+          "kind": "file",
+          "role": "版本追踪（仅发布级）",
+          "note": "放包根；SKILL.md 不引用"
+        }
+      ],
+      "tip": "资源路由要写成强指令：If the user mentions X, load references/x.md before choosing Y. 避免「see references/x.md」式弱路由。"
+    },
+    {
+      "id": "template",
+      "name": "模板产出型 Generator",
+      "one_liner": "产出标准化格式文件 —— assets 放模板（不进上下文），scripts 负责渲染与校验。",
+      "fit_signals": [
+        "B03 = Generator × D 模板渲染",
+        "B05 输出 O 有文件产出",
+        "B06 已声明输出文件约定四要素",
+        "格式固定、可批量复现"
+      ],
+      "anti_signals": [
+        "输出自由文本无固定格式",
+        "每次产出结构都不同"
+      ],
+      "tree": [
+        {
+          "path": "SKILL.md",
+          "kind": "file",
+          "role": "路由 + 输出文件约定 + 验证要求",
+          "note": "必须含「## 输出文件约定」四要素：输出目录 / 命名 / 格式 / 错误输出",
+          "fill_from": "skeleton"
+        },
+        {
+          "path": "assets/",
+          "kind": "dir",
+          "role": "输出素材（不读入上下文）",
+          "note": "模板 / 图片 / 字体 / 示例工程 / boilerplate",
+          "fill_from": "dir:assets",
+          "children": [
+            {
+              "path": "templates/",
+              "kind": "dir",
+              "role": "模板文件",
+              "note": "占位符 + 填充规则；Agent 复制而非逐字符生成"
+            },
+            {
+              "path": "examples/",
+              "kind": "dir",
+              "role": "示例产出",
+              "note": "golden sample，供校验时比对格式"
+            }
+          ]
+        },
+        {
+          "path": "scripts/",
+          "kind": "dir",
+          "role": "渲染 + 格式校验",
+          "note": "幂等：重复运行不产生重复文件；失败保留现场",
+          "fill_from": "dir:scripts",
+          "children": [
+            {
+              "path": "render.py",
+              "kind": "file",
+              "role": "模板渲染",
+              "note": "读模板 → 填占位符 → 落盘 → 返回结构化结果"
+            },
+            {
+              "path": "validate.py",
+              "kind": "file",
+              "role": "产出校验",
+              "note": "比对 schema/格式；非零退出码表示不通过"
+            }
+          ]
+        },
+        {
+          "path": "references/",
+          "kind": "dir",
+          "role": "风格与规则",
+          "note": "格式规范 / 风格约定 / 例外处理",
+          "fill_from": "dir:references",
+          "children": [
+            {
+              "path": "README.md",
+              "kind": "file",
+              "role": "agent 索引",
+              "note": "加载条件 / 标签 / 体量"
+            },
+            {
+              "path": "style-rules.md",
+              "kind": "file",
+              "role": "格式与风格规则",
+              "note": "可判定的规则，不写「美观大方」式主观要求"
+            }
+          ]
+        },
+        {
+          "path": "CHANGELOG.md",
+          "kind": "file",
+          "role": "版本追踪（仅发布级）",
+          "note": "放包根；SKILL.md 不引用"
+        }
+      ],
+      "tip": "模板型最容易漏「错误输出」——失败时产出什么、写到哪，必须和成功路径一样明确。"
+    },
+    {
+      "id": "full",
+      "name": "全栈工程型 Full-stack",
+      "one_liner": "发布级 / 长迭代 / 高风险 / 多模块 —— 脚本、知识、素材、治理台账四件套齐全。",
+      "fit_signals": [
+        "对外发布（SkillHub 等）或需长期迭代",
+        "B05 风险 = 高（财务/医疗/数据/生产环境）",
+        "多模块多接口，需模块级工具隔离",
+        "需要错误台账与需求/方案看板追溯"
+      ],
+      "anti_signals": [
+        "一次性自用脚本",
+        "低风险、无需追溯的轻量 skill（属过度工程）"
+      ],
+      "tree": [
+        {
+          "path": "SKILL.md",
+          "kind": "file",
+          "role": "路由器 + 全局安全红线",
+          "note": "≤500 行；意图路由表 + 五段章节骨架 + 工具白名单",
+          "fill_from": "skeleton"
+        },
+        {
+          "path": "scripts/",
+          "kind": "dir",
+          "role": "确定性逻辑 + 统一入口",
+          "note": "建议用 cli.py 聚合各脚本；脚本四原则（自愈/结构化/幂等/安全边界）",
+          "fill_from": "dir:scripts",
+          "children": [
+            {
+              "path": "cli.py",
+              "kind": "file",
+              "role": "统一命令入口",
+              "note": "聚合子命令 + --dry-run + 自动重试"
+            },
+            {
+              "path": "retry.py",
+              "kind": "file",
+              "role": "瞬态失败重试",
+              "note": "只重试环境/IO 类，业务错误不重试"
+            },
+            {
+              "path": "validate.py",
+              "kind": "file",
+              "role": "自检与静态验证",
+              "note": "支持 --self / --json / --fix"
+            }
+          ]
+        },
+        {
+          "path": "references/",
+          "kind": "dir",
+          "role": "分层知识 + 索引",
+          "note": "顶层 README 索引；按使用频率分层，越常用离入口越近",
+          "fill_from": "dir:references",
+          "children": [
+            {
+              "path": "README.md",
+              "kind": "file",
+              "role": "agent 索引（必备）",
+              "note": "文件 / 摘要 / 加载条件 / 标签 / 体量；控制在 150 行内"
+            },
+            {
+              "path": "design-guide.md",
+              "kind": "file",
+              "role": "主流程细则",
+              "note": "按模块/阶段拆；单文件 > 300 行再拆"
+            },
+            {
+              "path": "best-practices.md",
+              "kind": "file",
+              "role": "条目化最佳实践",
+              "note": "提示 + 理由 + 实施建议；按标签命中，不一次性灌输"
+            },
+            {
+              "path": "gotchas.md",
+              "kind": "file",
+              "role": "踩坑清单",
+              "note": "症状 → 原因 → 修复"
+            }
+          ]
+        },
+        {
+          "path": "assets/",
+          "kind": "dir",
+          "role": "输出素材",
+          "note": "模板 / 示例 / boilerplate",
+          "fill_from": "dir:assets",
+          "children": [
+            {
+              "path": "templates/",
+              "kind": "dir",
+              "role": "模板",
+              "note": "不进上下文，按需复制"
+            }
+          ]
+        },
+        {
+          "path": "MISTAKES.md",
+          "kind": "file",
+          "role": "错误台账（负向约束优先）",
+          "note": "append-only：NEVER → 后果 → 改为 Y；TOP 5 注入 SKILL.md 约束区"
+        },
+        {
+          "path": "REQUIREMENTS.md",
+          "kind": "file",
+          "role": "需求看板（可选）",
+          "note": "ID / 来源 / 状态 / VFM / 对应方案 + append-only 变更日志"
+        },
+        {
+          "path": "SOLUTIONS.md",
+          "kind": "file",
+          "role": "方案看板（可选）",
+          "note": "ID / 对应需求 / 状态 / 版本 / 验证证据 + ADR + 废弃方案"
+        },
+        {
+          "path": "CHANGELOG.md",
+          "kind": "file",
+          "role": "版本治理",
+          "note": "SemVer + 每条改动；放包根，SKILL.md 不引用"
+        }
+      ],
+      "tip": "全栈型最容易犯「治理文件污染上下文」——MISTAKES/REQUIREMENTS/SOLUTIONS/CHANGELOG 都不得被 SKILL.md 正文引用，只由人或工具按需读取。"
+    },
+    {
+      "id": "suite",
+      "name": "套件型 Skill Suite",
+      "one_liner": "大领域多子域的套件 —— 顶层 SKILL.md 做路由器 + 全局护栏 + 工程宪法，references/ 下 N 个自治子 skill 各自独立。",
+      "fit_signals": [
+        "覆盖多个正交子域（auth / 数据库 / 云函数 / AI / ops…），单 SKILL.md 装不下",
+        "知识总量 > 50K，需要 10+ 个可独立使用的子 skill",
+        "B07 场景数 ≥ 5，需要结构化场景路由契约",
+        "子域间低耦合，可分别维护 / 分别发布"
+      ],
+      "anti_signals": [
+        "单一子域（应选 knowledge 或 full）",
+        "子域强耦合、需互相引用实现细节"
+      ],
+      "tree": [
+        {
+          "path": "SKILL.md",
+          "kind": "file",
+          "role": "路由器：意图路由契约 + 全局护栏 + 工程宪法",
+          "note": "≤500 行；只放场景路由（信号/首读/禁读/动作前检查）+ 跨场景护栏，领域细节全部下沉子 skill",
+          "fill_from": "skeleton"
+        },
+        {
+          "path": "references/",
+          "kind": "dir",
+          "role": "子 skill 套件 + 索引 + 协议",
+          "note": "每个子 skill 一个目录，各自自治（含自己的 references/）；同域内用相对路径互引",
+          "fill_from": "dir:references",
+          "children": [
+            {
+              "path": "README.md",
+              "kind": "file",
+              "role": "套件索引（必备）",
+              "note": "子 skill 清单 + 加载条件 + 稳定 id 引用，替代盲目全量加载"
+            },
+            {
+              "path": "<sub-skill-a>/SKILL.md",
+              "kind": "file",
+              "role": "子 skill 一（按需命名）",
+              "note": "自治：自己的 frontmatter + 五段骨架 + references/"
+            },
+            {
+              "path": "<sub-skill-b>/SKILL.md",
+              "kind": "file",
+              "role": "子 skill 二（按需命名）",
+              "note": "同上；与 a 正交，不重叠"
+            },
+            {
+              "path": "protocols/",
+              "kind": "dir",
+              "role": "跨场景横切协议（可选但推荐）",
+              "note": "变更安全 / 部署门禁 / 敏感数据等跨所有子场景的强制红线",
+              "children": [
+                {
+                  "path": "change-safety.md",
+                  "kind": "file",
+                  "role": "变更安全协议",
+                  "note": "任何代码/配置变更前必读"
+                },
+                {
+                  "path": "deployment-gate.md",
+                  "kind": "file",
+                  "role": "部署门禁",
+                  "note": "部署/发布/自定义域名前必过检查"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "path": "CHANGELOG.md",
+          "kind": "file",
+          "role": "版本治理",
+          "note": "SemVer + 每条改动；放包根，SKILL.md 不引用"
+        }
+      ],
+      "tip": "套件型最容易犯「路由器膨胀」——把子域细节也塞进顶层 SKILL.md，或路由器无法准确路由（场景模糊）。顶层只留路由 + 护栏，配结构化场景路由契约（信号/首读/禁读/动作前检查/常见错误）。活样板：cloudbase-2.32.4（30+ 子 skill）。"
+    }
+  ],
+  "selection_rules": [
+    {
+      "if": "无文件产出 且 无外部调用 且 知识 < 5K",
+      "then": "minimal"
+    },
+    {
+      "if": "有外部 API/工具调用",
+      "then": "tool"
+    },
+    {
+      "if": "有文件产出 且 格式固定",
+      "then": "template"
+    },
+    {
+      "if": "知识量大（专家经验为主，需拆分查阅）",
+      "then": "knowledge"
+    },
+    {
+      "if": "多步骤带 checkpoint 且 无外部调用 且 无文件产出",
+      "then": "pipeline"
+    },
+    {
+      "if": "对外发布 / 高风险 / 长迭代",
+      "then": "full"
+    },
+    {
+      "if": "覆盖多个正交子域（auth/DB/云函数/AI/ops…）且子 skill 需独立使用",
+      "then": "suite"
+    }
+  ],
+  "selection_note": "按顺序匹配，命中即停；都不命中默认 pipeline。minimal 是起点而非终点——装不下时按「先 references/、再 scripts/、再 assets/」的顺序逐步扩容；子域正交且数量多时直接升级 suite（套件），不再往单个 SKILL.md 里堆。"
+}

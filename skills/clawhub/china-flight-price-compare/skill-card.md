@@ -1,42 +1,58 @@
-## Description: <br>
-Compares direct flight prices across Fliggy, Tuniu, Tongcheng, Meituan, and RollingGo, matching the same flight by flight number and returning booking links with the results. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+途牛+同程+美团+RollingGo五平台直飞航班实时比价，按航班号自动匹配同一航班跨平台报价，一次出结果含预订链接。暑期机票比价、出行省钱。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-Travelers and travel-planning agents use this skill to compare real-time direct domestic flight prices for a route and date, identify the lowest available platform price, and review flight timing, airline, airport, and booking-link details. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Flight route and date queries are sent through the publisher's Tencent Cloud proxy and onward to travel platforms. <br>
-Mitigation: Use the skill only when that data flow is acceptable; avoid sensitive travel queries in environments that prohibit third-party proxying. <br>
-Risk: The artifact includes a proxy token in source code. <br>
-Mitigation: Review credential exposure before deployment and rotate, scope, or replace the token for managed or enterprise use. <br>
-Risk: Flight prices and booking links are time-sensitive and may omit taxes, fees, or platform-specific fare conditions. <br>
-Mitigation: Confirm final price and terms on the booking platform before purchase. <br>
+## Use Case:
 
+External users use this skill to compare direct mainland China flight prices across several OTA platforms by departure city, destination city, and travel date. It helps identify lower displayed fares, compare the same flight across platforms, and navigate to a booking site for purchase.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/china-flight-price-compare) <br>
+### Deployment Geography for Use:
 
+Mainland China domestic direct-flight searches
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown flight comparison results with platform prices, source labels, booking links, warnings, and plain text status messages when no results are available.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Results are limited to direct flights and may include warnings about missing platforms, price differences, or platform-specific price caveats.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.3 (source: server release evidence) <br>
+Risk: Flight search details such as cities and travel date are sent through the skill publisher's Tencent Cloud proxy and onward to OTA flight platforms.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when that data flow is acceptable, and avoid entering unrelated personal or sensitive information in flight-search prompts.
+
+Risk: Displayed fares may be estimates, starting prices, stale, or missing taxes and fees.
+
+Mitigation: Verify the final price, itinerary, and terms on the booking site before purchasing.
+
+Risk: The artifact describes support for direct mainland China flights and excludes transfers, international flights, Hong Kong, Macau, Taiwan, booking status, and check-in.
+
+Mitigation: Use the skill only for supported direct domestic searches and switch to an appropriate travel service for unsupported itineraries or post-booking tasks.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/china-flight-price-compare)
+- [ClawHub publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown-formatted text with flight options, platform prices, caveats, and booking links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires fromCity, toCity, and date; optional timePref and sortMode. Displayed prices are estimates and can change before booking.]
+
+## Skill Version(s):
+
+4.2.9 (source: release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

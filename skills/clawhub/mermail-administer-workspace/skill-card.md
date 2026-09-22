@@ -1,41 +1,56 @@
-## Description: <br>
-Inspect Mermail API and email usage and manage workspaces, members, invitations, email domains, mailboxes, and storage. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Inspect Mermail AI, API, and email usage and manage workspaces, members, invitations, email domains, mailboxes, and storage.
 
-## Publisher: <br>
-[mermail](https://clawhub.ai/user/mermail) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mermail](https://clawhub.ai/user/mermail)
 
-## Use Case: <br>
-Workspace administrators and developers use this skill to inspect Mermail usage and manage workspace members, invitations, email domains, mailboxes, storage, plan usage, RPM, and credits while preserving the API key's workspace boundary. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can administer real Mermail workspace resources when given API-key access. <br>
-Mitigation: Use an API key scoped to the intended workspace, review previews carefully, and verify affected resources after changes. <br>
-Risk: Member, domain, mailbox, and deletion actions can change access, routing, ownership, or stored data. <br>
-Mitigation: Require explicit approval for invitations and destructive changes, and use the single-use destructive-action token flow before deletion or member removal. <br>
+## Use Case:
 
+Workspace administrators and authorized support operators use this skill to inspect Mermail usage, storage, members, domains, mailboxes, and settings, then make approved administrative changes within the authenticated workspace boundary.
 
-## Reference(s): <br>
-- [Mermail AI skills documentation](https://docs.mermail.app/ai/skills) <br>
-- [Workspace administration tool map](references/tools.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, API calls, configuration] <br>
-**Output Format:** [Markdown guidance with MCP tool-call and configuration instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MERMAIL_API_KEY and the Mermail MCP server; administrative writes require previews and approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release metadata) <br>
+Risk: The skill can perform administrative changes using privileges tied to MERMAIL_API_KEY.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for intended Mermail workspace administration and review proposed member, domain, mailbox, and settings changes before approval.
+
+Risk: Sensitive actions such as removals, domain deletion, role changes, and automatic-response settings can have workspace-wide effects.
+
+Mitigation: Require exact target previews, explicit approval, and the skill's destructive-action token flow where applicable.
+
+## Reference(s):
+
+- [Mermail AI Skills Documentation](https://docs.mermail.app/ai/skills)
+- [Mermail MCP Server](https://console.mermail.app/mcp)
+- [Workspace administration tool map](references/tools.md)
+- [Workspace AI credits](references/ai-credits.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, configuration]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports exact workspace state, current-to-intended diffs, approval status, and verification outcomes.]
+
+## Skill Version(s):
+
+1.2.7 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

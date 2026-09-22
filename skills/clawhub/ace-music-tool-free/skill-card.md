@@ -1,41 +1,55 @@
-## Description: <br>
-Generates short AI music clips with vocals or instrumentals from text prompts using ACE-Step, with support for lyrics, multiple languages, and multiple styles. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ACE音乐生成-免费版 helps agents generate short AI songs with vocals, lyrics, instrumental mode, multiple languages, and basic style controls through the ACE Music API.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External creators, developers, and music hobbyists use this skill to generate short songs, vocal demos, or background instrumentals from prompts, lyrics, and basic music settings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is under-specified and its instructions are inconsistent enough that users may run commands outside the intended music-generation scope. <br>
-Mitigation: Review the exact command before execution and constrain use to ACE music generation tasks. <br>
-Risk: Prompts, lyrics, API keys, and generated requests may be sent to the external ACE Music API. <br>
-Mitigation: Do not submit sensitive lyrics, prompts, credentials, or private project details unless external processing is acceptable. <br>
+## Use Case:
 
+External creators and developers use this skill to prompt an agent to generate short AI music demos, background tracks, or instrumental clips through ACE Music API commands. It is intended for ACE music generation workflows, not broad media conversion or unrelated agent automation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/ace-music-tool-free) <br>
-- [ACE Music API key page](https://acemusic.ai/playground/api-key) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Files, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks and generated audio file paths] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce MP3 files through an external ACE Music API; the free version is described as limited to one song per request and up to 60 seconds.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact metadata) <br>
+Risk: The skill requests command execution while its activation text and stated capabilities are broader than its ACE music generation purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Restrict use to ACE music generation, review proposed commands before execution, and avoid using it for unrelated video, media conversion, generic agent, or file-processing tasks.
+
+Risk: The workflow requires an ACE Music API key.
+
+Mitigation: Provide the API key through a controlled environment variable and do not hard-code or echo credentials in generated commands or output.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/ace-music-tool-free)
+- [ACE Music API key page](https://acemusic.ai/playground/api-key)
+- [ACE Music API endpoint](https://api.acemusic.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Markdown guidance with bash command examples and generated audio file paths]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May call the external ACE Music API and may produce MP3 outputs; the free-version guidance describes a 60-second single-song limit.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence; artifact metadata version is 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

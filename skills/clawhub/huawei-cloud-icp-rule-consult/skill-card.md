@@ -1,44 +1,67 @@
-## Description: <br>
-Provides read-only consultation on Huawei Cloud mainland China ICP filing requirements, processes, materials, and filing-change scenarios using embedded guidance and optional official-document lookup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ICP Filing rule consultation skill for Huawei Cloud that answers whether filing is required, filing process and materials questions, account and entity limits, change filing, access filing, cancellation filing, APP filing, and migration or transfer filing without performing filing operations.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Huawei Cloud after-sales technical engineers use this skill to answer customer questions about non-commercial mainland China ICP filings, including whether filing is needed, required materials, access filing, change filing, cancellation filing, APP filing, migration, and account or entity limits. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Mainland China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The bundled web tools can fetch or browse arbitrary sites even though the intended purpose is Huawei Cloud ICP documentation consultation. <br>
-Mitigation: Restrict network access to Huawei Cloud ICP documentation domains, block localhost and private-network targets, and avoid untrusted remote Chrome endpoints. <br>
-Risk: Users may rely on filing guidance in sensitive compliance workflows. <br>
-Mitigation: Review answers against the cited Huawei Cloud ICP documentation before using them for filing decisions. <br>
+## Use Case:
 
+Huawei Cloud after-sales technical engineers and support agents use this skill to answer Mainland China ICP filing questions with concise customer-facing guidance and relevant Huawei Cloud documentation links. It covers filing requirement, process, materials, access, change, cancellation, account limits, APP filing, and migration scenarios.
 
-## Reference(s): <br>
-- [Huawei Cloud ICP filing process](https://support.huaweicloud.com/usermanual-icp/zh-cn_topic_0000002127712329.html) <br>
-- [Huawei Cloud access filing process](https://support.huaweicloud.com/usermanual-icp/zh-cn_topic_0000002581758204.html) <br>
-- [Huawei Cloud regional filing requirements](https://support.huaweicloud.com/prepare-icp/icp_02_0005.html) <br>
-- [Huawei Cloud APP filing characteristic information](https://support.huaweicloud.com/usermanual-icp/zh-cn_topic_0000002085120221.html) <br>
-- [Embedded ICP filing knowledge base](references/knowledge-base.md) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown or plain text customer-facing answers with relevant document links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only consultation; embedded knowledge is preferred before document fetch or search; web_search is limited to one call and combined web_fetch/web_search calls are limited to three.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill can use network-based document lookup beyond embedded guidance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Allow network access only when documentation lookup is needed, and prefer the embedded knowledge base or direct Huawei Cloud support document URLs first.
+
+Risk: Remote Chrome configuration may expose browser state or reachable internal resources if pointed at a non-isolated browser.
+
+Mitigation: Use remote Chrome only in an isolated browser session with no sensitive logins and no internal-network reachability.
+
+Risk: The helper tools are broader than the consultation scope.
+
+Mitigation: Restrict fetch and search usage to approved Huawei Cloud documentation domains during deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-icp-rule-consult)
+- [ICP Filing workflow](https://support.huaweicloud.com/usermanual-icp/zh-cn_topic_0000002127712329.html)
+- [Regional ICP filing requirements](https://support.huaweicloud.com/prepare-icp/icp_02_0005.html)
+- [Access filing workflow](https://support.huaweicloud.com/usermanual-icp/zh-cn_topic_0000002581758204.html)
+- [APP characteristic information](https://support.huaweicloud.com/usermanual-icp/zh-cn_topic_0000002085120221.html)
+- [references/catalog.yml](references/catalog.yml)
+- [references/filing-rules.yml](references/filing-rules.yml)
+- [references/doc-commands.md](references/doc-commands.md)
+- [references/knowledge-base.md](references/knowledge-base.md)
+- [references/prerequisites.md](references/prerequisites.md)
+- [references/verification-method.md](references/verification-method.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, text, shell commands]
+
+**Output Format:** [Markdown or plain text with concise customer-facing answers and relevant document links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include copyable shell commands for local document fetch or search setup when operational verification is requested.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

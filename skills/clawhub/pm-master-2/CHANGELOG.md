@@ -1,393 +1,410 @@
 # Changelog · PM Master v2
 
+## 2.2.16 (2026-09-21) · OpenClaw security-audit rectification + English-only unification
+
+Single, English-only OpenClaw package produced in response to the ClawHub security audit
+(scanners: AI-Infra-Guard, ClawScan, SkillSpector, Static-Analysis, VirusTotal).
+
+### Security fixes (P0/P1)
+- **T09-1 `comm_send.py` · forgeable approval**: an arbitrary `--approve <string>` was accepted. Approval is now bound to an authorization allowlist: `config.email.approvers` (admin) unioned with the project's declared `project.pm` / `project.sponsor`. Self-approval is forbidden, and an unresolvable approver set now rejects the send (fail-closed) instead of accepting any string.
+- **T09-2 `gate_engine.py` · unauthenticated stage-gate transition**: the same boundary is applied to stage gates via `config.governance.approver_identities` unioned with `project.pm` / `project.sponsor`. Records now carry `requested_by`, `by`, `nonce` and `decision` so each transition is attributable and non-replayable.
+- **T05 `comm_send.py` · path traversal in the SMTP draft filename**: the draft path is sanitized to `[A-Za-z0-9_-]`, suffixed with a random nonce, and confined to the artifact directory via `os.path.realpath` + `os.path.commonpath` containment.
+- **DCE `control_engine.py` · dynamic code execution**: the lazy `importlib.util.exec_module()` load of `evm.py` was replaced with a direct `import evm` on `sys.path`.
+
+### Disclosure / packaging / locale hygiene
+- **TP4**: `description` now discloses the email gateway, the pre-publish confidentiality/leak scan, Markdown-to-DOCX export and SOW-driven expert-role dispatch, instead of implying pure PM document generation.
+- **SQP-1**: trigger wording narrowed and explicit "do NOT trigger" exclusions added.
+- **SQP-3 / AE1**: the dual `SKILL.md` + `SKILL.en.md` split was removed. This package ships ONE manifest (`SKILL.md`) and is English-only; the Chinese surface across scripts, references, config, examples and templates was translated. Zero CJK/fullwidth characters remain (verified by scan).
+- **`config.yaml`**: `email.enabled` now ships `false` (was `true`), matching the documented "email is off by default" posture; the `email.approvers`, `email.sponsor_approvers` and `governance.approver_identities` allowlist keys referenced by the code and docs were added.
+
+### Quality
+- Fixed a regression in the stage-gate atomic commit: the pre-commit concurrency re-validation compared the already-mutated in-memory state, so it aborted every transition. It now re-reads `project.yaml` from disk and compares against the evaluated state.
+- **Test fixtures repaired: `scripts/test_gate_engine.py` now passes 66 / 66 (was 55 passed / 11 failed).** The 11 failures were fixtures that did not model a deliverable-ready project:
+  - WBS leaves had no `deliverable`, no milestone attribution, no connected dependency network, no domain-expert `role`, and `decomposition.critic_passed` was unset — so `consistency_check.py` reported fatal problems.
+  - Fixtures did not register the deliverables `artifact_guard` derives from data presence (`wbs`, `raid_log`, `risk_register`, `status_report`, plus `portfolio_dashboard` / `program_charter` for programs), so the OAG gate criterion failed.
+  - Operational fixtures used `ev=77 / ac=55` against `pv=100`, which put SPI at 0.77 and made `control_engine.py` raise a RED escalation. Aligned to `ev=ac=pv` (SPI/CPI = 1.0).
+
+### De-identification (hardcoded-value review)
+- **Removed all real customer / vendor / personal identifiers from the distributed package.** `confidentiality_check.py` previously hardcoded client, vendor and personal tokens in `HIGH_PATTERNS`, and shipped docs (`usage.md`, `CHANGELOG.md`) listed them verbatim — while the scanner's own `EXCLUDE_META` skipped exactly those files, so the check passed while the leak shipped.
+  - Client/vendor/person tokens moved out of source into `config.yaml` → `confidentiality.high_tokens` / `confidentiality.high_patterns` (empty by default). Only universally safe patterns (local absolute paths `/Users/`, `/home/`, `C:\Users`) remain built in.
+  - `usage.md` and `CHANGELOG.md` now describe the mechanism generically.
+  - Verified: a grep for the identifiers across the package now returns zero hits, and the scanner still detects configured tokens correctly.
+- Example emails switched from the real domains `corp.com` / `external.com` to the RFC 2606 reserved `example.com`.
+
 ## 2.2.15 (2026-07-24)
 
-### 包整备（housekeeping）· 移除根级遗留脚本 + 文档 CLI 对齐
-- **移除两个根级遗留脚本**（不属于运行时脚本目录 `scripts/`，历史遗留在包根）：
-  - `_split_subprojects.py`：一次性迁移助手（把示例数据湖项目群拆成 per-SOW 子项目），含示例硬编码路径；全包零引用，删除。
-  - 根级 `rollup_subprojects.py`：与 `scripts/rollup_subprojects.py` 同名但为**旧的回写式实现**（86 行，positional CLI，估算加权回写 master）。规范版本为 `scripts/rollup_subprojects.py`（125 行，`--program <program_dir>`，只读聚合视图，不改 master）。删除根级重名副本，消除歧义。
-- **文档 CLI 对齐规范版本**：`README.md` §7、`references/program-management.md`、`references/operation-model.md`（2 处）原示例仍用旧的 positional 调用 `rollup_subprojects.py <program/project.yaml>` 并描述「估算加权回写 master」行为；统一改为 `--program <program_dir>`，并将描述更正为**只读聚合视图**（读取各 `subprojects/<sow>/project.yaml`，汇总里程碑 done/total + BAC/EV/AC/EAC/CPI，打印或 `--json` 导出，不改 master）。
-- 说明：上版评审疑似的 CHANGELOG mojibake 经字节核验为**误报**（文件 0 个 U+FFFD，UTF-8 干净）；实为终端 awk 截断多字节字符的显示假象，无需修改。
-- 机密性扫描 exit 0。
+### Package housekeeping · remove root-level legacy scripts + doc CLI alignment to canonical version
+- **Removed two root-level legacy scripts** (not part of the runtime script dir `scripts/`, historically left at package root):
+  - `_split_subprojects.py`: one-off migration helper (split the example data-lake program into per-SOW subprojects), containing example hardcoded paths; zero references across the package, deleted.
+  - Root-level `rollup_subprojects.py`: same name as `scripts/rollup_subprojects.py` but the **old write-back implementation** (86 lines, positional CLI, weighted-estimate write-back to master). The canonical version is `scripts/rollup_subprojects.py` (125 lines, `--program <program_dir>`, read-only aggregated view, does not modify master). Deleted the root-level duplicate to eliminate ambiguity.
+- **Doc CLI aligned to canonical version**: `README.md` §7, `references/program-management.md`, `references/operation-model.md` (2 places) still used the old positional call `rollup_subprojects.py <program/project.yaml>` in examples and described "weighted-estimate write-back to master" behavior; unified to `--program <program_dir>`, and corrected the description to **read-only aggregated view** (reads each `subprojects/<sow>/project.yaml`, rolls up milestone done/total + BAC/EV/AC/EAC/CPI, prints or exports via `--json`, does not modify master).
+- Note: the CHANGELOG mojibake suspected in last review's audit was verified byte-level as a **false positive** (file has 0 U+FFFD, clean UTF-8); it was a display artifact from terminal awk truncating multi-byte characters — no change needed.
+- Confidentiality scan exit 0.
 
 ## 2.2.14 (2026-07-24)
 
-### WorkBuddy 兼容性整备 + 分支治理（main 晋升）
-- **SKILL.md 自述纠错**：原头注错误声明「this file is English (OpenClaw-compatible)」，实为 WorkBuddy 主控加载的活动清单。改为正确标注 `SKILL.md` = **WorkBuddy edition（活动清单）**，`SKILL.en.md` = OpenClaw 英文版；二者共用 `scripts/`/`templates/`/`references/`，经 `config.yaml` 的 `subagent_mode: team` 选择后端。
-- **版本对齐 2.2.14**：`SKILL.md` / `SKILL.en.md` / `_user_meta.json` / `README.md` 统一至 2.2.14（CHANGELOG 为权威）。
-- **分支治理**：`v2`（当前 WorkBuddy 包）经 **fast-forward** 晋升为 `main` 并设为默认/活动分支；旧 `main`（v1.3.6）已由不可变 tag `v1.3.6` 归档，另建 `archive/v1.3.6-main` 分支便于检索。零历史丢失、无 force-push。
-- 机密性扫描 exit 0。
+### WorkBuddy compatibility housekeeping + branch governance (main promotion)
+- **SKILL.md self-description fix**: the original header wrongly stated "this file is English (OpenClaw-compatible)"; it is actually the WorkBuddy main-controller activity list. Corrected to label `SKILL.md` = **WorkBuddy edition (activity list)**, `SKILL.en.md` = OpenClaw English version; both share `scripts/`/`templates/`/`references/`, and select the backend via `config.yaml`'s `subagent_mode: team`.
+- **Version alignment 2.2.14**: `SKILL.md` / `SKILL.en.md` / `_user_meta.json` / `README.md` unified to 2.2.14 (CHANGELOG is authoritative).
+- **Branch governance**: `v2` (current WorkBuddy package) promoted to `main` via **fast-forward** and set as the default/active branch; old `main` (v1.3.6) archived under immutable tag `v1.3.6`, plus an `archive/v1.3.6-main` branch for easy retrieval. Zero history loss, no force-push.
+- Confidentiality scan exit 0.
 
 ## 2.2.13 (2026-07-22)
 
-### 控制引擎健壮性 + 重渲染覆盖扩展
-- **根因**：真实项目运行暴露 4 类状态/渲染错位，导致控制门误报与文档漂移。
-- **control_engine.py**：
-  - 新增统一状态常量 `DONE/CLOSED/CANCELLED_STATES` 与 `_norm_status()` 归一（兼容中英文同义词），杜绝各支柱内联 hardcode 产生的「已降降」类错字。
-  - 进度汇总跳过 `summary` 包（其估算是子叶子的 rollup，纳入会重复计数）。
-  - 已取消/降级/终止/移出范围的包与风险不计入逾期与活跃漂移（非在办工作/已关闭不误报）。
-  - 新增 `TERMINAL_LS`（closed/closeout/archived 等）：程序/项目进入终态后控制门判 GREEN、不再误报 `gate_not_operational`。
-- **rerender_docs.py**：
-  - 新增 `change_log`（title→description 映射，杜绝事实源有 CR 却渲染空壳）、`raid_log`（dict 假设自动展平为字符串）、`evm_report`（调用 `evm.py` 按现值重算）、`baseline_record` + `control_register` 重渲染。
-  - `--only` 选项扩展覆盖上述类型。
-- **rollup_program_wbs.py**：新增 `_rollup_status()`，叶子包全为取消/终止态时里程碑行携带 `cancelled`，避免控制引擎误报逾期。
-- **rollup_subprojects.py**：`eac_vs_bac_var` 为 None 时回退 `n/a`，避免 None 格式化崩溃。
-- 验证：对示例客户项目复跑控制引擎/重渲染，原误报消失；机密性扫描 exit 0。
+### Control engine robustness + rerender coverage expansion
+- **Root cause**: running on a real project exposed 4 classes of status/render misalignment, causing false gate alarms and doc drift.
+- **control_engine.py**:
+  - Added unified status constants `DONE/CLOSED/CANCELLED_STATES` and `_norm_status()` normalization (compatible with Chinese/English synonyms), eliminating the "typo-style" errors from inlined hardcoding in each pillar.
+  - Progress rollup skips `summary` packages (their estimates are rollups of child leaves; including them double-counts).
+  - Cancelled/downgraded/terminated/out-of-scope packages and risks are excluded from overdue and active-drift counts (non-active work / closed items don't false-alarm).
+  - Added `TERMINAL_LS` (closed/closeout/archived etc.): once a program/project reaches a terminal state, the control gate reports GREEN and no longer false-alarms `gate_not_operational`.
+- **rerender_docs.py**:
+  - Added `change_log` (title→description mapping, eliminating the case where the fact source has a CR but renders an empty shell), `raid_log` (dict assumptions auto-flattened to strings), `evm_report` (calls `evm.py` to recompute at current value), `baseline_record` + `control_register` re-rendering.
+  - `--only` option extended to cover the above types.
+- **rollup_program_wbs.py**: added `_rollup_status()`; when all leaf packages are cancelled/terminated, the milestone row carries `cancelled`, avoiding false overdue alarms from the control engine.
+- **rollup_subprojects.py**: when `eac_vs_bac_var` is None, fall back to `n/a` to avoid None formatting crash.
+- Validation: reran control engine/rerender on the example customer project; original false alarms gone; confidentiality scan exit 0.
 
 ## 2.2.12 (2026-07-21)
-- **域无关 + SOW 自动对齐**：消除开箱即偏向数据域的硬编码默认（`data-architect`/`etl-engineer`/`data-modeler`/`requirements-analyst`）。
-  - 新增 `scripts/role_catalog.py`（单一事实源）：覆盖 10 个技术域（data-platform / software-dev / cloud-infra / ai-ml / cybersecurity / product / qa / integration / erp / biz-analytics）+ 跨域角色；提供 `infer_domain(text)` / `infer_role(name, domain)` / `specialize()` / `align_from_sow(spec)`。
-  - `dispatch.py` / `consistency_check.py` 改为 import `role_catalog`，删除各自重复的 `ROLE_KEYWORDS` / `DOMAIN_BY_KEYWORD` / `DOMAIN_SPECIALIZATION`。
-  - `parse_sow.py` 默认角色改为 `solution-architect`（summary/wave）与按域推断兜底 `domain-sme`（leaf），并从 SOW 文本自动写入 `domain`。
-  - 旧项目域（insurance-data-lake / payments / ecommerce / fintech-core）经 `LEGACY_SPECIALIZATION` 向后兼容，仍保留特化名。
-  - `expert-roles.md` / `activity-expert-map.md` 扩展为全技术域角色目录；`sow-parsing-playbook.md` / `program-management.md` 示例去数据偏向。
+- **Domain-agnostic + SOW auto-alignment**: removed hardcoded defaults biased toward the data domain out of the box (`data-architect`/`etl-engineer`/`data-modeler`/`requirements-analyst`).
+  - Added `scripts/role_catalog.py` (single source of truth): covers 10 technical domains (data-platform / software-dev / cloud-infra / ai-ml / cybersecurity / product / qa / integration / erp / biz-analytics) + cross-domain roles; provides `infer_domain(text)` / `infer_role(name, domain)` / `specialize()` / `align_from_sow(spec)`.
+  - `dispatch.py` / `consistency_check.py` changed to import `role_catalog`, deleting their respective duplicate `ROLE_KEYWORDS` / `DOMAIN_BY_KEYWORD` / `DOMAIN_SPECIALIZATION`.
+  - `parse_sow.py` default role changed to `solution-architect` (summary/wave) and a domain-inferred fallback `domain-sme` (leaf), and auto-writes `domain` from SOW text.
+  - Old project domains (insurance-data-lake / payments / ecommerce / fintech-core) kept compatible via `LEGACY_SPECIALIZATION`, preserving specialized names.
+  - `expert-roles.md` / `activity-expert-map.md` expanded into a full technical-domain role catalog; `sow-parsing-playbook.md` / `program-management.md` examples de-biased from data.
 
 ## 2.2.11 (2026-07-21)
 
-### 机密性评审穿透化 · 新增 `confidentiality_check.py`（发布前必跑）
-- **背景**：用户指出机密性评审不能「仅限路径」，必须覆盖「所有文件的内容（scripts / examples / 任意文件，含二进制）」。
-  早期评审只扫文本，漏掉了编译缓存 `__pycache__/*.pyc`——其字节码内嵌 `co_filename` 绝对路径
-  （如 `/Users/<user>/...` 或历史工作区路径），会泄露本机用户名/历史工作区。
-- **新增 `scripts/confidentiality_check.py`**：递归穿透扫描整个 skill 包。
-  - 文本文件按行匹配；**二进制（.pyc 等）按字节级扫描**，可抓到内嵌绝对路径；
-  - HIGH 令牌（命中即泄露，exit 1）：`LIC` / `Teradata` / `Vertica` / `Vantage` / `FSAS` / `lic-datalake` /
-    `/Users/` `/home/` `C:\Users` / `qclaw` / `Stephen Lau`；
-  - 白名单（已评审安全，不报警）：`示例客户` / `示例数据湖项目` / `MPP数仓` / `nos-architect` /
-    通用示例邮箱 / `示例 ₹ 金额`；
-  - 自动排除自身源码，避免模式定义自匹配误报。
-- **清理**：删除本地 `__pycache__`（路径泄露源）；`.gitignore` 本已忽略 `*.pyc`，故 `origin/v2` 不含泄露。
-- **固化**：`references/usage.md` §14 将本扫描定为「发布到共享分支前的必跑门禁」。
-- 验证：对当前包运行 exit 0（PASS）；向包内注入含 `/Users/` 绝对路径的 .pyc 后运行立即 FAIL（字节级命中 `@offset`），证明二进制穿透有效。
+### Confidentiality review made deep · added `confidentiality_check.py` (mandatory pre-release)
+- **Background**: user pointed out the confidentiality review must not be "path-only" but must cover "the content of all files (scripts / examples / any file, including binaries)". Early reviews only scanned text and missed compiled caches `__pycache__/*.pyc` — whose bytecode embeds `co_filename` absolute paths (e.g. `/Users/<user>/...` or historical workspace paths), leaking the local username / historical workspace.
+- **Added `scripts/confidentiality_check.py`**: recursively deep-scans the entire skill package.
+  - Text files matched line-by-line; **binaries (.pyc etc.) scanned at byte level**, catching embedded absolute paths;
+  - HIGH tokens (hit = leak, exit 1): absolute paths `/Users/` `/home/` `C:\Users`, plus customer / vendor / personal identifiers supplied via `config.yaml` → `confidentiality.high_tokens` / `confidentiality.high_patterns` (deliberately not hardcoded in the distributed package);
+  - Whitelist (reviewed safe, no alarm): `Example Customer` / `Example Data-Lake Project` / `MPP Data Warehouse` / `nos-architect` / generic example email / `Example INR Amount`;
+  - Auto-excludes its own source to avoid pattern self-match false positives.
+- **Cleanup**: removed local `__pycache__` (path-leak source); `.gitignore` already ignored `*.pyc`, so `origin/v2` contains no leak.
+- **Solidified**: `references/usage.md` §14 makes this scan a "mandatory gate before publishing to a shared branch".
+- Validation: ran on current package exit 0 (PASS); after injecting a .pyc with a `/Users/` absolute path into the package, ran again and immediately FAIL (byte-level hit `@offset`), proving binary deep-scan works.
 
 ## 2.2.10 (2026-07-21)
 
-### Bug fix · RAID 日志「A · Assumptions」渲染为 JSON 字面量
-- **根因**：`templates/common/raid_log.md`（及 `sow_kickoff.md`）的假设段落用 `{{#each assumptions}} - {{this}}`，
-  当假设以 `{'text': '...'}` dict 形式存储时，`{{this}}` 输出整段 dict 的 `str()`（`{'text': '<=1600 源表...'}`），
-  用户看到 JSON 风格 blob，可读性被破坏。
-- **修复**：渲染引擎 `scripts/render.py` 新增 `assume_text` 助手——dict 取 `.text`、纯字符串/标量直出、None 回退空串；
-  两模板假设段落改为 `- {{ assume_text(this) }}`。该助手对两种写法均安全，杜绝 dict 被字符串化。
-- 验证：示例客户 程序 `risks/raid_log.md` 的 A 段重渲染为干净项目符号（「- <=1600 source tables…」等 6 条）；
-  纯字符串假设（如 SOW kickoff）亦正常。
+### Bug fix · RAID log "A · Assumptions" rendered as JSON literal
+- **Root cause**: `templates/common/raid_log.md` (and `sow_kickoff.md`) assumptions section used `{{#each assumptions}} - {{this}}`; when an assumption is stored as a `{'text': '...'}` dict, `{{this}}` outputs the whole dict's `str()` (`{'text': '<=1600 source tables...'}`), and the user sees a JSON-style blob, hurting readability.
+- **Fix**: render engine `scripts/render.py` added the `assume_text` helper — dict takes `.text`, plain string/scalar passes through, None falls back to empty string; both templates' assumptions sections changed to `- {{ assume_text(this) }}`. This helper is safe for both forms and prevents dict stringification.
+- Validation: the example customer program's `risks/raid_log.md` A section re-rendered as clean bullets ("- <=1600 source tables…" etc., 6 items); plain-string assumptions (e.g. SOW kickoff) also render fine.
 
 ## 2.2.9 (2026-07-21)
 
-### 运营期交付物护栏（OAG, Operational Artifact Guardrail）— 新增可执行护栏
-- **根因**：示例客户 项目在 operational 阶段修改了 `project.yaml`（RAID/EVM）却未重渲染对应交付物，导致
-  `raid_log` / `risk_register` / `portfolio_dashboard` 落后于事实源数周，违反「每次动作须刷新交付物」护栏。
-- **新增 `scripts/artifact_guard.py`**：内容哈希漂移检测。
-  - 每次渲染（`build_subproject.py` / `rerender_docs.py`）向 `project.yaml.artifacts_meta.<key>`
-    写入 `source_hash`（依赖数据切片 content-hash）+ `rendered_at`；
-  - 校验时重算当前数据哈希并与 `source_hash` 比对：一致=OK，不一致=数据漂移（违规，exit 1）；
-  - 存量文档（无 `source_hash`）仅给 ADVISORY，不误杀；
-  - `--stamp <key>` 为手工/外部渲染文档记录 `source_hash`（如 `portfolio_dashboard`）。
-- **集成**：
-  - `control_engine.py` 周期巡检内置 OAG 检查，漂移即 RED 升级并 `exit 1`（可挂定时任务）；
-  - `gate_engine.py` 收尾门（G3→4）将「交付物与事实源一致 (OAG)」列为**硬准则**，漂移则禁止收尾；
-  - 每次阶段门评估均打印 OAG 状态。
-- **文档化**：SKILL.md 新增 Iron Rule #12；`references/operation-model.md` §4.6、`references/phases/p2-execution.md`
-  §7.1、`references/project-schema.md`（artifacts_meta）同步。
-- 验证：示例客户 程序 `artifact_guard.py --project` 在重渲染后 exit 0；临时改动 `raid` 后运行立即报
-  `[数据漂移] raid_log`，证明可抓到当初漏掉的环节。
+### Operational artifact guardrail (OAG, Operational Artifact Guardrail) — new executable guardrail
+- **Root cause**: the example customer project modified `project.yaml` (RAID/EVM) during the operational phase but did not re-render the corresponding artifacts, leaving `raid_log` / `risk_register` / `portfolio_dashboard` weeks behind the fact source, violating the "refresh artifacts on every action" guardrail.
+- **Added `scripts/artifact_guard.py`**: content-hash drift detection.
+  - Each render (`build_subproject.py` / `rerender_docs.py`) writes `source_hash` (content hash of the dependent data slice) + `rendered_at` to `project.yaml.artifacts_meta.<key>`;
+  - On check, recompute the current data hash and compare with `source_hash`: match = OK, mismatch = data drift (violation, exit 1);
+  - Existing docs (no `source_hash`) only get an ADVISORY, not a false kill;
+  - `--stamp <key>` records `source_hash` for manually/externally rendered docs (e.g. `portfolio_dashboard`).
+- **Integration**:
+  - `control_engine.py` periodic inspection has built-in OAG checks; drift escalates to RED and `exit 1` (can be hooked to a scheduled task);
+  - `gate_engine.py` closeout gate (G3→4) lists "artifacts consistent with fact source (OAG)" as a **hard criterion**; drift blocks closeout;
+  - OAG status printed on every stage-gate evaluation.
+- **Documented**: SKILL.md added Iron Rule #12; `references/operation-model.md` §4.6, `references/phases/p2-execution.md` §7.1, `references/project-schema.md` (artifacts_meta) synced.
+- Validation: example customer program `artifact_guard.py --project` exit 0 after re-render; after temporarily changing `raid`, ran again and immediately reported `[Data Drift] raid_log`, proving it catches the previously missed step.
 
-### Bug fix · 程序级 RAID 渲染读取 `raid.*` 而非顶层 `risks`
-- **根因**：`build_subproject.py` / `rerender_docs.py` 读取 RAID 时取顶层 `data['risks']`，但程序层 RAID 存于
-  `data['raid']['risks']`，导致 `rerender_docs.py` 静默跳过风险文档（`if not data.get('risks'): skip`），
-  且 `risk_register.md` 被喂空列表；`consistency_check.py` 读 `raid.risks` 故门禁仍过，造成「门过但文档陈旧」的静默漂移。
-- **修复**：两脚本的 risk 渲染路径回退到 `data['raid']['risks']`；`rerender_docs.py` 去掉 `KeyError` 隐患。
-- 验证：示例客户 程序 `risks/raid_log.md` / `risks/risk_register.md` 正确反映 R1–R12 / I1–I6；`rerender_docs.py` 不再跳过。
+### Bug fix · program-level RAID render read `raid.*` instead of top-level `risks`
+- **Root cause**: `build_subproject.py` / `rerender_docs.py` read RAID from top-level `data['risks']`, but program-level RAID lives under `data['raid']['risks']`, causing `rerender_docs.py` to silently skip the risk doc (`if not data.get('risks'): skip`), and `risk_register.md` to be fed an empty list; `consistency_check.py` reads `raid.risks`, so the gate still passed, producing silent drift of "gate passed but doc stale".
+- **Fix**: both scripts' risk render path falls back to `data['raid']['risks']`; `rerender_docs.py` removes the `KeyError` hazard.
+- Validation: example customer program `risks/raid_log.md` / `risks/risk_register.md` correctly reflect R1–R12 / I1–I6; `rerender_docs.py` no longer skips.
 
 ## 2.2.7 (2026-07-20)
 
-### Bug fix · 子项目状态报告「5. Risks & Blockers」渲染为 JSON 字符串
-- **根因**：`templates/common/status_report.md` 的 §5 用 `{{#each risks}} - {{this}}`，当 `risks` 为 dict 列表时 `{{this}}` 输出 `str(dict)` → 用户看到的 JSON 风格 blob。
-- **修复**：§5 改为与风险登记册一致的**风险表格**（含 `sev_cell` 严重度色标 emoji：🟢绿/🟡黄/🟠橙/🔴红），列含 # / Severity / Risk ID / Description / Category / Owner / Mitigation / Status；`risks` 为空时显示「_No active risks or blockers this period._」。
-- 验证：示例客户 9 个子项目 status_report 全部重渲染，§5 无 JSON blob；空风险分支正常。三处安装 v2.2.7。
+### Bug fix · sub-project status report "5. Risks & Blockers" rendered as JSON string
+- **Root cause**: `templates/common/status_report.md` §5 used `{{#each risks}} - {{this}}`; when `risks` is a list of dicts, `{{this}}` outputs `str(dict)` → user sees a JSON-style blob.
+- **Fix**: §5 changed to a risk table consistent with the risk register (with `sev_cell` severity color-band emoji: 🟢 green / 🟡 yellow / 🟠 orange / 🔴 red), columns include # / Severity / Risk ID / Description / Category / Owner / Mitigation / Status; when `risks` is empty shows "_No active risks or blockers this period._".
+- Validation: all 9 example customer sub-project status reports re-rendered, §5 has no JSON blob; empty-risk branch normal. Three installs at v2.2.7.
 
 ## 2.2.6 (2026-07-20)
 
-### WBS/排期 Pillar 2+4 落盘修复 + 已冻结 示例客户 的 Payment Linkage 实化
-- **`build_schedule.py` 部分图保护（防压平回归）**：项目群/program 视图缺叶子细节（部分图）时，若包已有真实 start/end 且其排程偏移为 0，则**沿用既有日期**，不再把已基线化里程碑重置为起始日。修复了 2.2.5 末次 program 视图回写把 示例客户 全部里程碑压平到 2026-08-01 的回归。
-- **program / 单 SOW 视图默认只读**：`--level program` 与 `--sow` 不再回写 `wbs` 日期（仅 full 视图拥有完整叶子图才回写），保护已冻结 master 索引不被视图渲染改动。
-- **Pillar 4 `due` 改为逐里程碑计算**：里程碑计费（fixed）且无独立合同日历 → 付款随该里程碑达成即到期（收款节奏=交付节奏），每行 `due` 默认取自身里程碑日；仅当 `sow_map`/`program.sows` 显式给 `due_date`（早于里程碑日）才可能出现 `drift`。修复了 SOW 级 `due` 泄漏到后续里程碑导致误报 30 条 drift 的 bug。
-- **示例客户 元数据回填（非破坏性）**：为 示例客户 37 个既有固定费率里程碑补 `billing.payment_id`（{SOW}-P{n}），未改任何日期/BAC。回填后 `plans/schedule_program_gantt.md` 的 Payment Linkage 段 37 行全部 `linked`（合同即“签字/完工触发付款”），master 未被改动，consistency/critic 仍 exit 0。
-- 验证：示例客户（operational）不击穿；规划期显式 late `due_date` 仍触发 `drift`（exit 1 由 6d 门禁）。三处安装 v2.2.6。
+### WBS/Schedule Pillar 2+4 persistence fix + frozen example customer Payment Linkage materialized
+- **`build_schedule.py` partial-graph protection (prevent flatten regression)**: when the program view lacks leaf detail (partial graph), if a package already has real start/end and its schedule offset is 0, **reuse existing dates** instead of resetting already-baselined milestones to the start date. Fixed the regression where 2.2.5's last program-view write-back flattened all example customer milestones to 2026-08-01.
+- **program / single-SOW view read-only by default**: `--level program` and `--sow` no longer write back `wbs` dates (only the full view, with the complete leaf graph, writes back), protecting the frozen master index from view-render changes.
+- **Pillar 4 `due` computed per milestone**: a billed (fixed) milestone with no separate contract calendar → payment becomes due when that milestone is achieved (collection cadence = delivery cadence); each row's `due` defaults to its own milestone date; only when `sow_map`/`program.sows` explicitly gives `due_date` (earlier than the milestone date) can `drift` occur. Fixed the bug where SOW-level `due` leaked into later milestones, causing 30 false `drift` alarms.
+- **example customer metadata backfill (non-destructive)**: added `billing.payment_id` ({SOW}-P{n}) to 37 existing fixed-fee milestones, changing no dates / BAC. After backfill, the Payment Linkage section of `plans/schedule_program_gantt.md` shows all 37 rows as `linked` (contract = "sign-off / completion triggers payment"); master unchanged, consistency/critic still exit 0.
+- Validation: example customer (operational) not breached; planning-phase explicitly-late `due_date` still triggers `drift` (exit 1 from 6d gate). Three installs at v2.2.6.
 
 ## 2.2.5 (2026-07-20)
 
-### WBS/排期 Pillar 2（里程碑↔活动归集）+ Pillar 4（支付里程碑↔排期联动）
-- **Pillar 2**：`build_schedule.py` 新增 `milestone_coverage` 计算——每个里程碑下直接归属的活动集合（叶子 `milestone_ref` 或依赖末端落在里程碑），渲染到 `schedule_gantt.md` 的「Milestone Coverage」段。一个支付里程碑可对应多个活动。
-- **`parse_sow.py` 自动标注**：每叶子自动置 `milestone_ref` 指向其 Wave 里程碑；每计费里程碑自动置 `billing.payment_id = {SOW}-P{n}`（Pillar 4 映射）。
-- **Pillar 4**：`build_schedule.py` 新增 `payment_linkage` 计算——每条固定费率支付行 → 其里程碑 → 排期日 vs 合同 due_date；状态 linked/drift/no-due。渲染到「Payment Linkage」段。
-- **`consistency_check.py` 6d 排期联动门禁（仅规划期致命，运营期跳过）**：6d-1 里程碑覆盖缺口（叶子未归属里程碑）、6d-2 支付↔里程碑缺失（固定费率 SOW 有支付行却无计费里程碑）、6d-3 支付顺序非单调（同一 SOW 计费里程碑排期日须升序）。
-- 验证：示例客户（operational）不击穿（consistency/critic 均 exit 0，Payment Linkage 段正常渲染示例 ₹ 金额）；规划期样例触发 6d 门禁。
-- 安全沿用 Pillar 1 设计：所有新门禁仅在 planning_now（phase∈{启动,规划,''} 或 lifecycle∈{planning,review,baselined,None}）致命。
+### WBS/Schedule Pillar 2 (milestone ↔ activity rollup) + Pillar 4 (payment milestone ↔ schedule linkage)
+- **Pillar 2**: `build_schedule.py` added `milestone_coverage` computation — the set of activities directly attributed to each milestone (leaf `milestone_ref` or a dependency endpoint landing on the milestone), rendered to the "Milestone Coverage" section of `schedule_gantt.md`. A payment milestone may map to multiple activities.
+- **`parse_sow.py` auto-tagging**: each leaf auto-sets `milestone_ref` pointing to its Wave milestone; each billing milestone auto-sets `billing.payment_id = {SOW}-P{n}` (Pillar 4 mapping).
+- **Pillar 4**: `build_schedule.py` added `payment_linkage` computation — each fixed-fee payment row → its milestone → scheduled date vs contract due_date; status linked/drift/no-due. Rendered to the "Payment Linkage" section.
+- **`consistency_check.py` 6d schedule-linkage gate (fatal only in planning phase, skipped in operational)**: 6d-1 milestone coverage gap (leaf not attributed to a milestone), 6d-2 payment ↔ milestone missing (fixed-fee SOW has payment rows but no billing milestone), 6d-3 payment order non-monotonic (same SOW billing milestones must be in ascending scheduled order).
+- Validation: example customer (operational) not breached (consistency/critic both exit 0, Payment Linkage section renders example INR amounts normally); planning-phase example triggers the 6d gate.
+- Safely reuses the Pillar 1 design: all new gates are fatal only in `planning_now` (phase ∈ {initiation, planning, ''} or lifecycle ∈ {planning, review, baselined, None}).
 
 ## 2.2.4 (2026-07-20)
 
-### WBS 拆解纪律 Pillar 1（6 因素 + Critic 自审引擎）+ Pillar 3（双周 fortnight 颗粒度）
-- **新增 `scripts/critic_review.py`（可执行 Critic 自审）**：把 `sow-parsing-playbook.md` 的散文 Critic 固化为 6 因素校验——scope 可追溯 / milestone 归属 / payment 挂支付行 / assumptions 可量化边界 / constraints 外部前置须 entry_gate / dependencies 连通。规划期致命（exit 1），运营期（已冻结，如 示例客户）降级为提示不阻断。
-- **`consistency_check.py` 新增 6c 拆解纪律门禁（仅规划/启动期致命）**：集成 `critic_review.py --strict` 结果 + 校验 `decomposition.critic_passed==true` + assumptions 可量化边界。运营期自动跳过，保护已冻结项目不被新门禁击穿。
-- **Pillar 3**：`init_project.py` 默认 `control.leaf_granularity: fortnight` + `granularity_threshold: 10`（=10 工作人天，沿用既有默认但显式化），作为 waterfall/program 叶子包标准颗粒度。
-- **`sow-parsing-playbook.md` §2.6** 重写：Critic 自审列出 6 因素清单，并要求落盘后运行 `critic_review.py --strict` 并置 `critic_passed=true`。
-- 验证：示例客户（operational）一致性 exit 0 / critic exit 0（不击穿）；规划期样例触发 7 项致命（scope/milestone/dependency/critic_passed/assumption-bound 等），exit 1。
+### WBS decomposition discipline Pillar 1 (6 factors + Critic self-review engine) + Pillar 3 (fortnight granularity)
+- **Added `scripts/critic_review.py` (executable Critic self-review)**: solidified the prose Critic of `sow-parsing-playbook.md` into a 6-factor check — scope traceable / milestone attribution / payment linked to payment row / assumptions have quantifiable boundaries / constraints' external prerequisites need entry_gate / dependencies connected. Fatal in planning phase (exit 1); downgraded to a hint (non-blocking) in operational phase (frozen, e.g. example customer).
+- **`consistency_check.py` added 6c decomposition-discipline gate (fatal only in planning/initiation)**: integrates `critic_review.py --strict` result + validates `decomposition.critic_passed==true` + assumptions have quantifiable boundaries. Auto-skipped in operational phase, protecting frozen projects from being breached by new gates.
+- **Pillar 3**: `init_project.py` defaults `control.leaf_granularity: fortnight` + `granularity_threshold: 10` (=10 working person-days, reusing the existing default but made explicit), as the standard leaf-package granularity for waterfall/program.
+- **`sow-parsing-playbook.md` §2.6** rewritten: Critic self-review lists the 6-factor checklist, and requires running `critic_review.py --strict` after persistence and setting `critic_passed=true`.
+- Validation: example customer (operational) consistency exit 0 / critic exit 0 (not breached); planning-phase example triggers 7 fatal items (scope/milestone/dependency/critic_passed/assumption-bound etc.), exit 1.
 
 ## 2.2.3 (2026-07-20)
 
-### P0/P1 拆细：方法无关骨架 + 联邦式事实源（SOW 解析驱动）
-- **`references/phases/p0-p1-initiation-planning.md` 重构**：
-  - 新增 §1.1 **P0/P1 逐步序列**，明确方法无关骨架：P0 不建 WBS，WBS 在 P1 由 P0.2 的 draft charter 派生。
-  - **P0.0** 分类（project vs program）+ 设计 PM 团队（程序=master+各 SOW PM 子 Agent）。
-  - **P0.1** 抽取 SOW → 结构化理解（spec JSON），套用 `sow-parsing-playbook.md`；program 下明确「先 init 各子项目，再回填 master 索引」，master 绝不持叶子（呼应 Iron Rule #11 / operation-model.md）。
-  - **P0.2** 由 spec 生成基础产物：charter 仍 **draft**，估算基准作为 **charter 内章节**（Scope / Delivery milestones / Payment milestones / Assumptions / Constraints / Dependencies），非独立文档；RAID 从 SOW 假设/约束/依赖 **seed**（非 draft）。
-  - **P1** dispatch 建 WBS（源自 draft charter）→ 排期 → 5×5 风险校准 → 一致性门 → baseline 冻结 → **charter 定稿** → G1→2 门禁。
-  - §2 方法论适配表改造为「P0.2 估算基准形态 / P1 排期产物 / 基线冻结与否」，明确 agile/iteration 不冻结基线、纯 agile 支付章节标 "N/A — internal release cadence"。
-  - §3 交付物清单标注 charter 为「P0 draft、P1 final」，估算基准=charter 内章节。
-- 背景：用户要求把「P0 判定 program/project 并设计 PM 团队、从 SOW 抽取建事实源、估算基准入 charter、P1 完成规划」固化为技能级步骤，且与 operation-model 的自底向上一致。
+### P0/P1 decomposition: methodology-agnostic skeleton + federated source of truth (SOW-parsing driven)
+- **`references/phases/p0-p1-initiation-planning.md` refactor**:
+  - Added §1.1 **P0/P1 step-by-step sequence**, clarifying the methodology-agnostic skeleton: P0 does not build the WBS; the WBS is derived in P1 from the P0.2 draft charter.
+  - **P0.0** classify (project vs program) + design the PM team (program = master + per-SOW PM sub-agents).
+  - **P0.1** extract SOW → structured understanding (spec JSON), applying `sow-parsing-playbook.md`; under a program, explicitly "init each sub-project first, then backfill the master index"; the master never holds leaves (echoes Iron Rule #11 / operation-model.md).
+  - **P0.2** generate base artifacts from spec: charter still **draft**, estimate baseline as a **charter section** (Scope / Delivery milestones / Payment milestones / Assumptions / Constraints / Dependencies), not a standalone doc; RAID **seeded** from SOW assumptions/constraints/dependencies (not draft).
+  - **P1** dispatch builds WBS (from draft charter) → schedule → 5×5 risk calibration → consistency gate → baseline freeze → **charter finalized** → G1→2 gate.
+  - §2 methodology-adaptation table changed to "P0.2 estimate-baseline form / P1 schedule artifact / whether baseline frozen", clarifying agile/iteration does not freeze baseline, pure agile payment section marked "N/A — internal release cadence".
+  - §3 artifact list annotates charter as "P0 draft, P1 final", estimate baseline = charter section.
+- Background: user requested solidifying "P0 decides program/project and designs the PM team, builds the fact source from SOW extraction, puts the estimate baseline into the charter, P1 completes planning" as a skill-level step, consistent with operation-model's bottom-up approach.
 
 ## 2.2.2 (2026-07-20)
 
-### 操作模型固化：自底向上编制 + 向上汇总（技能级铁律，非项目专属）
-- **新增 `references/operation-model.md`**：将「计划在子项目层编制、状态/RAID/变更/进度在子项目层维护、程序层是只读脚本汇总的视图」固化为技能级默认操作模型。明确：程序 `actuals`/RAID/status 均为派生值，禁止手工编辑；要纠偏须改源子项目并重跑 `rollup_subprojects.py`（或单文件两层的 `rollup_program_wbs.py --derive-actuals`）。
-- **SKILL.md / SKILL.en.md 新增 Iron Rule #11（Bottom-up authoring & rollup）**：计划/状态/RAID/变更控制在最低归属单元（SOW/子项目）编制，程序层为只读脚本汇总，不得作为手工并行的真相源。违反后果：治理漂移、虚假状态。
-- **Program-specific Rules 第 6 条** 引用 Iron Rule #11，并明确 `rollup_subprojects.py`（跨文件）与 `rollup_program_wbs.py`（单文件两层）的分工。
-- **`references/program-management.md`** Per-SOW Sub-Project 段落：指向 `operation-model.md`，新增「Rollup（程序=子项目的只读聚合）」小节，写明刷新程序视图的标准命令序列（rollup → control_engine），并强调派生字段禁手工编辑。
-- 背景：示例数据湖项目 程序（9 份 SOW）实测时，子项目拆分后若程序级 RAID/status 与子项目各维护一套会一周内漂移；此模型从机制上消除该反模式。
+### Operation model solidified: bottom-up authoring + upward rollup (skill-level iron rule, not project-specific)
+- **Added `references/operation-model.md`**: solidified "plans authored at sub-project level, status/RAID/change/progress maintained at sub-project level, program level is a read-only script-aggregated view" as the skill-level default operation model. Clarified: program `actuals`/RAID/status are all derived values, manual editing prohibited; to correct, change the source sub-project and rerun `rollup_subprojects.py` (or the single-file two-layer `rollup_program_wbs.py --derive-actuals`).
+- **SKILL.md / SKILL.en.md added Iron Rule #11 (Bottom-up authoring & rollup)**: plans/status/RAID/change-control authored at the lowest owning unit (SOW/sub-project); the program level is a read-only script rollup, not a hand-maintained parallel source of truth. Violation consequence: governance drift, false status.
+- **Program-specific Rules #6** references Iron Rule #11, and clarifies the division of labor between `rollup_subprojects.py` (cross-file) and `rollup_program_wbs.py` (single-file two-layer).
+- **`references/program-management.md`** Per-SOW Sub-Project section: points to `operation-model.md`, adds a "Rollup (program = read-only aggregation of sub-projects)" subsection, writing the standard command sequence to refresh the program view (rollup → control_engine), and stresses derived fields must not be hand-edited.
+- Background: when the example data-lake program (9 SOWs) was empirically tested, after splitting sub-projects, if program-level RAID/status and sub-projects each maintained their own set, they drifted within a week; this model eliminates that anti-pattern at the mechanism level.
 
 ## 2.2.1 (2026-07-19)
 
-### 排期引擎 3 个修复（SOW1 依赖失效 / mermaid 里程碑报错 / 汇总包时长=0）
-- **`parse_sow.py` 依赖落盘修复**：`chain_leaves` 此前只改写 spec 字典，而叶子包在 `add_wave` 时已创建（当时 `dependsOn=[]`），导致真实依赖从未写入 `project.yaml` → `build_schedule` 正向排程所有任务 `ES=0`、开始日全部等于项目起始日。现改为直接写回 `byid` 里真实包对象，叶子依赖链真正生效。
-- **`build_schedule.py` 汇总包不参与顺序工期**：WBS 汇总包（Wave/SOW 根）是容器，其 `estimate` 是子项累计值，若按 `dur` 参与正向排程会注入数十天「幽灵间隙」。现汇总包排程 `dur=0`，跨度仅用于显示（自底向上 rollup 出真实 start/end）。此前 SOW1 各 Wave 间出现 ~7 周空洞即源于此。
-- **mermaid 里程碑语法修复**：甘特图里程碑行原只输出 `:milestone, start`，mermaid 旧版对缺 end 的里程碑报 `undefined.endTime`。现改为 `:milestone, start, end`（start==end）。同时甘特图跳过汇总包（不再误当作零宽里程碑渲染）。
-- **叶子包工期回退**：叶子包仅有 `estimate` 无 `duration` 时，用 `estimate` 作为工期（此前为 0 导致被误判里程碑）。
-- **program 级视图修复**：此前 program 视图只排程 SOW 根包，叶子被排除 → 汇总包跨度算不出、duration 全 0。现 program 视图排程时把所有 SOW 后代纳入（算出真实跨度并回写叶子日期），渲染时仅显示 `tier==program` 行 + 里程碑。SOW1 现显示 210 天（2026-08-01 → 2027-02-27），不再为 0。
-- 端到端验证：SOW1 叶子依赖链生效、日期连续级联、mermaid 块无裸 `&`、program 表格/甘特均无 0 时长、一致性门禁 exit 0。
+### 3 scheduling-engine fixes (SOW1 dependency failure / mermaid milestone error / summary package duration = 0)
+- **`parse_sow.py` dependency persistence fix**: `chain_leaves` previously only rewrote the spec dict, while leaf packages were already created in `add_wave` (with `dependsOn=[]` at the time), so the real dependency was never written to `project.yaml` → `build_schedule` forward-scheduled all tasks with `ES=0`, start dates all equal to the project start date. Now writes back directly to the real package object in `byid`, so the leaf dependency chain truly takes effect.
+- **`build_schedule.py` summary packages excluded from sequential duration**: WBS summary packages (Wave/SOW root) are containers whose `estimate` is a child rollup; if scheduled by `dur`, they inject tens of days of "ghost gaps". Now summary packages schedule with `dur=0`, span used for display only (bottom-up rollup yields real start/end). The ~7-week void between SOW1 Waves came from this.
+- **mermaid milestone syntax fix**: the gantt milestone line originally output only `:milestone, start`; old mermaid errored `undefined.endTime` on milestones missing end. Now `:milestone, start, end` (start==end). Also the gantt skips summary packages (no longer mistakenly rendered as zero-width milestones).
+- **Leaf package duration fallback**: when a leaf package has only `estimate` but no `duration`, use `estimate` as duration (previously 0, causing it to be misjudged as a milestone).
+- **program-level view fix**: previously the program view scheduled only SOW root packages, leaves excluded → summary span uncomputable, duration all 0. Now the program view includes all SOW descendants when scheduling (computes real span and writes back leaf dates); on render shows only `tier==program` rows + milestones. SOW1 now shows 210 days (2026-08-01 → 2027-02-27), no longer 0.
+- End-to-end validation: SOW1 leaf dependency chain effective, dates cascade continuously, no bare `&` in mermaid block, program table/gantt have no zero-duration, consistency gate exit 0.
 
 ## 2.2.0 (2026-07-19)
 
-### 基础布局加固：SOW/合同解析流水线（a + c 双通道）+ 计费里程碑门禁
-- **新增 `references/sow-parsing-playbook.md`**：把「专家级理解」固化为可重复、方法论无关（waterfall/agile/T&M/hybrid）、合同类型无关（固定费率/T&M/混合/LOI）的解析 Playbook。核心：(a) 文本抽取 + (c) 引导式 Q&A 双通道生成「理解记录(spec, JSON)」，从源头杜绝泛化推断。
-- **新增 `scripts/parse_sow.py`**：理解记录(spec) → 自动写入 `project.yaml` 的 WBS 包（幂等可重跑，自底向上累计估算，默认依赖链保证可正向排程，自动维护 `sow_map` 的 fee/fee_type/methodology/status）。因 spec 已通过 (a)+(c) 双重确认，WBS 落盘无需人工审批。
-- **`consistency_check.py` 新增「计费里程碑完整性」基础布局门禁（致命）**：`sow_map` 中任一固定费率 SOW 或其子树含 `billing.fee_type=='fixed' && fee>0` 的包，必须存在 ≥1 个 `milestone:true && billing.fee_type=='fixed' && fee>0` 的包，否则一致性门阻断交付。从机制上保证：任何基础布局都必然含计费里程碑、细粒度叶子、完整依赖——杜绝初级计划。
-- **端到端验证**：dry-run/实跑/依赖链（entry_gate→Wave→叶链→计费里程碑→下一 Wave）、正向门禁（真实 SOW1 通过）、负向门禁（缺里程碑的固定费率 SOW 致命失败）全部通过。
+### Base-layout hardening: SOW/contract parsing pipeline (a + c dual channel) + billing-milestone gate
+- **Added `references/sow-parsing-playbook.md`**: solidified "expert-level understanding" into a repeatable, methodology-agnostic (waterfall/agile/T&M/hybrid), contract-type-agnostic (fixed-fee/T&M/hybrid/LOI) parsing Playbook. Core: (a) text extraction + (c) guided Q&A dual channel generates an "understanding record (spec, JSON)", eliminating generalized inference at the source.
+- **Added `scripts/parse_sow.py`**: understanding record (spec) → auto-writes WBS packages into `project.yaml` (idempotent, re-runnable, bottom-up cumulative estimate, default dependency chain guarantees forward-schedulability, auto-maintains `sow_map`'s fee/fee_type/methodology/status). Since spec passed (a)+(c) double confirmation, WBS persistence needs no manual approval.
+- **`consistency_check.py` added "billing-milestone completeness" base-layout gate (fatal)**: any fixed-fee SOW in `sow_map` or its subtree containing a package with `billing.fee_type=='fixed' && fee>0` must have ≥1 package with `milestone:true && billing.fee_type=='fixed' && fee>0`, else the consistency gate blocks delivery. Mechanistically guarantees: any base layout necessarily contains billing milestones, fine-grained leaves, complete dependencies — eliminating naive plans.
+- **End-to-end validation**: dry-run/real-run/dependency chain (entry_gate → Wave → leaf chain → billing milestone → next Wave), positive gate (real SOW1 passes), negative gate (fixed-fee SOW missing milestone fatally fails) all pass.
 
 ## 2.1.8 (2026-07-19)
 
-### Bugfix: mermaid gantt 渲染 `&` 导致 "undefined.endTime" 崩溃
-- **根因**：`_gantt_name()` 只转义 `:` 为全角 `：`，未处理 `&`。mermaid gantt 中 `&` 是多任务同行运算符，任务名里的 ASCII `&`（如 "SOW1 Data Modelling **&** Engineering"）会被解析为行延续符，使后续 token 变成无日期任务 → 报错 `Cannot read properties of undefined (reading "endTime")`。
-- **修复**：`_gantt_name()` 额外把 ASCII `&` 换成全角 `＆`(U+FF06)（视觉仍是 &，但不触发运算符解析）。`SOW6 SME Support (T&M)` 同理已覆盖（程序级 gantt 用 graph TD 引号标签原本安全，但 SOW 级 gantt 已修复）。
-- **验证**：重新生成的 `plans/SOW1/schedule_gantt.md` 甘特块已无裸 ASCII `&`（全为 `＆`），在 mermaid 解析器下可正常渲染。
-- 同步运行副本 `~/.workbuddy/skills/pm-master/scripts/render.py`。
+### Bugfix: mermaid gantt render `&` causes "undefined.endTime" crash
+- **Root cause**: `_gantt_name()` only escaped the ASCII colon to its fullwidth form, not the ampersand. In a mermaid gantt, `&` is a multi-task same-line operator; an ASCII `&` in a task name (e.g. "SOW1 Data Modelling **&** Engineering") is parsed as a line continuation, making subsequent tokens date-less tasks → error `Cannot read properties of undefined (reading "endTime")`.
+- **Fix**: `_gantt_name()` additionally replaces the ASCII ampersand with its fullwidth equivalent (U+FF06) (visually still an ampersand, but does not trigger operator parsing). `SOW6 SME Support (T&M)` similarly covered (program-level gantt uses graph TD quoted labels, originally safe, but SOW-level gantt fixed).
+- **Validation**: regenerated `plans/SOW1/schedule_gantt.md` gantt block has no bare ASCII `&` (all converted to the fullwidth form), renders normally under the mermaid parser.
+- Synced run copy `~/.workbuddy/skills/pm-master/scripts/render.py`.
 ## 2.1.7 (2026-07-19)
 
-### SOW 解析深度修复（用户评审 SOW1 子项目后：计划仅显示首双周、缺 Wave 结构与计费里程碑）
-- **根因**：此前 SOW1 计划是「初级水平」——套用一次性泛化 4 阶段瀑布，未读 SOW 真实 **4-Wave 商业结构** 与 **5 个设计文档签字里程碑**（其中 4 个为计费事件 = 示例金额），排期只覆盖前 ~5 周。
-- **专家级重做（CoT + 评审）**：先逐字提取 SOW 计费/交付节，把每个 "<Deliverable> post sign-off" 事件建模为 `milestone: true` + `billing:{event,fee_inr,currency,status}` 包；4 个 Wave 各为 summary 包（源分析→逻辑模型→物理模型+DDL→S2T映射→签字里程碑），并按商业节奏顺序排程（W1 2026-10-15 → W4 2027-04-28，全 ~9 个月）；客户系统B 归档设计为独立交付里程碑（fee_inr:0，标注非独立计费）。
-- **叶子包 ≤10 人天**：逻辑/物理/S2T 拆为 ≤10 天领域专家桶（W1.2a FSDM / W1.2b 客户系统A / W1.3a Core DDL / W1.3b Semantic DDL …），满足控制门硬阈值；summary/milestone 用子项累计估算。
-- **数据就绪门**：新增 `SOW1.0 源就绪门` 作为关键路径前置（SME+真实数据+接口文档），对应 SOW 最大返工风险。
-- **子项目联动**：subprojects/sow1/project.yaml 补 `billing_milestones[]` 索引（M1–M5 含金额/日期/状态）与 4 项 Wave 级风险（含 S1-R4 计费里程碑延迟现金流风险）；RAID 依赖写回 SOW2/3/7 正确前置。
-- **新增参考规范**：`references/program-management.md` 加「Billing-Milestone-Driven WBS Decomposition」专家约定（解析 SOW 必须先做链路思考+评审，再写 WBS）。
-- **验证**：SOW1 排期覆盖 FN01→FN20（全 ~9 个月，非仅首双周）；甘特含 11 个里程碑（4 计费+1 交付+其他）；程序级一致性门 exit 0。
-> 版本号与 `SKILL.md` 的 `metadata.version`、`_user_meta.json` 的 `version` 保持一致。
+### SOW parsing depth fix (after user review of SOW1 sub-project: plan showed only first fortnight, missing Wave structure and billing milestones)
+- **Root cause**: previously the SOW1 plan was "naive level" — applied a one-off generalized 4-phase waterfall, did not read the SOW's real **4-Wave commercial structure** and **5 design-doc sign-off milestones** (4 of which are billing events = example amount); schedule covered only the first ~5 weeks.
+- **Expert-level redo (CoT + review)**: extracted the SOW billing/delivery sections verbatim, modeled each "<Deliverable> post sign-off" event as a `milestone: true` + `billing:{event,fee_inr,currency,status}` package; each of 4 Waves is a summary package (source analysis → logical model → physical model + DDL → S2T mapping → sign-off milestone), scheduled in commercial-rhythm order (W1 2026-10-15 → W4 2027-04-28, full ~9 months); Customer System B archival design as a standalone delivery milestone (fee_inr:0, marked non-standalone billing).
+- **Leaf packages ≤10 person-days**: logic/physical/S2T split into ≤10-day domain-expert buckets (W1.2a FSDM / W1.2b Customer System A / W1.3a Core DDL / W1.3b Semantic DDL …), meeting the control-gate hard threshold; summary/milestone use child rollup estimates.
+- **Data-readiness gate**: added `SOW1.0 Source Readiness Gate` as a critical-path prerequisite (SME + real data + interface docs), corresponding to the SOW's largest rework risk.
+- **Sub-project linkage**: subprojects/sow1/project.yaml adds `billing_milestones[]` index (M1–M5 with amount/date/status) and 4 Wave-level risks (incl. S1-R4 billing-milestone delay cash-flow risk); RAID dependency written back to SOW2/3/7 with correct prerequisites.
+- **Added reference spec**: `references/program-management.md` adds "Billing-Milestone-Driven WBS Decomposition" expert convention (parsing a SOW must do chain-thinking + review before writing the WBS).
+- **Validation**: SOW1 schedule covers FN01→FN20 (full ~9 months, not just first fortnight); gantt has 11 milestones (4 billing + 1 delivery + others); program-level consistency gate exit 0.
+> Version number kept consistent with `SKILL.md`'s `metadata.version` and `_user_meta.json`'s `version`.
 
 ## 2.1.6 (2026-07-19)
 
-### 两个架构性缺口补齐（用户评审 示例客户 SOW1 后提出）
+### Two architectural gaps filled (raised after user reviewed example customer SOW1)
 
-**1. 子项目（per-SOW sub-project）层级**
-- 每个 SOW 现在作为独立「子项目」维护，拥有自己的 `project.yaml`、RAID 日志、风险登记册、状态报告，由各 SOW 项目经理独立负责。
-- `init_project.py` 新增 `--parent <program.yaml> --sow SOW1 --slug sow1`：在 `program/subprojects/<slug>/` 下建立独立骨架，并自动回写 `program.projects[]` 索引（id/sow/methodology/status/path）。
-- 新增 `build_subproject.py`：从子项目 `project.yaml`（单一事实源）渲染 `risks/raid_log.md`、`risks/risk_register.md`、`reports/status_report.md`，并把产物路径写回 `artifacts`。
-- 子项目通过 `parent: {project: '../../project.yaml', sow: SOW1}` 与父项目群保持血缘关联；跨 SOW 依赖写入各子项目 `raid.dependencies[]`。
+**1. Sub-project (per-SOW sub-project) level**
+- Each SOW is now maintained as an independent "sub-project", with its own `project.yaml`, RAID log, risk register, status report, independently owned by each SOW project manager.
+- `init_project.py` added `--parent <program.yaml> --sow SOW1 --slug sow1`: builds an independent skeleton under `program/subprojects/<slug>/`, and auto-write-backs the `program.projects[]` index (id/sow/methodology/status/path).
+- Added `build_subproject.py`: renders `risks/raid_log.md`, `risks/risk_register.md`, `reports/status_report.md` from the sub-project `project.yaml` (single source of truth), and writes artifact paths back to `artifacts`.
+- Sub-projects keep lineage with the parent program via `parent: {project: '../../project.yaml', sow: SOW1}`; cross-SOW dependencies written to each sub-project's `raid.dependencies[]`.
 
-**2. 双周（Fortnight）颗粒度 + 领域专家拆解**
-- SOW1 叶子包由「4 个包 × 1 角色」重拆为 4 个阶段组（SOW1.1–1.4，summary）+ 8 个双周叶子包（1.1.1–4.2），每个 ≤6 天、分配独立领域角色（requirements-analyst / data-modeler / etl-mapping-analyst / nos-architect），可独立计费与验收。
-- `build_schedule.py` 新增 `--granularity fortnight`：按 2 周桶分组，排期表新增「Fortnight Plan」节（FN01… 窗口 + 任务计数 + 工作包），甘特图按 `section FNxx` 分桶。
-- `render.py` 新增 `eq` 辅助函数（`{{#if (eq granularity "fortnight")}}`）以支撑条件渲染；模板 `schedule_gantt.md` 新增双周分支。
-- 修复：`build_sow_kickoff.py` 仅把 `tier=program` 汇总包识别为 SOW 级（避免阶段组重复开启动会）；`consistency_check.py` 孤儿包检查仅覆盖顶层 SOW（`^SOW\d+$`），不再误报阶段组。
+**2. Fortnight granularity + domain-expert decomposition**
+- SOW1 leaf packages re-split from "4 packages × 1 role" into 4 phase groups (SOW1.1–1.4, summary) + 8 fortnight leaf packages (1.1.1–4.2), each ≤6 days, assigned independent domain roles (requirements-analyst / data-modeler / etl-mapping-analyst / nos-architect), independently billable and acceptable.
+- `build_schedule.py` added `--granularity fortnight`: groups by 2-week buckets, schedule table adds a "Fortnight Plan" section (FN01… window + task count + work packages), gantt buckets by `section FNxx`.
+- `render.py` added `eq` helper (`{{#if (eq granularity "fortnight")}}`) to support conditional rendering; template `schedule_gantt.md` added the fortnight branch.
+- Fix: `build_sow_kickoff.py` only recognizes `tier=program` summary packages as SOW-level (avoids phase groups re-holding kickoff); `consistency_check.py` orphan-package check only covers top-level SOW (`^SOW\d+$`), no longer false-alarms phase groups.
 
-**验证**：示例客户 SOW1 子项目建立并索引成功；fortnight 排期渲染（FN01–FN03 分桶、任务命名正确）；子项目 RAID/风险/状态渲染含严重度色标；程序级一致性门 exit 0。
+**Validation**: example customer SOW1 sub-project built and indexed successfully; fortnight schedule rendered (FN01–FN03 bucketed, tasks named correctly); sub-project RAID/risk/status render with severity color bands; program-level consistency gate exit 0.
 
 ## 2.1.3 (2026-07-19)
 
-### 项目群章程（Program Charter）重构（用户 WorkBuddy 实测 docs/program_charter.md 反馈）
-- **Program Architecture mermaid 修复**：用户渲染稿的 `subgraph DELIVERY` 内节点 `S6/S7` 指向 subgraph 自身（`S6 --> DELIVERY`）属非法 mermaid 语法。章程模板重写为数据驱动版，架构图改为 SOW6→CORE、SOW7 作为独立节点，不再自指 subgraph（已渲染验证合法）。
-- **财务与商务模型（Financials & Commercial Model）费用捕获**：原渲染稿费用整列 `（待定）`。新增 `program.sows[]`（sow/workstream/model/billing/fee），章程「财务与商务模型」表改由 `program.sows[].fee` 驱动；未锁定时须填 `TBC — 原因`，禁止整表 `（待定）`。已把 示例客户 实际项目数据写入 `project.yaml` 并重渲染，费用列呈现实值/TBC。
-- **一致性门新增规则 7d**：`program.sows[].fee` 必填，空白/`（待定）`/TBD 即致命（未锁定写 `TBC — 原因` 放行）。`project-schema.md` / `program-management.md` 补 `sows[]` 与 `fee` 字段定义。
-- 章程结构对齐用户预期：表头 + 架构图 + 商业论证/目标/范围/范围外/财务/治理门/关键风险/成功标准 + 合同边界节。
+### Program Charter refactor (feedback from user's WorkBuddy real-test of docs/program_charter.md)
+- **Program Architecture mermaid fix**: the user's rendered draft had node `S6/S7` inside `subgraph DELIVERY` pointing to the subgraph itself (`S6 --> DELIVERY`), illegal mermaid syntax. Charter template rewritten as a data-driven version; architecture diagram changed to SOW6→CORE, SOW7 as a standalone node, no longer self-referencing the subgraph (rendered and verified legal).
+- **Financials & Commercial Model fee capture**: original rendered draft had the whole fee column `(TBD)`. Added `program.sows[]` (sow/workstream/model/billing/fee); charter "Financials & Commercial Model" table now driven by `program.sows[].fee`; when not locked must fill `TBC — reason`, prohibiting whole-table `(TBD)`. Wrote example customer's real project data into `project.yaml` and re-rendered; fee column shows real values / TBC.
+- **Consistency gate added rule 7d**: `program.sows[].fee` required; blank / `(TBD)` / TBD is fatal (unlocked writing `TBC — reason` passes). `project-schema.md` / `program-management.md` added `sows[]` and `fee` field definitions.
+- Charter structure aligned with user expectations: header + architecture diagram + business case / objectives / scope / out-of-scope / financials / governance gates / key risks / success criteria + contract boundaries section.
 
 ## 2.1.2 (2026-07-19)
 
-### WorkBuddy 实测修复（用户现场 3 条反馈）
-- **RAID 日志色标**：`templates/common/raid_log.md` 新增严重度/优先级色标列，风险按 `score` 自动推导 🟢🟡🟠🔴（缺 severity 也显示），问题按 `priority` 推导色标。`render.py` 新增 `sev_cell(severity, score)` / `sev_band(score)` 辅助（score 推导色带，未知不阻塞）。
-- **风险登记册色标鲁棒化**：`risk_register.md` 改用 `sev_cell(this.severity, this.score)`，即便数据缺 `severity` 也按 `score` 显示色标（修复"没用色标"）。
-- **项目群章程·合同金额**：合同总览表新增「合同金额(fee)」列；新增「商务模型与费用」节，把各合同 `fee` 汇总进财务边界，费用被捕获而非留空（待定）；`consistency_check` 合同/商务语义不变。
-- **项目群章程·架构图**：新增「项目群架构（Program Architecture · mermaid graph TD）」节，呈现发起人→项目经理→治理委员会→组件组合结构（用户提供的数据无此图时仅出治理骨架）。
+### WorkBuddy real-test fixes (3 pieces of on-site user feedback)
+- **RAID log color band**: `templates/common/raid_log.md` added severity/priority color-band columns; risks auto-derived from `score` (🟢🟡🟠🔴, shown even when severity missing), issues derived from `priority`. `render.py` added `sev_cell(severity, score)` / `sev_band(score)` helpers (score derives color band, unknown does not block).
+- **Risk register color-band robustness**: `risk_register.md` switched to `sev_cell(this.severity, this.score)`, showing color band by `score` even when data lacks `severity` (fixed "no color band used").
+- **Program charter · contract amount**: contract overview table added a "contract amount (fee)" column; added a "Commercial Model & Fees" section, rolling up each contract's fee into the financial boundary, fees captured rather than left blank (TBD); `consistency_check` contract/commercial semantics unchanged.
+- **Program charter · architecture diagram**: added a "Program Architecture (mermaid graph TD)" section showing sponsor → program manager → governance board → component portfolio structure (when user-provided data lacks this diagram, only the governance skeleton is shown).
 
-> 说明：用户反馈的 "Program Architecture mermaid 报错" 在 2.1.1 章程中并不存在对应节；本次新增了合规 mermaid 架构图。若你看到的是别的文件里的报错 mermaid，请贴出该块，我按原文修。
+> Note: the "Program Architecture mermaid error" the user reported does not have a corresponding section in the 2.1.1 charter; this time we added a compliant mermaid architecture diagram. If the erroring mermaid you see is in another file, please paste that block and I'll fix it per the original.
 
 ## 2.1.1 (2026-07-19)
 
-### 补齐 v2.1.0 的四处生产级缺口（用户现场反馈）
-- **#1 拆解自动回写 glue**：新增 `scripts/sync_wbs.py`——专家（人或子 Agent）把 SOW/领域包拆成叶子包后，用拆解补丁 YAML 一键 merge 回 `project.yaml.wbs`；自动挂父子（parent / id 前缀）、标 tier、校验叶子包必填 role/owner/estimate/dod/dependsOn（缺则致命、不写回），并置 `artifacts.wbs_dirty` 提示重渲染。
-- **#2 WBS 分解树 mermaid**：`templates/waterfall/wbs.md` 新增「WBS 分解树（graph TD 层级/分解图）」，由 `build_wbs.py` 从 `wbs[].parent`（或 id 前缀）自动构造，汇总/里程碑包标 `▶`、叶子包标 role。与甘特图为同一事实源双视图。
-- **#3 Program Charter 覆盖合同/Extract/SOW**：`program_charter.md` 新增「合同边界与分包」章（contracts / extracts / sow_map 三表）；`references/program-management.md` 补充对应数据模型与一致性约束（SOW 映射须对应 `tier:program` 汇总包、外包 Extract 须绑合同）。
-- **#4 单一事实源防漂移**：`consistency_check.py` 新增规则 7c（项目群 SOW 映射 ↔ wbs 一致，漂移即致命）+ `wbs_dirty` 重渲染提醒；新增 `scripts/rerender_docs.py` 从 `project.yaml` 纯函数重渲染 wbs/risk_register/program_charter，文档 = 事实源 + 模板，杜绝内容漂移。
+### Fill the four production-grade gaps of v2.1.0 (on-site user feedback)
+- **#1 Decomposition auto-write-back glue**: added `scripts/sync_wbs.py` — after an expert (human or sub-agent) splits SOW/domain packages into leaf packages, a decomposition-patch YAML one-click merges back into `project.yaml.wbs`; auto-attaches parent/child (parent / id prefix), tags tier, validates leaf-package required fields (role/owner/estimate/dod/dependsOn — fatal if missing, not written back), and sets `artifacts.wbs_dirty` to prompt re-render.
+- **#2 WBS decomposition tree mermaid**: `templates/waterfall/wbs.md` added "WBS Decomposition Tree (graph TD hierarchy/decomposition diagram)", auto-constructed by `build_wbs.py` from `wbs[].parent` (or id prefix); summary/milestone packages marked `▶`, leaf packages marked with role. Dual views of the same source of truth as the gantt.
+- **#3 Program Charter covers contract/Extract/SOW**: `program_charter.md` added a "Contract Boundaries & Subcontracting" chapter (contracts / extracts / sow_map three tables); `references/program-management.md` added the corresponding data model and consistency constraints (SOW mapping must correspond to `tier:program` summary package; outsourced Extract must bind to a contract).
+- **#4 Single source of truth anti-drift**: `consistency_check.py` added rule 7c (program SOW mapping ↔ wbs consistent, drift is fatal) + `wbs_dirty` re-render reminder; added `scripts/rerender_docs.py` pure-function re-render of wbs/risk_register/program_charter from `project.yaml`, docs = source of truth + template, eliminating content drift.
 
 ## 2.1.0 (2026-07-19)
 
-### 合并重构：v1.3.6 强制框架 + v2.0.0 架构方向，修复 v2 死锁与纸面特性
-- **修复 v2 P0 死锁**：恢复 v1.3.6 的「专家调度」工作流（SKILL.md 新增 Step 2.5），WBS 领域活动须由领域专家拆解并标注 `role`；一致性门禁对缺 `role`/超阈值领域活动默认致命，主控不得自拆绕过。
-- **子 Agent 协议真实接线**：新增 `references/subagent-protocol.md`（JSON 回报契约）+ `scripts/subagent_check.py` 实际校验每个子 Agent 产出。
-- **阶段门硬/软可配**：`gate_engine.py` 读 `config.stage_gates`，新增英文阶段别名（`--to execution/closeout` 等）便于英文包使用。
-- **专家调度幂等**：`dispatch.py` 对已达标的包标 `done`，重跑归零 pending。
-- **巡检落盘**：`control_engine.py` 写 `last_control_check`；`execution_driver.py` 读同一字段避免重复巡检。
-- **阈值配置化**：`control_engine.py` 注入 `config.operational_control` 到 `data.control.thresholds`。
-- **跨会话续跑**：`project_state.py` 增加 `migrate`/`checkpoint`，`schema_version=2` + `_checkpoint` 防跳步。
-- **双语双包**：中文版（WorkBuddy，`SKILL.md`）+ 英文版（OpenClaw，`SKILL.en.md`）共用 `scripts/`/`templates/`/`references/`，经 `config.yaml.execution.subagent_mode` 切换后端。
+### Merge refactor: v1.3.6 enforcement framework + v2.0.0 architecture direction, fixing v2 deadlock and paper features
+- **Fixed v2 P0 deadlock**: restored v1.3.6's "expert dispatch" workflow (SKILL.md added Step 2.5); WBS domain activities must be decomposed by domain experts and tagged with `role`; consistency gate defaults to fatal for missing `role` / over-threshold domain activities, main controller must not self-decompose to bypass.
+- **Sub-agent protocol real wiring**: added `references/subagent-protocol.md` (JSON reporting contract) + `scripts/subagent_check.py` actually validating each sub-agent's output.
+- **Stage gates hard/soft configurable**: `gate_engine.py` reads `config.stage_gates`, added English phase aliases (`--to execution/closeout` etc.) for use by the English package.
+- **Expert dispatch idempotent**: `dispatch.py` marks packages already meeting criteria as `done`, rerun resets pending to zero.
+- **Inspection persisted**: `control_engine.py` writes `last_control_check`; `execution_driver.py` reads the same field to avoid duplicate inspection.
+- **Thresholds configurable**: `control_engine.py` injects `config.operational_control` into `data.control.thresholds`.
+- **Cross-session resume**: `project_state.py` added `migrate`/`checkpoint`, `schema_version=2` + `_checkpoint` to prevent step-skipping.
+- **Bilingual dual-package**: Chinese edition (WorkBuddy, `SKILL.md`) + English edition (OpenClaw, `SKILL.en.md`) share `scripts/`/`templates/`/`references/`, switch backend via `config.yaml.execution.subagent_mode`.
 
 ## 1.3.6 (2026-07-18)
 
-**核心问题诊断**：v1.3.6 在多次迭代中积累了201行SKILL.md、14个脚本、12个references、35个模板——功能全面但输出不稳定。根因分析见审查报告。
+**Core problem diagnosis**: v1.3.6 accumulated 201 lines of SKILL.md, 14 scripts, 12 references, 35 templates over multiple iterations — comprehensive but unstable output. Root-cause analysis in the review report.
 
-### 重大变更
+### Major changes
 
-#### SKILL.md 重构
-- 从201行压缩到~90行，移除所有参考资料到references
-- 所有规则从"建议/推荐"改为"必须/禁止/否则阻断"
-- 8条核心铁律前置，不可违反
-- 工作流每步增加校验点
-- 意图→产物路由表精简
+#### SKILL.md refactor
+- Compressed from 201 lines to ~90 lines, moved all reference material to references
+- All rules changed from "suggested/recommended" to "must/prohibited/else blocked"
+- 8 core iron rules placed upfront, cannot be violated
+- Added checkpoints to each workflow step
+- Intent → artifact routing table streamlined
 
-#### Sub-Agent 通信协议（新增）
-- `references/subagent-protocol.md`：定义JSON Schema回报格式
-- `scripts/subagent_check.py`：子Agent产出自动校验
-- 子Agent行为规范：必须做的事/禁止做的事/异常处理
+#### Sub-Agent communication protocol (new)
+- `references/subagent-protocol.md`: defines JSON Schema reporting format
+- `scripts/subagent_check.py`: sub-agent output auto-validation
+- Sub-agent behavior spec: must-do / must-not-do / exception handling
 
-#### 执行期脚本补齐（新增）
-- `scripts/execution_driver.py`：执行驱动引擎
-  - 读取WBS状态，生成可执行工作包清单
-  - 追踪Sprint/迭代进度
-  - 自动触发control_engine巡检
-  - 支持JSON输出
+#### Execution-phase scripts completed (new)
+- `scripts/execution_driver.py`: execution driver engine
+  - Read WBS status, generate executable work-package list
+  - Track Sprint/iteration progress
+  - Auto-trigger control_engine inspection
+  - Support JSON output
 
-#### Agent层状态机锁（新增）
-- `project.yaml` 新增 `_checkpoint` 字段
-- 追踪当前工作流步骤
-- 非法跳步直接拒绝
+#### Agent-layer state-machine lock (new)
+- `project.yaml` added `_checkpoint` field
+- Track current workflow step
+- Illegal step-skip directly rejected
 
-#### 配置增强
-- `config.yaml` 新增 execution/quality_gate/stage_gates/operational_control 配置块
-- 分层配置更清晰
+#### Config enhancement
+- `config.yaml` added execution/quality_gate/stage_gates/operational_control config blocks
+- Layered config clearer
 
-### 保持不变
-- 所有 v1.3.6 脚本（render/render_docx/consistency_check/build_*/schedule_health/evm/baseline/control_engine/gate_engine/dispatch/comm_send/project_state）完全兼容
-- 所有 35 个模板完全兼容
-- 所有方法论 references 完全兼容
-- project.yaml 核心结构兼容（新增字段可选）
+### Unchanged
+- All v1.3.6 scripts (render/render_docx/consistency_check/build_*/schedule_health/evm/baseline/control_engine/gate_engine/dispatch/comm_send/project_state) fully compatible
+- All 35 templates fully compatible
+- All methodology references fully compatible
+- project.yaml core structure compatible (new fields optional)
 
-### 进一步脱敏（合规 · 消除法律风险）
-- `scripts/rollup_program_wbs.py` 的内置示例映射进一步去标识化：
-  - `COMPONENT_MAP`：剥离 SOW 组件 slug 的描述性后缀（`sow1-data-modelling` → `sow1`，…，`sow9-ts` → `sow9`，`external-pii` → `ext-pii`），仅保留编号标识。
-  - `PHASE_NAME`：阶段别名由客户专属描述（Wave 1–4 基础建模 / 示例主题域 / 客户系统A 分析结构 / 客户系统B 归档与集成）改为中性 `Stream 1–4` 命名，移除 客户系统A / 客户系统B / 示例主题域等客户系统/领域泄露。
-  - 三处「某示例数据湖项目 / 示例数据湖项目」注释与告警文案统一改为「示例项目」，不再暴露真实行业与客户。
-- `CHANGELOG.md`：将 1.1.0 中关于内置示例的语义描述「某示例数据湖项目」改为中性的「示例项目」。
+### Further de-identification (compliance · eliminate legal risk)
+- `scripts/rollup_program_wbs.py` built-in example mapping further de-identified:
+  - `COMPONENT_MAP`: stripped descriptive suffixes from SOW component slugs (`sow1-data-modelling` → `sow1`, …, `sow9-ts` → `sow9`, `external-pii` → `ext-pii`), keeping only numeric identifiers.
+  - `PHASE_NAME`: phase aliases changed from customer-specific descriptions (Wave 1–4 base modeling / example subject domain / Customer System A analysis structure / Customer System B archival & integration) to neutral `Stream 1–4` naming, removing Customer System A / Customer System B / example subject domain and other customer-system/domain leaks.
+  - Three occurrences of "an example data-lake project" / "example data-lake project" comments and alerts unified to "example project", no longer exposing real industry and customer.
+- `CHANGELOG.md`: changed the 1.1.0 semantic description of the built-in example "an example data-lake project" to the neutral "example project".
 
-> 说明：保留的 `Wave` / `示例数据湖项目` 命中（如 `references/methodology-hybrid.md`、`hybrid_playbook.md`、`expert-roles.md`）属**通用方法论/领域示例词汇**，非真实客户或厂商名，引擎路由与设计依赖之，故维持不变。
+> Note: the retained `Wave` / `example data-lake project` hits (e.g. `references/methodology-hybrid.md`, `hybrid_playbook.md`, `expert-roles.md`) are **generic methodology/domain example vocabulary**, not real customer or vendor names; the engine routing and design depend on them, so they remain unchanged.
 
 ## 1.3.1 (2026-07-16)
 
-### 脱敏（合规 · 消除法律风险）
-- 全量扫描技能文件，移除真实客户名与厂商名等敏感信息，统一改为代号：
-  - 真实保险行业客户名 → `客户A`（代号 `ALPHA`）；真实 MPP 数仓厂商名 → `MPP 数仓`（通用占位）；另一被点名的集成商经扫描确认本仓库**不存在**，无需处理。
-  - `references/activity-expert-map.md`：`example-data-lake` 的示例项目由真实客户项目名改为 `客户A 数据湖（代号 ALPHA，MPP 数仓）`，角色中的厂商专属 ETL 工程师改为 `MPP 数仓 TPT/ETL 工程师`。
-  - `scripts/dispatch.py`：专家角色标题中的厂商名改为 `MPP 数仓 TPT/ETL 工程师` / `MPP 数仓/平台工程师`。
-  - `references/expert-roles.md`：技术栈示例改为 `MPP 数仓、云数仓`；领域特化改为 `MPP 数仓 → 批量加载（厂商 TPT/MLOAD 类工具）`。
-- 经二次全仓扫描，真实客户名 / 厂商名已实现 **0 残留**；`examples/sample_project.yaml` 与 `rollup_program_wbs.py` 内置示例均为通用占位（无客户名），予以保留。
-- README / SKILL / `_user_meta.json` 版本同步至 1.3.1（延续「每次技能变更同步 README」规则）。
+### De-identification (compliance · eliminate legal risk)
+- Full scan of skill files; removed sensitive info such as real customer names and vendor names, unified into code names:
+  - Real insurance-industry customer name → `Customer A` (code `ALPHA`); real MPP data-warehouse vendor name → `MPP Data Warehouse` (generic placeholder); another named integrator confirmed by scan to not exist in this repo, no action needed.
+  - `references/activity-expert-map.md`: example project `example-data-lake` changed from real customer project name to `Customer A Data Lake (code ALPHA, MPP Data Warehouse)`; vendor-specific ETL engineer role changed to `MPP Data Warehouse TPT/ETL Engineer`.
+  - `scripts/dispatch.py`: vendor name in expert-role titles changed to `MPP Data Warehouse TPT/ETL Engineer` / `MPP Data Warehouse / Platform Engineer`.
+  - `references/expert-roles.md`: tech-stack example changed to `MPP Data Warehouse, cloud data warehouse`; domain specialization changed to `MPP Data Warehouse → batch loading (vendor TPT/MLOAD-class tools)`.
+- After a second full-repo scan, real customer / vendor names achieved **0 residue**; `examples/sample_project.yaml` and `rollup_program_wbs.py` built-in examples are all generic placeholders (no customer names), kept.
+- README / SKILL / `_user_meta.json` version synced to 1.3.1 (continuing the "sync README on every skill change" rule).
 
 ## 1.3.0 (2026-07-16)
 
-### operational 双轨并行（P2 执行 + P3 监控 多 Agent）
-- **编排双轨**：进入 `operational` 后，执行轨（领域专家 Agent 持续交付）与监控轨（`monitoring-agent` 周期跑 `control_engine.py` 并回流升级项）**以多 Agent 并行**落地，共享 `project.yaml`+`baselines/` 且字段零冲突（执行轨写 `actuals`/`wbs_progress`/交付物，监控轨写控制/状态报告与 RAID 更新）。
-- `orchestration.md` 新增 §3.4「operational 双轨」+ §3.2 组合表增「operational 双轨」行；`lifecycle.md §6.1` 并发说明升级为双轨引用；`p2-execution.md` / `p3-monitoring.md` §8 衔接引用双轨与 `monitoring-agent`。
-- `agents.md` 新增 §9 `monitoring-agent`（监控轨角色）。
+### operational dual-track parallel (P2 execution + P3 monitoring multi-agent)
+- **Orchestration dual-track**: after entering `operational`, the execution track (domain-expert Agent continuously delivers) and the monitoring track (`monitoring-agent` periodically runs `control_engine.py` and feeds back escalations) are implemented as **multi-agent parallel**, sharing `project.yaml`+`baselines/` with zero field conflicts (execution track writes `actuals`/`wbs_progress`/deliverables, monitoring track writes control/status reports and RAID updates).
+- `orchestration.md` added §3.4 "operational dual-track" + §3.2 combined table adds "operational dual-track" row; `lifecycle.md §6.1` concurrency note upgraded to dual-track reference; `p2-execution.md` / `p3-monitoring.md` §8 handoff references dual-track and `monitoring-agent`.
+- `agents.md` added §9 `monitoring-agent` (monitoring-track role).
 
-### 对外沟通与邮件审批门（Communication Send Gate）
-- **分层配置（policy/data 分离）**：技能根新增 `config.yaml`（安装期策略/护栏）——`email.enabled` / `email.backend`（agent-mail·himalaya·gog·smtp）/ `email.default_from` / `email.requires_send_approval`（**硬护栏，项目不可关闭**）；项目数据在 `project.yaml.communication:`（`from` / `cadence` / `approval_override`（仅可收紧）/ `contacts[]`）。
-- **联络簿**：`templates/common/communication_plan.md` 新增「相关方联络簿」段（姓名/角色/组织/邮箱/电话/时区/备注）；`stakeholder-agent` 定稿时把联络人同步进 `project.yaml.communication.contacts[]`；`templates-index.md`、`project-schema.md` 同步数据键契约与 `governance.communications[]` 审计块。
-- **`scripts/comm_send.py`（审批门封装）**：按角色解析收件人（查 `communication.contacts[]`）、强制 `--approve`、外部邮件按 `approval_override.require_sponsor_cosign` 须 sponsor 会签、发送后写 `governance.communications[]` 审计；`--dry-run` 仅打印+审计不真正外发；未审批/被护栏拒绝直接 `exit 1`。
-- **`agents.md` 新增 §8 `communication-agent`**：起草邮件 → 呈现待批 → 经 `comm_send.py` 审批门外发 → 登记审计；明确"绝不自行外发"。
-- `SKILL.md` §6 新增「operational 双轨并行」与「对外邮件须过审批门」规则；§5 脚本速查补 `comm_send.py`。
-- **README.md 同步至 v1.3.0**：§2 增「operational 双轨并行 / 对外沟通与邮件审批」能力、§3.1 补 `config.yaml` 安装期说明、§7 补 `comm_send.py` 行、§12 版本说明（延续「每次技能变更同步 README」规则）。
+### External communication & email approval gate
+- **Layered config (policy/data separation)**: skill root added `config.yaml` (install-time policy/guardrails) — `email.enabled` / `email.backend` (agent-mail·himalaya·gog·smtp) / `email.default_from` / `email.requires_send_approval` (**hard guardrail, cannot be disabled by project**); project data in `project.yaml.communication:` (`from` / `cadence` / `approval_override` (may only be tightened) / `contacts[]`).
+- **Contact book**: `templates/common/communication_plan.md` added a "stakeholder contact book" section (name/role/org/email/phone/timezone/note); `stakeholder-agent` syncs contacts into `project.yaml.communication.contacts[]` when finalized; `templates-index.md`, `project-schema.md` sync the data-key contract and `governance.communications[]` audit block.
+- **`scripts/comm_send.py` (approval-gate wrapper)**: resolves recipients by role (query `communication.contacts[]`), forces `--approve`, external email per `approval_override.require_sponsor_cosign` requires sponsor co-sign, writes `governance.communications[]` audit after send; `--dry-run` only prints + audits, does not really send; unapproved / rejected by guardrail directly `exit 1`.
+- **`agents.md` added §8 `communication-agent`**: draft email → present for approval → send via `comm_send.py` approval gate → register audit; explicitly never send on its own.
+- `SKILL.md` §6 added "operational dual-track parallel" and "external email must pass approval gate" rules; §5 script quick-ref adds `comm_send.py`.
+- **README.md synced to v1.3.0**: §2 adds "operational dual-track parallel / external communication & email approval" capabilities, §3.1 adds `config.yaml` install-time note, §7 adds `comm_send.py` row, §12 version note (continuing the "sync README on every skill change" rule).
 
 ## 1.2.2 (2026-07-16)
 
-### 阶段门引擎单测套件（CI 门禁）
-- **新增 `scripts/test_gate_engine.py`（standalone，无需 pytest）**：为 `gate_engine.py` 提供 66 条断言的回归保护，两层覆盖——
-  - **纯函数/逻辑层**：`GATES` 表不变量、软门无硬准则、硬门仅含控制门/收尾门、`phase_label_for_state` 路由（含「执行→监控 必须写入监控」历史 bug 的回归锁定）、`chk_*` 助手、`entry_criteria` 按方法论分支（敏捷进执行免基线、瀑布进执行含基线准则、收尾缺交付物判不过）。
-  - **CLI 集成层**：真实子进程运行 `gate_engine.py` 及其依赖的 `consistency_check.py` / `control_engine.py`，覆盖 waterfall/agile/iteration-hybrid 与项目群四方法论，验证软门（规划/监控）翻转、硬门（执行/收尾/组合收尾）通过、缺基线/缺验收/收益未实现/前置状态不符/未知目标 的阻断、dry-run 不落盘、`--status` 输出。
-- 退出码契约：`0`=全过，`1`=有失败，可直接挂 CI 质量门。
-- **README.md 同步至 v1.2.2**：§7 脚本速查补 `test_gate_engine.py` 行；版本号与 §12 变更说明更新（延续 v1.2.1 确立的「每次技能变更同步 README」规则）。
+### Stage-gate engine unit-test suite (CI gate)
+- **Added `scripts/test_gate_engine.py` (standalone, no pytest needed)**: provides 66-assertion regression protection for `gate_engine.py`, two-layer coverage —
+  - **Pure-function / logic layer**: `GATES` table invariants, soft gates have no hard criteria, hard gates contain only control gate / closeout gate, `phase_label_for_state` routing (incl. regression lock for the historical bug "execution → monitoring must write monitoring"), `chk_*` helpers, `entry_criteria` branches by methodology (agile into execution skips baseline, waterfall into execution includes baseline criteria, closeout missing deliverables judged as fail).
+  - **CLI integration layer**: real subprocess runs `gate_engine.py` and its dependencies `consistency_check.py` / `control_engine.py`, covering waterfall/agile/iteration-hybrid and the four program methodologies, verifying soft-gate (planning/monitoring) flips, hard-gate (execution/closeout/combo closeout) passes, blocking on missing baseline / missing acceptance / unrealized benefits / mismatched prerequisite state / unknown target, dry-run does not persist, `--status` output.
+- Exit-code contract: `0`=all pass, `1`=has failure, can be directly hooked as a CI quality gate.
+- **README.md synced to v1.2.2**: §7 script quick-ref adds `test_gate_engine.py` row; version number and §12 change note updated (continuing the "sync README on every skill change" rule established in v1.2.1).
 
 ## 1.2.1 (2026-07-16)
 
-### 文档同步
-- **README.md 同步至 v1.2.x**：补充「阶段化交付 / 阶段门审批」核心能力、§4.5 阶段模块与阶段门、`gate_engine.py` 脚本速查、阶段流转强制门规则、4 个阶段模块参考索引；版本号升至 1.2.1。
-- 确立规则：**每次技能变更都同步更新 README.md**（与 SKILL.md / CHANGELOG / 版本号保持一致）。
+### Doc sync
+- **README.md synced to v1.2.x**: added "phased delivery / stage-gate approval" core capabilities, §4.5 phase modules and stage gates, `gate_engine.py` script quick-ref, phase-transition mandatory-gate rule, 4 phase-module reference index; version raised to 1.2.1.
+- Established rule: **sync README.md on every skill change** (consistent with SKILL.md / CHANGELOG / version number).
 
 ## 1.2.0 (2026-07-16)
 
-### 阶段模块与阶段门（Phase Modules & Gates）
-- **新增 4 个阶段模块**（`references/phases/`）：`p0-p1-initiation-planning.md`（启动+规划）、`p2-execution.md`（执行）、`p3-monitoring.md`（监控）、`p4-closeout.md`（收尾）。每个模块定义该阶段的**活动 / 必产出交付物 / 入口准则 / 出口准则 / 阶段门审批清单**，并方法论适配（waterfall/agile/iteration/hybrid/项目群）。
-- **新增 `scripts/gate_engine.py`（阶段门引擎）**：按 `phase`↔`lifecycle_state` 模型评估进入目标阶段的入口准则；审批通过后翻转 `project.phase` 与 `lifecycle_state`、向 `governance.stage_gates` 追加门记录、在 `docs/gate_reports/` 产出阶段门评审报告并登记到 `artifacts`。
-- **硬门复用既有引擎**（避免逻辑重复）：进 `执行` 须 `consistency_check.py` exit 0（waterfall/hybrid 另须 `baseline.py --freeze`）；进 `收尾` 须 `control_engine.py` exit 0 + 验收/复盘交付物 +（项目群）收益闭环。未通过则 **exit 1 拒绝推进，不可跳过**。
-- **门映射**：G0→1 启动→规划（软门/PM）、**G1→2 规划→执行（硬门/sponsor）**、G2→3 执行→监控（软门/PM，operational 内并发）、**G3→4 监控→收尾（硬门/sponsor）**。对齐 `lifecycle.md §5/§6`。
-- `SKILL.md`：Step 1 路由按 `phase` 加载对应阶段模块；§5 增加 `gate_engine.py` 用法；§6 增加"阶段流转须过阶段门（强制）"规则；§7 索引登记 4 个阶段模块。
-- `lifecycle.md`：新增 §6「阶段模块与阶段门」——阶段模块↔门↔状态机映射表、硬门自动化准则、`gate_engine.py` 用法。
-- `project-schema.md`：注明 `governance.stage_gates` 记录结构。
+### Phase modules and stage gates
+- **Added 4 phase modules** (`references/phases/`): `p0-p1-initiation-planning.md` (initiation + planning), `p2-execution.md` (execution), `p3-monitoring.md` (monitoring), `p4-closeout.md` (closeout). Each module defines that phase's **activities / required deliverables / entry criteria / exit criteria / stage-gate approval checklist**, with methodology adaptation (waterfall/agile/iteration/hybrid/program).
+- **Added `scripts/gate_engine.py` (stage-gate engine)**: evaluates entry criteria for the target phase per the `phase`↔`lifecycle_state` model; after approval, flips `project.phase` and `lifecycle_state`, appends a gate record to `governance.stage_gates`, produces a stage-gate review report in `docs/gate_reports/` and registers it to `artifacts`.
+- **Hard gates reuse existing engine** (avoid logic duplication): entering `execution` requires `consistency_check.py` exit 0 (waterfall/hybrid also require `baseline.py --freeze`); entering `closeout` requires `control_engine.py` exit 0 + acceptance/retro deliverables + (program) benefits closure. If not passed, **exit 1 rejects advancement, cannot be skipped**.
+- **Gate mapping**: G0→1 initiation→planning (soft gate / PM), **G1→2 planning→execution (hard gate / sponsor)**, G2→3 execution→monitoring (soft gate / PM, concurrent within operational), **G3→4 monitoring→closeout (hard gate / sponsor)**. Aligned with `lifecycle.md §5/§6`.
+- `SKILL.md`: Step 1 routes to load the corresponding phase module by `phase`; §5 adds `gate_engine.py` usage; §6 adds rule "phase transition must pass stage gate (mandatory)"; §7 registers 4 phase modules in index.
+- `lifecycle.md`: added §6 "phase modules and stage gates" — phase module ↔ gate ↔ state-machine mapping table, hard-gate automation criteria, `gate_engine.py` usage.
+- `project-schema.md`: notes the `governance.stage_gates` record structure.
 
 ## 1.1.0 (2026-07-16)
 
-### 可选增强（§5）
-- **控制门技术强制**：`control_engine.py` 新增「控制门 Gate」控制项，校验 `lifecycle_state == operational`；未进入运营控制阶段时标记为 AMBER 并记入升级项 `gate_not_operational`，贴合 `lifecycle.md` §5 的 `planning→baselined→operational` 强制串行纪律（不破坏「仅 RED 才 exit 1」的既有契约）。
-- **项目群 rollup 解耦**：`rollup_program_wbs.py` 的组件 / 阶段映射改为可从 `project.yaml` 的 `program.components`（SOW id → 组件 slug）与 `governance.waves`（阶段 key → 阶段名）读取；缺省才回退内置示例（示例项目）并给出警告，不再硬编码单一项目。
-- **版本可追溯**：新增 `CHANGELOG.md`；`_user_meta.json` 增加 `version` 字段；技能版本升至 `1.1.0`。
+### Optional enhancements (§5)
+- **Control-gate technical enforcement**: `control_engine.py` added a "control gate Gate" control item, validating `lifecycle_state == operational`; when not yet in the operational control phase, mark AMBER and record escalation item `gate_not_operational`, aligning with `lifecycle.md` §5's `planning→baselined→operational` mandatory serial discipline (does not break the existing contract "only RED exits 1").
+- **Program rollup decoupling**: `rollup_program_wbs.py` component / phase mapping changed to read from `project.yaml`'s `program.components` (SOW id → component slug) and `governance.waves` (phase key → phase name); falls back to the built-in example (example project) only when absent, with a warning, no longer hardcoding a single project.
+- **Version traceability**: added `CHANGELOG.md`; `_user_meta.json` added `version` field; skill version raised to `1.1.0`.
 
-### 同期修复与加固（来自评审第一轮）
-- 修复空 `wbs` 项目群 `rollup_program_wbs.py` 崩溃。
-- 修复 4 张列表模板（`risk_register` / `change_log` / `benefits_realization` / `program_charter`）因 `| {{#each}}` 写法导致表首多出一列。
-- 让专家调度「领域特化」真正生效：`init_project.py` 骨架补 `domain` / `product` 并新增 `--domain` / `--product` 参数。
-- 移除 4 个脚本中 `eval(f.read())` 安全兜底，改为缺 PyYAML 时显式报错。
-- `usage.md` 模板计数（30→35、common 11→16）与脚本速查表同步补全。
+### Concurrent fixes and hardening (from review round 1)
+- Fixed crash of `rollup_program_wbs.py` on empty-wbs program.
+- Fixed 4 list templates (`risk_register` / `change_log` / `benefits_realization` / `program_charter`) showing an extra column at table top due to `| {{#each}}` syntax.
+- Made expert-dispatch "domain specialization" actually take effect: `init_project.py` skeleton adds `domain` / `product` and new `--domain` / `--product` params.
+- Removed `eval(f.read())` safety fallback in 4 scripts, changed to explicit error when PyYAML missing.
+- `usage.md` template count (30→35, common 11→16) synced and completed with the script quick-ref table.
 
-### 文档与健壮性（来自评审第二轮）
-- 新增 `references/project-schema.md`：`project.yaml` 完整字段结构、质量门必填项、子 Agent 协同约定。
-- `SKILL.md` §3 说明 TeamCreate 多 Agent 派发机制；§5 增加脚本异常处理与降级说明；§7 登记 `project-schema.md`。
-- `lifecycle.md` §5.3 补「项目群阶段 ↔ 状态机映射」「operational 与 monitor 关系」「退出 operational 的 5 条出口条件」。
+### Docs and robustness (from review round 2)
+- Added `references/project-schema.md`: `project.yaml` complete field structure, quality-gate required items, sub-agent collaboration conventions.
+- `SKILL.md` §3 explains the TeamCreate multi-agent dispatch mechanism; §5 adds script exception handling and degradation notes; §7 registers `project-schema.md`.
+- `lifecycle.md` §5.3 adds program phase ↔ state-machine mapping / operational vs monitor relationship / 5 exit conditions for leaving operational.
 
-### 发布
-- **已发布至 `slearnAI/pm-master`（private）**：v1.1.0 推送至 `https://github.com/slearnAI/pm-master`（私有仓库，默认分支 `main`）。提交历史保留 `v1.0 → v1.1.0` 线性演进；本次同时清理了仓库内误提交的 `__pycache__`，并在 `.gitignore` 补充 Python 缓存忽略。Git tag：`v1.1.0`。
+### Release
+- **Published to `slearnAI/pm-master` (private)**: v1.1.0 pushed to `https://github.com/slearnAI/pm-master` (private repo, default branch `main`). Commit history keeps `v1.0 → v1.1.0` linear evolution; also cleaned up mistakenly committed `__pycache__` in repo, and added Python cache ignore to `.gitignore`. Git tag: `v1.1.0`.
 
 ## 1.0.0
 
-- 初始版本：Builder-First 项目 / 项目群管理技能。
-- 适配 waterfall / agile / iteration / hybrid 四种方法论。
-- 内置模板库（35 个模板 + `_macros.md`）、自研 `render.py` 迷你模板引擎、双轨产出（Markdown → DOCX）。
-- 质量门 `consistency_check.py`、基线化 `baseline.py`、运营控制 `control_engine.py`、专家调度 `dispatch.py`、排期健康度 `schedule_health.py`、挣值 `evm.py`。
-- 四维度路由 + 标准工作流 + `planning→baselined→operational` 强制状态机 + 多 Agent 混合调度（direct / team / fork）。
+- Initial version: Builder-First project / program management skill.
+- Supports waterfall / agile / iteration / hybrid four methodologies.
+- Built-in template library (35 templates + `_macros.md`), self-built `render.py` mini template engine, dual-track output (Markdown → DOCX).
+- Quality gate `consistency_check.py`, baselining `baseline.py`, operational control `control_engine.py`, expert dispatch `dispatch.py`, schedule health `schedule_health.py`, earned value `evm.py`.
+- Four-dimension routing + standard workflow + `planning→baselined→operational` mandatory state machine + multi-agent hybrid dispatch (direct / team / fork).
 
 ## 2.1.4 (2026-07-19)
 
-### 用户实测三项反馈的真修
-- **#1 project_state.py 数据丢失加固**：保留 2.1.3 的 PyYAML 硬失败守卫；新增 `_save` 在覆盖非空文件前做时间戳备份（`project.yaml.bak_YYYYMMDD_HHMMSS`），并拒绝「用空 dict 覆盖非空文件」（空数据=疑似 PyYAML 加载失败）的毁灭性写入（exit 5）。已用 harness 验证守卫生效，文件未被破坏。
-- **#2 合同费用真实捕获**：原渲染整列 `（待定）` 实为缺数据。从归档的 9 份示例 SOW 文档 提取示例金额写入 `program.sows[].fee` 与 `program.contracts[]`（SOW1/3/4/5/7/9 固定费、SOW6 T&M、SOW8 USD 课程总额换算 INR、SOW2 T&M 封顶人天）。重渲染后章程「财务与商务模型」费用列显示示例 ₹ 金额，0 个数据单元格为（待定）。
-- **#3 风险/RAID 色标**：修复此前编辑落到错误路径（templates/risks/ 不存在，实为 templates/common/）导致未生效。现模板 `risk_register.md`/`raid_log.md` 正确调用 `sev_cell`，重渲染后 risk_register 含 7 个、raid_log 含 11 个严重度色标 emoji（🔴🟠🟡🟢）。已重渲染用户项目在盘文件，mtime 更新。
+### Real fixes for three on-site user feedback items
+- **#1 project_state.py data-loss hardening**: kept 2.1.3's PyYAML hard-fail guard; added `_save` to make a timestamped backup (`project.yaml.bak_YYYYMMDD_HHMMSS`) before overwriting a non-empty file, and reject the destructive write of "empty dict over non-empty file" (empty data = suspected PyYAML load failure) (exit 5). Verified guard effective via harness; file not corrupted.
+- **#2 contract fees really captured**: the original rendered whole-column `(TBD)` was actually missing data. Extracted example amounts from the archived 9 example SOW docs and wrote to `program.sows[].fee` and `program.contracts[]` (SOW1/3/4/5/7/9 fixed-fee, SOW6 T&M, SOW8 USD course total converted to INR, SOW2 T&M capped person-days). After re-render, the charter "Financials & Commercial Model" fee column shows example INR amounts, 0 data cells are `(TBD)`.
+- **#3 risk/RAID color band**: fixed previous edit landing on the wrong path (`templates/risks/` doesn't exist, actually `templates/common/`) causing it to not take effect. Now templates `risk_register.md`/`raid_log.md` correctly call `sev_cell`, after re-render risk_register has 7, raid_log has 11 severity color-band emojis (🔴🟠🟡🟢). Re-rendered the user project's on-disk files, mtime updated.
 
 ## 2.1.5 (2026-07-19)
 
-### WBS mermaid `invalid date` 修复（用户 clean test 反馈）
-- 根因：`wbs.md` 无条件渲染日期型 `gantt`，当 WBS 包缺 `start`/`end`（仅含 effort/估算，用户正确指出 WBS 可无日期）时 mermaid 报 `invalid date`。
-- 修复：`build_wbs.py` 新增 `wbs_has_dates` 标志（仅当所有包都有合法 YYYY-MM-DD 起止时为 true）；`wbs.md` 甘特区改为 `{{#if wbs_has_dates}}` 条件渲染。无日期时仅保留「WBS 分解树」(graph TD)，并注明日期型甘特属于排期计划（`schedule_gantt.md`），待补日期后自动出现。
-- 验证：无日期 WBS 渲染 → 无 gantt 代码块、无 invalid date，分解树保留；有日期 WBS（真实项目）→ gantt 正常。EN 模板同步。
+### WBS mermaid `invalid date` fix (user clean-test feedback)
+- Root cause: `wbs.md` unconditionally renders the date-type `gantt`; when a WBS package lacks `start`/`end` (only has effort/estimate; user correctly noted WBS may have no dates), mermaid reports `invalid date`.
+- Fix: `build_wbs.py` added `wbs_has_dates` flag (true only when all packages have valid YYYY-MM-DD start/end); `wbs.md` gantt section changed to `{{#if wbs_has_dates}}` conditional render. When no dates, only keep the "WBS Decomposition Tree" (graph TD), and note the date-type gantt belongs to the schedule plan (`schedule_gantt.md`), auto-appears after dates supplied.
+- Validation: no-date WBS render → no gantt code block, no invalid date, decomposition tree kept; dated WBS (real project) → gantt normal. EN template synced.

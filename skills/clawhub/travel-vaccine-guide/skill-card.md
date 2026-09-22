@@ -1,41 +1,53 @@
-## Description: <br>
-查询目的地疫苗和健康风险，覆盖黄热病、疟疾、伤寒等9种核心旅行疫苗，支持目的地健康要求查询和个性化疫苗接种方案推荐，零配置即装即用。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Chinese-language destination vaccine and travel health-risk lookups, including required or recommended vaccines, malaria guidance, and timing reminders for common destinations.
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External travelers and travel-planning agents use this skill to look up destination vaccine requirements, common travel vaccine information, malaria risk notes, and pre-trip vaccination timing guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Travel vaccine and entry requirements can change, and the skill states that it cannot guarantee real-time data. <br>
-Mitigation: Verify recommendations with official travel health sources or a clinician before making travel or medical decisions. <br>
-Risk: The skill provides medical-adjacent guidance that may not account for pregnancy, children, immune status, allergies, or individual health history. <br>
-Mitigation: Treat outputs as convenience references and consult a qualified clinician or international travel health clinic for personal advice. <br>
+## Use Case:
 
+External travelers and travel-planning agents use this skill to check destination-specific vaccine requirements, common travel health risks, malaria prevention prompts, and suggested vaccination timing before a trip. It is a planning aid and does not replace professional medical advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/travel-vaccine-guide) <br>
-- [Publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, guidance] <br>
-**Output Format:** [JSON-formatted text in Chinese] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns destination lookups, vaccine lists, and recommendation summaries; responses are informational and should be checked against official travel health sources.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: Users may treat generated vaccine and malaria guidance as medical advice.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Present the output as a planning checklist and direct users to verify requirements with an official travel clinic or public-health authority before travel.
+
+Risk: Embedded destination vaccine and health-risk data may become outdated.
+
+Mitigation: Validate destination requirements against current official sources before relying on the recommendations for travel decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/travel-vaccine-guide)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text]
+
+**Output Format:** [JSON text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese-language responses for destination queries, vaccine lists, and itinerary-based recommendations.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

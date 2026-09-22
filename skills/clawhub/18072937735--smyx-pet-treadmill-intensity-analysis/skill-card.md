@@ -1,44 +1,59 @@
-## Description: <br>
-AI-powered pet treadmill exercise intensity analysis combined with optional heart-rate band data; it detects stride frequency, limb extension, and respiratory rate from treadmill video to assess exercise load and provide pacing suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet treadmill videos, optionally with heart-rate band data, to estimate stride frequency, limb extension, respiratory rate, exercise intensity, and pacing suggestions for dogs and cats.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users, pet treadmill operators, pet training centers, and pet rehabilitation staff use this skill to analyze dog or cat treadmill videos, optionally combine heart-rate band data, classify exercise intensity, and review historical reports. The output is for exercise training support and is not medical diagnosis or treatment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet or home videos and public video URLs may be uploaded to a backend service. <br>
-Mitigation: Use the skill only with a trusted publisher and backend, and confirm retention, deletion, and access-control practices before uploading sensitive media. <br>
-Risk: Analysis and history retrieval can be linked to usernames, phone numbers, account tokens, or report history. <br>
-Mitigation: Avoid personal phone numbers as identifiers when possible, limit shared identifiers to the minimum needed, and verify how local tokens and backend accounts are managed. <br>
-Risk: Report links may expose historical analysis results if backend access controls are weak. <br>
-Mitigation: Do not assume report links are private unless the backend proves access control; review generated report links before sharing them. <br>
+## Use Case:
 
+External pet owners, smart treadmill vendors, training centers, and rehabilitation staff use this skill to assess pet exercise load from treadmill video and optional heart-rate data. The output supports training and pacing decisions, not medical diagnosis or treatment.
 
-## Reference(s): <br>
-- [Pet Treadmill Intensity & Heart Rate Analysis ClawHub Page](https://clawhub.ai/18072937735/smyx-pet-treadmill-intensity-analysis) <br>
-- [API 接口文档](references/api_doc.md) <br>
-- [API接口文档](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-like structured analysis reports with optional report-list tables and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May upload local video files or submit public video URLs to a backend API; may save analysis output to a user-specified file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Pet videos, report history identifiers, and username or phone-style open-id values may be sent to Life Emergence cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run only when this data transfer is acceptable; avoid shared workspaces unless token storage and retention are approved.
+
+Risk: The skill is framed as pet treadmill analysis, but server evidence describes broad cloud analysis and account behavior with under-disclosed token storage.
+
+Mitigation: Review the skill before installing, confirm cloud endpoints and account behavior, and do not place real API secrets in fields treated as identity.
+
+Risk: Exercise intensity output could be mistaken for veterinary guidance.
+
+Mitigation: Use results only for training and pacing support, and rely on veterinary professionals for diagnosis, treatment, or safety-critical decisions.
+
+## Reference(s):
+
+- [API interface documentation](references/api_doc.md)
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-treadmill-intensity-analysis)
+- [Publisher profile](https://clawhub.ai/user/18072937735)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and JSON-style structured reports, with shell command examples for invoking API-backed analysis.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can save analysis output to a requested file and can present history results as a Markdown table.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release, target metadata, frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

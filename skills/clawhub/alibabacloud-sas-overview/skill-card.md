@@ -1,46 +1,62 @@
-## Description: <br>
-Queries Alibaba Cloud Security Center (SAS) overview data, including security score, asset status, risk governance, asset risk trends, and billing information. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Retrieves Alibaba Cloud Security Center (SAS) overview data including security score, asset status, risk governance, asset risk trends, WAF blocks, and billing information.
 
-## Publisher: <br>
-[sdk-team](https://clawhub.ai/user/sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sdk-team](https://clawhub.ai/user/sdk-team)
 
-## Use Case: <br>
-Cloud security operators and developers use this skill to retrieve read-only Alibaba Cloud SAS overview metrics, WAF block statistics, asset risk trends, and SAS billing or subscription status through Aliyun CLI commands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Setup may make persistent changes to the local Aliyun CLI and plugin state. <br>
-Mitigation: Review the setup steps first, prefer package-manager or manually verified CLI installation, and run plugin updates only in an environment where CLI state changes are acceptable. <br>
-Risk: Remote script execution through curl | bash can run unreviewed installer code. <br>
-Mitigation: Avoid piping remote scripts directly to a shell; download from the official source, inspect or verify the installer, and execute it explicitly. <br>
-Risk: Alibaba Cloud credentials and returned security or billing data are sensitive. <br>
-Mitigation: Use least-privilege read-only RAM permissions, verify credentials only through safe CLI status checks, and avoid sharing access keys or command outputs containing sensitive account data. <br>
+## Use Case:
 
+Developers and cloud security operators use this skill to query Alibaba Cloud SAS overview metrics and billing or subscription status through Aliyun CLI commands, scoped to the requested data item, module, or full dashboard.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sdk-team/skills/alibabacloud-sas-overview) <br>
-- [RAM Policies](references/ram-policies.md) <br>
-- [Related APIs](references/related-apis.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Aliyun CLI Installation & Configuration Guide](references/cli-installation-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Alibaba Cloud queries; results may include security posture, asset, and billing data from configured Aliyun profiles.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.4 (source: server release evidence) <br>
+Risk: Setup steps can persistently change the local Aliyun CLI environment and install or update plugins.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a separately verified Aliyun CLI and explicitly approved plugin versions; avoid mutable latest installers and curl-piped shell installation.
+
+Risk: Cloud credentials or tokens could be exposed if placed in commands or agent chat.
+
+Mitigation: Configure credentials outside the agent session, do not print access keys, and only verify credential status with safe profile listing commands.
+
+Risk: The skill queries SAS, WAF, and billing data from an Alibaba Cloud account.
+
+Mitigation: Use a dedicated least-privilege, read-only RAM profile for SAS, WAF, and billing overview queries.
+
+## Reference(s):
+
+- [Related APIs](references/related-apis.md)
+- [RAM Policies](references/ram-policies.md)
+- [Verification Method](references/verification-method.md)
+- [Acceptance Criteria](references/acceptance-criteria.md)
+- [Aliyun CLI Installation Guide](references/cli-installation-guide.md)
+- [ClawHub Skill Page](https://clawhub.ai/sdk-team/skills/alibabacloud-sas-overview)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration guidance]
+
+**Output Format:** [Markdown with Aliyun CLI command blocks and concise result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Queries are scoped to the requested SAS overview module or data item; no cloud resources are created.]
+
+## Skill Version(s):
+
+0.0.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

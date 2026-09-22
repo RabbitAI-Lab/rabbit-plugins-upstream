@@ -1,42 +1,57 @@
-## Description: <br>
-Triage and answer support requests for the xrow-public/ci-tools GitLab components catalog. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Triage and answer support requests for the xrow-public/ci-tools GitLab components catalog.
 
-## Publisher: <br>
-[xrowgmbh](https://clawhub.ai/user/xrowgmbh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xrowgmbh](https://clawhub.ai/user/xrowgmbh)
 
-## Use Case: <br>
-Developers and support maintainers use this skill to triage eligible CI Tools support issues and discussion threads, answer from public documentation or provided context, and hand off unsafe or out-of-scope requests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Support may be provided to an unintended requester if SUPPORT_TRUSTED_DOMAINS is stale or too broad. <br>
-Mitigation: Keep SUPPORT_TRUSTED_DOMAINS current and verify the requester domain before answering. <br>
-Risk: Private customer details, private URLs, private logs, or internal project names could be exposed in public support replies. <br>
-Mitigation: Mark issues confidential when they include sensitive details and do not quote private logs into public places. <br>
-Risk: Incorrect CI Tools guidance could be given if component behavior or inputs are assumed. <br>
-Mitigation: Inspect the relevant public component template, documentation, issue, merge request, or pipeline log before answering. <br>
+## Use Case:
 
+Developers and support maintainers use this skill to triage GitLab support issues or discussions for the CI Tools components catalog, answer from public evidence, and hand off unsafe or out-of-scope requests.
 
-## Reference(s): <br>
-- [ci-tools-support Support on ClawHub](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-ci-tools-support) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown support replies with citations or concise handoff guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses are constrained to eligible CI Tools support requests and public or explicitly provided information.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.165.2 (source: server-resolved release metadata) <br>
+Risk: Support replies could expose private customer details, private URLs, private logs, or internal project names in public threads.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check confidentiality before replying, avoid quoting private logs publicly, and hand off private customer systems or unclear cases to a human maintainer.
+
+Risk: A broad or incorrect SUPPORT_TRUSTED_DOMAINS value could allow support responses for requesters outside the intended audience.
+
+Mitigation: Configure SUPPORT_TRUSTED_DOMAINS narrowly and verify the requester domain before providing technical support.
+
+Risk: The agent could provide inaccurate CI Tools behavior if it answers without inspecting public documentation, repository content, or provided thread details.
+
+Mitigation: Ground each answer in public documentation, public repository content, public GitLab history, or explicit request context, and ask for one focused reproduction detail when evidence is missing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-ci-tools-support)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown]
+
+**Output Format:** [Markdown support replies, follow-up questions, labels, refusals, or maintainer handoffs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a carefully scoped SUPPORT_TRUSTED_DOMAINS value for requester eligibility checks.]
+
+## Skill Version(s):
+
+4.199.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

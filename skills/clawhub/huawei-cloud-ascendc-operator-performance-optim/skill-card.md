@@ -1,53 +1,71 @@
-## Description: <br>
-Develops and optimizes custom AscendC operators, analyzes performance bottlenecks, and validates optimizations for Ascend NPU workloads using the CANN toolkit. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Develops and optimizes custom AscendC operators for Ascend NPUs by analyzing bottlenecks, applying memory, compute, and data-layout techniques, and validating performance and correctness.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and engineers use this skill to investigate AscendC operator bottlenecks, implement targeted operator optimizations, and validate functional correctness and performance improvement on Ascend NPU workloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill includes unsafe chmod 777 guidance for profiling output directories. <br>
-Mitigation: Use a private profiling output directory with restrictive permissions instead of following chmod 777 guidance. <br>
-Risk: Included profiling scripts delete OPPROF_* profiling outputs in the target operator workspace. <br>
-Mitigation: Run the scripts only in an operator workspace where deleting existing OPPROF_* outputs is acceptable, and keep backups when prior profiling data must be preserved. <br>
-Risk: Overbroad activation language may cause the skill to be used outside AscendC/CANN operator work. <br>
-Mitigation: Install and use the skill only for AscendC/CANN custom operator development, profiling, and optimization tasks. <br>
+## Use Case:
 
+Developers and engineers use this skill to optimize performance-critical AscendC custom operators, identify operator bottlenecks, apply Ascend NPU memory/compute/data-layout optimizations, and validate accuracy and speedup.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-ascendc-operator-performance-optim) <br>
-- [Acceptance Criteria](references/acceptance-criteria.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
-- [AscendC API Guide](references/ascendc-api/GUIDE.md) <br>
-- [Kernel Constraints](references/ascendc-api/kernel-constraints.md) <br>
-- [Tiling Optimization Reference](references/tiling-prof.md) <br>
-- [Data Copy Optimization Reference](references/data-copy-prof.md) <br>
-- [Memory Optimization Reference](references/memory-prof.md) <br>
-- [Pipeline Optimization Reference](references/pipeline-prof.md) <br>
-- [Scalar Optimization Reference](references/scalar-prof.md) <br>
-- [API Usage Optimization Reference](references/api-usage-prof.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code blocks, shell commands, JSON/CSV profiling report descriptions, and optimization recommendations.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference generated profiling artifacts such as summary.json, operator_stats.csv, timeline.json, recommendations.md, and before/after comparison reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: The skill may read and modify local AscendC operator projects and run build or profiling commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the selected operator directory first, work in a controlled workspace, and keep a backup before allowing changes or command execution.
+
+Risk: The profiling scripts remove existing OPPROF_* directories in the selected operator directory.
+
+Mitigation: Copy or archive existing OPPROF_* profiling results before running the scripts, or run profiling in a fresh working directory.
+
+Risk: The troubleshooting material includes broad permission guidance for /tmp/opprof.
+
+Mitigation: Avoid chmod 777; use a private user-owned profiling directory with restrictive permissions.
+
+Risk: Optimization guidance or code changes can produce incorrect results or misleading performance gains.
+
+Mitigation: Validate against a baseline implementation, compare numerical accuracy within the stated tolerances, and rerun before/after profiling on realistic inputs.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-ascendc-operator-performance-optim)
+- [Acceptance Criteria](references/acceptance-criteria.md)
+- [Verification Methods](references/verification-method.md)
+- [Troubleshooting](references/troubleshooting.md)
+- [AscendC Operator Code Generation Reference Documents Load Guide](references/ascendc-api/GUIDE.md)
+- [Tiling Optimization Reference](references/tiling-prof.md)
+- [Data Copy Optimization Reference](references/data-copy-prof.md)
+- [API Usage Optimization Reference](references/api-usage-prof.md)
+- [Memory Optimization Reference](references/memory-prof.md)
+- [Pipeline Optimization Reference](references/pipeline-prof.md)
+- [Scalar Optimization Reference](references/scalar-prof.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline bash and C++ code blocks, profiling report descriptions, and optimization recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide local compilation and profiling workflows and produce terminal comparison output or paths to generated profiling artifacts.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata; artifact frontmatter lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

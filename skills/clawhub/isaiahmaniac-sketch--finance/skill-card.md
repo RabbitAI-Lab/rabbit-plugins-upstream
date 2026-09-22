@@ -1,43 +1,53 @@
-## Description: <br>
-Helps agents answer stock, options, dividend, split, ticker, cryptocurrency price, market-cap, and other financial market-data questions using Polygon and CoinGecko APIs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use this skill when the user asks about stock prices, options, dividends, splits, ticker details, cryptocurrency prices, market caps, or any financial market data.
 
-## Publisher: <br>
-[isaiahmaniac-sketch](https://clawhub.ai/user/isaiahmaniac-sketch) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[isaiahmaniac-sketch](https://clawhub.ai/user/isaiahmaniac-sketch)
 
-## Use Case: <br>
-Agents use this skill to retrieve and summarize financial market data for users asking about equities, options, dividends, splits, ticker details, and cryptocurrency markets. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Relevant prompts may trigger external Polygon or CoinGecko API requests and consume configured service access. <br>
-Mitigation: Use the skill for intended market-data questions, monitor API usage where applicable, and avoid unnecessary broad or repeated queries. <br>
-Risk: Market-data answers can be time-sensitive or gated to a specific date. <br>
-Mitigation: Check the requested date range, note data timestamps when available, and account for the TIME_GATE environment variable before relying on results. <br>
-Risk: Financial market data may be incomplete, delayed, or unsuitable as the sole basis for financial decisions. <br>
-Mitigation: Verify important results against authoritative sources and treat outputs as informational rather than financial advice. <br>
+## Use Case:
 
+External users, developers, and analysts use this skill to query US equities, options, dividends, splits, ticker metadata, and cryptocurrency market data through Polygon.io and CoinGecko examples.
 
-## Reference(s): <br>
-- [ClawHub Finance skill](https://clawhub.ai/isaiahmaniac-sketch/skills/finance) <br>
-- [CoinGecko API](https://api.coingecko.com/api/v3) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown responses with Python code blocks and market-data summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use configured Polygon and CoinGecko API access; time-sensitive responses can depend on available data and the TIME_GATE environment variable.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Finance queries may be sent to Polygon or CoinGecko, which can expose requested tickers, coins, dates, or other market-data interests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid including private portfolio details unless they are intentionally part of the market-data request.
+
+Risk: Market data is time-sensitive and may be gated to a specific date by the environment.
+
+Mitigation: Include the query date or time context in outputs and verify current values before using results for decisions.
+
+## Reference(s):
+
+- [CoinGecko API](https://api.coingecko.com/api/v3)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, guidance]
+
+**Output Format:** [Markdown with Python code blocks and tabular quick references]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include API request examples, market-data summaries, ticker details, options contract details, dividend and split information, and cryptocurrency price or metadata results.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,53 @@
+{
+  "skill": "skill-creator (cb_teams_marketplace, Anthropic 官方)",
+  "highlights": [
+    {
+      "id": "A-001",
+      "name": "祈使句写作规范（指令体非对话体）",
+      "block": "B03",
+      "trigger": "起草或打磨 SKILL.md 正文时；发现\"你应该/如果你需要 X\"式第二人称对话体",
+      "evidence": "skill-creator SKILL.md Step 4: \"Write the entire skill using imperative/infinitive form (verb-first instructions), not second person. Use objective, instructional language (e.g., 'To accomplish X, do Y' rather than 'You should do X')\"",
+      "point": "全文用动宾开头指令体（\"加载 X\"/\"先跑 Y\"），禁对话体；中文本地化表述为「指令体而非对话体」。我们的 designer-guide 仅约定 description 用第三人称，正文写作体例是空白【降级注记 2026-09-02 用户拍板：本条属施工层 SKILL.md 行文规范，主责 skill-creator；skill-designer 仅在交接 brief 约定中留一句「正文用指令体」，不入 absorbed-library 正式条目，勿升格】"
+    },
+    {
+      "id": "A-002",
+      "name": "AI 受众视角（写给另一个 agent 实例）",
+      "block": "B02",
+      "trigger": "写 SKILL.md 犹豫\"这条要不要写\"时；内容在人类看来精彩但对 AI 执行无增益",
+      "evidence": "skill-creator SKILL.md Step 4: \"remember that the skill is being created for another instance of Claude to use. Focus on including information that would be beneficial and non-obvious to Claude.\"",
+      "point": "受众是另一个 AI 实例而非人类读者——只收\"对 AI 有益且非显然\"的程序性知识；本地化：'Claude'改平台中立表述，并与面向用户的话术层（白话注释/FAQ）分层不混写"
+    },
+    {
+      "id": "A-003",
+      "name": "正文四结构模式（与目录架构正交分层）",
+      "block": "B07",
+      "trigger": "B07 画目录时用户追问\"SKILL.md 正文章节怎么组织\"",
+      "evidence": "skill-creator scripts/init_skill.py SKILL_TEMPLATE L31-53: 四种 body 结构模式 Workflow-Based(顺序流程)/Task-Based(工具集合)/Reference-Guidelines(标准规范)/Capabilities-Based(能力系统) + \"Patterns can be mixed and matched\"",
+      "point": "我们 7 套 archetype 管目录架构（文件怎么分），四模式管正文层级（章节怎么排）——两层正交互补，补齐「body 怎么组织」空白；建议混搭：task 为主干 + 复杂操作嵌 workflow"
+    },
+    {
+      "id": "A-004",
+      "name": "大文件 grep 检索模式内嵌",
+      "block": "B09",
+      "trigger": "某份 reference 文档超过约 1 万词、加载全文 token 代价过高时",
+      "evidence": "skill-creator SKILL.md references 节: \"If files are large (>10k words), include grep search patterns in SKILL.md\"",
+      "point": "在 SKILL.md 对应条目旁内嵌 grep 检索模式串，agent 不加载全文也能精准命中段落；与既有「索引行/词数 diff」体检项互补——索引管发现，grep 模式管检索"
+    },
+    {
+      "id": "A-005",
+      "name": "具体使用例反推资源清单",
+      "block": "B05",
+      "trigger": "Phase 0/② 出稿前需求只有抽象描述、拿不出具体使用例",
+      "evidence": "skill-creator SKILL.md Step 1-2: \"analyze each example by: (1) Considering how to execute on the example from scratch (2) Identifying what scripts, references, and assets would be helpful when executing these workflows repeatedly\"",
+      "point": "先逼出 2-3 个真实使用例（\"用户会说什么来触发它\"），逐例从零推演执行过程，把重复出现的动作沉淀为 scripts/references/assets 资源清单——补上「例→资源」的推导桥接，比抽象三问更落地"
+    },
+    {
+      "id": "A-006",
+      "name": "validate 门禁前置打包（fail-closed 发布）",
+      "block": "B09",
+      "trigger": "蓝图落地后要产出发布包或同步 dist 时",
+      "evidence": "skill-creator scripts/package_skill.py L47-54: \"Run validation before packaging... if not valid: print('Validation failed...') return None\"——校验不过拒绝出 zip",
+      "point": "打包与校验合成一条命令、校验不过 fail-closed；反观我们 prepare_release 手工 cp 与 validate 分离，可加 sd_cli package 把 validate --self 设为打包硬门禁（防同步遗漏裸奔发布）"
+    }
+  ]
+}

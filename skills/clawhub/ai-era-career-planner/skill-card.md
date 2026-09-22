@@ -1,51 +1,65 @@
-## Description: <br>
-AI-era-career-planner helps agents guide Chinese-language career planning conversations with staged intake, interest and values assessment, AI job-impact analysis, salary and demand references, and personalized action plans. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI Era Career Planner is a Chinese-language career planning assistant that collects user background, assesses career interests and values, evaluates AI-era job impact, and produces personalized career planning reports.
 
-## Publisher: <br>
-[mnetfairy](https://clawhub.ai/user/mnetfairy) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mnetfairy](https://clawhub.ai/user/mnetfairy)
 
-## Use Case: <br>
-External users and career guidance agents use this skill to plan education choices, career entry, or career transitions in the AI era. The skill supports structured intake, assessment, career recommendations, AI-resilience guidance, and concrete next-step planning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, with China-focused salary and insurance company reference data. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may ask for personal career-context information. <br>
-Mitigation: Collect only information the user chooses to provide and avoid saving profiles unless the user explicitly requests a saved record. <br>
-Risk: Salary references and insurance company recommendations may be stale, incomplete, or mistaken for endorsement. <br>
-Mitigation: Treat salary and company data as reference material, keep insurance recommendations disclosed as informational, and ask users to verify details before acting. <br>
-Risk: Optional email, subscription, live-search, or saved-record actions can affect user data outside the conversation. <br>
-Mitigation: Only use optional integrations when the current environment permits them and the user has clearly approved the specific action. <br>
+## Use Case:
 
+Individuals, students, and career changers use this skill to receive structured career direction, AI impact analysis, salary and demand context, and short- and long-term action plans. It can optionally export a Markdown report when the user explicitly requests export.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mnetfairy/skills/ai-era-career-planner) <br>
-- [AI career impact reference](references/ai_career_impact.md) <br>
-- [Career assessment framework](references/assessment.md) <br>
-- [Career anchor reference](references/career_anchor.md) <br>
-- [Education paths](references/education_paths.md) <br>
-- [Job demand trends](references/job_demand.md) <br>
-- [Industry trends](references/industry_trends.md) <br>
-- [Salary data](references/salary_data.md) <br>
-- [Insurance broker company reference](references/insurance_broker_companies.json) <br>
-- [Optional integrations reference](references/integrations.md) <br>
+### Deployment Geography for Use:
 
+Global; reference data and insurance-company guidance are primarily China-focused.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Files] <br>
-**Output Format:** [Markdown career planning report and conversational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May optionally generate a Markdown report file when the host environment allows it and the user explicitly requests export.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.2.240 (source: server release metadata) <br>
+Risk: Salary and insurance-company data may be incomplete, outdated, or advisory rather than authoritative.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat those outputs as reference material and independently verify company credentials, contact details, salary ranges, and source claims before acting on recommendations.
+
+Risk: Career planning guidance can materially influence education, employment, or insurance-industry decisions.
+
+Mitigation: Use the skill as decision support, compare multiple sources, and avoid treating recommendations as a guarantee of employment outcomes or professional advice.
+
+Risk: Optional export, email, subscription, network lookup, or tracking features can create privacy or persistence effects.
+
+Mitigation: Enable those actions only after an explicit user request and confirm the destination, data to be shared, and storage behavior before proceeding.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/mnetfairy/skills/ai-era-career-planner)
+- [SKILL.md](artifact/SKILL.md)
+- [AI career impact reference](artifact/references/ai_career_impact.md)
+- [Career assessment reference](artifact/references/assessment.md)
+- [Salary data reference](artifact/references/salary_data.md)
+- [Job demand trends](artifact/references/job_demand.md)
+- [Industry trends](artifact/references/industry_trends.md)
+- [Insurance broker company data](artifact/references/insurance_broker_companies.json)
+- [Optional integrations reference](artifact/references/integrations.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Analysis, Guidance, Files]
+
+**Output Format:** [Markdown-style conversational report with structured career recommendations; optional Markdown file export]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses local reference material by default; optional export, email, subscription, network lookup, and tracking behaviors require explicit user request.]
+
+## Skill Version(s):
+
+2.2.438 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

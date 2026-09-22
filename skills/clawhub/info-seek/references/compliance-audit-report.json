@@ -1,0 +1,337 @@
+{
+  "tool": "compliance_audit",
+  "version": "2.2.0",
+  "generated_at": "2026-09-21T02:22:29+00:00",
+  "date": "2026-09-21",
+  "root": "/root/.skills/infoseek",
+  "chains": [
+    {
+      "chain": "credentials",
+      "scanner": {
+        "module": "scripts/leak_scan.py",
+        "available": true,
+        "pattern_count": 9,
+        "assign_pattern": true,
+        "safe_values": 13
+      },
+      "scan": {
+        "root": "/root/.skills/infoseek",
+        "files_scanned": 231,
+        "raw_findings": 8,
+        "actionable": 0,
+        "whitelisted": 8,
+        "by_class": {
+          "placeholder": 3,
+          "test_fixture": 5
+        },
+        "items": [
+          {
+            "file": "scripts/infoseek_auth.py",
+            "line": 174,
+            "pattern": "OpenAI/通用 sk- key",
+            "class": "placeholder",
+            "value": "sk-***"
+          },
+          {
+            "file": "scripts/infoseek_auth.py",
+            "line": 175,
+            "pattern": "OpenAI/通用 sk- key",
+            "class": "placeholder",
+            "value": "sk-***"
+          },
+          {
+            "file": "scripts/infoseek_auth.py",
+            "line": 176,
+            "pattern": "OpenAI/通用 sk- key",
+            "class": "placeholder",
+            "value": "sk-***"
+          },
+          {
+            "file": "tests/test_async_tools.py",
+            "line": 8,
+            "pattern": "OpenAI/通用 sk- key",
+            "class": "test_fixture",
+            "value": "sk-***"
+          },
+          {
+            "file": "tests/test_async_tools.py",
+            "line": 9,
+            "pattern": "OpenAI/通用 sk- key",
+            "class": "test_fixture",
+            "value": "sk-***"
+          },
+          {
+            "file": "tests/test_key_manager_v101.py",
+            "line": 57,
+            "pattern": "OpenAI/通用 sk- key",
+            "class": "test_fixture",
+            "value": "sk-***"
+          },
+          {
+            "file": "tests/test_key_manager_v101.py",
+            "line": 59,
+            "pattern": "OpenAI/通用 sk- key",
+            "class": "test_fixture",
+            "value": "sk-***"
+          },
+          {
+            "file": "tests/test_key_manager_v101.py",
+            "line": 128,
+            "pattern": "OpenAI/通用 sk- key",
+            "class": "test_fixture",
+            "value": "sk-***"
+          }
+        ]
+      },
+      "key_status": {
+        "module": "core/key_manager.py",
+        "available": true,
+        "providers": 0,
+        "records": 0,
+        "by_status": {},
+        "open_circuits": [],
+        "fingerprints": [],
+        "thresholds": {
+          "fail": 3,
+          "circuit": 5,
+          "cooldown_s": 60.0
+        }
+      },
+      "verdict": "pass"
+    },
+    {
+      "chain": "crawl_compliance",
+      "registry": {
+        "module": "core/capability_registry.py",
+        "available": true,
+        "declared": "capabilities/registry.yaml",
+        "total": 12,
+        "by_kind": {
+          "structured_data_api": 1,
+          "identity_attribution": 3,
+          "free_api": 1,
+          "gateway_api": 1,
+          "browser_engine": 1,
+          "account_forensics": 1,
+          "knowledge_verify": 1,
+          "multimedia_transcribe": 1,
+          "patent_lookup": 1,
+          "graceful_fallback": 1
+        },
+        "enabled_declared": 2,
+        "effective_enabled": 2
+      },
+      "consent": {
+        "required": [
+          "Maigret",
+          "Sherlock",
+          "AccountTrustScorer",
+          "AgentKey",
+          "FakeDetect"
+        ],
+        "granted_runtime": [],
+        "unauthorized": [
+          "Maigret",
+          "Sherlock",
+          "AccountTrustScorer",
+          "AgentKey",
+          "FakeDetect"
+        ],
+        "declared_conflicts": []
+      },
+      "capabilities": [
+        {
+          "name": "QVeris",
+          "kind": "structured_data_api",
+          "enabled": true,
+          "requires_consent": false,
+          "consent_granted": null,
+          "effective_enabled": true,
+          "network_boundary": "open",
+          "env_override": false
+        },
+        {
+          "name": "Maigret",
+          "kind": "identity_attribution",
+          "enabled": false,
+          "requires_consent": true,
+          "consent_granted": false,
+          "effective_enabled": false,
+          "network_boundary": "open",
+          "env_override": true
+        },
+        {
+          "name": "Sherlock",
+          "kind": "identity_attribution",
+          "enabled": false,
+          "requires_consent": true,
+          "consent_granted": false,
+          "effective_enabled": false,
+          "network_boundary": "open",
+          "env_override": true
+        },
+        {
+          "name": "AccountTrustScorer",
+          "kind": "identity_attribution",
+          "enabled": false,
+          "requires_consent": true,
+          "consent_granted": false,
+          "effective_enabled": false,
+          "network_boundary": "local",
+          "env_override": true
+        },
+        {
+          "name": "PublicApisCatalog",
+          "kind": "free_api",
+          "enabled": false,
+          "requires_consent": false,
+          "consent_granted": null,
+          "effective_enabled": false,
+          "network_boundary": "local",
+          "env_override": false
+        },
+        {
+          "name": "AgentKey",
+          "kind": "gateway_api",
+          "enabled": false,
+          "requires_consent": true,
+          "consent_granted": false,
+          "effective_enabled": false,
+          "network_boundary": "open",
+          "env_override": false
+        },
+        {
+          "name": "L2Renderer",
+          "kind": "browser_engine",
+          "enabled": false,
+          "requires_consent": false,
+          "consent_granted": null,
+          "effective_enabled": false,
+          "network_boundary": "open",
+          "env_override": false
+        },
+        {
+          "name": "FakeDetect",
+          "kind": "account_forensics",
+          "enabled": false,
+          "requires_consent": true,
+          "consent_granted": false,
+          "effective_enabled": false,
+          "network_boundary": "local",
+          "env_override": false
+        },
+        {
+          "name": "WikiVerify",
+          "kind": "knowledge_verify",
+          "enabled": false,
+          "requires_consent": false,
+          "consent_granted": null,
+          "effective_enabled": false,
+          "network_boundary": "sandbox_restricted",
+          "env_override": false
+        },
+        {
+          "name": "L4Transcribe",
+          "kind": "multimedia_transcribe",
+          "enabled": false,
+          "requires_consent": false,
+          "consent_granted": null,
+          "effective_enabled": false,
+          "network_boundary": "sandbox_restricted",
+          "env_override": false
+        },
+        {
+          "name": "PatentLookup",
+          "kind": "patent_lookup",
+          "enabled": false,
+          "requires_consent": false,
+          "consent_granted": null,
+          "effective_enabled": false,
+          "network_boundary": "sandbox_restricted",
+          "env_override": false
+        },
+        {
+          "name": "manual_review",
+          "kind": "graceful_fallback",
+          "enabled": true,
+          "requires_consent": false,
+          "consent_granted": null,
+          "effective_enabled": true,
+          "network_boundary": "local",
+          "env_override": false
+        }
+      ],
+      "consent_log": {
+        "path": "/root/.infoseek/consent.log",
+        "exists": true,
+        "lines": 157,
+        "grant": 86,
+        "revoke": 71,
+        "malformed": 0,
+        "last": "2026-09-21T02:22:29.320537 revoke Sherlock",
+        "source": "capability_registry"
+      },
+      "verdict": "pass"
+    },
+    {
+      "chain": "network_boundary",
+      "module": "scripts/boundary_gate.py",
+      "available": true,
+      "mode": "static_only",
+      "probe": false,
+      "note": "只校验能力声明的边界/要求主机，不探测可达性（零网络）",
+      "valid_boundaries": [
+        "open",
+        "sandbox_restricted",
+        "local"
+      ],
+      "gate_enabled": false,
+      "checked": 12,
+      "ok": 12,
+      "failed": 0,
+      "by_boundary": {
+        "open": 5,
+        "local": 4,
+        "sandbox_restricted": 3
+      },
+      "issues": {},
+      "report": "references/network-boundary-report.md",
+      "report_exists": true,
+      "report_bytes": 3359,
+      "verdict": "pass"
+    },
+    {
+      "chain": "provenance",
+      "source": "references/trusted-sources.json",
+      "exists": true,
+      "version": "2.0.0",
+      "schema": "dual-segment(v2.0)",
+      "updated": "2026-09-11",
+      "white_list": 85,
+      "kb_sources": 29,
+      "by_tier": {
+        "1": 48,
+        "2": 33,
+        "3": 4
+      },
+      "by_credibility": {
+        "90": 20,
+        "82": 29,
+        "74": 28,
+        "66": 8
+      },
+      "by_type": {
+        "官方权威源": 48,
+        "行业头部": 33,
+        "一般可信": 4
+      },
+      "unverified": [],
+      "verdict": "pass"
+    }
+  ],
+  "summary": {
+    "pass": 4
+  },
+  "actionable": 0,
+  "verdict": "pass"
+}

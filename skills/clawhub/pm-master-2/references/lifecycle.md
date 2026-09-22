@@ -133,8 +133,8 @@ while the state machine is the "mandatory serial discipline". The two connect vi
 ```bash
 SKILL_DIR=<this skill directory>
 python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.yaml --status            # current state + available gates
-python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.yaml --to 执行            # evaluate (dry-run, no changes)
-python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.yaml --to 执行 --approve "Zhang San(sponsor)"  # approval flip
+python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.yaml --to execution            # evaluate (dry-run, no changes)
+python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.yaml --to execution --approve "Zhang San(sponsor)"  # approval flip
 ```
 
 After approval passes, it will: ① flip `project.phase` and `lifecycle_state`; ② append a gate record to `governance.stage_gates`

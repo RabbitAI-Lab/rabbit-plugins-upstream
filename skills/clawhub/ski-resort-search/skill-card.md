@@ -1,39 +1,54 @@
-## Description: <br>
-全球15+热门滑雪场查询，覆盖日本北海道、欧洲阿尔卑斯、北美、中国东北四大区域，含落差、雪质、票价、雪季和交通信息，支持多雪场对比，零配置即装即用。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Chinese-language ski resort lookup and comparison for 15+ popular resorts across Japan, the European Alps, North America, and northeast China, covering vertical drop, snow quality, ticket prices, seasons, transportation, and multi-resort comparisons.
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-Travelers and skiing enthusiasts use this skill to search, filter, and compare offline ski resort reference data by country, difficulty, budget, terrain, season, ticket price, and transport access. It supports trip planning guidance but does not provide live snow conditions, bookings, or ticket purchases. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Ski resort facts, prices, seasons, and transport details are static reference data and may become outdated. <br>
-Mitigation: Verify current resort conditions, ticket prices, opening dates, and transport options with official sources before booking or travel. <br>
+## Use Case:
 
+External travel planners and agents use this skill to search, inspect, and compare ski resorts by country, difficulty, budget, resort details, and transportation. It is best suited for preliminary Chinese-language ski trip planning using static local reference data.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/travel-skills/skills/ski-resort-search) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown-style Chinese text with ski resort search results, detail summaries, or comparison tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local static resort data; no live conditions, booking, or purchase output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Resort prices, seasons, snow status, and availability may be stale because the skill uses static local reference data and does not query live services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify trip-critical details with authoritative resort, weather, snow-report, and booking sources before making travel decisions.
+
+Risk: Users may expect real-time snow status, booking, or indoor and summer ski recommendations that the security evidence says are not provided.
+
+Mitigation: Use the skill for initial comparison only and use dedicated booking, snow-report, or indoor and summer resort sources for those needs.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/ski-resort-search)
+- [Publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown-style Chinese text responses from search, detail, and compare tools]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Static local resort data; no real-time snow, booking, or live travel-status output]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,56 @@
-## Description: <br>
-Fetch and parse news highlights from CCTV News Broadcast (Xinwen Lianbo) for a given date. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fetch and parse news highlights from CCTV News Broadcast (Xinwen Lianbo) for a given date.
 
-## Publisher: <br>
-[yuhangch](https://clawhub.ai/user/yuhangch) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[yuhangch](https://clawhub.ai/user/yuhangch)
 
-## Use Case: <br>
-External users and developers use this skill to fetch CCTV News Broadcast highlights for a requested date and receive a concise summary grouped by topic when possible. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill makes outbound requests to CCTV-related news pages when asked for news. <br>
-Mitigation: Install and use it only in environments where that network access is acceptable, and review the documented domains before execution. <br>
-Risk: News summaries depend on live public pages that may change, be unavailable, or parse incompletely. <br>
-Mitigation: Verify important summaries against the linked CCTV source pages before relying on them. <br>
-Risk: Relative date requests such as today or yesterday depend on the agent environment's local time. <br>
-Mitigation: Use an explicit YYYYMMDD date when the exact broadcast date matters. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/yuhangch/skills/cctv-news-fetcher) <br>
-- [Publisher profile](https://clawhub.ai/user/yuhangch) <br>
-- [Example Usage](examples/example.md) <br>
-- [CCTV News Broadcast recent archive](https://tv.cctv.com/lm/xwlb/day/{YYYYMMDD}.shtml) <br>
-- [CCTV News Broadcast older archive](https://cctv.cntv.cn/lm/xinwenlianbo/{YYYYMMDD}.shtml) <br>
+## Use Case:
 
+External users and agents use this skill to fetch CCTV News Broadcast highlights for a requested date, parse the crawler JSON, and summarize the results as domestic, international, or general news highlights.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands] <br>
-**Output Format:** [Markdown summary based on JSON crawler output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires bun or Node.js, node-html-parser, and outbound access to CCTV-related news pages.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and package.json) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The crawler follows links collected from remote CCTV pages and makes outbound requests from the local environment.
+
+Mitigation: Review the skill before installation and prefer a version that allowlists CCTV hosts, rejects non-HTTPS or unexpected links, and adds request limits.
+
+Risk: The crawler sends a hard-coded cookie and Host header with page requests.
+
+Mitigation: Prefer a version that removes the hard-coded cookie and Host header before use in sensitive networks.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/yuhangch/skills/cctv-news-fetcher)
+- [Publisher Profile](https://clawhub.ai/user/yuhangch)
+- [CCTV Xinwen Lianbo archive endpoint](https://cctv.cntv.cn/lm/xinwenlianbo/${date}.shtml)
+- [CCTV daily Xinwen Lianbo endpoint](https://tv.cctv.com/lm/xwlb/day/${date}.shtml)
+- [Example Usage](examples/example.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown summary derived from JSON crawler output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The crawler prints dated news items with title and content fields before the agent summarizes them for the user.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata and package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

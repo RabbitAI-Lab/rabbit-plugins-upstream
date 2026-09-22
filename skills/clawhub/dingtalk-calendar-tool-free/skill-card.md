@@ -1,42 +1,58 @@
-## Description: <br>
-Uses the mcporter CLI to help an agent manage DingTalk calendar workflows, including creating and updating events, checking schedules and free/busy status, booking meeting rooms, and searching contacts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses the mcporter CLI to manage DingTalk calendar events, including creating events, checking availability, and booking meeting rooms.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent operate basic DingTalk calendar and meeting-room workflows from natural language prompts. It is aimed at individual and lightweight use cases rather than batch or team-scale calendar administration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, delete, or book calendar and meeting-room resources through CLI-mediated DingTalk workflows. <br>
-Mitigation: Require explicit human review before write actions such as creating, updating, deleting, or booking resources. <br>
-Risk: Security evidence flags unclear trigger scope and incomplete privacy disclosure for what may be sent to DingTalk, callback endpoints, or local caches. <br>
-Mitigation: Avoid broad data-analysis prompts as triggers, verify DingTalk and callback URLs, and confirm data handling with the publisher before deployment. <br>
-Risk: The workflow depends on the external mcporter package and configured DingTalk endpoints. <br>
-Mitigation: Verify the mcporter package source and configured DingTalk URLs before granting an agent execution access. <br>
+## Use Case:
 
+Individual users and lightweight business workflows use this skill to create, query, update, and delete DingTalk calendar events, check attendee availability, search contacts, and find or reserve meeting rooms.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/dingtalk-calendar-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return status, result data, logs, and errors from mcporter-mediated DingTalk calendar or contact operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Routing text includes database, SQL, and data-analysis triggers that do not accurately describe the DingTalk calendar workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for DingTalk calendar, room, free/busy, and contact workflows, and disregard the unrelated trigger language.
+
+Risk: Calendar updates, deletions, and room bookings can change user or team schedules.
+
+Mitigation: Require explicit user confirmation before event updates, deletions, or meeting-room bookings.
+
+Risk: The skill depends on mcporter and DingTalk endpoint configuration that may involve sensitive service URLs or credentials.
+
+Mitigation: Review the mcporter package and endpoint configuration before use, and avoid storing secrets in plaintext config where possible.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/dingtalk-calendar-tool-free)
+- [ClawHub publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON, text, or CSV command outputs.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May invoke mcporter CLI calls for DingTalk calendar and contact operations.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata; artifact frontmatter shows 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

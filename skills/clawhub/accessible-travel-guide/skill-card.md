@@ -1,41 +1,57 @@
-## Description: <br>
-无障碍出行助手，查询景点、酒店和交通无障碍设施，覆盖轮椅、视障、听障、婴儿车和老年人5类需求，提供热门景区和主流酒店品牌的设施查询与出行建议。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Accessible Travel Guide helps agents look up accessibility details for Chinese attractions, hotel brands, and travel plans across wheelchair, visual, hearing, stroller, and older-adult needs.
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External users and travel-planning agents use this skill to look up accessibility details for supported Chinese attractions and hotel brands, then receive practical travel tips for wheelchair users, visually impaired travelers, hearing impaired travelers, stroller users, and older adults. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill claims local-only operation while evidence.security reports under-explained token and network code. <br>
-Mitigation: Review before installation and require the publisher to remove or clearly document PROXY_TOKEN and the outbound request helper before treating the skill as zero-network. <br>
-Risk: Accessibility details may be incomplete or outdated because the skill does not provide real-time facility changes. <br>
-Mitigation: Confirm critical accessibility details, reservations, and service availability with the venue or hotel before travel. <br>
+## Use Case:
 
+External users and travel-planning agents use this skill to retrieve static accessibility guidance for selected Chinese tourist sites, hotel brands, and transport scenarios. It supports planning for wheelchair users, blind or low-vision travelers, deaf or hard-of-hearing travelers, stroller users, and older adults.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/accessible-travel-guide) <br>
-- [Publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Guidance] <br>
-**Output Format:** [JSON strings containing accessibility lookup results or travel guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are generated from embedded local datasets for supported attractions, hotel brands, accessibility needs, and travel modes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Static attraction and hotel accessibility details may be outdated or incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm critical facility status, booking availability, and route accessibility with the venue or hotel before travel.
+
+Risk: Coverage is limited to selected Chinese attractions and hotel brands.
+
+Mitigation: Treat missing or unsupported destinations as out of scope and use authoritative venue or local travel sources for confirmation.
+
+Risk: Travel guidance may touch on mobility or health-sensitive planning but is not medical advice.
+
+Mitigation: Use qualified medical advice for health constraints and emergency planning.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/accessible-travel-guide)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Guidance]
+
+**Output Format:** [JSON strings with Chinese accessibility facility details, hotel accessibility notes, and travel guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses static local travel data; critical accessibility, booking, and medical needs should be confirmed before travel.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

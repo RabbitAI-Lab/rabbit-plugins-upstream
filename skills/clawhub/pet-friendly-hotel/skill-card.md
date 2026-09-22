@@ -1,40 +1,53 @@
-## Description: <br>
-宠物友好酒店提供本地内置的中国宠物友好酒店、航司宠物托运、铁路携带政策和宠物证件办理指南。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Chinese-language, China-focused pet travel guidance for pet-friendly hotel policy checks, airline pet transport, rail alternatives, and travel document preparation.
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External travelers and travel planners use this skill to get quick guidance for pet-friendly lodging, pet transport by air or rail in China, and domestic or international pet travel document preparation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, with content focused on China pet travel policies <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Hotel, airline, rail, and entry-policy guidance may become outdated or vary by provider, route, date, or destination. <br>
-Mitigation: Verify current requirements directly with the hotel, carrier, railway operator, destination authority, or official notice before booking or traveling. <br>
-Risk: International pet-entry requirements can be complex and country-specific. <br>
-Mitigation: Use the skill as a planning checklist and confirm destination-specific documents, timelines, quarantine, and permits with official sources or a qualified travel provider. <br>
+## Use Case:
 
+External travelers and travel-planning agents use this skill to answer pet travel questions for China-focused trips, including chain-hotel pet policies, domestic airline transport rules, rail limitations, and pet travel document checklists.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/pet-friendly-hotel) <br>
+### Deployment Geography for Use:
 
+China-focused; usable globally where Chinese-language pet travel guidance is appropriate.
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, JSON, Text] <br>
-**Output Format:** [JSON tool results and natural-language guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Policy guidance can change; verify current requirements with hotels, carriers, rail operators, and destination authorities before booking or travel.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata) <br>
+Risk: Hotel-search capability may be overstated because the skill provides general chain and booking tips rather than live hotel search or store-level policy verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Users should confirm pet policies directly with the hotel or carrier before booking or travel.
+
+Risk: Pet travel policies, fees, document requirements, and transport restrictions can change.
+
+Mitigation: Treat results as planning guidance and verify current requirements with the airline, rail operator, hotel, or destination authority before relying on them.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/travel-skills/skills/pet-friendly-hotel)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, guidance]
+
+**Output Format:** [Structured JSON responses with human-facing Chinese guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses local built-in policy data and does not perform live hotel search, booking, or external verification.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata; artifact SKILL.md reports 1.0.5 and artifact _meta.json reports 1.0.7)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

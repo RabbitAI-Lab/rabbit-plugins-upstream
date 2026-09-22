@@ -1,5 +1,5 @@
 ## Description: <br>
-Ai Podcast Free turns pasted plain text into a two-host conversational podcast through MagicPodcast and returns a shareable podcast link. <br>
+ai-podcast-free helps agents turn pasted plain text into a two-host conversational podcast through the MagicPodcast API and return a shareable link. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to convert articles, notes, or other pasted text into shareable audio podcasts after configuring a MagicPodcast API key. <br>
+External users and developers use this skill to create shareable podcast audio from pasted plain text, with the language explicitly chosen before calling MagicPodcast. It is suited to blog posts, study notes, and similar text-to-audio workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: User-provided text is sent to MagicPodcast for processing. <br>
-Mitigation: Do not submit secrets, private records, or regulated personal data unless MagicPodcast's data practices have been reviewed and the data is approved for sharing. <br>
-Risk: The skill requires a MagicPodcast API key. <br>
-Mitigation: Configure the API key locally and avoid committing it to source control. <br>
-Risk: Podcast generation depends on MagicPodcast service availability and may take several minutes. <br>
-Mitigation: Use the dashboard or job status endpoint for progress, avoid excessive polling, and retry only after checking network and service status. <br>
+Risk: Broad triggers and overstated translation, localization, PDF, file-processing, or custom-voice claims could cause users or agents to apply the skill outside its supported text-to-podcast workflow. <br>
+Mitigation: Use this release only for plain text that the user intentionally wants to send to MagicPodcast, and avoid unsupported workflows unless the publisher updates the documentation and API fields. <br>
+Risk: Podcast source text is sent to an external MagicPodcast service. <br>
+Mitigation: Review text for sensitive or restricted content before use and avoid sending content that should not leave the user's approved environment. <br>
+Risk: The workflow requires a MagicPodcast API key. <br>
+Mitigation: Store the key in environment variables, keep it out of source control and logs, and rotate it if exposure is suspected. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/ai-podcast-free) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
 - [MagicPodcast API key setup](https://www.magicpodcast.app/skill-platform) <br>
 - [MagicPodcast dashboard](https://www.magicpodcast.app/app) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with bash and JSON snippets, API responses, and shareable podcast links] <br>
+**Output Type(s):** [Guidance, Shell commands, Configuration, API calls, Text] <br>
+**Output Format:** [Markdown with shell commands and JSON examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a MagicPodcast API key; podcast creation is asynchronous and returns status plus a shareable link when complete.] <br>
+**Other Properties Related to Output:** [Returns setup guidance, task status handling, and shareable MagicPodcast links when generation completes.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release evidence and SKILL.md frontmatter) <br>
+1.0.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

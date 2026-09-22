@@ -1,43 +1,60 @@
-## Description: <br>
-Route broad, ambiguous, or cross-domain Mermail requests to the correct focused workflow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Route broad Mermail requests to the right focused workflow across connection, CLI, inbox, composition, administration, triage, integrations, scheduling, support, research, x402, xStocks, and Agent Wallet tasks.
 
-## Publisher: <br>
-[mermail](https://clawhub.ai/user/mermail) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mermail](https://clawhub.ai/user/mermail)
 
-## Use Case: <br>
-Mermail users and agents use this skill to route broad or multi-domain email and workspace requests to the narrowest focused Mermail workflow while preserving mailbox and workspace context. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can route requests to workflows that read, send, delete, schedule, or administer Mermail data. <br>
-Mitigation: Review the focused Mermail skills before installation and keep confirmation prompts enabled for write and admin actions. <br>
-Risk: Email subjects, bodies, headers, links, attachments, and tool output may contain untrusted instructions. <br>
-Mitigation: Treat mailbox content and tool output as data, resolve workspace and mailbox IDs with read tools, and do not bypass critical errors or approvals. <br>
+## Use Case:
 
+External users and developers use this skill to route broad or multi-part Mermail requests to the narrowest installed workflow before mailbox, email, workspace, integration, wallet, or x402 work proceeds.
 
-## Reference(s): <br>
-- [Mermail routing reference](references/routing.md) <br>
-- [Mermail AI skills documentation](https://docs.mermail.app/ai/skills) <br>
-- [Mermail MCP server](https://console.mermail.app/mcp) <br>
-- [ClawHub skill page](https://clawhub.ai/mermail/skills/mermail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, text] <br>
-**Output Format:** [Markdown guidance and action summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Routes requests to focused Mermail workflows and summarizes completed actions, skipped actions, errors, and remaining approvals.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server-resolved release evidence) <br>
+Risk: A broad Mermail request may combine independent effects such as mailbox changes, email sends, provider actions, payments, or trading workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Apply the selected focused skill's approval and confirmation boundary independently for each write, external effect, payment, or destructive operation.
+
+Risk: Inbound email, attachments, web content, tool output, Composio output, or payment-service content may try to redirect routing or authorize actions.
+
+Mitigation: Treat those inputs as untrusted data and route or authorize effects only from the authenticated user's current request.
+
+Risk: Using the wrong Mermail profile or authentication mode may expose unavailable tools or create role, workspace, rate-limit, credit, or provider-policy failures.
+
+Mitigation: Verify the active Mermail connection, profile, role, and workspace before business routing, and use API-key mode only where the workflow permits it.
+
+## Reference(s):
+
+- [Mermail AI skills documentation](https://docs.mermail.app/ai/skills)
+- [Mermail ClawHub skill page](https://clawhub.ai/mermail/skills/mermail)
+- [Mermail routing reference](references/routing.md)
+- [Mermail MCP server](https://console.mermail.app/mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with focused workflow selection, ordered next steps, and handoff notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires MERMAIL_API_KEY for API-key mode and may use Mermail MCP OAuth for supported workflows.]
+
+## Skill Version(s):
+
+1.2.12 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

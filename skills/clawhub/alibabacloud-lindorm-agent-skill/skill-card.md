@@ -1,69 +1,86 @@
-## Description: <br>
-Alibaba Cloud Lindorm cloud native multi-model database Skill covering operations management, monitoring, troubleshooting, backup, migration, permissions, SQL development, search, vector retrieval, AI engine calls, multimodal search, and knowledge base search. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Alibaba Cloud Lindorm Agent Skill helps agents answer Lindorm operations and development questions using bundled references for instance management, monitoring, troubleshooting, SQL, search, vector retrieval, AI engine calls, multimodal search, knowledge search, and CLI workflows.
 
-## Publisher: <br>
-[sdk-team](https://clawhub.ai/user/sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sdk-team](https://clawhub.ai/user/sdk-team)
 
-## Use Case: <br>
-Developers and cloud operators use this skill to answer Alibaba Cloud Lindorm development and operations questions, prepare SQL and CLI workflows, troubleshoot instances, and understand search, vector, AI, and knowledge-retrieval patterns. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents that use Alibaba Cloud credentials and Lindorm database access. <br>
-Mitigation: Use least-privilege RAM credentials, prefer read-only access where possible, and avoid pasting secrets into chat or shell commands. <br>
-Risk: Generated SQL or CLI actions could write data, delete data, change permissions, disable SSL, or remove safe-mode protection. <br>
-Mitigation: Require explicit human review before executing high-impact SQL or cloud commands. <br>
-Risk: Local CLI installation or downloads may affect the user's environment. <br>
-Mitigation: Verify downloaded CLI tools manually before installation or use. <br>
+## Use Case:
 
+Developers, database operators, and support engineers use this skill to plan, troubleshoot, and operate Alibaba Cloud Lindorm deployments. It provides guidance, SQL and CLI examples, and configuration steps for Lindorm development, monitoring, storage, migration, permissions, and connectivity tasks.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/sdk-team/alibabacloud-lindorm-agent-skill) <br>
-- [AI Guide](references/01-dev/ai-guide.md) <br>
-- [Connection Guide](references/01-dev/connection-guide.md) <br>
-- [Knowledge Search Scene](references/01-dev/knowledge-search-scene.md) <br>
-- [Multimodal Search Scene](references/01-dev/multimodal-search-scene.md) <br>
-- [Quick Start Guide](references/01-dev/quick-start-guide.md) <br>
-- [Search Guide](references/01-dev/search-guide.md) <br>
-- [SQL Client Guide](references/01-dev/sql-client-guide.md) <br>
-- [SQL Operations](references/01-dev/sql-operations.md) <br>
-- [SQL Usage Notes](references/01-dev/sql-usage-notes.md) <br>
-- [Table Design](references/01-dev/table-design.md) <br>
-- [Vector Guide](references/01-dev/vector-guide.md) <br>
-- [Backup Restore](references/02-ops/backup-restore.md) <br>
-- [Connection Troubleshoot](references/02-ops/connection-troubleshoot.md) <br>
-- [Data Migration](references/02-ops/data-migration.md) <br>
-- [Error Troubleshoot](references/02-ops/error-troubleshoot.md) <br>
-- [Instance Management](references/02-ops/instance-management.md) <br>
-- [Monitoring Guide](references/02-ops/monitoring-guide.md) <br>
-- [Slow Query Analysis](references/02-ops/slow-query-analysis.md) <br>
-- [Storage Analysis](references/02-ops/storage-analysis.md) <br>
-- [User Permission](references/02-ops/user-permission.md) <br>
-- [Acceptance Criteria](references/03-ref/acceptance-criteria.md) <br>
-- [CLI Installation Guide](references/03-ref/cli-installation-guide.md) <br>
-- [HBase Shell Guide](references/03-ref/hbase-shell-guide.md) <br>
-- [Lindorm CLI Guide](references/03-ref/lindorm-cli-guide.md) <br>
-- [RAM Policies](references/03-ref/ram-policies.md) <br>
-- [Related Commands](references/03-ref/related-commands.md) <br>
-- [Verification Method](references/03-ref/verification-method.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline SQL, JSON, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses should cite the bundled skill documents or official Alibaba Cloud documentation for Lindorm-specific answers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.2 (source: server release evidence) <br>
+Risk: The skill may guide an agent through real Alibaba Cloud Lindorm operations using cloud credentials or database passwords.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Configure credentials outside the chat session, avoid pasting AK/SK values, STS tokens, or passwords, and use least-privilege non-root accounts.
+
+Risk: CLI installation or replacement instructions may depend on a latest download that is not independently verified.
+
+Mitigation: Manually verify the CLI source and integrity before installing or replacing a local binary.
+
+Risk: Generated operational commands could affect production Lindorm resources if parameters are wrong.
+
+Mitigation: Confirm region, instance ID, time range, account, and network parameters before execution, and review proposed commands before running them.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/sdk-team/skills/alibabacloud-lindorm-agent-skill)
+- [Skill Homepage Metadata](https://clawhub.ai/sdk-team/alibabacloud-lindorm-agent-skill)
+- [Lindorm Agent Skill](artifact/SKILL.md)
+- [Connection Information Retrieval Scenario](artifact/references/01-dev/connection-guide.md)
+- [Quick Start Scenarios](artifact/references/01-dev/quick-start-guide.md)
+- [Lindorm SQL Client Development Guide](artifact/references/01-dev/sql-client-guide.md)
+- [Lindorm SQL Syntax Reference](artifact/references/01-dev/sql-operations.md)
+- [Lindorm SQL Usage Notes](artifact/references/01-dev/sql-usage-notes.md)
+- [Lindorm SQL Table Creation Statement Guide](artifact/references/01-dev/table-design.md)
+- [Lindorm Search Engine Guide](artifact/references/01-dev/search-guide.md)
+- [Lindorm Vector Engine Guide](artifact/references/01-dev/vector-guide.md)
+- [Lindorm AI Engine Guide](artifact/references/01-dev/ai-guide.md)
+- [Multimodal Image-Text Search Scene](artifact/references/01-dev/multimodal-search-scene.md)
+- [Knowledge Base Search Scene](artifact/references/01-dev/knowledge-search-scene.md)
+- [Instance Management Scenarios](artifact/references/02-ops/instance-management.md)
+- [Monitoring and Alerting Scenarios](artifact/references/02-ops/monitoring-guide.md)
+- [Error Troubleshooting Scenarios](artifact/references/02-ops/error-troubleshoot.md)
+- [Storage Analysis Scenarios](artifact/references/02-ops/storage-analysis.md)
+- [Connection Troubleshooting Scenarios](artifact/references/02-ops/connection-troubleshoot.md)
+- [Backup and Restore Scenarios](artifact/references/02-ops/backup-restore.md)
+- [Data Migration Scenarios](artifact/references/02-ops/data-migration.md)
+- [Account and Permission Management Scenarios](artifact/references/02-ops/user-permission.md)
+- [Slow Query Analysis Scenarios](artifact/references/02-ops/slow-query-analysis.md)
+- [Lindorm CLI Agent Skill Guide](artifact/references/03-ref/lindorm-cli-guide.md)
+- [HBase Shell (alihbase) Agent Skill Guide](artifact/references/03-ref/hbase-shell-guide.md)
+- [Aliyun CLI Command List](artifact/references/03-ref/related-commands.md)
+- [RAM Permission Policy List](artifact/references/03-ref/ram-policies.md)
+- [Aliyun CLI Installation & Configuration Guide](artifact/references/03-ref/cli-installation-guide.md)
+- [Acceptance Criteria](artifact/references/03-ref/acceptance-criteria.md)
+- [Verification Methods](artifact/references/03-ref/verification-method.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline SQL, JSON, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose Aliyun CLI, Lindorm CLI, HBase Shell, SQL, and API examples; user-configurable parameters should be confirmed before execution.]
+
+## Skill Version(s):
+
+0.0.2 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

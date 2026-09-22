@@ -19,6 +19,7 @@ Prefer a manual upload without an agent? Visit the DropFiles website directly to
 ### Features
 
 - One-shot upload of HTML or Markdown content to get a public URL
+- Bundled `scripts/upload.py` wrapper — agents and humans both call one command
 - Automatic content-type detection (`html` / `markdown` / `auto`)
 - Configurable expiry: 1 hour, 1 day, 7 days, or 30 days
 - Optional password protection (user-supplied or auto-generated 6-digit code)
@@ -29,11 +30,13 @@ Prefer a manual upload without an agent? Visit the DropFiles website directly to
 
 ### Installation
 
-Copy the `SKILL.md` file into your agent's skill directory, or clone this repository and reference it from your workspace. Works with any agent that supports the `SKILL.md` frontmatter convention (TRAE, Claude, Cursor, etc.).
+Copy the entire skill directory (including both `SKILL.md` and `scripts/`) into your agent's skill directory, or clone this repository:
 
 ```bash
 git clone https://github.com/icexun/drop-files-skill.git
 ```
+
+Works with any agent that supports the `SKILL.md` frontmatter convention (TRAE, Claude, Cursor, etc.).
 
 ### Usage
 
@@ -44,64 +47,46 @@ Invoke this skill whenever you want to:
 - Upload any text-based artifact (HTML/Markdown) for online viewing
 - Generate a shareable preview link for content the agent just produced
 
-#### Example: Upload Markdown (no password)
+#### The Wrapper Script
 
-```bash
-curl -X POST https://dropfiles.tokendealhub.com/api/v1/upload \
-  -H "Content-Type: application/json" \
-  -d '{
-    "content": "# Hello World\n\nThis is a shared Markdown document.",
-    "type": "markdown",
-    "expire": "7d",
-    "title": "My Document"
-  }'
+**Use `scripts/upload.py` for all uploads. Do not construct curl commands or JSON payloads manually.**
+
+The script handles content reading, JSON serialization, temp-file management, curl invocation (Cloudflare WAF blocks non-curl HTTP clients), response parsing, and temp-file cleanup.
+
+Run `python3 scripts/upload.py --help` for the full interface.
+
+```
+python3 scripts/upload.py [OPTIONS]
+
+Content source (priority: --file > --content > stdin):
+  --file PATH          Read content from file
+  --content TEXT       Inline content (avoid for large text)
+                       (if neither, read from stdin)
+
+Upload options:
+  --type TYPE          html | markdown | auto (default: auto)
+  --expire EXPIRE      1h | 1d | 7d | 30d (default: 7d)
+  --title TITLE        Optional title shown on the share page
+  --lang LANG          en | zh | auto (default: auto)
+
+Password (mutually exclusive):
+  --password PASSWORD  Use a user-supplied password
+  --generate-password  Generate a random 6-digit numeric password
+
+Output:
+  --json               Output full JSON response (recommended for agents)
+  -h, --help           Show this help message and exit
 ```
 
-#### Example: Upload with a user-supplied password
+#### Example: Upload Markdown (stdin, JSON output)
 
 ```bash
-curl -X POST https://dropfiles.tokendealhub.com/api/v1/upload \
-  -H "Content-Type: application/json" \
-  -d '{
-    "content": "# Secret Report\n\nConfidential content.",
-    "type": "markdown",
-    "expire": "1d",
-    "password": "user_provided_password"
-  }'
+echo '# Hello World
+
+This is a shared Markdown document.' | python3 scripts/upload.py --type markdown --json
 ```
 
-#### Example: Upload with an auto-generated 6-digit password
-
-```bash
-curl -X POST https://dropfiles.tokendealhub.com/api/v1/upload \
-  -H "Content-Type: application/json" \
-  -d '{
-    "content": "# Protected Document\n\nContent here.",
-    "type": "markdown",
-    "expire": "7d",
-    "password": "482917"
-  }'
-```
-
-### API Reference
-
-- **Base URL**: `https://dropfiles.tokendealhub.com`
-- **Upload**: `POST /api/v1/upload`
-- **Metadata**: `GET /api/v1/info/{id}`
-- **Preview**: `https://dropfiles.tokendealhub.com/v/{id}`
-
-#### Upload Request Body
-
-| Field      | Type   | Required | Description |
-|------------|--------|----------|-------------|
-| `content`  | string | Yes      | The HTML or Markdown text to upload. Max 5MB. |
-| `type`     | string | No       | `html`, `markdown`, or `auto` (default: `auto`, auto-detects from content). |
-| `expire`   | string | No       | `1h`, `1d`, `7d`, or `30d` (default: `7d`). |
-| `title`    | string | No       | Optional title shown on the share page. |
-| `password` | string | No       | Optional password to protect the share page. See Password Policy below. |
-| `lang`     | string | No       | `en`, `zh`, or `auto` (default: `auto`). |
-
-#### Success Response (HTTP 201)
+Response:
 
 ```json
 {
@@ -110,27 +95,51 @@ curl -X POST https://dropfiles.tokendealhub.com/api/v1/upload \
     "id": "abc123def456",
     "url": "https://dropfiles.tokendealhub.com/v/abc123def456",
     "preview_url": "https://dropfiles.tokendealhub.com/v/abc123def456?preview=1",
-    "expire_at": "2026-07-22T10:30:00.000Z",
+    "expire_at": "2026-08-05T10:30:00.000Z",
     "type": "markdown",
     "size": 42
   }
 }
 ```
 
-#### Error Response (HTTP 400/404/429/500)
+#### Example: Upload from a file, human-readable output
+
+```bash
+python3 scripts/upload.py --file report.md --expire 1d --title "Q3 Report"
+```
+
+Response:
+
+```
+URL: https://dropfiles.tokendealhub.com/v/abc123
+Preview: https://dropfiles.tokendealhub.com/v/abc123?preview=1
+Expires: 2026-08-05T10:30:00Z
+```
+
+#### Example: Upload with an auto-generated 6-digit password
+
+```bash
+python3 scripts/upload.py --file secret.html --generate-password --json
+```
+
+Response includes the generated password so it can be communicated to viewers:
 
 ```json
 {
-  "success": false,
-  "error": {
-    "code": "CONTENT_REQUIRED",
-    "message": "Content is required"
-  }
+  "success": true,
+  "data": { "...": "..." },
+  "password": "482917"
 }
 ```
 
-Common error codes:
+### API Reference (for reference only — use the wrapper script)
 
+- **Base URL**: `https://dropfiles.tokendealhub.com`
+- **Upload**: `POST /api/v1/upload`
+- **Metadata**: `GET /api/v1/info/{id}`
+- **Preview**: `https://dropfiles.tokendealhub.com/v/{id}`
+
+Common error codes:
 - `CONTENT_REQUIRED` — `content` field is empty.
 - `CONTENT_TOO_LARGE` — content exceeds 5MB.
 - `INVALID_TYPE` — `type` is not one of `html`, `markdown`, `auto`.
@@ -143,16 +152,9 @@ The default behavior is **no password** — the share link is publicly accessibl
 
 Password protection is opt-in and supports three modes:
 
-1. **No password (default)**: Omit the `password` field entirely, or send `null`. The share page is publicly readable.
-2. **User-supplied password**: If the user explicitly provides a password, pass it in the `password` field. The share page will prompt viewers for this password.
-3. **Skill-generated 6-digit password**: If the user asks for password protection but does not provide a password, the skill generates a random 6-digit numeric code (e.g. `"482917"`) and includes it in the `password` field. The generated password is communicated back to the user so they can share it with intended viewers.
-
-#### 6-Digit Password Generation Rule
-
-- Exactly 6 digits, each 0–9.
-- Format: a string of 6 numeric characters, e.g. `"482917"`.
-- Do NOT use letters, symbols, or shorter/longer lengths.
-- Always display the generated password to the user in the response, e.g.: `Generated password: 482917`.
+1. **No password (default)**: Omit both password flags. The share page is publicly readable.
+2. **User-supplied password**: Pass `--password "your password"` to the upload script.
+3. **Skill-generated 6-digit password**: Pass `--generate-password`. The script generates a random 6-digit numeric code (e.g. `"482917"`), includes it in the upload, and surfaces it in the output. **Always relay the generated password to the user** so they can share it with viewers.
 
 ### Limits
 
@@ -189,6 +191,7 @@ MIT
 ### 功能特性
 
 - 一键上传 HTML 或 Markdown 内容，获取公开链接
+- 内置 `scripts/upload.py` 包装脚本——agent 和人类调用者都只需一条命令
 - 自动识别内容类型（`html` / `markdown` / `auto`）
 - 可配置过期时间：1 小时、1 天、7 天或 30 天
 - 可选密码保护（用户自定义或自动生成 6 位数字密码）
@@ -199,11 +202,13 @@ MIT
 
 ### 安装
 
-将 `SKILL.md` 文件复制到你的 agent 技能目录，或克隆本仓库并在工作区中引用。兼容任何支持 `SKILL.md` frontmatter 约定的 agent（TRAE、Claude、Cursor 等）。
+将整个技能目录（包含 `SKILL.md` 和 `scripts/`）复制到你的 agent 技能目录，或克隆本仓库：
 
 ```bash
 git clone https://github.com/icexun/drop-files-skill.git
 ```
+
+兼容任何支持 `SKILL.md` frontmatter 约定的 agent（TRAE、Claude、Cursor 等）。
 
 ### 使用方法
 
@@ -214,64 +219,46 @@ git clone https://github.com/icexun/drop-files-skill.git
 - 上传任何基于文本的内容（HTML/Markdown）以便在线查看
 - 为刚刚生成的内容生成可分享的预览链接
 
-#### 示例：上传 Markdown（无密码）
+#### 包装脚本
 
-```bash
-curl -X POST https://dropfiles.tokendealhub.com/api/v1/upload \
-  -H "Content-Type: application/json" \
-  -d '{
-    "content": "# Hello World\n\nThis is a shared Markdown document.",
-    "type": "markdown",
-    "expire": "7d",
-    "title": "My Document"
-  }'
+**所有上传操作都使用 `scripts/upload.py`。不要手动构造 curl 命令或 JSON payload。**
+
+脚本负责内容读取、JSON 序列化、临时文件管理、curl 调用（Cloudflare WAF 会拦截非 curl 的 HTTP 客户端）、响应解析以及临时文件清理。
+
+运行 `python3 scripts/upload.py --help` 查看完整接口。
+
+```
+python3 scripts/upload.py [选项]
+
+内容来源（优先级：--file > --content > stdin）：
+  --file PATH          从文件读取内容
+  --content TEXT       内联内容（长文本不推荐）
+                       （两者均未提供时从 stdin 读取）
+
+上传选项：
+  --type TYPE          html | markdown | auto（默认 auto）
+  --expire EXPIRE      1h | 1d | 7d | 30d（默认 7d）
+  --title TITLE        分享页显示的可选标题
+  --lang LANG          en | zh | auto（默认 auto）
+
+密码（二选一）：
+  --password PASSWORD  使用用户提供的密码
+  --generate-password  生成随机 6 位数字密码
+
+输出：
+  --json               输出完整 JSON 响应（推荐 agent 使用）
+  -h, --help           显示帮助信息并退出
 ```
 
-#### 示例：使用用户自定义密码上传
+#### 示例：上传 Markdown（stdin，JSON 输出）
 
 ```bash
-curl -X POST https://dropfiles.tokendealhub.com/api/v1/upload \
-  -H "Content-Type: application/json" \
-  -d '{
-    "content": "# Secret Report\n\nConfidential content.",
-    "type": "markdown",
-    "expire": "1d",
-    "password": "user_provided_password"
-  }'
+echo '# Hello World
+
+这是一篇分享的 Markdown 文档。' | python3 scripts/upload.py --type markdown --json
 ```
 
-#### 示例：使用自动生成的 6 位数字密码上传
-
-```bash
-curl -X POST https://dropfiles.tokendealhub.com/api/v1/upload \
-  -H "Content-Type: application/json" \
-  -d '{
-    "content": "# Protected Document\n\nContent here.",
-    "type": "markdown",
-    "expire": "7d",
-    "password": "482917"
-  }'
-```
-
-### API 参考
-
-- **基础地址**：`https://dropfiles.tokendealhub.com`
-- **上传**：`POST /api/v1/upload`
-- **元数据**：`GET /api/v1/info/{id}`
-- **预览**：`https://dropfiles.tokendealhub.com/v/{id}`
-
-#### 上传请求体
-
-| 字段       | 类型   | 必填 | 说明 |
-|------------|--------|------|------|
-| `content`  | string | 是   | 要上传的 HTML 或 Markdown 文本，最大 5MB。 |
-| `type`     | string | 否   | `html`、`markdown` 或 `auto`（默认：`auto`，根据内容自动识别）。 |
-| `expire`   | string | 否   | `1h`、`1d`、`7d` 或 `30d`（默认：`7d`）。 |
-| `title`    | string | 否   | 可选标题，在分享页面显示。 |
-| `password` | string | 否   | 可选密码，用于保护分享页面。详见下方密码策略。 |
-| `lang`     | string | 否   | `en`、`zh` 或 `auto`（默认：`auto`）。 |
-
-#### 成功响应（HTTP 201）
+响应：
 
 ```json
 {
@@ -280,27 +267,51 @@ curl -X POST https://dropfiles.tokendealhub.com/api/v1/upload \
     "id": "abc123def456",
     "url": "https://dropfiles.tokendealhub.com/v/abc123def456",
     "preview_url": "https://dropfiles.tokendealhub.com/v/abc123def456?preview=1",
-    "expire_at": "2026-07-22T10:30:00.000Z",
+    "expire_at": "2026-08-05T10:30:00.000Z",
     "type": "markdown",
     "size": 42
   }
 }
 ```
 
-#### 错误响应（HTTP 400/404/429/500）
+#### 示例：从文件上传，人类可读输出
+
+```bash
+python3 scripts/upload.py --file report.md --expire 1d --title "Q3 报告"
+```
+
+响应：
+
+```
+URL: https://dropfiles.tokendealhub.com/v/abc123
+Preview: https://dropfiles.tokendealhub.com/v/abc123?preview=1
+Expires: 2026-08-05T10:30:00Z
+```
+
+#### 示例：使用自动生成的 6 位数字密码上传
+
+```bash
+python3 scripts/upload.py --file secret.html --generate-password --json
+```
+
+响应包含生成的密码，方便转告给访问者：
 
 ```json
 {
-  "success": false,
-  "error": {
-    "code": "CONTENT_REQUIRED",
-    "message": "Content is required"
-  }
+  "success": true,
+  "data": { "...": "..." },
+  "password": "482917"
 }
 ```
 
-常见错误码：
+### API 参考（仅作查阅——请使用包装脚本）
 
+- **基础地址**：`https://dropfiles.tokendealhub.com`
+- **上传**：`POST /api/v1/upload`
+- **元数据**：`GET /api/v1/info/{id}`
+- **预览**：`https://dropfiles.tokendealhub.com/v/{id}`
+
+常见错误码：
 - `CONTENT_REQUIRED` — `content` 字段为空。
 - `CONTENT_TOO_LARGE` — 内容超过 5MB。
 - `INVALID_TYPE` — `type` 不是 `html`、`markdown`、`auto` 之一。
@@ -313,16 +324,9 @@ curl -X POST https://dropfiles.tokendealhub.com/api/v1/upload \
 
 密码保护为可选功能，支持三种模式：
 
-1. **无密码（默认）**：完全省略 `password` 字段，或发送 `null`。分享页面公开可读。
-2. **用户自定义密码**：如果用户明确提供了密码，将其放入 `password` 字段。分享页面会向访问者请求该密码。
-3. **技能生成 6 位数字密码**：如果用户要求密码保护但未提供密码，技能会生成一个随机的 6 位数字代码（例如 `"482917"`）并放入 `password` 字段。生成的密码会反馈给用户，以便分享给预期的访问者。
-
-#### 6 位数字密码生成规则
-
-- 恰好 6 位数字，每位为 0–9。
-- 格式：6 个数字字符组成的字符串，例如 `"482917"`。
-- 不要使用字母、符号，也不要使用其他长度。
-- 始终在响应中向用户显示生成的密码，例如：`Generated password: 482917`。
+1. **无密码（默认）**：两个密码标志都不传。分享页面公开可读。
+2. **用户自定义密码**：向上传脚本传递 `--password "你的密码"`。
+3. **技能生成 6 位数字密码**：传递 `--generate-password`。脚本会生成一个随机的 6 位数字代码（例如 `"482917"`），放入上传请求，并在输出中回显。**务必把生成的密码转告给用户**，以便分享给预期的访问者。
 
 ### 限制
 

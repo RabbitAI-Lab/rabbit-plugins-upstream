@@ -1,47 +1,55 @@
-## Description: <br>
-Enterprise query and risk-screening skill for Chinese company lookup through Fengniao/Riskbird, covering business registration data, legal representatives, shareholders, executives, outbound investments, registration changes, credit and risk records, and due-diligence report generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+China Company Search Fengniao helps agents query Riskbird for Chinese company registration, ownership, executive, investment, business-change, legal, and risk records and compile due-diligence reports.
 
-## Publisher: <br>
-[xinshu001](https://clawhub.ai/user/xinshu001) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xinshu001](https://clawhub.ai/user/xinshu001)
 
-## Use Case: <br>
-External users and business operators use this skill to check Chinese company background, ownership, management, investment, registration-change, and risk information before supplier onboarding, customer review, partnership evaluation, or contract signing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Company names, person names used for company lookup, entids, and due-diligence query details are sent to Riskbird/Fengniao. <br>
-Mitigation: Use the skill only for queries you are comfortable sharing with Riskbird/Fengniao, and avoid submitting sensitive or confidential business details unless your organization has approved that use. <br>
-Risk: The built-in public API key is shared and quota-limited. <br>
-Mitigation: Configure a private FN_API_KEY when account control, paid quota, or predictable availability is required. <br>
+## Use Case:
 
+External users and developers use this skill to look up Chinese company registration, ownership, management, investment, legal enforcement, and risk records before supplier onboarding, contracting, customer review, or due diligence.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/xinshu001/company-search-fengniao) <br>
-- [Fengniao public API key and quota page](https://www.riskbird.com/skills) <br>
-- [Fengniao website](https://www.riskbird.com/) <br>
-- [Setup and local validation](artifact/SETUP.md) <br>
-- [Due diligence report guide](artifact/references/due_diligence_report.md) <br>
-- [Common business information field definitions](artifact/references/field_definitions_common_bizinfo.md) <br>
-- [Legal risk field definitions](artifact/references/field_definitions_legal.md) <br>
-- [Risk field definitions](artifact/references/field_definitions_risk.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or text summaries with JSON tool results from Fengniao/Riskbird API calls] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Queries may include Chinese company names, person names, entids, and due-diligence details; the skill uses FN_API_KEY when supplied and otherwise falls back to a shared public key.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Company names, person names, entids, due-diligence queries, and API credentials are sent to Riskbird, with private API keys transmitted in URL parameters.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the shared key only for low-sensitivity testing, avoid exposing request URLs or keys in shared logs or terminals, and review generated reports before relying on or redistributing corporate or personal risk data.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/xinshu001/skills/company-search-fengniao)
+- [Riskbird Public Key and Quota Page](https://www.riskbird.com/skills)
+- [Riskbird Website](https://www.riskbird.com/)
+- [Due Diligence Report Guide](references/due_diligence_report.md)
+- [Common Business Information Field Definitions](references/field_definitions_common_bizinfo.md)
+- [Legal Field Definitions](references/field_definitions_legal.md)
+- [Risk Field Definitions](references/field_definitions_risk.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown reports and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Queries require a resolved company entid after fuzzy search; Riskbird API keys may be supplied through FN_API_KEY or the bundled shared key.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and target metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

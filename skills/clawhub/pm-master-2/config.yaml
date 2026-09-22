@@ -1,37 +1,46 @@
-# PM Master v2 · 安装期配置（策略 / 护栏层）
+# PM Master v2 · Install-time configuration (policy / guardrail layer)
 # ------------------------------------------------------------------
-# 本文件在安装技能时由组织/管理员填写，定义「能力开关 + 安全护栏 + 邮件后端」。
-# 项目级数据（相关方联络人簿、发送节奏、项目内审批覆写）在 project.yaml 的
-# communication: 块，详见 references/project-schema.md。
+# This file is filled in by the organization/admin when installing the skill. It defines the
+# "capability switches + safety guardrails + email backend".
+# Project-level data (stakeholder contact book, send cadence, in-project approval overrides) lives
+# under the communication: block of project.yaml; see references/project-schema.md for details.
 #
-# 设计原则：分层（policy / data 分离）。
-#   - 安装期 = 能力与安全护栏（尤其是「外发必须审批」这类不可逆动作的硬护栏）。
-#   - 项目期 = 数据（谁要收邮件、什么频率）。
-# requires_send_approval 等安全护栏为「硬护栏」，项目级配置只能收紧、不能放宽或关闭。
+# Design principle: layering (policy / data separation).
+#   - Install time = capabilities and safety guardrails (especially "hard" guardrails for irreversible
+#     actions such as "external sends require approval").
+#   - Project time = data (who receives email, at what frequency).
+# Safety guardrails such as requires_send_approval are "hard guardrails" — project-level config may only
+# tighten them, never loosen or disable them.
 
-# ---- 执行模式配置 ----
+# ---- Execution mode configuration ----
 execution:
-  # 子Agent调度策略
-  subagent_mode: team          # team (TeamCreate并行) | fork (上下文接力) | direct (主控直做)
-  subagent_timeout_minutes: 15 # 子Agent超时时间（分钟）
-  max_parallel_agents: 5       # 最大并行子Agent数
+  # Sub-agent dispatch strategy
+  subagent_mode: team          # team (parallel via TeamCreate) | fork (context hand-off) | direct (main agent does it)
+  subagent_timeout_minutes: 15 # Sub-agent timeout (minutes)
+  max_parallel_agents: 5       # Maximum number of parallel sub-agents
 
-  # 专家调度
-  expert_dispatch: true        # 是否启用领域专家调度（WBS叶子包拆解）
-  granularity_threshold_days: 10  # 叶子包最大人天（超过则必须拆解）
+  # Expert dispatch
+  expert_dispatch: true        # Whether to enable domain-expert dispatch (WBS leaf-package decomposition)
+  granularity_threshold_days: 10  # Max person-days for a leaf package (must be decomposed if exceeded)
 
-# ---- 质量门配置 ----
+# ---- Quality gate configuration ----
 quality_gate:
-  consistency_check_strict: false   # true=告警也阻断交付
-  require_baseline_before_exec: true  # waterfall/hybrid进入执行前必须基线化
-  require_5x5_risk_calibration: true  # 风险必须5×5校准
+  consistency_check_strict: false   # true = warnings also block delivery
+  require_baseline_before_exec: true  # waterfall/hybrid must be baselined before entering execution
+  require_5x5_risk_calibration: true  # Risks must be 5x5 calibrated
 
-# ---- 邮件配置 ----
+# ---- Email configuration ----
+# Email is OFF by default. Enable it only after configuring a trusted backend AND a
+# non-empty approver allowlist; comm_send.py rejects every send while enabled=false.
 email:
-  enabled: true                 # 是否启用对外邮件能力；false 时 comm_send.py 直接拒绝发送
-  backend: agent-mail           # 邮件后端：agent-mail | himalaya | gog | smtp
-  default_from: ""              # 默认发件人；留空则回退 project.yaml communication.from
-  requires_send_approval: true  # 硬护栏：任何外发邮件必须经 --approve <审批人>，否则 exit 1；项目不可关闭
+  enabled: false                # Whether to enable the external-email capability; if false, comm_send.py rejects sending outright
+  backend: agent-mail           # Email backend: agent-mail | himalaya | gog | smtp
+  default_from: ""              # Default sender; falls back to project.yaml communication.from if blank
+  requires_send_approval: true  # Hard guardrail: any outbound email must pass --approve <approver>, else exit 1; cannot be disabled by project
+  # Authorization boundary (ClawHub T09-1): an approver must be listed below OR be
+  # the project's declared project.pm / project.sponsor. Self-approval is forbidden.
+  approvers: []                 # e.g. ["ZhangSan", "LiSi"] -- identities authorized to approve outbound email
+  sponsor_approvers: []         # Subset authorized to approve mail with EXTERNAL recipients when require_sponsor_cosign=true
 
   smtp:
     host: ""
@@ -39,21 +48,41 @@ email:
     user: ""
     use_tls: true
 
-# ---- 阶段门配置 ----
+# ---- Stage gate configuration ----
 stage_gates:
-  # 硬门（不可跳过，必须 sponsor 审批）
+  # Hard gates (cannot be skipped; require sponsor approval)
   hard_gates:
-    - G1→2   # 规划→执行（控制门）
-    - G3→4   # 监控→收尾（收尾门）
-  # 软门（PM 审批）
+    - G1→2   # planning -> execution (control gate)
+    - G3→4   # monitoring -> closeout (closeout gate)
+  # Soft gates (PM approval)
   soft_gates:
-    - G0→1   # 启动→规划
-    - G2→3   # 执行→监控（operational内并发）
+    - G0→1   # initiation -> planning
+    - G2→3   # execution -> monitoring (concurrent within operational)
 
-# ---- 运营控制配置 ----
+# ---- Operational control configuration ----
 operational_control:
-  default_cadence_days: 7       # 默认巡检周期（天）
-  schedule_slip_warn_pct: 15    # 进度偏差告警阈值（%）
-  spi_warn: 0.95                # SPI告警阈值
-  cpi_warn: 0.95                # CPI告警阈值
-  open_change_high: 2           # 未决变更请求高水位
+  default_cadence_days: 7       # Default inspection cadence (days)
+  schedule_slip_warn_pct: 15    # Schedule variance warning threshold (%)
+  spi_warn: 0.95                # SPI warning threshold
+  cpi_warn: 0.95                # CPI warning threshold
+  open_change_high: 2           # Open change-request high-water mark
+
+# ---- Governance / approval authority configuration ----
+# Authorization boundary for stage-gate transitions (ClawHub T09-2). An approver must
+# be listed below OR be the project's declared project.pm / project.sponsor.
+# Leaving this list empty is safe: the project's own pm/sponsor still authorize, and a
+# project declaring neither will have every approval rejected (fail-closed).
+governance:
+  approver_identities: []       # e.g. ["ZhangSan", "LiSi"] -- identities authorized to approve stage-gate transitions
+  forbid_self_approval: true    # Hard guardrail: the requester cannot approve their own request
+
+# ---- Confidentiality / pre-publish leak scan configuration ----
+# Org-specific sensitive identifiers consumed by scripts/confidentiality_check.py.
+# Deliberately empty by default: a distributed skill must never ship real customer,
+# vendor or personal identifiers. Populate at install time with the tokens that
+# must not appear in any published artifact.
+confidentiality:
+  high_tokens: []               # Literal tokens, word-boundary matched, e.g. ["ACME", "ACME-DW"]
+  high_patterns: []             # Or explicit regex + label:
+                                #   - pattern: "acme[-_]?dw"
+                                #     label: "ACME data warehouse"

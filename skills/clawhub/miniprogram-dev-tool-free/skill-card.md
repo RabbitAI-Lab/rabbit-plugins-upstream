@@ -1,5 +1,5 @@
 ## Description: <br>
-Miniprogram Dev Tool Free helps individual developers review WeChat miniprogram page structure, data binding, lifecycle behavior, WXSS styling, and wx:key performance practices for local development and preview. <br>
+小程序开发工具 helps individual developers build and review WeChat mini-program pages, components, data binding, lifecycle behavior, WXSS styling, and wx:key performance practices for local project development. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,16 +11,16 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers use this skill to get concise guidance, examples, and review checks for single-project WeChat miniprogram development. It focuses on WXML/WXSS structure, data binding, event handling, lifecycle practices, setData usage, wx:key performance, and local preview workflows. <br>
+Developers use this skill to generate, inspect, and improve WeChat mini-program project structure, page/component conventions, data binding, lifecycle handling, WXSS usage, and local preview workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill requests read, write, and command-execution authority while the security summary reports broad, mismatched trigger instructions. <br>
-Mitigation: Install only after review, use it in a disposable or clearly selected WeChat miniprogram workspace, and approve command execution or file modification only for actions you explicitly requested. <br>
-Risk: Overly broad trigger text could cause the skill to be selected for non-miniprogram work. <br>
-Mitigation: Narrow activation to WeChat miniprogram tasks and document the allowed write and command behaviors before publishing. <br>
+Risk: The skill requests read, write, and shell command capabilities while describing broad create, modify, delete, import, and export behavior. <br>
+Mitigation: Use it only in a specific project directory and require confirmation before file writes, deletes, imports, exports, or shell commands are executed. <br>
+Risk: The activation wording includes mismatched data-analysis triggers that can cause the skill to be selected outside its mini-program development scope. <br>
+Mitigation: Invoke it only for WeChat mini-program development, review, and local preview tasks. <br>
 
 
 ## Reference(s): <br>
@@ -29,13 +29,13 @@ Mitigation: Narrow activation to WeChat miniprogram tasks and document the allow
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline code blocks and concise implementation guidance] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline code blocks and optional JSON-style status output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local file edits or commands for a selected WeChat miniprogram workspace when the user explicitly asks for that action.] <br>
+**Other Properties Related to Output:** [May propose local file writes, imports, exports, or shell commands that should be reviewed before execution.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release evidence; artifact frontmatter says 1.0.0) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

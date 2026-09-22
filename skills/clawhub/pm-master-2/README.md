@@ -285,7 +285,7 @@ All 28 scripts are under `scripts/`, run with `python3`. Grouped by function.
 Full changelog history is in [`CHANGELOG.md`](CHANGELOG.md). Current version **2.2.15**.
 
 **v2.1.x → v2.2.x arc (highlights):**
-- **v2.1.0** — Merged refactor: v1.3.6 enforced framework + v2 architecture; restored expert-dispatch workflow (Step 2.5); wired the sub-agent protocol (`subagent_check.py`), execution driver, and config knobs; bilingual dual-package (`SKILL.md` / `SKILL.en.md`).
+- **v2.1.0** — Merged refactor: v1.3.6 enforced framework + v2 architecture; restored expert-dispatch workflow (Step 2.5); wired the sub-agent protocol (`subagent_check.py`), execution driver, and config knobs; unified single English package (`SKILL.md`).
 - **v2.1.1–2.1.8** — Production hardening from live use: `sync_wbs.py` decomposition write-back, WBS decomposition-tree mermaid, program-charter contract/SOW coverage, drift-proof `rerender_docs.py`, `project_state.py` data-loss guard (backup-on-overwrite), severity color icons, and multiple mermaid `&`/invalid-date fixes.
 - **v2.2.0–2.2.6** — SOW/contract parsing pipeline (`sow-parsing-playbook.md` + `parse_sow.py`), billing-milestone integrity gate, WBS→schedule engine (`build_schedule.py` fortnight/coverage/payment-linkage), and scheduling-engine fixes (dependency chains, summary-package zero-duration).
 - **v2.2.2–2.2.4** — Operating model (`operation-model.md`) with Iron Rule #11 (bottom-up authoring & rollup); P0/P1 method-agnostic skeleton; WBS decomposition discipline Pillar 1 (`critic_review.py` 6-factor self-audit) + Pillar 3 (fortnight granularity).

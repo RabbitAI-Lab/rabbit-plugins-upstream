@@ -1,39 +1,55 @@
-## Description: <br>
-Upload generated HTML or Markdown files to DropFiles and return a shareable public link. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Upload generated HTML/Markdown files to DropFiles and get a shareable public link. Invoke when the user wants to share, publish, or generate a public link for any HTML or Markdown content they produced.
 
-## Publisher: <br>
-[icexun](https://clawhub.ai/user/icexun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[icexun](https://clawhub.ai/user/icexun)
 
-## Use Case: <br>
-Developers and agents use this skill to publish generated HTML or Markdown content as a temporary public DropFiles URL, optionally with password protection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/icexun/skills/drop-files-skill) <br>
-- [DropFiles Website](https://dropfiles.tokendealhub.com/) <br>
-- [DropFiles Upload API](https://dropfiles.tokendealhub.com/api/v1/upload) <br>
+Developers and agents use this skill to publish generated HTML or Markdown artifacts through DropFiles and return a shareable URL, with optional expiry and password protection.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown or plain text with a returned public URL, optional preview URL, and optional generated password.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uploads HTML or Markdown content up to 5 MB with 1h, 1d, 7d, or 30d expiry; links are public unless password-protected.] <br>
+Global
 
-## Skill Version(s): <br>
-0.1.1 (source: server release metadata) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Generated links may make uploaded HTML or Markdown publicly accessible to anyone with the URL.
+
+Mitigation: Use the skill only for content intended to be shared publicly, avoid secrets or regulated data, and enable password protection when access should be limited.
+
+Risk: Agents can accidentally upload internal-only documents to a third-party sharing service.
+
+Mitigation: Review the content before upload and confirm that use of the DropFiles service is appropriate for the document.
+
+## Reference(s):
+
+- [Server-resolved source repository](https://github.com/icexun/drop-files-skill)
+- [ClawHub skill listing](https://clawhub.ai/icexun/skills/drop-files-skill)
+- [DropFiles web interface](https://dropfiles.tokendealhub.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown or plain text containing DropFiles URLs, preview URLs, expiry details, passwords when generated, and error guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uploads support HTML or Markdown content up to 5 MB with expiry options from 1 hour to 30 days.]
+
+## Skill Version(s):
+
+0.1.2 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

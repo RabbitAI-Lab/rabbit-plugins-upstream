@@ -1,5 +1,5 @@
 ## Description: <br>
-Helps users run interactive topic research, maintain structured Markdown research folders, synthesize findings, and optionally export PDFs. <br>
+并行研究助手免费版 helps an agent run interactive topic research, organize findings in persistent Markdown research folders, and optionally export the research document to PDF. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,18 +11,16 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, students, and independent founders use this skill to research a topic through interactive agent sessions, record findings and sources in persistent Markdown documents, and review next steps over multiple rounds. <br>
+External users, developers, students, and independent founders use this skill to research a topic through interactive agent sessions, preserve findings in structured Markdown, track open questions and resources, and export a report when needed. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Research notes are saved locally and may contain sensitive topics or source material. <br>
-Mitigation: Use non-confidential topics unless the local agent environment and storage location are approved for that data. <br>
-Risk: Interactive research can send topic details to web search providers or other agent-integrated services. <br>
-Mitigation: Avoid confidential, proprietary, or personal research prompts unless those providers are acceptable for the data. <br>
-Risk: The skill may create files under ~/.research-workspace and optionally run PDF export tools. <br>
-Mitigation: Review proposed file paths and commands before execution, and install optional export dependencies only from trusted package sources. <br>
+Risk: Research notes are saved locally under ~/.research-workspace and may expose sensitive topics on shared or managed machines. <br>
+Mitigation: Avoid sensitive research topics on shared systems, and manually review or delete generated files after use. <br>
+Risk: The optional callback_url parameter can send completion data to an external destination. <br>
+Mitigation: Use callback_url only with fully trusted destinations, or omit it when no callback is required. <br>
 
 
 ## Reference(s): <br>
@@ -32,12 +30,12 @@ Mitigation: Review proposed file paths and commands before execution, and instal
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown research documents, text guidance, optional shell commands, and optional JSON-style status responses] <br>
+**Output Format:** [Markdown research documents, optional PDF exports, configuration snippets, and status-style JSON examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates persistent research folders under ~/.research-workspace and may export research documents to PDF when optional tools are installed.] <br>
+**Other Properties Related to Output:** [Creates local research folders under ~/.research-workspace/research; PDF export depends on optional local tools.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+1.0.1 (source: ClawHub release evidence; artifact frontmatter says 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
