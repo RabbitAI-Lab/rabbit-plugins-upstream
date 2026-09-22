@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/arboreto",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/arboreto",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/arboreto",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "a87ed1ca5acd91336696f7956be5fc13fc5b4919062e9af69e6057825fcedcad",
+  "fetchedAt": "2026-09-22T12:40:55.503Z"
+}

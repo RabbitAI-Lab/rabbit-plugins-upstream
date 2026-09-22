@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/medchem",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/medchem",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/medchem",
+  "branch": "main",
+  "pushedAt": "2026-09-22T03:14:32Z",
+  "contentHash": "d27843230b265231650b2b1508c3e0f9ae9fee7ca2687f6ac9199fc0f86a1a8c",
+  "fetchedAt": "2026-09-22T12:40:41.657Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pymoo",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pymoo",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pymoo",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "c25ff8a6082f68e97204bcc49e85f78ca8a1bcd42b8f2025ec4e1a5ab125a7ef",
+  "fetchedAt": "2026-09-22T12:40:55.587Z"
+}

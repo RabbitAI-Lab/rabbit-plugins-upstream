@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/analytical-method-validation",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/analytical-method-validation",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/analytical-method-validation",
+  "branch": "main",
+  "pushedAt": "2026-09-22T03:14:32Z",
+  "contentHash": "471d58465c670cece3cf8f707252424481ffd44a8cadd32fbb6b8bbca77ad909",
+  "fetchedAt": "2026-09-22T12:40:41.587Z"
+}

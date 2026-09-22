@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/pubchem-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/pubchem-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/pubchem-database",
+  "branch": "main",
+  "pushedAt": "2026-09-22T03:14:32Z",
+  "contentHash": "cfefaab2ca0d4a06918516f8120932338482ca1c8cd965e3eb0a6dd0a5a68395",
+  "fetchedAt": "2026-09-22T12:40:41.694Z"
+}
