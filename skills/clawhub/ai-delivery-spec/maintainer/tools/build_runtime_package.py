@@ -8,9 +8,10 @@ import fnmatch
 import hashlib
 import json
 import os
+import re
 import subprocess
 import sys
-import tempfile
+import shutil
 import zipfile
 from pathlib import Path
 
@@ -48,11 +49,41 @@ def file_record(path: Path) -> dict[str, object]:
     }
 
 
+def source_revision() -> tuple[str, bool]:
+    try:
+        revision = subprocess.run(
+            ["git", "rev-parse", "HEAD"], cwd=ROOT, text=True, capture_output=True,
+        )
+        if revision.returncode or not revision.stdout.strip():
+            return "uncommitted-dirty", True
+        commit = revision.stdout.strip()
+        status = subprocess.run(
+            ["git", "status", "--porcelain"], cwd=ROOT, text=True, capture_output=True,
+        )
+    except OSError:
+        return "uncommitted-dirty", True
+    dirty = status.returncode != 0 or bool(status.stdout.strip())
+    return (f"{commit}-dirty" if dirty else commit), dirty
+
+
+def release_source_failures(source_commit: str, source_worktree_dirty: bool) -> list[str]:
+    """Reject release artifacts that cannot be traced to one clean Git commit."""
+    failures: list[str] = []
+    if source_worktree_dirty:
+        failures.append(
+            "release package requires a clean Git worktree; commit the intended files and rebuild"
+        )
+    if not re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", source_commit):
+        failures.append("release package source_commit must be one full clean Git SHA")
+    return failures
+
+
 def self_check(root: Path) -> list[str]:
     failures: list[str] = []
     commands = (
         [sys.executable, "scripts/ai_delivery_spec_cli.py", "version"],
         [sys.executable, "scripts/validators/validate_spec_config.py", "examples/spec.config.example.yaml"],
+        [sys.executable, "scripts/ai_delivery_spec_cli.py", "gate", "--profile", "prd", "--prd", "examples/minimal-v5/requirement-card.md", "--level", "auto"],
     )
     clean_env = {**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}
     for command in commands:
@@ -79,7 +110,13 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, help="target zip; omitted for check-only")
     parser.add_argument("--check", action="store_true", help="validate selection and extracted runtime")
+    parser.add_argument(
+        "--release", action="store_true",
+        help="enforce clean-source release provenance and run extracted-package checks",
+    )
     args = parser.parse_args()
+    if args.release:
+        args.check = True
     config = yaml.safe_load(CONFIG.read_text(encoding="utf-8"))
     files = select_files(config)
     failures: list[str] = []
@@ -88,14 +125,26 @@ def main() -> int:
     forbidden = [path for path in files if "maintainer" in path.relative_to(ROOT).parts]
     if forbidden:
         failures.append("maintainer files leaked into runtime package")
-    version = yaml.safe_load((ROOT / "agents" / "openai.yaml").read_text(encoding="utf-8"))["interface"]["version"]
+    skill_heading = next(
+        (line for line in (ROOT / "SKILL.md").read_text(encoding="utf-8").splitlines() if line.startswith("# AI Delivery Spec ")),
+        "",
+    )
+    version = skill_heading.removeprefix("# AI Delivery Spec ").split(" ", 1)[0]
+    if not version:
+        failures.append("SKILL.md does not declare a release version in its H1 heading")
+    source_commit, source_worktree_dirty = source_revision()
+    if args.release:
+        failures.extend(release_source_failures(source_commit, source_worktree_dirty))
     manifest = {
         "schema_version": "5.3.0", "skill_version": version,
-        "source_commit": subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True, capture_output=True).stdout.strip() or "uncommitted",
+        "source_commit": source_commit,
+        "source_worktree_dirty": source_worktree_dirty,
         "files": [file_record(path) for path in files],
     }
-    with tempfile.TemporaryDirectory(prefix="ads-runtime-") as temp_name:
-        temp = Path(temp_name)
+    temp = ROOT / "build" / f"runtime-package-{os.getpid()}"
+    shutil.rmtree(temp, ignore_errors=True)
+    temp.mkdir(parents=True, exist_ok=True)
+    try:
         for source in files:
             target = temp / source.relative_to(ROOT)
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -110,6 +159,12 @@ def main() -> int:
                     relative = source.relative_to(ROOT).as_posix()
                     archive.write(temp / relative, relative)
                 archive.write(temp / "runtime-manifest.json", "runtime-manifest.json")
+    finally:
+        shutil.rmtree(temp, ignore_errors=True)
+        try:
+            temp.parent.rmdir()
+        except OSError:
+            pass
     if failures:
         for failure in failures:
             print("FAIL: " + failure)

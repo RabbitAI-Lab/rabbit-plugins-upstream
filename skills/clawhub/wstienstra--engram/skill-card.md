@@ -1,43 +1,60 @@
-## Description: <br>
-One-install associative memory graph for any OpenClaw workspace: stage, migrate markdown memory, rewire, verify with a seeded battery, and revert. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Engram gives OpenClaw agents a local associative memory graph over workspace content, with CLI tools for recall, message context, task tracking, migration, backup, hygiene, and uninstall.
 
-## Publisher: <br>
-[wstienstra](https://clawhub.ai/user/wstienstra) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wstienstra](https://clawhub.ai/user/wstienstra)
 
-## Use Case: <br>
-Developers and engineers use Engram to install and manage a local associative memory system for OpenClaw workspaces, including migration from markdown memory files, workspace rewiring, verification, and rollback. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can modify workspace memory files and agent-instruction files. <br>
-Mitigation: Review the migration dry-run report, require human approval before applying changes, and retain the backup manifest for restoration. <br>
-Risk: The skill can add scheduled local jobs for backup, sleep, and verification workflows. <br>
-Mitigation: Inspect scheduled job changes before install and use the uninstall path to remove ENGRAM-MANAGED cron entries. <br>
-Risk: The submitted package references installer and engine scripts that are not included in the artifact evidence. <br>
-Mitigation: Inspect the actual source repository and install scripts before running external installation commands. <br>
+## Use Case:
 
+Developers and agent operators use Engram to give an OpenClaw workspace persistent local memory, retrieve concise context for incoming messages, and maintain a task ledger backed by local SQLite storage.
 
-## Reference(s): <br>
-- [Server-resolved GitHub repository](https://github.com/WStienstra/engram) <br>
-- [ClawHub skill page](https://clawhub.ai/wstienstra/skills/engram) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown instructions with inline shell commands and configuration details] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces installation, migration, verification, and rollback guidance for a local workspace memory system.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: Engram keeps persistent local memory state and has broad enough shell and file access to influence a workspace over time.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in a trusted workspace and review the skill before deployment.
+
+Risk: Task evidence strings run through the shell with the user's privileges.
+
+Mitigation: Treat evidence commands as code, and never store evidence commands from untrusted text.
+
+Risk: Migration, rewire, cron setup, logs, backups, and battery reports can affect or expose sensitive workspace data.
+
+Mitigation: Review migration reports and rewire changes before applying them, avoid unattended rewire approval, and handle Engram outputs as sensitive workspace data.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wstienstra/skills/engram)
+- [Measurement methodology](docs/measurement.md)
+- [README](README.md)
+- [Skill documentation](SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Plain text and Markdown with shell command examples; local CLI output includes short context blocks, recall results, migration reports, and maintenance summaries.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Runs locally against workspace files and SQLite state; optional localhost Ollama use is user-enabled.]
+
+## Skill Version(s):
+
+1.2.2 (source: frontmatter, changelog, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,47 +1,65 @@
-## Description: <br>
-Comprehensive Azure Cloud Platform management via command-line interface. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Comprehensive Azure Cloud Platform management via command-line interface
 
-## Publisher: <br>
-[ddevaal](https://clawhub.ai/user/ddevaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[ddevaal](https://clawhub.ai/user/ddevaal)
 
-## Use Case: <br>
-Developers, cloud engineers, and DevOps teams use this skill to draft and review Azure CLI commands, automation patterns, and helper-script workflows for managing Azure resources. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Azure CLI guidance and helper scripts can create, update, deploy, or delete cloud resources in the active subscription. <br>
-Mitigation: Use a least-privilege Azure identity, prefer a sandbox or non-production subscription for examples, and confirm the active subscription and resource group before execution. <br>
-Risk: Authentication examples involve Azure tokens, connection strings, or service-principal secrets that could expose cloud access if shared. <br>
-Mitigation: Never provide secrets in chat or logs; use managed identity or secure secret stores where available. <br>
-Risk: Resource cleanup and deployment workflows can affect costs or availability if run against production assets. <br>
-Mitigation: Review proposed commands before running them and require explicit approval for create, update, delete, deployment, or run-command actions. <br>
+## Use Case:
 
+Developers and cloud engineers use this skill to manage Microsoft Azure resources with Azure CLI commands, automation patterns, and helper shell scripts for VMs, storage, subscriptions, deployments, and resource cleanup.
 
-## Reference(s): <br>
-- [ClawHub Azure CLI Skill Page](https://clawhub.ai/ddevaal/skills/azure-cli) <br>
-- [Azure CLI Documentation](https://learn.microsoft.com/en-us/cli/azure/) <br>
-- [Azure CLI Command Reference](https://learn.microsoft.com/en-us/cli/azure/reference-index) <br>
-- [Azure CLI GitHub Repository](https://github.com/Azure/azure-cli) <br>
-- [Azure CLI Release Notes](https://github.com/Azure/azure-cli/releases) <br>
-- [Azure CLI Complete Command Reference](references/REFERENCE.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline bash, PowerShell, and Azure CLI code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference bundled shell scripts for Azure status, cleanup, storage analysis, subscription reporting, and resource group deployment workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and frontmatter) <br>
+Risk: Unsafe install guidance can encourage running downloaded shell content directly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install Azure CLI using verified Microsoft package instructions before following command examples.
+
+Risk: Azure CLI examples can create, modify, or delete cloud resources and may affect costs or availability.
+
+Mitigation: Confirm the active subscription and resource group, and review delete, --yes, --no-wait, and bulk xargs targets before execution.
+
+Risk: Authentication tokens, kubeconfig files, connection strings, and service-principal secrets are sensitive.
+
+Mitigation: Handle credentials as secrets, avoid hardcoding them, and keep them out of shared logs or generated output.
+
+Risk: The included cleanup script's delete mode does not actually remove resources.
+
+Mitigation: Treat cleanup output as an inventory report and verify resource-removal behavior separately before relying on it.
+
+## Reference(s):
+
+- [Azure CLI Complete Command Reference](references/REFERENCE.md)
+- [Official Azure CLI Documentation](https://learn.microsoft.com/en-us/cli/azure/)
+- [Azure CLI Command Reference](https://learn.microsoft.com/en-us/cli/azure/reference-index)
+- [Azure CLI Releases](https://github.com/Azure/azure-cli/releases)
+- [Azure Storage Pricing](https://azure.microsoft.com/en-us/pricing/details/storage/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash, PowerShell, and Azure CLI command blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Azure CLI commands and helper-script usage that require review before execution.]
+
+## Skill Version(s):
+
+1.0.0 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

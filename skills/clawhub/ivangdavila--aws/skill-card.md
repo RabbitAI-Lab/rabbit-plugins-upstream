@@ -1,49 +1,61 @@
-## Description: <br>
-Architects, debugs, secures, and cost-optimizes AWS infrastructure across EC2, Lambda, RDS, VPC, IAM, ECS, CloudFront, AWS accounts, billing, reliability, and CLI workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Architects, debugs, secures, and cost-optimizes AWS infrastructure across EC2, Lambda, RDS, VPC, IAM, ECS, CloudFront, infrastructure as code, accounts, reliability, and billing.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-Developers, operators, and cloud engineers use this skill to plan, review, debug, secure, and cost-optimize AWS infrastructure and AWS CLI workflows. It is suited for service selection, account audits, IAM and network troubleshooting, incident diagnosis, infrastructure-as-code guidance, and production readiness checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can persist AWS inventory, account IDs, resource names, cost history, runbooks, and policy notes under ~/Clawic/data/. <br>
-Mitigation: Keep the local Clawic data directory protected and treat infrastructure metadata as sensitive operational information. <br>
-Risk: Real AWS secret keys, session tokens, passwords, private keys, or webhook tokens could be accidentally added to local notes. <br>
-Mitigation: Store only credential pointers such as profile names, SSM paths, keychain references, or environment-variable names, and remove raw secret values from any saved text. <br>
-Risk: AWS CLI guidance can include commands that inspect or modify live cloud resources. <br>
-Mitigation: Review commands before execution, use the intended AWS profile and region, and require explicit confirmation for destructive or state-changing actions. <br>
+## Use Case:
 
+Developers, operators, and cloud engineers use this skill to plan, troubleshoot, harden, operate, and cost-review AWS environments. It is especially suited for AWS CLI-driven diagnosis, service selection, IAM and network review, billing investigation, and production readiness work.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ivangdavila/skills/aws) <br>
-- [Clawic AWS skill homepage](https://clawic.com/skills/aws) <br>
-- [AWS CLI requirement](https://formulae.brew.sh/formula/awscli) <br>
-- [AWS skill definition](artifact/SKILL.md) <br>
-- [AWS CLI toolkit](artifact/commands.md) <br>
-- [AWS security guide](artifact/security.md) <br>
-- [AWS cost control guide](artifact/costs.md) <br>
-- [AWS production guide](artifact/production.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline commands, configuration examples, checklists, and infrastructure recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference local Clawic memory files under ~/Clawic/data/ for user-declared AWS preferences, inventory notes, cost history, runbooks, and policy notes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: AWS CLI actions can affect resources through the user's configured AWS identity, including account changes when create, modify, delete, terminate, force, S3 sync, or IAM-related commands are approved.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review commands before allowing account changes and require explicit confirmation for destructive or privilege-sensitive operations.
+
+Risk: The skill maintains local operational notes that can include account IDs, resource names, spend history, and generated runbooks.
+
+Mitigation: Keep ~/Clawic/data/ under the user's control, avoid sharing those notes without review, and store only credential pointers rather than secret values.
+
+Risk: Cloud guidance can become inaccurate if it uses stale inventory, an unintended profile, or the wrong region.
+
+Mitigation: Confirm the AWS identity and region before material changes, read stored inventory first, and verify live account state and current pricing before committing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ivangdavila/skills/aws)
+- [Clawic skill homepage](https://clawic.com/skills/aws)
+- [Skill definition](artifact/SKILL.md)
+- [Security guide](artifact/security.md)
+- [CLI toolkit](artifact/commands.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with AWS CLI commands, infrastructure and policy snippets, runbook text, and configuration guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose local note updates under ~/Clawic/data/ and AWS CLI actions using the user's configured AWS identity.]
+
+## Skill Version(s):
+
+1.0.7 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

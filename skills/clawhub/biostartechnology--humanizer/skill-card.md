@@ -1,42 +1,54 @@
-## Description: <br>
-Remove signs of AI-generated writing from text and help rewrite it so it sounds more natural while preserving meaning and tone. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Remove signs of AI-generated writing from text and rewrite it to sound more natural while preserving meaning and tone.
 
-## Publisher: <br>
-[biostartechnology](https://clawhub.ai/user/biostartechnology) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[biostartechnology](https://clawhub.ai/user/biostartechnology)
 
-## Use Case: <br>
-External writers, editors, and developers use this skill to revise supplied text or local documents so they read less like generic AI output while preserving meaning and tone. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can be used to make AI-generated writing harder to identify. <br>
-Mitigation: Use it for legitimate editing and do not use it to evade academic, workplace, legal, publishing, or other AI-disclosure requirements. <br>
-Risk: Rewrites may alter meaning, tone, or factual nuance in supplied text or local documents. <br>
-Mitigation: Review the rewritten text or file diff before accepting changes. <br>
+## Use Case:
 
+External users and developers use this skill to revise text that sounds formulaic or AI-generated, replacing common AI writing patterns with clearer, more natural prose. It is intended for legitimate style improvement, not for bypassing disclosure or authorship requirements.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/biostartechnology/skills/humanizer) <br>
-- [Wikipedia: Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) <br>
-- [Wikipedia: WikiProject AI Cleanup](https://en.wikipedia.org/wiki/Wikipedia:WikiProject_AI_Cleanup) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or plain text with rewritten content and optional change summary] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May edit local documents when explicitly asked; users should review changes before accepting them.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill can be used to make AI-generated writing appear human-written without appropriate disclosure.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for legitimate style improvement and follow applicable academic, workplace, legal, platform, client, and disclosure rules.
+
+Risk: Style edits can unintentionally change emphasis, remove useful qualifiers, or make a claim sound more certain than the source supports.
+
+Mitigation: Review the rewritten text against the original for meaning, factual accuracy, required caveats, and disclosure obligations before publishing or submitting it.
+
+## Reference(s):
+
+- [Wikipedia: Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing)
+- [Wikipedia: WikiProject AI Cleanup](https://en.wikipedia.org/wiki/Wikipedia:WikiProject_AI_Cleanup)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Rewritten text with an optional concise summary of changes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Preserves the source meaning and intended tone while editing style.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata; artifact SKILL.md frontmatter says 2.1.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

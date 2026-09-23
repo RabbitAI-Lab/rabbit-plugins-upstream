@@ -1,48 +1,73 @@
-## Description: <br>
-帮助英语老师把口语练习升级为系统化口语教学，围绕目标设定、输入准备、任务型活动、输出练习、反馈纠正和口语能力档案设计教学流程。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+英语口语活动设计 helps Chinese K-12 English teachers turn recitation-style speaking lessons into task-based speaking activities with clear goals, classroom-ready workflows, feedback patterns, and teacher-reviewed workspace writeback.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-English teachers use this skill to design classroom speaking activities, feedback routines, and speaking-profile templates based on task-based language teaching. It supports planning and instructional guidance, not automated oral exams or AI practice conversations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student recordings, speaking profiles, and classroom feedback may contain sensitive student information. <br>
-Mitigation: Obtain appropriate student or guardian consent, de-identify records, restrict access, and set a deletion schedule before using or storing these materials. <br>
-Risk: Teaching guidance, rubrics, or feedback templates may be mistaken for final automated assessment. <br>
-Mitigation: Use the skill as a classroom-planning aid and have a teacher review outputs before sharing feedback or making assessment decisions. <br>
-Risk: Speaking task materials may include copyrighted textbook or third-party content. <br>
-Mitigation: Label material copyright status and use self-authored, licensed, adapted, or otherwise authorized materials. <br>
+## Use Case:
 
+External educators and teaching agents use this skill to design English speaking classes for upper-primary and junior-middle-school learners, including task-based activities, differentiated prompts, feedback language, speaking rubrics, and optional teacher-controlled class-workspace updates.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-english-speaking-designer) <br>
-- [任务型口语活动模板](references/task-based-template.md) <br>
-- [英语口语评估评分细则](references/speaking-rubric.md) <br>
-- [英语纠错策略参考](references/error-correction-strategies.md) <br>
-- [任务设计样板 · 餐厅点餐](references/task-design-sample-restaurant.md) <br>
-- [反馈话术库](references/feedback-phrases.md) <br>
-- [学员口语档案模板](references/speaking-profile-template.md) <br>
+### Deployment Geography for Use:
 
+China mainland by default for curriculum, consent assumptions, and safety-channel defaults; localize curriculum, minor-data consent rules, and crisis referral channels before using elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown teaching plans, rubrics, feedback phrases, task templates, and speaking-profile structures] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces instructional planning content and templates; no executable code or tool calls are included.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Student oral records and speaking notes may contain sensitive information about minors.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm an approved school basis for storing oral records, keep records pseudonymized, and leave student-profile writeback disabled unless the required consent is present.
+
+Risk: Generated lesson content or workspace entries could be used as authoritative teaching material without teacher review.
+
+Mitigation: Require teacher review before student-facing use, resource-bank entry, or class-workspace writeback.
+
+Risk: Speaking tasks, rubrics, and AI-generated items may be inaccurate, age-inappropriate, or misaligned with the target class.
+
+Mitigation: Use the artifact's AI item check, grade-band constraints, and speaking rubric before classroom use; mark generated tasks as AI-generated until a teacher validates them.
+
+Risk: Pronunciation feedback may be overclaimed when the platform only has text or speech transcription.
+
+Mitigation: Do not make phoneme-level pronunciation judgments without an approved speech-assessment capability; keep pronunciation comments to teacher-observed intelligibility.
+
+Risk: Student text may include crisis or safety signals outside the learning-support scope.
+
+Mitigation: Stop the lesson workflow and follow the bundled crisis exception and referral protocol, including region-appropriate emergency guidance.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-english-speaking-designer)
+- [Task-based speaking activity template](references/task-based-template.md)
+- [Speaking rubric](references/speaking-rubric.md)
+- [Error-correction strategies](references/error-correction-strategies.md)
+- [Feedback phrases](references/feedback-phrases.md)
+- [Speaking profile template](references/speaking-profile-template.md)
+- [Class teaching workspace schema](shared/class-teaching-workspace.schema.json)
+- [Platform conventions](shared/platform-conventions.md)
+- [Crisis referral protocol](shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown and structured teaching-plan text with rubrics, task cards, feedback phrases, and workspace-ready field suggestions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher review is required before student-facing use or workspace writeback; generated tasks should be marked as AI-generated before resource-bank entry.]
+
+## Skill Version(s):
+
+2.2.0 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

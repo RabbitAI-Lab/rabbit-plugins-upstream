@@ -1,42 +1,60 @@
-## Description: <br>
-Detects camera image or video quality problems such as black screens, white screens, color casts, stripes, snow noise, and blur for surveillance self-check and maintenance workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects quality issues in camera footage such as black/white screens, color cast, stripes, noise, and blurriness. Suitable for security surveillance and camera self-check scenarios. | 图像质量检测分析工具，检测摄像头画面出现的全黑、全白、偏色、条纹、雪花、模糊等质量问题，适用于安防监控、摄像头自检等场景
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, developers, and camera operations teams use this skill to analyze uploaded camera images, videos, or image URLs for common visual quality defects and to review structured reports and report history. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Camera images, videos, or URLs may be sent to configured lifeemergence.com services for analysis. <br>
-Mitigation: Confirm that users understand remote processing before analysis and avoid submitting confidential footage unless the configured service is approved for that data. <br>
-Risk: Report history is tied to an automatically managed identity, with user records and tokens stored locally. <br>
-Mitigation: Review identity creation, token storage, and report-history behavior before deployment; prefer a version that documents retention and asks for confirmation before history lookup or account creation. <br>
+## Use Case:
 
+External users and operations teams use this skill to analyze camera images, video frames, or media URLs for visible quality problems such as black screens, white screens, color cast, stripes, snow noise, and blur. It supports security monitoring self-checks and camera maintenance review, with results intended as maintenance guidance rather than a substitute for professional hardware inspection.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-image-quality-detection-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands] <br>
-**Output Format:** [Markdown and JSON analysis reports with optional report links and saved text output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can query cloud report history and can save analysis output to a user-specified file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Images, videos, media URLs, identity metadata, and report queries may be sent to the configured cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with media that is approved for that service, review configured endpoints before installation, and avoid sensitive camera footage unless the deployment has the required approvals.
+
+Risk: Identity handling and local token storage may expose user or report access metadata if the workspace is shared or poorly protected.
+
+Mitigation: Protect workspace data, review token storage behavior before deployment, and require explicit user confirmation before history report lookups.
+
+Risk: Broad authenticated network helpers and debug logging can increase exposure if endpoints or logs are not controlled.
+
+Mitigation: Disable debug logging, restrict allowed service URLs, and review authenticated request behavior before production use.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-image-quality-detection-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [API Documentation](references/api_doc.md)
+- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Structured JSON or Markdown text with analysis results, recommendations, and report links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include cloud-generated report export links and history-list results from the configured service.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release metadata; artifact frontmatter lists 1.0.12)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

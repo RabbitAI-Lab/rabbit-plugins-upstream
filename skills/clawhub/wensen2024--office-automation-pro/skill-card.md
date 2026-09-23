@@ -1,42 +1,57 @@
-## Description: <br>
-Automates common office workflows, including document processing, data organization, email management, scheduling, and report generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+常见办公流程自动化处理 - 智能办公助手，支持文档处理、数据整理、邮件管理、日程安排、报表生成等
 
-## Publisher: <br>
-[wensen2024](https://clawhub.ai/user/wensen2024) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wensen2024](https://clawhub.ai/user/wensen2024)
 
-## Use Case: <br>
-Employees and office teams use this skill to automate routine HR, finance, sales, administrative, and operations workflows such as generating documents, cleaning spreadsheets, sending template-based email, scheduling meetings, and producing recurring reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can give an agent broad access to sensitive office files, including HR, finance, customer, and database-derived content. <br>
-Mitigation: Back up files before batch operations, limit the working set to the minimum required documents, and require explicit approval before processing sensitive content. <br>
-Risk: The skill can send emails and distribute generated reports, which may expose confidential information if recipients or templates are wrong. <br>
-Mitigation: Require explicit approval before sending emails or distributing reports, and review recipients, attachments, and generated content before release. <br>
-Risk: Optional SMTP configuration may expose mailbox credentials if long-lived passwords are stored in configuration files. <br>
-Mitigation: Use a limited mailbox or app password and avoid storing SMTP passwords in reusable configuration files. <br>
+## Use Case:
 
+Business users and office teams use this skill to automate common office workflows such as document generation, spreadsheet cleanup, bulk email preparation, scheduling, report generation, and workflow coordination.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wensen2024/office-automation-pro) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Configuration, Guidance] <br>
-**Output Format:** [Markdown or plain text reports, generated office files, and optional JSON email configuration] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read, transform, generate, or distribute office documents and email content based on user-supplied files and configuration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter and artifact changelog list 1.0.0) <br>
+Risk: Sensitive business data may be processed across documents, spreadsheets, finance records, HR files, or email content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use explicit file paths and least-privilege access, keep backups, and require a preview before modifying or distributing outputs.
+
+Risk: Bulk email, content publishing, and automated distribution can create unintended external actions.
+
+Mitigation: Require draft mode, explicit recipient lists, and human approval before sending, publishing, or distributing generated materials.
+
+Risk: SMTP credentials and business-system access could be exposed or misused if configured broadly.
+
+Mitigation: Store credentials outside prompts, scope accounts to the minimum needed permissions, and review configuration before use in a work environment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wensen2024/skills/office-automation-pro)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or plain text with command snippets, configuration examples, and task execution summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May describe generated office files, cleaned data, scheduled actions, email drafts, or reports depending on the requested workflow.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata; artifact frontmatter reports 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

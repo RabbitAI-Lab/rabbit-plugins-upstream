@@ -1,42 +1,53 @@
-## Description: <br>
-MarkItDown is a Python utility from Microsoft for converting PDF, Word, Excel, PowerPoint, image, audio, web, and text files into Markdown for structured-text extraction and LLM analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MarkItDown is a Python utility from Microsoft for converting various files (PDF, Word, Excel, PPTX, Images, Audio) to Markdown.
 
-## Publisher: <br>
-[Damirikys](https://clawhub.ai/user/Damirikys) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[jeminay](https://clawhub.ai/user/jeminay)
 
-## Use Case: <br>
-Developers and agent users use this skill to convert selected local files or supported URLs into Markdown so the agent can read and analyze document structure, tables, lists, and extracted text. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Installing the skill downloads markitdown and extra Python dependencies from PyPI. <br>
-Mitigation: Install only in environments where PyPI-based dependencies are acceptable and review dependency policies before use. <br>
-Risk: Converted Markdown may expose private contents from files, folders, or URLs passed to the tool. <br>
-Mitigation: Process only documents and URLs the user intentionally chooses and handle generated Markdown according to the source content's sensitivity. <br>
-Risk: Some conversions, such as YouTube URL processing, may require external network access. <br>
-Mitigation: Use network-backed conversions only where external fetching is permitted; otherwise limit use to local files. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/Damirikys/markitdown) <br>
-- [MarkItDown project link declared by the skill](https://github.com/microsoft/markitdown) <br>
+## Use Case:
 
+Developers and agents use this skill to convert PDFs, Office documents, images, audio, video, web files, archives, and structured text formats into Markdown for downstream reading and analysis.
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Text, Shell commands, Configuration] <br>
-**Output Format:** [Markdown text or .md files produced by the markitdown CLI, with shell commands for conversion workflows] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3 and installs markitdown[all] into a local virtual environment] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.4 (source: ClawHub release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Installing the skill downloads Python packages and transitive dependencies from PyPI.
+
+Mitigation: Review the installation command and dependency policy before installation in controlled environments.
+
+Risk: The skill processes local files and may fetch remote URL content for formats such as YouTube URLs.
+
+Mitigation: Use it only on files intended for conversion, and avoid remote URL conversion when network fetching is not acceptable.
+
+## Reference(s):
+
+- [ClawHub MarkItDown Skill](https://clawhub.ai/jeminay/skills/markitdown)
+- [Microsoft MarkItDown Repository](https://github.com/microsoft/markitdown)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown text or Markdown files with inline bash commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Converted output depends on the input file format and installed optional dependencies.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

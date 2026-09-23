@@ -6,14 +6,6 @@ displayName: "内容洗稿师"
 summary: "同质化内容救星,LLM深度改写+8平台适配+SimHash去重,原创度99%规避查重"
 license: Proprietary
 description: |-
-  内容洗稿师是一款同质化内容改写工具,解决内容查重与原创度问题。
-  支持LLM深度改写、8平台风格适配、SimHash去重检测,原创度达99%。
-  
-  核心能力:
-  - 双模式改写引擎(LLM/本地)
-  - 8平台风格精准适配
-  - SimHash汉明距离去重
-  - 自动降级与变更明细追踪
 homepage: "https://skillhub.cn"
 tags: [内容改写, 原创度, 多平台分发, 查重规避]
 tools:

@@ -1,40 +1,53 @@
-## Description: <br>
-Compresses verbose markdown memory logs into structured summaries that preserve key events, lessons, decisions, and todos without external dependencies. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Compresses verbose markdown daily logs into structured memory summaries that preserve key events, lessons, decisions, and todos without API keys or external dependencies.
 
-## Publisher: <br>
-[LingLin6](https://clawhub.ai/user/LingLin6) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linglin6](https://clawhub.ai/user/linglin6)
 
-## Use Case: <br>
-Developers and agents with markdown-based memory systems use this skill to compress daily memory logs into curated summaries before appending them to long-term memory. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The local script reads selected memory log files and may process sensitive memory content. <br>
-Mitigation: Run it only on intended markdown logs, avoid broad or sensitive paths, and review generated summaries before appending them to long-term memory. <br>
-Risk: The compressed summary is a best-effort reduction and may omit nuance from the original log. <br>
-Mitigation: Compare the summary against the source log for important decisions, lessons, and todos before treating it as authoritative. <br>
+## Use Case:
 
+Developers and agent users use this skill to compress markdown daily logs into curated long-term memory entries for systems such as OpenClaw, Cursor, Claude Code, or other markdown-based memory workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/LingLin6/memory-compress) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown summaries with optional shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reads a selected markdown log and writes a compressed summary file; default output is /tmp/compressed-memory.md.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: release evidence) <br>
+Risk: Untrusted log text can be compressed into content that may later be added to long-term agent memory.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the compressed output before appending it to persistent memory, and treat source logs as untrusted data rather than instructions.
+
+Risk: The default output path is a temporary file location.
+
+Mitigation: Pass an explicit output file in a trusted workspace directory instead of relying on the default /tmp/compressed-memory.md path.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linglin6/skills/memory-compress)
+
+## Skill Output:
+
+**Output Type(s):** [markdown, shell commands, guidance]
+
+**Output Format:** [Markdown summaries with CLI status text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes a compressed markdown summary to the requested output path; users should review it before appending to long-term memory.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

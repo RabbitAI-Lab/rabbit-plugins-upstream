@@ -1,45 +1,66 @@
-## Description: <br>
-Transform AI agents from task-followers into proactive partners that anticipate needs and continuously improve with WAL Protocol, Working Buffer, autonomous cron patterns, and security hardening. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Transform AI agents from task-followers into proactive partners that anticipate needs and continuously improve, using WAL Protocol, Working Buffer, Autonomous Crons, and battle-tested patterns.
 
-## Publisher: <br>
-[halthelobster](https://clawhub.ai/user/halthelobster) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[halthelobster](https://clawhub.ai/user/halthelobster)
 
-## Use Case: <br>
-Developers and agent operators use this skill to configure assistants that maintain persistent context, recover from compaction, proactively surface useful work, and apply guardrails for external content, deletion, cron jobs, and self-improvement. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill encourages persistent personal context and monitoring of sensitive sources. <br>
-Mitigation: Use explicit opt-in for monitored sources and provide a clear way to inspect, edit, and delete stored memory. <br>
-Risk: The skill can prompt agents toward local cleanup, cron reminders, and spawned-agent workflows that may act without enough scoping. <br>
-Mitigation: Require previews and human approval before deleting, trashing, sending, posting, or delegating sensitive tasks. <br>
-Risk: The skill may capture tool configuration and credential-location notes. <br>
-Mitigation: Store only credential locations or handling rules, never secret values, and constrain file permissions before enabling broad local-tool access. <br>
+## Use Case:
 
+Developers and agent operators use this skill to configure an AI agent for proactive assistance, persistent memory, self-healing workflows, reverse prompting, and periodic check-ins while preserving human approval for external actions.
 
-## Reference(s): <br>
-- [Proactive Agent ClawHub Page](https://clawhub.ai/halthelobster/skills/proactive-agent) <br>
-- [Onboarding Flow Reference](references/onboarding-flow.md) <br>
-- [Security Patterns Reference](references/security-patterns.md) <br>
-- [Clawdbot GitHub Repository](https://github.com/clawdbot/clawdbot) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide agents to create or update local memory, onboarding, tool, heartbeat, and audit files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.1.0 (source: server release and SKILL.md frontmatter) <br>
+Risk: Persistent memory and full-exchange logging can capture personal or third-party details without enough user control.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require approval before writing sensitive details to memory, disable automatic full-exchange logging, and periodically audit generated memory files.
+
+Risk: Self-modification guidance can alter AGENTS.md or similar policy files in ways the user did not review.
+
+Mitigation: Require explicit human approval and diff review before modifying agent policy, governance, or operating-instruction files.
+
+Risk: The BOOTSTRAP auto-follow/delete behavior can execute local bootstrap instructions and remove evidence before review.
+
+Mitigation: Treat BOOTSTRAP content as proposed setup data, review it before use, and require approval before deleting it.
+
+Risk: Heartbeat cleanup behavior can close apps, tabs, or move files while the user still needs them.
+
+Mitigation: Turn cleanup into a proposed-action report and wait for confirmation before closing applications, tabs, or moving files.
+
+Risk: Credential and environment-file handling depends on local hygiene and can expose secrets if templates are used carelessly.
+
+Mitigation: Add a real .gitignore before storing credentials, keep secrets out of memory files, and run the included security audit before deployment.
+
+## Reference(s):
+
+- [Onboarding Flow Reference](references/onboarding-flow.md)
+- [Security Patterns Reference](references/security-patterns.md)
+
+## Skill Output:
+
+**Output Type(s):** [markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and starter configuration files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes reusable local memory, onboarding, heartbeat, tool, user, and agent-governance templates.]
+
+## Skill Version(s):
+
+3.1.0 (source: artifact/SKILL.md frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

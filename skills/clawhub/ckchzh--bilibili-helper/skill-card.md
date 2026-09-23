@@ -1,42 +1,58 @@
-## Description: <br>
-Bilibili Helper helps creators generate Bilibili video titles, descriptions, tags, scripts, and channel operations guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Bilibili Helper assists creators with Bilibili video titles, descriptions, tags, scripts, publishing strategy, creator operations, and audience interaction guidance.
 
-## Publisher: <br>
-[ckchzh](https://clawhub.ai/user/ckchzh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ckchzh](https://clawhub.ai/user/ckchzh)
 
-## Use Case: <br>
-External creators and channel operators use this skill to draft Bilibili-ready titles, descriptions, tags, scripts, posting guidance, and engagement templates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run commands under the user's existing CLI credentials. <br>
-Mitigation: Install only when the publisher is trusted and review commands before execution. <br>
-Risk: Nested review or automation flows may use elevated agent access if enabled. <br>
-Mitigation: Use dry-run modes and the autoreview no-yolo option when full-access review is not desired. <br>
+## Use Case:
 
+External creators and content teams use this skill to draft Bilibili-ready titles, descriptions, tags, video scripts, cover guidance, posting schedules, channel diagnostics, and growth suggestions.
 
-## Reference(s): <br>
-- [Bilibili Helper ClawHub Page](https://clawhub.ai/ckchzh/bilibili-helper) <br>
-- [Publisher Profile](https://clawhub.ai/user/ckchzh) <br>
-- [Bilibili Helper Tips](tips.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Plain text and Markdown-style templates with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Review commands before execution and install only when the publisher is trusted.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.3.5 (source: ClawHub release evidence; artifact frontmatter reports 2.0.0) <br>
+Risk: The security assessment reports unsafe shell helper input handling that could run local commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review or patch the shell helper before deployment, and avoid passing untrusted values to command arguments.
+
+Risk: The security guidance warns that draft names containing path characters may read or write Markdown files outside the draft folder.
+
+Mitigation: Use simple draft names without path separators, or constrain the helper to a controlled data directory before enabling draft commands.
+
+Risk: The security guidance notes that draft text and command topics may be stored locally.
+
+Mitigation: Do not enter sensitive topics or draft content unless local storage is acceptable, and clear the helper data directory when needed.
+
+## Reference(s):
+
+- [Bilibili Helper on ClawHub](https://clawhub.ai/ckchzh/skills/bilibili-helper)
+- [Publisher profile](https://clawhub.ai/user/ckchzh)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Plain text and Markdown-style templates with occasional inline shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Some helper commands may store draft Markdown and command history in a local data directory.]
+
+## Skill Version(s):
+
+2.3.5 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

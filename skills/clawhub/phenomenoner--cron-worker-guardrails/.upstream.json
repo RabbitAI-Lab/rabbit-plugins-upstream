@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cron-worker-guardrails",
   "slug": "cron-worker-guardrails",
   "ownerHandle": "phenomenoner",
-  "version": "1.0.5",
-  "updatedAt": 1778491578254,
-  "contentHash": "7871e66b327f9668068fd255cf8855e84c3a7840d6166f826bf444192cfd6e27",
-  "fetchedAt": "2026-07-26T18:11:34.836Z"
+  "version": "1.0.0",
+  "updatedAt": 1790017221839,
+  "contentHash": "e198dc5668c5f3d24ef6b9d7225f712e68e1440a27dcdbd24bcf6d304afd3663",
+  "fetchedAt": "2026-09-23T13:08:29.486Z"
 }

@@ -1,42 +1,65 @@
-## Description: <br>
-用直觉代替死记，让物理概念从“背下来”变成“真正懂了”，并通过生活类比、实验想象、公式推导三种解释模型先建直觉再学公式。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese K12 physics concept tutor for middle school through first-year high school that uses everyday analogies, thought experiments, and formula unpacking to build physics intuition.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External learners and tutoring agents use this skill to explain physics concepts by building intuition before formulas through daily-life analogies, thought experiments, formula meaning restoration, and layered understanding checks. It is for conceptual tutoring and validation, not physical experiment operation guidance or problem-solving drill. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Physical experiment examples could be mistaken for unsupervised real-world instructions, especially examples involving sunlight, heat, electricity, pressure, or sharp objects. <br>
-Mitigation: Present experiment examples as conceptual unless an appropriate supervisor is involved, and avoid operational safety-sensitive instructions when the goal is concept intuition. <br>
-Risk: The skill describes updates to learning-profile fields and reminder handoffs after repeated concept failures. <br>
-Mitigation: Keep learning-profile updates and reminders visible to the user and under user control. <br>
+## Use Case:
 
+Students and educators in Mainland China Chinese K12 physics use this skill to explain the meaning of physics concepts and formulas through familiar examples, guided thought experiments, and concept checks. It is scoped to concept intuition and routes worked problem solving, mistake tracking, and experiment-data workflows to other skills.
 
-## Reference(s): <br>
-- [Physics Analogy Bank](artifact/references/physics-analogy-bank.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-concept-intuition) <br>
-- [Publisher Profile](https://clawhub.ai/user/qizhitang) <br>
+### Deployment Geography for Use:
 
+Mainland China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or conversational text with structured explanation steps, analogy mappings, formula interpretation, and validation prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable output; responses draw on the bundled physics analogy bank and should keep experiment examples conceptual unless supervised.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Using the skill outside Mainland China Chinese K12 settings could produce mismatched curriculum, consent expectations, or crisis-support guidance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Localize curriculum assumptions, minor-consent rules, and crisis hotline guidance before deploying it in another language, school system, or country.
+
+Risk: Student tutoring sessions may include sensitive learning records or reminder handoffs.
+
+Mitigation: Use the documented controls for viewing, correcting, deleting, pausing, exporting, and limiting sharing of concept mastery records.
+
+Risk: Physics analogies can become misleading when applied beyond their stated boundaries.
+
+Mitigation: Use the skill's concept checks, misconception references, and failure-boundary prompts to verify that the student can transfer the concept correctly.
+
+Risk: A learner may disclose self-harm, bullying, severe despair, or other issues outside the tutoring scope.
+
+Mitigation: Stop the tutoring flow and follow the crisis exception protocol: avoid judgment, state AI limits, involve a trusted adult, and provide localized emergency guidance.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-concept-intuition)
+- [物理概念生活类比素材库](artifact/references/physics-analogy-bank.md)
+- [高一必修第一册的概念与迷思](artifact/references/physics-hs1-misconceptions.md)
+- [平台能力约定与降级路径](artifact/shared/platform-conventions.md)
+- [危机例外](artifact/shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Conversational Markdown in simplified Chinese]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce concept explanations, analogy-based prompts, verification questions, and user-confirmed memory or reminder handoff text.]
+
+## Skill Version(s):
+
+2.2.0 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

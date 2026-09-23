@@ -1,41 +1,52 @@
-## Description: <br>
-Run end-to-end body-scan measurement flow in Telegram using AnthroVision bridge tools. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Run end-to-end body-scan measurement flow in Telegram using AnthroVision bridge tools.
 
-## Publisher: <br>
-[dr2101](https://clawhub.ai/user/dr2101) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[dr2101](https://clawhub.ai/user/dr2101)
 
-## Use Case: <br>
-External users and operators use this skill to collect body measurements from a consenting person's Telegram video through the AnthroVision bridge workflow. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Body-scan videos and derived measurements are sensitive personal data. <br>
-Mitigation: Process only videos from people who have explicitly consented to the AnthroVision bridge workflow. <br>
-Risk: Unsafe video inputs could reference local files or private network locations. <br>
-Mitigation: Accept only video attachments or downloadable HTTPS video URLs, and reject local paths, localhost, loopback, and private-subnet URLs. <br>
-Risk: Upstream tool output could include arbitrary or untrusted text. <br>
-Mitigation: Return deterministic messages from structured fields only, without relaying arbitrary tool strings, links, or commands. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dr2101/anthrovision-telegram-body-scan) <br>
+## Use Case:
 
+External users use this skill to submit a Telegram body-scan video and required measurements, consent to processing, and receive grouped body measurements with a waist-to-hip summary.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Concise Markdown text with fixed-format scan status and measurement summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses structured fields for scan_id, status, measurements, and waist-to-hip summary; avoids links, commands, and untrusted upstream text.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Body-scan videos and related measurements are sensitive personal data.
+
+Mitigation: Ask for explicit consent before processing a real person's video, prefer Telegram attachments, and avoid submitting videos of other people unless they have clearly consented.
+
+Risk: External video URLs may expose users to unsafe or unintended network access patterns.
+
+Mitigation: Accept only downloadable HTTPS video URLs and reject local paths, localhost, loopback, and private network URLs.
+
+## Reference(s):
+
+- [AnthroVision Telegram Body Scan on ClawHub](https://clawhub.ai/dr2101/skills/anthrovision-telegram-body-scan)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, API Calls]
+
+**Output Format:** [Concise Markdown with deterministic status acknowledgements and grouped measurement results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses structured scan fields and avoids relaying arbitrary upstream tool strings.]
+
+## Skill Version(s):
+
+1.0.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

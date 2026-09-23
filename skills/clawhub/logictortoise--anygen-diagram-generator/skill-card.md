@@ -1,43 +1,59 @@
-## Description: <br>
-Use this skill when an agent needs to create diagrams, flowcharts, or visual structures such as architecture diagrams, mind maps, org charts, user journeys, ER diagrams, sequence diagrams, process flows, decision trees, network topologies, class diagrams, Gantt charts, SWOT analysis diagrams, wireframes, or sitemaps. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates diagrams, flowcharts, and visual structures such as architecture diagrams, mind maps, org charts, ER diagrams, sequence diagrams, Gantt charts, wireframes, and sitemaps through the AnyGen CLI.
 
-## Publisher: <br>
-[logictortoise](https://clawhub.ai/user/logictortoise) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[logictortoise](https://clawhub.ai/user/logictortoise)
 
-## Use Case: <br>
-Developers, designers, and other agent users can use this skill to route diagram requests through the AnyGen CLI and generate visual charts server-side. It is suited for creating common technical and planning diagrams from natural-language requests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Diagram content is sent to AnyGen's servers. <br>
-Mitigation: Avoid sending confidential diagrams unless AnyGen is approved for that data. <br>
-Risk: The skill can ask the agent to install an additional helper skill. <br>
-Mitigation: Manually inspect and approve the helper-skill installation instead of allowing an automatic install. <br>
-Risk: The skill requires an AnyGen API key. <br>
-Mitigation: Use a dedicated, revocable API key and rotate or revoke it when access is no longer needed. <br>
+## Use Case:
 
+Developers, product teams, and other agent users use this skill to turn diagram requests into visual structures, including architecture, process, data, organization, journey, and planning diagrams.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/logictortoise/anygen-diagram-generator) <br>
-- [AnyGen website](https://www.anygen.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the anygen CLI and ANYGEN_API_KEY; diagram content is sent to AnyGen's servers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.0 (source: server release evidence) <br>
+Risk: Diagram prompts may contain private architecture, network, organization, or workflow details that are sent to an external diagram service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use redacted inputs for sensitive diagrams and review whether the external AnyGen service is acceptable for the intended data.
+
+Risk: The skill relies on mutable third-party CLI tooling and may install an additional workflow skill.
+
+Mitigation: Verify the AnyGen CLI package and any workflow skill version before installation, and avoid unattended installs unless the publisher and update channel are trusted.
+
+Risk: Diagram generation requires authentication through an API key or browser login.
+
+Mitigation: Store ANYGEN_API_KEY securely, avoid placing credentials in prompts or logs, and rotate the key if it may have been exposed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/logictortoise/skills/anygen-diagram-generator)
+- [AnyGen website](https://www.anygen.io)
+- [AnyGen CLI package](https://www.npmjs.com/package/@anygen/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, Files]
+
+**Output Format:** [Markdown instructions with CLI commands and generated diagram artifacts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires AnyGen CLI authentication through ANYGEN_API_KEY or browser login.]
+
+## Skill Version(s):
+
+3.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

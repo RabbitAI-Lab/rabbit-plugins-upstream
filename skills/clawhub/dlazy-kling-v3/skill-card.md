@@ -1,45 +1,60 @@
-## Description: <br>
-Powerful video generation with Kling v3 for high-quality text-to-video and image-to-video through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Powerful video generation with Kling v3, supporting high-quality text-to-video and image-to-video generation.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to generate videos from text prompts or image inputs via the dLazy-hosted Kling v3 service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, parameters, and local media paths are sent to the dLazy hosted API and media storage. <br>
-Mitigation: Use the skill only for media that may be processed by dLazy, and review inputs before invoking the CLI. <br>
-Risk: The dLazy API key may be stored in the local user configuration file. <br>
-Mitigation: Protect the local config file and rotate or revoke the key from the dLazy dashboard if exposure is suspected. <br>
-Risk: Video generation consumes dLazy credits. <br>
-Mitigation: Monitor credit usage and use dry-run or explicit parameters when cost awareness is needed. <br>
+## Use Case:
 
+External users and developers use this skill to invoke the dLazy Kling v3 hosted video-generation service for text-to-video and image-to-video workflows.
 
-## Reference(s): <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-kling-v3) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON command responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated media is returned as hosted output URLs; asynchronous runs may return a task ID for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release and skill frontmatter) <br>
+Risk: Broad trigger wording could route ordinary video requests to a paid external API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use explicit provider requests and dry runs where possible before making paid generation calls.
+
+Risk: Prompts and referenced local media files may be sent to dLazy cloud services.
+
+Mitigation: Install and invoke the skill only when cloud video generation through dLazy/Kling is intended.
+
+Risk: The API key may be stored in local CLI configuration.
+
+Mitigation: Use DLAZY_API_KEY per run when persistent local credential storage is not desired.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-kling-v3)
+- [dLazy CLI Source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy Homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, API Calls, Files, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can return hosted generated media URLs, async task identifiers, and optional saved local files.]
+
+## Skill Version(s):
+
+1.3.19 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

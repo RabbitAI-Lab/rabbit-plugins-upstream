@@ -1,41 +1,54 @@
-## Description: <br>
-Markdown 排版工具箱。格式化中文混排、转换微信公众号/小红书格式、生成目录、检查链接和标题层级。当用户需要排版、美化、转换 Markdown 文件时使用本技能。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Markdown 排版工具箱用于格式化中文混排、转换微信公众号和小红书格式、生成目录、检查链接和标题层级。
 
-## Publisher: <br>
-[krisyhr](https://clawhub.ai/user/krisyhr) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[krisyhr](https://clawhub.ai/user/krisyhr)
 
-## Use Case: <br>
-Writers, editors, and developers use this skill to format Markdown documents for Chinese-English typography, convert Markdown for WeChat publishing, work with Markdown tables, generate tables of contents, inspect links, and count document text. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads user-named local documents and can create derived output files beside the originals. <br>
-Mitigation: Run commands only on intended paths and review generated Markdown, HTML, CSV, or formatted files before publishing or sharing. <br>
-Risk: Converted output may contain content derived from sensitive documents. <br>
-Mitigation: Avoid running conversion commands on sensitive documents unless derived local output files are acceptable. <br>
+## Use Case:
 
+External users, developers, and documentation authors use this skill to format Chinese and English Markdown, convert trusted Markdown to WeChat-ready HTML, convert Markdown tables and CSV, generate a table of contents, count words, and extract links.
 
-## Reference(s): <br>
-- [Markdown Chinese Formatting Rules](references/format-rules.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/krisyhr/skills/markdown-toolkit) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python command examples; commands produce formatted Markdown, HTML, CSV, tables of contents, link lists, or text statistics.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Local file operations read explicit document paths and may write derived files next to the originals.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The WeChat HTML conversion can preserve unsafe markup from untrusted Markdown.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use HTML conversion only on trusted Markdown and review or sanitize generated HTML before opening it in a browser or publishing it.
+
+Risk: Generated output files may overwrite previous generated files with the same derived name.
+
+Mitigation: Run the formatter on copies or check for existing generated filenames before writing output.
+
+## Reference(s):
+
+- [Markdown 中文排版规则](artifact/references/format-rules.md)
+- [ClawHub skill page](https://clawhub.ai/krisyhr/skills/markdown-toolkit)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands]
+
+**Output Format:** [Markdown, HTML, CSV, and plain text, often with shell commands for the Python formatter.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write generated files next to the source file with derived filenames.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

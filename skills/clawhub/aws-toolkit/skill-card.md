@@ -1,5 +1,5 @@
 ## Description: <br>
-Aws Toolkit helps enterprise operations teams manage AWS services across infrastructure deployment, compliance auditing, cost optimization, security scanning, and monitoring. <br>
+Aws Toolkit helps agents produce AWS operations guidance for infrastructure deployment, multi-region management, compliance auditing, cost optimization, and security scanning workflows. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External developers and enterprise operations teams use this skill to generate AWS deployment guidance, infrastructure-as-code workflows, compliance checks, cost optimization analysis, and security scan outputs for managed AWS environments. <br>
+Developers and operations teams use this skill to plan AWS infrastructure changes, review compliance and cost posture, and produce commands or configuration for controlled execution in accounts they manage. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Broad AWS deployment and remediation workflows can change live cloud resources or create cost-bearing infrastructure. <br>
-Mitigation: Use scoped AWS credentials, explicit accounts and regions, non-production environments first, and manual approval before apply, deploy, optimize, or remediation actions. <br>
-Risk: The artifact includes an auto-approve deployment example that could bypass human review. <br>
-Mitigation: Prefer plan or dry-run modes and require a human review step before running commands that modify infrastructure. <br>
-Risk: Security, compliance, and cost recommendations can be incomplete or unsuitable for a specific AWS environment. <br>
-Mitigation: Review generated reports against the organization's cloud governance policies before acting on recommendations. <br>
+Risk: The skill can guide infrastructure-changing AWS operations such as apply, deploy, optimize, or remediation actions. <br>
+Mitigation: Use only AWS accounts you control, require least-privilege credentials, set explicit account and region limits, and review a dry run or Terraform plan before execution. <br>
+Risk: Broad cloud execution authority could affect production resources or incur cost if commands are followed without review. <br>
+Mitigation: Require human approval for exact changes, confirm rollback steps, and avoid automatic approval in real environments. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/aws-toolkit) <br>
-- [Skill homepage](https://skillhub.cn) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+- [Aws Toolkit on ClawHub](https://clawhub.ai/thcjp/skills/aws-toolkit) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON, YAML, and bash command examples] <br>
+**Output Format:** [Markdown with JSON examples and inline shell command blocks] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include execution logs, status codes, generated infrastructure configuration, reports, and remediation guidance depending on the requested AWS workflow.] <br>
+**Other Properties Related to Output:** [May include infrastructure-as-code snippets, AWS CLI or Python command examples, audit findings, cost recommendations, and remediation guidance.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server evidence and frontmatter) <br>
+1.0.2 (source: server release metadata; artifact frontmatter reports 1.0.1) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

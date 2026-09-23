@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/expflow-pipeline-hpo",
   "slug": "expflow-pipeline-hpo",
   "ownerHandle": null,
-  "version": "0.5.0",
-  "updatedAt": 1779256625627,
-  "contentHash": "74cc0062eef30cba66a3e36c52968316d9da91111e8ee67ffa1ad58a14eefcad",
-  "fetchedAt": "2026-07-26T18:42:25.915Z"
+  "version": "0.7.2",
+  "updatedAt": 1790048190135,
+  "contentHash": "af212cccc5f377f3752bf17598825ca6c323e99241af2fae2c0227d179e18706",
+  "fetchedAt": "2026-09-23T13:03:20.819Z"
 }

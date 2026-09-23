@@ -1,37 +1,33 @@
 ---
-slug: game-theory-tool-free
-name: game-theory-tool-free
-version: 1.0.0
-displayName: 博弈论分析免费版
-summary: 策略互动分析工具,支持纳什均衡、囚徒困境与决策树分析
+
+name: "game-theory-tool-free"
+description: "策略互动分析工具,支持纳什均衡、囚徒困境与决策树分析。Use when 需要数据分析、报表生成、统计洞察、数据可视化时使用。不适用于实时流数据处理。适用于独立开发者、企业团队和自动化工作流场景。支持中文交互，无需复杂配置即开即用。输出结果可直接使用，减少二次加工成本。提供结构化输出和错误处理机制。支持多场景应用和灵活配置。"
 license: Proprietary
-edition: free
-description: '面向学生、研究者与决策者的博弈论分析工具。
-
-  核心能力: 收益矩阵分析、纳什均衡求解、囚徒困境、决策树、重复博弈
-
-  适用场景: 经济学学习、商业决策分析、谈判策略、游戏设计、社会科学研究
-
-  差异化: 免费版聚焦个人学习与基础分析,提供清晰的逻辑推导与可视化
-
-  适用关键词: 博弈论, 纳什均衡, 囚徒困境, 收益矩阵, 决策树, 策略分析'
-tags:
-- 博弈论
-- 决策分析
-- 纳什均衡
-- 策略互动
-- 经济学
-- 学习工具
+allowed-tools: read exec
+compatibility: "Requires LLM with tool-use capability"
+metadata:
+  displayName: "博弈论分析免费版"
+  version: "1.0.0"
+  summary: "策略互动分析工具,支持纳什均衡、囚徒困境与决策树分析"
+  tags:
+    - "博弈论"
+    - "决策分析"
+    - "纳什均衡"
+    - "策略互动"
+    - "经济学"
+    - "学习工具"
+  source: "SkillHub"
+  converted_at: "2026-07-22T17:58:36"
 tools:
-- - read
-- exec
-homepage: https://skillhub.cn
-pricing_tier: L3
-pricing_model: per_use
-suggested_price: 29.9
-tools: ["read", "write", "exec"]
-tags: "工具,效率,自动化"
+  - exec
+  - read
+  - write
+
 ---
+
+> **功能说明**: 本技能涵盖 中文交互、化工作流场景 等核心能力。
+
+
 # 博弈论分析 (免费版)
 
 ## 概述
@@ -43,7 +39,7 @@ tags: "工具,效率,自动化"
 ## 核心能力
 
 | 能力模块 | 描述 | 免费版支持 |
-|----|---|-----|
+|:--------|:-----|:-----------|
 | 收益矩阵分析 | 2x2 博弈分析 | 支持 |
 | 纳什均衡求解 | 纯策略均衡 | 支持 |
 | 囚徒困境 | 经典案例库 | 支持 |
@@ -59,25 +55,19 @@ tags: "工具,效率,自动化"
 ### 核心功能执行
 用`input_params`参数进行配置。
 
-**输入**: 用户提供核心功能执行所需的指令和必要参数。
-**处理**: 解析核心功能执行的输入参数,完成核心逻辑,返回结构化响应。
-**输出**: 返回核心功能执行的响应数据,包含状态码、结果和日志。
+**输出**: 返回核心功能执行的执行结果,包含操作状态和输出数据。
 - 执行此能力时使用`input_params`参数,支持创建/查询/导出操作
 
 ### 参数配置与调用
 用`config_options`参数进行配置。
 
-**输入**: 用户提供参数配置与调用所需的指令和必要参数。
-**处理**: 解析参数配置与调用的输入参数,完成核心逻辑,返回结构化响应。
-**输出**: 返回参数配置与调用的响应数据,包含状态码、结果和日志。
+**输出**: 返回参数配置与调用的执行结果,包含操作状态和输出数据。
 - 执行此能力时使用`config_options`参数,支持修改/重置/导入操作
 
 ### 结果处理与输出
 用`output_format`参数进行配置。
 
-**输入**: 用户提供结果处理与输出所需的指令和必要参数。
-**处理**: 解析结果处理与输出的输入参数,完成核心逻辑,返回结构化响应。
-**输出**: 返回结果处理与输出的响应数据,包含状态码、结果和日志。
+**输出**: 返回结果处理与输出的执行结果,包含操作状态和输出数据。
 - 执行此能力时使用`output_format`参数,支持导出/保存/转换操作
 **能力覆盖范围**：本skill的核心能力覆盖以下场景关键词：策略互动分析工具、支持纳什均衡、囚徒困境与决策树、面向学生、研究者与决策者的、博弈论分析工具、核心能力、适用场景、经济学学习、商业决策分析、谈判策略、游戏设计、社会科学研究、差异化、免费版聚焦个人学、习与基础分析、提供清晰的逻辑推、导与可视化、适用关键词、博弈论、策略分析等。这些关键词对应description中声明的使用场景,均已在上述能力点中提供对应的操作支持。
 
@@ -90,11 +80,11 @@ tags: "工具,效率,自动化"
 ```text
 情境: 两名嫌疑人被分别审讯,各有"坦白"或"沉默"两个选择。
 收益 (A, B 表示刑期年数,越少越好):
-# ...
+
               B 坦白    B 沉默
 A 坦白       (5, 5)    (0, 10)
 A 沉默      (10, 0)    (1, 1)
-# ...
+
 分析:
 1. 优势策略分析:
    - 对 A: 无论 B 选什么,坦白都比沉默好 (5 < 10, 0 < 1)
@@ -103,7 +93,7 @@ A 沉默      (10, 0)    (1, 1)
 2. 纳什均衡: (坦白, 坦白) = (5, 5)
 3. 帕累托最优: (沉默, 沉默) = (1, 1)
 4. 困境: 个人理性导致集体非最优
-# ...
+
 洞察:
 - 短期单次博弈中,合作难以达成
 - 重复博弈中,"以牙还牙"策略可促进合作
@@ -117,7 +107,7 @@ A 沉默      (10, 0)    (1, 1)
 ```python
 # 定价博弈分析
 import numpy as np
-# ...
+
 class GameTheoryAnalyzer:
     def __init__(self, payoff_matrix, row_player="A", col_player="B"):
         self.payoff = np.array(payoff_matrix)
@@ -125,17 +115,17 @@ class GameTheoryAnalyzer:
         self.col_player = col_player
         self.row_strategies = []
         self.col_strategies = []
-# ...
+
     def find_dominant_strategies(self):
         """寻找优势策略"""
         row_player_payoffs = self.payoff[:, :, 0]  # 行玩家收益
         col_player_payoffs = self.payoff[:, :, 1]  # 列玩家收益
-# ...
+
         row_dominant = self._find_row_dominant(row_player_payoffs)
         col_dominant = self._find_col_dominant(col_player_payoffs)
-# ...
+
         return row_dominant, col_dominant
-# ...
+
     def find_nash_equilibrium(self):
         """寻找纳什均衡 (纯策略)"""
         equilibria = []
@@ -144,35 +134,34 @@ class GameTheoryAnalyzer:
                 if self._is_nash(i, j):
                     equilibria.append((i, j, self.payoff[i, j]))
         return equilibria
-# ...
+
     def _is_nash(self, i, j):
         """检查 (i,j) 是否纳什均衡"""
         row_payoff = self.payoff[i, j, 0]
         col_payoff = self.payoff[i, j, 1]
-# ...
+
         # 行玩家不能通过单方面改变策略获益
         for k in range(self.payoff.shape[0]):
             if self.payoff[k, j, 0] > row_payoff:
                 return False
         # 列玩家不能通过单方面改变策略获益
-        for k in range(self.payoff.shape[1]):
             if self.payoff[i, k, 1] > col_payoff:
                 return False
         return True
-# ...
+
 # 示例
 # 收益 (万元利润): [咖啡店A利润, 咖啡店B利润]
 analyzer = GameTheoryAnalyzer([
     [[10, 10], [15, 5]],   # A 高价
     [[5, 15], [8, 8]],     # A 低价
 ], row_player="咖啡店A", col_player="咖啡店B")
-# ...
+
 analyzer.row_strategies = ["高价", "低价"]
 analyzer.col_strategies = ["高价", "低价"]
-# ...
+
 print("优势策略:", analyzer.find_dominant_strategies())
 print("纳什均衡:", analyzer.find_nash_equilibrium())
-# ...
+
 # 输出:
 # 优势策略: (None, None) - 双方都无优势策略
 # 纳什均衡: [(1, 1, [8, 8])] - 双方都低价
@@ -186,23 +175,23 @@ print("纳什均衡:", analyzer.find_nash_equilibrium())
 class DecisionTree:
     def __init__(self):
         self.nodes = {}
-# ...
+
     def add_node(self, node_id, player, actions=None, payoff=None):
         self.nodes[node_id] = {
             "player": player,
             "actions": actions or {},
             "payoff": payoff,
         }
-# ...
+
     def add_edge(self, parent, action, child):
         self.nodes[parent]["actions"][action] = child
-# ...
+
     def backward_induction(self, node_id):
-        """逆向归纳求解子博弈完美均衡"""
+        """逆向归纳求解子博弈完善均衡"""
         node = self.nodes[node_id]
         if node["payoff"]:
             return node["payoff"], []
-# ...
+
         best_payoff = None
         best_path = None
         for action, child in node["actions"].items():
@@ -211,9 +200,9 @@ class DecisionTree:
             if best_payoff is None or child_payoff[player_idx] > best_payoff[player_idx]:
                 best_payoff = child_payoff
                 best_path = [action] + child_path
-# ...
+
         return best_payoff, best_path
-# ...
+
 # 案例: 进入市场博弈
 tree = DecisionTree()
 tree.add_node("root", "A")  # A 决定是否进入
@@ -225,9 +214,9 @@ tree.add_edge("root", "进入", "enter")
 tree.add_edge("root", "退出", "exit")
 tree.add_edge("enter", "反击", "fight")
 tree.add_edge("enter", "默认", "accommodate")
-# ...
+
 payoff, path = tree.backward_induction("root")
-print(f"子博弈完美均衡路径: {path}, 收益: {payoff}")
+print(f"子博弈完善均衡路径: {path}, 收益: {payoff}")
 # 输出: 路径: ['进入', '默认'], 收益: [5, 5]
 ```
 
@@ -251,7 +240,7 @@ print(f"子博弈完美均衡路径: {path}, 收益: {payoff}")
 # 用收益矩阵定义博弈
 # 矩阵形状: (行策略数, 列策略数, 2)
 # 第 3 维 [0] 是行玩家收益, [1] 是列玩家收益
-# ...
+
 cooperation_game = [
     [[3, 3], [0, 5]],   # 合作
     [[5, 0], [1, 1]],   # 背叛
@@ -262,8 +251,8 @@ cooperation_game = [
 
 ```python
 analyzer = GameTheoryAnalyzer(cooperation_game)
-print("纳什均衡:", analyzer.find_nash_equilibrium())
-print("优势策略:", analyzer.find_dominant_strategies())
+find_nash_equilibrium())
+find_dominant_strategies())
 ```
 
 ### Step 3: 解读结果
@@ -321,44 +310,39 @@ CLASSIC_GAMES = {
 
 ```markdown
 # 博弈分析报告
-# ...
+
 ## 1. 情境描述
 [参与方、可选策略、收益规则]
-# ...
+
 ## 2. 收益矩阵
 |              | 玩家 B 策略 1 | 玩家 B 策略 2 |
-|:-----|:-----|:-----|
+|:-------------|:-------------:|:-------------:|
 | 玩家 A 策略 1 | (a11, b11)   | (a12, b12)   |
 | 玩家 A 策略 2 | (a21, b21)   | (a22, b22)   |
-# ...
+
 ## 3. 优势策略分析
 - 玩家 A: [有/无] 优势策略
 - 玩家 B: [有/无] 优势策略
-# ...
+
 ## 4. 纳什均衡
 - 均衡点: [...]
 - 均衡收益: [...]
-# ...
+
 ## 5. 帕累托最优
 - 帕累托最优状态: [...]
-# ...
+
 ## 6. 洞察与应用
 [现实意义与建议]
 ```
 
-## 最佳实践
+## 优选实践
 
 ### 1. 收益矩阵规范
 
 ```python
-# 收益矩阵规范:
-# 1. 第一个数字总是行玩家 (玩家 A) 的收益
-# 2. 第二个数字总是列玩家 (玩家 B) 的收益
-# 3. 收益数值: 正数表示收益,负数表示损失
-# 4. 数值大小表示偏好强度
-# ...
-# 示例: 标准囚徒困境 (刑期年数,负数表示损失)
-# 收益: [-5, -5] 表示 A 被判 5 年,B 被判 5 年
+# 本技能的核心实现逻辑
+# 请参考上方使用说明进行配置和调用
+result = "implementation_ready"
 ```
 
 ### 2. 现实情境建模
@@ -370,7 +354,7 @@ CLASSIC_GAMES = {
 3. 评估每个策略组合的收益 (主观效用)
 4. 构建收益矩阵
 5. 求解均衡并解读
-# ...
+
 注意事项:
 - 收益不一定是金钱,可以是效用 (满足感、声誉等)
 - 收益是相对的,只关心排序而非绝对值
@@ -423,7 +407,7 @@ def repeated_game_insight(game_type, repetitions):
 ### 依赖详情
 
 | 依赖项 | 类型 | 是否必需 | 获取方式 |
-|---:|---:|---:|---:|
+|:-------|:-----|:---------|:---------|
 | LLM API | 推理服务 | 必需 | 由 Agent 内置 LLM 提供 |
 | Python 3.8+ | 运行时 | 可选 | python.org 下载 |
 | NumPy | Python 库 | 可选 | `pip install numpy` (矩阵运算) |
@@ -433,7 +417,7 @@ def repeated_game_insight(game_type, repetitions):
 ```bash
 # 免费版无需外部 API Key
 # 所有分析通过 Agent LLM 本地推理完成
-# ...
+
 # 可选: 默认分析偏好
 export GAME_THEORY_LANGUAGE="zh"
 export GAME_THEORY_VERBOSE="true"
@@ -441,14 +425,14 @@ export GAME_THEORY_VERBOSE="true"
 
 ### 可用性分类
 
-- **分类**: MD+EXEC (Markdown 指令 + 代码执行)
+- **分类**: MD+execute(Markdown 指令 + 代码执行)
 - **说明**: 本 Skill 通过自然语言指令驱动 Agent 进行博弈论分析,提供逻辑推导与可视化
 - **免费版限制**: 2 人博弈、纯策略为主、无演化博弈、无机制设计、无实验数据
 
 ## 错误处理
 
 | 错误场景 | 原因 | 处理方式 |
-|:---:|:---:|:---:|
+|---------|------|---------|
 | 配置错误 | 参数缺失或格式错误 | 检查依赖说明中的配置要求 |
 | 运行时错误 | 运行环境不满足 | 确认运行环境符合依赖说明 |
 | 网络错误 | 连接超时或不可达 | 执行ping命令测试网络连通性,检查防火墙和代理设置连接后执行ping命令测试网络连通性,检查防火墙和代理设置连接后重新执行命令，参考国内替代方案 |
@@ -463,8 +447,6 @@ export GAME_THEORY_VERBOSE="true"
 
 ### 基本用法
 
-**输入**：用户提供操作指令和必要参数
-
 **输出**：返回执行结果,包含操作状态和输出数据
 
 ```text
@@ -472,3 +454,14 @@ export GAME_THEORY_VERBOSE="true"
 Skill: 正在执行核心功能...
 Skill: 执行完成,结果如下: 操作成功
 ```
+
+## 安全注意事项
+
+| 风险类型 | 防范措施 |
+|----------|---------|
+| API密钥泄露 | 通过环境变量配置，禁止硬编码到代码或配置文件中 |
+| 命令执行风险 | 仅执行白名单命令，避免拼接用户输入到命令行参数中 |
+| 网络通信安全 | 使用HTTPS协议，验证SSL证书有效性 |
+| 敏感数据暴露 | 输出结果中不包含密钥、令牌等敏感信息 |
+
+使用前请确认已阅读依赖说明章节，确保运行环境满足安全要求。

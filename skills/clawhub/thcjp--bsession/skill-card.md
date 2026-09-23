@@ -1,5 +1,5 @@
 ## Description: <br>
-Bsession helps agents set up browser automation sessions to fetch website information, perform page interactions, and return structured results. <br>
+bsession helps agents set up browser automation sessions, perform one-shot website information fetches, and create persistent browser sessions. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and automation users can use this skill to run browser automation for explicit target websites, including one-shot data extraction, page interaction, persistent sessions, and structured result collection. It is not intended for tasks that require complex human judgment. <br>
+Developers and automation users can use this skill to drive browser sessions for navigation, page interaction, content extraction, screenshots, login workflows, and repeated web tasks. It is not suited to complex decisions requiring human creative judgment. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill requests broad shell execution and persistent web automation authority. <br>
-Mitigation: Review before installing and require confirmation before shell commands, logins, persistent sessions, scraping, or anti-bot bypass activity. <br>
-Risk: Browser automation may expose credentials, sensitive pages, session data, or screenshots. <br>
-Mitigation: Use only with explicit target sites and actions, and avoid credentials or sensitive pages unless the data handling path is understood. <br>
+Risk: The skill promotes persistent browser sessions, login automation, scraping, and anti-bot bypass without enough stated limits or user controls. <br>
+Mitigation: Review the skill carefully before installing, use it only for sites and accounts you are authorized to automate, and do not use it for compliant scraping or anti-bot circumvention without stronger guardrails from the publisher. <br>
+Risk: Browser automation may expose credentials or session data if the agent stores or reuses authenticated sessions. <br>
+Mitigation: Avoid providing credentials unless you understand how the agent stores browser sessions, and prefer scoped test accounts or explicit session cleanup for sensitive workflows. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/bsession) <br>
-- [Skill homepage](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, configuration, shell commands] <br>
-**Output Format:** [Markdown guidance with shell commands and structured JSON results] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown with JSON examples and inline shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include execution logs, extracted page data, status metadata, and screenshots when browser actions are performed.] <br>
+**Other Properties Related to Output:** [May produce structured browser automation results, execution logs, extracted page data, and screenshots when supported by the agent environment.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+1.0.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

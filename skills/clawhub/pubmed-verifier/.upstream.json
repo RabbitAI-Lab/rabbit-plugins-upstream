@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/pubmed-verifier",
   "slug": "pubmed-verifier",
   "ownerHandle": null,
-  "version": "2.1.4",
-  "updatedAt": 1778492647488,
-  "contentHash": "0d425a70be07a7dfc2c83d6d784ebbc60b4cd8a9fa8ee68c4c196195517ec447",
-  "fetchedAt": "2026-07-26T19:25:01.280Z"
+  "version": "2.4.0",
+  "updatedAt": 1790134423117,
+  "contentHash": "0e480b5c8ea6682b6b05f3ca9ce7109465f34acd22a73352c1b15beec6420dbd",
+  "fetchedAt": "2026-09-23T12:58:26.552Z"
 }

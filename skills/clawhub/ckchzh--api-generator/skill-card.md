@@ -1,41 +1,59 @@
-## Description: <br>
-API code generator. Generate RESTful endpoints, GraphQL schemas, OpenAPI/Swagger docs, API clients, mock servers, authentication, rate limiting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+API code generator. Generate RESTful endpoints, GraphQL schemas, OpenAPI/Swagger docs, API clients, mock servers, authentication, rate limiting.
 
-## Publisher: <br>
-[ckchzh](https://clawhub.ai/user/ckchzh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ckchzh](https://clawhub.ai/user/ckchzh)
 
-## Use Case: <br>
-Developers and engineers use this skill to scaffold API endpoints, schemas, clients, mock servers, auth snippets, rate limiting examples, tests, and API documentation templates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated API, authentication, and rate limiting code may be incomplete or unsuitable for a production service as emitted. <br>
-Mitigation: Review, adapt, scan, and test generated code before integrating it into an application. <br>
-Risk: The REST scaffolding script can create a local api-generator data directory and append command history under the user's data directory unless APIGEN_DIR is set. <br>
-Mitigation: Set APIGEN_DIR to an appropriate workspace-specific location or review the local history file handling before use. <br>
+## Use Case:
 
+Developers and engineers use this skill to scaffold API endpoints, GraphQL schemas, OpenAPI documents, clients, mock servers, authentication, rate limiting, and tests as starting points for implementation.
 
-## Reference(s): <br>
-- [BytesAgain homepage](https://bytesagain.com) <br>
-- [ClawHub skill page](https://clawhub.ai/ckchzh/api-generator) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Terminal text and generated code snippets printed to stdout.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated scaffolds should be reviewed, edited, and tested before production use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Generated authentication scaffolding may be unsafe if copied directly into production code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and harden generated JWT, OAuth, and API-key handling before use, including secret management and validation.
+
+Risk: Generator inputs and generated API code may need project-specific validation before use.
+
+Mitigation: Validate inputs, inspect generated endpoints and schemas, and add application-specific tests before deployment.
+
+Risk: The auxiliary script can write local usage history when invoked.
+
+Mitigation: Review local data-writing behavior and set an appropriate data directory or avoid commands that record history if that is not acceptable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ckchzh/skills/api-generator)
+- [BytesAgain homepage](https://bytesagain.com)
+- [BytesAgain feedback](https://bytesagain.com/feedback)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [stdout text containing code, JSON, Markdown, shell snippets, and implementation guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated output is scaffolding that should be reviewed and hardened before production use.]
+
+## Skill Version(s):
+
+2.0.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

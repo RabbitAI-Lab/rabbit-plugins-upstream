@@ -1,43 +1,63 @@
-## Description: <br>
-Generates weekly learning review reports from authorized learning activity, including progress evidence, weak points, next-week priorities, and optional family-facing summaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill turns a student's weekly learning activity into an evidence-based weekly review with self-reflection, a focused next step, consent-controlled family sharing, and optional reminder or profile handoff.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning-support agents use this skill to turn weekly learning records into evidence-based review reports, concrete next-week priorities, and optional family-sharing summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Weekly reviews may summarize learning activity, emotional state, stress, or crisis-related observations that are sensitive if shared too broadly. <br>
-Mitigation: Use the skill only for an explicit review request, collect only the minimum necessary fields, and review family-facing reports before sharing. <br>
-Risk: Crisis signals such as self-harm thoughts, bullying, serious harm, or sustained despair could be softened if treated like normal learning feedback. <br>
-Mitigation: Do not reframe crisis signals as positive progress; alert guardians plainly and seek professional or emergency help when immediate danger is present. <br>
-Risk: Sparse or incomplete weekly data can make conclusions sound more certain than the evidence supports. <br>
-Mitigation: State when data is limited, identify which days or records support the review, and avoid firm judgments when evidence is incomplete. <br>
+## Use Case:
 
+External Chinese K12 learners use this skill to summarize a week of study into a student-facing review, identify the highest-priority next action, and optionally prepare a family-visible summary when consent allows. It is intended for weekly learning reflection rather than monthly reporting or single-question error analysis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-weekly-review) <br>
-- [Weekly review report template](references/review-report-template.md) <br>
+### Deployment Geography for Use:
 
+China Mainland Chinese K12 deployments by default; other regions require localization of safety referral channels, consent language, and family-sharing expectations.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown learning review reports with structured sections and concise action recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce separate student-facing and family-facing report variants when appropriate.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Weekly reviews can expose student learning history or prepare family-visible summaries.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review profile, cross-skill sharing, parent sharing, emotion sharing, and reminder consent before generating summaries or handoffs.
+
+Risk: Safety referral content is written for the Chinese K12 context and includes China Mainland emergency resources.
+
+Mitigation: Localize crisis and referral channels before deployment outside China Mainland, and ask for the user's region before giving phone numbers when location is uncertain.
+
+Risk: Sparse or unavailable memory/statistics can make trend claims unreliable.
+
+Mitigation: Mark low-data conclusions as provisional and avoid historical counts or completion-rate claims when the required platform capability is unavailable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-weekly-review)
+- [Publisher profile](https://clawhub.ai/user/qizhitang)
+- [Weekly review report template](references/review-report-template.md)
+- [Grade-band parameters](shared/grade-bands.md)
+- [Crisis exception](shared/crisis-exception.md)
+- [Crisis referral protocol](shared/crisis-referral-protocol.md)
+- [Handover protocol schema](https://xiaozhi-skills.openclaw.dev/schemas/handover-protocol.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Chinese Markdown/text weekly review, optional family summary, and structured handoff guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires current-week learning evidence; profile writeback, reminders, cross-skill sharing, and family sharing require the relevant student consent settings.]
+
+## Skill Version(s):
+
+2.2.0 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

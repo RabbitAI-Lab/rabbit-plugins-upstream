@@ -1,42 +1,57 @@
-## Description: <br>
-This skill helps personal investors and entry-level analysts extract financial data from local Excel or PDF files and generate interactive HTML financial analysis reports with trend sparklines. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+从Excel/PDF文件分析财务数据，生成含趋势图的HTML分析报告。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users, personal investors, and entry-level analysts use this skill to turn a single Excel or PDF financial report into a readable HTML analysis with calculated metrics and trend visuals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Financial reports can contain confidential business or investment data, and broad file-analysis triggers may expose unrelated content if invoked on the wrong files. <br>
-Mitigation: Use the skill only with intended financial report files and avoid providing unrelated PDFs or spreadsheets. <br>
-Risk: The local-processing privacy language may be misunderstood because the agent's LLM may still see content used during analysis. <br>
-Mitigation: Treat opened financial content as visible to the active agent environment and follow the user's data-handling policies. <br>
-Risk: Financial analysis and PDF extraction can be incorrect or incomplete when source data is malformed, scanned, or missing context. <br>
-Mitigation: Review the source data, extracted values, calculated metrics, and generated report before relying on the output for investment or business decisions. <br>
+## Use Case:
 
+Individual investors, analysts, and automation users use this skill to extract financial data from local Excel or PDF files, calculate basic financial metrics, and produce an HTML report with trend visuals. It is intended for single-file report generation rather than real-time streams, batch analysis, or peer benchmarking.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/finance-report-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and generated HTML report files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May generate a local interactive HTML financial analysis report with trend sparklines from one Excel or PDF input file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Sensitive financial files may be processed in the agent environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with financial files approved for that environment, keep generated reports in a private directory, and delete outputs when no longer needed.
+
+Risk: The artifact mixes local report generation with broad command, API, network, and information-retrieval claims that are not clearly scoped.
+
+Mitigation: Review the skill before installation and do not allow API or network use unless the destination, data sent, and purpose have been confirmed.
+
+Risk: Generated financial analysis and forecast markers may be incomplete or misleading.
+
+Mitigation: Treat reports and simple trend extrapolations as decision support only, and verify conclusions against source filings or a qualified financial review.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/finance-report-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown guidance with bash and YAML examples; generated report output is HTML.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Free version is described as single-file, HTML-only output with basic trend forecasting.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact frontmatter lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

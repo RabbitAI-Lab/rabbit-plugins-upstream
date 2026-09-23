@@ -1,43 +1,58 @@
-## Description: <br>
-游戏AI工具免费版 helps independent game developers and students produce guidance and code templates for finite state machines, behavior trees, A* pathfinding, utility AI, perception systems, and crowd behavior. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Chinese-language guidance and code templates for implementing game AI patterns such as finite-state machines, behavior trees, A* pathfinding, utility AI, perception systems, and flocking.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers, independent game creators, and students use this skill to generate game AI architecture guidance, C# code templates, and configuration examples for learning, prototyping, and game jam projects. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requests broad read, write, and shell-command capabilities with unclear limits on file-changing actions. <br>
-Mitigation: Use it in a bounded project workspace and review proposed writes or shell commands before execution. <br>
-Risk: Generated game AI templates may be incomplete, engine-specific, or unsuitable for a project's architecture. <br>
-Mitigation: Treat generated code as a starting point, test it in the target game engine, and adapt it before production use. <br>
-Risk: The security verdict is suspicious because the skill is mostly documentation and templates but can still modify files or run commands. <br>
-Mitigation: Avoid using it as a general programming or deployment assistant and keep usage focused on game AI prototyping tasks. <br>
+## Use Case:
 
+Game developers, students, and agent users use this skill to generate or adapt game AI code templates and implementation guidance for prototypes, learning projects, and game-jam workflows.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/game-ai-tool-free) <br>
-- [Detailed Reference](artifact/references/detail.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with C#, YAML, bash, and JSON code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include project file changes or shell commands when used by an agent; review generated code and commands before applying them.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter says 1.0.0) <br>
+Risk: Generated file changes, export actions, or shell commands could modify a user's game project incorrectly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed changes and commands before applying them, especially save/export/modify actions.
+
+Risk: Broad troubleshooting or network-diagnostic wording could move usage outside the intended game AI coding and template scope.
+
+Mitigation: Use the skill as a game AI coding aid and keep diagnostics or deployment advice scoped to the active game project.
+
+Risk: Code templates and AI architecture suggestions may be incomplete or unsuitable for a specific engine, version, or production constraint.
+
+Mitigation: Test generated code in the target engine and have developers review architecture choices before production use.
+
+## Reference(s):
+
+- [Detailed reference examples](references/detail.md)
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/game-ai-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown with C# code examples, YAML configuration snippets, and occasional shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese-language interaction; examples emphasize Godot 4.x C# while concepts may transfer to Unity, Unreal, and Cocos.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact metadata version is 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

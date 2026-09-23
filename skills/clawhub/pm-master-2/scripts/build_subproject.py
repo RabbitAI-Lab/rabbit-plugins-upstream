@@ -1,24 +1,28 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PM Master · 子项目（per-SOW）工件生成器
--------------------------------------------------
-程序（项目群）层之下，每个 SOW 应作为「子项目（sub-project）」独立维护，由该 SOW 的项目经理
-拥有自己的 PM 工件：RAID 日志、风险登记册、状态报告。本脚本从子项目的 project.yaml
-（单一事实源）渲染这些工件到 subprojects/<slug>/risks/ 与 reports/。
+PM Master · Sub-project (per-SOW) artifact generator
+---------------------------------------------------
+Below the program tier, each SOW should be maintained as an independent
+"sub-project" with its own PM artifacts: RAID log, risk register, status report.
+This script renders these artifacts from the sub-project's project.yaml
+(single source of truth) into subprojects/<slug>/risks/ and reports/.
 
-前置：init_project.py --parent <program.yaml> --sow SOW1 已建立子项目骨架并写入 program.projects 索引。
+Prerequisite: init_project.py --parent <program.yaml> --sow SOW1 has created the
+sub-project skeleton and written the program.projects index.
 
-用法：
+Usage:
   python3 build_subproject.py --project subprojects/<slug>/project.yaml
   python3 build_subproject.py --project subprojects/<slug>/project.yaml --only raid
-  python3 build_subproject.py --program <program.yaml> --sow SOW1     # 按索引定位子项目
+  python3 build_subproject.py --program <program.yaml> --sow SOW1     # locate via index
 
-渲染工件（均来自子项目 project.yaml，单一事实源防漂移）：
+Rendered artifacts (all from the sub-project project.yaml, single source of truth to
+prevent drift):
   - raid_log.md        <- data.raid (risks/assumptions/issues/dependencies)
   - risk_register.md   <- data.risks
   - status_report.md   <- data.progress / data.metrics / data.risks
-并把产物路径写回子项目 project.yaml 的 artifacts（raid_log / risk_register / status_report）。
+and write the artifact paths back to the sub-project project.yaml's artifacts
+(raid_log / risk_register / status_report).
 """
 import argparse
 import os
@@ -34,8 +38,8 @@ except ImportError:
     yaml = None
 
 from render import render
-from rerender_docs import _render_doc  # 复用 SSOT 渲染助手
-from artifact_guard import DEPS as _AG_DEPS  # 交付物依赖键（OAG 漂移检测）
+from rerender_docs import _render_doc  # Reuse the SSOT render helper
+from artifact_guard import DEPS as _AG_DEPS  # Artifact dependency keys (OAG drift detection)
 
 
 def _load(path):
@@ -97,23 +101,23 @@ def render_all(sub_yaml, data, only=None):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="PM Master · 子项目工件生成器")
-    ap.add_argument('--project', default=None, help="子项目 project.yaml")
-    ap.add_argument('--program', default=None, help="程序 project.yaml（配合 --sow 定位子项目）")
-    ap.add_argument('--sow', default=None, help="SOW id（配合 --program）")
+    ap = argparse.ArgumentParser(description="PM Master · Sub-project artifact generator")
+    ap.add_argument('--project', default=None, help="Sub-project project.yaml")
+    ap.add_argument('--program', default=None, help="Program project.yaml (locate sub-project via --sow)")
+    ap.add_argument('--sow', default=None, help="SOW id (with --program)")
     ap.add_argument('--only', default=None, choices=['raid', 'risk_register', 'status_report'])
     a = ap.parse_args()
 
     if yaml is None:
-        raise SystemExit("需要 PyYAML")
+        raise SystemExit("PyYAML required")
     if a.project:
         sub_yaml = os.path.abspath(a.project)
     elif a.program and a.sow:
         sub_yaml = _find_subproject(os.path.abspath(a.program), a.sow)
         if not sub_yaml or not os.path.exists(sub_yaml):
-            raise SystemExit(f"未找到 SOW {a.sow} 对应的子项目（请先 init_project.py --parent … --sow {a.sow}）")
+            raise SystemExit(f"Sub-project for SOW {a.sow} not found (run init_project.py --parent ... --sow {a.sow} first)")
     else:
-        raise SystemExit("需提供 --project 或 --program + --sow")
+        raise SystemExit("Provide --project or --program + --sow")
 
     data = _load(sub_yaml)
     done = render_all(sub_yaml, data, only=a.only)

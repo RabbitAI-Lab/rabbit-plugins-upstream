@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cruise-ticket-query",
   "slug": "cruise-ticket-query",
   "ownerHandle": null,
-  "version": "1.0.6",
-  "updatedAt": 1783564761672,
-  "contentHash": "37206204a0aae48bd63d881b3dec24333a9d99f0a2cc09e45c93bc534dfdbfba",
-  "fetchedAt": "2026-07-26T18:17:50.482Z"
+  "version": "1.0.17",
+  "updatedAt": 1790070561278,
+  "contentHash": "9760370ba195a5537de75217373fbfc70e0970dbabd22ea909a52aef58f84000",
+  "fetchedAt": "2026-09-23T13:02:08.434Z"
 }

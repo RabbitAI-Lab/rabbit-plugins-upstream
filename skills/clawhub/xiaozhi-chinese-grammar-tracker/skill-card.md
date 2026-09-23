@@ -1,44 +1,67 @@
-## Description: <br>
-Helps students identify and improve recurring Chinese grammar issues by tracking error patterns only after explicit consent. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Chinese K-12 grammar coach that classifies six common sentence-error types, guides students through corrections, and, with consent, tracks recurring grammar-error patterns.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning assistants use this skill to check Chinese writing, identify repeated grammar-error patterns, practice targeted corrections, and generate progress summaries when the student asks for them. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can build a grammar-error history that may reveal learning patterns. <br>
-Mitigation: Enable tracking only after explicit user consent and avoid storing or sharing the history when the user has not opted in. <br>
-Risk: Sharing grammar-history summaries with related learning or reminder skills could expose more information than needed. <br>
-Mitigation: Share only the minimum necessary fields with related skills and only when the user permits that specific use. <br>
-Risk: Grammar correction guidance may be misleading if accepted without review. <br>
-Mitigation: Use the skill's prompt-and-practice flow to help the student verify the correction instead of treating suggestions as final answers. <br>
+## Use Case:
 
+External students, parents, and teachers use this skill for Chinese sentence-error practice, guided correction, and progress review for upper-primary and junior-secondary learners. Profile storage, parent sharing, cross-skill sharing, and reminders require explicit consent.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-chinese-grammar-tracker) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [Grammar error library](references/grammar-error-library.md) <br>
+### Deployment Geography for Use:
 
+Mainland China by default; other regions require localized crisis contacts, curriculum alignment, and minor-data consent review before student use.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and conversational text with structured correction prompts, practice exercises, reminders, and progress reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Consent-gated tracking of grammar-error history and minimal sharing with related learning skills when the user permits it.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-99999.0.2 (source: server release metadata; artifact frontmatter reports 2.0.1) <br>
+Risk: The skill may store a student's recurring grammar-error profile.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep profile storage, cross-skill sharing, parent sharing, and reminders disabled unless the student or required guardian explicitly consents.
+
+Risk: The bundled safety contacts and curriculum assumptions are designed for Mainland China.
+
+Mitigation: Localize crisis-referral contacts, curriculum expectations, and minor-data consent rules before deploying outside Mainland China.
+
+Risk: Students could ask for help during an active exam or restricted assessment.
+
+Mitigation: Do not analyze the item or provide hints during an active exam; invite the student to return after the assessment for review.
+
+Risk: Grammar-profile summaries could be shared beyond the student's intended audience.
+
+Mitigation: Check consent before parent-visible output or cross-skill sharing, and share only the minimum grammar-profile fields needed for the task.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-chinese-grammar-tracker)
+- [Publisher profile](https://clawhub.ai/user/qizhitang)
+- [Six-category grammar-error reference library](references/grammar-error-library.md)
+- [Chinese error dimension table](shared/chinese-error-dimension-table.md)
+- [Learning profile schema](shared/dna-profile.schema.json)
+- [Handover protocol schema](shared/handover-protocol.schema.json)
+- [Crisis referral protocol](shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Configuration]
+
+**Output Format:** [Markdown guidance with optional JSON handoff snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Conversational coaching output; profile and handoff data are consent-gated; no executable code or shell commands are shipped.]
+
+## Skill Version(s):
+
+2.2.0 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

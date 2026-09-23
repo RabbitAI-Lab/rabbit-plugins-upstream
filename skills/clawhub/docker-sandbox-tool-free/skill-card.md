@@ -1,42 +1,58 @@
-## Description: <br>
-Docker沙箱入门工具 helps developers use Docker-based container isolation, resource limits, network isolation, and file-system isolation for safer code testing and development experiments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Docker安全沙箱环境，支持隔离运行与基础资源限制，适合代码测试。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers use this skill to prepare and review Docker sandbox commands for running untrusted scripts, testing container images, and creating isolated local experiment environments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad local execution and write authority could cause unintended host changes if Docker commands are accepted without review. <br>
-Mitigation: Keep use limited to explicit sandbox or container-isolation tasks and review every Docker command before execution. <br>
-Risk: Writable host mounts can expose host files when running untrusted code. <br>
-Mitigation: Avoid writable host mounts for untrusted code; prefer read-only mounts, temporary file systems, and disposable containers. <br>
-Risk: Broad cleanup commands can remove the wrong containers or data. <br>
-Mitigation: Confirm cleanup targets before running broad cleanup commands such as cleanup-all workflows. <br>
+## Use Case:
 
+Developers and engineers use this skill to create Docker-based sandbox environments for running untrusted code, testing container images, and performing isolated development experiments.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/thcjp/skills/docker-sandbox-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash, YAML, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include Docker command proposals, sandbox configuration examples, structured response examples, and safety guidance for local review before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill asks an agent to run local Docker and shell commands, which can affect the host environment if commands or mounts are unsafe.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an isolated workspace without secrets, review each command before execution, and avoid writable host mounts when running untrusted code.
+
+Risk: Security evidence reports broad and partly inconsistent command-execution instructions.
+
+Mitigation: Clarify intended API and network behavior before processing private code or data, and apply the server-provided review guidance before installation.
+
+Risk: Docker isolation does not fully protect against kernel-level or advanced container escape threats.
+
+Mitigation: Use stronger isolation such as a dedicated virtual machine for highly sensitive workloads.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/docker-sandbox-tool-free)
+- [ClawHub publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline bash and YAML examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces Docker sandbox setup and execution guidance, including status-oriented command output expectations.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

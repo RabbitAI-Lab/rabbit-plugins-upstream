@@ -1,44 +1,63 @@
-## Description: <br>
-Academic Figures generates publication-quality charts from JSON or CSV data, including 14 chart types, colorblind-safe themes, CJK support, hatching, multi-panel layouts, flow diagrams, and PNG, SVG, PDF, TIFF, or EPS output. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Publication-ready scientific figures from one command, covering 22 chart types, journal presets, multi-format export, Python API use, and local data handling.
 
-## Publisher: <br>
-[docsor1212](https://clawhub.ai/user/docsor1212) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[docsor1212](https://clawhub.ai/user/docsor1212)
 
-## Use Case: <br>
-Developers, researchers, and agents use this skill to turn structured JSON or CSV datasets into journal-ready academic figures, diagrams, and statistical visualizations. It is suited for local figure generation workflows where the user controls the input data and output path. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The plotting workflow reads the user-selected input file and can write or overwrite the requested output file. <br>
-Mitigation: Use intentional input data and explicit output paths, and review the generated figure before sharing or submitting it. <br>
-Risk: Generic chart-generation requests may activate the skill in contexts where another visualization workflow would be more appropriate. <br>
-Mitigation: Confirm the desired output is a publication-style academic figure before running the local generator. <br>
+## Use Case:
 
+Developers, researchers, and technical writers use this skill to create publication-ready scientific charts from JSON, CSV, TSV, Excel, or YAML pipeline inputs. It supports journal-oriented figures, statistical chart workflows, accessibility sidecars, and verification guidance for manuscript submission outputs.
 
-## Reference(s): <br>
-- [Academic Figures Skill Page](https://clawhub.ai/docsor1212/academic-figures) <br>
-- [Data Format Reference](references/data-formats.md) <br>
-- [Academic Figures Pitfalls](references/pitfalls.md) <br>
-- [Reverse-Engineering Chart Colors from Reference Images](references/reverse-engineering-colors.md) <br>
-- [academic-figures v1.5.0 Upgrade Analysis](references/v1.5-upgrade-analysis.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration instructions, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with Python and shell command examples; generated figure files may be PNG, SVG, PDF, TIFF, or EPS.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Local execution with user-selected input and output paths; generated figures use a white background for publication workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.1 (source: server release metadata; artifact frontmatter lists 1.5.0) <br>
+Risk: Local Python scripts read user datasets and write figure, sidecar, report, or demo files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run commands only on intended inputs in a writable working directory, then review generated files before use or publication.
+
+Risk: setup_env.py may install dependencies and clear the matplotlib font cache.
+
+Mitigation: Run setup_env.py only when you intentionally want environment setup; skip it when dependencies and fonts are already managed.
+
+Risk: A historical reference note discusses optional web fetching outside the core local workflow.
+
+Mitigation: Use the documented local rendering workflow and avoid historical curl or download notes when a strict no-network workflow is required.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/docsor1212/skills/academic-figures)
+- [Quickstart](artifact/references/quickstart.md)
+- [Data Format Reference](artifact/references/data-formats.md)
+- [Limits and Compatibility](artifact/references/limits.md)
+- [Python API](artifact/references/python-api.md)
+- [Changelog](artifact/references/changelog.md)
+- [Publisher Documentation Site](https://docsor.cn)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Code, Markdown, Guidance, Files]
+
+**Output Format:** [Markdown guidance with bash and Python snippets plus JSON/YAML data examples; generated artifacts may include PNG, SVG, PDF, TIFF, EPS, alt-text, captions, and report files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Runs locally with user-provided data files and can emit multi-format figure outputs, sidecar text files, and diagnostics.]
+
+## Skill Version(s):
+
+3.2.0 (source: server release metadata and artifact changelog, released 2026-09-22)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

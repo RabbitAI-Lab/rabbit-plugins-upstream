@@ -1,41 +1,59 @@
-## Description: <br>
-Guides Chinese-speaking learners through a week-long cross-disciplinary inquiry project that connects a real-world theme across subjects and summarizes the work as project DNA. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用一个真实主题在一周内串联多门学科，找出学科之间的联结。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, parents, and learning assistants use this skill to plan and run a cross-subject project around a real topic, explore it from several academic perspectives, and turn the results into reusable study notes and a project DNA summary. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can connect with related learning-note skills and may read or update study records such as Cornell notes and a knowledge accumulation tree. <br>
-Mitigation: Use it only in learning-note workspaces where those records are expected to be available, and review generated note or knowledge-tree updates before keeping them. <br>
-Risk: Cross-subject project guidance can produce broad connections that may need validation for a student's curriculum or age level. <br>
-Mitigation: Review the proposed subject perspectives, prompts, and project DNA summary before treating them as study material. <br>
+## Use Case:
 
+Chinese K12 students, guardians, teachers, or learning agents use this skill to guide a week-long interdisciplinary project: selecting a real topic, exploring it from several subject perspectives, identifying links, and summarizing the project record. It is intended for cross-subject inquiry and concept-map growth, not single-subject problem solving, mistake analysis, or writing a report on the student's behalf.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-cross-subject-detective) <br>
-- [跨学科侦探周项目模板](references/detective-project-template.md) <br>
+### Deployment Geography for Use:
 
+Global, with localization required for crisis referral channels and with intended use in Chinese K12 learning contexts.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance and structured project notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces subject-view prompts, connection maps, project DNA summaries, and learning-note updates when paired with the related note-taking skills.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Student project records, profile memory, or cross-skill sharing could expose learning data to an unintended audience.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before enabling memory or sharing, confirm record visibility, guardian consent requirements, and deletion or export controls.
+
+Risk: The skill is intended for Chinese K12 learning contexts and may require localization for student-safety escalation paths.
+
+Mitigation: Deploy only in the intended context unless crisis-referral channels and responsible-adult escalation guidance are localized for the user's region.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-cross-subject-detective)
+- [跨学科侦探周项目记录模板](references/detective-project-template.md)
+- [跨学科概念关联标准模板库](shared/cross-subject-connections.md)
+- [提示阶梯与完整示例出口](shared/hint-ladder.md)
+- [学段参数表](shared/grade-bands.md)
+- [AI 出题自检协议](shared/ai-item-check.md)
+- [平台能力约定与降级路径](shared/platform-conventions.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, configuration]
+
+**Output Format:** [Markdown and structured study-record guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce project records, cross-subject connection summaries, concept-graph writeback guidance, and privacy-control prompts.]
+
+## Skill Version(s):
+
+2.2.0 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

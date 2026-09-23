@@ -1,45 +1,62 @@
-## Description: <br>
-Monitors pet media for restricted-area entry, dining-table climbing, and trash-rummaging behavior, then returns alerts and structured analysis reports for home pet monitoring. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Monitors pet videos for restricted-area intrusion, dining-table climbing, and trash rummaging, then returns alert-oriented analysis results and report links.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Pet owners and home-monitoring agents use this skill to analyze uploaded or URL-based pet media for restricted-area and nuisance behavior, receive structured warning results, and query cloud-stored historical reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet-monitoring media or media URLs are sent to external lifeemergence.com/open.lifeemergence.com services for analysis. <br>
-Mitigation: Use only media that is appropriate to share with the service provider, and review the provider's retention, access, and privacy controls before processing private household footage. <br>
-Risk: The skill can silently create or reuse a cloud-linked identity for report association. <br>
-Mitigation: Install and run it only in workspaces where automatic identity creation is acceptable, and review the generated identity before sharing the workspace. <br>
-Risk: Service tokens and user history may be stored in the workspace data directory. <br>
-Mitigation: Protect the workspace data directory, avoid committing it, and remove stored tokens or history when decommissioning the skill. <br>
+## Use Case:
 
+External users and developers use this skill to analyze home pet monitoring videos or URLs for restricted-zone and prohibited-behavior alerts, and to retrieve cloud-stored historical reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-restricted-area-warning-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON text with optional report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save analysis output to a user-specified file path.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata; artifact frontmatter reports 1.0.7) <br>
+Risk: Private home monitoring media may be uploaded to a remote analysis service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use non-sensitive test media until the publisher documents the backend, data handling, retention, and deletion controls.
+
+Risk: The skill can silently create or reuse an account identity and store authentication tokens locally.
+
+Mitigation: Use an isolated test identity, review local token storage before use, and avoid real accounts unless identity and token controls are documented.
+
+Risk: Configuration and scan evidence indicate unsafe or under-scoped network paths, including development or non-HTTPS endpoints.
+
+Mitigation: Require HTTPS-only production endpoints and restrict authenticated requests to trusted hosts before deployment.
+
+Risk: Historical report queries may expose cloud-stored monitoring reports.
+
+Mitigation: Confirm access controls, user consent, report retention, and deletion options before enabling history lookup.
+
+## Reference(s):
+
+- [API interface documentation](artifact/references/api_doc.md)
+- [Skill usage demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown or JSON analysis report text with optional report export links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May save report output to a user-provided local file path.]
+
+## Skill Version(s):
+
+1.0.14 (source: server release metadata; artifact/SKILL.md frontmatter says 1.0.16)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

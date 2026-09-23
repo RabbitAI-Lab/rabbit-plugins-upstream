@@ -1,46 +1,46 @@
 project:
-  name: 支付重构
-  phase: 规划中
+  name: Payment Refactoring
+  phase: planning
   start_date: 2024-01-01
   target_end: 2024-04-30
 sprint:
   num: 3
 wbs:
   - id: w1
-    name: 需求调研
+    name: Requirements Research
     level: 1
-    deliverable: 需求规格书
-    owner: 产品经理
+    deliverable: Requirements Specification
+    owner: Product Manager
     estimate: 10
     duration: 10
     start: 2024-01-01
     end: 2024-01-12
     dependsOn: ""
   - id: w2
-    name: 方案设计
+    name: Solution Design
     level: 1
-    deliverable: 架构方案
-    owner: 架构师
+    deliverable: Architecture Plan
+    owner: Architect
     estimate: 8
     duration: 8
     start: 2024-01-15
     end: 2024-01-26
     dependsOn: w1
   - id: w3
-    name: 核心开发
+    name: Core Development
     level: 1
-    deliverable: 可运行版本
-    owner: 研发组长
+    deliverable: Runnable Build
+    owner: Dev Lead
     estimate: 30
     duration: 30
     start: 2024-01-29
     end: 2024-03-15
     dependsOn: w2
   - id: w4
-    name: 上线验收
+    name: Go-live Acceptance
     level: 1
-    deliverable: 生产环境
-    owner: 测试经理
+    deliverable: Production Environment
+    owner: QA Manager
     estimate: 12
     duration: 12
     start: 2024-03-18
@@ -48,28 +48,28 @@ wbs:
     dependsOn: w3
 tasks:
   - id: t1
-    name: 需求评审
+    name: Requirements Review
     duration: 3
     deps: ""
     start: 2024-01-01
     end: 2024-01-04
     milestone: false
   - id: t2
-    name: 设计评审
+    name: Design Review
     duration: 4
     deps: t1
     start: 2024-01-08
     end: 2024-01-12
     milestone: true
   - id: t3
-    name: 迭代开发
+    name: Iterative Development
     duration: 20
     deps: t2
     start: 2024-01-15
     end: 2024-02-09
     milestone: false
   - id: t4
-    name: 上线
+    name: Go-live
     duration: 2
     deps: t3
     start: 2024-04-01
@@ -105,47 +105,47 @@ burndown:
     ideal: 0
 dependencies:
   - id: d1
-    from: 订单服务
-    to: 支付服务
-    type: 接口
-    status: 进行中
-    blocker: 否
+    from: Order Service
+    to: Payment Service
+    type: Interface
+    status: in progress
+    blocker: no
   - id: d2
-    from: 支付服务
-    to: 风控服务
-    type: 决策
-    status: 规划中
-    blocker: 是
+    from: Payment Service
+    to: Risk Service
+    type: Decision
+    status: planning
+    blocker: yes
   - id: d3
-    from: 风控服务
-    to: 账务服务
-    type: 数据
-    status: 已完成
-    blocker: 否
+    from: Risk Service
+    to: Accounting Service
+    type: Data
+    status: done
+    blocker: no
 governance:
   parts:
-    - name: 核心交易
+    - name: Core Trading
       methodology: waterfall
-      gate: GA-评审
+      gate: GA Review
       decision_owner: CTO
-    - name: 商户台
+    - name: Merchant Portal
       methodology: agile
-      gate: Sprint 评审
-      decision_owner: 产品VP
-    - name: 数据平台
+      gate: Sprint Review
+      decision_owner: Product VP
+    - name: Data Platform
       methodology: hybrid
-      gate: 阶段门
-      decision_owner: 数据负责人
+      gate: Stage Gate
+      decision_owner: Data Lead
   principles:
-    - 关口未过不得进入下一阶段
-    - 混合部分按各自方法论度量，统一健康度上报
+    - No entry to the next phase until the gate is passed
+    - Hybrid parts are measured by their own methodology; health is reported in a unified way
 map:
-  - macro_milestone: M1 交易闭环
-    micro_iteration: I1 下单
-    alignment_status: 已对齐
-  - macro_milestone: M1 交易闭环
-    micro_iteration: I2 支付
-    alignment_status: 已对齐
-  - macro_milestone: M2 风控上线
-    micro_iteration: I3 风控规则
-    alignment_status: 有偏差
+  - macro_milestone: M1 Trading Loop
+    micro_iteration: I1 Order Placement
+    alignment_status: aligned
+  - macro_milestone: M1 Trading Loop
+    micro_iteration: I2 Payment
+    alignment_status: aligned
+  - macro_milestone: M2 Risk Control Go-live
+    micro_iteration: I3 Risk Rules
+    alignment_status: drift

@@ -1,45 +1,62 @@
-## Description: <br>
-Analyzes pet or home camera media to detect pet entry into an active UV disinfection area, assess UV lamp status, produce risk alerts, recommend shutdown actions, and retrieve historical reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet-safety camera images or videos to identify when a pet enters an active UV-C disinfection area, produce a structured risk report, and recommend shutting off the lamp when UV exposure risk is detected.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, developers, and operators use this skill to analyze pet safety risks in UV disinfection spaces from uploaded or URL-based media. It supports structured monitoring reports, high-risk alerts, UV lamp shutdown recommendations, and historical report lookup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles sensitive pet and home camera media through the publisher's cloud services. <br>
-Mitigation: Use only with media that may be sent to the publisher's service, and review cloud-processing expectations before deployment. <br>
-Risk: The security evidence reports automatic identity creation or reuse, login to an external service, and local token storage. <br>
-Mitigation: Review the code and clear local workspace data, databases, or tokens if the skill is no longer used. <br>
-Risk: UV lamp state recognition can be affected by lighting conditions when visual glow detection is used. <br>
-Mitigation: Prefer supported smart-home API linkage or device state signals where available, and treat visual-only detections as safety-supporting alerts rather than medical advice. <br>
+## Use Case:
 
+External users and developers use this skill to analyze smart-home or facility camera media for pet entry into UV disinfection zones, UV lamp status, and resulting safety alerts. It can also query prior UV safety monitoring reports through the configured cloud service.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-uv-safety-monitor-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Pet UV safety monitor API documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured analysis reports with command-line usage guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include risk level, detected pet type, UV lamp status, recommended actions, event logs, report links, and historical report tables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact SKILL.md frontmatter says 1.0.6) <br>
+Risk: Pet-safety video is uploaded to remote services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require clear disclosure of upload, retention, and access practices before deployment.
+
+Risk: The inspected artifacts include silent user identity creation and token storage.
+
+Mitigation: Review identity handling, token storage, and report-history access controls before installation.
+
+Risk: The inspected artifacts include insecure development HTTP endpoints.
+
+Mitigation: Use only a production configuration that enforces HTTPS endpoints.
+
+Risk: The skill describes UV-lamp shutoff recommendations but the inspected evidence does not establish it as a dependable real-time safety control.
+
+Mitigation: Keep independent UV-lamp safety controls in place and treat skill output as advisory until validated in the deployment environment.
+
+## Reference(s):
+
+- [API documentation](artifact/references/api_doc.md)
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-uv-safety-monitor-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown or JSON structured analysis report with safety status, recommendations, and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local video input, remote video URL input, pet type selection, detail level selection, optional file output, and report-history listing.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release metadata; artifact frontmatter reports 1.0.14)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

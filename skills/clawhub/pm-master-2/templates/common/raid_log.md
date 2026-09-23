@@ -1,7 +1,7 @@
 # RAID Log · {{ project.name }}
 
 > The RAID log (Risks / Assumptions / Issues / Dependencies) is the one-page daily-management board that tracks risks, assumptions, issues, and dependencies for fast stand-up / weekly review.
-> Color key: 🟢 green (1–4) ｜ 🟡 yellow (5–9) ｜ 🟠 orange (10–15) ｜ 🔴 red (16–25), auto-derived from score (shown even when severity is blank).
+> Color key: 🟢 green (1–4) | 🟡 yellow (5–9) | 🟠 orange (10–15) | 🔴 red (16–25), auto-derived from score (shown even when severity is blank).
 
 ## R · Risks
 | ID | Severity | Description | Score | Owner | Mitigation |
