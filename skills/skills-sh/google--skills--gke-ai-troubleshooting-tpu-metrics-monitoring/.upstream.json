@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-ai-troubleshooting-tpu-metrics-monitoring",
+  "repo": "google/skills",
+  "skillId": "gke-ai-troubleshooting-tpu-metrics-monitoring",
+  "branch": "main",
+  "pushedAt": "2026-09-22T23:08:51Z",
+  "contentHash": "4d943030e90bbb9d048b08153b6e626175af01e8f1faa9785b71b300c7dff89b",
+  "fetchedAt": "2026-09-23T12:50:35.196Z"
+}
