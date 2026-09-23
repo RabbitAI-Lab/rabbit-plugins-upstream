@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/scvi-tools",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/scvi-tools",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/scvi-tools",
+  "branch": "main",
+  "pushedAt": "2026-09-23T07:46:59Z",
+  "contentHash": "3435d88623b38bf35e0dd1d94089e7f1023fbafd90c26233336bc0547de44987",
+  "fetchedAt": "2026-09-23T12:49:10.742Z"
+}

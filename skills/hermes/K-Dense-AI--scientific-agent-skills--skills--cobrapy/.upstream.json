@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/cobrapy",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/cobrapy",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/cobrapy",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "4487e58633ed880530d2e21e893324627e2686327bdc45e7ab8eabf7c40f343c",
+  "fetchedAt": "2026-09-23T12:49:22.731Z"
+}

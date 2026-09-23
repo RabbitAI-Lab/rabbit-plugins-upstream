@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/markitdown",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/markitdown",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/markitdown",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "e5fb55d395157679604efc71c6ede4d5c3a8f3b83670a4a845b4e2251c2f8e74",
+  "fetchedAt": "2026-09-23T12:49:22.776Z"
+}

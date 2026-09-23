@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/gget",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/gget",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/gget",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "30d98a54e266610f044c324a229ce2bb3e3b186d831c0e950f872b79c507b79b",
+  "fetchedAt": "2026-09-23T12:49:22.757Z"
+}
