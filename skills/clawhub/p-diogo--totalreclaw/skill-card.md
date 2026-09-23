@@ -1,48 +1,56 @@
-## Description: <br>
-End-to-end encrypted, decentralized memory for OpenClaw with native memory_search and memory_get recall plus background fact capture. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+End-to-end encrypted, decentralized memory for OpenClaw, with automatic recall through memory_search and memory_get and background fact capture.
 
-## Publisher: <br>
-[p-diogo](https://clawhub.ai/user/p-diogo) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[p-diogo](https://clawhub.ai/user/p-diogo)
 
-## Use Case: <br>
-Developers and OpenClaw users install this skill to give agents persistent encrypted memory, automatic background fact capture, explicit memory writes, recall, import, export, curation, and account pairing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The plugin can read local OpenClaw conversation history and extract facts in the background. <br>
-Mitigation: Install it only when cross-session automatic memory is desired, and disable or configure extraction when background capture is not acceptable. <br>
-Risk: The plugin may use configured LLM provider keys while extracting or processing memories. <br>
-Mitigation: Review provider configuration before installation and limit credentials to the intended account or environment. <br>
-Risk: Recovery phrases and credential files are sensitive key material. <br>
-Mitigation: Use the browser-based pairing flow and do not paste recovery phrases into chat or inspect credential files through an agent. <br>
-Risk: The plugin contacts TotalReclaw, GitHub, and configured provider endpoints and persists encrypted memories. <br>
-Mitigation: Confirm endpoint and data-retention expectations before deployment, especially in managed or shared OpenClaw environments. <br>
+## Use Case:
 
+OpenClaw users and agent developers use TotalReclaw to add persistent encrypted memory, automatic recall, explicit memory saves, account pairing, import, export, and curation workflows to an agent.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/p-diogo/skills/totalreclaw) <br>
-- [TotalReclaw Homepage](https://totalreclaw.xyz) <br>
-- [TotalReclaw OpenClaw Setup Guide](https://github.com/p-diogo/totalreclaw/blob/main/docs/guides/openclaw-setup.md) <br>
-- [TotalReclaw 3.3.13 Release](https://github.com/p-diogo/totalreclaw/releases/tag/v3.3.13) <br>
-- [OpenClaw](https://github.com/openclaw/openclaw) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON snippets, setup URLs, PINs, and memory recall text.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill can guide pairing, installation, explicit memory writes, memory recall, import/export, status checks, and configuration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.3.13 (source: server release evidence, SKILL.md frontmatter, package.json, skill.json) <br>
+Risk: The plugin has broad background access to local OpenClaw conversations, credentials, host configuration, and persistent instructions under the same OS account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only on a dedicated machine or OS user, use a dedicated recovery phrase, and use a narrowly scoped LLM provider key.
+
+Risk: The security evidence flags remotely downloaded executable code as something users should review carefully.
+
+Mitigation: Avoid shared multi-agent or multi-user gateways until polling and credential access are limited to the active agent and remote executable loading is removed or verified with a stronger trust root.
+
+## Reference(s):
+
+- [ClawHub TotalReclaw listing](https://clawhub.ai/p-diogo/skills/totalreclaw)
+- [TotalReclaw homepage](https://totalreclaw.xyz)
+- [OpenClaw setup guide](https://github.com/p-diogo/totalreclaw/blob/main/docs/guides/openclaw-setup.md)
+- [Release 3.4.1](https://github.com/p-diogo/totalreclaw/releases/tag/v3.4.1)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON snippets, and agent tool instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces operational guidance for OpenClaw memory setup, recall, explicit saves, pairing, import, export, and curation.]
+
+## Skill Version(s):
+
+3.4.1 (source: SKILL.md frontmatter, package.json, skill.json, server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

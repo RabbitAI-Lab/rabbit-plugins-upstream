@@ -1,40 +1,53 @@
-## Description: <br>
-Extracts structured knowledge from conversations and meetings, classifies it, and saves it to a knowledge base or document system. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+从对话和讨论中提取结构化知识，自动分类并保存到知识库或文档系统。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Personal users and agents use this skill to extract knowledge points, meeting notes, decisions, and action items from conversations or documents, then organize them for reuse. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Captured notes could be saved, exported, archived, modified, deleted, or sent to a callback URL without the intended destination being clear. <br>
-Mitigation: Specify the output path or knowledge-base destination and ask for a preview or confirmation before saving, exporting, archiving, modifying, deleting, or using any callback URL. <br>
-Risk: The skill can use read/write and command execution for knowledge-management tasks. <br>
-Mitigation: Install and run it only in trusted workspaces, review proposed file or command actions before execution, and limit access to private conversations or documents. <br>
+## Use Case:
 
+External users, developers, and teams use this skill to extract knowledge points, meeting decisions, action items, and categorized records from conversations or documents for saving into a knowledge base or documentation system.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/knowledge-capture-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Structured text, Markdown, JSON/YAML examples, and occasional shell or Python snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read and write files for knowledge-management tasks; users should specify the destination before saving or exporting results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The skill may use shell commands and broad file or API operations without clear limits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep the skill constrained to explicit knowledge-capture tasks, review any command before it runs, and control where outputs are saved.
+
+Risk: Knowledge-capture inputs may include sensitive documents or private conversations.
+
+Mitigation: Avoid using the skill on sensitive material unless you control output storage and whether external services are contacted.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/knowledge-capture-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with code blocks and structured JSON or YAML examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce structured knowledge records, meeting summaries, action items, and file or command proposals depending on the task.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence; artifact metadata reports 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

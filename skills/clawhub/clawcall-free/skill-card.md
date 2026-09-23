@@ -1,43 +1,57 @@
-## Description: <br>
-Clawcall Free helps an AI agent place basic outbound calls to United States phone numbers, poll the call lifecycle to completion, and return the call outcome and transcript. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI语音代理拨打美国真实电话的免费版，支持基础外呼与轮询，并提供每日有限试用额度。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and developers use this skill when they want an agent to make low-risk outbound calls for tasks such as merchant inquiries, information lookups, or order-status checks, then report the transcript-backed result. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States phone calls only <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Using the skill may place real outbound phone calls and send call instructions to an external service. <br>
-Mitigation: Use it only for appropriate low-risk calls, confirm the target phone number and call objective before execution, and avoid emergency, medical, legal, or other high-stakes decisions. <br>
-Risk: The skill may store an API key and phone number in ~/.config/voicecall/key.json. <br>
-Mitigation: Manage file permissions for the local key file and delete it when credential retention is not desired. <br>
-Risk: Returned transcripts may contain sensitive details from the call. <br>
-Mitigation: Review transcripts before sharing them and avoid including private or unnecessary sensitive information in call instructions. <br>
+## Use Case:
 
+Developers, teams, and automation users use this skill to have an agent place basic outbound calls to US phone numbers, poll call status, and summarize the final outcome and transcript.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/clawcall-free) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+United States
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with API request examples and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include call IDs, lifecycle status, outcome, talk duration, transcripts, and local API key configuration guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: ClawHub release metadata) <br>
+Risk: The skill can cause an agent to place real outbound phone calls based on broad activation language.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user consent before each call and keep call instructions scoped to the user's stated purpose.
+
+Risk: The skill persistently stores an API key and phone number locally.
+
+Mitigation: Obtain consent before credential storage and document how users can delete or rotate the stored key.
+
+Risk: Call instructions and transcripts may contain sensitive information sent to or returned from an external service.
+
+Mitigation: Include only necessary information in the call task and review transcripts before sharing or retaining them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/clawcall-free)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown text with JSON examples and shell/API command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include call_id, lifecycle status, outcome, talk_seconds, transcript, and API key handling guidance.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata; artifact frontmatter lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

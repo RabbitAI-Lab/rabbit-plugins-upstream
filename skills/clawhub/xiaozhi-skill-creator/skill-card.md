@@ -1,42 +1,61 @@
-## Description: <br>
-Guides ClawHub users through creating, testing, and iterating custom SKILLs using a four-layer structure, privacy boundaries, template examples, and health checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+写一个新 SKILL 时用的编写工具，覆盖四层结构、边界声明、记忆字段、输出格式、安全与隐私边界、五步落地流程和常见问题诊断。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External ClawHub users and students use this skill to design personalized learning SKILLs, write and refine prompts, structure memory and output behavior, and test whether a new SKILL is working as intended. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Templates may encourage long-term memory, uploaded learning materials, reminders, or cross-SKILL sharing beyond a user's intent. <br>
-Mitigation: Keep memory, uploads, reminders, and cross-SKILL sharing explicitly opt-in, and scope stored or shared information to the minimum needed for the learning task. <br>
-Risk: Broad activation wording can cause the skill to be invoked for general prompt-writing help outside custom SKILL creation. <br>
-Mitigation: Narrow activation language when installing if the desired use is only SKILL creation, debugging, and iteration. <br>
+## Use Case:
 
+Developers, skill authors, and prompt-literate high school students use this skill to write or revise Chinese K12 learning skills with clear roles, rules, memory boundaries, output formats, and safety controls. It produces authoring guidance and templates rather than subject tutoring, exercise generation, or runtime actions.
 
-## Reference(s): <br>
-- [Skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-skill-creator) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [references/skill-templates-library.md](references/skill-templates-library.md) <br>
+### Deployment Geography for Use:
 
+Mainland China by default; localize emergency contacts, curriculum assumptions, language defaults, and minor-consent rules before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Configuration, Text] <br>
-**Output Format:** [Markdown and structured prompt templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes reusable SKILL prompt templates, privacy-boundary guidance, testing steps, iteration advice, and diagnostic checklists.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Mainland-China-specific emergency contacts, curriculum assumptions, language defaults, and minor-consent rules may not fit other regions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Localize those items before relying on the templates outside Mainland China.
+
+Risk: Skill drafts based on these templates can still contain unclear boundaries, unsafe retention rules, or unsuitable crisis wording if adopted without review.
+
+Mitigation: Review generated drafts against the shared vocabulary, platform conventions, crisis protocol, and schemas before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-skill-creator)
+- [Publisher profile](https://clawhub.ai/user/qizhitang)
+- [Skill templates library](artifact/references/skill-templates-library.md)
+- [Platform conventions](artifact/shared/platform-conventions.md)
+- [Crisis exception](artifact/shared/crisis-exception.md)
+- [Crisis referral protocol](artifact/shared/crisis-referral-protocol.md)
+- [Unified vocabulary](artifact/shared/vocab.md)
+- [DNA profile schema](artifact/shared/dna-profile.schema.json)
+- [Handover protocol schema](artifact/shared/handover-protocol.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Configuration]
+
+**Output Format:** [Markdown guidance and structured text templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Text-only authoring guidance; no hidden runtime, install, persistence, or execution behavior is indicated by security evidence.]
+
+## Skill Version(s):
+
+2.2.0 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

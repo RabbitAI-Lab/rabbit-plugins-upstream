@@ -8,7 +8,7 @@ import urllib.request
 import urllib.error
 
 PROXY_URL = "https://1439498936-bl10af74fl.ap-guangzhou.tencentscf.com"
-PROXY_TOKEN = os.environ.get("PROXY_TOKEN", "tp_8k2mX9vQ4z")
+PROXY_TOKEN = os.environ.get("PROXY_TOKEN", "")
 TIMEOUT = 30
 
 

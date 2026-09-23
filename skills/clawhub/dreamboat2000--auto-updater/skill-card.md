@@ -1,46 +1,58 @@
-## Description: <br>
-Automatically update Clawdbot and all installed skills once daily. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automatically update Clawdbot and all installed skills once daily. Runs via cron, checks for updates, applies them, and messages the user with a summary of what changed.
 
-## Publisher: <br>
-[dreamboat2000](https://clawhub.ai/user/dreamboat2000) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dreamboat2000](https://clawhub.ai/user/dreamboat2000)
 
-## Use Case: <br>
-Developers and Clawdbot users use this skill to configure unattended daily updates for Clawdbot and installed skills, then receive a concise summary of what changed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill configures unattended daily updates that can change Clawdbot and every installed skill without a manual review step. <br>
-Mitigation: Use the documented dry-run and manual update commands when review is required before code changes are applied. <br>
-Risk: A persistent cron job can continue applying updates after the user no longer wants automatic changes. <br>
-Mitigation: Confirm the user knows how to remove the Daily Auto-Update cron job or disable cron in configuration before enabling it. <br>
-Risk: Update commands may fail because of permissions, network timeouts, or package conflicts. <br>
-Mitigation: Report partial success clearly, surface errors in the summary, and direct the user to manual remediation such as checking permissions, connectivity, or running Clawdbot diagnostics. <br>
+## Use Case:
 
+Developers and Clawdbot users use this skill to configure recurring update checks that update Clawdbot and installed skills, then report what changed.
 
-## Reference(s): <br>
-- [Clawdbot Updating Guide](https://docs.clawd.bot/install/updating) <br>
-- [ClawdHub CLI](https://docs.clawd.bot/tools/clawdhub) <br>
-- [Cron Jobs](https://docs.clawd.bot/cron) <br>
-- [Agent Implementation Guide](references/agent-guide.md) <br>
-- [Update Summary Examples](references/summary-examples.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces cron setup guidance, update commands, verification steps, and human-readable update summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Automatic daily updates can change Clawdbot and all installed skills without a review step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer dry-run or notification-only workflows, pin or approve versions before applying them, and avoid running the updater under a highly privileged account.
+
+Risk: A recurring cron job may continue applying changes after the user's risk tolerance or environment changes.
+
+Mitigation: Document how to inspect and remove the cron job before enabling it, and periodically review whether automatic updates remain appropriate.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dreamboat2000/skills/auto-updater)
+- [Agent Implementation Guide](artifact/references/agent-guide.md)
+- [Update Summary Examples](artifact/references/summary-examples.md)
+- [Clawdbot Updating Guide](https://docs.clawd.bot/install/updating)
+- [ClawdHub CLI](https://docs.clawd.bot/tools/clawdhub)
+- [Cron Jobs](https://docs.clawd.bot/cron)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with shell command blocks and JSON configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces setup guidance, cron configuration commands, and update summary formats.]
+
+## Skill Version(s):
+
+1.0.1 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

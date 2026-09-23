@@ -1,44 +1,60 @@
-## Description: <br>
-A Chinese-language physics problem-solving coach that guides students through diagramming, physical modeling, calculation, and reflection instead of giving full answers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese K12 physics tutoring agent that guides middle-school through first-year high-school students through a four-step problem-solving flow: draw the physical situation, model it, calculate, then verify and reflect.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and tutors use this skill to work through physics exercises by first establishing a physical diagram, then selecting a model, writing equations, checking units, and reflecting on errors. It is especially oriented toward mechanics, circuits, optics, and common middle-school physics problem types. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may persist or sync detailed student learning records, including mistakes, answers, weak points, and recovery state. <br>
-Mitigation: Use it only when the platform provides clear consent, local-only storage when promised, deletion and export controls, and a no-storage mode; confirm these controls before using it with students, especially minors. <br>
-Risk: Image-based problem intake depends on multimodal vision or OCR and can misread unclear problem statements. <br>
-Mitigation: When image recognition is unavailable or uncertain, ask the student to type the problem and known conditions, then confirm the interpretation before continuing. <br>
+## Use Case:
 
+External students and tutors use this skill to work through a specific Chinese K12 physics problem with Socratic hints, diagram-first reasoning, model selection, calculation checks, and reflection. It is designed for current-session tutoring by default, with learning-record handoff or reminders only after explicit consent.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-problem-coach) <br>
-- [physics-4step-statemachine.md](artifact/references/physics-4step-statemachine.md) <br>
-- [physics-socrates-guide.md](artifact/references/physics-socrates-guide.md) <br>
-- [physics-diagram-guide.md](artifact/references/physics-diagram-guide.md) <br>
-- [claw-templates-physics.md](artifact/references/claw-templates-physics.md) <br>
+### Deployment Geography for Use:
 
+Global, with localization required outside Chinese K12 tutoring contexts.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Conversational Markdown guidance with prompts, checks, and step-by-step tutoring structure] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask the student to provide text descriptions or drawings when image/OCR support is unavailable.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: The skill is tailored to a Chinese K12 tutoring context and may be inappropriate if language, curriculum assumptions, crisis resources, or minor-consent rules do not match the deployment setting.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Localize the tutoring content and safety resources before deployment outside the intended context, and confirm applicable minor-consent requirements.
+
+Risk: Learning-record memory, cross-skill sharing, wrong-answer archiving, and reminders can affect student privacy if enabled without the required consent gates.
+
+Mitigation: Confirm the platform enforces explicit consent before profile memory, cross-skill sharing, wrong-answer archiving, or reminders are enabled.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-problem-coach)
+- [物理四步解题法状态机定义](artifact/references/physics-4step-statemachine.md)
+- [四类物理图景绘制追问手册](artifact/references/physics-diagram-guide.md)
+- [物理意图识别模板](artifact/references/claw-templates-physics.md)
+- [物理苏格拉底追问指南](artifact/references/physics-socrates-guide.md)
+- [高一必修第一册样板题](artifact/references/physics-hs1-worked-examples.md)
+- [Learning DNA profile schema](artifact/shared/dna-profile.schema.json)
+- [Handover protocol schema](artifact/shared/handover-protocol.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, json]
+
+**Output Format:** [Chinese conversational tutoring text with occasional Markdown structure and consent-gated JSON handoff records.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Current-session tutoring by default; optional profile reading, wrong-answer handoff, and reminders require explicit consent.]
+
+## Skill Version(s):
+
+2.2.0 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,59 @@
-## Description: <br>
-AI-powered plant growth stage detection for plant images, videos, or URLs that classifies phenological stage, reports confidence, and returns a structured analysis report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects plant growth stages from plant images or video by sending media for cloud analysis and returning the phenological stage, confidence, care guidance, and report links.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and developers use this skill to analyze plant images or videos from smart pots, home grow boxes, greenhouses, and plant factories, then determine the current growth stage and confidence. It can also query cloud-stored historical growth-stage reports for the resolved user identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Plant images, videos, and submitted URLs are processed by the LifeEmergence cloud service. <br>
-Mitigation: Avoid sensitive media and private or internal URLs unless cloud processing, retention, and deletion expectations are acceptable. <br>
-Risk: Historical report lookup queries cloud-stored report history associated with the resolved user identity. <br>
-Mitigation: Use only with accounts and workspaces where cloud report history access is expected and authorized. <br>
-Risk: The skill creates or reuses a local identity and stores backend session tokens locally. <br>
-Mitigation: Review local storage handling before deployment, restrict workspace access, and clear stored tokens when they are no longer needed. <br>
-Risk: Growth-stage analysis and care direction may be incomplete for ambiguous images, transitional stages, or plant-specific conditions. <br>
-Mitigation: Treat outputs as reference guidance, review confidence values, and avoid using the result as a specific agriculture operation plan without domain review. <br>
+## Use Case:
 
+External users and developers use this skill to analyze plant images or videos from smart pots, home grow boxes, greenhouses, or plant factories and identify the current growth stage. It can also retrieve cloud-hosted historical plant growth reports associated with the skill's internal user identity.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-growth-stage-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Plant growth stage API documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON structured analysis text, with optional report export links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write the rendered result to a caller-specified output file; supports basic, standard, and json detail modes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: ClawHub release evidence) <br>
+Risk: Plant media and report queries are handled through under-disclosed remote endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated workspace and account, inspect or change endpoint configuration before running, and avoid private greenhouse or home imagery unless the publisher clarifies endpoint ownership, retention, and access controls.
+
+Risk: The skill silently creates or reuses local identities and persists account or token state.
+
+Mitigation: Run in an isolated environment, review local state before and after use, and avoid sharing the workspace with unrelated users or projects.
+
+Risk: Growth-stage assessments and care suggestions may be wrong for unclear images, transitional stages, or plant-specific requirements.
+
+Mitigation: Treat results as reference guidance only, confirm with plant-specific context, and do not use outputs as the sole basis for agricultural decisions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-growth-stage-detection-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [API Documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, files, guidance]
+
+**Output Format:** [JSON or Markdown report text, with optional saved output file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Analysis results include plant growth stage, confidence, general care guidance, and report links; history mode returns a Markdown table from cloud report data.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata; artifact frontmatter says 1.0.12)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

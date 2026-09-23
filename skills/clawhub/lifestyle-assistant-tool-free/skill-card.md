@@ -1,39 +1,52 @@
-## Description: <br>
-生活助手免费版 helps individual users manage tasks, summarize long messages, coordinate schedules, and organize local personal information. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+生活助手免费版 helps users manage personal tasks, summarize emails, coordinate schedules, and maintain local productivity records through a Chinese-language agent workflow.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[thcjp](https://clawhub.ai/user/thcjp)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+External users, independent developers, freelancers, and small teams use this skill to turn personal tasks, long emails, meeting requests, and notes into structured local plans, summaries, reminders, and records.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The skill can create and maintain local task, note, reminder, and email-summary files that may contain personal or work-sensitive information.
+
+Mitigation: Use it only when local storage under $HOME/.assistant is acceptable, and periodically review or remove stored files that contain sensitive details.
+
+Risk: The skill includes broad disclosed command and file capabilities for setup, backup, and diagnostics.
+
+Mitigation: Review proposed shell commands before execution and limit use to trusted workspaces and expected local productivity operations.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Personal users, freelancers, and independent developers use this skill to capture and break down tasks, track due dates, summarize emails, check schedule conflicts, and keep notes or reminders in a local personal-assistant workflow. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The quick-start setup command can overwrite an existing ~/.assistant/config.json file. <br>
-Mitigation: Check for an existing config file and back it up or merge settings before running commands that redirect output to ~/.assistant/config.json. <br>
-Risk: The skill creates and updates local task, email, note, and reminder files under ~/.assistant. <br>
-Mitigation: Review generated files before relying on them and apply normal local backup and access-control practices for personal data. <br>
+**Output Format:** [Markdown and structured text with optional JSON, YAML, Python, and shell command examples]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
+**Other Properties Related to Output:** [Outputs may include task breakdowns, email summaries, schedule suggestions, local file structures, setup commands, and configuration snippets.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell snippets, Python examples, YAML configuration, and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Free edition focuses on single-user local storage under ~/.assistant and does not require external API keys.] <br>
+1.0.3 (source: server release evidence)
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

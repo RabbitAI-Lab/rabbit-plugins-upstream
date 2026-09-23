@@ -1,44 +1,52 @@
-## Description: <br>
-Spanish direct-response copywriting guidance for drafting ads, sales emails, landing pages, headlines, hooks, VSLs, social posts, offers, and other persuasive sales text. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Spanish-language direct-response copywriting guidance for ads, sales emails, landing pages, headlines, hooks, VSLs, social posts, offers, and other persuasive sales copy.
 
-## Publisher: <br>
-[highvalue-llc](https://clawhub.ai/user/highvalue-llc) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[highvalue-llc](https://clawhub.ai/user/highvalue-llc)
 
-## Use Case: <br>
-External users and business teams use this skill to generate Spanish sales copy for advertisements, sales emails, landing pages, video sales letters, social posts, offers, and conversion-focused headlines. The skill helps diagnose the audience, choose a copywriting framework, and produce complete persuasive drafts with headline variants and testing suggestions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated sales copy may include unverified claims, unrealistic guarantees, inaccurate testimonials, or unsupported scarcity. <br>
-Mitigation: Review generated copy for truthful claims, real scarcity, accurate testimonials, and compliant guarantees before publication. <br>
-Risk: Spanish copy may use the wrong tone, register, or dialect for the intended audience. <br>
-Mitigation: Adapt the output to the target audience's language, dialect, and brand voice before use. <br>
+## Use Case:
 
+External users and marketers use this skill to draft and improve Spanish persuasive copy across ads, email sequences, landing pages, sales letters, headlines, hooks, and offers using established direct-response frameworks.
 
-## Reference(s): <br>
-- [Copywriting Master on ClawHub](https://clawhub.ai/highvalue-llc/copywriting-master) <br>
-- [Publisher profile: highvalue-llc](https://clawhub.ai/user/highvalue-llc) <br>
-- [Frameworks de Copywriting - Referencia Completa](references/frameworks.md) <br>
-- [Secuencias de Email - Guia Completa](references/email-sequences.md) <br>
-- [Carta de Ventas Larga - Estructura Completa](references/sales-letter.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown text, usually in Spanish, with complete copy drafts, headline variants, framework notes, and A/B testing suggestions.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The artifact is Markdown-only and produces advisory copywriting content; users should review factual claims, proof, guarantees, scarcity, and dialect before publication.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The skill may produce direct, urgency-driven marketing language with claims, testimonials, scarcity, guarantees, or regulated-industry statements that could be inaccurate or non-compliant if published unchecked.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated copy for truthfulness, substantiation, real scarcity or deadlines, guarantee terms, testimonial accuracy, and industry-specific compliance before publication.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/highvalue-llc/skills/copywriting-master)
+- [Frameworks de Copywriting](references/frameworks.md)
+- [Secuencias de Email](references/email-sequences.md)
+- [Carta de Ventas Larga](references/sales-letter.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown prose with structured copy sections, headline variants, framework rationale, and improvement or A/B testing suggestions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Spanish-language persuasive copy; generated marketing claims, testimonials, urgency, scarcity, guarantees, and regulated-industry content require review before publication.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

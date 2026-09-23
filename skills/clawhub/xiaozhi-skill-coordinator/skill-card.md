@@ -1,42 +1,61 @@
-## Description: <br>
-Coordinates mistake notebooks, Feynman tests, Cornell notes, study plans, and focus data only for explicit learning tasks with user consent and minimal necessary summaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+学习系统协调器判断学习请求应由哪个 Skill 接手，并在用户请求或同意后汇总授权摘要形成全景月报。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External learners and learning assistants use this skill to decide when to coordinate mistake review, explanation checks, note retrieval, study planning, focus coaching, reminders, and monthly learning-system summaries. It is intended for explicit user-requested coordination rather than automatic broad data collection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill coordinates summaries from multiple learning skills, which can expose more learner context than a single-skill workflow. <br>
-Mitigation: Use it only for explicit coordination, system-check, or monthly-report tasks, and keep inputs limited to the minimum necessary authorized summaries. <br>
-Risk: Study-profile writebacks or reminder synchronization could persist incorrect or unwanted updates if used without consent. <br>
-Mitigation: Require explicit user permission before writebacks or reminder sync, and block malformed handover data with the provided schema before persistence. <br>
+## Use Case:
 
+Students, parents, teachers, and learning-support agents use this skill to route learning requests among related study skills, avoid duplicate handoffs, and generate consent-bounded system health checks or monthly learning summaries.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-skill-coordinator) <br>
-- [One-week linkage record](references/one-week-linkage-record.md) <br>
-- [Handover protocol schema](schemas/handover-protocol.schema.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with optional structured JSON handover blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses consent-gated summaries and schema-validated handover payloads when coordinating with related learning skills.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Learning summaries may include student data that is routed among related skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enable cross-skill sharing only after confirming consent settings and limit summaries to the fields needed for the current task.
+
+Risk: Parent views, teacher writebacks, reminders, and long-term profiles can expose or retain sensitive learning information.
+
+Mitigation: Confirm who may view, change, delete, pause, or export linkage records before enabling those features.
+
+Risk: Reminder handoff and linkage-record wording has minor ambiguity in the security review.
+
+Mitigation: Review reminder and linkage-record messages before deployment so users understand what is queued, stored, or merely suggested.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/qizhitang/skills/xiaozhi-skill-coordinator)
+- [One-week linkage record example](references/one-week-linkage-record.md)
+- [Handover protocol schema](schemas/handover-protocol.schema.json)
+- [Platform conventions](shared/platform-conventions.md)
+- [Crisis exception protocol](shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, JSON, Configuration]
+
+**Output Format:** [Markdown guidance with structured JSON handoff examples and text reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are consent-bounded routing decisions, summary reports, and handoff payload guidance; the skill does not directly teach, analyze root causes, issue reminders, or write records without authorization.]
+
+## Skill Version(s):
+
+2.2.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

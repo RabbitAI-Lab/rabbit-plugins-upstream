@@ -1,45 +1,59 @@
-## Description: <br>
-Scans OpenClaw agent memory files and workspace configuration files for malicious instructions, prompt injection, credential leakage, and related security threats. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scans OpenClaw agent memory files and workspace configuration files for malicious content, credential leaks, prompt injections, and related security threats.
 
-## Publisher: <br>
-[dgriffin831](https://clawhub.ai/user/dgriffin831) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[dgriffin831](https://clawhub.ai/user/dgriffin831)
 
-## Use Case: <br>
-Developers and operators use this skill to scan OpenClaw memory, daily logs, and workspace configuration files for stored prompt attacks, exposed credentials, and other security threats before continuing agent work. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The scanner can read OpenClaw memory and workspace configuration files that may contain sensitive content. <br>
-Mitigation: Install and run it only when memory and configuration scanning is intended, and review findings before sharing or acting on them. <br>
-Risk: Remote analysis can send redacted memory content to OpenAI or Anthropic when explicitly enabled. <br>
-Mitigation: Keep remote scanning disabled unless external LLM analysis is intended; use --allow-remote only after confirming the data-sharing posture. <br>
-Risk: Quarantine actions modify memory files by redacting lines or replacing files. <br>
-Mitigation: Use quarantine only after reviewing findings; the artifact creates backups before modification so original content can be inspected or restored. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dgriffin831/skills/memory-scan) <br>
-- [README](artifact/README.md) <br>
-- [Detection prompt](artifact/docs/detection-prompt.md) <br>
-- [Testing](artifact/TESTING.md) <br>
-- [Changelog](artifact/CHANGELOG.md) <br>
+## Use Case:
 
+Developers and agent operators use this skill to scan stored OpenClaw memory and workspace configuration files for injected instructions, leaked credentials, prompt stealing attempts, and other security-relevant content before the agent acts on it.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Human-readable scan summaries, optional JSON reports, quiet severity-score output, and shell commands for scanning, scheduling, or quarantine.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Severity levels are SAFE, LOW, MEDIUM, HIGH, and CRITICAL; MEDIUM or higher findings are intended for review and optional alerting.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and changelog, released 2026-02-01) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Optional remote analysis can send memory and configuration content to an external LLM provider after best-effort redaction.
+
+Mitigation: Use the default local scan mode unless remote review is explicitly acceptable, and review redaction expectations before running with --allow-remote.
+
+Risk: The quarantine script modifies target files and can overwrite content outside the intended memory area if pointed at the wrong path.
+
+Mitigation: Run quarantine only on intended memory files after reviewing findings; rely on the backup created under .memory-scan/quarantine/ before restoring or deleting content.
+
+Risk: Scheduled scanning creates persistent daily automation.
+
+Mitigation: Review the cron job after setup and disable it if daily background scans or alert delivery are not wanted.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dgriffin831/skills/memory-scan)
+- [README](artifact/README.md)
+- [Testing](artifact/TESTING.md)
+- [Detection Prompt](artifact/docs/detection-prompt.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Human-readable terminal report, JSON scan results, quiet severity/score line, and concise agent-facing recommendations.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can scan a specific file or recent memory logs; remote LLM analysis is disabled by default and enabled only with --allow-remote.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata and CHANGELOG, released 2026-02-01)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

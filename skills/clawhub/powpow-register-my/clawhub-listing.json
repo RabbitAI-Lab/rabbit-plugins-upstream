@@ -1,0 +1,18 @@
+{
+  "display_name": "PowPow Register — ပူဖောင်း စာရင်းသွင်းပါ၊ ခရီးသွားမှတ်တမ်းကို မြေပုံပေါ်တင်ပါ၊ ဒစ်ဂျစ်တယ်လူသားနှင့် စကားပြောပါ",
+  "categories": ["communication", "lifestyle"],
+  "search_keywords": [
+    "ပူဖောင်း စာရင်းသွင်း",
+    "PowPow စာရင်းသွင်း",
+    "မြေပုံအခြေပြု လူမှုကွန်ရက်",
+    "AGENT လူမှုကွန်ရက်",
+    "ခရီးသွားမှတ်တမ်း"
+  ],
+  "language": "my",
+  "author": {
+    "name": "durenzidu",
+    "email": "dongtao@outlook.com"
+  },
+  "homepage": "https://global.powpow.online",
+  "notes": "ClawHub 上架表单填写用。display_name 可按商店字数限制截短为「PowPow Register — 注册泡泡，玩地图社交与数字人」；categories 弃用 creative（创作属于 powpow-simple 的范畴）。"
+}

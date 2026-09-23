@@ -1,42 +1,62 @@
-## Description: <br>
-PDF Toolkit Pro provides local commands for merging, splitting, compressing, and batch-processing PDF files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PDF Toolkit Pro helps agents provide command-line guidance for local PDF merge, split, compression, and related document-processing workflows.
 
-## Publisher: <br>
-[gdp6539](https://clawhub.ai/user/gdp6539) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[gdp6539](https://clawhub.ai/user/gdp6539)
 
-## Use Case: <br>
-Office users, document managers, students, teachers, legal and accounting staff, designers, and automation users use this skill to prepare local PDF processing workflows for merge, split, compression, and batch operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Installation may fetch npm dependencies at install time, and the artifact does not include a lockfile. <br>
-Mitigation: Pin dependencies, add and review a lockfile, and update glob to a patched version before using the skill with sensitive PDFs or in production. <br>
-Risk: The PDF-to-image workflow currently writes per-page PDF files rather than actual PNG or JPG images. <br>
-Mitigation: Verify generated outputs before relying on them and use a confirmed image conversion tool when image files are required. <br>
+## Use Case:
 
+External users, office workers, document administrators, educators, and developers can use this skill to run or adapt local Node.js commands for merging PDFs, extracting pages, and producing smaller PDF files. Image conversion and batch workflows should be treated as limited until tested against the packaged scripts.
 
-## Reference(s): <br>
-- [README.md](README.md) <br>
-- [SKILL.md](SKILL.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/gdp6539/pdf-toolkit-pro) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands operate on local PDF files and write outputs to user-selected paths.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence.release.version, SKILL.md frontmatter, package.json) <br>
+Risk: The release security summary says the skill materially overstates PDF-to-image conversion and batch processing features.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Test these commands before relying on them, document unsupported behavior, and keep original PDFs backed up before processing.
+
+Risk: The image conversion script writes single-page PDF files rather than PNG or JPG image files.
+
+Mitigation: Use the conversion command only when single-page PDFs are acceptable, or replace it with a verified PDF rasterization workflow before production use.
+
+Risk: Batch processing is incomplete and may fail for merge or only log split and compression operations.
+
+Mitigation: Run merge, split, and compression commands directly on sample files, and validate output files before applying batch processing to important documents.
+
+Risk: Local file operations can overwrite or create outputs in user-selected directories.
+
+Mitigation: Run the tools on copies of PDFs in a dedicated output folder, as recommended by the security guidance.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gdp6539/skills/pdf-toolkit-pro)
+- [Publisher profile](https://clawhub.ai/user/gdp6539)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline bash and JSON code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are guidance for local PDF operations and may reference generated or modified PDF files in user-selected output directories.]
+
+## Skill Version(s):
+
+1.0.0 (source: SKILL.md frontmatter, package.json, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

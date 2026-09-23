@@ -1,42 +1,53 @@
-## Description: <br>
-Azure Infra provides chat-based Azure infrastructure assistance using Azure CLI and portal context for querying, auditing, monitoring resources, and proposing safe changes with explicit confirmation before write or destructive actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Chat-based Azure infrastructure assistance using Azure CLI and portal context. Use for querying, auditing, and monitoring Azure resources (VMs, Storage, IAM, Functions, AKS, App Service, Key Vault, Azure Monitor, billing, etc.), and for proposing safe changes with explicit confirmation before any write/destructive action.
 
-## Publisher: <br>
-[bmdhodl](https://clawhub.ai/user/bmdhodl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[bmdhodl](https://clawhub.ai/user/bmdhodl)
 
-## Use Case: <br>
-Developers, cloud engineers, and operators use this skill to inspect Azure subscriptions, audit security, cost, and health signals, and prepare Azure CLI changes that require confirmation before execution. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill can propose Azure CLI write, delete, IAM, scaling, billing, or deployment actions against an Azure subscription. <br>
-Mitigation: Keep actions read-only by default, and before any write or destructive action require confirmation after reviewing the subscription, resource group, exact command, and dry-run output where available. <br>
-Risk: The skill uses the current Azure CLI login to inspect cloud infrastructure and may surface resource, access, cost, or monitoring details. <br>
-Mitigation: Install only where the agent is allowed to inspect the Azure tenant, and do not reveal or log secrets such as keys, tokens, client secrets, or credentials. <br>
-Risk: Multiple Azure subscriptions or tenants can cause queries or changes to target the wrong scope. <br>
-Mitigation: Confirm and state the active subscription or tenant before subscription-scoped results or any proposed change. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [Azure CLI Query Patterns](references/azure-cli-queries.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/bmdhodl/skills/azure-infra) <br>
+## Use Case:
 
+Developers, cloud engineers, and operators use this skill to inspect Azure resources through a local Azure CLI session, audit common infrastructure and security areas, monitor health and cost signals, and prepare safe command proposals for changes that require explicit confirmation.
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Analysis, Shell commands, Configuration instructions] <br>
-**Output Format:** [Markdown responses with inline Azure CLI commands and summarized command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Defaults to read-only Azure CLI usage; write or destructive actions require explicit confirmation.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: ClawHub release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill can propose Azure CLI commands that affect real cloud resources if executed in the user's active session.
+
+Mitigation: Review each command before execution, confirm the intended subscription or tenant, and require explicit confirmation for resource, IAM, billing, credential, or deletion changes.
+
+Risk: Azure inspection may expose sensitive operational details or secrets from the local environment.
+
+Mitigation: Use the skill only with intended Azure accounts and avoid revealing or logging keys, client secrets, tokens, or credential values.
+
+## Reference(s):
+
+- [Azure CLI Query Patterns](references/azure-cli-queries.md)
+- [ClawHub Skill Page](https://clawhub.ai/bmdhodl/skills/azure-infra)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline Azure CLI commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-first operational guidance; write or destructive command proposals require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

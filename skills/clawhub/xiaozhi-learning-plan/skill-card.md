@@ -1,41 +1,71 @@
-## Description: <br>
-This skill helps students create personalized 30-day study plans, execution check-ins, parent-facing dashboards, and exam-prep schedules from their stated goals and authorized learning-profile data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+把学习目标拆成可执行的 30 天或周学习计划，并在学生明确开启后跟进执行偏差、生成家庭看板或入队提醒。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and guardians use this skill to turn learning goals, weak areas, time constraints, and authorized learning-profile summaries into practical study plans, weekly adjustment prompts, printable family dashboards, and exam-prep schedules. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose sensitive student learning-profile, emotional-profile, or progress details in parent-facing outputs. <br>
-Mitigation: Use parent-facing dashboards only with clear student and guardian consent, and avoid emotional or diagnostic summaries unless there is explicit agreement and a real need. <br>
-Risk: Plans based on historical learning data may overstate what a student can complete or create pressure through family monitoring. <br>
-Mitigation: Confirm time limits with the student, preserve the skill's iteration step before execution, and frame family dashboard guidance as supportive actions rather than performance judgment. <br>
+## Use Case:
 
+Students, families, and learning-support agents use this skill in a Simplified Chinese K12 context to turn goals, weak-point summaries, available time, and exam dates into concrete study plans. It supports weekly planning for upper primary students, 30-day plans for middle and high school students, optional family-facing boards, and consent-gated reminder handoff.
 
-## Reference(s): <br>
-- [Plan Templates](references/plan-templates.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-learning-plan) <br>
+### Deployment Geography for Use:
 
+Mainland China by default; localize curriculum assumptions, crisis-contact resources, language defaults, and minor-consent rules before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and structured text plans] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces study-plan schedules, learning-profile analyses, weekly review prompts, parent dashboard text, and exam-prep guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Use outside the Mainland China K12 context may produce unsuitable curriculum assumptions, crisis-contact guidance, language defaults, or minor-consent handling.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Localize the curriculum context, crisis resources, language defaults, and consent rules before deploying in another region.
+
+Risk: Profile reads, parent-visible boards, reminders, and plan storage could expose student learning data if enabled too broadly.
+
+Mitigation: Keep each gate independent and off by default; require explicit consent for profile access, parent sharing, reminders, and plan storage.
+
+Risk: Family-facing outputs could over-share sensitive learning or emotional information.
+
+Mitigation: Generate family boards only after checking parent-sharing consent and student veto rights; keep boards limited to tasks and completion facts unless crisis handling applies.
+
+Risk: Crisis or safety signals could be minimized in ordinary planning or family-board flows.
+
+Mitigation: Stop the learning-plan flow when crisis signals appear and follow the bundled crisis exception protocol with localized emergency guidance.
+
+Risk: Generated practice items or plan tasks may be incorrect, too broad, or hard to verify.
+
+Mitigation: Use concrete completion criteria for each task and apply the bundled AI item self-check before presenting generated exercises.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-learning-plan)
+- [Publisher profile](https://clawhub.ai/user/qizhitang)
+- [Plan templates](references/plan-templates.md)
+- [Grade bands](shared/grade-bands.md)
+- [Consent and vocabulary](shared/vocab.md)
+- [Crisis exception](shared/crisis-exception.md)
+- [Handover protocol schema](shared/handover-protocol.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Configuration, Guidance]
+
+**Output Format:** [Markdown/text study plans, printable family-board tables, and consent-gated handover payload guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are intended for Simplified Chinese K12 learning workflows; profile reads, parent-visible boards, reminders, and plan storage are optional and require explicit consent.]
+
+## Skill Version(s):
+
+2.2.0 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,60 @@
-## Description: <br>
-Access Wikipedia through MCP to search articles, retrieve summaries, random facts, dinosaur facts, featured articles, and multi-language results across 10 wikis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Wikipedia MCP gives agents read-only access to Wikipedia and Wikimedia search, article summaries, media, pageviews, current events, citations, contributors, and multilingual article data.
 
-## Publisher: <br>
-[evanfoglia](https://clawhub.ai/user/evanfoglia) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[evanfoglia](https://clawhub.ai/user/evanfoglia)
 
-## Use Case: <br>
-External users, developers, and content teams use this skill to query Wikipedia from an MCP-compatible agent for research, quick article summaries, trivia, and daily content prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: User queries are sent to Wikipedia through the local MCP server. <br>
-Mitigation: Install only if this network behavior is acceptable for the intended use case. <br>
-Risk: The Python dependency is lower-bounded but not pinned or tightly bounded. <br>
-Mitigation: For stronger supply-chain hygiene, prefer a release that pins or tightly bounds the dependency. <br>
+## Use Case:
 
+Developers and external users can use this skill to let an agent retrieve public encyclopedia summaries, article metadata, media, citations, quality signals, contributors, pageviews, and current events from Wikipedia and Wikimedia services.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/evanfoglia/skills/wikipedia) <br>
-- [Wikipedia REST API v1 endpoint](https://en.wikipedia.org/api/rest_v1) <br>
-- [MediaWiki Action API endpoint](https://en.wikipedia.org/w/api.php) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown] <br>
-**Output Format:** [Markdown text returned through MCP tool responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include source article links and summary images; supported languages are en, de, es, fr, ja, zh, pt, it, ru, and nl.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: server release evidence and target metadata; artifact frontmatter reports 1.1.0) <br>
+Risk: Lookup terms, article titles, dates, and coordinates are sent to Wikipedia and Wikimedia services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid secrets or sensitive internal research topics in queries and install only where public API disclosure is acceptable.
+
+Risk: Responses depend on public, collaboratively edited Wikipedia and Wikimedia content that may be incomplete or change over time.
+
+Mitigation: Use returned source links, article quality, contributors, and references outputs to verify important claims before relying on results.
+
+Risk: The skill depends on live public APIs and the requests package.
+
+Mitigation: Pin dependencies in controlled environments and plan for API availability or response format changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/evanfoglia/skills/wikipedia)
+- [Wikipedia REST API v1](https://en.wikipedia.org/api/rest_v1)
+- [MediaWiki Action API](https://en.wikipedia.org/w/api.php)
+- [Wikimedia Pageviews API](https://wikimedia.org/api/rest_v1/metrics/pageviews/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown-formatted text with article links, media URLs, tables, citation lists, and short summaries.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only public Wikipedia and Wikimedia lookups; most tools support en, de, es, fr, ja, zh, pt, it, ru, and nl.]
+
+## Skill Version(s):
+
+1.6.10 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

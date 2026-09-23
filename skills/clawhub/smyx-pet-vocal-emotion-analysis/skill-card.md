@@ -1,44 +1,60 @@
-## Description: <br>
-Recognizes cat and dog vocalizations through pet voiceprint AI and returns emotions and behavioral intentions such as happiness, excitement, anger, anxiety, pain, vigilance, and attention-seeking. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Recognizes cat and dog vocalizations and returns AI-inferred emotions and behavioral intentions, with structured reports, report links, and history lookup for prior analyses.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and agents use this skill to analyze cat or dog audio/video files or public media URLs, generate structured pet vocal emotion reports, and retrieve cloud-hosted historical analysis reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User pet audio/video or supplied media URLs are sent to Life Emergence cloud APIs for analysis. <br>
-Mitigation: Use the skill only when cloud processing is acceptable, and avoid media that includes sensitive household, personal, or bystander information. <br>
-Risk: The skill can create and reuse a local account identity, tokens, and cloud history without prompting the user. <br>
-Mitigation: Review local identity and token persistence before installation or shared-machine use, and clear stored state when account continuity is not desired. <br>
-Risk: Historical report retrieval depends on cloud-hosted data associated with the resolved local identity. <br>
-Mitigation: Confirm that cloud history access matches the intended user context before using or sharing retrieved reports. <br>
+## Use Case:
 
+External users and agents use this skill to submit pet audio or video for cloud-based cat and dog vocal emotion analysis, then receive a structured result and a report link. The skill can also retrieve prior pet vocal emotion analysis reports associated with the current local/cloud identity.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-vocal-emotion-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON analysis reports, with optional saved text output.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can return structured recognition results, recommendations, report links, and cloud history lists.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter states 1.0.8) <br>
+Risk: Submitted media and report queries are sent to a cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installing and use it only with media approved for that cloud service.
+
+Risk: Activity is automatically linked to a local/cloud identity and reusable tokens may be stored in a workspace database.
+
+Mitigation: Run in an isolated workspace, review token storage behavior, and clear generated identity or token data after use where required.
+
+Risk: The packaged configuration includes development HTTP endpoints and a broad common API layer flagged by the security guidance.
+
+Mitigation: Fix or justify development endpoints before use with private media or real accounts, and restrict allowed network targets.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-vocal-emotion-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [Pet Vocal Emotion Analysis API Documentation](artifact/references/api_doc.md)
+- [Common Analysis API Documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration]
+
+**Output Format:** [Structured text or JSON with Markdown report links and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include exported report image links and paginated history report data.]
+
+## Skill Version(s):
+
+1.0.13 (source: server evidence release; artifact frontmatter states 1.0.16)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

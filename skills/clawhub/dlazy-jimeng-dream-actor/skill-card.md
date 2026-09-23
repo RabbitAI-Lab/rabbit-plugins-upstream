@@ -1,45 +1,60 @@
-## Description: <br>
-Convert static character images into vivid action videos with Jimeng Dream Actor. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Convert static character images into vivid action videos with Jimeng Dream Actor.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to invoke the dLazy CLI for Jimeng Dream Actor image-to-video generation from prompts and image or video references. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected media files are sent to the dLazy hosted API and media storage for generation. <br>
-Mitigation: Use only prompts and media approved for third-party processing, review dLazy service terms, and avoid sending sensitive or restricted content. <br>
-Risk: The skill requires a dLazy API key and may consume billable credits. <br>
-Mitigation: Prefer scoped organization keys, rotate or revoke keys from the dLazy dashboard when no longer needed, and use dry-run or balance checks before costly runs. <br>
-Risk: A globally installed CLI persists on the local system. <br>
-Mitigation: Use the pinned npx invocation for occasional use and review the CLI source before persistent installation. <br>
+## Use Case:
 
+External users and developers use this skill to turn a static character image, optional reference media, and a prompt into a Jimeng Dream Actor action-video generation request through the dLazy CLI.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-jimeng-dream-actor) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [JSON response with generated media URLs or async task status, plus concise guidance for authentication, balance, and execution errors.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May upload selected prompts and media files to dLazy endpoints and may use billable API credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: The skill sends prompts, local media paths, and generated outputs through the dLazy hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for content you are comfortable processing with dLazy, and confirm before submitting sensitive images, videos, prompts, or credentials.
+
+Risk: The skill depends on the npm/npx-installed dLazy CLI and external endpoints.
+
+Mitigation: Install the pinned CLI version from the skill metadata and review the package/source links before use.
+
+Risk: Broad image-to-video trigger phrases could route unrelated work to this third-party service.
+
+Mitigation: Invoke the skill only for explicit Jimeng Dream Actor requests.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-jimeng-dream-actor)
+- [dLazy homepage](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Files, Guidance]
+
+**Output Format:** [JSON responses from the dLazy CLI, with optional downloaded generated media files when a save path is provided.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return asynchronous task identifiers for later polling when no-wait mode is used.]
+
+## Skill Version(s):
+
+1.3.19 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

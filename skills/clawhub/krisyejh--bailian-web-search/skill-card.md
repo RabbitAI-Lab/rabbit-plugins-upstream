@@ -1,41 +1,58 @@
-## Description: <br>
-AI-optimized web search via Bailian(Alibaba ModelStdio) API. Returns multisourced, concise web search results for LLMs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Bailian Web Search provides AI-optimized web search through the Bailian (Alibaba ModelStudio) API and returns concise, multisourced results for LLMs.
 
-## Publisher: <br>
-[krisyejh](https://clawhub.ai/user/krisyejh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[krisyejh](https://clawhub.ai/user/krisyejh)
 
-## Use Case: <br>
-Developers and agent builders use this skill to run Bailian/DashScope web searches from an agent workflow and return concise, multi-source search results. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Search queries are sent to Bailian/DashScope and may include sensitive user or business information. <br>
-Mitigation: Avoid submitting secrets or confidential business data in queries, and install only if the deployment trusts Bailian/DashScope for search processing. <br>
-Risk: The skill uses a DashScope API key and may affect quota or billing. <br>
-Mitigation: Use a dedicated DashScope API key where possible and monitor quota and billing for the account. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [Bailian WebSearch MCP Marketplace Page](https://bailian.console.aliyun.com/cn-beijing?tab=app#/mcp-market/detail/WebSearch) <br>
-- [DashScope WebSearch MCP Endpoint](https://dashscope.aliyuncs.com/api/v1/mcps/WebSearch/mcp) <br>
-- [ClawHub Skill Page](https://clawhub.ai/krisyejh/bailian-web-search) <br>
+## Use Case:
 
+Developers and agent builders use this skill to run web searches through Alibaba DashScope/Bailian and return concise web results for LLM workflows.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with shell command examples and JSON-formatted API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires bash, curl, jq, and the DASHSCOPE_API_KEY environment variable; accepts a query and optional result count with a default of 5 and maximum of 20.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Search queries are sent to Alibaba DashScope using the user's API key.
+
+Mitigation: Avoid sensitive secrets or private text in search queries, and use the skill only where DashScope data handling is acceptable.
+
+Risk: The DashScope API key is available to the script runtime.
+
+Mitigation: Provide DASHSCOPE_API_KEY through a scoped environment secret and rotate it if the runtime environment may have exposed it.
+
+Risk: The result-count maximum is documented, while the script validates only that count is numeric.
+
+Mitigation: Enforce the documented maximum of 20 in the calling environment when quota, cost, or response-size control matters.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/krisyejh/skills/bailian-web-search)
+- [Bailian WebSearch MCP Marketplace](https://bailian.console.aliyun.com/cn-beijing?tab=app#/mcp-market/detail/WebSearch)
+- [DashScope WebSearch MCP Endpoint](https://dashscope.aliyuncs.com/api/v1/mcps/WebSearch/mcp)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration]
+
+**Output Format:** [Terminal stdout containing status text and JSON-formatted MCP responses.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires DASHSCOPE_API_KEY and local bash, curl, and jq; result count defaults to 5 and is documented with a maximum of 20.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

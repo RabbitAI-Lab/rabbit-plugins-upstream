@@ -1,0 +1,43 @@
+{
+  "version": "1.0",
+  "description": "Domain-Kit business rules configuration",
+  "rules": [
+    {
+      "name": "transitive_depends_on",
+      "type": "transitive_inference",
+      "description": "If A depends_on B and B depends_on C, then A depends_on C",
+      "relation": "depends_on",
+      "priority": 10,
+      "category": "inference",
+      "enabled": true
+    },
+    {
+      "name": "constraint_propagation",
+      "type": "constraint_propagation",
+      "description": "Propagate constraints through dependency chains",
+      "priority": 8,
+      "category": "inference",
+      "enabled": true
+    },
+    {
+      "name": "template_device_inference",
+      "type": "class_inference",
+      "description": "If a CodeTemplate depends_on a PLC, infer it's a PLC template",
+      "from_class": "CodeTemplate",
+      "relation": "depends_on",
+      "to_class": "PLC",
+      "infer_class": "CodeTemplate",
+      "priority": 5,
+      "category": "classification",
+      "enabled": true
+    },
+    {
+      "name": "compatibility_check",
+      "type": "compatibility_check",
+      "description": "Check device-protocol compatibility",
+      "priority": 3,
+      "category": "validation",
+      "enabled": true
+    }
+  ]
+}

@@ -1,41 +1,55 @@
-## Description: <br>
-谷歌搜索(免费版) helps agents run lightweight Google searches through browser automation, parse result titles, URLs, and snippets, filter results, and export structured search outputs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+谷歌搜索(免费版) helps agents run lightweight Google searches through browser automation, parse titles, URLs, and snippets, filter results, and export search outputs without requiring a Google API key.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and developers can use this skill for lightweight information retrieval, SEO keyword checks, learning references, and research collection when they need Google search results without a Google API key. It is not intended for black-hat SEO workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Browser automation sends search queries to Google and may expose sensitive terms or trigger search-provider anti-automation controls. <br>
-Mitigation: Use non-sensitive queries, comply with applicable service terms, and run the skill only in environments where browser automation and outbound Google traffic are acceptable. <br>
-Risk: The setup guidance includes a curl-to-bash Bun installer path without verification. <br>
-Mitigation: Prefer an already-installed Node.js runtime or a verified package-manager installation route; only use remote shell installers after independent trust and integrity checks. <br>
+## Use Case:
 
+External users, developers, and automation teams use this skill for quick Google search, SEO keyword checks, lightweight research collection, and result export through an agent workflow.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/free-google-search-tool-free) <br>
-- [Detailed reference](references/detail.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline Python, shell, and JSON examples; generated search results may be exported as JSON, Markdown, CSV, or text.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include search status, result records with title, URL, snippet, and position, and optional execution logs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence; artifact frontmatter reports 1.0.0) <br>
+Risk: The skill uses browser automation and local command execution for Google searches, with documented ability to write exported result files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it in a dedicated workspace, and require agent confirmation before executing local commands or writing exported files.
+
+Risk: The security evidence flags unsafe install guidance around piping a remote Bun installer script to the shell.
+
+Mitigation: Prefer Node.js or a verified package-manager installation path, and review any remote installer before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/free-google-search-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+- [Detailed reference](references/detail.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, CSV files, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown guidance with command examples and structured search results exported as JSON, CSV, or Markdown.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write exported search result files when the agent runs the documented exporter.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

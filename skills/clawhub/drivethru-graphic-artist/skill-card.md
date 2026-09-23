@@ -1,51 +1,62 @@
-## Description: <br>
-Helps agents create deterministic product mockups, clean degraded flat artwork, remove backgrounds, and prepare DTF decoration files for Bacon & Co production workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates deterministic apparel and product mockups, cleans flat artwork, removes backgrounds, and prepares DTF production PNGs with sizing, color extraction, upload, and sample-creation steps for Bacon & Co decoration workflows.
 
-## Publisher: <br>
-[zmtucker](https://clawhub.ai/user/zmtucker) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zmtucker](https://clawhub.ai/user/zmtucker)
 
-## Use Case: <br>
-External operators and production-support agents use this skill to place logos on blank product photos, tune mockups, prepare DTF artwork at production size, and update decoration records after review. It is intended for Bacon & Co graphic-production workflows where deterministic image processing and human-facing review are required. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can update Odoo decoration records and upload production artwork when asked to make art production-ready. <br>
-Mitigation: Install it only in environments authorized for Bacon & Co decoration work, scope Odoo credentials, and verify target record IDs before production actions. <br>
-Risk: Incorrect print size, placement, color extraction, or cleanup could produce misleading proofs or unsuitable production files. <br>
-Mitigation: Review generated mockups, cleanup proofs, production files, dimensions, and colors before accepting or uploading final artwork. <br>
-Risk: Production uploads depend on an Odoo MCP endpoint and token when using the upload helper. <br>
-Mitigation: Use a trusted HTTPS ODOO_MCP_URL, keep tokens scoped, and fall back to approved MCP image-setting tools when direct upload credentials are unavailable. <br>
+## Use Case:
 
+Graphic artists and operations agents use this skill to place existing decoration art on product blanks, tune placement, clean degraded flat art, and prepare DTF production files for decoration records. It is intended for apparel and merchandise production workflows that need deterministic image processing rather than model-generated artwork.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zmtucker/skills/drivethru-graphic-artist) <br>
-- [Publisher profile](https://clawhub.ai/user/zmtucker) <br>
-- [Decoration spec](references/decoration_spec.md) <br>
-- [Production ready procedure](references/production_ready.md) <br>
-- [Production cleanup procedure](references/production_cleanup.md) <br>
-- [Self-review loop](references/self_review.md) <br>
-- [Iterative feedback](references/iterative_feedback.md) <br>
-- [Location dimensions](references/location_dimensions.json) <br>
-- [Placement rules schema](references/placement_rules_schema.json) <br>
-- [rembg](https://github.com/danielgatis/rembg) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, files, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON receipts from helper scripts, and generated PNG files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include deterministic mockup, thumbnail, cutout, cleanup proof, and production PNG files; production workflows also rely on user review of sizes, colors, target records, and generated proofs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.7.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: The skill can run unattended routines that upload images and change live Odoo production or catalog records.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing in a live Odoo environment, avoid scheduled routines unless unattended writes are acceptable, and prefer dry-run or explicit operator approval before production uploads, sample creation, state changes, or catalog image updates.
+
+Risk: Incorrect Odoo credentials or vision endpoint settings could send work to the wrong service.
+
+Mitigation: Confirm the Odoo URL, token, and vision endpoint are exactly the intended services before use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zmtucker/skills/drivethru-graphic-artist)
+- [Publisher profile](https://clawhub.ai/user/zmtucker)
+- [Decoration spec](references/decoration_spec.md)
+- [Self-review loop](references/self_review.md)
+- [Production-ready DTF workflow](references/production_ready.md)
+- [Production cleanup workflow](references/production_cleanup.md)
+- [Web image routine](references/web_image_routine.md)
+- [Placement rules schema](references/placement_rules_schema.json)
+- [rembg](https://github.com/danielgatis/rembg)
+- [OpenRouter API endpoint](https://openrouter.ai/api/v1)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON receipts, and generated image file paths]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce local PNG assets for reviewed mockups, thumbnails, cleaned art, and print-ready DTF production files.]
+
+## Skill Version(s):
+
+0.14.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

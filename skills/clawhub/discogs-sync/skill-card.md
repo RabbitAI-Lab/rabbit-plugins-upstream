@@ -1,46 +1,58 @@
-## Description: <br>
-Discogs Sync helps agents manage Discogs wantlists and collections by artist and album name, master ID, release ID, or bulk CSV/JSON input, and search marketplace pricing for vinyl, CD, and other formats. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discogs Sync helps agents add, remove, list, and bulk-sync Discogs wantlist or collection entries, search marketplace pricing, and authenticate with a Discogs personal access token against api.discogs.com.
 
-## Publisher: <br>
-[khaney64](https://clawhub.ai/user/khaney64) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[khaney64](https://clawhub.ai/user/khaney64)
 
-## Use Case: <br>
-External Discogs users and agents use this skill to authenticate with Discogs, add or remove releases from wantlists or collections, list saved items, sync batches from CSV/JSON files, and compare marketplace prices. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can make broad changes to a Discogs wantlist or collection. <br>
-Mitigation: Review proposed commands before execution and run sync commands with --dry-run before allowing writes. <br>
-Risk: The --remove-extras option can remove items that are not present in the input file. <br>
-Mitigation: Use --remove-extras only after checking the dry-run output and confirming the input file is complete. <br>
-Risk: Fuzzy artist and album matching can select an unintended release. <br>
-Mitigation: Prefer exact Discogs release IDs for removals or high-impact updates. <br>
-Risk: Discogs access tokens are stored locally in ~/.discogs-sync/config.json. <br>
-Mitigation: Protect the credential file, delete it when no longer needed, and revoke tokens in Discogs if they may be exposed. <br>
+## Use Case:
 
+External users and agents use this skill to manage Discogs wantlists and collections from album metadata, Discogs IDs, or CSV/JSON inputs. It is also useful for checking Discogs marketplace pricing before buying or cataloging records.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/khaney64/discogs-sync) <br>
-- [Publisher profile](https://clawhub.ai/user/khaney64) <br>
-- [Discogs developer settings](https://www.discogs.com/settings/developers) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands; the CLI can return terminal tables or JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create local dependency, credential, and cache files when executed by an agent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.10 (source: server release metadata) <br>
+Risk: The skill uses a Discogs personal access token that can read and modify the user's wantlist or collection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer DISCOGS_USER_TOKEN over storing a token on disk, never run interactive auth on the user's behalf, and revoke the token from Discogs if it may be compromised.
+
+Risk: Remove and sync operations can delete wantlist or collection entries when confirmed.
+
+Mitigation: Preview removals without --yes, use --dry-run for sync changes, show the resolved targets to the user, and only rerun with --yes after explicit approval.
+
+Risk: The skill writes local config and cache files under ~/.discogs-sync/ and relies on pinned Python dependencies.
+
+Mitigation: Review the local cache/config behavior before deployment and update pinned dependencies before regular use when security updates are available.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/khaney64/skills/discogs-sync)
+- [Discogs developer token settings](https://www.discogs.com/settings/developers)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands; command output may be terminal tables or JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires python3 and a Discogs personal access token supplied through DISCOGS_USER_TOKEN or one-time local authentication.]
+
+## Skill Version(s):
+
+0.1.13 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

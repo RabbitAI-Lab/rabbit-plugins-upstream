@@ -1,5 +1,5 @@
 ## Description: <br>
-Fetches and parses CCTV News Broadcast (Xinwen Lianbo) highlights for a given date. <br>
+Fetches and parses CCTV News Broadcast (Xinwen Lianbo) highlights for a specified date. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to retrieve date-based CCTV Xinwen Lianbo news highlights and turn them into structured news lists and summaries for research, information collection, and workflow automation. <br>
+Researchers, journalists, and developers use this skill to retrieve date-specific CCTV News Broadcast highlights and convert them into structured news items or summaries for information collection and analysis. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill asks for broad command execution. <br>
-Mitigation: Use it only in an environment where shell access is acceptable, review proposed commands before execution, and prefer a version that documents exact commands. <br>
-Risk: The artifact describes scraping and scheduled monitoring without clear source restrictions or safeguards. <br>
-Mitigation: Restrict use to approved news sources, avoid unattended scheduled execution, and confirm scraping limits before deployment. <br>
+Risk: The skill requests command execution and describes broad scraping, file handling, and automation beyond date-based CCTV news retrieval. <br>
+Mitigation: Grant exec or broad file access only with clear command allowlists, source limits, and user approval boundaries. <br>
+Risk: Configuration examples refer to API key handling, which can expose credentials if copied into files, prompts, or logs. <br>
+Mitigation: Use environment variables or platform-managed secrets, avoid hardcoding credentials, and redact keys from logs and outputs. <br>
+Risk: Fetched news content may be incomplete, stale, source-limited, or unsuitable for downstream publication without review. <br>
+Mitigation: Review retrieved items against the intended source and apply content, copyright, and accuracy checks before redistribution or decision use. <br>
 
 
 ## Reference(s): <br>
-- [Cctv News Fetcher on ClawHub](https://clawhub.ai/thcjp/skills/cctv-news-fetcher) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cctv-news-fetcher) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with structured JSON-style results] <br>
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
+**Output Format:** [Markdown guidance with JSON examples and inline shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May require network access and shell execution depending on the agent environment.] <br>
+**Other Properties Related to Output:** [May include structured news items, summaries, configuration guidance, and troubleshooting steps.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: artifact frontmatter and server release evidence) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

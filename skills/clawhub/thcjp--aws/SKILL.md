@@ -1,182 +1,304 @@
 ---
-slug: "aws"
-name: "aws"
-version: 1.0.3
+name: aws
+slug: aws
 displayName: "Aws"
-summary: "架构部署优化AWS基础设施,避开成本失控与安全陷阱,省钱又稳"
-license: "Proprietary"
-description: |-
-  Architect, deploy, and optimize AWS infrastructure avoiding cost explosions
-  and security pitfalls。核心能力:
-
-  - 运维工具领域的专业化AI辅助工具
-
-  - 基于高人气开源Skill深度优化升级
-
-  - 移除风险代码,增强安全性和稳定性
-
-  适用场景:
-
-  - 系统运维、监控告警、资源管理
-
-  - 独立开发者与一人公司效率提升
-
-  - 自动化工作流与智能决策辅助
-
-  差异化:经过深度优化,去除原始风险代码,清理外部依赖引用,增强元...
-tags:
-  - Operations
+version: "1.0.2"
+summary: "AWS架构设计、部署、成本优化,规避资源浪费与安全陷阱,降低云上运维成本"
+description: "AWS架构设计、部署、成本优化,规避资源浪费与安全陷阱,降低云上运维成本。Architect, deploy, and optimize AWS infrastructure avoiding cost explosions。触发关键词: web, deploy, architect, avoiding, aws, optimize, infrastructure, amazon。"
+license: "MIT"
 tools:
   - read
-  - exec
-homepage: "https://skillhub.cn"
-# 定价元数据
-suggested_price: "19.9 CNY/per_use"
-pricing_tier: "L2-标准级"
-pricing_model: "per_use"
-
 ---
-# Aws
 
-## 付费版专享能力
+# AWS | Amazon Web Services
 
-| 能力 | 免费版 | 付费版 |
-|---|---|---|
-| 基础功能 | 支持 | 支持 |
-| 深度漏洞扫描与CVE关联 | 不支持 | 支持 |
-| 安全基线合规审计 | 不支持 | 支持 |
-| 批量资产风险评分 | 不支持 | 支持 |
-| 威胁情报实时订阅与告警 | 不支持 | 支持 |
+## Setup
+
+On first use, read `setup.md` for integration options. The skill works immediately — setup is optional for personalization.
+
+## When to Use
+
+User needs AWS infrastructure guidance. Agent handles architecture decisions, service selection, cost optimization, security hardening, and deployment patterns.
+
+## Architecture
+
+Memory lives in `~/aws/`. See `memory-template.md` for structure.
+
+```text
+~/aws/
+├── memory.md        # Account context + preferences
+├── resources.md     # Active infrastructure inventory
+└── costs.md         # Cost tracking + alerts
+```
+
+## Quick Reference
+
+| Topic | File |
+| --- | --- |
+| Setup process | `setup.md` |
+| Memory template | `memory-template.md` |
+| Service patterns | `services.md` |
+| Cost optimization | `costs.md` |
+| Security hardening | `security.md` |
+
+## Core Rules
+
+### 1. Verify Account Context First
+
+Before any operation, confirm:
+
+* Region (default: us-east-1, but ask)
+* Account type (personal/startup/enterprise)
+* Existing infrastructure (VPC, subnets, security groups)
+
+```bash
+aws sts get-caller-identity
+aws ec2 describe-vpcs --query 'Vpcs[].{ID:VpcId,CIDR:CidrBlock,Default:IsDefault}'
+```
+
+### 2. Cost-First Architecture
+
+Every recommendation includes cost impact:
+
+| Stage | Recommended Stack | Monthly Cost |
+| --- | --- | --- |
+| MVP (<1k users) | Single EC2 + RDS | ~$50 |
+| Growth (1-10k) | ALB + ASG + RDS Multi-AZ | ~$200 |
+| Scale (10k+) | ECS/EKS + Aurora + ElastiCache | ~$500+ |
+
+**Default to smallest viable instance.** Scaling up is easy; scaling down wastes money.
+
+### 3. Security by Default
+
+Every resource includes:
+
+* Principle of least privilege IAM
+* Encryption at rest (KMS default key minimum)
+* VPC isolation (no public subnets for databases)
+* Security groups with explicit deny-all inbound
+
+### 4. Infrastructure as Code
+
+Generate Terraform or CloudFormation for reproducibility:
+
+```bash
+terraform init && terraform plan
+```
+
+Never rely on console-only changes.
+
+### 5. Tagging Strategy
+
+Every resource gets tagged for cost allocation:
+
+```bash
+--tags Key=Environment,Value=prod Key=Project,Value=myapp Key=Owner,Value=team
+```
+
+### 6. Monitoring from Day 1
+
+Deploy CloudWatch alarms with infrastructure:
+
+* Billing alerts (before you get surprised)
+* CPU/Memory thresholds
+* Error rate spikes
+
+## Cost Traps
+
+**NAT Gateway data processing ($0.045/GB):**
+VPC endpoints are free for S3/DynamoDB. A busy app can burn $500/month on NAT alone.
+
+```bash
+aws ec2 create-vpc-endpoint --vpc-id vpc- \
+  --service-name com.amazonaws.us-east-1.s3 --route-table-ids rtb-
+```
+
+**EBS snapshots accumulate forever:**
+Automated backups create snapshots that never delete. Set lifecycle policies.
+
+```bash
+aws ec2 describe-snapshots --owner-ids self \
+  --query 'Snapshots[?StartTime<=`2024-01-01`].[SnapshotId,StartTime,VolumeSize]'
+```
+
+**CloudWatch Logs default retention is forever:**
+
+```bash
+aws logs put-retention-policy --log-group-name /aws/lambda/fn --retention-in-days 14
+```
+
+**Idle load balancers cost $16/month minimum:**
+ALBs charge even with zero traffic. Delete unused ones.
+
+**Data transfer between AZs costs $0.01/GB each way:**
+Chatty microservices across AZs add up fast. Co-locate when possible.
+
+## Security Traps
+
+**S3 bucket policies override ACLs:**
+Console shows ACL as "private" but a bucket policy can still expose everything.
+
+```bash
+aws s3api get-bucket-policy --bucket my-bucket 2>/dev/null || echo "No policy"
+aws s3api get-public-access-block --bucket my-bucket
+```
+
+**Default VPC security groups allow all outbound:**
+Attackers exfiltrate through outbound. Restrict it.
+
+**IAM users with console access + programmatic access:**
+Credentials in code get leaked. Use roles + temporary credentials.
+
+**RDS publicly accessible defaults to Yes in console:**
+Always verify:
+
+```bash
+aws rds describe-db-instances --query 'DBInstances[].{ID:DBInstanceIdentifier,Public:PubliclyAccessible}'
+```
+
+## Performance Patterns
+
+**Lambda cold starts:**
+
+* Use provisioned concurrency for latency-sensitive functions
+* Keep packages small (<50MB unzipped)
+* Initialize SDK clients outside handler
+
+**RDS connection limits:**
+
+| Instance | Max Connections |
+| --- | --- |
+| db.t3.micro | 66 |
+| db.t3.small | 150 |
+| db.t3.medium | 300 |
+
+Use RDS Proxy for Lambda to avoid connection exhaustion.
+
+**EBS volume types:**
+
+| Type | Use Case | IOPS |
+| --- | --- | --- |
+| gp3 | Default (consistent) | 3,000 base |
+| io2 | Databases (guaranteed) | Up to 64,000 |
+| st1 | Big data (throughput) | 500 MiB/s |
+
+## Service Selection
+
+| Need | Service | Why |
+| --- | --- | --- |
+| Static site | S3 + CloudFront | Pennies/month, global CDN |
+| API backend | Lambda + API Gateway | Zero idle cost |
+| Container app | ECS Fargate | No cluster management |
+| Database | RDS 关系型数据库 | Managed, Multi-AZ ready |
+| Cache | ElastiCache Redis | Session/cache, < DynamoDB latency |
+| Queue | SQS | Simpler than SNS for most cases |
+| Search | OpenSearch | Elasticsearch managed |
+
+## CLI Essentials
+
+```bash
+aws configure --profile myproject
+
+export AWS_PROFILE=myproject
+
+aws sts get-caller-identity
+
+aws ec2 describe-regions --query 'Regions[].RegionName'
+
+aws ce get-cost-forecast --time-period Start=$(date +%Y-%m-01),End=$(date -v+1m +%Y-%m-01) \
+  --metric UNBLENDED_COST --granularity MONTHLY
+```
+
+## Security & Privacy
+
+**Credentials:** This skill uses the AWS CLI, which reads credentials from `[REDACTED_AWS_PATH] or environment variables. The skill never stores, logs, or transmits AWS credentials.
+
+**Local storage:** Preferences and context stored in `~/aws/` — no data leaves your machine.
+
+**CLI commands:** All commands shown are read-only by default. Destructive operations (delete, terminate) require explicit user confirmation.
+
+## Related Skills
+
+Install with `* 安装此Skill请参考SkillHub平台指南
+
+* `infrastructure` — architecture decisions
+* `cloud` — multi-cloud patterns
+* `docker` — container basics
+* `backend` — API design
+
+## Feedback
+
+* If useful: `
+* Stay updated: `
+
+## 依赖说明
+
+### 运行环境
+- **Agent平台**: 支持SKILL.md的任意AI Agent( Code / Cursor / Codex /  CLI等)
+- **操作系统**: Windows / macOS / Linux
+
+### 依赖说明
+| 依赖项 | 类型 | 是否必需 | 获取方式 |
+|:-------|:-----|:---------|:---------|
+| LLM API | API | 必需 | 由Agent内置LLM提供 |
+
+### API Key 配置
+- 本Skill基于Markdown指令,无需额外API Key(除内容中明确标注的外部API)
+
+### 可用性分类
+- **分类**: MD+execute(纯Markdown指令,部分功能需要exec命令行执行能力)
+- **说明**: 基于Markdown的AI Skill,通过自然语言指令驱动Agent执行任务
 
 ## 核心能力
 
 - Architect, deploy, and optimize AWS infrastructure avoiding cost explosions
   and security pitfalls
-#
+- 触发关键词: web, deploy, architect, avoiding, aws, optimize, infrastructure, amazon
+
 ## 适用场景
 
 | 场景 | 输入 | 输出 |
-|:-----|:-----|:-----|
-| 场景1: 架构部署优化AWS基础设施 | 用户请求数据 | 结构化处理结果 |
-| 场景2: 避开成本失控与安全陷阱 | 用户请求数据 | 结构化处理结果 |
+|------|------|------|
+| 基础使用 | 用户请求 | 处理结果 |
 
 **不适用于**：需要人工判断的复杂决策场景
 
 ## 使用流程
 
-1. **解析输入参数**: 读取用户提供的输入数据,校验参数完整性与格式合法性
-2. **执行核心处理**: 调用skill核心逻辑对输入数据进行加工或转换
-3. **验证并返回结果**: 检查输出结果的完整性与格式,返回结构化数据
-4. **异常处理**: 如遇错误,参考错误处理章节中对应场景的处理方式
+1. 确认运行环境满足依赖说明中的要求
+2. 根据适用场景选择合适的使用方式
+3. 执行操作并检查输出结果
+4. 如遇错误，参考错误处理章节
 
-## 输入格式
+## 示例
 
-| 参数名 | 类型 | 必填 | 说明 |
-|---:|---:|---:|---:|
-| content | string | 否 | aws处理的内容输入 |,  |
-| mode | string | 否 | 处理模式, 可选: json/text/markdown,  |
-| max_retries | integer | 否 | 单步最大重试次数, 默认: 2 |
-| skip_steps | array | 否 | 跳过的步骤编号(用于断点续传), 默认: [] |
+### 示例1：基础用法
 
-## 输出格式
-
-```json
-{
-  "success": true,
-  "data": {
-    "final_result": {
-      "aws_result": "aws_result_value",
-      "aws_metadata": "aws_metadata_value",
-      "aws_status": "aws_status_value"
-    },
-    "execution_log": [
-      {
-        "step": 1,
-        "name": "按流程执行",
-        "status": "completed",
-        "duration_ms": 1200,
-        "output_summary": "按流程执行"
-      },
-      {
-        "step": 2,
-        "name": "按流程执行",
-        "status": "completed",
-        "duration_ms": 3500,
-        "output_summary": "按流程执行"
-      },
-      {
-        "step": 3,
-        "name": "按流程执行",
-        "status": "completed",
-        "duration_ms": 2100,
-        "output_summary": "按流程执行"
-      },
-      {
-        "step": 4,
-        "name": "按流程执行",
-        "status": "completed",
-        "duration_ms": 800,
-        "output_summary": "按流程执行"
-      }
-    ],
-    "total_duration_ms": 7600,
-    "gates_passed": 3,
-    "gates_total": 3
-  },
-  "error": null
-}
 ```
-
-中间产物模板参考: `assets/aws_template`
-
-## 异常处理
-
-| 错误场景 | 原因 | 处理方式 |
-|:---:|:---:|:---:|
-| 配置错误 | 参数缺失或格式错误 | 检查依赖说明中的配置要求 |
-| 运行时错误 | 运行环境不满足 | 确认运行环境符合依赖说明 |
-| 网络错误 | 连接超时或不可达 | 
-
-## 依赖说明
-
-### 运行环境
-- **Agent平台**: 支持SKILL.md的任意AI Agent(Claude Code / Cursor / Codex / Gemini CLI等)
-- **操作系统**: Windows / macOS / Linux
-
-### 依赖说明(补充)
-| 依赖项 | 类型 | 是否必需 | 获取方式 |
-|:------|------:|:------|:------|
-| LLM API | API | 必需 | 由Agent内置LLM提供 |
-
-### API Key 配置
-- 
-
-### 可用性分类
-- **分类**: MD+EXEC()
-- **说明**: 基于Markdown的AI Skill,
-
-**API Key配置方式**:
-```bash
-export API_KEY="your_api_key_here"
+输入: 用户请求
+处理: 根据使用流程执行
+输出: 处理结果
 ```
-配置后需重启会话或开启新终端生效。API Key应妥善保管,避免泄露到版本控制系统.
-## 常见问题
-
-### Q1: 如何开始使用Aws？
-A: 
 
 ## 错误处理
 
-| 错误场景2 | 原因 | 处理方式 |
-|---:|:---|---:|
-| LLM响应超时或无响应 | 网络延迟或模型负载过高 | ，请求；确认Agent平台LLM服务正常 |
-| 输入内容格式不正确 | 用户输入不符合skill预期格式 | 检查输入是否符合skill使用说明中的格式要求，参考示例章节 |
-| 执行结果与预期不符 | 指令描述不够明确或上下文不足 | 提供更详细的指令描述，补充必要的上下文信息 |
-| 命令执行失败 | 运行环境不满足要求或权限不足 | 确认运行环境符合依赖说明中的要求；检查命令权限设置 |
+| 错误场景 | 原因 | 处理方式 |
+|---------|------|---------|
+| 配置错误 | 参数缺失或格式错误 | 检查依赖说明中的配置要求 |
+| 运行时错误 | 运行环境不满足 | 确认运行环境符合依赖说明 |
+| 网络错误 | 连接超时或不可达 | 检查网络连接后重试，参考国内替代方案 |
+
+## 常见问题
+
+### Q1: 如何开始使用Aws？
+A: 请先阅读使用流程章节，确认环境满足依赖说明中的要求。
+
+### Q2: 遇到错误怎么办？
+A: 请参考错误处理章节，按照表格中的处理方式操作。
+
+### Q3: Aws有什么限制？
+A: 请参考已知限制章节了解具体限制。
 
 ## 已知限制
 
 - 依赖云服务，需要网络连接
-- 需要有效的云服务凭证和配置好的CLI环境
-- 产生的云资源可能产生费用，使用前请确认计费方式
-- 不同区域的服务可用性和功能支持可能存在差异

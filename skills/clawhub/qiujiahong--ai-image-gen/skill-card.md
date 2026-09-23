@@ -1,43 +1,58 @@
-## Description: <br>
-AI image generation and editing skill for text-to-image, image-and-text generation, and style conversion with multiple aspect ratios and standard, 2K, and 4K resolution options. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI Image Gen helps agents generate images from text prompts through a Gemini Flash Image compatible API, with documented model options for common aspect ratios and standard, 2K, and 4K resolutions.
 
-## Publisher: <br>
-[qiujiahong](https://clawhub.ai/user/qiujiahong) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[qiujiahong](https://clawhub.ai/user/qiujiahong)
 
-## Use Case: <br>
-External users and developers use this skill to generate or edit images from prompts, choose aspect ratio and resolution-specific Gemini Flash Image models, and save generated image files for downstream use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and API credentials are sent to the configured image-generation endpoint, and the default endpoint is a third-party API proxy. <br>
-Mitigation: Use an official or trusted provider endpoint where supported, avoid sensitive prompts, and install only if the endpoint and credential handling are acceptable. <br>
-Risk: Generated image files are written to disk at a user-provided path or the current working directory. <br>
-Mitigation: Review output paths before execution and verify where generated files are saved. <br>
+## Use Case:
 
+Developers and agents use this skill to convert user image requests into prompts and API calls that save generated image files locally.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qiujiahong/ai-image-gen) <br>
-- [Publisher profile](https://clawhub.ai/user/qiujiahong) <br>
-- [Default Gemini-compatible endpoint](https://code.newcli.com/gemini) <br>
-- [FoxCode API key registration](https://foxcode.rjj.cc/auth/register?aff=R0P5ZY) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files] <br>
-**Output Format:** [Markdown instructions with shell commands and generated image files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes generated image output to the requested path or to generated_image.<ext> in the current working directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server-resolved release metadata) <br>
+Risk: Prompts and API credentials are sent to configurable third-party endpoints, which can expose sensitive content if the endpoint is not trusted.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the provider endpoint before use, avoid sensitive prompts, and use a narrowly scoped, revocable API key.
+
+Risk: The script accepts an output path and can write files locally, which is risky when untrusted requests choose paths.
+
+Mitigation: Constrain output locations to an approved workspace and review paths before execution.
+
+Risk: The documentation claims editing and image-to-image support, but the packaged script only implements text-prompt image generation.
+
+Mitigation: Treat editing and image-to-image workflows as unsupported until the package includes clear implementation and scoping.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qiujiahong/skills/ai-image-gen)
+- [FoxCode API key registration](https://foxcode.rjj.cc/auth/register?aff=R0P5ZY)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Files, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and generated image file paths]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires IMAGE_GEN_API_KEY and can write image files to a selected local output path.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,54 @@
-## Description: <br>
-Guides developers and agent workflows in using the Linear CLI with stable JSON handling, dry-run previews, safe Markdown input, batch operations, and authentication recovery. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Linear CLI专家 guides developers using the Linear CLI from coding agents through stable JSON workflows, dry-run write operations, safer Markdown handling, bulk issue operations, and authentication recovery.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to have an agent operate Linear through the CLI for issue creation, status changes, backlog cleanup, label synchronization, and source-adjacent intake from Slack, email, PRs, or git workflows. It emphasizes read-preview-write-verify loops before authenticated writes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide an agent through authenticated Linear writes that create, update, or transition issues. <br>
-Mitigation: Review dry-run previews before writes, use the least-privileged Linear token available, and verify command receipts and error details after execution. <br>
-Risk: Batch updates or hook-based automation can affect many Linear issues quickly or trigger rate limits. <br>
-Mitigation: Keep concurrency low, start with dry-run or read-before-write checks, and add backoff when Linear returns rate-limit responses. <br>
-Risk: Linear credentials may be exposed if tokens or credential files are copied into project files. <br>
-Mitigation: Use interactive login or environment variables for automation, keep tokens out of repositories, and refresh or re-login when authentication fails. <br>
+## Use Case:
 
+Developers and engineering teams use this skill to have an agent operate Linear through the local linear CLI for issue creation, updates, comments, labels, triage, bulk changes, and GraphQL fallback workflows.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/thcjp/skills/linear-cli-pro) <br>
-- [Linear GraphQL API endpoint](https://api.linear.app/graphql) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration instructions] <br>
-**Output Format:** [Markdown with bash command examples and JSON-oriented workflow guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs guide authenticated Linear CLI operations and prefer dry-run previews, machine-readable JSON, receipt checks, and file or stdin input for Markdown content.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill can lead an agent to read or change Linear issues, labels, comments, workflow states, and related workspace data using existing Linear credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and invoke it only for workflows where agent-operated Linear access is intended, and require dry-run or preview confirmation before write or bulk operations.
+
+Risk: Token retrieval examples and credential handling can expose Linear credentials if run in logged shells or shared transcripts.
+
+Mitigation: Avoid token-retrieval examples in logged shells and prefer configured authentication mechanisms such as interactive login or controlled environment variables.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/thcjp/skills/linear-cli-pro)
+- [Linear GraphQL API endpoint](https://api.linear.app/graphql)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, code]
+
+**Output Format:** [Markdown with inline bash, JSON, and GraphQL code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Emphasizes dry-run previews, JSON responses, file/stdin Markdown input, and post-operation validation.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
