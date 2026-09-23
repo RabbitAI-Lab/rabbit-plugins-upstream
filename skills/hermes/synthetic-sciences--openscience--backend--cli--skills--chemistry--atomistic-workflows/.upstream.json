@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/atomistic-workflows",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/atomistic-workflows",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/atomistic-workflows",
+  "branch": "main",
+  "pushedAt": "2026-09-23T07:46:59Z",
+  "contentHash": "f07bd7babf12a0898dec74141a00915d0bfa39022d1585c8bfaa3d679f324401",
+  "fetchedAt": "2026-09-23T12:49:10.585Z"
+}

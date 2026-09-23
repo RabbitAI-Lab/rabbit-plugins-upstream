@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/geoscience-data",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/geoscience-data",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/geoscience-data",
+  "branch": "main",
+  "pushedAt": "2026-09-23T07:46:59Z",
+  "contentHash": "df83e2f50724157f2102927795fcd722a0637aa24e0bf231747c7ddef1ed67e3",
+  "fetchedAt": "2026-09-23T12:49:10.644Z"
+}
