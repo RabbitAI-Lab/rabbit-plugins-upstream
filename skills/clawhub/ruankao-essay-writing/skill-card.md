@@ -1,53 +1,70 @@
-## Description: <br>
-Guides Ruankao advanced qualification candidates through exam essay preparation, including project material planning, topic analysis, outlines, abstracts, full drafts, and revision checks for five qualification tracks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides Chinese Ruankao advanced qualification candidates through essay preparation, question analysis, outlining, abstract writing, drafting, and review across five senior certification tracks.
 
-## Publisher: <br>
-[nieen](https://clawhub.ai/user/nieen) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nieen](https://clawhub.ai/user/nieen)
 
-## Use Case: <br>
-External learners and exam candidates use this skill to prepare and revise Ruankao advanced qualification essays. It helps select project material, map exam prompts to a structured outline, draft abstracts and body sections, and check the result against common scoring issues. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generic essay-writing prompts may trigger guidance for the wrong Ruankao qualification track. <br>
-Mitigation: Ask or specify the target qualification before drafting so the skill uses the correct project type, role perspective, and checklist. <br>
-Risk: Draft editing may change user-provided essay content in ways that do not match the candidate's real project experience. <br>
-Mitigation: Review revised drafts for factual accuracy and keep project details aligned with the candidate's own experience. <br>
+## Use Case:
 
+External learners and exam-preparation users use this skill to prepare reusable project material, map Ruankao essay prompts to outlines, draft abstracts and body sections, and revise essays against qualification-specific criteria.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nieen/skills/ruankao-essay-writing) <br>
-- [Publisher profile](https://clawhub.ai/user/nieen) <br>
-- [Abstract templates](references/abstract-templates.md) <br>
-- [Outline template](references/outline-template.md) <br>
-- [Project preparation](references/project-preparation.md) <br>
-- [Common issues checklist](references/common-issues.md) <br>
-- [Writing principles](references/writing-principles.md) <br>
-- [Architecture and system analysis project examples](references/project-examples-arch.md) <br>
-- [Project management project examples](references/project-examples-pm.md) <br>
-- [Network planning project examples](references/project-examples-ne.md) <br>
-- [Project management depth criteria](references/depth-criteria-pm.md) <br>
-- [System analysis depth criteria](references/depth-criteria-sa.md) <br>
-- [Network planning depth criteria](references/depth-criteria-ne.md) <br>
-- [System planning and management depth criteria](references/depth-criteria-sp.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown prose with outlines, essay sections, checklists, and revision guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May edit user-provided drafts and uses qualification-specific reference materials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: frontmatter and server release evidence) <br>
+Risk: Users may provide real project background, architecture, test results, incident details, customer names, or other confidential business information while preparing essay material.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Redact or generalize confidential business, customer, security, and proprietary details before using them in prompts or drafts.
+
+Risk: Essay drafts or revision advice may still require review for exam fit, factual accuracy, and alignment with the user's actual role and project experience.
+
+Mitigation: Review generated material against the provided checklists, qualification-specific depth criteria, and the user's real project facts before relying on it.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/nieen/skills/ruankao-essay-writing)
+- [摘要模板与示例](references/abstract-templates.md)
+- [常见错误与故障排查](references/common-errors.md)
+- [论文常见问题及修正建议](references/common-issues.md)
+- [应用深度标准详解：系统架构设计师（架构）](references/depth-criteria-arch.md)
+- [应用深度标准详解：网络规划设计师（网规）](references/depth-criteria-ne.md)
+- [应用深度标准详解：信息系统项目管理师（信管）](references/depth-criteria-pm.md)
+- [应用深度标准详解：系统分析师（系分）](references/depth-criteria-sa.md)
+- [应用深度标准详解：系统规划与管理师（系规）](references/depth-criteria-sp.md)
+- [论文七问（完整版）](references/essay-seven-questions.md)
+- [论文提纲模板](references/outline-template.md)
+- [架构类项目案例（系统架构设计师）](references/project-examples-arch.md)
+- [网络类项目案例（网络规划设计师）](references/project-examples-ne.md)
+- [管理类项目案例（信息系统项目管理师）](references/project-examples-pm.md)
+- [分析类项目案例（系统分析师）](references/project-examples-sa.md)
+- [IT 服务类项目案例（系统规划与管理师）](references/project-examples-sp.md)
+- [项目准备与素材库建设详细指导](references/project-preparation.md)
+- [六大写作原则详解](references/writing-principles.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown prose with outlines, checklists, essay drafts, revision notes, and word-count summaries.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese-language Ruankao advanced exam essay preparation with qualification-specific project examples and depth criteria.]
+
+## Skill Version(s):
+
+1.6.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

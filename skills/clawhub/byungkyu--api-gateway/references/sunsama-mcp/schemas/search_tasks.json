@@ -1,6 +1,6 @@
 {
   "name": "search_tasks",
-  "description": "Search for tasks by keyword",
+  "description": "Search the user's Sunsama tasks by keyword. Use this when the user is looking for their own Sunsama tasks; it does not search calendar events, channels, other apps' task lists, or other people's tasks.",
   "inputSchema": {
     "type": "object",
     "properties": {
@@ -9,6 +9,8 @@
         "description": "The search term to find tasks"
       }
     },
-    "required": ["searchTerm"]
+    "required": [
+      "searchTerm"
+    ]
   }
 }

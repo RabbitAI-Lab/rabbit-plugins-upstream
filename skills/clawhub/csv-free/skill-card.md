@@ -1,41 +1,54 @@
-## Description: <br>
-Csv Free helps agents parse and generate RFC 4180-style comma-separated CSV with basic quoting, escaping, empty-field handling, and column-count checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CSV解析生成-免费版 helps agents parse and generate simple comma-delimited CSV using basic RFC 4180-style quoting, comma separation, and column-count checks.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and agents use this skill to format, parse, and validate simple CSV data for cross-tool exchange when comma delimiters and basic RFC 4180 quoting are sufficient. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan marked the release suspicious because the skill requests command execution and file-writing tools without a clear need for simple CSV formatting. <br>
-Mitigation: Use it in a least-privileged agent session, review any proposed commands or file writes, and prefer a version that removes exec access or narrowly scopes writes. <br>
-Risk: CSV contents can be mishandled by downstream tools because the free guidance does not include Excel formula-injection defenses, BOM handling, alternate delimiters, or detailed parse-failure diagnostics. <br>
-Mitigation: Treat CSV contents strictly as data, validate outputs in the target tool, and avoid using this skill for workflows that require those protections. <br>
+## Use Case:
 
+Developers, analysts, and automation users can use this skill to produce or inspect basic comma-separated CSV data for reports, statistics, data exchange, and simple cross-tool workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/csv-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown responses with CSV text examples and validation notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Limited to comma-separated RFC 4180-style CSV guidance; the free version does not cover BOM handling, alternate delimiters, Excel formula-injection defenses, or detailed parse diagnostics.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill requests command execution and describes workflows broader than basic CSV parsing and generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installing, run it only where command execution is controlled, and restrict use to trusted CSV-related workflows.
+
+Risk: The artifact discusses API key handling even though no specific trusted CSV workflow requires credentials.
+
+Mitigation: Do not provide API keys unless the user has verified a concrete need, and keep any credentials in environment variables outside version control.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/csv-free)
+- [ClawHub Publisher Profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline CSV examples and shell snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce CSV-formatted text, validation notes, processing summaries, and error-handling guidance.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,55 @@
-## Description: <br>
-Audit-ready decision artifacts for LLM outputs: assumptions, risks, recommendation, and review gating as schema-valid JSON. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Audit-ready decision artifacts for LLM outputs with assumptions, risks, recommendations, and review gating as schema-valid JSON.
 
-## Publisher: <br>
-[sapenov](https://clawhub.ai/user/sapenov) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[sapenov](https://clawhub.ai/user/sapenov)
 
-## Use Case: <br>
-Developers, teams, and decision makers use this skill to turn review-required prompts into auditable JSON decision records with assumptions, risks, recommendations, and consistency checks. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Generated decision records may contain secrets, personal data, or confidential incident details if those details are included in the prompt. <br>
-Mitigation: Remove sensitive data before storing or sharing generated artifacts. <br>
-Risk: Example outputs may not require review for every high-impact scenario. <br>
-Mitigation: Require qualified human review for production rollbacks, access-control, financial, legal, medical, safety, or other high-impact decisions. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/sapenov/skills/dgr) <br>
-- [Publisher Profile](https://clawhub.ai/user/sapenov) <br>
-- [DGR JSON Schema](artifact/schema.json) <br>
-- [DGR Field Guide](artifact/field_guide.md) <br>
+## Use Case:
 
+Decision makers, auditors, and teams use DGR to turn decision requests into auditable JSON records that surface assumptions, risks, recommendations, review gates, and consistency checks for ticket, incident, or audit workflows.
 
-## Skill Output: <br>
-**Output Type(s):** [text, guidance] <br>
-**Output Format:** [JSON object conforming to schema.json] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes decision metadata, assumptions, risks, recommendation, review gating, and consistency checks.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata and SKILL.md changelog) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: DGR outputs may be mistaken for authorization to act in production, financial, legal, medical, safety, or access-control decisions.
+
+Mitigation: Treat outputs as decision documentation and require human approval before action in high-stakes workflows.
+
+Risk: An incident-response example understates review gating for a production rollback recommendation.
+
+Mitigation: Apply production change controls and require incident owner approval before acting on rollback recommendations.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/sapenov/skills/dgr)
+- [DGR Homepage](https://www.clawhub.ai/sapenov/dgr)
+- [DGR Field Guide](artifact/field_guide.md)
+- [DGR JSON Schema](artifact/schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, json, guidance]
+
+**Output Format:** [Schema-valid JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Must conform to artifact/schema.json and include assumptions, risks, recommendation, and consistency_check.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata and SKILL.md changelog)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

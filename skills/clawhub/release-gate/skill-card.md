@@ -1,44 +1,55 @@
-## Description: <br>
-Prevents bad deploys by enforcing structured sign-off before any irreversible action. Configurable checklist with named reviewers (Dev, QA, Legal, Product). Blocks execution until all required gates pass and logs every decision. Use before systemctl restarts, file deploys, database migrations, public launches, or any action that is hard to undo. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enforces structured reviewer sign-off and audit logging before clearly irreversible actions such as deployments, migrations, public launches, pricing changes, or emails to real users.
 
-## Publisher: <br>
-[ferrentinomj-dev](https://clawhub.ai/user/ferrentinomj-dev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ferrentinomj-dev](https://clawhub.ai/user/ferrentinomj-dev)
 
-## Use Case: <br>
-Developers, release managers, and AI agents use this skill to run structured deployment sign-off before hard-to-undo, customer-facing, or high-stakes changes. It provides configurable role-based checklists and logging patterns for pass or block decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat the checklist helper as proof that approvals, tests, or reviews actually happened. <br>
-Mitigation: Verify every checklist item with independent evidence before invoking the helper, and block the release when any required sign-off is missing or uncertain. <br>
-Risk: Deployment logs may contain sensitive operational notes. <br>
-Mitigation: Choose an access-controlled log path and avoid writing secrets, credentials, or unnecessary sensitive details in gate notes. <br>
-Risk: A failed or skipped log write can leave the deployment decision without an audit trail. <br>
-Mitigation: Confirm the log entry exists before proceeding with the irreversible action. <br>
+## Use Case:
 
+Developers, operators, and agent teams use this skill to require explicit role-based pass/fail checks before high-stakes or hard-to-reverse changes. It provides checklist patterns and a Python helper for recording approved and blocked release decisions.
 
-## Reference(s): <br>
-- [Release Gate on ClawHub](https://clawhub.ai/ferrentinomj-dev/release-gate) <br>
-- [OWASP Secure Coding Practices Quick Reference Guide](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/) <br>
-- [The Twelve-Factor App](https://12factor.net/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown checklists, configuration examples, and Python helper snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The helper can append gate decisions to a text log when invoked by an agent or workflow.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact _meta.json) <br>
+Risk: The release gate is a checklist and audit-log convention, not a technical lock that prevents deployment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat unchecked or missing approvals as blockers, verify the checklist is complete before acting, and do not rely on the helper to stop bypasses.
+
+Risk: A failed or skipped log write can leave an irreversible action without an audit trail.
+
+Mitigation: Use an appropriate project log path, verify the log entry was written before proceeding, and serialize gate runs for multi-agent teams.
+
+## Reference(s):
+
+- [OWASP Secure Coding Practices Quick Reference Guide](https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/)
+- [The Twelve-Factor App](https://12factor.net/)
+- [ClawHub Skill Page](https://clawhub.ai/ferrentinomj-dev/skills/release-gate)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown checklists with optional Python helper calls and deployment-command context]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces human-facing gate decisions and optional append-only deployment log entries.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

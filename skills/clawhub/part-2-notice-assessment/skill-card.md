@@ -1,42 +1,59 @@
-## Description: <br>
-Assesses a publicly posted Part 2 patient notice for SUD treatment programs against 42 CFR §2.22(b) and reports face-of-document content gaps with citations and quoted notice language. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assesses a public Part 2 patient notice for SUD programs against 42 CFR §2.22(b) and produces a citable coverage map of notice-content gaps without making claims about actual privacy practices.
 
-## Publisher: <br>
-[dangsllc](https://clawhub.ai/user/dangsllc) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dangsllc](https://clawhub.ai/user/dangsllc)
 
-## Use Case: <br>
-Healthcare compliance practitioners, auditors, and developers use this skill to review a SUD program's posted Part 2 patient notice against the required §2.22 content elements. It produces document-review findings only and does not assess the organization's actual privacy practices. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat notice-content findings as legal conclusions about a program's real-world privacy practices. <br>
-Mitigation: Use the output as a public-document review aid and have qualified legal or compliance reviewers decide operational significance and remediation. <br>
-Risk: Untrusted or incomplete notice text could lead to inaccurate absent or insufficient-information findings. <br>
-Mitigation: Prefer pasted notice text or trusted public http/https URLs, and verify that retrieved text is complete before relying on final findings. <br>
+## Use Case:
 
+Compliance, audit, and policy reviewers use this skill to inspect a publicly posted Part 2 patient notice or notice of privacy practices for the specific content elements required by 42 CFR §2.22. It reports document-coverage gaps only, not legal advice or proof of actual program practices.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dangsllc/skills/part-2-notice-assessment) <br>
-- [Rote Compliance Skills](https://github.com/Rote-Compliance/rote-compliance-skills) <br>
-- [Rote Compliance](https://rotecompliance.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [JSON coverage map or Markdown summary with cited notice excerpts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include shell commands for fetching public notice text; findings are limited to public notice content.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The output could be mistaken for legal advice or proof of operational compliance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the output as a public document-coverage review only, and have a qualified compliance professional decide whether and how to act on any gap.
+
+Risk: Incomplete or summarized notice text can cause incorrect absent or insufficient-information classifications.
+
+Mitigation: Use pasted notice text or verbatim page retrieval before finalizing coverage values, especially when classifying missing elements.
+
+Risk: The §2.22 checklist can be misapplied to entities that are not Part 2 programs.
+
+Mitigation: Run the applicability gate first and stop with a scope finding when the subject is not directly bound by the Part 2 patient-notice duty.
+
+## Reference(s):
+
+- [Part 2 Notice Assessment on ClawHub](https://clawhub.ai/dangsllc/skills/part-2-notice-assessment)
+- [Rote Compliance Skills](https://github.com/Rote-Compliance/rote-compliance-skills)
+- [Rote Compliance](https://rotecompliance.com)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Shell commands, Guidance]
+
+**Output Format:** [JSON coverage map with cited findings and a completeness summary]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Findings are scoped to public notice content and include applicability, source, element coverage, notice language, regulatory anchors, reasoning, and a professional review note.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

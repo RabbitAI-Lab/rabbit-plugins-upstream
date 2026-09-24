@@ -1,12 +1,12 @@
----slug: miniprogram-dev-tool-free
+---
+slug: miniprogram-dev-tool-free
 name: miniprogram-dev-tool-free
 version: 1.0.0
 displayName: 小程序开发工具
-summary: "面向个人开发者的微信小"
-license: Proprietary
+summary: "面向个人开发者的微信小,提供核心能力"
+license: "MIT"
 edition: free
-description: 面向个人开发者的微信小程序开发规范与避坑工具，可处理提升工作效率
-  核心能力:
+description: "面向个人开发者的微信小程序开发规范与避坑工具，可处置提升工作效率 核心能力:.该技能适用于相关开发场景,包含结构化的工作流程和配置指引.经过深度差异化处置,针对用户反馈和使用痛点进行了改进,提升了实用性和可操作性.该技能适用于相关开发场景,包含结构化的工作流程和配置指引.经过深度差异化处置,针对用户反馈和使用痛点进行了改进,提升了实用性和可操作性. 功能涵盖: miniprogram。"
 
   - 页面/组件结构与配置规范
 
@@ -24,7 +24,7 @@ description: 面向个人开发者的微信小程序开发规范与避坑工具�
 
   - 本地预览与基础调试
 
-  差异化: 免费版聚焦个人单项目开发与避坑，提供规范速查，零成本使用.
+  差异化: 免费版聚焦个人单项目开发与避坑，包含规范速查，零成本使用.
   适用关键词: 小程序, 微信小程序, wxml, wxss, wxml 规范, wx:key, 生命周期, miniprogram, wechat'
 tags:
   - 小程序
@@ -37,25 +37,26 @@ tags:
   - setdata
   - key
   - index
-  - nav
-  - json
 tools:
   - read
   - exec
   - write
 homepage: ""
-category: "Automation"---# 小程序开发工具（免费版）
+category: "Automation"
+pricing_tier: free
+---
+# 小程序开发工具（免费版）
 
 ## 概述
 
-本工具帮助个人开发者遵循微信小程序开发规范，覆盖页面/组件结构、数据绑定与事件、生命周期、WXSS 样式与 `wx:key` 性能要点。适合单项目本地开发与预览.
+本工具帮助个人开发者遵循微信小程序开发规范，覆盖页面/组件结构、数据绑定与事件、生命周期、WXSS 样式与 `wx:key` 性能要点。适合单项目本地开发与预览. 关键词: dev
 ## 核心能力
 
 | 能力 | 说明 | 免费版范围 |
 |---|---|-----|
 | 页面规范 | 目录结构、json 配置 | 单项目 |
 | 组件规范 | 自定义组件与插槽 | 基础 |
-| 数据绑定 | `{{}}`、事件、setData | 全覆盖 |
+| 数据绑定 | `<配置项>`、事件、setData | 全覆盖 |
 | 生命周期 | onLoad/onShow/onUnload | 全覆盖 |
 | 样式性能 | WXSS、rpx、wx:key | 关键项 |
 **技术实现要点**：核心能力基于`input_params`参数与`output_format`配置实现,支持创建/查询/修改/删除等操作模式,通过`config_options`进行运行时配置.
@@ -105,8 +106,8 @@ pages/
 
 ```html
 <!-- index.wxml -->
-<view wx:for="{{list}}" wx:key="id" bindtap="onTap" data-id="{{item.id}}">
-  {{item.name}}
+<view wx:for="<配置项>" wx:key="id" bindtap="onTap" data-id="<配置项>">
+  <配置项>
 </view>
 ```
 
@@ -125,7 +126,7 @@ Page({
 
 ```html
 <!-- 列表必加 wx:key，提升 diff 性能 -->
-<view wx:for="{{list}}" wx:key="id">{{item.name}}</view>
+<view wx:for="<配置项>" wx:key="id"><配置项></view>
 ```
 
 ## 不适用场景
@@ -143,7 +144,7 @@ Page({
 
 1. 用开发者工具创建项目.
 2. 按规范组织页面/组件目录.
-3. 数据绑定用 `{{}}`，事件用 `bind`/`catch`.
+3. 数据绑定用 `<配置项>`，事件用 `bind`/`catch`.
 4. 列表必加 `wx:key`.
 **响应解析**: 完成完成后,查看输出响应确认任务状态。成功时输出包含解析摘要和响应数据;失败时根据错误信息排查问题,查阅错误解析章节获取恢复步骤.
 ## 示例
@@ -158,7 +159,7 @@ Page({
 | `catch` | 阻止冒泡，`bind` 不阻止 |
 | 生命周期 | onLoad 一次，onShow 每次 |
 
-## 最佳实践
+## 优秀实践
 
 - **wx:key 必加**：列表不加 wx:key 会告警且 diff 慢.
 - **setData 局部**：用路径更新 `list[0].name`，别整个 setData.
@@ -206,7 +207,7 @@ Component({
 
 ```html
 <!-- nav.wxml -->
-<view class="nav" bindtap="onTap">{{title}}</view>
+<view class="nav" bindtap="onTap"><配置项></view>
 ```
 
 ### 数据绑定与 setData 优化

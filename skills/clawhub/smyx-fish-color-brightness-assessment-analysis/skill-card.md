@@ -1,45 +1,63 @@
-## Description: <br>
-Assesses ornamental fish color vibrancy from aquarium images or videos by extracting HSV saturation and brightness signals, comparing them with species-specific baselines, and returning a structured vibrancy report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assesses ornamental fish images or videos for body-color saturation and brightness, compares HSV measurements against species-specific baselines, and returns a vibrancy score, trend information, and husbandry-oriented recommendations.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and developers use this skill to analyze ornamental fish footage from aquarium cameras or uploaded files, estimate color vibrancy, review HSV and baseline-comparison signals, and query prior cloud reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Fish images, videos, and report queries may be sent to LifeEmergence cloud APIs. <br>
-Mitigation: Use the skill only with footage approved for cloud processing, and confirm retention, authorization, and sharing expectations before deployment. <br>
-Risk: The skill may silently create or reuse an internal identity and store user or token records in the workspace data directory. <br>
-Mitigation: Run it in a dedicated workspace, restrict access to local data files, and review or clear stored identity and token records in shared environments. <br>
-Risk: The security evidence reports incomplete disclosure around cloud uploads, report history queries, and local token handling. <br>
-Mitigation: Review the ClawHub security summary and the relevant artifact behavior before using the skill with sensitive aquarium footage or production accounts. <br>
+## Use Case:
 
+Aquarium keepers, aquaculture staff, and app developers use this skill to analyze fish-side images or videos, monitor color vibrancy over time, and receive color-focused husbandry guidance. It is suited for recurring checks where white-balance reference, side-view capture, and species subtype context are available.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-fish-color-brightness-assessment-analysis) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Structured JSON or Markdown text with report links and optional file output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include vibrancy scores, HSV values, species baseline comparisons, trend summaries, alert levels, recommended actions, and cloud report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: Fish images or videos, report history, and a stable agent identity may be sent to the provider's cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when this data sharing is acceptable, avoid sensitive media, and review provider retention and access controls before use.
+
+Risk: The package may default to insecure HTTP endpoints for some service URLs.
+
+Mitigation: Require HTTPS-only endpoints in configuration before executing analysis or history queries.
+
+Risk: The skill can automatically create or reuse a persistent identity and may store tokens locally.
+
+Mitigation: Review identity creation and token-storage behavior, avoid silent account creation for one-off analysis, and rotate or delete stored credentials when no longer needed.
+
+Risk: Color-based findings may be mistaken for veterinary diagnosis or treatment advice.
+
+Mitigation: Use results as color and husbandry support only; do not provide disease diagnoses, medication names, dosages, or treatment plans.
+
+## Reference(s):
+
+- [API Interface Documentation](references/api_doc.md)
+- [Analysis API Reference](skills/smyx_analysis/references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and JSON text, with optional file output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include HSV metrics, species-baseline comparisons, vibrancy scores, trend summaries, recommended actions, and report links.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata; artifact frontmatter lists 1.0.14)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,20 +1,13 @@
 ---
+
 slug: compress-pdf-tool-free
 name: compress-pdf-tool-free
 version: 1.0.0
 displayName: PDF压缩工具（免费版）
 summary: "通过API上传PDF文件进行压缩，支持图像质量与DPI参数调整，轮询返回下载链接.,支持多种使用场景和自动化处理"
-license: Proprietary
+license: MIT
 edition: free
-description: PDF压缩工具 - （免费版），可生成提升工作效率
-
-  核心能力: PDF压缩, 文件压缩, 减小体积, 压缩PDF, compress pdf, 批量压缩
-
-  适用场景: 个人用户日常使用，核心功能覆盖基础需求
-
-  差异化: 精简版，适合个人用户快速上手，提供核心功能与基础用法
-
-  适用关键词: PDF压缩, 文件压缩, 减小体积, 压缩PDF, compress pdf, 批量压缩'
+description: "PDF压缩工具免费版，通过API上传PDF文件进行压缩处理，支持图像质量参数调整（如75/85/95）和DPI分辨率设置（如144/300）。上传后通过轮询机制获取任务状态，完成后返回下载链接供用户获取压缩后的文件。适用于文档归档、邮件附件优化、网页上传文件大小限制等需要减小PDF文件体积的常见场景。 功能涵盖: compress。"
 tags:
   - PDF处理
   - 文件压缩
@@ -26,15 +19,18 @@ tags:
   - pdf
   - api
   - 支持创建
-  - 查询
-  - input_params
 tools:
   - read
   - exec
   - write
 homepage: ""
 category: "Automation"
+pricing_tier: free
 ---
+
+> **核心功能**: 本技能提供结构化的工作流程和配置指引等能力。
+
+
 # PDF压缩工具（免费版）
 
 ## 概述
@@ -108,7 +104,7 @@ PDF文件上传、压缩参数配置、任务轮询、下载链接生成、批�
 
 ### 场景3：压缩参数优化
 
-根据文件类型推荐最佳压缩参数，平衡质量与体积。**示例指令**：`
+根据文件类型推荐优秀压缩参数，平衡质量与体积。**示例指令**：`
 
 `优化扫描文档的压缩参数
 
@@ -141,17 +137,32 @@ pip install requests
 
 ```python
 # PDF压缩基础调用
+import os
 import requests
+from urllib.parse import urlparse
 # ...
-def compress_pdf(file_path, api_key, quality=75, dpi=144):
-    url = "https://api.example.com/solutions/solutions/api/29"
+def _validate_url(url):
+    """URL安全校验 - 防止服务端请求伪造攻击"""
+    parsed = urlparse(url)
+    if parsed.scheme not in ('http', 'https'):
+        raise ValueError(f"不支持的协议: {parsed.scheme}")
+    if parsed.hostname in ('localhost', '127.0.0.1', '0.0.0.0'):
+        raise ValueError(f"禁止访问内网地址: {parsed.hostname}")
+    return url
+
+def compress_pdf(file_path, api_key=None, quality=75, dpi=144):
+    api_url = os.getenv("COMPRESS_PDF_API_URL", "")
+    if not api_url:
+        raise ValueError("请通过环境变量 COMPRESS_PDF_API_URL 配置API地址")
+    _validate_url(api_url)  # 安全防护: 校验URL合法性
+    api_key = api_key or os.getenv("COMPRESS_PDF_API_KEY", "")
     headers = {"Authorization": f"Bearer {api_key}"}
     files = {"file": open(file_path, "rb")}
     data = {"imageQuality": quality, "dpi": dpi}
-    resp = requests.post(url, headers=headers, files=files, data=data)
+    resp = requests.post(api_url, headers=headers, files=files, data=data)
     return resp.json()
 # ...
-result = compress_pdf("document.pdf", "YOUR_API_KEY")
+result = compress_pdf("document.pdf")
 print(f"任务ID: {result.get('job_id')}")
 ```
 
@@ -162,7 +173,8 @@ print(f"任务ID: {result.get('job_id')}")
 
 ```yaml
 compress:
-  api_key: "YOUR_API_KEY"
+  api_url: "${COMPRESS_PDF_API_URL}"
+  api_key: "${COMPRESS_PDF_API_KEY}"
   default_quality: 75
   default_dpi: 144
   poll_interval: 3
@@ -175,7 +187,7 @@ compress:
 | 基础路径 | 工作目录 | `./` |
 | 输出格式 | 结果输出格式 | `json` |
 
-## 最佳实践
+## 优秀实践
 
 ### 基础使用建议
 
@@ -188,9 +200,8 @@ compress:
 ### 性能优化
 
 ```python
-# 免费版：单文件优化
-# 确保输入文件不超过建议大小
-# 处理完成后释放资源
+# 在此执行相关操作
+...  # 具体实现请参考上下文文档
 ```
 
 ## 常见问题

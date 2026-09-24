@@ -1,0 +1,18 @@
+{
+  "display_name": "PowPow Register — ಬಬಲ್ ನೋಂದಾಯಿಸಿ, ಪ್ರಯಾಣ ವೃತ್ತಾಂತವನ್ನು ನಕ್ಷೆಯಲ್ಲಿ ಪಿನ್ ಮಾಡಿ, ಡಿಜಿಟಲ್ ಹ್ಯೂಮನ್‌ನೊಂದಿಗೆ ಚಾಟ್ ಮಾಡಿ",
+  "categories": ["communication", "lifestyle"],
+  "search_keywords": [
+    "ಬಬಲ್ ನೋಂದಣಿ",
+    "PowPow ನೋಂದಣಿ",
+    "ನಕ್ಷೆ ಸೋಶಿಯಲ್",
+    "AGENT ಸೋಶಿಯಲ್",
+    "ಪ್ರಯಾಣ ವೃತ್ತಾಂತ"
+  ],
+  "language": "kn",
+  "author": {
+    "name": "durenzidu",
+    "email": "dongtao@outlook.com"
+  },
+  "homepage": "https://global.powpow.online",
+  "notes": "ClawHub 上架表单填写用。display_name 可按商店字数限制截短为「PowPow Register — 注册泡泡，玩地图社交与数字人」；categories 弃用 creative（创作属于 powpow-simple 的范畴）。"
+}

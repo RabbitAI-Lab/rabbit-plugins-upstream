@@ -1,45 +1,60 @@
-## Description: <br>
-Implements file-based planning so agents can organize complex work with persistent task plans, findings, progress logs, reusable scripts, and session recovery support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Persistent file-based planning for multi-step AI-agent work using project-local planning files, lifecycle hooks, and optional same-project session catch-up.
 
-## Publisher: <br>
-[othmanadi](https://clawhub.ai/user/othmanadi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[othmanadi](https://clawhub.ai/user/othmanadi)
 
-## Use Case: <br>
-Developers and agent users use this skill to keep multi-step tasks, research, and implementation work organized across long sessions. It creates and maintains markdown planning files in the user project, with helper scripts for initialization, active-plan selection, progress summaries, completion checks, and session catch-up. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Automatic hooks can inject persistent planning content into agent turns. <br>
-Mitigation: Review the planning files before use, keep plan directories scoped to the current project, and use attestation when relying on automatic injection or gated workflows. <br>
-Risk: Session catch-up can read local agent session history for the current project. <br>
-Mitigation: Avoid using the skill in projects where prompts, command arguments, or prior tool output may contain secrets. <br>
-Risk: Completion-gated workflows may affect when an agent stops. <br>
-Mitigation: Use gated mode only when the plan file is expected to be the completion source of truth, and keep phase status current in task_plan.md. <br>
+## Use Case:
 
+Developers and agent users use this skill to keep long-running or multi-step work organized with durable task plans, findings, and progress files. It is suited to research, implementation, debugging, and other workflows that need state to survive across many tool calls or sessions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/othmanadi/skills/planning-with-files) <br>
-- [Planning with Files reference](references/reference.md) <br>
-- [Planning with Files examples](references/examples.md) <br>
-- [Manus context engineering article](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown files with inline shell and PowerShell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates or updates task_plan.md, findings.md, progress.md, and optional .planning plan directories in the user project.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.0 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Planning files may be read by hooks and added to agent context.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not store secrets in task_plan.md, progress.md, or findings.md; keep planning content limited to information suitable for agent context.
+
+Risk: Explicit session-catchup replay can bring prior same-project transcript excerpts into the current session.
+
+Mitigation: Use --replay only intentionally, and treat replayed excerpts as untrusted context.
+
+Risk: Instruction-like content copied into planning files can influence future agent behavior.
+
+Mitigation: Treat planning-file content as data, keep untrusted research in findings.md, and use the skill's attestation workflow where supported.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/othmanadi/skills/planning-with-files)
+- [Manus context engineering source](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus)
+- [Attestation locking and fallback](https://github.com/OthmanAdi/planning-with-files/blob/master/docs/attestation-locking.md)
+- [Performance notes](https://github.com/OthmanAdi/planning-with-files/blob/master/docs/perf-notes.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown files and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates project-local planning files and can inject selected planning context through host hooks.]
+
+## Skill Version(s):
+
+3.20.7 (source: evidence.release.version and SKILL.md metadata.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

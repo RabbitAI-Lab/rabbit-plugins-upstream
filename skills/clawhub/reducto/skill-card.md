@@ -1,46 +1,77 @@
-## Description: <br>
-Reducto provides a document processing API integration through Maton-managed authentication for parsing, extraction, splitting, uploads, jobs, pipelines, and PDF or DOCX edits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reducto document processing API integration with managed API key authentication for parsing, extracting, splitting, and editing documents.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to call Reducto document workflows from ClawHub, including parsing documents, extracting structured fields, splitting content into sections, editing PDFs or DOCX files, uploading files, and polling asynchronous jobs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Document data is sent to Maton and Reducto for processing. <br>
-Mitigation: Use the skill only when that transfer is acceptable, and avoid sensitive or regulated documents unless the user has approved the transfer and compliance requirements are satisfied. <br>
-Risk: MATON_API_KEY is a sensitive credential required for all requests. <br>
-Mitigation: Use a dedicated API key where possible, keep the key out of logs and chat transcripts, and rotate it if exposure is suspected. <br>
-Risk: Uploads, document edits, connection changes, and delete operations can change documents or account state. <br>
-Mitigation: Require clear user confirmation before any upload, create, update, edit, connection-management, or delete operation, including the target resource and intended effect. <br>
+## Use Case:
 
+Developers and operators use this skill to connect an agent to Reducto through Maton for document parsing, structured extraction, splitting, editing, uploads, and job checks. It is intended for user-approved document workflows that need managed authentication and explicit confirmation before writes or automation.
 
-## Reference(s): <br>
-- [ClawHub Reducto Skill](https://clawhub.ai/byungkyu/reducto) <br>
-- [Maton](https://maton.ai) <br>
-- [Reducto Documentation](https://docs.reducto.ai) <br>
-- [Reducto API Reference](https://docs.reducto.ai/api-reference) <br>
-- [Reducto Studio](https://studio.reducto.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration, API requests] <br>
-**Output Format:** [Markdown with inline Bash, Python, JavaScript, JSON, and HTTP examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; API responses may include processed document content, job status, usage data, and presigned upload URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence; artifact frontmatter says 1.0) <br>
+Risk: Selected documents and extracted document contents may be sent to Reducto through Maton.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user is comfortable with that data flow and process only the documents and fields required for the approved task.
+
+Risk: Long-lived API keys or raw credentials can be exposed through environment variables, command history, logs, or destination configuration.
+
+Mitigation: Prefer OAuth and the CLI credential store, avoid embedding credentials in headers or body templates, and rotate any key that was printed, committed, or pasted.
+
+Risk: Uploads, edits, connection changes, functions, triggers, and destinations can modify data or create persistent automation.
+
+Mitigation: Default to read and list operations, then require explicit user confirmation for each write, upload, edit, connection, deployment, trigger, destination, or replay action.
+
+Risk: Triggers and destinations can continuously forward document-related or third-party event data beyond the original interactive request.
+
+Mitigation: Create them only for a specific approved workflow, scope them narrowly, forward minimum fields, and prefer Maton-hosted destinations unless the user approves an exact external host.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/reducto)
+- [Maton Homepage](https://maton.ai)
+- [Reducto Documentation](https://docs.reducto.ai)
+- [Reducto API Reference](https://docs.reducto.ai/api-reference)
+- [Reducto Studio](https://studio.reducto.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Time Trigger Reference](references/time/triggers.md)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and user-approved Reducto connection actions.]
+
+## Skill Version(s):
+
+1.2.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

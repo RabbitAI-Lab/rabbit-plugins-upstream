@@ -1,42 +1,57 @@
-## Description: <br>
-Provides local Whisper v1 audio transcription and subtitle generation for single audio or video files, with optional audio-to-English translation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Whisper v1转录免费版 helps agents guide local Whisper v1 audio transcription, subtitle generation, and basic translation workflows for individual users and automation scenarios.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and agent users use this skill to install local transcription dependencies, run Whisper CLI commands, and produce transcript or subtitle outputs for user-selected media files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill asks the agent to run local shell commands and install transcription dependencies. <br>
-Mitigation: Review proposed commands before execution and install only in environments where local package installation is permitted. <br>
-Risk: The first transcription run may download Whisper model files and cache them locally. <br>
-Mitigation: Plan for network access and local storage, or pre-stage approved model files before using the skill in controlled environments. <br>
-Risk: The documentation contains inconsistent API-key guidance and a broader localization trigger than the supported transcription scope. <br>
-Mitigation: Use the skill only for user-selected audio or video transcription and audio-to-English translation, and clarify API-key requirements with the publisher before controlled or offline use. <br>
+## Use Case:
 
+Developers, independent creators, and automation users can use this skill to prepare local Whisper transcription commands, generate txt/srt/vtt/json outputs, and document setup requirements for offline media transcription.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/llm-provider-whisper-v1-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and transcript or subtitle file outputs such as txt, srt, vtt, json, or tsv.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May install command-line dependencies and cache Whisper model files locally on first use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Security evidence marks the release as suspicious because the documentation is broad and internally inconsistent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installation and confirm that the publisher's intended behavior matches local transcription or subtitle-generation use.
+
+Risk: The skill proposes package installation, sudo package-manager commands, and shell commands that may process private media files.
+
+Mitigation: Review each command before execution, avoid passing sensitive media unless the local environment is trusted, and confirm package sources before installing dependencies.
+
+Risk: The documentation contains inconsistent API key language even though the security guidance says to treat API key references as unreliable unless clarified by the publisher.
+
+Mitigation: Do not provide API keys based only on this skill's text; clarify requirements with the publisher or rely on local-only operation when appropriate.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/llm-provider-whisper-v1-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and transcription output paths]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce or point to local txt, srt, vtt, json, or tsv transcription artifacts when executed by an agent.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

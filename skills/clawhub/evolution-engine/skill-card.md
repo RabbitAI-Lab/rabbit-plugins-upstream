@@ -1,44 +1,53 @@
-## Description: <br>
-Evolution Engine helps an AI agent learn from explicit corrections, reflect on important work, maintain layered local memory, and track whether repeated mistakes decline over time. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+进化引擎 helps AI agents record corrections, reflect on completed work, maintain layered local memory, and reuse confirmed lessons with anti-pollution safeguards.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and agent users use this skill to give an AI coding or productivity assistant a persistent local correction-and-reflection workflow so it can reuse confirmed preferences and project patterns across sessions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores durable interaction-derived memory in local files, which can preserve preferences, corrections, or project context longer than expected. <br>
-Mitigation: Review stored memory regularly, avoid saving sensitive data, and keep a clear process for exporting, disabling, or deleting the memory directory. <br>
-Risk: The manifest requests command execution even though the artifact describes the skill as pure Markdown guidance. <br>
-Mitigation: Install with least privilege where possible and review any proposed shell commands before execution. <br>
-Risk: Incorrectly learned memories or over-broad rules can affect future agent behavior across sessions or projects. <br>
-Mitigation: Require explicit user confirmation before promoting rules, keep project and domain namespaces separate, and archive or remove mistaken memories when found. <br>
+## Use Case:
 
+Developers and agent operators use this skill to guide an AI agent in recording user corrections, promoting confirmed patterns into local memory, and tracking evolution metrics for repeated workflows. It is not suitable for critical decisions that require deterministic certainty.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/evolution-engine) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [Clawdis homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with structured local-memory file conventions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces correction records, reflection notes, memory rules, metrics summaries, and maintenance guidance for local files under the skill's memory directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The skill requests or advertises command and network-related capabilities that exceed its described local-memory purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install with command execution and network/API access disabled or restricted unless the publisher provides a clear operational need.
+
+Risk: The skill writes persistent memory records under ~/evolution-engine/, which can retain sensitive, stale, or unintended user information.
+
+Mitigation: Review stored memory files regularly, avoid storing credentials or sensitive personal data, and delete or archive records only with explicit user intent.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/evolution-engine)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance, shell commands]
+
+**Output Format:** [Markdown guidance with local file paths and optional shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update local memory files under ~/evolution-engine/ when the agent follows the skill.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

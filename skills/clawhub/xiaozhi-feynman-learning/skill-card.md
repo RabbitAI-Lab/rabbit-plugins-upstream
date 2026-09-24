@@ -1,40 +1,63 @@
-## Description: <br>
-用“教会小智”的方式，通过讲解、追问、迁移和批判性验证，帮助学生检验自己是否真正理解一个知识点。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用“讲给小智听”的方式检验学生是否真正掌握一个知识点，并输出掌握度判定和卡住位置。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, parents, and education-focused agents use this skill to run Feynman-style self-checks after learning a topic, after reviewing mistakes, before exams, or before explaining material to others. It helps surface shallow understanding by asking the learner to explain, give examples, justify reasoning, transfer concepts, and perform age-adapted critical validation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may store and reuse student learning responses and ratings without clear consent, retention, access, or deletion controls. <br>
-Mitigation: Before using it with children or shared accounts, require clear disclosure of what is saved, where it goes, who can access it, how long it remains, and how a user or parent can delete it. <br>
+## Use Case:
 
+External Chinese-language K-12 learners and their learning-support agents use this skill to test whether a student can explain, apply, transfer, and critically check a concept after studying it. It is suited to post-lesson self-checks, mistake-review follow-ups, and preparation for explaining a topic to another person.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-feynman-learning) <br>
-- [费曼测试追问话术参考库](references/feynman-dialogue-patterns.md) <br>
-- [费曼4+1跳验证 · 状态机定义](references/feynman-5jump-statemachine.md) <br>
+### Deployment Geography for Use:
 
+Mainland China by default; other regions require localization of language, curriculum assumptions, guardian-consent rules, and crisis resources before deployment.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown conversation guidance and structured assessment summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce learner-facing prompts, Feynman test evaluations, next-step recommendations, and learning-depth records when the host agent supports shared learner state.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: The skill is designed for Chinese-language K-12 study support and includes mainland China crisis-resource assumptions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Localize the language, curriculum assumptions, guardian-consent rules, and crisis resources before deploying outside mainland China.
+
+Risk: The workflow can involve student learning records or reminder handoffs.
+
+Mitigation: Use only the documented consent-gated profile and reminder controls; when consent is absent, keep results within the current conversation.
+
+Risk: Student frustration signals can overlap with safety concerns.
+
+Mitigation: Run the crisis-signal check before study-support fallback and route urgent safety content to trusted-adult and local emergency guidance.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-feynman-learning)
+- [Feynman 4+1 Jump State Machine](references/feynman-5jump-statemachine.md)
+- [Feynman Dialogue Patterns](references/feynman-dialogue-patterns.md)
+- [Grade Bands](shared/grade-bands.md)
+- [Crisis Exception](shared/crisis-exception.md)
+- [AI Item Check Protocol](shared/ai-item-check.md)
+- [Handover Protocol Schema](shared/handover-protocol.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, configuration]
+
+**Output Format:** [Chinese-language conversational guidance and assessment summaries in Markdown-like text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May describe consent-gated handoff data for understanding records and reminder requests; otherwise defaults to current-session guidance.]
+
+## Skill Version(s):
+
+2.3.0 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

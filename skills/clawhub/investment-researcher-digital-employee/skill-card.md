@@ -1,40 +1,58 @@
-## Description: <br>
-Covers 34 investment research capabilities across macro strategy, fixed income, industry and company analysis, quant factors, asset allocation, convertible bonds, market sentiment, policy commentary, and industry cycle tracking. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides 34 investment research modules for macro, fixed income, industry, company, strategy, and quantitative workflows that generate report outlines and research drafts with source, methodology, and human-review checks.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Financial professionals and investment research teams use this skill to structure human-reviewed research workflows, including macro, fixed income, equity, industry, quant factor, asset allocation, sentiment, policy, and risk reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill appears intended for financial research automation and may involve external financial or news queries, sandboxed Python analysis, or scheduled briefings. <br>
-Mitigation: Enable it only where those actions are explicitly allowed and controlled by the user, and review outputs before use. <br>
-Risk: Financial research outputs could be mistaken for investment, legal, insurance, or compliance advice. <br>
-Mitigation: Treat outputs as reference material only and require review by qualified professionals before decisions or submissions. <br>
+## Use Case:
 
+Investment research employees and external analysts use this skill to choose an appropriate research module, structure financial research briefs, and draft markdown reports for human review. It supports macro, fixed income, industry, company, strategy, and quantitative analysis using user-authorized data sources.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/gechengling/skills/investment-researcher-digital-employee) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown reports, tables, checklists, command examples, and analytical guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reference-only outputs that require human review before real-world use] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The skill may lead an agent to query authorized financial data services or public web sources during research workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only approved data services or public sources, minimize sensitive data, cite source and timestamp, and cross-check critical values.
+
+Risk: Some workflows describe recurring or scheduled report generation.
+
+Mitigation: Require explicit user approval before saving, sending, or setting up recurring reports, and preview the full output first.
+
+Risk: Generated research can resemble investment advice or overstate confidence.
+
+Mitigation: Treat outputs as draft research only, preserve non-advice disclaimers, and require review by qualified personnel before real-world use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/investment-researcher-digital-employee)
+- [Publisher profile](https://clawhub.ai/user/gechengling)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, code, shell commands, configuration]
+
+**Output Format:** [Markdown research reports, report outlines, tables, checklists, and illustrative command or configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires user-supplied target, asset, and time window; outputs require qualified human review and explicit confirmation before saving, sending, or scheduling.]
+
+## Skill Version(s):
+
+2.0.6 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,57 @@
-## Description: <br>
-Coding workflow with planning, implementation, verification, and testing for clean software development. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Coding workflow with planning, implementation, verification, and testing for clean software development.
 
-## Publisher: <br>
-[Lion504](https://clawhub.ai/user/Lion504) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[lion504](https://clawhub.ai/user/lion504)
 
-## Use Case: <br>
-Developers and engineers use this skill to structure coding requests into planned, testable implementation steps with verification before delivery. It also provides guidance for optional local preference memory when the user explicitly asks to save coding preferences. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Optional local preference memory can store sensitive information if a user asks to save secrets, credentials, or sensitive personal data. <br>
-Mitigation: Do not save secrets, credentials, or sensitive personal data in ~/code/memory.md; review or delete the file when preferences should no longer be reused. <br>
-Risk: Generated coding guidance or proposed changes may be incorrect or insufficiently verified. <br>
-Mitigation: Review proposed changes and run the relevant tests, screenshots, or full verification workflow before delivery or deployment. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/Lion504/code-1-0-4) <br>
-- [Skill homepage](https://clawic.com/skills/code) <br>
-- [Memory setup reference](memory-template.md) <br>
-- [Planning reference](planning.md) <br>
-- [Execution guidance](execution.md) <br>
-- [Verification reference](verification.md) <br>
+## Use Case:
 
+Developers and engineers use this skill when they want an agent to follow a structured coding workflow for planning, implementation, progress tracking, verification, and delivery. The skill also provides guidance for saving coding preferences locally only when the user explicitly requests it.
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline code and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose edits, verification steps, and optional local preference-memory instructions; it does not automatically execute code or make network requests.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.4 (source: SKILL.md frontmatter and artifact _meta.json; ClawHub release version 1.0.0) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: User preference notes can persist on local disk in ~/code/memory.md when explicitly saved.
+
+Mitigation: Do not ask the skill to save credentials, secrets, sensitive personal data, or project-confidential details; edit or delete ~/code/memory.md when stored preferences are no longer needed.
+
+## Reference(s):
+
+- [Code 1.0.4 ClawHub Skill Page](https://clawhub.ai/lion504/skills/code-1-0-4)
+- [lion504 Publisher Profile](https://clawhub.ai/user/lion504)
+- [Code Skill Homepage](https://clawic.com/skills/code)
+- [Skill Definition](artifact/SKILL.md)
+- [Planning Reference](artifact/planning.md)
+- [Execution Guidance](artifact/execution.md)
+- [Verification Reference](artifact/verification.md)
+- [Preference Storage Criteria](artifact/criteria.md)
+- [Memory Template](artifact/memory-template.md)
+- [State Tracking Guidance](artifact/state.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with occasional shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No executable code; may propose local preference files only when explicitly requested.]
+
+## Skill Version(s):
+
+1.0.4 (source: artifact/SKILL.md frontmatter); release 1.0.0 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

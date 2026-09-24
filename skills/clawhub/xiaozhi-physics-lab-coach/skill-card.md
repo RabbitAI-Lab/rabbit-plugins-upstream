@@ -1,39 +1,68 @@
-## Description: <br>
-A Chinese-language physics experiment coaching skill that helps students reason through experiment design, data analysis, error analysis, and experimental conclusions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+面向初中到高一学生的中文物理实验思维教练，帮助学习实验方法、变量控制、数据处理、误差分析、实验评价和实验操作考试自查。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning-support agents use this skill to practice middle-school physics experiment reasoning, including variable control, measurement design, graph and table analysis, error reasoning, and standard conclusion wording. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may interact with learning-profile or reminder features when those are available in the OpenClaw environment. <br>
-Mitigation: Review configured integrations and student-data handling before enabling profile updates or reminders. <br>
+## Use Case:
 
+External Chinese-speaking K-12 students use this skill to reason through physics experiments rather than memorize procedures, including variable control, data-table and graph analysis, error analysis, conclusion wording, and exam-operation self-checks. Educators or platforms can use it as a guided tutoring skill for Mainland China curriculum-aligned physics lab preparation.
 
-## Reference(s): <br>
-- [物理实验方法深度手册](references/physics-experiment-methods.md) <br>
-- [物理数据分析方法手册](references/physics-data-analysis.md) <br>
+### Deployment Geography for Use:
 
+Mainland China by default; localize crisis contacts, curriculum assumptions, minor-consent rules, and language expectations before use in other regions.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown-style tutoring guidance and Socratic question prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; outputs are coaching dialogue and structured physics experiment study guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Use outside Mainland China may provide mismatched crisis contacts, curriculum assumptions, minor-consent expectations, or language support.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Localize crisis contacts, curriculum assumptions, minor-consent rules, and language expectations before deployment outside Mainland China or to non-Chinese-speaking learners.
+
+Risk: Learning profiles, cross-skill sharing, parent visibility, and reminders can expose student data or create consent issues if platform settings are not configured.
+
+Mitigation: Review and configure consent, sharing, parent visibility, deletion/export, and reminder controls before enabling profile or reminder features.
+
+Risk: Physics lab questions can involve unsafe at-home procedures such as 220 V circuits, heat, flames, glassware, or hazardous classroom setups.
+
+Mitigation: Keep the artifact's lab-safety boundaries active: do not provide at-home dangerous experiment steps, require teacher supervision for medium-risk classroom experiments, and route emergencies to immediate adult or local emergency support.
+
+Risk: Active exams or tests could be undermined if the skill provides live hints or answers.
+
+Mitigation: Follow the artifact's exam-integrity rule: do not provide the requested help during an active exam or test; offer to review after it ends.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-lab-coach)
+- [Publisher profile: qizhitang](https://clawhub.ai/user/qizhitang)
+- [物理实验方法深度手册](artifact/references/physics-experiment-methods.md)
+- [物理数据分析方法手册](artifact/references/physics-data-analysis.md)
+- [高一必修第一册的学生必做实验（高中衔接段）](artifact/references/physics-hs1-labs.md)
+- [中考物理实验操作考试备考指南](artifact/references/physics-lab-exam-guide.md)
+- [实验安全约定](artifact/shared/lab-safety.md)
+- [危机例外](artifact/shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Text]
+
+**Output Format:** [Chinese conversational tutoring guidance in Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May ask the learner to transcribe unclear images or data tables; includes privacy-control, crisis-referral, exam-integrity, and lab-safety boundaries.]
+
+## Skill Version(s):
+
+2.3.0 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

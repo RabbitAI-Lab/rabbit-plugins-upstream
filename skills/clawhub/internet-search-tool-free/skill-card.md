@@ -1,41 +1,59 @@
-## Description: <br>
-A SearXNG-based aggregated search skill that helps agents route general, news, academic, and social queries across multiple search engines for personal information retrieval. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+基于 SearXNG 的多引擎聚合搜索工具，支持分类路由与智能查询，聚合多个搜索引擎结果，适合个人日常信息检索。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users, developers, students, and researchers use this skill to run single SearXNG-backed searches across general, news, academic, and social categories. It is intended for personal information retrieval and source discovery, not bulk search, result export, custom engine configuration, or cached workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries may be sent to the configured SearXNG instance and, depending on that instance, upstream search engines. <br>
-Mitigation: Use a trusted or self-hosted SearXNG instance for sensitive searches, and avoid entering secrets or private personal data in queries. <br>
-Risk: The free edition documents unsupported advanced behaviors such as bulk queries, export, custom engine configuration, and search caching. <br>
-Mitigation: Treat those advanced behaviors as unavailable unless the publisher clarifies support, and keep use to single-query search workflows. <br>
+## Use Case:
 
+External users, developers, students, and researchers use this skill to route search queries across SearXNG-backed general, news, academic, and social search categories and summarize aggregated results.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/internet-search-tool-free) <br>
-- [Example public SearXNG instance](https://searx.be) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON-style search result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Single-query search helper; the artifact states a maximum of 10 results per query and no bulk query, export, custom engine, or cache support in the free edition.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The security summary says the skill asks for or documents broader local command and file-changing powers than the search purpose explains.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing, avoid granting write access unless the package is narrowed to search-only behavior, and use the skill only in an environment where local command execution is expected.
+
+Risk: Searches may be sent to a public or configured SearXNG instance.
+
+Mitigation: Use non-sensitive searches or a trusted self-hosted SearXNG instance, especially for private research, business, or user data.
+
+Risk: The artifact describes unsupported export and cache behavior while the security guidance says those features should be clarified.
+
+Mitigation: Treat export, cache, batch query, and custom engine features as unsupported in this release unless a reviewer confirms narrowed behavior.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/internet-search-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+- [Public SearXNG instance referenced by artifact](https://searx.be)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and search query examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Free edition documents a maximum of 10 results per query and no batch query, export, custom engine configuration, or search cache support.]
+
+## Skill Version(s):
+
+1.0.2 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

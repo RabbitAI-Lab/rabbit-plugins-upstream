@@ -1,50 +1,66 @@
-## Description: <br>
-ActiveCampaign API integration with managed OAuth for marketing automation, CRM, contacts, deals, email campaigns, automations, tags, lists, users, accounts, custom fields, notes, and webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ActiveCampaign API integration with managed OAuth for managing contacts, deals, tags, lists, automations, campaigns, CRM records, custom fields, notes, and webhooks.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Marketing, CRM, and operations teams, plus developers assisting them, use this skill to inspect and manage ActiveCampaign resources through Maton-managed OAuth. It supports contact, deal, list, campaign, automation, tag, account, custom field, note, and webhook workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Maton API key and ActiveCampaign OAuth access can read or manage data in the connected account. <br>
-Mitigation: Install only if you trust Maton to proxy ActiveCampaign access, keep MATON_API_KEY in the environment, and specify the intended connection when multiple accounts are available. <br>
-Risk: Create, update, and delete calls can change CRM and marketing resources. <br>
-Mitigation: Confirm the exact resource, account, and intended effect with the user before every write operation. <br>
-Risk: Webhook creation can send ActiveCampaign account event data to an external URL. <br>
-Mitigation: Confirm the destination URL, subscribed events, and business intent before creating a webhook. <br>
-Risk: User and account management actions can affect shared resources and team access. <br>
-Mitigation: Treat user and account changes as administrative actions and require explicit confirmation before modifying them. <br>
+## Use Case:
 
+Employees, operators, and developers use this skill to read and manage ActiveCampaign marketing automation and CRM resources through Maton-authenticated API calls, with explicit approval before writes, webhooks, connections, hosted functions, or triggers.
 
-## Reference(s): <br>
-- [Maton](https://maton.ai) <br>
-- [ActiveCampaign API Overview](https://developers.activecampaign.com/reference/overview) <br>
-- [ActiveCampaign Developer Portal](https://developers.activecampaign.com/) <br>
-- [ActiveCampaign API Base URL](https://developers.activecampaign.com/reference/url) <br>
-- [Contacts API](https://developers.activecampaign.com/reference/list-all-contacts) <br>
-- [Tags API](https://developers.activecampaign.com/reference/contact-tags) <br>
-- [Deals API](https://developers.activecampaign.com/reference/list-all-deals) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with HTTP, Python, JavaScript, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY, network access, and explicit user approval before write operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata) <br>
+Risk: Write operations, user or account management, and connection changes can affect shared ActiveCampaign resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact account, connection, resource IDs, payload, and intended operation with the user before approving any write, delete, or connection action.
+
+Risk: Webhook, trigger, or hosted function workflows may send account event data to a destination or run persistently after setup.
+
+Mitigation: Verify the destination URL, receiving system owner, function code, connection scope, network policy, and persistence before creation; remove automation when the task is finished.
+
+Risk: API-key authentication can expose a long-lived credential if handled through environment variables or raw HTTP.
+
+Mitigation: Prefer OAuth and the operating system credential store; use raw HTTP only where the CLI cannot be installed and avoid logging or storing raw responses and credentials.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/active-campaign)
+- [Maton Homepage](https://maton.ai)
+- [ActiveCampaign API Overview](https://developers.activecampaign.com/reference/overview)
+- [ActiveCampaign Developer Portal](https://developers.activecampaign.com/)
+- [Contacts API](https://developers.activecampaign.com/reference/list-all-contacts)
+- [Tags API](https://developers.activecampaign.com/reference/contact-tags)
+- [Deals API](https://developers.activecampaign.com/reference/list-all-deals)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, code snippets, JSON examples, and operational guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs guide authenticated ActiveCampaign API calls through Maton and require user approval before write, webhook, connection, hosted function, or trigger operations.]
+
+## Skill Version(s):
+
+1.2.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

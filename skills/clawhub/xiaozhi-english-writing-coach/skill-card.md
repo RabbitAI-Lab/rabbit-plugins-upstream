@@ -1,41 +1,71 @@
-## Description: <br>
-Guides English learners through targeted writing feedback, sentence and vocabulary upgrades, scenario-based practice, and consent-gated progress tracking. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+英语写作进化教练 helps Chinese-language K12 learners improve English writing through sentence-level grammar, vocabulary, and logic feedback, guided revision prompts, scenario practice, and consent-gated writing profiles.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and English learners use this skill to improve written English through grammar, vocabulary, and logic feedback that asks them to revise rather than simply receiving rewritten answers. It can also guide practical writing exercises, track progress when the user consents, and produce monthly writing-development summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can remember writing-development patterns when the user allows progress tracking. <br>
-Mitigation: Ask for consent before updating writing profiles, DNA records, reminders, or cross-session progress notes, and let the user decline tracking. <br>
-Risk: Writing feedback may be misleading if treated as authoritative scoring or a complete rewrite. <br>
-Mitigation: Use the skill as coaching guidance, focus on the most important issues, and have the learner review and revise the work themselves. <br>
+## Use Case:
 
+External learners, parents, teachers, and education operators use this skill as a Chinese-language English writing coach for paragraph and essay feedback, sentence upgrade practice, and progress reporting. It is intended for normal learning support, not active exams, crisis counseling, or unconsented student profiling.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-writing-coach) <br>
-- [Low-to-high vocabulary upgrade reference](references/vocabulary-upgrade.md) <br>
+### Deployment Geography for Use:
 
+Global, with localization required for emergency resources, curriculum assumptions, and minor-consent rules before student use outside Mainland China.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style coaching feedback, revision prompts, practice scripts, and progress summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include consent-gated progress notes for writing habits, sentence-level development, and monthly summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: The skill is designed for K12 learners, so student use may require adult supervision, consent, and local minor-data handling rules.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require parent or teacher presence for younger learners, enable long-term writing profiles only after consent, and localize consent controls before deployment.
+
+Risk: Crisis signals such as self-harm, bullying, serious despair, or family safety concerns are outside the learning-coach scope.
+
+Mitigation: Stop tutoring flow, avoid judgment, explain the AI boundary, contact a trusted adult, and route the learner to local emergency or crisis resources.
+
+Risk: Emergency contacts, curriculum assumptions, and consent expectations may not match regions outside Mainland China.
+
+Mitigation: Replace emergency resources, school-stage assumptions, and consent language with locally appropriate guidance before serving those users.
+
+Risk: The coach could over-assist by effectively writing an assignment for the learner or helping during an active exam.
+
+Mitigation: Use hint ladders and example patterns instead of writing the learner's paragraph or essay, and pause support until after any active exam or test.
+
+## Reference(s):
+
+- [Skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-writing-coach)
+- [Publisher profile](https://clawhub.ai/user/qizhitang)
+- [Vocabulary upgrade reference](references/vocabulary-upgrade.md)
+- [English error dimension table](shared/english-error-dimension-table.md)
+- [Crisis referral protocol](shared/crisis-referral-protocol.md)
+- [Crisis exception](shared/crisis-exception.md)
+- [Hint ladder](shared/hint-ladder.md)
+- [Platform conventions](shared/platform-conventions.md)
+- [Unified vocabulary](shared/vocab.md)
+- [Grade bands](shared/grade-bands.md)
+- [AI item check protocol](shared/ai-item-check.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Configuration]
+
+**Output Format:** [Chinese-language coaching dialogue and Markdown feedback, with occasional structured profile or handoff snippets when consent allows.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Focuses on 2-3 priority issues per writing sample; does not write full arguments, paragraphs, or essays for the learner.]
+
+## Skill Version(s):
+
+2.3.0 (source: server release evidence, target metadata, and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

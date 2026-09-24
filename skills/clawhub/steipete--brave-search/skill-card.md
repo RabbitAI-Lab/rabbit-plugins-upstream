@@ -1,41 +1,59 @@
-## Description: <br>
-Web search and content extraction via Brave Search API. Use for searching documentation, facts, or any web content. Lightweight, no browser required. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Web search and content extraction via Brave Search API. Use for searching documentation, facts, or any web content. Lightweight, no browser required.
 
-## Publisher: <br>
-[steipete](https://clawhub.ai/user/steipete) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[steipete](https://clawhub.ai/user/steipete)
 
-## Use Case: <br>
-Developers and agents use this skill to search the web, retrieve current facts or documentation, and optionally extract readable page content as Markdown without launching a browser. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries and fetched URLs are sent to external websites. <br>
-Mitigation: Do not include secrets, proprietary internal terms, or internal-only URLs in queries or content extraction requests. <br>
-Risk: Extracted webpage content may be inaccurate, malicious, or otherwise untrusted. <br>
-Mitigation: Treat extracted content as reference material and verify important claims before acting on them. <br>
-Risk: The artifact advertises BRAVE_API_KEY, but this version does not use that API key. <br>
-Mitigation: Do not rely on API-key based access control or quota behavior for this release. <br>
+## Use Case:
 
+Developers and agents use this skill to search the web, retrieve search result titles, links, and snippets, and optionally extract readable page content as markdown for documentation, facts, or current web information.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Plain text search results with optional Markdown page content] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search output includes title, link, snippet, and optional extracted page content capped by the script.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Search queries and requested URLs may be sent from the agent environment to Brave and third-party sites.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid secrets, private hostnames, localhost, cloud metadata addresses, intranet URLs, and sensitive internal content when using this skill.
+
+Risk: The page extraction command can fetch arbitrary URLs from the agent environment.
+
+Mitigation: Review URLs before execution and restrict use to public, expected destinations until URL validation and clearer disclosure are added.
+
+Risk: The documentation says Brave Search API is used, while the scanner notes the Brave usage is misstated.
+
+Mitigation: Verify the actual Brave access path and terms before relying on the skill in managed or commercial environments.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/steipete/skills/brave-search)
+- [Publisher Profile](https://clawhub.ai/user/steipete)
+- [Brave Search](https://search.brave.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Plain text search results with optional markdown page content]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search output includes result title, link, and snippet; extracted page content is truncated by the skill when fetched through search with content.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata; package.json reports 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

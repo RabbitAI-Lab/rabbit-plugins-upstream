@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/apify-api",
   "slug": "apify-api",
   "ownerHandle": null,
-  "version": "1.0.2",
-  "updatedAt": 1781739751880,
-  "contentHash": "2230dad038f8a987377cdceaa9060d204e6ef9dafd29ec69f958d13d36bd1c0d",
-  "fetchedAt": "2026-07-26T18:27:37.234Z"
+  "version": "1.2.4",
+  "updatedAt": 1790206340076,
+  "contentHash": "6c1ab62a160b508d07e681bd752b025c60d51901a81d995f038d0ccc5c663e39",
+  "fetchedAt": "2026-09-24T12:58:28.031Z"
 }

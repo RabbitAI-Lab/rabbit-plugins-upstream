@@ -1,50 +1,70 @@
-## Description: <br>
-Supports Chinese language teachers with writing task design, guided drafting and revision, three-dimensional feedback rubrics, style DNA tracking, and review-lesson planning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-language K12 writing-teaching aid for teachers that supports writing-task design, process guidance, rubric-based review, style tracking, lesson review design, and class writing records without writing student essays or replacing teacher grading.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External Chinese language teachers use this skill to design writing assignments, guide student drafting and revision, apply structured feedback rubrics, track writing style development, and prepare review lessons. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student writing profiles may contain sensitive classroom or learner data when shared between related teaching skills. <br>
-Mitigation: Use pseudonyms, obtain consent where required, and remove identifying details before storing, sharing, or reusing writing samples. <br>
-Risk: Writing guidance could be mistaken for direct AI grading or student ghostwriting. <br>
-Mitigation: Keep teachers as final reviewers, use the rubrics and templates as decision support, and do not produce finished student essays. <br>
-Risk: Writing prompts or examples may include copyrighted workbook, classroom, or online materials. <br>
-Mitigation: Track copyrightStatus for prompts and use original, adapted, licensed, or publicly reusable materials only. <br>
+## Use Case:
 
+External Chinese-language K12 educators use this skill to design作文 tasks, structure student writing guidance, apply rubric-based correction criteria, prepare review lessons, and maintain class writing/style records under consent controls.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-chinese-writing-guide) <br>
-- [Writing task design template](artifact/references/writing-task-template.md) <br>
-- [Three-dimensional correction rubric](artifact/references/three-dim-rubric.md) <br>
-- [Style DNA record template](artifact/references/style-dna-record.md) <br>
-- [Task design sample card](artifact/references/task-design-sample-card.md) <br>
-- [Three-dimensional scoring items](artifact/references/three-dim-scoring-items.md) <br>
-- [Correction sample template](artifact/references/correction-sample-template.md) <br>
-- [Style DNA profile template](artifact/references/style-dna-profile-template.md) <br>
-- [Review lesson scripts](artifact/references/review-lesson-scripts.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with structured text templates and rubrics] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; outputs require teacher review and privacy-aware handling of student writing records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill may handle student writing records and class-level learning data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the platform consent fields before record use or parent sharing, prefer aliases, avoid retaining raw作文全文 unless necessary, and honor pause, delete, and share-control requests.
+
+Risk: Teacher-facing outputs could be mistaken for final grades or official evaluations.
+
+Mitigation: Treat rubric analysis and lesson-review text as drafts; the teacher remains responsible for final grading, sharing decisions, and classroom use.
+
+Risk: Student writing may contain self-harm, bullying, family safety, or other crisis signals.
+
+Mitigation: Stop normal writing-review workflows when crisis signals appear and follow the bundled crisis referral protocol, including region-aware emergency guidance.
+
+Risk: Writing prompts or examples may create copyright or attribution issues if copied from external sources.
+
+Mitigation: Require copyrightStatus labels for writing topics and keep textbook, workbook, and exam-bank questions as source indexes rather than copied prompts.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-chinese-writing-guide)
+- [Writing task design template](artifact/references/writing-task-template.md)
+- [Three-dimensional writing rubric](artifact/references/three-dim-rubric.md)
+- [Correction sample template](artifact/references/correction-sample-template.md)
+- [Style DNA profile template](artifact/references/style-dna-profile-template.md)
+- [Style DNA long-term record](artifact/references/style-dna-record.md)
+- [Review lesson scripts](artifact/references/review-lesson-scripts.md)
+- [Class teaching workspace schema](artifact/shared/class-teaching-workspace.schema.json)
+- [Crisis referral protocol](artifact/shared/crisis-referral-protocol.md)
+- [Platform conventions](artifact/shared/platform-conventions.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown guidance with structured templates and JSON-compatible class record fields]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher-facing drafts and criteria; final grading, sharing, and record updates require teacher review and consent checks.]
+
+## Skill Version(s):
+
+2.3.0 (source: server release evidence, frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,47 +1,67 @@
-## Description: <br>
-Helps independent teachers draft paced, specific, low-anxiety, and actionable parent communications for routine updates, stage reports, urgent discussions, renewal conversations, and group announcements. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps independent teachers draft specific, low-anxiety, actionable parent communications from learning records while preserving consent checks, teacher review, and limited communication logging.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External educators and independent teachers use this skill to turn informal parent messaging requests into reviewed parent-message drafts, communication reminders, group announcement templates, and communication-log suggestions. It is intended for teacher-parent education workflows where the teacher reviews all generated text before sending. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated messages may expose sensitive student details or individual learner performance in the wrong channel. <br>
-Mitigation: Use pseudonyms, keep content limited to teaching-related facts, avoid group-posting individual feedback, and review each message before sending. <br>
-Risk: The skill may be used outside its intended teacher-parent communication workflow. <br>
-Mitigation: Install and activate it only for education communication scenarios, and honor workspace consent fields before using or sharing student data. <br>
-Risk: Drafts about learner performance or renewals may be inaccurate, overly anxious, or misleading if sent without review. <br>
-Mitigation: Require teacher confirmation, check drafts against source lesson or workspace records, and keep language specific, low-anxiety, and actionable. <br>
+## Use Case:
 
+External independent teachers use this agent to draft one-to-one parent messages, weekly group announcements, renewal explanations, and concern responses for Chinese K12 tutoring contexts. The skill keeps the teacher in control by checking consent, avoiding automatic sending, and recording only limited channel and status fields.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-parent-communication) <br>
-- [qizhitang publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [Parent message templates](references/parent-message-templates.md) <br>
-- [Typical scenario scripts](references/typical-scenario-scripts.md) <br>
-- [Weekly group announcement template](references/weekly-group-announcement-template.md) <br>
-- [Communication principles examples](references/communication-principles-examples.md) <br>
+### Deployment Geography for Use:
 
+China Mainland by default; localize crisis-contact, curriculum, consent, and parent-communication assumptions before deployment elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown or plain text drafts, templates, reminders, and communication-log field suggestions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; generated communications require teacher review before sending.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Parent messages could be drafted without the right consent or sent without teacher review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm parentCommunicationAllowed and emotionSharingWithParent before drafting; keep outputs as teacher-reviewed drafts and do not send automatically.
+
+Risk: The published behavior assumes a Chinese K12 tutoring context, including curriculum, consent, and crisis-contact defaults.
+
+Mitigation: Localize wording, curriculum assumptions, consent defaults, and crisis-contact guidance before using the skill outside that context.
+
+Risk: Parent communication can expose student or family personal information.
+
+Mitigation: Use student aliases, keep specific student feedback in private one-to-one channels, avoid contact details and family background, and persist only limited communication-log fields.
+
+Risk: Crisis signals could be softened by normal low-anxiety parent-communication wording.
+
+Mitigation: Stop the normal drafting flow when crisis signals appear and follow the crisis referral protocol, including locale checks before giving emergency resources.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-parent-communication)
+- [Typical scenario scripts](references/typical-scenario-scripts.md)
+- [Weekly group announcement template](references/weekly-group-announcement-template.md)
+- [Communication principles examples](references/communication-principles-examples.md)
+- [Solo teacher workspace schema](shared/solo-teacher-workspace.schema.json)
+- [Authorization vocabulary](shared/vocab.md)
+- [Crisis exception protocol](shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Configuration, Guidance]
+
+**Output Format:** [Plain text or Markdown message drafts with structured parentCommunicationLogs[] fields]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Drafts only; no automatic sending. Persistent writes are limited to parentCommunicationLogs[].]
+
+## Skill Version(s):
+
+2.3.0 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

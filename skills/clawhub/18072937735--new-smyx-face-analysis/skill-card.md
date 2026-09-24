@@ -1,45 +1,63 @@
-## Description: <br>
-Supports uploading local MP4 videos or network video URLs to call a server-side API for facial diagnosis and return structured TCM facial diagnosis results. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Supports uploading local MP4 videos or network video URLs to call a server-side API for facial diagnosis and return structured TCM facial diagnosis results.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and agent operators use this skill to submit facial video files, images, or public video URLs for TCM-style health analysis, structured reports, health suggestions, report links, and report-history retrieval from a remote service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive face and health media, or media from supplied URLs, may be sent to lifeemergence.com services for analysis. <br>
-Mitigation: Use only with approved data handling, consent, and retention expectations; avoid private media, internal URLs, and broad automatic invocation. <br>
-Risk: The skill can create or reuse identity and report-history state to retrieve prior reports. <br>
-Mitigation: Review identity and report-history behavior before deployment, and inspect or clear workspace data when removing the skill. <br>
-Risk: Health-style facial analysis can be misunderstood as medical diagnosis. <br>
-Mitigation: Present results as informational reference only and require qualified professional review for medical decisions. <br>
+## Use Case:
 
+External users and developers use this skill to submit facial videos or video URLs for server-side TCM-style facial analysis, then receive structured results, health warnings, suggestions, and report links. It can also retrieve cloud-hosted historical facial analysis reports associated with the managed user identity.
 
-## Reference(s): <br>
-- [Skill page](https://clawhub.ai/18072937735/skills/new-smyx-face-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API reference](references/api_doc.md) <br>
-- [smyx analysis API reference](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON] <br>
-**Output Format:** [Markdown or JSON text with structured facial-analysis results, health suggestions, history tables, and report links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save results to an output file when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-999.999.999 (source: server release metadata) <br>
+Risk: Facial videos or video URLs are sent to lifeemergence.com services for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Process only videos that the user has the right and consent to submit, and confirm that the remote service's data handling is acceptable for the intended use.
+
+Risk: The skill can create or reuse a managed identity and store service tokens locally.
+
+Mitigation: Review local workspace data, including managed identity and token storage, before uninstalling the skill, sharing the workspace, or moving it to another environment.
+
+Risk: Cloud history retrieval can expose prior health-style reports associated with the managed identity.
+
+Mitigation: Run history queries only in trusted workspaces and verify that the active identity is the expected one before retrieving report lists.
+
+Risk: TCM facial diagnosis output may be incorrect or incomplete and is not a professional medical diagnosis.
+
+Mitigation: Treat results as informational health references and route medical decisions to qualified professionals.
+
+## Reference(s):
+
+- [API Documentation](references/api_doc.md)
+- [SMYX Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, files]
+
+**Output Format:** [Markdown or JSON analysis report with optional report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write the returned report content to a user-specified output file.]
+
+## Skill Version(s):
+
+1.0.6 (source: frontmatter); release 999.999.999 (source: ClawHub metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,53 @@
-## Description: <br>
-Cloud Free helps users choose consumer cloud storage services by device mix and clarify common sync and storage-space misconceptions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+消费级云存储免费版，帮助用户按设备组合选择消费级云存储服务，并澄清存储配额、同步和重复备份等常见困惑。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users ask an agent for consumer cloud storage service selection and explanations for storage quota, photo backup, and sync behavior questions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill asks for command execution capability, API-key setup, and an optional callback URL despite a simple advisory purpose. <br>
-Mitigation: Install with least privilege and avoid granting execution, API keys, or callback URLs unless the publisher documents why they are required and what data is sent. <br>
-Risk: Consumer cloud-storage recommendations may affect account, sync, or storage decisions. <br>
-Mitigation: Confirm storage quotas, sync settings, and deletion behavior in the relevant provider account before making irreversible changes. <br>
+## Use Case:
 
+External users can use this skill for basic consumer cloud-storage decisions, including choosing between iCloud, Google Drive, OneDrive, and Dropbox based on their devices. It also helps clarify common storage and sync misunderstandings such as full cloud quotas, deleted files syncing across devices, duplicate photo backups, and paying for multiple services.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/thcjp/skills/cloud-free) <br>
-- [Skill homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with optional JSON-formatted result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include service recommendations, misconception explanations, and configuration caveats; normal use does not require generated files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter lists 1.0.0) <br>
+Risk: The skill requests command and file authority that is broader than ordinary consumer cloud-storage guidance requires.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing; prefer a narrowed version that removes exec/write access for advisory use.
+
+Risk: The source includes unrelated automation, API, and database language that can confuse the intended scope.
+
+Mitigation: Use the skill only for consumer cloud-storage service selection and common storage or sync explanations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cloud-free)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown]
+
+**Output Format:** [Markdown text with tables, examples, and short recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese-language consumer cloud-storage guidance; normal use does not require file output.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,51 +1,75 @@
-## Description: <br>
-ClawCall lets an agent place real US phone calls, navigate phone menus and hold time, optionally bridge the user into a live call, and return call outcomes, transcripts, and recording links when available. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ClawCall lets an AI agent place real US phone calls, navigate phone trees and hold time, optionally bridge the user into a live call, and return call outcomes, transcripts, and recording links when available.
 
-## Publisher: <br>
-[shreyjindal81](https://clawhub.ai/user/shreyjindal81) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[shreyjindal81](https://clawhub.ai/user/shreyjindal81)
 
-## Use Case: <br>
-External users use this skill to delegate routine US phone work to an AI agent, including booking, confirming, rescheduling, cancelling, checking order or appointment status, comparing options across businesses, and configuring ClawCall voice, personality, and inbound reserved-number behavior. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can place real US phone calls that may create bookings, cancellations, payments, or other commitments. <br>
-Mitigation: Give the agent explicit call limits and decision boundaries, and use live handoff before sensitive, negotiable, payment, identity-verification, or irreversible actions. <br>
-Risk: The skill stores ClawCall API key and user phone-number state locally. <br>
-Mitigation: Treat the saved key and phone number as sensitive user data, and review or delete ~/.config/clawcall/key.json when retained access is not desired. <br>
-Risk: Calls may involve private information, verification steps, or recording and transcript links. <br>
-Mitigation: Do not invent or disclose private details, bridge the user for live verification when needed, and handle transcripts and recording URLs as sensitive outputs. <br>
+## Use Case:
 
+External end users and agents use this skill to delegate routine US phone work such as booking, confirming, rescheduling, canceling, checking order or appointment status, comparing business options, reaching a live person, or configuring ClawCall voice, personality, and inbound reserved-number answering.
 
-## Reference(s): <br>
-- [ClawCall homepage](https://clawcall.dev) <br>
-- [ClawHub skill page](https://clawhub.ai/shreyjindal81/clawcall) <br>
-- [API contract](references/api-contract.md) <br>
-- [Outbound calls](references/outbound-calls.md) <br>
-- [Inbound reserved numbers](references/inbound-reserved-numbers.md) <br>
-- [Account linking and data](references/account-linking-and-data.md) <br>
-- [Errors and limits](references/errors-and-limits.md) <br>
-- [Profile and personality](references/profile-and-personality.md) <br>
-- [Examples](references/examples.md) <br>
-- [Pressure scenarios](evals/pressure-scenarios.md) <br>
+### Deployment Geography for Use:
 
+United States only; the artifact states that the skill validates +1 E.164 numbers and does not support international calls.
 
-## Skill Output: <br>
-**Output Type(s):** [API calls, JSON, configuration, guidance] <br>
-**Output Format:** [JSON over HTTPS with agent-facing summaries and configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Terminal call results can include lifecycle, outcome, talk_seconds, transcript, and recording_url; saved local state can include an API key and user phone number.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release evidence) <br>
+Risk: The skill can place real phone calls that may create commitments, costs, or unwanted contact with third parties.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review call instructions before execution, include explicit decision boundaries, and use live handoff for sensitive, negotiable, identity-heavy, payment, or OTP-related calls.
+
+Risk: The skill can persist and reuse a ClawCall API key and the user's phone number.
+
+Mitigation: Prefer a secure secret store, rotate exposed keys, and only save or reuse phone numbers when the user is comfortable with ongoing use.
+
+Risk: Account-link URLs can contain tokens that grant access to the user's ClawCall session context.
+
+Mitigation: Preserve returned URLs exactly, do not share account-link URLs broadly, and replace or rotate keys if a token-bearing URL is exposed.
+
+Risk: The skill can access call transcripts, recording links, and inbound call history that may contain sensitive personal information.
+
+Mitigation: Treat transcripts and recording links as sensitive, summarize only what is needed, and enable inbound answering or polling only when the user accepts the privacy implications.
+
+Risk: The skill can alter global ClawCall voice, personality, greeting, and inbound answering preferences.
+
+Mitigation: Read current preferences before changes, preserve existing global settings when editing only inbound behavior, and confirm persistent profile changes with the user.
+
+## Reference(s):
+
+- [Skill source](artifact/SKILL.md)
+- [API contract](artifact/references/api-contract.md)
+- [Outbound calls](artifact/references/outbound-calls.md)
+- [Inbound reserved numbers](artifact/references/inbound-reserved-numbers.md)
+- [Account linking and data](artifact/references/account-linking-and-data.md)
+- [Errors and limits](artifact/references/errors-and-limits.md)
+- [Profile and personality](artifact/references/profile-and-personality.md)
+- [Examples](artifact/references/examples.md)
+- [Pressure scenarios](artifact/evals/pressure-scenarios.md)
+- [ClawCall product site](https://clawcall.dev)
+- [Agent Skills open specification](https://agentskills.io/specification)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, API Calls, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with JSON and HTTP request examples; API interactions return JSON call status, transcript, outcome, and recording metadata when available.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill may persist a ClawCall API key and user phone number, place real US phone calls, poll call status, configure voice and inbound preferences, and surface transcript or recording links.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

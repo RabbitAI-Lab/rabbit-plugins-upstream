@@ -1,42 +1,61 @@
-## Description: <br>
-用直觉代替死记，让物理概念从“背下来”变成“真正懂了”，并通过生活类比、实验想象、公式推导三种解释模型先建直觉再学公式。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps Chinese-speaking middle school through first-year high school students build intuition for physics concepts using everyday analogies, thought experiments, and formula-meaning explanations.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External learners and tutoring agents use this skill to explain physics concepts by building intuition before formulas through daily-life analogies, thought experiments, formula meaning restoration, and layered understanding checks. It is for conceptual tutoring and validation, not physical experiment operation guidance or problem-solving drill. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Physical experiment examples could be mistaken for unsupervised real-world instructions, especially examples involving sunlight, heat, electricity, pressure, or sharp objects. <br>
-Mitigation: Present experiment examples as conceptual unless an appropriate supervisor is involved, and avoid operational safety-sensitive instructions when the goal is concept intuition. <br>
-Risk: The skill describes updates to learning-profile fields and reminder handoffs after repeated concept failures. <br>
-Mitigation: Keep learning-profile updates and reminders visible to the user and under user control. <br>
+## Use Case:
 
+External learners, tutors, and educational agents use this skill to explain physics quantities and laws conceptually rather than solve specific exercise steps. It is scoped to junior high physics and first-year high school compulsory physics concepts, with handoff guidance for problem solving, experiment handling, and mistake-log workflows.
 
-## Reference(s): <br>
-- [Physics Analogy Bank](artifact/references/physics-analogy-bank.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-concept-intuition) <br>
-- [Publisher Profile](https://clawhub.ai/user/qizhitang) <br>
+### Deployment Geography for Use:
 
+Global; localize curriculum assumptions, privacy and guardian-consent handling, and crisis referral contacts before use outside Mainland China.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or conversational text with structured explanation steps, analogy mappings, formula interpretation, and validation prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable output; responses draw on the bundled physics analogy bank and should keep experiment examples conceptual unless supervised.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Curriculum, privacy, guardian-consent, and crisis referral expectations may not transfer cleanly outside Mainland China.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Localize these assumptions and referral contacts before deploying the skill in other regions.
+
+Risk: Students may ask for help during an active exam or test.
+
+Mitigation: Follow the artifact's exam boundary by not explaining the active item or giving hints, and offer to review after the exam.
+
+Risk: A learner may disclose self-harm, abuse, bullying, severe despair, or home-safety concerns during tutoring.
+
+Mitigation: Stop the tutoring flow and follow the crisis referral protocol: respond without judgment, state AI limits, involve a trusted adult, and provide region-appropriate urgent help channels.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-concept-intuition)
+- [Physics analogy bank](artifact/references/physics-analogy-bank.md)
+- [High school physics misconceptions](artifact/references/physics-hs1-misconceptions.md)
+- [AI item check](artifact/shared/ai-item-check.md)
+- [Crisis referral protocol](artifact/shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, text]
+
+**Output Format:** [Markdown conversational tutoring guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces conceptual explanations, analogy-driven prompts, thought experiments, formula interpretations, verification questions, and safety handoff guidance.]
+
+## Skill Version(s):
+
+2.3.0 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

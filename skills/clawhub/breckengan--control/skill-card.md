@@ -1,42 +1,59 @@
-## Description: <br>
-Advanced desktop automation with mouse, keyboard, and screen control. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Advanced desktop automation with mouse, keyboard, and screen control.
 
-## Publisher: <br>
-[Breckengan](https://clawhub.ai/user/Breckengan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[breckengan](https://clawhub.ai/user/breckengan)
 
-## Use Case: <br>
-Developers and agent builders use this skill to add supervised desktop automation workflows, including mouse and keyboard control, screenshots, image lookup, window management, clipboard access, and higher-level task execution. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Broad live desktop control can click, type, drag, launch applications, and trigger hotkeys in the active user session. <br>
-Mitigation: Keep failsafe enabled, use approval mode where possible, and supervise actions before running the skill against sensitive applications. <br>
-Risk: Screenshots, clipboard reads, logs, and typed text can expose private or sensitive data. <br>
-Mitigation: Close sensitive windows, avoid passwords and private documents, and treat screenshots, logs, and clipboard output as sensitive. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/Breckengan/control) <br>
-- [Desktop Control Skill Documentation](artifact/SKILL.md) <br>
-- [AI Desktop Agent Guide](artifact/AI_AGENT_GUIDE.md) <br>
-- [Desktop Control Quick Reference](artifact/QUICK_REFERENCE.md) <br>
+## Use Case:
 
+Developers and automation engineers use Control to let agents perform desktop actions such as mouse and keyboard input, screen capture, window management, clipboard access, and simple autonomous application workflows.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown documentation with Python and bash code blocks; runtime helpers return Python objects such as screenshots, coordinates, window lists, clipboard text, and task result dictionaries.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Desktop actions can affect the live user interface; screenshots, logs, typed text, and clipboard values may contain sensitive data.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill can control a live desktop through mouse and keyboard actions.
+
+Mitigation: Run it first in a non-sensitive profile or virtual machine, keep failsafe enabled, and avoid administrator mode.
+
+Risk: Screenshot and clipboard features can expose sensitive data.
+
+Mitigation: Do not use the skill while secrets, private documents, or sensitive clipboard contents are visible or copied.
+
+Risk: Approval safeguards are incomplete for high-impact automation.
+
+Mitigation: Use approval mode for interactive actions and review planned desktop actions before execution.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/breckengan/skills/control)
+- [Skill Documentation](artifact/SKILL.md)
+- [AI Agent Guide](artifact/AI_AGENT_GUIDE.md)
+- [Quick Reference](artifact/QUICK_REFERENCE.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown documentation with Python examples and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill may also produce desktop side effects, screenshots, clipboard changes, and action logs when executed.]
+
+## Skill Version(s):
+
+1.0.0 (source: server-resolved release metadata and artifact/_meta.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

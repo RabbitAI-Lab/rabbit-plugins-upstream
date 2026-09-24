@@ -1,42 +1,72 @@
-## Description: <br>
-A Chinese-language study coach that helps students record learning time, run guided Pomodoro focus sessions, analyze distraction patterns, and build focus-history summaries with user consent. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助学生记录学习时间、启动番茄钟、分析黄金时段和分心规律，并在明确同意后维护专注力档案。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students use this skill to understand where study time goes, plan realistic focus windows, and improve concentration through consent-based logs, Pomodoro check-ins, and follow-up summaries. It is also useful for study-planning agents that need user-approved focus-pattern summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Long-term focus logs can reveal study habits, distraction patterns, and productivity routines. <br>
-Mitigation: Enable archives, reminders, or sharing summaries only with user confirmation, and make clear when conclusions rely on lower-confidence self-reported timing data. <br>
-Risk: Users may overread completion metrics as proof of learning quality or as an attention assessment. <br>
-Mitigation: Frame completion rates as behavior indicators, combine time data with learning-quality signals, and recommend professional evaluation when persistent attention problems substantially affect daily learning or social life. <br>
+## Use Case:
 
+Students in Chinese-language K-12 learning contexts use this skill to understand how study time is spent, run focus sessions, review distraction patterns, and decide when to study. Guardians, teachers, or platform operators can use its consent and handoff rules to keep focus records, reminders, and cross-skill sharing bounded.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-time-focus-coach) <br>
-- [Focus archive template](artifact/references/focus-archives-template.md) <br>
-- [Pomodoro state machine](artifact/references/pomodoro-statemachine.md) <br>
+### Deployment Geography for Use:
 
+China mainland by default; use elsewhere requires localizing emergency contacts, curriculum assumptions, and minor-consent rules before student-facing deployment.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown conversation responses with structured study-time logs, focus-session check-ins, and summary templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update user-approved focus archives, Pomodoro session records, and reminder handoffs when platform support exists.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and release evidence) <br>
+Risk: Minor students may create sensitive focus records or cross-skill handoffs without fully understanding data retention.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep long-term memory, reminders, and cross-skill sharing off until the student, and a guardian where required, intentionally consents; provide view, correct, export, pause, and delete controls.
+
+Risk: Crisis or safety disclosures can appear during focus coaching or distraction review.
+
+Mitigation: Stop the focus workflow, avoid diagnosis and detailed recording, direct the student to a trusted adult, and provide emergency channels only after confirming the relevant region.
+
+Risk: Focus patterns can be overstated when there is too little data.
+
+Mitigation: Mark low-sample observations as insufficient, avoid formal golden-time reports when fewer than five days of data are available, and keep unsupported conclusions out of long-term records.
+
+Risk: Deploying the skill outside its intended Chinese K-12 context can produce mismatched safety contacts, curriculum assumptions, or consent handling.
+
+Mitigation: Localize emergency resources, school-stage assumptions, and minor-consent requirements before use in other regions or languages.
+
+Risk: Persistent attention difficulties may need support beyond study-time coaching.
+
+Mitigation: Frame the skill as study support, not clinical assessment, and suggest professional evaluation when attention problems are severe, persistent, or affect everyday life and social functioning.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-time-focus-coach)
+- [focus-archives-template.md](artifact/references/focus-archives-template.md)
+- [pomodoro-statemachine.md](artifact/references/pomodoro-statemachine.md)
+- [grade-bands.md](artifact/shared/grade-bands.md)
+- [crisis-exception.md](artifact/shared/crisis-exception.md)
+- [platform-conventions.md](artifact/shared/platform-conventions.md)
+- [handover-protocol.schema.json](artifact/shared/handover-protocol.schema.json)
+- [dna-profile.schema.json](artifact/shared/dna-profile.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Configuration, Guidance]
+
+**Output Format:** [Chinese Markdown-style conversational guidance, focus summaries, and JSON-compatible profile or reminder handoff records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Long-term memory, reminders, and cross-skill sharing are consent-gated and default off.]
+
+## Skill Version(s):
+
+2.3.0 (source: server release and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

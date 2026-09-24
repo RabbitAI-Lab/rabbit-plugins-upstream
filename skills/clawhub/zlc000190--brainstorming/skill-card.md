@@ -1,37 +1,51 @@
-## Description: <br>
-Helps agents explore user intent, requirements, design alternatives, and implementation plans before creative or behavior-changing work begins. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation.
 
-## Publisher: <br>
-[zlc000190](https://clawhub.ai/user/zlc000190) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[zlc000190](https://clawhub.ai/user/zlc000190)
 
-## Use Case: <br>
-Developers and agents use this skill to turn an initial feature, component, or behavior-change idea into a validated design through focused questions, trade-off analysis, and staged review. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill can lead an agent to inspect project context and save or commit a design document. <br>
-Mitigation: Confirm the intended scope, output path, and git commit before repository changes; review generated design content before committing. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zlc000190/brainstorming) <br>
+## Use Case:
+
+Developers and agents use this skill to turn early feature, component, functionality, or behavior-change ideas into validated designs before implementation.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The skill can trigger broadly before creative work and may lead to file creation or git commits during planning.
+
+Mitigation: Require explicit user confirmation before writing design documents, creating implementation workspaces, or committing changes.
+
+Risk: Generated designs may omit constraints or reflect misunderstood requirements.
+
+Mitigation: Review each design section with the user before treating it as implementation guidance.
+
+## Reference(s):
 
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, shell commands] <br>
-**Output Format:** [Conversational guidance and Markdown design documents, with shell commands or git actions when repository changes are confirmed.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce a design document under docs/plans and a git commit after user validation.] <br>
+## Skill Output:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+**Output Format:** [Markdown guidance with questions, options, design sections, and implementation setup instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce a design document path and proposed git commit as part of the planning workflow.]
+
+## Skill Version(s):
+
+0.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

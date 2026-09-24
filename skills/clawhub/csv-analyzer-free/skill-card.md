@@ -1,42 +1,54 @@
-## Description: <br>
-CSV Analyzer Free guides agents through lightweight CSV inspection with basic statistics, simple filtering, and optional CSV export using Python standard-library workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CSV数据分析免费版，提供快速统计与基础筛选，零外部依赖，适合轻量数据探索。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers, analysts, and other external agent users use this skill for lightweight CSV exploration when they need row counts, type detection, numeric summaries, unique counts, and single-condition filtering without pandas. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads local CSV files and can write filtered CSV outputs. <br>
-Mitigation: Use it only on files the agent is allowed to read and choose explicit output filenames to avoid overwriting important files. <br>
-Risk: The inspected package does not include the referenced analyzer script. <br>
-Mitigation: Confirm the required script exists or implement the missing command behavior before relying on the skill in production workflows. <br>
-Risk: Large CSV files can exceed the skill's intended lightweight operating range. <br>
-Mitigation: Keep inputs near the documented 100 MB limit, split larger files, or use a streaming tool for high-volume analysis. <br>
+## Use Case:
 
+Developers, independent creators, enterprise teams, and automation workflows use this skill to inspect local CSV files, generate quick column statistics, and perform basic single-condition filtering without external dependencies.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/csv-analyzer-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and CSV output descriptions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read local CSV files and write explicitly named CSV output files when filtering.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill requests command execution while its documentation is inconsistent about supported capabilities.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each proposed command before execution and use it only for local CSV statistics or simple filtering.
+
+Risk: The documentation advertises broader API, file, and command automation than the free CSV features support.
+
+Mitigation: Avoid external API work, broad automation, sensitive datasets, and non-CSV processing unless the publisher narrows the documentation and provides matching implementation files.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/csv-analyzer-free)
+- [ClawHub publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and CSV analysis results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Local CSV stats and filtering guidance; no external API key is required.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

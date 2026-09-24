@@ -1,41 +1,62 @@
-## Description: <br>
-Helps English learners save vocabulary, schedule consent-based spaced repetition reminders, preview upcoming lesson words, and track vocabulary retention. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+英语词汇复习：按间隔重复排到期日，每天把到期的词合并成一张词卡。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning assistants use this skill to capture English vocabulary from photos, conversations, or manual entries, then run consent-based spaced review through flashcards, sentence practice, contextual dialogue, and progress reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores vocabulary history, example sentences, and learning performance in local memory, which may resurface personal details during later reviews or reports. <br>
-Mitigation: Use the skill only with user consent, avoid sensitive personal details in practice sentences, and review local memory behavior before installation. <br>
-Risk: IM reminders may interrupt users or run outside expectations if enabled without clear consent. <br>
-Mitigation: Enable reminders only after explicit consent and use the documented fallback of session-time review or user-initiated practice when timed reminders are unavailable. <br>
+## Use Case:
 
+Students in Chinese K12 English study contexts, with appropriate guardian or teacher involvement for younger learners, use this skill to save vocabulary, schedule spaced reviews, receive a single daily due-word card, and preview upcoming lesson vocabulary.
 
-## Reference(s): <br>
-- [Vocabulary radar topic templates](references/vocabulary-radar-topics.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-vocabulary-dna) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown and conversational text with review prompts, vocabulary cards, reports, and setup guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local memory for vocabulary history and learning performance when available; OCR and timed reminders can fall back to manual input or session-time review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: The skill can maintain a vocabulary profile and queue daily review cards when relevant consents are enabled.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm profile, cross-skill sharing, reminder, sharing, and deletion choices before saving, enqueueing, sharing, or deleting vocabulary data.
+
+Risk: Broad study triggers could be mistaken for permission to save new words or schedule reminders.
+
+Mitigation: Pair broad triggers with a clear confirmation step before any profile write, reminder enqueue, sharing, or deletion action.
+
+Risk: The skill is designed around Chinese K12 curriculum assumptions and default crisis resources.
+
+Mitigation: Localize curriculum, consent-age rules, and crisis referral channels before deployment outside the intended Chinese K12 context.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-vocabulary-dna)
+- [Vocabulary radar topics](artifact/references/vocabulary-radar-topics.md)
+- [Unified vocabulary and consent terms](artifact/shared/vocab.md)
+- [Spaced review schedule](artifact/shared/ebbinghaus-schedule.md)
+- [Platform capability conventions](artifact/shared/platform-conventions.md)
+- [Crisis exception protocol](artifact/shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown-style study prompts, vocabulary review cards, profile writeback proposals, and reminder enqueue proposals]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Consent-gated vocabulary profile updates and at most one daily due-vocabulary card queued through the reminder system.]
+
+## Skill Version(s):
+
+2.3.0 (source: server release evidence and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

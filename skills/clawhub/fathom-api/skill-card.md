@@ -1,44 +1,62 @@
-## Description: <br>
-Fathom API integration with managed OAuth for accessing meeting recordings, transcripts, summaries, action items, and webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fathom API integration with managed OAuth for accessing meeting recordings, transcripts, summaries, action items, and webhook workflows through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agent users use this skill to retrieve and search Fathom meeting content, manage OAuth-backed Fathom connections, and create or delete webhook notifications for new meeting data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access Fathom meeting recordings, transcripts, summaries, action items, and related account data. <br>
-Mitigation: Install only for the intended Fathom account, keep MATON_API_KEY private, and confirm the active connection before retrieving meeting content. <br>
-Risk: Webhook and destination_url callbacks can send meeting content to external endpoints. <br>
-Mitigation: Before approving callbacks, verify the destination URL, endpoint ownership, fields to be sent, and how to delete the webhook later. <br>
-Risk: Create, update, and delete operations can change Fathom connections or webhooks. <br>
-Mitigation: Require explicit user approval for every write operation and confirm the target resource and intended effect. <br>
+## Use Case:
 
+Developers and agents use this skill to retrieve Fathom meeting content, search recordings, manage connection-scoped access, and set up approved webhook or scheduled automation through Maton.
 
-## Reference(s): <br>
-- [Fathom API Documentation](https://developers.fathom.ai) <br>
-- [Fathom LLM Reference](https://developers.fathom.ai/llms.txt) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown with endpoint descriptions, JSON examples, and Python or shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY for live API requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+Risk: The skill can access sensitive meeting recordings, transcripts, summaries, and action items.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only the user-authorized Fathom connection, prefer read/list calls first, avoid dumping full responses, and extract only the fields needed for the task.
+
+Risk: Webhook callbacks, hosted functions, and triggers can move meeting content or keep automation running after the initial task.
+
+Mitigation: Require explicit user approval for write actions, destination URLs, hosted functions, triggers, and any third-party destination, and remove automation when it is no longer needed.
+
+Risk: Long-lived API keys and raw HTTP fallback can expose credentials if handled carelessly.
+
+Mitigation: Prefer OAuth through the Maton CLI and the operating system credential store; use raw HTTP and environment credentials only when the CLI cannot be installed.
+
+## Reference(s):
+
+- [Fathom API Documentation](https://developers.fathom.ai)
+- [Fathom LLM Reference](https://developers.fathom.ai/llms.txt)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Maton Homepage](https://maton.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline shell commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include Maton CLI commands, raw HTTP examples, OAuth connection guidance, function examples, and trigger configuration guidance.]
+
+## Skill Version(s):
+
+1.2.6 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

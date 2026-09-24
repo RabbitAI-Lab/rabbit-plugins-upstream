@@ -1,42 +1,61 @@
-## Description: <br>
-A Chinese-language tutoring skill that explains math concepts through familiar analogies, visual reasoning, step-by-step decomposition, and understanding checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps Chinese junior-high students understand math concepts through everyday analogies, visual reasoning, and step-by-step decomposition, then checks understanding with restatement, examples, or transfer questions.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning-support agents use this skill to turn formula-memorization questions into concept explanations, especially for algebra rules, functions, geometry visualization, probability, and statistics. It guides the agent to build intuition first, introduce formal math language second, and verify understanding through examples, counterexamples, transfer tasks, and links to prior knowledge. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate broadly for math-understanding requests. <br>
-Mitigation: Use it for concept explanation and tutoring workflows where Chinese-language math guidance is intended, and confirm that the selected skill matches the learner's request before relying on its output. <br>
-Risk: Connected learning-progress updates or reminder creation could affect a learner's study record or schedule. <br>
-Mitigation: Confirm such updates with the user or apply the connected skills' controls before recording progress or creating reminders. <br>
+## Use Case:
 
+External students in Chinese junior-high math use this skill when they are stuck on the meaning of a concept rather than on one specific problem. It supports concept explanations, spatial reasoning for geometry, and brief verification prompts after explanation.
 
-## Reference(s): <br>
-- [Analogy Bank](references/analogy-bank.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-math-concept-explainer) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
+### Deployment Geography for Use:
 
+China mainland Chinese-language K12 context unless curriculum, emergency contacts, and minor-consent rules are localized for another region.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or conversational text with structured prompts, analogies, explanations, and checks for understanding] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese-language tutoring guidance; no executable code or hidden data access found in the artifact] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill is designed around Chinese-language K12 curriculum assumptions, emergency contacts, and minor-consent rules.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it in the intended Chinese-language K12 context, or localize curriculum scope, emergency channels, and consent rules before deployment.
+
+Risk: Long-term memory, parent visibility, or cross-skill sharing could expose student learning records if enabled without consent review.
+
+Mitigation: Review profile, deletion/export, parent-sharing, and cross-skill-sharing controls before enabling persistent memory or shared reports.
+
+Risk: Generated verification questions or examples may be unsuitable if they exceed the intended grade band or are not checked.
+
+Mitigation: Apply the included AI item self-check process and keep generated math questions within the declared junior-high scope.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-math-concept-explainer)
+- [Publisher profile](https://clawhub.ai/user/qizhitang)
+- [Junior-high math analogy bank](artifact/references/analogy-bank.md)
+- [Platform conventions and localization guidance](artifact/shared/platform-conventions.md)
+- [Crisis exception protocol](artifact/shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, text, markdown]
+
+**Output Format:** [Concise Chinese tutoring dialogue in plain text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Designed for short concept explanations with follow-up checks; the skill states a single-message budget of about 120 Chinese characters and up to three follow-up turns.]
+
+## Skill Version(s):
+
+2.3.0 (source: server release evidence and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

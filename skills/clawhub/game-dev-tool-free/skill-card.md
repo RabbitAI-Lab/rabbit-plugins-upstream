@@ -1,41 +1,53 @@
-## Description: <br>
-Provides a free game-development assistant for indie developers and small teams, covering design documentation, coding guidance, testing strategy, release planning, and basic operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-language agent skill that guides indie developers and small game teams through game design documentation, coding architecture, testing, release planning, and basic operations.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External developers, indie game makers, students, and small teams use this skill to structure game projects, draft GDD content, choose a technology stack, generate code examples, plan testing, and prepare release checklists. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may propose shell commands that create directories, write files, export environment variables, or run development tooling. <br>
-Mitigation: Review commands before allowing execution, especially file-writing examples under a project directory such as ~/my-game. <br>
-Risk: Generated game design, architecture, testing, and release guidance may be incomplete or unsuitable for a specific project. <br>
-Mitigation: Have a developer or project owner review generated plans, code examples, and release checklists before using them in a production game project. <br>
+## Use Case:
 
+External game developers, students, Game Jam participants, and small teams use this skill to structure game concepts, GDDs, implementation guidance, test plans, release checklists, and lightweight operations plans.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/game-dev-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline code blocks, configuration snippets, shell commands, and structured JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May suggest creating project directories, writing project files, exporting environment variables, and running standard development commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: evidence.release.version; artifact frontmatter version is 1.0.0) <br>
+Risk: The skill can propose shell commands or file writes that may affect an existing game project.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the target project directory and review any reset, import, export, or save action before execution.
+
+Risk: Generated game-development guidance, code, tests, or release steps may be incomplete or unsuitable for a specific engine or platform.
+
+Mitigation: Review outputs against the chosen engine, platform requirements, and project constraints before adopting them.
+
+## Reference(s):
+
+- [ClawHub skill release page](https://clawhub.ai/thcjp/skills/game-dev-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline code blocks, shell commands, checklists, and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are intended for direct review and adaptation inside a user's selected game project.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence; artifact frontmatter metadata lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

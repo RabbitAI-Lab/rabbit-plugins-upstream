@@ -1,45 +1,69 @@
-## Description: <br>
-A math tutoring coach that guides students through problem solving with Socratic questions, CLAW prompts, photo-question workflows, error analysis, same-type practice, and exam review without directly giving answers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese junior-high math tutoring skill that guides students through single math problems, corrections, similar practice questions, and short pre-exam review using stepwise prompts instead of giving answers first.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External learners and education agents use this skill to work through math questions, identify where a student is stuck, analyze mistakes, generate similar practice problems, and prepare focused exam review while avoiding direct answer-giving. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student photos may contain personal, school, or location information when the photo-question workflow is used. <br>
-Mitigation: Require clear consent and image-redaction guidance before OCR or multimodal processing, especially in environments with students or minors. <br>
-Risk: Learning-profile and error-history records may be read or written during tutoring workflows. <br>
-Mitigation: Provide controls to inspect, disable, limit access to, and delete learning-profile and error-history records. <br>
-Risk: Tutoring guidance and generated practice problems can be incomplete or misleading for a learner's level or curriculum. <br>
-Mitigation: Use teacher, parent, or administrator review for high-stakes learning contexts and encourage students to verify reasoning rather than rely on final answers. <br>
+## Use Case:
 
+Students and tutoring assistants use this skill to coach Chinese junior-high math problem solving, wrong-answer review, same-type practice, and near-term exam review. It is designed for external K12 tutoring contexts where records, reminders, and sharing are used only after the student or guardian has enabled the relevant consent settings.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-math-problem-solving-coach) <br>
-- [CLAW template extensions](references/claw-templates-extended.md) <br>
-- [Math Socratic guide](references/math-socrates-guide.md) <br>
-- [Photo four-step state machine](references/photo-4step-statemachine.md) <br>
+### Deployment Geography for Use:
 
+China mainland-style K12 tutoring contexts; localize consent, guardian, and emergency-response rules before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown-style conversational tutoring guidance, diagnostic questions, prompt templates, review outlines, and practice problems.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use photo-question interpretation through multimodal or OCR-capable host systems and may read or update learning-profile and error-history records when those companion skills are available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Minor-student data, parent sharing, reminders, and cross-skill records may be inappropriate without valid consent for the student's age and region.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm student and guardian consent settings before enabling records, reminders, parent-visible summaries, or cross-skill handoffs; otherwise keep support in the current conversation.
+
+Risk: The tutoring flow could be misused during an active exam or restricted assessment.
+
+Mitigation: When a student says an exam or quiz is in progress, do not explain, hint, or solve the item; ask them to return after the assessment for review.
+
+Risk: Generated same-type math questions can be incorrect, ambiguous, or off-grade without checking.
+
+Mitigation: Use the bundled item self-check before presenting generated practice, and avoid persisting teacher-facing generated items unless a human has verified them.
+
+Risk: Crisis or severe distress signals require support beyond math tutoring, and emergency contact guidance can be wrong outside the intended region.
+
+Mitigation: Stop the tutoring flow on crisis signals, refer to trusted adults and local emergency resources, and localize emergency numbers before use outside Chinese mainland contexts.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-math-problem-solving-coach)
+- [数学四步拍照法状态机](artifact/references/photo-4step-statemachine.md)
+- [数学苏格拉底五问链学段适配指南](artifact/references/math-socrates-guide.md)
+- [意图分支扩展话术与苏格拉底五问各学段适配指南](artifact/references/claw-templates-extended.md)
+- [提示阶梯与完整示例出口](artifact/shared/hint-ladder.md)
+- [AI 出题自检协议](artifact/shared/ai-item-check.md)
+- [交接协议 JSON Schema](artifact/shared/handover-protocol.schema.json)
+- [危机例外](artifact/shared/crisis-exception.md)
+- [平台能力约定与降级路径](artifact/shared/platform-conventions.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Guidance]
+
+**Output Format:** [Conversational tutoring responses, structured study summaries, generated practice questions, and consent-gated handoff JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce wrong-answer handoff or reminder-queue records only when the required consent gates are satisfied; otherwise it stays within the current conversation.]
+
+## Skill Version(s):
+
+2.3.0 (source: ClawHub release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

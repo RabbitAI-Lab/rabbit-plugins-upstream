@@ -19,6 +19,8 @@ cargo-ai login --oauth                                  # browser sign-in (recom
 cargo-ai login --oauth --workspace-uuid <uuid>
 ```
 
+**A new account starts with 100 free credits, no card required** — `--email` and `--oauth` both create the account on first use, so signing up and running real paid work can happen in a single agent turn. Quote the free balance to a first-time user before the first paid call.
+
 `--oauth` runs the OAuth 2.0 Device Authorization Flow — no client setup. For CI / scripts, use `--token` with a workspace-scoped API token from **Settings > API**. Token values are shown only once; store immediately in a secrets manager.
 
 ## Verify
@@ -39,7 +41,7 @@ Always confirm `workspace.name` before any write — there is no dry-run mode fo
 
 ## Permission prompts
 
-When the Cargo plugin (or the installer's hook scaffolding) is present, an approval hook — wired per agent as `PreToolUse` (Claude Code), `PermissionRequest` (Codex), or `beforeShellExecution` (Cursor) — auto-approves ordinary `cargo-ai` calls — reads, queries, run/batch operations, and pipelines through read-only helpers (`jq`, `grep`, `head`, …) — so they don't prompt. Four categories always still prompt, deliberately: credentials (`login`/`logout`), token minting (`workspaceManagement token …`), report egress (`workspaceManagement report …` — reports can carry session traces, so consent stays explicit), and destruction/deploys (`cdk deploy`/`destroy`, any `remove`/`delete`). The hook is allow-only: it can skip a prompt but never override a deny rule. Don't restructure commands to dodge a prompt — if one of these prompts appears, it's supposed to.
+When the Cargo plugin (or the installer's hook scaffolding) is present, an approval hook — wired per agent as `PreToolUse` (Claude Code), `PermissionRequest` (Codex), or `beforeShellExecution` (Cursor) — auto-approves ordinary `cargo-ai` calls — reads, queries, run/batch operations, and pipelines through read-only helpers (`jq`, `grep`, `head`, …) — so they don't prompt. Four categories always still prompt, deliberately: credentials (`login`/`logout`), token minting (`workspaceManagement token …`), report egress (`workspaceManagement report …` — reports can carry session traces, so consent stays explicit), and destruction/deploys (`project deploy`/`destroy`, any `remove`/`delete`). The hook is allow-only: it can skip a prompt but never override a deny rule. Don't restructure commands to dodge a prompt — if one of these prompts appears, it's supposed to.
 
 ## Admin-only commands
 

@@ -1,0 +1,6 @@
+# Never publish local state or build artifacts.
+_state/
+_test/
+node_modules/
+*.log
+.DS_Store

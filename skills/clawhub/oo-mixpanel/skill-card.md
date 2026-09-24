@@ -1,42 +1,55 @@
-## Description: <br>
-Helps agents search and read Mixpanel analytics data through OOMOL's Mixpanel connector and oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Mixpanel through an OOMOL-connected account with the oo CLI for reading, creating, updating, querying, and exporting Mixpanel data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers, analysts, and support teams use this skill to query Mixpanel events, funnels, cohorts, reports, retention, profiles, and related analytics from an OOMOL-connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may use existing local or connected credentials when running Mixpanel actions. <br>
-Mitigation: Confirm the intended Mixpanel account, project, action, and payload before running connector commands, and only initiate setup or reauthentication when an auth or connection error requires it. <br>
+## Use Case:
 
+Developers and analytics operators use this skill to run Mixpanel connector actions, inspect live action schemas, query saved reports and behavioral analytics, export events, and handle account setup or billing errors.
 
-## Reference(s): <br>
-- [ClawHub Mixpanel Skill](https://clawhub.ai/oomol/oo-mixpanel) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
-- [Mixpanel](https://mixpanel.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown responses with shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Mixpanel query results returned by the oo CLI when the user's connected account authorizes the requested action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Risk: First-time setup includes unpinned remote shell installers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the oo CLI installer before running it, or prefer a package-manager or verified installer path when available.
+
+Risk: The connector can access Mixpanel analytics data, including raw events and profile information, through an OOMOL-connected account.
+
+Mitigation: Install and use the skill only when that account-level Mixpanel access is acceptable, and confirm state-changing payloads before running actions tagged as write or destructive.
+
+## Reference(s):
+
+- [Mixpanel homepage](https://mixpanel.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-mixpanel)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector responses include a data object and meta.executionId when actions run successfully.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

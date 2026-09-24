@@ -1,5 +1,5 @@
 ## Description: <br>
-Logo Design Tool Free helps agents guide users through AI-assisted logo creation with prompt templates, model selection, visual review loops, and export guidance. <br>
+Logo Design Tool Free helps individuals and small teams create logo concepts with AI image generation prompts, model-selection guidance, visual review loops, and export recommendations. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,30 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, independent developers, creators, and small teams use this skill to plan and iterate logo concepts with AI image generation tools, then review and prepare outputs for common brand uses. <br>
+External users, independent developers, content creators, and small teams use this skill to draft logo prompts, compare logo styles, iterate on generated images, and plan common logo export formats. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Prompts or callback URLs could expose secrets, private brand material, or sensitive files to an external image-generation provider. <br>
-Mitigation: Do not include secrets or sensitive brand assets in prompts or callback URLs unless the selected provider is trusted and API keys are configured securely. <br>
-Risk: AI-generated logo outputs may include malformed text, excessive complexity, unwanted whitespace, or poor small-size legibility. <br>
-Mitigation: Use the skill's visual review loop, inspect each generated image, simplify prompts when needed, and test small sizes before export. <br>
+Risk: The security review found broad command and file-writing authority that is not clearly scoped to logo creation. <br>
+Mitigation: Install only for logo and branding tasks, review requested actions before approval, and restrict shell commands or file writes to the intended output location. <br>
+Risk: The skill can describe callback-style workflows or network diagnostics that may send requests outside the local workspace. <br>
+Mitigation: Approve callback URLs, network requests, and destinations explicitly before use. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/logo-design-tool-free) <br>
+- [ClawHub package page](https://clawhub.ai/thcjp/skills/logo-design-tool-free) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with prompt templates, comparison tables, inline shell examples, and JSON response examples] <br>
+**Output Type(s):** [text, markdown, guidance, shell commands] <br>
+**Output Format:** [Markdown guidance with prompt templates, checklists, tables, and example JSON responses] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires human visual review of generated logo images before delivery.] <br>
+**Other Properties Related to Output:** [May suggest manual image review, prompt iteration, image export formats, and limited diagnostic commands.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
