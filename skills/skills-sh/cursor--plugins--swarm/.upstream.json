@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/swarm",
+  "repo": "cursor/plugins",
+  "skillId": "swarm",
+  "branch": "main",
+  "pushedAt": "2026-09-23T20:03:21Z",
+  "contentHash": "23c1976700b6e1308df751b1b39fc2f56c245fb906f8e124ccf08ff022fbc024",
+  "fetchedAt": "2026-09-24T12:46:54.175Z"
+}

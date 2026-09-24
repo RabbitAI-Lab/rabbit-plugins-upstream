@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/runpod/runpod-plugins-official/companion-clis",
+  "repo": "runpod/runpod-plugins-official",
+  "skillId": "companion-clis",
+  "branch": "main",
+  "pushedAt": "2026-09-22T18:30:45Z",
+  "contentHash": "a37c8a506bdcdf748dc01ffe7329962cf7918ecc4cec279c52675695c48d01cc",
+  "fetchedAt": "2026-09-24T12:49:06.343Z"
+}

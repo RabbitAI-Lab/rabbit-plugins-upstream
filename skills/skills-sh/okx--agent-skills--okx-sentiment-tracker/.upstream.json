@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/okx/agent-skills/okx-sentiment-tracker",
+  "repo": "okx/agent-skills",
+  "skillId": "okx-sentiment-tracker",
+  "branch": "github-main",
+  "pushedAt": "2026-09-23T13:02:14Z",
+  "contentHash": "56eb4c4667c042661205c3d03d57e9dd05984a5270a6504d6ae16b2b27241435",
+  "fetchedAt": "2026-09-24T12:48:57.390Z"
+}
