@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/research/blogwatcher",
+  "identifier": "official/research/blogwatcher",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/research/blogwatcher",
+  "branch": "main",
+  "pushedAt": "2026-09-24T12:44:35Z",
+  "contentHash": "994703af4bada1d11e18795ae1b0a0a2da0a06209f59a8c07d58342f02af4364",
+  "fetchedAt": "2026-09-24T12:47:32.291Z"
+}

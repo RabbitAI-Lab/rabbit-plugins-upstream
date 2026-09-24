@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/analytical-method-validation",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/analytical-method-validation",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/analytical-method-validation",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "76e81616b799b7f3b5dfd1a27ca6da9ce380f0623da2f09ef7e8b87cfecc86d7",
+  "fetchedAt": "2026-09-24T12:47:21.205Z"
+}
