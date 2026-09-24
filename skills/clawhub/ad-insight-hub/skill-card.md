@@ -1,5 +1,5 @@
 ## Description: <br>
-Ad Insight Hub helps agents query the AdMapix advertising intelligence API for ad creative search, app and developer profiles, store rankings, and download or revenue estimates with cache-aware endpoint orchestration. <br>
+广告洞察中枢 helps agents translate advertising intelligence requests into AdMapix API calls, orchestrate dependent endpoints, cache reusable results, and label estimated download or revenue data with confidence levels. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Marketing, user acquisition, and market analysis teams use this skill through an agent to translate advertising research questions into AdMapix API calls and return structured ad intelligence for competitor creative monitoring, app and developer research, store ranking checks, and regional strategy comparisons. <br>
+Advertising, user acquisition, and market analysis teams use this skill to retrieve structured AdMapix data for competitor creative monitoring, app and developer profiling, store rankings, SDK review, and regional strategy comparisons. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill uses command execution and network access for curl-style AdMapix API calls. <br>
-Mitigation: Review proposed API calls before execution and install the skill only when AdMapix access is intended. <br>
-Risk: An AdMapix API key could be exposed if pasted into chat, logs, or URLs. <br>
-Mitigation: Configure ADMAPIX_API_KEY as an environment variable and avoid printing, logging, or sharing the key. <br>
-Risk: Advertising intelligence data may remain in local cache directories. <br>
-Mitigation: Review or delete ~/.admapix-cache when cached data should not remain on the machine. <br>
-Risk: Download and revenue outputs are third-party estimates and may be unreliable for long-tail markets. <br>
-Mitigation: Treat estimates as directional, preserve the skill's A/B/C confidence labels, and avoid relying on them as sole financial evidence. <br>
+Risk: The skill uses curl/exec access and an ADMAPIX_API_KEY environment variable to call a remote advertising intelligence API. <br>
+Mitigation: Install only when AdMapix access is intended, keep the key in the environment, avoid echoing or storing the value, and send it only as the X-API-Key request header. <br>
+Risk: Local caches under ~/.admapix-cache may retain advertising intelligence data that could be sensitive. <br>
+Mitigation: Review cache contents periodically, use explicit export paths, and delete retained cache data when it is no longer needed. <br>
+Risk: Download and revenue data are third-party estimates and may be unsuitable for precise financial decisions. <br>
+Mitigation: Use the skill's A/B/C confidence labels and treat lower-confidence or long-tail estimates as directional signals only. <br>
 
 
 ## Reference(s): <br>
-- [Ad Insight Hub on ClawHub](https://clawhub.ai/thcjp/skills/ad-insight-hub) <br>
-- [Skill homepage](https://skillhub.cn) <br>
-- [AdMapix](https://www.admapix.com) <br>
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/ad-insight-hub) <br>
+- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+- [AdMapix website](https://www.admapix.com) <br>
+- [AdMapix API base](https://api.admapix.com) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with bash/curl commands and structured JSON API responses] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands and JSON API payloads] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ADMAPIX_API_KEY, may use ~/.admapix-cache, and labels download or revenue estimates with A/B/C confidence guidance.] <br>
+**Other Properties Related to Output:** [Outputs may include raw structured AdMapix JSON, endpoint orchestration steps, cache guidance, and confidence labels for third-party estimates.] <br>
 
 ## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+1.0.6 (source: server release evidence and frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

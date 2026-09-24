@@ -1,43 +1,65 @@
-## Description: <br>
-AI reminder system based on the Ebbinghaus forgetting curve that activates only with explicit student or guardian consent and supports pause, cancel, minimal sharing, and do-not-disturb boundaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+IM智能提醒 consolidates consented Chinese K12 study review, task, and follow-up reminders from other Xiaozhi skills into a daily summary and sends or queues reminders only when the student explicitly asks or authorizes them.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External students, guardians, and education agents use this skill to set consent-based study, task, exploration, and follow-up reminders in IM workflows. It helps schedule spaced review prompts, manage reminder queues, and explain fallback behavior when the host platform cannot wake the agent proactively. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Repeated non-response could still lead to ongoing weekly reminders. <br>
-Mitigation: Require renewed confirmation or pause the reminder series after repeated silence, and make pause and cancel controls visible in every reminder flow. <br>
-Risk: Reminder timing may depend on learning-profile signals from another skill. <br>
-Mitigation: Use learning-profile timing only after explicit sharing consent and limit exchanged data to the minimum timing summary needed. <br>
-Risk: Active push reminders depend on a host platform with scheduled wake-up capability. <br>
-Mitigation: When scheduled wake-up is unavailable, disclose the limitation and fall back to user-triggered checks or catch-up prompts when the user next opens a conversation. <br>
+## Use Case:
 
+Students, guardians, and learning-support agents use this skill to manage consented Chinese K12 study reminders, including spaced review, error-review follow-ups, planned study tasks, exploration tasks, and daily confirmations. It is intended to reduce reminder overload by merging due items into a limited daily summary and respecting pause, cancel, sharing, and quiet-hour controls.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-im-reminder) <br>
-- [Ebbinghaus schedule reference](references/ebbinghaus-schedule.md) <br>
+### Deployment Geography for Use:
 
+Default configuration is for mainland China Chinese K12 learning contexts; other regions require localized guardian-consent, data-sharing, and crisis-contact settings before use.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown and conversational text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces reminder plans, reminder message templates, queue summaries, consent prompts, pause or cancel guidance, and platform fallback guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill handles reminders for minors in a China-focused K12 context.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm reminder consent, guardian involvement for younger students, and local legal requirements before deployment, especially outside mainland China.
+
+Risk: Reminder workflows can become intrusive or create pressure if they run without clear consent or limits.
+
+Mitigation: Create reminders only after explicit student or guardian authorization, provide pause/cancel controls, cap reminders to the daily budget, and honor grade-band quiet hours.
+
+Risk: Cross-skill reminder intake can expose more learning-profile data than needed.
+
+Mitigation: Require cross-skill sharing and reminder-consent flags, accept only the minimum fields needed for the reminder, and avoid default synchronization back to other skills.
+
+Risk: Crisis or safety disclosures can appear during learning conversations.
+
+Mitigation: Stop the reminder flow, avoid diagnosis, prompt contact with trusted adults, and use localized emergency or crisis-contact guidance.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/qizhitang/skills/xiaozhi-im-reminder)
+- [Ebbinghaus schedule reference](artifact/references/ebbinghaus-schedule.md)
+- [Handover protocol schema](artifact/shared/handover-protocol.schema.json)
+- [Grade-band reminder windows](artifact/shared/grade-bands.md)
+- [Crisis exception protocol](artifact/shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Configuration, Guidance]
+
+**Output Format:** [Chinese conversational reminders, queue summaries, and structured reminder_enqueue/reminder_sync JSON guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires reminder consent; daily summaries are capped and quiet hours apply by grade band.]
+
+## Skill Version(s):
+
+2.3.0 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

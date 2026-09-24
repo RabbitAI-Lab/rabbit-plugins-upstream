@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PM Master · gate_engine.py 单测套件（standalone，无需 pytest）
+PM Master · gate_engine.py unit test suite (standalone, no pytest needed)
 ============================================================
-两层覆盖：
-  A. 纯函数/逻辑层：直接 import gate_engine，验证阶段↔状态路由、入口准则分支、
-     chk_* 助手、GATES 表不变量（快速、确定、无子进程）。
-  B. CLI 集成层：以子进程真实运行 gate_engine.py（及其依赖的 consistency_check.py /
-     control_engine.py），覆盖 4 种方法论 × 软/硬门、被拒、dry-run 不落盘、--status。
+Two layers of coverage:
+  A. Pure function/logic layer: directly import gate_engine, verify phase<->state
+     routing, entry-criteria branches, chk_* helpers, and GATES table invariants
+     (fast, deterministic, no subprocess).
+  B. CLI integration layer: actually run gate_engine.py as a subprocess (along with
+     its dependencies consistency_check.py / control_engine.py), covering 4
+     methodologies x soft/hard gates, rejection, dry-run no-write, and --status.
 
-运行：
+Run:
   python3 scripts/test_gate_engine.py
-退出码：0 = 全过；1 = 有失败（可挂 CI 门禁）。
+Exit code: 0 = all pass; 1 = failures (can hook into CI gate).
 """
 import os
 import sys
@@ -58,7 +60,7 @@ def write_yaml(path, data):
 
 
 # ------------------------------------------------------------------ #
-# 夹具构造
+# Fixture construction
 # ------------------------------------------------------------------ #
 def make_project(slug, data, extra=None):
     root = os.path.join(_ROOT, slug)
@@ -73,83 +75,112 @@ def make_project(slug, data, extra=None):
     return proj
 
 
+_WBS_WF = [
+    # M1 is a milestone. It is also flagged `summary` because the Critic's orphan /
+    # dependency check exempts only `summary` entries -- without it, a first-in-chain
+    # milestone that has no dependsOn is reported as an orphaned package.
+    {'id': 'M1', 'name': 'Design Approved', 'milestone': True, 'summary': True,
+     'estimate': 1, 'start': '2026-01-01', 'end': '2026-01-10'},
+    {'id': 'W1', 'name': 'Requirements', 'role': 'ba', 'estimate': 5,
+     'start': '2026-01-01', 'end': '2026-01-10',
+     'deliverable': 'Requirements specification', 'milestone_ref': 'M1', 'dependsOn': 'M1'},
+    {'id': 'W2', 'name': 'Development', 'role': 'software-architect', 'estimate': 10,
+     'start': '2026-01-11', 'end': '2026-02-10',
+     'deliverable': 'Delivered module', 'milestone_ref': 'M1', 'dependsOn': 'W1'},
+]
+
 _BASELINE_WF = {
-    'wbs': [
-        {'id': 'W1', 'name': '需求', 'role': 'ba', 'estimate': 5, 'start': '2026-01-01', 'end': '2026-01-10'},
-        {'id': 'W2', 'name': '开发', 'estimate': 10, 'start': '2026-01-11', 'end': '2026-02-10', 'dependsOn': 'W1'},
-    ],
+    'wbs': _WBS_WF,
     'metrics': {'evm': {'pv': 100}},
     'risks': [
-        {'id': 'R1', 'likelihood': 2, 'impact': 2, 'score': 4, 'severity': '绿',
-         'owner': '王五', 'mitigation': '提前评审'},
+        {'id': 'R1', 'likelihood': 2, 'impact': 2, 'score': 4, 'severity': 'green',
+         'owner': 'WangWu', 'mitigation': 'early review'},
     ],
 }
 
-_WBS_WF = [
-    {'id': 'W1', 'name': '需求', 'role': 'ba', 'estimate': 5, 'start': '2026-01-01', 'end': '2026-01-10'},
-    {'id': 'W2', 'name': '开发', 'estimate': 10, 'start': '2026-01-11', 'end': '2026-02-10', 'dependsOn': 'W1'},
-]
+# artifact_guard (OAG) derives the required deliverable set from data presence:
+#   risks/raid -> raid_log + risk_register;   metrics/actuals -> status_report;
+#   wbs -> wbs;                               type=program -> portfolio_dashboard + program_charter.
+# Each required key must be registered in `artifacts` AND exist on disk, so the
+# fixtures must both register them and create the files; otherwise the
+# "Deliverables consistent with source (OAG)" gate criterion fails.
+_OAG_BASE_KEYS = ['wbs', 'raid_log', 'risk_register', 'status_report']
+
+
+def _oag_artifacts(extra_keys=()):
+    """Register + materialize the deliverables OAG requires for this fixture."""
+    arts, files = {}, {}
+    for k in list(_OAG_BASE_KEYS) + list(extra_keys):
+        rel = f'artifacts/{k}.md'
+        arts[k] = rel
+        files[rel] = f'# {k}\n'
+    return arts, files
 
 
 def fixture_waterfall_planning():
-    """瀑布 planning 夹具：consistency 在 规划 态 exit 0，可用于 G1→2 硬门。"""
+    """Waterfall planning fixture: consistency exits 0 in planning state, usable for G1->2 hard gate."""
+    arts, art_files = _oag_artifacts()
     data = {
         'project': {
-            'id': 't-wf', 'name': '测试-瀑布', 'type': 'project', 'methodology': 'waterfall',
-            'lifecycle_state': 'planning', 'phase': '规划', 'pm': '张三', 'sponsor': '李四',
+            'id': 't-wf', 'name': 'test-waterfall', 'type': 'project', 'methodology': 'waterfall',
+            'lifecycle_state': 'planning', 'phase': 'planning', 'pm': 'ZhangSan', 'sponsor': 'LiSi',
         },
         'wbs': _WBS_WF,
         'risks': [
-            {'id': 'R1', 'likelihood': 2, 'impact': 2, 'score': 4, 'severity': '绿',
-             'owner': '王五', 'mitigation': '提前评审'},
+            {'id': 'R1', 'likelihood': 2, 'impact': 2, 'score': 4, 'severity': 'green',
+             'owner': 'WangWu', 'mitigation': 'early review'},
         ],
         'metrics': {'evm': {'pv': 100}},
+        'decomposition': {'critic_passed': True},
         'baseline': {'file': 'baselines/2026-01-01.yaml', 'on': '2026-01-01'},
-        'artifacts': {},
+        'artifacts': arts,
     }
-    return make_project('wf_plan', data,
-                         extra={'baselines/2026-01-01.yaml': _dump(_BASELINE_WF)})
+    extra = {'baselines/2026-01-01.yaml': _dump(_BASELINE_WF)}
+    extra.update(art_files)
+    return make_project('wf_plan', data, extra=extra)
 
 
 def fixture_waterfall_operational():
-    """瀑布 operational 夹具：consistency 在 执行 态 exit 0 且 control_engine exit 0，用于 G3→4 硬门。"""
+    """Waterfall operational fixture: consistency exits 0 in execution state and control_engine exits 0, for G3->4 hard gate."""
+    arts, art_files = _oag_artifacts()
     data = {
         'project': {
-            'id': 't-wf2', 'name': '测试-瀑布-运营', 'type': 'project', 'methodology': 'waterfall',
-            'lifecycle_state': 'operational', 'phase': '执行', 'pm': '张三', 'sponsor': '李四',
+            'id': 't-wf2', 'name': 'test-waterfall-ops', 'type': 'project', 'methodology': 'waterfall',
+            'lifecycle_state': 'operational', 'phase': 'execution', 'pm': 'ZhangSan', 'sponsor': 'LiSi',
         },
         'wbs': _WBS_WF,
         'risks': [
-            {'id': 'R1', 'likelihood': 2, 'impact': 2, 'score': 4, 'severity': '绿',
-             'owner': '王五', 'mitigation': '提前评审'},
+            {'id': 'R1', 'likelihood': 2, 'impact': 2, 'score': 4, 'severity': 'green',
+             'owner': 'WangWu', 'mitigation': 'early review'},
         ],
-        'metrics': {'evm': {'pv': 100, 'ev': 77, 'ac': 55}},
+        # ev/ac == pv keeps SPI/CPI at 1.0 so control_engine reports GREEN (no RED escalation)
+        'metrics': {'evm': {'pv': 100, 'ev': 100, 'ac': 100}},
+        'decomposition': {'critic_passed': True},
         'baseline': {'file': 'baselines/2026-01-01.yaml', 'on': '2026-01-01'},
-        'actuals': {'as_of': '2026-02-01', 'ev': 77, 'ac': 55, 'wbs_progress': {'W1': 100, 'W2': 40}},
-        'artifacts': {
-            'closure_report': 'artifacts/closure_report.md',
-            'lessons_learned': 'artifacts/lessons_learned.md',
-        },
+        'actuals': {'as_of': '2026-02-01', 'ev': 100, 'ac': 100,
+                    'wbs_progress': {'M1': 100, 'W1': 100, 'W2': 100}},
+        'artifacts': dict(arts, closure_report='artifacts/closure_report.md',
+                          lessons_learned='artifacts/lessons_learned.md'),
     }
-    return make_project('wf_op', data, extra={
-        'baselines/2026-01-01.yaml': _dump(_BASELINE_WF),
-        'artifacts/closure_report.md': '# 验收交付物\n',
-        'artifacts/lessons_learned.md': '# 经验教训\n',
-    })
+    extra = {'baselines/2026-01-01.yaml': _dump(_BASELINE_WF),
+             'artifacts/closure_report.md': '# Acceptance Deliverables\n',
+             'artifacts/lessons_learned.md': '# Lessons Learned\n'}
+    extra.update(art_files)
+    return make_project('wf_op', data, extra=extra)
 
 
 def fixture_agile_planning():
     data = {
         'project': {
-            'id': 't-ag', 'name': '测试-敏捷', 'type': 'project', 'methodology': 'agile',
-            'lifecycle_state': 'planning', 'phase': '规划', 'pm': '张三', 'sponsor': '李四',
+            'id': 't-ag', 'name': 'test-agile', 'type': 'project', 'methodology': 'agile',
+            'lifecycle_state': 'planning', 'phase': 'planning', 'pm': 'ZhangSan', 'sponsor': 'LiSi',
         },
         'backlog': [
-            {'id': 'B1', 'name': '登录', 'estimate': 3},
-            {'id': 'B2', 'name': '列表', 'estimate': 5},
+            {'id': 'B1', 'name': 'Login', 'estimate': 3},
+            {'id': 'B2', 'name': 'List', 'estimate': 5},
         ],
         'sprints': [
-            {'id': 'S1', 'name': '冲刺1', 'tasks': [{'id': 'T1', 'name': '登录', 'estimate': 3}]},
+            {'id': 'S1', 'name': 'Sprint 1', 'tasks': [{'id': 'T1', 'name': 'Login', 'estimate': 3}]},
         ],
         'risks': [],
         'artifacts': {},
@@ -158,30 +189,33 @@ def fixture_agile_planning():
 
 
 def fixture_program_operational():
+    # program type additionally requires portfolio_dashboard + program_charter
+    arts, art_files = _oag_artifacts(extra_keys=('portfolio_dashboard', 'program_charter'))
     data = {
         'project': {
-            'id': 't-pg', 'name': '测试-项目群', 'type': 'program', 'methodology': 'waterfall',
-            'lifecycle_state': 'operational', 'phase': '组合交付', 'pm': '张三', 'sponsor': '李四',
+            'id': 't-pg', 'name': 'test-program', 'type': 'program', 'methodology': 'waterfall',
+            'lifecycle_state': 'operational', 'phase': 'program-delivery', 'pm': 'ZhangSan', 'sponsor': 'LiSi',
         },
         'wbs': _WBS_WF,
         'risks': [
-            {'id': 'R1', 'likelihood': 2, 'impact': 2, 'score': 4, 'severity': '绿',
-             'owner': '王五', 'mitigation': '提前评审'},
+            {'id': 'R1', 'likelihood': 2, 'impact': 2, 'score': 4, 'severity': 'green',
+             'owner': 'WangWu', 'mitigation': 'early review'},
         ],
-        'metrics': {'evm': {'pv': 100, 'ev': 77, 'ac': 55}},
+        # ev/ac == pv keeps SPI/CPI at 1.0 so control_engine reports GREEN (no RED escalation)
+        'metrics': {'evm': {'pv': 100, 'ev': 100, 'ac': 100}},
+        'decomposition': {'critic_passed': True},
         'baseline': {'file': 'baselines/2026-01-01.yaml', 'on': '2026-01-01'},
-        'actuals': {'as_of': '2026-02-01', 'ev': 77, 'ac': 55, 'wbs_progress': {'W1': 100, 'W2': 40}},
-        'program': {'benefits': [{'id': 'BN1', 'status': 'realized', 'owner': '赵六'}]},
-        'artifacts': {
-            'closure_report': 'artifacts/closure_report.md',
-            'lessons_learned': 'artifacts/lessons_learned.md',
-        },
+        'actuals': {'as_of': '2026-02-01', 'ev': 100, 'ac': 100,
+                    'wbs_progress': {'M1': 100, 'W1': 100, 'W2': 100}},
+        'program': {'benefits': [{'id': 'BN1', 'status': 'realized', 'owner': 'ZhaoLiu'}]},
+        'artifacts': dict(arts, closure_report='artifacts/closure_report.md',
+                          lessons_learned='artifacts/lessons_learned.md'),
     }
-    return make_project('pg_op', data, extra={
-        'baselines/2026-01-01.yaml': _dump(_BASELINE_WF),
-        'artifacts/closure_report.md': '# 验收交付物\n',
-        'artifacts/lessons_learned.md': '# 经验教训\n',
-    })
+    extra = {'baselines/2026-01-01.yaml': _dump(_BASELINE_WF),
+             'artifacts/closure_report.md': '# Acceptance Deliverables\n',
+             'artifacts/lessons_learned.md': '# Lessons Learned\n'}
+    extra.update(art_files)
+    return make_project('pg_op', data, extra=extra)
 
 
 def _dump(d):
@@ -190,178 +224,179 @@ def _dump(d):
 
 
 # ------------------------------------------------------------------ #
-# A. 纯函数 / 逻辑层
+# A. Pure function / logic layer
 # ------------------------------------------------------------------ #
 def test_logic_layer():
-    print("\n[A] 纯函数 / 逻辑层")
-    # GATES 表不变量
+    print("\n[A] Pure function / logic layer")
+    # GATES table invariants
     for t, g in G.GATES.items():
-        ok(f"GATES[{t}] 含必需键",
+        ok(f"GATES[{t}] has required keys",
            all(k in g for k in ('requires_state', 'set_state', 'hard', 'approver', 'gate')),
            str(g))
-    # 硬门必须是 执行/收尾/组合交付/组合收尾
+    # Hard gates must be execution/closeout/program-delivery/program-closeout
     hard_targets = [t for t, g in G.GATES.items() if g['hard']]
-    ok("硬门仅含控制门/收尾门",
-       set(hard_targets) == {'执行', '收尾', '组合交付', '组合收尾'}, str(hard_targets))
-    # 软门不得阻断（entry_criteria 对 启动/规划/监控 返回空准则）
-    for soft in ('启动', '规划', '监控'):
+    ok("Hard gates contain only control/closeout gates",
+       set(hard_targets) == {'execution', 'closeout', 'program-delivery', 'program-closeout'}, str(hard_targets))
+    # Soft gates must not block (entry_criteria returns empty criteria for initiation/planning/monitoring)
+    for soft in ('initiation', 'planning', 'monitoring'):
         crit = G.entry_criteria(soft, {'project': {'methodology': 'waterfall'}}, 'x')
-        ok(f"软门 {soft} 无硬准则", crit == [], str(crit))
-    # phase_label_for_state：目标即合法 phase 时优先用目标（监控修复点）
+        ok(f"Soft gate {soft} has no hard criteria", crit == [], str(crit))
+    # phase_label_for_state: target is a valid phase -> prefer target (monitoring fix)
     data_op = {'project': {'type': 'project'}}
-    ok("执行→监控 写入 phase=监控（修复点）",
-       G.phase_label_for_state(data_op, 'operational', '监控') == '监控')
-    ok("规划→执行 写入 phase=执行",
-       G.phase_label_for_state(data_op, 'operational', '执行') == '执行')
-    # 项目群同义
+    ok("execution->monitoring writes phase=monitoring (fix)",
+       G.phase_label_for_state(data_op, 'operational', 'monitoring') == 'monitoring')
+    ok("planning->execution writes phase=execution",
+       G.phase_label_for_state(data_op, 'operational', 'execution') == 'execution')
+    # Program synonym
     data_pg = {'project': {'type': 'program'}}
-    ok("项目群 组合收尾→组合收尾",
-       G.phase_label_for_state(data_pg, 'closed', '组合收尾') == '组合收尾')
-    # 回退映射（target 非法时按 state 映射）
-    ok("回退：operational→执行", G.phase_label_for_state(data_op, 'operational', 'ZZ') == '执行')
-    ok("回退：closed→收尾", G.phase_label_for_state(data_op, 'closed', 'ZZ') == '收尾')
-    ok("回退：planning→规划", G.phase_label_for_state(data_op, 'planning', 'ZZ') == '规划')
-    # chk_* 助手
-    ok("chk_baseline 有指针=True", G.chk_baseline({'baseline': {'file': 'x.yaml'}})[0] is True)
-    ok("chk_baseline 无指针=False", G.chk_baseline({'baseline': {}})[0] is False)
-    ok("chk_artifact 存在=True", G.chk_artifact({'artifacts': {'closure_report': 'p'}}, 'closure_report')[0] is True)
-    ok("chk_artifact 缺失=False", G.chk_artifact({'artifacts': {}}, 'closure_report')[0] is False)
-    ok("chk_program_benefits 非项目群=True", G.chk_program_benefits({'program': None})[0] is True)
-    ok("chk_program_benefits 全部实现=True",
+    ok("program program-closeout->program-closeout",
+       G.phase_label_for_state(data_pg, 'closed', 'program-closeout') == 'program-closeout')
+    # Fallback mapping (target invalid -> map by state)
+    ok("fallback: operational->execution", G.phase_label_for_state(data_op, 'operational', 'ZZ') == 'execution')
+    ok("fallback: closed->closeout", G.phase_label_for_state(data_op, 'closed', 'ZZ') == 'closeout')
+    ok("fallback: planning->planning", G.phase_label_for_state(data_op, 'planning', 'ZZ') == 'planning')
+    # chk_* helpers
+    ok("chk_baseline has pointer=True", G.chk_baseline({'baseline': {'file': 'x.yaml'}})[0] is True)
+    ok("chk_baseline no pointer=False", G.chk_baseline({'baseline': {}})[0] is False)
+    ok("chk_artifact exists=True", G.chk_artifact({'artifacts': {'closure_report': 'p'}}, 'closure_report')[0] is True)
+    ok("chk_artifact missing=False", G.chk_artifact({'artifacts': {}}, 'closure_report')[0] is False)
+    ok("chk_program_benefits non-program=True", G.chk_program_benefits({'program': None})[0] is True)
+    ok("chk_program_benefits all realized=True",
        G.chk_program_benefits({'program': {'benefits': [{'id': 'B1', 'status': 'realized'}]}})[0] is True)
-    ok("chk_program_benefits 有未实现=False",
+    ok("chk_program_benefits has unrealized=False",
        G.chk_program_benefits({'program': {'benefits': [{'id': 'B1', 'status': 'open'}]}})[0] is False)
-    # entry_criteria 分支：收尾缺交付物 → passed=False
-    crit = G.entry_criteria('收尾', {'project': {'methodology': 'waterfall'}, 'artifacts': {}}, 'x')
-    ok("收尾 缺 closure/lessons → 有未过准则", any(not ok_ for _, ok_, _ in crit), str(crit))
-    # entry_criteria 分支：敏捷进执行免基线
-    crit = G.entry_criteria('执行', {'project': {'methodology': 'agile'}}, 'x')
-    names = [n for n, _, _ in crit]
-    ok("敏捷进执行 不含『已冻结基线』准则", '已冻结基线' not in names, str(names))
-    # 瀑布进执行 含『已冻结基线』准则
-    crit = G.entry_criteria('执行', {'project': {'methodology': 'waterfall'}}, 'x')
-    names = [n for n, _, _ in crit]
-    ok("瀑布进执行 含『已冻结基线』准则", '已冻结基线' in names, str(names))
+    # entry_criteria branch: closeout missing deliverables -> passed=False
+    crit = G.entry_criteria('closeout', {'project': {'methodology': 'waterfall'}, 'artifacts': {}}, 'x')
+    ok("closeout missing closure/lessons -> has unmet criteria", any(not ok_ for _, ok_, _ in crit), str(crit))
+    # entry_criteria branch: agile into execution waives baseline
+    crit = G.entry_criteria('execution', {'project': {'methodology': 'agile'}}, 'x')
+    names = [n.lower() for n, _, _ in crit]
+    ok("agile into execution excludes 'baseline frozen' criterion", 'baseline frozen' not in names, str(names))
+    # waterfall into execution includes 'baseline frozen' criterion
+    crit = G.entry_criteria('execution', {'project': {'methodology': 'waterfall'}}, 'x')
+    names = [n.lower() for n, _, _ in crit]
+    ok("waterfall into execution includes 'baseline frozen' criterion", 'baseline frozen' in names, str(names))
 
 
 # ------------------------------------------------------------------ #
-# B. CLI 集成层
+# B. CLI integration layer
 # ------------------------------------------------------------------ #
 def test_cli_layer():
-    print("\n[B] CLI 集成层")
+    print("\n[B] CLI integration layer")
 
-    # B1 软门 G0→1 启动→规划
+    # B1 soft gate G0->1 initiation->planning
     p = fixture_waterfall_planning()
-    rc, out = run_gate(p, to='规划', approve='张三(PM)')
-    ok("软门 规划 approve 成功(rc=0)", rc == 0, out)
+    rc, out = run_gate(p, to='planning', approve='ZhangSan(PM)')
+    ok("soft gate planning approve success (rc=0)", rc == 0, out)
     d = _load(p)
-    ok("软门 规划 后 phase=规划", d['project']['phase'] == '规划', d['project']['phase'])
-    ok("软门 规划 后 state 仍为 planning", d['project']['lifecycle_state'] == 'planning')
-    ok("软门 规划 写入 stage_gates", len(d.get('governance', {}).get('stage_gates', [])) == 1)
+    ok("soft gate planning -> phase=planning", d['project']['phase'] == 'planning', d['project']['phase'])
+    ok("soft gate planning state still planning", d['project']['lifecycle_state'] == 'planning')
+    ok("soft gate planning wrote stage_gates", len(d.get('governance', {}).get('stage_gates', [])) == 1)
 
-    # B2 软门 G2→3 执行→监控（修复点：不能写成 执行）
+    # B2 soft gate G2->3 execution->monitoring (fix: must not be written as execution)
     p = fixture_waterfall_operational()
-    rc, out = run_gate(p, to='监控', approve='张三(PM)')
-    ok("软门 监控 approve 成功(rc=0)", rc == 0, out)
+    rc, out = run_gate(p, to='monitoring', approve='ZhangSan(PM)')
+    ok("soft gate monitoring approve success (rc=0)", rc == 0, out)
     d = _load(p)
-    ok("软门 监控 后 phase=监控（修复点）", d['project']['phase'] == '监控', d['project']['phase'])
-    ok("软门 监控 后 state 仍为 operational", d['project']['lifecycle_state'] == 'operational')
+    ok("soft gate monitoring -> phase=monitoring (fix)", d['project']['phase'] == 'monitoring', d['project']['phase'])
+    ok("soft gate monitoring state still operational", d['project']['lifecycle_state'] == 'operational')
 
-    # B3 硬门 G1→2 瀑布 规划→执行（有基线+一致性）
+    # B3 hard gate G1->2 waterfall planning->execution (has baseline + consistency)
     p = fixture_waterfall_planning()
-    rc, out = run_gate(p, to='执行', approve='李四(sponsor)')
-    ok("硬门 执行(瀑布,基线齐) 通过(rc=0)", rc == 0, out)
+    rc, out = run_gate(p, to='execution', approve='LiSi(sponsor)')
+    ok("hard gate execution (waterfall, baseline present) passes (rc=0)", rc == 0, out)
     d = _load(p)
-    ok("硬门 执行 后 phase=执行", d['project']['phase'] == '执行', d['project']['phase'])
-    ok("硬门 执行 后 state=operational", d['project']['lifecycle_state'] == 'operational')
-    ok("硬门 执行 写入 stage_gates", len(d.get('governance', {}).get('stage_gates', [])) == 1)
-    ok("硬门 执行 产出报告 docs/gate_reports", os.path.exists(
+    ok("hard gate execution -> phase=execution", d['project']['phase'] == 'execution', d['project']['phase'])
+    ok("hard gate execution state=operational", d['project']['lifecycle_state'] == 'operational')
+    ok("hard gate execution wrote stage_gates", len(d.get('governance', {}).get('stage_gates', [])) == 1)
+    ok("hard gate execution produced report docs/gate_reports", os.path.exists(
         os.path.join(os.path.dirname(p), 'docs', 'gate_reports')))
 
-    # B4 硬门 G1→2 瀑布 缺基线 → 阻断(rc=1)
+    # B4 hard gate G1->2 waterfall missing baseline -> blocked (rc=1)
     p = fixture_waterfall_planning()
-    # 移除 baseline 指针
+    # remove baseline pointer
     d = _load(p)
     d.pop('baseline', None)
     write_yaml(p, d)
-    rc, out = run_gate(p, to='执行')
-    ok("硬门 执行(瀑布,缺基线) 阻断(rc=1)", rc == 1, out)
-    ok("硬门 执行 阻断信息含『基线』", '基线' in out or 'baseline' in out.lower(), out)
+    rc, out = run_gate(p, to='execution')
+    ok("hard gate execution (waterfall, missing baseline) blocked (rc=1)", rc == 1, out)
+    ok("hard gate execution block message mentions 'baseline'", 'baseline' in out.lower(), out)
     d2 = _load(p)
-    ok("硬门 执行 阻断后 phase 未变", d2['project']['phase'] == '规划', d2['project']['phase'])
+    ok("hard gate execution blocked phase unchanged", d2['project']['phase'] == 'planning', d2['project']['phase'])
 
-    # B5 硬门 G1→2 敏捷 免基线 → 通过(rc=0)
+    # B5 hard gate G1->2 agile waives baseline -> passes (rc=0)
     p = fixture_agile_planning()
-    rc, out = run_gate(p, to='执行', approve='李四(sponsor)')
-    ok("硬门 执行(敏捷,免基线) 通过(rc=0)", rc == 0, out)
+    rc, out = run_gate(p, to='execution', approve='LiSi(sponsor)')
+    ok("hard gate execution (agile, baseline waived) passes (rc=0)", rc == 0, out)
     d = _load(p)
-    ok("硬门 执行(敏捷) 后 phase=执行", d['project']['phase'] == '执行', d['project']['phase'])
-    ok("硬门 执行(敏捷) state=operational", d['project']['lifecycle_state'] == 'operational')
+    ok("hard gate execution (agile) -> phase=execution", d['project']['phase'] == 'execution', d['project']['phase'])
+    ok("hard gate execution (agile) state=operational", d['project']['lifecycle_state'] == 'operational')
 
-    # B6 硬门 G3→4 收尾（交付物齐+control exit 0）
+    # B6 hard gate G3->4 closeout (deliverables present + control exit 0)
     p = fixture_waterfall_operational()
-    rc, out = run_gate(p, to='收尾', approve='李四(sponsor)')
-    ok("硬门 收尾(齐) 通过(rc=0)", rc == 0, out)
+    rc, out = run_gate(p, to='closeout', approve='LiSi(sponsor)')
+    ok("hard gate closeout (complete) passes (rc=0)", rc == 0, out)
     d = _load(p)
-    ok("硬门 收尾 后 phase=收尾", d['project']['phase'] == '收尾', d['project']['phase'])
-    ok("硬门 收尾 后 state=closed", d['project']['lifecycle_state'] == 'closed')
+    ok("hard gate closeout -> phase=closeout", d['project']['phase'] == 'closeout', d['project']['phase'])
+    ok("hard gate closeout state=closed", d['project']['lifecycle_state'] == 'closed')
 
-    # B7 硬门 G3→4 收尾 缺交付物 → 阻断(rc=1)
+    # B7 hard gate G3->4 closeout missing deliverables -> blocked (rc=1)
     p = fixture_waterfall_operational()
     d = _load(p)
     d['artifacts'].pop('closure_report', None)
     write_yaml(p, d)
-    rc, out = run_gate(p, to='收尾')
-    ok("硬门 收尾(缺验收) 阻断(rc=1)", rc == 1, out)
-    ok("硬门 收尾 阻断信息含 closure", 'closure' in out, out)
+    rc, out = run_gate(p, to='closeout')
+    ok("hard gate closeout (missing acceptance) blocked (rc=1)", rc == 1, out)
+    ok("hard gate closeout block message mentions closure", 'closure' in out, out)
     d2 = _load(p)
-    ok("硬门 收尾 阻断后 state 未变", d2['project']['lifecycle_state'] == 'operational')
+    ok("hard gate closeout blocked state unchanged", d2['project']['lifecycle_state'] == 'operational')
 
-    # B8 项目群 组合收尾（收益齐）
+    # B8 program program-closeout (benefits realized)
     p = fixture_program_operational()
-    rc, out = run_gate(p, to='组合收尾', approve='李四(sponsor)')
-    ok("硬门 组合收尾(收益齐) 通过(rc=0)", rc == 0, out)
+    rc, out = run_gate(p, to='program-closeout', approve='LiSi(sponsor)')
+    ok("hard gate program-closeout (benefits realized) passes (rc=0)", rc == 0, out)
     d = _load(p)
-    ok("硬门 组合收尾 后 phase=组合收尾", d['project']['phase'] == '组合收尾', d['project']['phase'])
-    ok("硬门 组合收尾 后 state=closed", d['project']['lifecycle_state'] == 'closed')
+    ok("hard gate program-closeout -> phase=program-closeout", d['project']['phase'] == 'program-closeout', d['project']['phase'])
+    ok("hard gate program-closeout state=closed", d['project']['lifecycle_state'] == 'closed')
 
-    # B9 项目群 组合收尾 收益未实现 → 阻断
+    # B9 program program-closeout benefits unrealized -> blocked
     p = fixture_program_operational()
     d = _load(p)
     d['program']['benefits'][0]['status'] = 'open'
     write_yaml(p, d)
-    rc, out = run_gate(p, to='组合收尾')
-    ok("硬门 组合收尾(收益未实现) 阻断(rc=1)", rc == 1, out)
-    ok("硬门 组合收尾 阻断信息含『收益』", '收益' in out, out)
+    rc, out = run_gate(p, to='program-closeout')
+    ok("hard gate program-closeout (benefits unrealized) blocked (rc=1)", rc == 1, out)
+    ok("hard gate program-closeout block message mentions 'benefit'", 'benefit' in out, out)
 
-    # B10 前置状态不符 → 拒绝(rc=1)
+    # B10 prerequisite state mismatch -> rejected (rc=1)
     p = fixture_waterfall_operational()  # operational
-    rc, out = run_gate(p, to='规划')       # 规划 requires planning/review/baselined
-    ok("前置状态不符 拒绝(rc=1)", rc == 1, out)
-    ok("拒绝信息含『阶段门被拒』", '阶段门被拒' in out, out)
+    rc, out = run_gate(p, to='planning')       # planning requires planning/review/baselined
+    ok("prerequisite state mismatch rejected (rc=1)", rc == 1, out)
+    ok("rejection message mentions 'gate rejected'", 'gate rejected' in out.lower(), out)
 
-    # B11 未知目标 → 退出(rc=2)
+    # B11 unknown target -> exit (rc=2)
     p = fixture_waterfall_planning()
-    rc, out = run_gate(p, to='不存在的阶段')
-    ok("未知目标 退出(rc=2)", rc == 2, out)
+    rc, out = run_gate(p, to='nonexistent-phase')
+    ok("unknown target exit (rc=2)", rc == 2, out)
 
-    # B12 dry-run 不落盘（phase/state/stage_gates 不变）
+    # B12 dry-run no write (phase/state/stage_gates unchanged)
     p = fixture_waterfall_planning()
     before = _load(p)
-    rc, out = run_gate(p, to='执行')  # 无 --approve
-    ok("dry-run 评估成功(rc=0)", rc == 0, out)
+    rc, out = run_gate(p, to='execution')  # no --approve
+    ok("dry-run evaluation success (rc=0)", rc == 0, out)
     after = _load(p)
-    ok("dry-run 前 phase=规划", before['project']['phase'] == '规划')
-    ok("dry-run 后 phase 仍=规划（未落盘）", after['project']['phase'] == '规划')
-    ok("dry-run 未写 stage_gates",
+    ok("dry-run before phase=planning", before['project']['phase'] == 'planning')
+    ok("dry-run after phase still=planning (not written)", after['project']['phase'] == 'planning')
+    ok("dry-run did not write stage_gates",
        len(after.get('governance', {}).get('stage_gates', [])) == 0)
 
-    # B13 --status 正常输出
+    # B13 --status normal output
     p = fixture_waterfall_planning()
     rc, out = run_gate(p, status=True)
-    ok("--status 成功(rc=0)", rc == 0, out)
-    ok("--status 含 可走的门", '可走的门' in out, out)
-    ok("--status 含 硬门/软门 标注", '硬门' in out and '软门' in out, out)
+    ok("--status success (rc=0)", rc == 0, out)
+    low = out.lower()
+    ok("--status contains available gates", 'available gates' in low, out)
+    ok("--status contains hard/soft gate markers", 'hard gate' in low and 'soft gate' in low, out)
 
 
 def _load(path):
@@ -374,13 +409,13 @@ def _load(path):
 def main():
     global _ROOT
     _ROOT = tempfile.mkdtemp(prefix='pm_gate_test_')
-    print(f"临时根：{_ROOT}")
+    print(f"Temp root: {_ROOT}")
     try:
         test_logic_layer()
         test_cli_layer()
     finally:
         shutil.rmtree(_ROOT, ignore_errors=True)
-    print(f"\n==== 结果：通过 {PASS} / 失败 {FAIL} ====")
+    print(f"\n==== Result: passed {PASS} / failed {FAIL} ====")
     sys.exit(1 if FAIL else 0)
 
 

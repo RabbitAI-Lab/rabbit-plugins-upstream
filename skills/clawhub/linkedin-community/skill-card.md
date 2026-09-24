@@ -1,49 +1,82 @@
-## Description: <br>
-LinkedIn Community Management API integration with managed OAuth for organization pages, posts, comments, reactions, and analytics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+LinkedIn Community Management API integration with managed OAuth for managing organization pages, posts, comments, reactions, and analytics.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to manage LinkedIn organization content through Maton-managed OAuth, including creating posts, editing or deleting posts and comments, reacting to content, looking up organizations, and retrieving page or follower statistics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, edit, delete, comment on, or react to LinkedIn content, which can affect a public or business LinkedIn presence. <br>
-Mitigation: Confirm the exact Maton connection, LinkedIn identity, target organization, target resource, and content before allowing write actions. <br>
-Risk: Requests act within the permissions granted to the connected LinkedIn account. <br>
-Mitigation: Verify the intended Maton connection and LinkedIn organization before performing actions, especially when multiple connections are available. <br>
+## Use Case:
 
+Employees and developers use this skill to operate LinkedIn Community Management workflows through Maton, including reading analytics and creating or managing posts, comments, reactions, organization lookups, and approved automations.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/linkedin-community) <br>
-- [Maton](https://maton.ai) <br>
-- [LinkedIn Community Management Overview](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/community-management-overview) <br>
-- [LinkedIn Posts API](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/posts-api) <br>
-- [LinkedIn Comments API](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/comments-api) <br>
-- [LinkedIn Reactions API](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/reactions-api) <br>
-- [LinkedIn Organization Lookup API](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/organizations/organization-lookup-api) <br>
-- [LinkedIn Follower Statistics](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/organizations/follower-statistics) <br>
-- [LinkedIn Page Statistics](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/organizations/page-statistics) <br>
-- [LinkedIn Share Statistics](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/organizations/share-statistics) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with curl commands, JSON payloads, and JavaScript or Python examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, a valid MATON_API_KEY, and a Maton LinkedIn OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill can create or modify public LinkedIn posts, comments, and reactions through the connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact LinkedIn identity, target resource, content, and intended effect with the user before every write operation.
+
+Risk: LinkedIn OAuth access and Maton API keys can expose account capabilities if mishandled.
+
+Mitigation: Prefer OAuth, keep credentials in the platform or operating-system credential store, and never print, persist, or forward access tokens or API keys.
+
+Risk: Triggers and destinations create persistent automation and ongoing data forwarding.
+
+Mitigation: Create them only for a specific approved workflow, disclose the destination host and payload fields, prefer Maton-controlled destinations, and remove unused automations.
+
+Risk: External content and trigger payloads may contain sensitive data or adversarial instructions.
+
+Mitigation: Treat returned content as untrusted data, forward only fields needed for the task, and never execute local handlers or commands from untrusted payload content without separate user review.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/linkedin-community)
+- [Maton homepage](https://maton.ai)
+- [LinkedIn Community Management Overview](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/community-management-overview)
+- [LinkedIn Posts API](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/posts-api)
+- [LinkedIn Comments API](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/comments-api)
+- [LinkedIn Reactions API](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/shares/reactions-api)
+- [LinkedIn Organization Lookup API](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/organizations/organization-lookup-api)
+- [LinkedIn Follower Statistics](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/organizations/follower-statistics)
+- [LinkedIn Page Statistics](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/organizations/page-statistics)
+- [LinkedIn Share Statistics](https://learn.microsoft.com/en-us/linkedin/marketing/community-management/organizations/share-statistics)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Reference](artifact/references/calendly/triggers.md)
+- [GitHub Trigger Reference](artifact/references/github/triggers.md)
+- [Gmail Trigger Reference](artifact/references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](artifact/references/hubspot/triggers.md)
+- [Linear Trigger Reference](artifact/references/linear/triggers.md)
+- [Notion Trigger Reference](artifact/references/notion/triggers.md)
+- [Slack Trigger Reference](artifact/references/slack/triggers.md)
+- [Stripe Trigger Reference](artifact/references/stripe/triggers.md)
+- [Time Trigger Reference](artifact/references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, API paths, JSON examples, and small code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and LinkedIn authorization; outputs should be reviewed before writes or persistent automation are created.]
+
+## Skill Version(s):
+
+1.2.3 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

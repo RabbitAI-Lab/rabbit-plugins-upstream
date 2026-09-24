@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/mailchimp",
   "slug": "mailchimp",
   "ownerHandle": null,
-  "version": "1.0.4",
-  "updatedAt": 1781739757511,
-  "contentHash": "775d54c3201df5f45dee92823a9f1a9f1230ce2779c03a70639c7b10b0100eb7",
-  "fetchedAt": "2026-07-26T18:27:30.851Z"
+  "version": "1.2.3",
+  "updatedAt": 1790209483674,
+  "contentHash": "75ac5158ac6da0c5f3ed05875512f40148ef53d324faabc54522790feb3144ea",
+  "fetchedAt": "2026-09-24T12:57:08.968Z"
 }

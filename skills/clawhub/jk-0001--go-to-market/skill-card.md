@@ -1,37 +1,48 @@
-## Description: <br>
-Builds a go-to-market strategy for launching a product or entering a new market, covering customer segmentation, positioning, channel strategy, pricing, and execution planning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build a go-to-market (GTM) strategy for launching a product or entering a new market.
 
-## Publisher: <br>
-[JK-0001](https://clawhub.ai/user/JK-0001) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[jk-0001](https://clawhub.ai/user/jk-0001)
 
-## Use Case: <br>
-Solopreneurs, founders, and small teams use this skill to define an ideal customer profile, positioning, sales motion, acquisition channels, pricing, and a 90-day execution plan for a product launch or market entry. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Strategic GTM advice may be incorrect, misleading, or unsuitable for a specific market, budget, pricing model, or public claim. <br>
-Mitigation: Review recommendations before acting on them, especially for public marketing claims, spending decisions, pricing, and launch plans. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/JK-0001/go-to-market) <br>
+## Use Case:
 
+External founders, operators, and go-to-market planners use this skill to shape customer segmentation, positioning, sales motion, channel selection, pricing, launch execution, and iteration plans for a product or market entry.
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown guidance with planning templates, examples, tables, and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Does not execute code, call external services, or handle private data.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata and target metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill may activate on broad launch or customer-acquisition questions and provide cold outreach or paid advertising planning suggestions.
+
+Mitigation: Treat outreach and advertising recommendations as planning inputs and review them against applicable laws, platform policies, and business constraints before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jk-0001/skills/go-to-market)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, configuration]
+
+**Output Format:** [Markdown guidance with templates, examples, tables, and planning checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces planning recommendations only; no executable code or privileged actions.]
+
+## Skill Version(s):
+
+0.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

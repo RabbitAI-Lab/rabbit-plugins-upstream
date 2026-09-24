@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/weather",
   "slug": "weather",
   "ownerHandle": "tongguanghai",
-  "version": "1.0.0",
-  "updatedAt": 1778485729679,
-  "contentHash": "0f976215bf641e11cf09e5c6913e0b0d31e940c16fd7070ecf869648cbbba388",
-  "fetchedAt": "2026-07-26T18:04:15.323Z"
+  "version": "1.0.1",
+  "updatedAt": 1790017065536,
+  "contentHash": "2caeba8d4deb877722bc07838f450c55d0662ed17b92b670b7c59a73656ad526",
+  "fetchedAt": "2026-09-24T13:24:44.513Z"
 }

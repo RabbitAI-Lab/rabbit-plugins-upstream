@@ -1,38 +1,54 @@
-## Description: <br>
-Authors HyperFrames slideshows, pitch decks, and interactive decks with slides, fragment reveals, branching, hotspot navigation, presenter mode, speaker notes, and page-to-deck conversion guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Author a HyperFrames slideshow: a presentation, pitch deck, or interactive deck with discrete slides, fragment reveals, branching, hotspot navigation, and built-in presenter mode with speaker notes; also converts an existing page into a deck.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and content authors use this skill to create runnable HyperFrames slideshow decks, convert existing pages into decks, and prepare handoff guidance for presenter-mode use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill asks agents to silently run an update command that can change installed skills and dependent HyperFrames skills before the user's task. <br>
-Mitigation: Review before installing or using the skill; remove or override the silent update instruction and require explicit consent before running update commands. <br>
+## Use Case:
 
+Developers and content authors use this skill to create runnable HyperFrames slideshow decks with slide navigation, fragments, branching, speaker notes, presenter mode, and validation guidance. It can also guide conversion of an existing page into a deck while preserving source-page interaction, motion, media behavior, and visual design.
 
-## Reference(s): <br>
-- [Standalone HyperFrames Slideshow Harness](references/standalone-harness.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with HTML, JSON, CSS, JavaScript, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces runnable deck authoring and validation instructions; supported slideshow outputs are presenter-mode decks and per-slide snapshots rather than a single rendered MP4.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server evidence) <br>
+Risk: The skill asks agents to run live unpinned npx hyperframes commands, including a skill self-update.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only from a trusted HyperFrames package source, pin the HyperFrames CLI version where possible, avoid automatic skill updates unless intended, and review generated package.json scripts before reuse.
+
+Risk: A slideshow can be incorrectly rendered as a single MP4, which may silently truncate the deck to the first composition.
+
+Mitigation: Use HyperFrames presenter mode for the live deck and per-slide snapshots for still output; surface the MP4 limitation when users ask for a linear video export.
+
+## Reference(s):
+
+- [Standalone HyperFrames Slideshow Harness](references/standalone-harness.md)
+- [ClawHub Skill Page](https://clawhub.ai/heygen-com/skills/slideshow)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with HTML, JSON, JavaScript, CSS, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces guidance for a navigable live deck and per-slide snapshots, not a linear MP4.]
+
+## Skill Version(s):
+
+1.0.13 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

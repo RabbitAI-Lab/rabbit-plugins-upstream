@@ -1,42 +1,57 @@
-## Description: <br>
-AI-powered insurance agent training coach that generates question banks, skill assessments, personalized training plans, and role-play practice for insurance-agent development. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered insurance agent training coach that parses product documents conceptually, generates question banks, assesses agent skill levels, schedules personalized daily training, and supports interactive role-play sessions.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Insurance training teams and agents use this skill to create training content, assessment prompts, role-play scenarios, and daily practice plans for insurance sales development. Generated guidance is for training support and should be reviewed by licensed insurance or compliance staff before real-world use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, with China-specific regulatory examples and compliance references. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated insurance scripts, product comparisons, and regulatory claims may be incomplete or inaccurate if used as compliance or sales advice. <br>
-Mitigation: Have licensed insurance or compliance staff review generated materials before use with agents or customers. <br>
-Risk: Users may provide real customer PII or sensitive business data while preparing training scenarios. <br>
-Mitigation: Use approved local handling controls and avoid entering real customer PII unless the organization has authorized that workflow. <br>
-Risk: Document-upload parsing claims may be misunderstood as a verified document-processing implementation. <br>
-Mitigation: Treat document parsing behavior as a training-content framework capability unless separately validated in the deployment environment. <br>
+## Use Case:
 
+Insurance training teams, agency managers, and agents use this skill to prepare coaching materials, question banks, role-play drills, training plans, and advisory assessment reports for insurance-agent development. Outputs require human review before real sales, compliance, or product-recommendation use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/insurance-agent-trainer) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown and structured text with example JSON and Python snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces training materials, question banks, role-play prompts, assessment reports, and practice-plan guidance that require human review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.2.3 (source: server evidence and frontmatter) <br>
+Risk: Training scripts or regulatory notes could be mistaken for current licensed insurance, legal, or financial advice.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat outputs as training examples only and require licensed compliance review before using generated material in real sales contexts.
+
+Risk: Agent or customer details entered during training could include sensitive personal information.
+
+Mitigation: Avoid entering real customer PII, use desensitized descriptions, and keep any training records limited to summary metrics unless proper consent and controls are in place.
+
+Risk: Insurance rules, product terms, and sales-compliance requirements may change after the skill content was written.
+
+Mitigation: Verify current insurance regulations and product terms against authoritative sources before applying any training output.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/insurance-agent-trainer)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, configuration, guidance]
+
+**Output Format:** [Markdown guidance with structured JSON examples and illustrative pseudocode.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory educational outputs; no executable package, persistent storage, network calls, or credential collection are bundled.]
+
+## Skill Version(s):
+
+5.2.5 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

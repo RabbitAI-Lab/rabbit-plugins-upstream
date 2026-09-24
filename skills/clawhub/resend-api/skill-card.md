@@ -1,46 +1,76 @@
-## Description: <br>
-Resend API integration with managed authentication for sending transactional emails and managing domains, contacts, templates, broadcasts, webhooks, and API keys. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Resend API integration with managed authentication for sending transactional emails and managing domains, contacts, templates, broadcasts, and webhooks.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to manage a connected Resend account through Maton, including sending transactional or broadcast email and administering domains, templates, contacts, webhooks, and API keys. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: MATON_API_KEY grants access to connected Resend account operations. <br>
-Mitigation: Keep MATON_API_KEY private and install the skill only when you intend to manage a Resend account through Maton. <br>
-Risk: Write operations can send email, modify account resources, configure webhooks, or create and delete API keys. <br>
-Mitigation: Approve create, update, send, and delete operations only after checking recipients, sender, content, webhook destination, resource IDs, and API key impact. <br>
-Risk: Multiple Resend connections can cause requests to target the wrong account. <br>
-Mitigation: Use the intended Maton connection and include the Maton-Connection header when multiple connections exist. <br>
+## Use Case:
 
+Developers and operators use this skill to work with Resend through Maton-managed authentication, including email sending, contact and template management, webhooks, and approved automation.
 
-## Reference(s): <br>
-- [ClawHub Resend Skill](https://clawhub.ai/byungkyu/resend-api) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [Resend API Documentation](https://resend.com/docs/api-reference/introduction) <br>
-- [Resend Dashboard](https://resend.com) <br>
-- [ClawHub API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline Python, JavaScript, shell command, HTTP endpoint, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY for live API calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill can perform sensitive Resend actions such as sending email, creating broadcasts, deleting resources, creating API keys, configuring webhooks, and running automation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the target account, resource, payload, and intended effect with the user before any write, send, deletion, API-key, webhook, trigger, destination, or hosted-function action.
+
+Risk: Persistent webhooks or trigger destinations can continue forwarding future email or event data after setup.
+
+Mitigation: Use only user-named destinations, disclose what data will flow and how often, review existing destinations first, and remove destinations that are no longer needed.
+
+Risk: Long-lived Maton API keys can leak through environment variables, command lines, logs, crash dumps, shell history, or pasted output.
+
+Mitigation: Prefer OAuth, keep API keys out of logs and command arguments, do not persist them in profiles or scripts, and rotate any key that may have been exposed.
+
+Risk: Hosted functions or local event handlers can run unattended against user-connected accounts.
+
+Mitigation: Use user-authored or user-reviewed handlers, require separate approval for deploys and invocations, prefer least-privilege connections, and use DENY_ALL network policy unless the user approves named hosts.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/resend-api)
+- [Maton Homepage](https://maton.ai)
+- [Resend API Documentation](https://resend.com/docs/api-reference/introduction)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, code, configuration, text]
+
+**Output Format:** [Markdown with inline bash, JSON, and code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces user-directed API workflows and approval prompts; responses may contain personal or business data and should be minimized to the task.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

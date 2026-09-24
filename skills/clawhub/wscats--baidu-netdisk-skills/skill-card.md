@@ -1,48 +1,63 @@
-## Description: <br>
-Baidu Netdisk file management skill for uploading, downloading, transferring, sharing, searching, moving, copying, renaming, creating folders, deleting files with confirmation, and backing up or restoring agent memory. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Baidu Netdisk file management via CLI for upload, download, transfer, sharing, search, move, copy, rename, folder creation, deletion, and agent memory backup or restore.
 
-## Publisher: <br>
-[wscats](https://clawhub.ai/user/wscats) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wscats](https://clawhub.ai/user/wscats)
 
-## Use Case: <br>
-External users and developers use this skill to operate Baidu Netdisk files from an agent session through the bdpan CLI, limited to the app data area. It also supports agent memory backup, listing, and restore workflows with explicit safety checks for sensitive or destructive actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires OAuth access and local credential storage for a Baidu Netdisk account. <br>
-Mitigation: Install and log in only on trusted machines, do not expose bdpan configuration files or tokens, and log out or uninstall when access is no longer needed. <br>
-Risk: Uploads, deletes, shares, transfers, and memory restore operations can change cloud or local data. <br>
-Mitigation: Review the operation scope before approving prompts, require explicit confirmation for destructive or overwrite actions, and keep backups before restore workflows. <br>
-Risk: Install and update workflows download or replace local command-line tooling. <br>
-Mitigation: Run install or update only after an explicit user request, review the displayed download source and checksum information, and avoid automatic or silent updates. <br>
+## Use Case:
 
+External users and developers use this skill to manage files in Baidu Netdisk through the bdpan CLI, including file operations, public sharing, and transfer workflows. Users in supported Claw environments can also back up or restore selected agent memory files.
 
-## Reference(s): <br>
-- [Authentication Guide](reference/authentication.md) <br>
-- [bdpan CLI Command Reference](reference/bdpan-commands.md) <br>
-- [Usage Examples](reference/examples.md) <br>
-- [Development Notes and Safety Guidance](reference/notes.md) <br>
-- [Troubleshooting Guide](reference/troubleshooting.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/wscats/baidu-netdisk-skills) <br>
-- [Publisher Profile](https://clawhub.ai/user/wscats) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and concise status text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce JSON-formatted bdpan command output when requested or when scripting workflows require it.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.5 (source: server release evidence) <br>
+Risk: The skill can access and modify Baidu Netdisk files and selected local agent-memory files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only after confirming that this access is acceptable, and review planned file operations before execution.
+
+Risk: Install, self-update, restore, and uninstall flows can make high-impact changes.
+
+Mitigation: Review installer and update behavior carefully, avoid --yes or --force for install, update, restore, or uninstall, and verify custom configuration paths before use.
+
+Risk: Public sharing can expose files to anyone with the link and extraction code.
+
+Mitigation: Confirm public shares before creation, verify the selected files, and prefer time-limited shares unless a permanent link is required.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wscats/skills/baidu-netdisk-skills)
+- [Metadata repository link](https://github.com/wscats/baidu-netdisk-skills)
+- [Authentication Guide](artifact/reference/authentication.md)
+- [bdpan CLI Command Reference](artifact/reference/bdpan-commands.md)
+- [Usage Examples](artifact/reference/examples.md)
+- [Troubleshooting Guide](artifact/reference/troubleshooting.md)
+- [Development Notes](artifact/reference/notes.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown responses with inline shell commands and optional JSON CLI output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include user confirmations, risk warnings, progress reports, and Baidu Netdisk or local memory file paths.]
+
+## Skill Version(s):
+
+1.1.5 (source: server release evidence and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

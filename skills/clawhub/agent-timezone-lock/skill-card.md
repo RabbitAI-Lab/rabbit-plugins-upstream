@@ -1,44 +1,55 @@
-## Description: <br>
-Stops your OpenClaw agent from reporting the wrong time by requiring timezone-aware local-time checks before time output. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an OpenClaw agent avoid UTC-as-local mistakes by configuring a local timezone and providing scripts for accurate current-time reporting.
 
-## Publisher: <br>
-[ferrentinomj-dev](https://clawhub.ai/user/ferrentinomj-dev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ferrentinomj-dev](https://clawhub.ai/user/ferrentinomj-dev)
 
-## Use Case: <br>
-Developers and agent operators use this skill to configure an OpenClaw agent with a persistent IANA timezone, answer time questions through a local-time helper script, and reduce UTC-as-local mistakes in scheduling or heartbeat workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Setup can modify persistent agent instruction files by patching AGENTS.md. <br>
-Mitigation: Inspect the generated Timezone Standing Order block before relying on it, and remove that block if the skill is uninstalled or persistent timezone steering is no longer desired. <br>
-Risk: Timezone configuration can be wrong if the user supplies an invalid or unintended timezone. <br>
-Mitigation: Use a valid IANA timezone string, verify tz_config.json after setup, and run now.py to confirm the displayed local time. <br>
-Risk: The skill does not automatically intercept every time-related response. <br>
-Mitigation: Ensure the agent explicitly runs now.py before reporting times and rerun timezone_setup.py when the user's timezone changes. <br>
+## Use Case:
 
+Developers and agent operators use this skill when an agent needs to answer time questions, convert UTC timestamps, or maintain a configured local timezone without guessing from internal context.
 
-## Reference(s): <br>
-- [Timezone Conversion Rules & Edge Cases](references/timezone_rules.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/ferrentinomj-dev/agent-timezone-lock) <br>
-- [Publisher Profile](https://clawhub.ai/user/ferrentinomj-dev) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and text output from Python helper scripts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write tz_config.json and patch AGENTS.md when setup is run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and artifact _meta.json) <br>
+Risk: The optional AGENTS.md patch creates a persistent timezone rule that can affect future agent sessions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use --patch-agents only when persistent behavior is intended and review the prompted change before confirming.
+
+Risk: Time answers may be wrong if the timezone has not been configured or has changed since setup.
+
+Mitigation: Run timezone_setup.py for the user's current timezone and verify output with now.py before relying on time-sensitive responses.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ferrentinomj-dev/skills/agent-timezone-lock)
+- [Publisher profile](https://clawhub.ai/user/ferrentinomj-dev)
+- [Timezone conversion rules](artifact/references/timezone_rules.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON configuration]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes local-time command output and optional timezone configuration files.]
+
+## Skill Version(s):
+
+1.2.0 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

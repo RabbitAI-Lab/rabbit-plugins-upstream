@@ -1,47 +1,75 @@
-## Description: <br>
-Access the YouTube Analytics API through Maton-managed OAuth to retrieve channel reports and manage video, playlist, and channel analytics groups. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+YouTube Analytics API integration with managed OAuth for retrieving channel analytics reports and managing video, playlist, and channel groups.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to query YouTube channel metrics such as views, watch time, subscribers, revenue, and performance by dimensions like day, country, or video. It also guides management of YouTube Analytics groups when the user has authorized the connected account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The Maton API key and connected OAuth account can expose YouTube Analytics data for authorized channels. <br>
-Mitigation: Keep MATON_API_KEY private, install only when the agent should access YouTube Analytics through Maton, and scope use to the intended connected account. <br>
-Risk: Requests may target the wrong YouTube Analytics account when multiple Maton connections exist. <br>
-Mitigation: List active connections and include the correct Maton-Connection header whenever multiple accounts are available. <br>
-Risk: Group management operations can create, update, delete, add, or remove analytics groups and group items. <br>
-Mitigation: Require the agent to list and confirm exact groups, items, and intended effects before any create, update, delete, or removal action. <br>
+## Use Case:
 
+External users and developers use this skill to authenticate YouTube Analytics through Maton, query channel performance metrics by dimensions such as day, country, or video, and manage analytics groups with user-approved changes.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/youtube-analytics-api) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [YouTube Analytics API Overview](https://developers.google.com/youtube/analytics) <br>
-- [YouTube Analytics API Reference](https://developers.google.com/youtube/analytics/reference) <br>
-- [YouTube Analytics Metrics](https://developers.google.com/youtube/analytics/metrics) <br>
-- [YouTube Analytics Dimensions](https://developers.google.com/youtube/analytics/dimensions) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Code, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with JSON examples and inline Python, JavaScript, and shell snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an authorized YouTube Analytics connection; API responses are JSON from the proxied YouTube Analytics service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Authorizing the integration gives Maton access to the selected YouTube Analytics account within the approved connection scopes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user intends to authorize the account, select only the scopes needed for the task when scope selection is offered, and use read-only reporting calls by default.
+
+Risk: Write operations can create, update, or delete analytics groups, group items, connections, functions, triggers, or destinations.
+
+Mitigation: Require explicit user approval before any write, connection creation, deletion, function deployment, trigger change, or destination change; list current resources first to verify identifiers and account context.
+
+Risk: Raw API keys, hosted functions, triggers, and outbound destinations can increase credential exposure or unattended automation risk.
+
+Mitigation: Prefer OAuth and the Maton credential store, avoid embedding credentials in destination headers or bodies, deploy functions with DENY_ALL unless the user approves specific hosts, and remove automation that is no longer needed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/youtube-analytics-api)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [YouTube Analytics API Overview](https://developers.google.com/youtube/analytics)
+- [YouTube Analytics API Reference](https://developers.google.com/youtube/analytics/reference)
+- [YouTube Analytics Channel Reports](https://developers.google.com/youtube/analytics/channel_reports)
+- [YouTube Analytics Metrics](https://developers.google.com/youtube/analytics/metrics)
+- [YouTube Analytics Dimensions](https://developers.google.com/youtube/analytics/dimensions)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, code]
+
+**Output Format:** [Markdown with command examples, configuration guidance, code snippets, and API response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and a user-approved YouTube Analytics connection.]
+
+## Skill Version(s):
+
+1.2.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

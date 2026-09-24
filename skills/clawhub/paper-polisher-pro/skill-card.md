@@ -1,48 +1,69 @@
-## Description: <br>
-Paper Polisher helps agents detect AI-writing traces, produce academic quality reports, check terminology, and guide bilingual paper polishing while preserving data, citations, and technical terms. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Paper Polisher Pro helps agents run local academic-writing self-checks, AI-risk analysis, terminology review, translation-smell checks, paragraph attribution, journal prechecks, and AIGC disclosure-label checks for Chinese and English manuscripts.
 
-## Publisher: <br>
-[docsor1212](https://clawhub.ai/user/docsor1212) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[docsor1212](https://clawhub.ai/user/docsor1212)
 
-## Use Case: <br>
-Developers, researchers, and academic-writing teams use this skill to run local checks for AI-writing signals, terminology issues, similarity, and paper-quality metrics before revising bilingual manuscripts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can be used to reduce AI-detection signals in academic writing, which may enable authorship misrepresentation or policy violations. <br>
-Mitigation: Use only for legitimate editing, transparency, and quality review; follow institutional authorship, disclosure, and academic integrity rules. <br>
-Risk: User-provided manuscripts may contain confidential or restricted research content. <br>
-Mitigation: Process only manuscripts the user is authorized to handle and avoid sharing confidential content outside approved environments. <br>
-Risk: Detection scores and polishing suggestions may be inaccurate or incomplete. <br>
-Mitigation: Treat outputs as review aids and require human review before changing or submitting academic work. <br>
+## Use Case:
 
+External users, developers, and academic authors use this skill to review manuscripts locally for writing quality, terminology consistency, AI-risk signals, paragraph-level attribution, and disclosure-label readiness before publication or submission. Its detector outputs are advisory and should be reviewed manually against institutional AI-use policies.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/docsor1212/paper-polisher-pro) <br>
-- [SKILL.md](artifact/SKILL.md) <br>
-- [SKILL_ZH.md](artifact/SKILL_ZH.md) <br>
-- [AI patterns, English](artifact/references/ai_patterns_en.json) <br>
-- [AI patterns, Chinese](artifact/references/ai_patterns_zh.json) <br>
-- [Chinese sentence patterns](artifact/references/sentence_patterns_zh.json) <br>
-- [General synonyms](artifact/references/synonyms_general.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with command examples and optional JSON reports from local scripts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runs on local user-provided manuscript files; reports AI-risk scores, pattern matches, terminology issues, similarity metrics, and quality summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata and artifact skill.json) <br>
+Risk: AI-risk scores and fingerprint attribution can be mistaken for authoritative publication or compliance decisions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat reports as advisory, review outputs manually, and follow the relevant institution or publisher disclosure policy.
+
+Risk: The tool includes detector-evasion-adjacent functionality and could be misused to hide AI involvement.
+
+Mitigation: Use it for author self-review, writing quality, and disclosure-aware revision rather than misrepresentation of AI-generated or AI-assisted work.
+
+Risk: The optional supervised ONNX layer is not bundled and may affect results if substituted or sourced incorrectly.
+
+Mitigation: Verify the optional model's provenance before placing it in cache and do not substitute unverified model exports.
+
+Risk: Short text, English text, medical register, colloquial prose, and mixed human/AI documents have documented scoring limitations.
+
+Mitigation: Use paragraph-level reports, heed degraded-mode and register warnings, and avoid relying on document-level scores where the skill discloses limitations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/docsor1212/skills/paper-polisher-pro)
+- [Article Review Workflow](references/article-review-workflow.md)
+- [Fusion Configuration](references/fusion_config.json)
+- [Model Fingerprints](references/model_fingerprints.json)
+- [English AI Patterns](references/ai_patterns_en.json)
+- [Chinese AI Patterns](references/ai_patterns_zh.json)
+- [Chinese Sentence Patterns](references/sentence_patterns_zh.json)
+- [General Synonyms](references/synonyms_general.json)
+- [Chinese Token Spectrum](references/token_spectrum_zh.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, JSON, Files, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance with optional JSON, text, and HTML reports from bundled local scripts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are local and advisory; some scripts can write report files to user-specified paths.]
+
+## Skill Version(s):
+
+3.8.0 (source: evidence.release.version, artifact/skill.json, and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

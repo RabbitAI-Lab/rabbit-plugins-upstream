@@ -1,44 +1,74 @@
-## Description: <br>
-帮助语文老师将阅读课文讲解升级为系统化阅读教学，提供文本三解、阅读策略、三阶阅读任务、阅读成长档案和学员阅读力评估框架。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+阅读教学指导 helps Chinese language teachers design modern-text reading lessons using three-level text interpretation, reading strategies, staged reading tasks, and class reading-ability records.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External Chinese-language teachers use this skill to design reading lessons, choose explicit reading strategies, create staged reading tasks, and maintain student reading-growth records. It supports lesson planning and assessment workflows while requiring teachers to review outputs and protect student information. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student reading records or analysis updates could expose unnecessary personal information. <br>
-Mitigation: Use pseudonyms, omit unnecessary student details, and confirm before allowing connected student-analysis or resource-library records to be updated. <br>
-Risk: Lesson materials may include copyrighted textbook or book content. <br>
-Mitigation: Require copyrightStatus for selected texts and avoid copying full textbooks or complete ebooks. <br>
+## Use Case:
 
+External Chinese language teachers use this skill to draft reading-teaching frameworks, discussion questions, strategy practice, group-reading designs, and reading-growth records for upper-primary and middle-school learners. Teachers remain responsible for reviewing classroom, student-facing, and parent-visible outputs before use.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-chinese-reading-guide) <br>
-- [文本三解模板](references/text-three-solve.md) <br>
-- [阅读 6 大策略卡片](references/six-strategies-card.md) <br>
-- [群文阅读设计模板](references/group-text-design.md) <br>
-- [学员阅读力档案模板](references/reading-ability-profile-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance, structured teaching notes, and reusable lesson-design templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; outputs may include teaching frameworks, reading-task plans, student profile templates, and suggested updates for connected teaching records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Student reading records and class-workspace entries may contain personal or educational data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only where teachers are authorized to process student learning records; use aliases or approved IDs, avoid unnecessary personal details, and honor delete, export, pause, and sharing controls.
+
+Risk: Profile writeback or parent-visible material could expose student evaluations without the correct consent.
+
+Mitigation: Verify teacher writeback and parent-sharing consent before producing or storing those outputs, and keep teacher review in the loop.
+
+Risk: Generated reading questions, tasks, or interpretations may be inaccurate, mismatched to grade level, or unsupported by the source text.
+
+Mitigation: Apply the included AI item self-check and label AI-generated items for teacher verification before classroom, homework, or resource-library use.
+
+Risk: Reading lessons may involve copyrighted textbooks, teaching aids, or literary works.
+
+Mitigation: Use the artifact's copyrightStatus convention, keep textbook and teaching-aid originals as indexed references only, and avoid reproducing full textbooks or unauthorized electronic books.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-chinese-reading-guide)
+- [文本三解模板](artifact/references/text-three-solve.md)
+- [文本三解填写样板](artifact/references/three-solve-sample.md)
+- [阅读 6 大策略卡片](artifact/references/six-strategies-card.md)
+- [阅读策略使用样板](artifact/references/strategy-use-sample.md)
+- [三阶练习设计填写样板](artifact/references/three-stage-practice-sample.md)
+- [群文阅读设计模板](artifact/references/group-text-design.md)
+- [群文阅读设计样板](artifact/references/group-text-sample-childhood.md)
+- [学员阅读力档案模板](artifact/references/reading-ability-profile-template.md)
+- [AI 出题自检协议](artifact/shared/ai-item-check.md)
+- [班级教学工作空间 Schema](artifact/shared/class-teaching-workspace.schema.json)
+- [平台能力约定与降级路径](artifact/shared/platform-conventions.md)
+- [危机例外](artifact/shared/crisis-exception.md)
+- [危机识别与转介协议](artifact/shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown teaching plans, reading-analysis frameworks, classroom task drafts, and structured class-record entries.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are teacher-reviewed drafts; AI-generated items require manual checking before classroom, repository, or parent-visible use.]
+
+## Skill Version(s):
+
+2.3.0 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

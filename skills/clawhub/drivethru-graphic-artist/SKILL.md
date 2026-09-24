@@ -1,7 +1,7 @@
 ---
 name: drivethru-graphic-artist
 description: Graphic-artist tasks for Bacon & Co decorations — (1) generate product mockups by compositing a decoration (logo/graphic) onto a blank product photo (deterministic; no model-generated pixels; self-reviewed), (2) make a DTF decoration "production-ready" / "drop the art" — take the real thumbnail, size it to the decoration location, render at 300 DPI, upload the DTF production file, set size + colors, and create a print sample, driving the decoration toward the 'done' state via the drivethru_mcp decoration_* tools, and (3) clean up degraded / AI-generated flat art before production — deterministically snap it back to its true inks, rebuild faded/broken/jagged outlines, and re-render crisp at print size (fixes the "looks fine as a thumbnail, falls apart at 13 inches" problem). Use whenever the user wants to see a logo on a garment, place artwork on a blank, remove an image background (knock a solid color out of flat art, or segment a photographic subject), tune a print's size/position, clean up / fix / "drop for production" a low-quality or AI-generated logo (ghosting, haze, jagged or fading outlines, soft edges), OR make a decoration production-ready / drop art / get a DTF decoration to done.
-version: 0.7.0
+version: 0.15.1
 emoji: 🎨
 metadata:
   openclaw:
@@ -15,6 +15,18 @@ metadata:
           mockup outputs. Defaults to `~/.drivethru/mockup`. The bundled
           starter catalog (assets/placement_rules.json) is used read-only
           until the first edit, which seeds an editable copy here.
+      MOCKUP_VISION_API_KEY:
+        required: false
+        description: >
+          API key for the independent vision review in the web-image routine
+          (web_mockup_job.py / vision_review.py). Falls back to
+          OPENROUTER_API_KEY. Without one, mockups are never written.
+      MOCKUP_VISION_MODEL:
+        required: false
+        description: >
+          Vision model slug for the review (default anthropic/claude-sonnet-5
+          on OpenRouter). MOCKUP_VISION_BASE_URL overrides the
+          OpenAI-compatible endpoint (default https://openrouter.ai/api/v1).
     install:
       uv:
         - Pillow>=10.3,<12
@@ -54,7 +66,9 @@ flags a human would. See [Self-review loop](#self-review-loop-required) below.
    [Background removal](#background-removal-flat-art-vs-photos)); `--auto-remove-bg`
    runs rembg inline and is meant for a *photographic* decoration, not flat art.
 3. **Placement** — where it goes: `full_front`, `left_chest`, `right_chest`,
-   `full_back`, `back_yoke`, `sleeve`, `front`, …
+   `center_chest`, `left_sleeve`, `right_sleeve`, `left_leg`, `right_leg`
+   (front of that leg on shorts/pants), `full_back`, `back_yoke`, `front`, … (left/right = the **wearer's** — see
+   [Left / right means the WEARER's](#left--right-means-the-wearers)).
 
 **Category** (hoodie / tee / hat / mug / …) is helpful but optional. If the
 user doesn't say, infer it from the image or chat, or omit it to fall back to
@@ -120,6 +134,8 @@ for the exact schema.
 | `scripts/cleanup_art.py` | **Fix degraded / AI-generated flat art** (before a drop): snap it to its true inks, rebuild faded/broken/jagged outlines, re-render crisp at print size (corner-preserving vector trace, or `--method raster`). Deterministic — no model-generated pixels. Writes a `*_proof.png` (before/after + outline zoom) to `Read` and self-review. See [`references/production_cleanup.md`](references/production_cleanup.md). |
 | `scripts/prepare_dtf_production.py` | Production-ready: fit the real art (aspect-locked) into a location's print box and stamp it at 300 DPI → print-ready PNG + inch/pixel receipt. |
 | `scripts/extract_colors.py` | Production-ready: extract dominant colors from art as `#RRGGBB` + coverage (feeds `decoration_match_colors`). |
+| `scripts/web_mockup_job.py` | **Web-image routine, end to end:** plan (`web_mockup_plan`) → fetch → art prep → compose → geometry + vision checks → verified upload to every size variant. JSON out only (plus one live progress line per colour on stderr); reports vision `cost` and placement `tuning`. `run` / `adjust` / `status`. See [`references/web_image_routine.md`](references/web_image_routine.md). |
+| `scripts/vision_review.py` | Independent vision QA of a rendered mockup → `{verdict: yes/no, checks, issues[{fix}], usage{cost_usd}}`. Sends the image to a vision model over HTTP so it never enters the agent's context. Used by `web_mockup_job.py`. |
 | `scripts/upload_production_file.py` | Production-ready: POST a local production file to Odoo's `/drivethru_mcp/v1/upload` route — server-side base64, no chunking, keeps the (large) file out of your token stream. Preferred for a real 300 DPI file **when `ODOO_MCP_URL` + `ODOO_MCP_TOKEN` are set**; when they're absent, stream the file through the `decoration_set_image` MCP tool instead. Same 20 MB server guard either way. |
 
 ## Composing a mockup
@@ -265,6 +281,63 @@ Note: a decoration can't actually reach `done` without a linked `design` in the
 other step and creating the ready sample.
 
 **Full step-by-step procedure: [`references/production_ready.md`](references/production_ready.md).**
+
+## Batch mockup routine (Mockup Artist Agent)
+
+Separate from the interactive workflow: the **Mockup Artist Agent** runs a
+scheduled routine that sweeps Odoo for open decoration requests **assigned to
+Zach Tucker**, and — for each one where both a **blank product image** and a
+**decoration image** are already attached — generates a mockup and writes it
+into the request's `mockup_image` field. Requests missing an input, or that
+already have a mockup, are recorded as `skipped` and left alone. Rendering is
+the same deterministic pipeline (`compose_mockup.py` + the mandatory
+[self-review loop](#self-review-loop-required)); this routine only wraps it
+in a per-request loop plus the Odoo read/write plumbing (dotted-path search
+across `sale.order.decoration_request_ids`, attachment listing, base64 write
+via `decoration_set_image`).
+
+**Full step-by-step procedure, per-outcome logging, and the exact routine
+prompt/cron to paste into the agent's Routines page:
+[`references/mockup_routine.md`](references/mockup_routine.md).**
+
+## Web-image routine — per-color storefront mockups (Mockup Artist Agent)
+
+A second scheduled routine — **"General Purpose Web image generation
+routine"** — images the **storefront catalog**: products built in bulk from
+blanks + decorations when a store is created, which arrive with no image. For
+each colour it composites the product's front decoration(s) onto that colour's
+blank and writes the mockup to every size variant of the colour.
+
+**It is one command — `scripts/web_mockup_job.py run --site-id <id>` — and it
+is different from the interactive flow above in three ways that matter:**
+
+- **Do not `Read` or open any image in this routine.** The self-review is done
+  by an independent vision model inside the script (`vision_review.py`), which
+  returns a yes/no verdict as JSON. Images in your context balloon the session.
+- **Do not fetch or write images yourself** — no `decoration_get_image`, no
+  `include_binary`, no `product_write` image fields, no chunked
+  `decoration_set_image`. The script downloads over HTTP and uploads byte-exact
+  through `POST <ODOO_MCP_URL>/upload`, verified.
+- **A "no" verdict comes with a fix:** run the job's `next` command
+  (`web_mockup_job.py adjust --job <job> --apply-suggested`). Max 3 attempts.
+
+Blank presence, art choice (embroidery/DTF production PNG before the thumbnail,
+whose background is removed and verified) and wearer-side placement are all
+resolved server-side by the `web_mockup_plan` MCP tool.
+
+**Full procedure, hard rules, statuses, and the exact routine prompt:
+[`references/web_image_routine.md`](references/web_image_routine.md).**
+
+## Left / right means the WEARER's
+
+Every placement name — `left_chest`, `right_chest`, `left_sleeve`,
+`right_sleeve` — refers to the **wearer's** side. Blanks are flat **front**
+photos, so the wearer's left is on the **image's right** (`x_center_ratio >
+0.5`) and the wearer's right is on the image's left. The bundled rules follow
+this; `compose_mockup.py` mirrors (and warns about) any rule that doesn't, and
+`edit_placement_rule.py` refuses to save one. `--offset-x-pct` is always in
+image coordinates: positive moves toward the image's right. Plain `sleeve` is
+rejected as ambiguous.
 
 ## Editing the rules catalog
 

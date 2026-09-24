@@ -1,5 +1,5 @@
 ## Description: <br>
-Ws Excel Tool Free helps agents read, write, clean, calculate formulas in, and summarize xlsx files without requiring Microsoft Excel. <br>
+Excel工具(免费版) helps agents read, write, clean, calculate, and summarize xlsx spreadsheets with Python libraries such as openpyxl and pandas. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, individual analysts, and developers use this skill to have an agent process user-provided xlsx files for basic reading, writing, data cleaning, formulas, formatting, and summary statistics. <br>
+Individuals, independent developers, and agents use this skill to process single Excel files for statistics, data cleaning, report formatting, and basic formula work without Microsoft Excel. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may run local Python code against Excel files supplied by the user. <br>
-Mitigation: Use it only on files you intend the agent to process, and review the generated Python or shell commands before execution. <br>
-Risk: The skill may write or overwrite local Excel output files. <br>
-Mitigation: Ask the agent to show the resolved output path first and to create new filenames unless an overwrite is explicitly requested. <br>
-Risk: Data cleaning, formula insertion, or formatting changes can alter spreadsheet contents in ways that affect downstream decisions. <br>
-Mitigation: Keep an original copy of the workbook and review formulas, row counts, and summary statistics before relying on the processed output. <br>
+Risk: The skill can run local Python and create or modify spreadsheet files. <br>
+Mitigation: Review generated scripts before execution, provide explicit input paths, and prefer new output filenames instead of overwriting source files. <br>
+Risk: Spreadsheet files may contain sensitive business or personal data. <br>
+Mitigation: Use the skill only for intended Excel/xlsx processing, keep data local when possible, and inspect generated outputs before sharing them. <br>
+Risk: Generated formulas may depend on Excel or another spreadsheet application to recalculate after the file is opened. <br>
+Mitigation: For final numeric results, have the agent compute values directly in Python or verify formulas in the target spreadsheet application. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/ws-excel-tool-free) <br>
-- [Skill homepage](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, files, guidance] <br>
-**Output Format:** [Markdown guidance with Python code snippets, shell commands, generated Excel files, and JSON-style status output] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, files] <br>
+**Output Format:** [Markdown guidance with Python snippets, shell commands, and JSON-like structured status] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Processes local Excel files supplied by the user and may write new xlsx outputs to a requested path or workspace data directory.] <br>
+**Other Properties Related to Output:** [May create or modify local xlsx output files using user-provided paths.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+1.0.1 (source: server release metadata and skill frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

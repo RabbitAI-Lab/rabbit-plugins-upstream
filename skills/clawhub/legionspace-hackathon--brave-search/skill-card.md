@@ -1,41 +1,58 @@
-## Description: <br>
-Headless web search and page-content extraction using Brave Search, with optional Markdown extraction from result pages. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Web search and content extraction via Brave Search API.
 
-## Publisher: <br>
-[legionspace-hackathon](https://clawhub.ai/user/legionspace-hackathon) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[legionspace-hackathon](https://clawhub.ai/user/legionspace-hackathon)
 
-## Use Case: <br>
-Developers and agents use this skill to search documentation, facts, current web content, and API references without an interactive browser. It can also fetch a specific URL and return readable page content as Markdown. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search terms and fetched URLs are sent to external websites. <br>
-Mitigation: Do not submit secrets, private internal URLs, confidential project names, or sensitive personal data through this skill. <br>
-Risk: Operators may expect BRAVE_API_KEY to control network access, but the security guidance says the current implementation does not use it. <br>
-Mitigation: Verify the runtime behavior before deployment and do not rely on BRAVE_API_KEY for access control, quota tracking, or audit expectations. <br>
+## Use Case:
 
+Developers and agents use this skill to search the web, find documentation or current facts, and extract readable page content without an interactive browser.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/legionspace-hackathon/skills/brave-search) <br>
-- [Publisher profile](https://clawhub.ai/user/legionspace-hackathon) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Plain text search results with optional Markdown page content] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search results include title, link, snippet, and optional extracted page content; embedded page content is truncated by the implementation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release and package.json; artifact _meta.json reports 1.0.1) <br>
+Risk: The skill can fetch arbitrary web pages from the agent environment, which may expose private network locations or metadata services if used with untrusted URLs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it only with public URLs and block network egress to private networks and metadata services.
+
+Risk: Search queries and fetched page URLs may contain sensitive information.
+
+Mitigation: Do not use confidential queries, internal links, regulated data, or customer data with this skill.
+
+Risk: The documented Brave API key requirement does not match the script behavior, which fetches Brave Search HTML directly.
+
+Mitigation: Confirm the intended Brave integration and update documentation or implementation before relying on API-key controls.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/legionspace-hackathon/skills/brave-search)
+- [Publisher profile](https://clawhub.ai/user/legionspace-hackathon)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Plain text search results with optional markdown page content]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search output includes title, link, snippet, and optional extracted content capped by the script.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata and package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

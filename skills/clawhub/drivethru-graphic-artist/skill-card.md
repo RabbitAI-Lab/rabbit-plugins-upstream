@@ -1,51 +1,65 @@
-## Description: <br>
-Helps agents create deterministic product mockups, clean degraded flat artwork, remove backgrounds, and prepare DTF decoration files for Bacon & Co production workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents create deterministic product mockups, prepare DTF artwork at print size, clean up degraded flat art, and update decoration records for Bacon & Co workflows.
 
-## Publisher: <br>
-[zmtucker](https://clawhub.ai/user/zmtucker) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zmtucker](https://clawhub.ai/user/zmtucker)
 
-## Use Case: <br>
-External operators and production-support agents use this skill to place logos on blank product photos, tune mockups, prepare DTF artwork at production size, and update decoration records after review. It is intended for Bacon & Co graphic-production workflows where deterministic image processing and human-facing review are required. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can update Odoo decoration records and upload production artwork when asked to make art production-ready. <br>
-Mitigation: Install it only in environments authorized for Bacon & Co decoration work, scope Odoo credentials, and verify target record IDs before production actions. <br>
-Risk: Incorrect print size, placement, color extraction, or cleanup could produce misleading proofs or unsuitable production files. <br>
-Mitigation: Review generated mockups, cleanup proofs, production files, dimensions, and colors before accepting or uploading final artwork. <br>
-Risk: Production uploads depend on an Odoo MCP endpoint and token when using the upload helper. <br>
-Mitigation: Use a trusted HTTPS ODOO_MCP_URL, keep tokens scoped, and fall back to approved MCP image-setting tools when direct upload credentials are unavailable. <br>
+## Use Case:
 
+Graphic artists and operations agents use this skill to place logos on garments, tune placements, prepare DTF production PNGs, and update decoration/sample records. It is intended for Bacon & Co decoration workflows that require reviewed visual output before storefront or production updates.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zmtucker/skills/drivethru-graphic-artist) <br>
-- [Publisher profile](https://clawhub.ai/user/zmtucker) <br>
-- [Decoration spec](references/decoration_spec.md) <br>
-- [Production ready procedure](references/production_ready.md) <br>
-- [Production cleanup procedure](references/production_cleanup.md) <br>
-- [Self-review loop](references/self_review.md) <br>
-- [Iterative feedback](references/iterative_feedback.md) <br>
-- [Location dimensions](references/location_dimensions.json) <br>
-- [Placement rules schema](references/placement_rules_schema.json) <br>
-- [rembg](https://github.com/danielgatis/rembg) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, files, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON receipts from helper scripts, and generated PNG files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include deterministic mockup, thumbnail, cutout, cleanup proof, and production PNG files; production workflows also rely on user review of sizes, colors, target records, and generated proofs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.7.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: The skill can modify live Odoo decoration, sample, state, and product-image records.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only where those changes are intended, use dedicated Odoo credentials with the narrowest feasible permissions, and review scheduled routines before enabling them.
+
+Risk: Customer artwork or product images may be sent to an external vision-review provider.
+
+Mitigation: Restrict MOCKUP_VISION_BASE_URL to an approved provider and control MOCKUP_VISION_API_KEY or OPENROUTER_API_KEY access before processing customer assets.
+
+Risk: The skill can run unattended and upload generated mockups or production files.
+
+Mitigation: Require operator review for routine configuration and pin or preinstall dependencies where possible before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zmtucker/skills/drivethru-graphic-artist)
+- [Decoration spec](references/decoration_spec.md)
+- [Production-ready DTF workflow](references/production_ready.md)
+- [Production cleanup workflow](references/production_cleanup.md)
+- [Self-review loop](references/self_review.md)
+- [Web-image routine](references/web_image_routine.md)
+- [Placement rules schema](references/placement_rules_schema.json)
+- [rembg project](https://github.com/danielgatis/rembg)
+- [OpenRouter API endpoint](https://openrouter.ai/api/v1)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, JSON, Files, API Calls]
+
+**Output Format:** [Markdown guidance with shell commands, JSON receipts, and PNG/JPEG image file outputs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write mockup and production image files, maintain placement-rule state, and upload production or storefront images to Odoo when credentials are configured.]
+
+## Skill Version(s):
+
+0.15.1 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

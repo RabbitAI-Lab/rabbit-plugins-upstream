@@ -1,45 +1,59 @@
-## Description: <br>
-Conducts intelligent video search based on target and semantic descriptions, supporting conventional target retrieval, natural-language retrieval, and vectorized model matching. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches local or remote videos for target objects or natural-language descriptions and returns structured video retrieval results.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to search video files or video URLs for objects, people, scenes, or natural-language descriptions and receive structured analysis results, report links, or cloud report history. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Videos, video URLs, and account-linked analysis requests are sent to the lifeemergence.com service. <br>
-Mitigation: Use only with data approved for that external service and confirm retention and processing terms before deployment. <br>
-Risk: The skill can silently create or reuse a local identity and store identity/token data in the workspace. <br>
-Mitigation: Protect the workspace data directory, review token lifecycle controls, and confirm whether silent identity reuse can be disabled. <br>
-Risk: Cloud report history can be fetched for the resolved identity. <br>
-Mitigation: Limit use to trusted environments and verify that report history access matches the intended user/account boundary. <br>
+## Use Case:
 
+Developers and operators use this skill to submit video files or video URLs with search text, locate matching footage, and review structured results or historical reports.
 
-## Reference(s): <br>
-- [Skill page](https://clawhub.ai/18072937735/skills/video-search-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/18072937735) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown or JSON-like structured report text, with optional saved output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include analysis details, cloud report history, and report export links returned by the external service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.99 (source: server release metadata; artifact frontmatter declares 1.0.5) <br>
+Risk: The security review says the skill sends video files, video URLs, search text, and report history to lifeemergence.com services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with media and descriptions approved for that cloud service; avoid sensitive surveillance, personal, or business media unless the service and account controls are approved.
+
+Risk: The security review says the skill creates or reuses account-linked cloud identities and stores tokens locally.
+
+Mitigation: Run it in a workspace with private data storage, review identity assignment and token storage before use, and clear local credentials when the workspace is shared.
+
+Risk: The security verdict is suspicious because remote processing controls are weakly scoped.
+
+Mitigation: Review the skill's expected domains, network access, and permissions before deployment, and restrict use to approved endpoints.
+
+## Reference(s):
+
+- [Video Search Analysis API Documentation](references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/video-search-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown text with inline shell commands and JSON-style report content.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include cloud-hosted report links and saved output files when requested.]
+
+## Skill Version(s):
+
+1.0.99 (source: ClawHub release metadata; artifact SKILL.md frontmatter says 1.0.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

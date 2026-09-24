@@ -1,48 +1,71 @@
-## Description: <br>
-帮助英语老师把口语练习升级为系统化口语教学，围绕目标设定、输入准备、任务型活动、输出练习、反馈纠正和口语能力档案设计教学流程。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+英语口语活动设计 helps Chinese K12 English teachers turn reading and memorized dialogue lessons into task-based speaking classes with scenarios, practice, feedback, and teacher-reviewed class records.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-English teachers use this skill to design classroom speaking activities, feedback routines, and speaking-profile templates based on task-based language teaching. It supports planning and instructional guidance, not automated oral exams or AI practice conversations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student recordings, speaking profiles, and classroom feedback may contain sensitive student information. <br>
-Mitigation: Obtain appropriate student or guardian consent, de-identify records, restrict access, and set a deletion schedule before using or storing these materials. <br>
-Risk: Teaching guidance, rubrics, or feedback templates may be mistaken for final automated assessment. <br>
-Mitigation: Use the skill as a classroom-planning aid and have a teacher review outputs before sharing feedback or making assessment decisions. <br>
-Risk: Speaking task materials may include copyrighted textbook or third-party content. <br>
-Mitigation: Label material copyright status and use self-authored, licensed, adapted, or otherwise authorized materials. <br>
+## Use Case:
 
+External Chinese K12 English teachers use this skill to design speaking objectives, task-based activities, output practice, correction strategies, rubrics, and class-workspace updates. It provides drafts and frameworks for teachers to review rather than replacing the teacher's instruction, scoring, or student-facing decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-english-speaking-designer) <br>
-- [任务型口语活动模板](references/task-based-template.md) <br>
-- [英语口语评估评分细则](references/speaking-rubric.md) <br>
-- [英语纠错策略参考](references/error-correction-strategies.md) <br>
-- [任务设计样板 · 餐厅点餐](references/task-design-sample-restaurant.md) <br>
-- [反馈话术库](references/feedback-phrases.md) <br>
-- [学员口语档案模板](references/speaking-profile-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown teaching plans, rubrics, feedback phrases, task templates, and speaking-profile structures] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces instructional planning content and templates; no executable code or tool calls are included.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Persistent class records may include student-related teaching data and sharing preferences.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only on platforms that enforce teacher confirmation, consent, aliasing, deletion, export, pause, and cross-skill sharing controls before records are written or shared.
+
+Risk: Crisis-support contacts and curriculum assumptions may be wrong outside the intended Chinese K12 workflow.
+
+Mitigation: Localize emergency contacts, referral language, grade-band assumptions, and curriculum expectations before deploying outside mainland China.
+
+Risk: Generated task cards, rubrics, or speaking prompts could contain unsuitable difficulty, unclear information gaps, or unverified materials.
+
+Mitigation: Require teacher review, AI-generated-item labeling, copyrightStatus checks, and human validation before classroom use or resource-bank storage.
+
+Risk: The skill could be mistaken for an automated pronunciation evaluator or teacher replacement.
+
+Mitigation: Keep pronunciation judgments, student-facing decisions, and final scoring with the teacher unless the platform provides appropriate speech-evaluation capability and human review.
+
+## Reference(s):
+
+- [Task-based speaking activity template](references/task-based-template.md)
+- [Restaurant speaking task design sample](references/task-design-sample-restaurant.md)
+- [English speaking assessment rubric](references/speaking-rubric.md)
+- [Error correction strategies](references/error-correction-strategies.md)
+- [Speaking feedback phrase bank](references/feedback-phrases.md)
+- [Speaking profile template](references/speaking-profile-template.md)
+- [AI item self-check protocol](shared/ai-item-check.md)
+- [Class teaching workspace schema](shared/class-teaching-workspace.schema.json)
+- [Crisis exception protocol](shared/crisis-exception.md)
+- [Platform conventions and data controls](shared/platform-conventions.md)
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-english-speaking-designer)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown with structured lesson activity drafts, rubrics, feedback templates, and class-record guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher-facing output; AI-generated tasks are marked for human validation before classroom or resource-bank use.]
+
+## Skill Version(s):
+
+2.3.0 (source: release evidence and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,38 +1,53 @@
-## Description: <br>
-Coding workflow with planning, implementation, verification, and testing for clean software development. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Coding workflow with planning, implementation, verification, and testing for clean software development.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-Developers use this skill when they want an agent to follow a coding workflow for planning, implementation, verification, testing, and delivery. It also guides agents to store only explicitly requested local coding preferences. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Local preference memory could contain secrets or sensitive project details if a user asks the agent to save them. <br>
-Mitigation: Review saved preferences in ~/code/memory.md and avoid storing secrets or sensitive project details unless they are intentionally meant for future agent sessions. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/ivangdavila/code) <br>
-- [Skill Homepage](https://clawic.com/skills/code) <br>
+## Use Case:
 
+Developers and software agents use this skill to structure coding work into planning, implementation, verification, and delivery steps while respecting explicit user preferences.
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline code blocks and command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local preference-memory content under ~/code/memory.md only when the user explicitly asks to save preferences.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill can persist coding preferences in ~/code/memory.md when explicitly requested, which may retain sensitive workflow preferences on the local machine.
+
+Mitigation: Store only preferences the user explicitly asks to save, and review ~/code/memory.md periodically for entries that should be removed.
+
+Risk: Coding workflow guidance may still lead to incorrect implementation choices or insufficient verification if applied without review.
+
+Mitigation: Use the skill's planning and verification flow to review proposed changes and run relevant tests before delivery.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ivangdavila/skills/code)
+- [Skill homepage](https://clawic.com/skills/code)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with optional code, shell command, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,87 @@
+# 商户进件服务端 SDK 能力矩阵
+
+## 目录
+
+- [版本基线](#版本基线)
+- [十一个已有专属类的 JSON 接口](#十一个已有专属类的-json-接口)
+- [费率查询缺口](#费率查询缺口)
+- [官方 SDK 通用调用入口](#官方-sdk-通用调用入口)
+- [图片上传](#图片上传)
+- [调试日志硬停](#调试日志硬停)
+- [官方 SDK-first 与图片例外](#官方-sdk-first-与图片例外)
+- [语言边界](#语言边界)
+
+## 版本基线
+
+本轮版本、类、路由与传输行为以 2026-09-22 用户提供的 `../sdk/` 源码为准；Java 读取 SDK 子模块 pom，PHP 读取 `SDK_VERSION`，Python 读取 `DGClient.__version__`。不据此宣称远端同名制品已经发布，也不沿用旧版本的生产确认覆盖本地新源码风险。商户进件 skill 保持 1.0.3。
+
+| SDK | 核验版本 | 结论 |
+| --- | --- | --- |
+| Java `dg-java-sdk` | `3.0.41` | 十一个 JSON Request 类可用；图片接口有专用 Request、URI 特判和 `upload(...)` 入口 |
+| PHP `huifurepo/dg-php-sdk` | `2.0.31` | 十一个 JSON Request 类可用；图片生成产物存在，但没有满足合同的可用调用路径 |
+| Python `dg-sdk` / `dg_sdk` | `2.0.25` | 十一个 JSON Request 模块可用；图片生成产物存在实现缺陷，不可用 |
+
+## 十一个已有专属类的 JSON 接口
+
+三语言均包含以下 Request：
+
+- `V2MerchantBasicdataEntRequest`
+- `V2MerchantBasicdataIndvRequest`
+- `V2MerchantBusiOpenRequest`
+- `V2MerchantBasicdataQueryRequest`
+- `V2MerchantBasicdataStatusQueryRequest`
+- `V2MerchantBusiModifyRequest`
+- `V2MerchantBasicdataModifyRequest`
+- `V2MerchantBusiModifyBusistatusRequest`
+- `V2MerchantBasicdataSmsSendRequest`
+- `V2MerchantBusiMultifeeConfigRequest`：精确路由 `/v2/merchant/busi/multiFee/config`
+- `V2MerchantBusiMultifeeQueryRequest`：精确路由 `/v2/merchant/busi/multiFee/query`
+
+共同规则：
+
+- 只使用官方 Request/SDK 主链路；不得为了提供三语言等价产物改走手写 HTTP+签名客户端。
+- 业务侧提供当天唯一的 `req_date/req_seq_id`。
+- 请求 `data` 保留签名；同步响应有 `sign` 时验签。
+- SDK 类存在不证明接口权限、材料条件或审核结果。
+- 多费率配置类只声明 `req_seq_id/req_date/huifu_id`；`wx_conf_list/ali_conf_list` 使用 exact-key 扩展映射，值必须是各自只序列化一次的 JSON Array 字符串。Java/PHP/Python 的扩展合并都可能覆盖声明字段，扩展映射必须拒绝这三个定位键。
+- 多费率配置查询类同样只声明三个定位字段；可选 `fee_sign` 使用 exact-key 扩展映射，并且扩展映射只能包含该键，不能传入配置接口的数组字段或覆盖定位字段。
+
+## 费率查询缺口
+
+三语言锁定 SDK 中均未找到 `/v2/merchant/fee-rate/query` 的专属 Request 类或路由常量。不得声称 SDK 已有专属类覆盖商户费率信息查询，也不得用支付费率、详情查询或名称相近的类替代。字段解释仍读取 `merchant-onboarding-rate-query.md` 与完整字段目录；可运行代码可经下方“官方 SDK 通用调用入口”生成，因无类型化封装兜底，字段合同必须逐项对照执行。
+
+## 官方 SDK 通用调用入口
+
+- 官方 SDK 自带通用调用入口：Java `BasePayClient.request(params, "v2.merchant.fee-rate.query", false)` 内部把功能码的点替换为 slash；PHP `BsPayClient::postRequest(['funcCode' => 'v2/merchant/fee-rate/query', 'params' => $params])` 明确支持数组；Python `DGTools.request_post('/v2/merchant/fee-rate/query', params)` 默认保留请求签名与同步验签。它们复用官方 SDK 的同一传输链，不得声称具有专属类型封装。常规 JSON 不设置 Java `isPage=true` 或 PHP `$tag=true` 来跳过验签。
+- SDK 没有某接口的专属 Request/路由时，可通过该入口生成可运行代码，不限于图片接口，也不属于受控降级；因无类型化封装兜底，字段名、类型、长度、必填和 String(JSON) 编码必须逐项对照字段合同构造。
+- 仍不得据此宣称 SDK 已有专属类支持，也不得用名称相近的专属类替代；离开官方 SDK 的手写 HTTP 客户端继续按“官方 SDK-first 与图片例外”执行。
+
+## 图片上传
+
+| 语言 | `file_url` | 本地文件 | 总结论 |
+| --- | --- | --- | --- |
+| Java | `BasePayClient.request(request, true)`；图片 URI 特判为 multipart 文本字段 | `BasePayClient.upload(request, file)`；multipart 文件字段为 `file` | 支持；两种来源互斥，请求签名保留，响应验签跳过 |
+| PHP | 无文件分支只是通用 JSON POST，不能直接用于 `file_url` | `BsPayClient` 的 `CURLFile` 包装分支关闭请求签名和响应验签；Demo 同时传互斥来源 | 官方专用实现不可用；允许符合图片 wire 的通用 POST/自写 HTTPS multipart 降级 |
+| Python | 无文件 `DGTools.request_post` 是 JSON，不能直接用于 `file_url` | 专用 Request 忽略扩展参数、漏字段、使用错误文件键、关闭签验，Demo 方法签名不匹配；底层通用 POST 可显式开启加签并传 `file` | 官方专用实现不可用；允许符合图片 wire 的底层通用 POST/自写 HTTPS multipart 降级 |
+
+图片能力结论必须区分“官方专用 SDK 支持”和“受控降级可实现”。单独存在 `V2SupplementaryPictureRequest`、路由常量或通用 POST 方法不算前者；PHP/Python 可使用后者，但只能用于 `/v2/supplementary/picture`，并严格保持 multipart、`data` 加签、互斥、TLS 和响应信任边界。
+
+## 调试日志硬停
+
+- Java `BasePay.debug` 默认 `true`，会输出私钥、签名和请求数据；必须在进程初始化阶段、任何请求前全局设置为 `false`，且不得并发临时切换。
+- PHP SDK 自带 `init.php` 默认 `DEBUG=false`，但官方 `BsPayDemo/loader.php` 和 `Composer/BsPayConfig.php` 会在 SDK 初始化前定义 `DEBUG=true`。开启后 `BsPayRequestV2` 会记录含 `rsa_merch_private_key` 的 `MerConfig`、完整请求体与完整响应。
+- PHP 联调/生产必须在加载 SDK、Demo/Composer 配置和调用 `BsPay::init` 之前固定 `DEBUG=false`；不得使用 Demo loader，启动检查必须拒绝已被定义为 `true` 的进程。不能证明时停止生成可运行实现。
+
+## 官方 SDK-first 与图片例外
+
+- 通用 Java `3.0.41` 源码使用默认 TLS 工厂，Python `2.0.25` 保留 requests 默认校验；按官方 Request/Client 生成调用。PHP `2.0.31` 当前源码 `BsPayRequestV2.php:30` 明确设置 `CURLOPT_SSL_VERIFYPEER=false`，旧确认不能覆盖此本地证据。
+- PHP 的 `CURLOPT_SSL_VERIFYPEER=false` 保留为非阻断风险提醒；按用户本轮要求，不因该已知本地 SDK 问题停止开发/联调代码生成，也不要求先取得修复证明。继续官方 Request/Client 或已核验通用入口，可提示开发者查阅对应 SDK/官方文档，不清楚时咨询汇付官方或汇付开发者交流沟通群。不得声称 TLS 已修复，不擅自修改 SDK 或以手写 HTTP 规避；新生成的适配代码保留正常证书链与主机名校验，不主动加入 trust-all、`verify=false`。
+- 常规接口不得用 `HttpClient`、OkHttp、`HttpURLConnection`、Guzzle、`curl_*`、通用 POST 包装或自实现签名/验签客户端替代官方 SDK，即使任务只称“技术链路验证”。唯一例外是 `/v2/supplementary/picture` 的 PHP/Python 受控降级；该例外必须满足图片专项 multipart、`data` 加签、TLS 与日志合同，Java 仍使用官方 SDK。本条限制的是离开官方 SDK 的手写实现；官方 SDK 自带的通用调用入口仍走 SDK 内部签名、验签、请求头与 TLS 链路，不属于上述替代，可用于无专属 Request 的常规接口。
+- 多语言任务分别使用三种官方 SDK；不得只让 Python 用 SDK，再为 Java/PHP 生成手写客户端。
+
+## 语言边界
+
+- Python `2.0.25` 必须用 `MerConfig(..., sign_type="RSA", jpt_x_skill_source=skill_source)`；第五参数是算法，第六参数才是来源。SDK 的 SM2 分支不改变本轮 RSA 合同；共享 `ApiRequest` 类级状态也不保证并发安全。
+
+- 企业/个人进件没有 `data.huifu_id`。
+- SDK 连接重试不是进件业务重试；未知业务重试、图片响应文件标识、服务端拉取 URL 结果和通知协议按 `shared-overview.md` 的“文档疑义与开发提醒”处理。继续已明确的调用链，未知部分用 TODO/配置隔离，不猜测或等待官方答复才开始开发。

@@ -1,51 +1,69 @@
-## Description: <br>
-AI-era-career-planner helps agents guide Chinese-language career planning conversations with staged intake, interest and values assessment, AI job-impact analysis, salary and demand references, and personalized action plans. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI Era Career Planner helps Chinese-language users plan careers for an AI-shaped labor market through progressive intake, Holland/MBTI/career-anchor assessment, AI impact analysis, salary and demand references, and personalized planning reports.
 
-## Publisher: <br>
-[mnetfairy](https://clawhub.ai/user/mnetfairy) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mnetfairy](https://clawhub.ai/user/mnetfairy)
 
-## Use Case: <br>
-External users and career guidance agents use this skill to plan education choices, career entry, or career transitions in the AI era. The skill supports structured intake, assessment, career recommendations, AI-resilience guidance, and concrete next-step planning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, with China-focused salary and insurance company reference data. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may ask for personal career-context information. <br>
-Mitigation: Collect only information the user chooses to provide and avoid saving profiles unless the user explicitly requests a saved record. <br>
-Risk: Salary references and insurance company recommendations may be stale, incomplete, or mistaken for endorsement. <br>
-Mitigation: Treat salary and company data as reference material, keep insurance recommendations disclosed as informational, and ask users to verify details before acting. <br>
-Risk: Optional email, subscription, live-search, or saved-record actions can affect user data outside the conversation. <br>
-Mitigation: Only use optional integrations when the current environment permits them and the user has clearly approved the specific action. <br>
+## Use Case:
 
+External users, students, and career changers use this skill to explore career directions, understand AI substitution risk, compare salary and demand signals, and generate concrete career action plans. It is especially oriented toward Chinese-language and China-market career planning.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mnetfairy/skills/ai-era-career-planner) <br>
-- [AI career impact reference](references/ai_career_impact.md) <br>
-- [Career assessment framework](references/assessment.md) <br>
-- [Career anchor reference](references/career_anchor.md) <br>
-- [Education paths](references/education_paths.md) <br>
-- [Job demand trends](references/job_demand.md) <br>
-- [Industry trends](references/industry_trends.md) <br>
-- [Salary data](references/salary_data.md) <br>
-- [Insurance broker company reference](references/insurance_broker_companies.json) <br>
-- [Optional integrations reference](references/integrations.md) <br>
+### Deployment Geography for Use:
 
+Global; content is primarily Chinese-language and China-market oriented.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Files] <br>
-**Output Format:** [Markdown career planning report and conversational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May optionally generate a Markdown report file when the host environment allows it and the user explicitly requests export.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.2.240 (source: server release metadata) <br>
+Risk: Career recommendations may be inaccurate, outdated, or unsuitable for an individual's circumstances.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat generated plans as decision support and verify salary, demand, certification, and education claims against current local sources before acting.
+
+Risk: Insurance-company recommendations may reflect publisher-maintained business priority rather than neutral market ranking.
+
+Mitigation: Review insurance recommendations independently, compare alternatives, and confirm company credentials before contacting or joining any company.
+
+Risk: Optional export, email, subscription, live search, and tracking flows can create file, network, or persistence side effects.
+
+Mitigation: Use the default offline mode and approve report export, email sending, subscriptions, live search, or saved tracking only when explicitly desired.
+
+## Reference(s):
+
+- [AI Career Impact Reference](references/ai_career_impact.md)
+- [Career Assessment Reference](references/assessment.md)
+- [MBTI Reference](references/mbti.md)
+- [Career Anchor Reference](references/career_anchor.md)
+- [Education Paths Reference](references/education_paths.md)
+- [Industry Trends Reference](references/industry_trends.md)
+- [Job Demand Reference](references/job_demand.md)
+- [Salary Data Reference](references/salary_data.md)
+- [Salary Database](references/salary_database.json)
+- [Insurance Broker Companies Dataset](references/insurance_broker_companies.json)
+- [Optional Integrations Reference](references/integrations.md)
+- [Tracking System Reference](references/tracker_system.md)
+- [National Financial Regulatory Administration](https://www.nfra.gov.cn/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, shell commands]
+
+**Output Format:** [Markdown career-planning reports, with optional exported Markdown files when report export is explicitly requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Defaults to offline responses; report export, email sending, live search, subscriptions, and saved tracking are optional and require explicit user action.]
+
+## Skill Version(s):
+
+2.2.442 (source: server release evidence; artifact frontmatter reports 2.2.260)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

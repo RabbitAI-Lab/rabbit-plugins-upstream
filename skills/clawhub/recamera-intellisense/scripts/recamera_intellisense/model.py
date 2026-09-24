@@ -27,7 +27,8 @@ PATH_INFERENCE = "/cgi-bin/entry.cgi/model/inference"
 
 
 def _parse_model(index: int, d: Dict[str, Any]) -> Dict[str, Any]:
-    info = d.get("modelInfo") if isinstance(d.get("modelInfo"), dict) else {}
+    raw_info = d.get("modelInfo")
+    info = raw_info if isinstance(raw_info, dict) else {}
     labels_raw = info.get("classes") or []
     labels = [c for c in labels_raw if isinstance(c, str)]
     return {
@@ -40,7 +41,7 @@ def _parse_model(index: int, d: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def get_detection_models_info(device_name: str) -> List[Dict[str, Any]]:
+def get_detection_models_info(device_name: Optional[str] = None) -> List[Dict[str, Any]]:
     """List installed detection models."""
     dev = _config.resolve(device_name)
     data = _http.get_json(dev, PATH_LIST)
@@ -53,7 +54,7 @@ def get_detection_models_info(device_name: str) -> List[Dict[str, Any]]:
     return [_parse_model(i, m) for i, m in enumerate(models) if isinstance(m, dict)]
 
 
-def get_detection_model(device_name: str) -> Optional[Dict[str, Any]]:
+def get_detection_model(device_name: Optional[str] = None) -> Optional[Dict[str, Any]]:
     """Currently-active detection model, or `None`."""
     dev = _config.resolve(device_name)
     data = _http.get_json(dev, PATH_INFERENCE) or {}
@@ -79,7 +80,7 @@ def get_detection_model(device_name: str) -> Optional[Dict[str, Any]]:
 
 
 def set_detection_model(
-    device_name: str,
+    device_name: Optional[str] = None,
     *,
     model_id: Optional[int] = None,
     model_name: Optional[str] = None,
@@ -115,12 +116,4 @@ COMMANDS = {
     "get_detection_models_info": get_detection_models_info,
     "get_detection_model": get_detection_model,
     "set_detection_model": set_detection_model,
-}
-COMMAND_SCHEMAS = {
-    "get_detection_models_info": {"required": {"device_name"}, "optional": set()},
-    "get_detection_model": {"required": {"device_name"}, "optional": set()},
-    "set_detection_model": {
-        "required": {"device_name"},
-        "optional": {"model_id", "model_name", "fps"},
-    },
 }

@@ -1,44 +1,54 @@
-## Description: <br>
-A free RSS digest skill that helps an agent use the local feed CLI to fetch subscriptions, scan unread entries, apply basic keyword filtering, read Markdown article content, and produce concise reading summaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+订阅摘要(免费版) helps an agent use the feed CLI to fetch RSS items, scan unread entries, filter likely high-value content, and produce lightweight reading summaries.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and developers use this skill to manage personal RSS subscriptions, reduce information overload, and generate lightweight daily digests from unread feed entries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a third-party feed CLI to fetch configured RSS sources over the network. <br>
-Mitigation: Install the feed CLI only from a trusted source and use feeds whose network access and content you are comfortable allowing in the agent environment. <br>
-Risk: RSS article and feed text can contain untrusted content that may be summarized or shown to the agent. <br>
-Mitigation: Treat feed content as data rather than instructions, and review generated digests before using them for decisions or follow-up automation. <br>
-Risk: Bulk marking entries as read can change local reading state for multiple feed items. <br>
-Mitigation: Review selected entry IDs before running read-status updates, especially after broad keyword filtering. <br>
+## Use Case:
 
+External users and developers use this skill to run a lightweight RSS reading workflow: fetch feeds, inspect unread entries, filter high-value items, summarize selected content, and optionally mark entries as read.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/feed-digest-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [Detailed reference](references/detail.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and structured text with inline shell commands and Python examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Digest entries may include feed titles, source names, basic keyword scores, short summaries, command output, status, logs, and error messages.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata; artifact frontmatter says 1.0.0) <br>
+Risk: The skill uses an external feed CLI that reads from and writes to the user's local feed database.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the feed CLI only from a trusted source and ask the agent to keep actions read-only unless you explicitly want database changes.
+
+Risk: Commands such as adding subscriptions or marking entries as read can change local feed state.
+
+Mitigation: Require explicit confirmation before running state-changing commands such as feed add or feed update entries --read.
+
+## Reference(s):
+
+- [Detailed feed digest examples](references/detail.md)
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/feed-digest-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown prose with shell command snippets, Python examples, and text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include feed CLI commands and summarized RSS entry content.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

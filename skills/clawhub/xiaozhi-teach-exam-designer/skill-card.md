@@ -1,44 +1,62 @@
-## Description: <br>
-帮助老师设计科学测评方案，包括确认测评目标、设计双向细目表、控制难度梯度、生成评分标准和提供考后分析建议。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助中国 K12 教师按双向细目表设计测验、试卷、评分细则和错题讲评清单，并控制难度、认知层级和题目返修流程。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Teachers and education-support agents use this skill to plan classroom assessments, build exam blueprints, align items to knowledge points and cognitive levels, draft scoring rubrics, and prepare aggregate post-exam analysis guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Assessment outputs may use classroom context from related teaching skills and write back score-rate or item-quality data. <br>
-Mitigation: Use aggregate score-rate and item-quality data only; avoid publishing named student results, rankings, or individual score records. <br>
-Risk: Exam materials may include copied or insufficiently licensed questions. <br>
-Mitigation: Require each item to include copyrightStatus and use teacher-owned, adapted, publicly citable, or index-only sources rather than unauthorized copied exam questions. <br>
-Risk: Generated scoring or analysis guidance could be treated as final judgment without teacher review. <br>
-Mitigation: Have a teacher review the blueprint, rubric, difficulty targets, and post-exam recommendations before classroom use. <br>
+## Use Case:
 
+K12 teachers in Chinese classroom contexts use this skill to plan formative, diagnostic, and summative assessments from curriculum goals through blueprint, item selection or adaptation, rubrics, and post-exam item repair guidance.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-exam-designer) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [Exam blueprint reference](references/exam-blueprint.md) <br>
+### Deployment Geography for Use:
 
+Mainland China by default; other regions require localized curriculum, legal, privacy, and crisis-referral guidance.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown guidance, structured tables, templates, and scoring rubric text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include assessment blueprints, two-way specification tables, item metadata templates, scoring standards, and aggregate post-exam analysis suggestions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: AI-generated or adapted questions may be incorrect, ambiguous, over-scoped, or misaligned with the assessment blueprint.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require teachers to verify every AI-generated item, answer, score value, and rubric before the item enters a formal test.
+
+Risk: Confidential unreleased exam materials or personal student data could be entered into the skill.
+
+Mitigation: Avoid entering confidential exam papers, answer keys, scoring standards, or personal student data; use anonymized class-level information where possible.
+
+Risk: The default safety, curriculum, legal, and crisis-referral guidance is written for mainland China and may not fit other regions.
+
+Mitigation: Localize curriculum standards, privacy rules, legal constraints, and crisis-referral channels before using the skill outside mainland China.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-exam-designer)
+- [Publisher profile](https://clawhub.ai/user/qizhitang)
+- [Exam blueprint reference](artifact/references/exam-blueprint.md)
+- [Class teaching workspace schema](artifact/shared/class-teaching-workspace.schema.json)
+- [AI item self-check protocol](artifact/shared/ai-item-check.md)
+- [Crisis referral protocol](artifact/shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Configuration, Guidance]
+
+**Output Format:** [Markdown and structured text tables with JSON-compatible classWorkspace fields when needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher review is required before AI-generated items are used in formal assessments.]
+
+## Skill Version(s):
+
+2.3.0 (source: server release and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

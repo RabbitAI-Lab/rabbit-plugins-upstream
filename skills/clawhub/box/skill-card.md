@@ -1,49 +1,74 @@
-## Description: <br>
-Box API integration with managed OAuth for managing files, folders, collaborations, shared links, and cloud storage. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Box API integration with managed OAuth for managing files, folders, collaborations, shared links, webhooks, and cloud storage through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and external users use this skill to access Box through Maton's managed OAuth gateway for file, folder, sharing, collaboration, search, trash, webhook, and upload workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can manage, share, and delete Box files through the user's authorized Maton/Box connection. <br>
-Mitigation: Require explicit user confirmation before deleting items, permanently deleting trash, creating open shared links, or changing collaborators. <br>
-Risk: Multiple active Box connections can cause the wrong account or workspace to be used. <br>
-Mitigation: Authorize only the intended Box account and set the Maton-Connection header when more than one Box connection exists. <br>
-Risk: The MATON_API_KEY is a sensitive credential required for gateway access. <br>
-Mitigation: Store the key in the environment, avoid exposing it in prompts or logs, and rotate it if disclosure is suspected. <br>
+## Use Case:
 
+Employees, external collaborators, and developers use this skill to manage Box files, folders, collaborations, shared links, webhooks, and automation through a user-approved Maton Box connection. It is suited for read, list, upload, download, sharing, organization, and approved automation workflows against Box data.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/box) <br>
-- [API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway) <br>
-- [Box API Reference](https://developer.box.com/reference) <br>
-- [Box Developer Documentation](https://developer.box.com/guides) <br>
-- [Box Authentication Guide](https://developer.box.com/guides/authentication) <br>
-- [Box SDKs and Tools](https://developer.box.com/sdks-and-tools) <br>
-- [Maton](https://maton.ai) <br>
-- [Maton Control Plane](https://ctrl.maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration guidance, API request guidance] <br>
-**Output Format:** [Markdown with inline shell, Python, JavaScript, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an explicitly authorized Box OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter metadata.version is 1.0) <br>
+Risk: Box authorization can expose or modify files, folders, shared links, collaborations, and cloud storage beyond the immediate request.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review OAuth scopes carefully, prefer read-only access when possible, and confirm every write, share, or delete action with the target and intended effect before execution.
+
+Risk: Persistent automation, webhooks, trigger destinations, and hosted functions can continue forwarding or changing data after setup.
+
+Mitigation: Create or update them only after explicit approval of the destination, payload, cadence, and network policy; review and remove them when no longer needed.
+
+Risk: Long-lived Maton API keys and raw Box responses can leak credentials or personal and business data.
+
+Mitigation: Prefer OAuth through the Maton CLI, never print or persist secrets, and extract only the response fields needed for the user's task.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/box)
+- [Maton homepage](https://maton.ai)
+- [Box API Reference](https://developer.box.com/reference)
+- [Box Developer Documentation](https://developer.box.com/guides)
+- [Box Authentication Guide](https://developer.box.com/guides/authentication)
+- [Box SDKs](https://developer.box.com/sdks-and-tools)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Time trigger catalogue](references/time/triggers.md)
+- [GitHub trigger catalogue](references/github/triggers.md)
+- [Google Mail trigger catalogue](references/google-mail/triggers.md)
+- [Slack trigger catalogue](references/slack/triggers.md)
+- [Stripe trigger catalogue](references/stripe/triggers.md)
+- [Calendly trigger catalogue](references/calendly/triggers.md)
+- [HubSpot trigger catalogue](references/hubspot/triggers.md)
+- [Linear trigger catalogue](references/linear/triggers.md)
+- [Notion trigger catalogue](references/notion/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with CLI commands, HTTP examples, JSON response examples, and code snippets.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and a user-approved Box OAuth connection; write, share, delete, webhook, and persistent automation actions require explicit confirmation.]
+
+## Skill Version(s):
+
+1.2.5 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

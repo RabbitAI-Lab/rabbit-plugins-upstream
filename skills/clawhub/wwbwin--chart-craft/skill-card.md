@@ -1,41 +1,54 @@
-## Description: <br>
-数据描述转柱状图/折线图/饼图等8种交互式SVG图表HTML <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates dependency-free interactive SVG chart HTML from simple data descriptions, including bar, line, pie, donut, area, stacked bar, radar, and combo charts.
 
-## Publisher: <br>
-[wwbwin](https://clawhub.ai/user/wwbwin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wwbwin](https://clawhub.ai/user/wwbwin)
 
-## Use Case: <br>
-Developers, analysts, and business users use this skill to turn natural-language or tabular data descriptions into lightweight interactive chart HTML for documents, email, and reports. It supports bar, line, pie, donut, area, stacked bar, radar, and combo chart patterns. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Included HTML templates are placeholders, so generated output may depend on the agent following the chart specification rather than a complete implementation. <br>
-Mitigation: Review generated chart HTML before reuse and verify that the rendered chart accurately represents the provided data. <br>
-Risk: Generated chart HTML may contain inline CSS, JavaScript, SVG, or Canvas code derived from user-provided data. <br>
-Mitigation: Use local, trusted data inputs and inspect generated HTML before embedding it in documents, email, or reports. <br>
+## Use Case:
 
+Developers, analysts, and business users use this skill to turn small data descriptions or table-like data into lightweight chart HTML for documents, email, and reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wwbwin/skills/chart-craft) <br>
-- [Publisher project homepage](https://github.com/wwbwin/clawhub-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with single-file HTML, inline CSS, JavaScript, and SVG chart code] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated charts are intended to be zero-dependency local HTML using inline assets and system fonts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill frontmatter) <br>
+Risk: Generated chart HTML may contain sensitive user-provided data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review chart content and remove sensitive values before sharing or embedding the HTML.
+
+Risk: The packaged HTML templates are placeholders, so generated output may require completeness review.
+
+Mitigation: Inspect the final HTML in a browser before using it in documents, email, or reports.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wwbwin/skills/chart-craft)
+- [Source homepage](https://github.com/wwbwin/clawhub-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Files, Guidance]
+
+**Output Format:** [Single-file HTML with inline CSS, JavaScript, and SVG chart markup]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports eight chart patterns; packaged HTML templates are placeholders and final chart output should be reviewed before sharing.]
+
+## Skill Version(s):
+
+1.0.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

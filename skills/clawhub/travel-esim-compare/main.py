@@ -5,9 +5,9 @@
 import json
 import os
 
-PROXY_TOKEN = os.environ.get("PROXY_TOKEN", "tp_8k2mX9vQ4z")
+PROXY_TOKEN = os.environ.get("PROXY_TOKEN", "")
 
-# ========== eSIM套餐数据库 ==========
+
 # 价格单位：美元（各平台统一定价货币）
 ESIM_DB = {
     "日本": {

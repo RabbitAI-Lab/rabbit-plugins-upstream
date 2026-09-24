@@ -1,45 +1,60 @@
-## Description: <br>
-Monitors pet media for restricted-area entry, dining-table climbing, and trash-rummaging behavior, then returns alerts and structured analysis reports for home pet monitoring. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Monitors restricted area intrusions, climbing on dining tables, and rummaging through trash cans, and issues real-time alerts, suitable for home pet monitoring scenarios. | 宠物禁区预警技能，监测禁止区域闯入、攀爬餐桌、翻垃圾桶行为并实时报警，适用于家庭宠物监控场景
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Pet owners and home-monitoring agents use this skill to analyze uploaded or URL-based pet media for restricted-area and nuisance behavior, receive structured warning results, and query cloud-stored historical reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet-monitoring media or media URLs are sent to external lifeemergence.com/open.lifeemergence.com services for analysis. <br>
-Mitigation: Use only media that is appropriate to share with the service provider, and review the provider's retention, access, and privacy controls before processing private household footage. <br>
-Risk: The skill can silently create or reuse a cloud-linked identity for report association. <br>
-Mitigation: Install and run it only in workspaces where automatic identity creation is acceptable, and review the generated identity before sharing the workspace. <br>
-Risk: Service tokens and user history may be stored in the workspace data directory. <br>
-Mitigation: Protect the workspace data directory, avoid committing it, and remove stored tokens or history when decommissioning the skill. <br>
+## Use Case:
 
+External users and pet owners use this skill to analyze home pet monitoring images or videos for restricted-area entry, table climbing, and trash-rummaging behavior, then receive structured warning reports and report links.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-restricted-area-warning-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON text with optional report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save analysis output to a user-specified file path.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata; artifact frontmatter reports 1.0.7) <br>
+Risk: Pet or household monitoring media may be sent to a configured cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with videos or URLs that are appropriate for cloud processing, and avoid sensitive household footage unless privacy, retention, and access terms are clear.
+
+Risk: Report history is tied to an automatically managed local or backend identity.
+
+Mitigation: Review identity, token storage, and account-isolation behavior before deployment, especially on shared systems.
+
+Risk: Cloud report history retrieval has limited user-facing privacy controls.
+
+Mitigation: Restrict use to trusted environments and verify that users understand where report history is stored and retrieved.
+
+## Reference(s):
+
+- [API 接口文档](references/api_doc.md)
+- [API接口文档](skills/smyx_analysis/references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-restricted-area-warning-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, files, shell commands, guidance]
+
+**Output Format:** [Markdown or JSON structured pet restricted-area warning report, with optional saved output file and report link.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts local video files or video URLs, supports basic, standard, and json detail levels, and can list cloud report history.]
+
+## Skill Version(s):
+
+1.0.15 (source: server release metadata; artifact frontmatter states 1.0.18)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

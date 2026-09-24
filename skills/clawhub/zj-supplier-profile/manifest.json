@@ -1,0 +1,17 @@
+{
+ "name": "浙江供应商资质业绩核验",
+ "slug": "zj-supplier-profile",
+ "version": "1.0.2",
+ "entry": "scripts/run.mjs",
+ "tags": [
+  "招投标",
+  "中标",
+  "供应商",
+  "浙江",
+  "工程",
+  "合同",
+  "业绩",
+  "采购"
+ ],
+ "product_id": "combo-supplier-profile"
+}

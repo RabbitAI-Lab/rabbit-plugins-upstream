@@ -1,38 +1,62 @@
-## Description: <br>
-思维梯度训练师 helps agents guide middle-school math learners through level-based diagnostics, tailored gradient exercises, growth journaling, and weekly progress checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+思维梯度训练师 helps Chinese-speaking junior-high students locate their current math practice level across a five-level gradient, practice targeted progression problems, and record consent-based growth notes and reminder requests.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, parents, and tutoring agents use this skill to identify a learner's current math ceiling, generate staged practice for weak areas, and summarize progress over time. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create ongoing learning profiles, record student mistakes and progress, update other learning-history skills, and trigger reminder workflows. <br>
-Mitigation: Use it with explicit student or parent consent and provide clear controls to disable, delete, or limit stored progress data. <br>
+## Use Case:
 
+External Chinese-speaking junior-high students and learning assistants use this skill to diagnose a student's current math practice layer, generate scaffolded progression exercises, summarize growth, and enqueue consent-based weekly review reminders.
 
-## Reference(s): <br>
-- [Initial Math Module Gradient Level Reference](references/gradient-levels.md) <br>
+### Deployment Geography for Use:
 
+Mainland China by default; localize safety resources, curriculum assumptions, consent handling, and language before serving other regions.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown-style tutoring prompts, problem sequences, progress records, and summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include learner progress records, weak-area summaries, and reminder guidance for recurring math growth checks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Use outside Mainland China may present incorrect curriculum assumptions, language, consent expectations, or emergency/help resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Localize the safety resources, curriculum assumptions, consent handling, and language before serving users in other regions.
+
+Risk: The skill can record learning-progress data and reminder requests for minors.
+
+Mitigation: Use the documented consent controls and privacy actions; only write profile or reminder data when the relevant consent is present.
+
+Risk: A student may disclose self-harm, abuse, severe distress, or another safety issue during tutoring.
+
+Mitigation: Stop math coaching and follow the bundled crisis referral flow, including asking for location before giving local emergency resources.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-math-gradient-trainer)
+- [Initial math gradient levels reference](references/gradient-levels.md)
+- [AI item generation self-check protocol](shared/ai-item-check.md)
+- [Platform capability conventions](shared/platform-conventions.md)
+- [Crisis exception protocol](shared/crisis-exception.md)
+- [Handover protocol schema](shared/handover-protocol.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Configuration instructions, Guidance]
+
+**Output Format:** [Chinese-language coaching dialogue, Markdown summaries, and JSON handoff payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May generate consent-gated subject profile writebacks and reminder enqueue payloads; no shell commands.]
+
+## Skill Version(s):
+
+2.3.0 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

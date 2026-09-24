@@ -1,47 +1,73 @@
-## Description: <br>
-Quo API integration with managed OAuth for managing calls, messages, contacts, and conversations in a business phone system. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Quo API integration with managed OAuth for managing calls, messages, contacts, conversations, call recordings, and transcripts in a business phone system.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Employees, support teams, sales teams, and developers use this skill to access a connected Quo/OpenPhone account through Maton-managed OAuth. It helps agents send SMS, list calls and conversations, manage contacts, and retrieve call recordings, transcripts, summaries, and voicemails when authorized. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive communications data, including calls, messages, recordings, transcripts, voicemails, contacts, and conversations. <br>
-Mitigation: Retrieve only data the user is authorized to access, treat communications records as sensitive, and avoid exposing them in prompts, logs, screenshots, or shared terminals. <br>
-Risk: Write operations can send SMS messages, create or update contacts, delete contacts, or delete OAuth connections. <br>
-Mitigation: Before any write or delete request, confirm the exact account, recipient or contact ID, and intended effect with the user. <br>
-Risk: MATON_API_KEY grants access to the connected Quo/OpenPhone account through Maton. <br>
-Mitigation: Keep MATON_API_KEY out of prompts, logs, and screenshots, and install the skill only when Maton is trusted with the connected account. <br>
+## Use Case:
 
+Employees and operators use this skill to work with Quo business-phone data through Maton-managed authentication, including SMS, calls, contacts, conversations, recordings, transcripts, and approved automation.
 
-## Reference(s): <br>
-- [Quo API Introduction](https://www.quo.com/docs/mdx/api-reference/introduction) <br>
-- [Quo API Authentication](https://www.quo.com/docs/mdx/api-reference/authentication) <br>
-- [Quo Support Center API Integration](https://support.quo.com/core-concepts/integrations/api) <br>
-- [Maton](https://maton.ai) <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/quo) <br>
-- [Related API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with API request examples, shell commands, and code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an authorized Quo OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill can access Quo business-phone data through a Maton connection, including calls, messages, contacts, conversations, recordings, and transcripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when Quo access through Maton is intended, use the least-privilege connection available, and avoid exposing raw responses unless the user asked for the specific data.
+
+Risk: Writes, new connections, functions, triggers, webhooks, and deletions can change business-phone data or create ongoing behavior.
+
+Mitigation: Require explicit user approval for each operation and summarize the target resource, payload, and expected effect before execution.
+
+Risk: Persistent forwarding destinations can continue sending future messages, calls, or event data until removed.
+
+Mitigation: Approve the exact destination URL and transmitted fields separately, prefer Maton-controlled destinations, review existing forwarding, and remove destinations that are no longer needed.
+
+## Reference(s):
+
+- [Quo Skill Page](https://clawhub.ai/byungkyu/skills/quo)
+- [Maton Homepage](https://maton.ai)
+- [Quo API Introduction](https://www.quo.com/docs/mdx/api-reference/introduction)
+- [Quo API Authentication](https://www.quo.com/docs/mdx/api-reference/authentication)
+- [Quo Support Center](https://support.quo.com/core-concepts/integrations/api)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance is task-scoped and should be reviewed before write operations, new connections, functions, triggers, webhooks, or persistent forwarding destinations.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

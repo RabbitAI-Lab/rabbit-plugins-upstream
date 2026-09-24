@@ -1,43 +1,73 @@
-## Description: <br>
-Jobber API integration with managed OAuth for managing clients, jobs, invoices, quotes, properties, and team members for field service businesses. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Jobber API integration with managed OAuth for managing clients, jobs, invoices, quotes, properties, and team members for field service businesses.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and field service operators use this skill to access Jobber through Maton's managed OAuth gateway, inspect account data, and create or update operational records such as clients, jobs, invoices, quotes, properties, and team members. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive Jobber business data and perform changes to clients, jobs, invoices, quotes, schedules, and account records through Maton's OAuth gateway. <br>
-Mitigation: Install only if you trust Maton to broker Jobber access, and require explicit user approval before any create, update, or delete operation. <br>
-Risk: Requests may target the wrong Jobber account when multiple connections are linked. <br>
-Mitigation: Verify the selected Jobber connection before use and include the intended connection identifier when multiple accounts are available. <br>
+## Use Case:
 
+Field service operators, support teams, and developers use this skill to access Jobber business data and perform approved Jobber API actions through a managed Maton connection.
 
-## Reference(s): <br>
-- [Jobber Developer Documentation](https://developer.getjobber.com/docs/) <br>
-- [Jobber Getting Started Guide](https://developer.getjobber.com/docs/getting_started/) <br>
-- [Jobber skill page](https://clawhub.ai/byungkyu/skills/jobber) <br>
-- [Related Maton API gateway skill](https://clawhub.ai/byungkyu/api-gateway) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with Python, JavaScript, GraphQL, JSON, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an active Jobber OAuth connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The skill can authorize access to a Jobber account and use sensitive business data through Maton.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Authorize only the intended Jobber account, prefer OAuth, choose least-privilege scopes when available, and confirm every new connection with the user.
+
+Risk: Functions, triggers, destination URLs, and `--exec` handlers can run unattended or forward future event data.
+
+Mitigation: Review each proposed automation, handler, destination, and execution command before enabling it, and remove automations that are no longer needed.
+
+Risk: Raw API responses can contain personal or business data.
+
+Mitigation: Return only fields needed for the task and avoid logging or storing full responses unless the user explicitly requests it.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/jobber)
+- [Publisher Profile](https://clawhub.ai/user/byungkyu)
+- [Maton Homepage](https://maton.ai)
+- [Jobber Developer Documentation](https://developer.getjobber.com/docs/)
+- [Jobber Getting Started Guide](https://developer.getjobber.com/docs/getting_started/)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Time Trigger Reference](references/time/triggers.md)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, code snippets, JSON examples, and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include Jobber API calls and Maton automation steps that require network access, authentication, and user approval for writes or new connections.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

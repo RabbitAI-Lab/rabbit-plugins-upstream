@@ -1,41 +1,58 @@
-## Description: <br>
-康奈尔笔记 helps students convert classroom notes into Cornell-format cue questions, concise summaries, searchable note records, and consent-based study prompts for review, wrong-answer analysis, and Feynman testing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Organizes student class notes into reusable Cornell-style records with cue questions, note content, short summaries, subject/topic indexing, consent-gated retrieval, and limited LearningDNA summary sharing.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External students and tutoring agents use this skill to organize photographed or pasted classroom notes into Cornell-note study material, store consent-based study memory, retrieve related notes, and generate review prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may remember and reuse uploaded class notes, generated summaries, keywords, links to other notes, and retrieval history. <br>
-Mitigation: Use the skill only when this study-memory behavior is acceptable, and rely on platform controls to disable or delete saved note data when needed. <br>
-Risk: Photo-based note extraction depends on multimodal vision or OCR capability and may be unavailable or inaccurate. <br>
-Mitigation: Ask the student to confirm recognized subject and topic details, and fall back to pasted or manually entered note text when image recognition is not available. <br>
+## Use Case:
 
+External students and learning assistants use this skill to transform uploaded or typed class notes into Cornell-style review material, retrieve related notes during study, and produce consent-gated note usage summaries.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-cornell-notes) <br>
-- [cornell-format-guide.md](references/cornell-format-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and conversational text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cue questions, short summaries, keyword tags, related-note prompts, and note-health report sections.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: server release evidence and frontmatter) <br>
+Risk: Persistent note archives and cross-skill summaries can contain student learning data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the locale and consent model before installation; enable archive, sharing, and reminders only after the relevant consents are set, and share only summary note fields rather than note text.
+
+Risk: The workflow is designed for Chinese K12 Cornell-note use and may not fit unsupported grades or locales.
+
+Mitigation: Confirm the learner's grade band and locale before use, apply the simplified flow for supported younger students, and avoid using the skill where its consent or grade assumptions do not apply.
+
+Risk: Student safety disclosures such as self-harm, abuse, or severe distress are outside the note-taking workflow.
+
+Mitigation: Stop the note workflow and follow the bundled crisis referral protocol, including referral to trusted adults or local emergency resources when appropriate.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-cornell-notes)
+- [Cornell format guide](artifact/references/cornell-format-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown and structured text guidance for Cornell-style notes, cue questions, summaries, indexes, and consent-gated handoffs.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No executable output; may maintain a note archive, share only summary note fields with LearningDNA, and queue review reminders when the required consents are present.]
+
+## Skill Version(s):
+
+2.3.0 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

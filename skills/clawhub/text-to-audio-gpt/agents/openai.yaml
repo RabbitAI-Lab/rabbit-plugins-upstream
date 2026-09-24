@@ -1,0 +1,14 @@
+interface:
+  display_name: Text to Audio GPT
+  short_description: GPT-only: выразительная озвучка текста в аудио
+  default_prompt: Используй $text-to-audio-gpt, чтобы озвучить предоставленный текст и
+    собрать готовый аудиофайл.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

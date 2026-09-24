@@ -1,45 +1,64 @@
-## Description: <br>
-Analyzes local or remote videos with Qwen 3.5 Plus using a configurable prompt and frame sampling rate. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes local or remote video with Alibaba Cloud Qwen 3.5 Plus, allowing a custom prompt and frame-sampling FPS.
 
-## Publisher: <br>
-[fackee](https://clawhub.ai/user/fackee) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fackee](https://clawhub.ai/user/fackee)
 
-## Use Case: <br>
-Developers and agents use this skill to run video understanding tasks such as scene description, object and action identification, and video summarization for local files or public video URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends user-selected videos to Alibaba Cloud DashScope/Qwen for analysis. <br>
-Mitigation: Analyze only videos that are approved for that provider, and confirm user consent and data handling requirements before use. <br>
-Risk: The bundled local settings allow broad python3 and chmod command execution. <br>
-Mitigation: Remove or narrow those permissions before routine installation or deployment. <br>
-Risk: The DashScope dependency is unpinned, which can introduce unreviewed dependency changes. <br>
-Mitigation: Pin the dashscope package version and review updates before adopting them. <br>
-Risk: Provider API use can consume quota or incur charges. <br>
-Mitigation: Use a dedicated DashScope key with appropriate quota and spend monitoring. <br>
+## Use Case:
 
+Developers and agent users use this skill to summarize videos, describe scenes, identify actions or objects, and produce analysis text from a local video file or publicly accessible video URL.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fackee/analyze-video-by-qwen) <br>
-- [DashScope API endpoint used by the skill](https://dashscope.aliyuncs.com/api/v1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Plain text analysis printed to stdout, with command examples and configuration guidance in Markdown documentation.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts a local file path or HTTP(S) URL, an optional prompt, and an optional frame sampling rate.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Bundled local agent permissions preapprove broad Python and chmod shell commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing and remove or narrow the .claude permissions, especially Bash(python3:*) and Bash(chmod:*).
+
+Risk: The DashScope dependency is unpinned.
+
+Mitigation: Pin dashscope to a reviewed version before deployment.
+
+Risk: Video content is submitted to Alibaba Cloud Qwen/DashScope for analysis.
+
+Mitigation: Only submit videos you are allowed to send to that service and review data-handling requirements for the intended use case.
+
+Risk: The skill depends on a local DashScope API key.
+
+Mitigation: Protect the API key in ~/.openclaw/openclaw.json and avoid sharing logs or screenshots that include it.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/fackee/skills/analyze-video-by-qwen)
+- [DashScope API endpoint used by the skill](https://dashscope.aliyuncs.com/api/v1)
+- [DashScope US regional endpoint noted by the skill](https://dashscope-us.aliyuncs.com/api/v1)
+- [DashScope international regional endpoint noted by the skill](https://dashscope-intl.aliyuncs.com/api/v1)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Plain text analysis printed to the terminal, with Markdown usage examples in the skill documentation]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a DashScope API key in ~/.openclaw/openclaw.json; higher FPS settings can increase API cost.]
+
+## Skill Version(s):
+
+1.0.1 (source: server evidence release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

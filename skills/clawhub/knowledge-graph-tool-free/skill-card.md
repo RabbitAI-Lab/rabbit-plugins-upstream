@@ -1,42 +1,58 @@
-## Description: <br>
-知识图谱工具(免费版) helps a personal agent maintain a local JSON-backed knowledge graph, query entities and relationships, and produce compact KGML context summaries for later sessions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+知识图谱工具(免费版) helps agents maintain a lightweight local JSON knowledge graph for personal entities, relationships, basic queries, and compact context summaries.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and developers use this skill to structure personal notes, research material, and session memory as a local knowledge graph. It supports basic graph maintenance, queries, timeline/statistics views, and KGML summaries that an agent can carry into later conversations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review flags persistent agent-instruction changes and later context injection with unclear control boundaries. <br>
-Mitigation: Review any changes to agent instruction files before use, keep generated summaries visible to the user, and install only when persistent KG context is expected. <br>
-Risk: The skill can persist personal knowledge in local graph files and reuse it in later sessions. <br>
-Mitigation: Avoid storing sensitive notes until local-only behavior is verified, add generated data files to gitignore where appropriate, and periodically inspect the KGML summaries. <br>
+## Use Case:
 
+Developers, independent users, and agent operators use this skill to create and query a local personal knowledge graph, persist entities and relationships, and summarize graph context for later agent sessions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/knowledge-graph-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [Artifact SKILL.md](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples, KGML summaries, and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose or maintain local JSON knowledge graph files and agent instruction context summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter lists 1.0.0) <br>
+Risk: The skill can persist memory and instructions into agent configuration files, which may carry unintended context into future sessions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the proposed AGENTS.md, CLAUDE.md, or GEMINI.md changes before installation and use the skill only in workspaces where persistent local memory is intended.
+
+Risk: Broad activation wording may cause the skill to be used outside focused knowledge-graph maintenance tasks.
+
+Mitigation: Scope usage to explicit knowledge-graph create, read, update, delete, query, and summary workflows, and review outputs before relying on persisted context.
+
+Risk: Personal notes, secrets, or sensitive graph data could enter future agent context through generated summaries.
+
+Mitigation: Do not store secrets or sensitive private notes in the graph unless summary behavior has been reviewed and the workspace is approved for that data.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/knowledge-graph-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and KGML/text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs focus on local knowledge-graph operations, configuration guidance, and compact context summaries.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

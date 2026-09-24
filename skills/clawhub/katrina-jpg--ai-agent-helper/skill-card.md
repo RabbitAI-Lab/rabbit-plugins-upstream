@@ -1,37 +1,47 @@
-## Description: <br>
-Helps users set up and optimize AI agents through prompt engineering, task decomposition, agent-loop design, tool selection, and structured-output patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users set up and optimize AI agents with prompt engineering, task decomposition, agent-loop design, tool selection, and structured output patterns.
 
-## Publisher: <br>
-[Katrina-jpg](https://clawhub.ai/user/Katrina-jpg) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[katrina-jpg](https://clawhub.ai/user/katrina-jpg)
 
-## Use Case: <br>
-Developers, builders, and AI-agent users can use this skill to draft stronger system prompts, break down complex tasks, design agent loops, choose tools, and shape structured outputs. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Generated prompts or agent workflows may be unsafe if used directly with agents that can access private data, run tools, or take real-world actions. <br>
-Mitigation: Review generated system prompts and workflows before connecting them to private data, external tools, or real-world actions. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/Katrina-jpg/ai-agent-helper) <br>
+## Use Case:
+
+Developers and agent builders use this skill for prompt engineering and agent setup tasks, including decomposing work, selecting tools, defining agent-loop patterns, and shaping structured outputs.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Agent-design guidance may be too general for sensitive or high-assurance agents.
+
+Mitigation: Review and adapt generated prompts, workflows, and structured-output patterns against the target agent's safety, policy, and operational requirements before use.
+
+## Reference(s):
 
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with prompt templates and short code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Instruction-only output; no code execution or system access is requested by the skill.] <br>
+## Skill Output:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and ClawHub release metadata) <br>
+**Output Type(s):** [Text, Markdown, Code, Configuration, Guidance]
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+**Output Format:** [Markdown guidance with prompt templates and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory output only; no files, tool calls, code execution, data access, persistence, or hidden behavior were found in the security evidence.]
+
+## Skill Version(s):
+
+1.0.0 (source: SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

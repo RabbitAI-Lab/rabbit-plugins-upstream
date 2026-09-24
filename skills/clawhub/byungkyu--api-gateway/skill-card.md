@@ -1,46 +1,70 @@
-## Description: <br>
-Connect to external services through Maton-managed API routes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+API Gateway helps agents call third-party services through the Maton gateway using app connections the user has already authorized.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to connect an agent to Maton-managed routes for user-approved, app-specific reads and changes across supported SaaS services. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent can operate Maton-connected SaaS accounts, including services that may affect data, billing, administration, or communications. <br>
-Mitigation: Review each requested connection and OAuth scope, start with read-only checks, and require explicit confirmation before any write, send, delete, billing, or admin action. <br>
-Risk: Triggers or configured destinations can forward future data automatically until removed. <br>
-Mitigation: Review trigger destinations before enabling them and remove connections or triggers when they are no longer needed. <br>
-Risk: API keys and provider-issued tokens may be exposed through logs, prompts, shared files, or forwarded configuration. <br>
-Mitigation: Keep credentials in memory or environment variables only, send them only to the expected Maton API host, and rotate any key that may have been exposed. <br>
+## Use Case:
 
+Developers and agent users use this skill to route concrete tasks to connected apps, such as reading mail, querying CRMs, filing issues, updating spreadsheets, or managing approved event automations.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/api-gateway) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [Maton API Reference](https://www.maton.ai/docs/api-reference) <br>
-- [Maton CLI Manual](https://cli.maton.ai/manual) <br>
-- [Supported Service References](references/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, API calls, Configuration] <br>
-**Output Format:** [Markdown with inline shell, Python, URL, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, Maton account setup, and explicit user approval before non-GET requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.138 (source: ClawHub release metadata) <br>
+Risk: Broad connected-app access can modify real accounts, publish content, send communications, or affect billing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to read and list calls, verify the target account and resource first, and require explicit user confirmation before any write or high-impact operation.
+
+Risk: Trigger destinations and webhooks can create persistent forwarding of event data to external URLs.
+
+Mitigation: Require isolated approval for the exact destination URL, disclose what data will flow there, avoid embedding credentials, and delete destinations when no longer needed.
+
+Risk: Local --exec handlers run code on untrusted event payloads.
+
+Mitigation: Use only user-authored or user-reviewed handlers, get separate approval before starting a watcher, and pass event data as discrete arguments rather than shell-interpolated strings.
+
+Risk: Maton or provider credentials could leak through logs, command lines, destinations, or raw HTTP fallback flows.
+
+Mitigation: Prefer OAuth and the operating system credential store, never print or extract stored credentials, and use raw API keys only when the CLI is unavailable.
+
+Risk: Hosted functions run with the Maton account identity that deployed them.
+
+Mitigation: Deploy or invoke functions only after a least-privilege review of the handler, connected accounts, and network policy; prefer DENY_ALL network policy unless specific hosts are approved.
+
+## Reference(s):
+
+- [API Gateway on ClawHub](https://clawhub.ai/byungkyu/skills/api-gateway)
+- [Maton](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Supported App References](references/)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API Calls, Code, Configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands target Maton-connected apps and require explicit user confirmation before writes, connection changes, triggers, destinations, functions, or local event handlers.]
+
+## Skill Version(s):
+
+1.2.22 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

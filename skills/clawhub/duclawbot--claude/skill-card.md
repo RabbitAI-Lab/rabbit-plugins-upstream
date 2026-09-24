@@ -1,41 +1,53 @@
-## Description: <br>
-Optimize long-context reasoning for commercial, legal, and high-stakes documents for users who need stronger logic, cleaner structure, and deeper analysis across contracts, memos, negotiations, and complex written materials. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Claude optimizes long-context reasoning for commercial, legal, and high-stakes documents by improving logic, structure, and analysis across contracts, memos, negotiations, and complex written materials.
 
-## Publisher: <br>
-[Duclawbot](https://clawhub.ai/user/Duclawbot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[duclawbot](https://clawhub.ai/user/duclawbot)
 
-## Use Case: <br>
-External users such as founders, operators, analysts, and professionals use this skill to analyze dense commercial and legal-adjacent documents, find contradictions or weak assumptions, compress long text into decision-ready summaries, and compare document versions. Outputs support human review and escalation, not legal, tax, compliance, procurement, contract approval, or execution authority. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may over-rely on document analysis as legal, tax, compliance, procurement, contract approval, or execution authority. <br>
-Mitigation: Use outputs as analytical support only, escalate high-stakes conclusions to qualified reviewers, and verify material recommendations against the source document. <br>
-Risk: Commercial or legal documents may contain confidential business information. <br>
-Mitigation: Review organizational data-handling rules before sharing sensitive documents with any AI environment and redact unnecessary confidential content where appropriate. <br>
-Risk: The skill name may be confused with an official Claude or Anthropic offering. <br>
-Mitigation: Verify the publisher profile and treat this as a third-party ClawHub skill from Duclawbot. <br>
+## Use Case:
 
+External users, founders, operators, analysts, and professionals use this skill to analyze long commercial or legal-adjacent documents, find contradictions and weak assumptions, and turn dense contracts, memos, proposals, or redlines into decision-ready summaries or review plans.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style document assessments with sections, bullet lists, comparison notes, risk flags, structure improvements, and recommended next steps.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Instruction-only output; no code execution, persistence, hidden access, or data exfiltration was identified by the security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: skill.md frontmatter, skill.json, ClawHub release evidence) <br>
+Risk: The skill may activate on ordinary contract, memo, or long-document analysis requests, and users could mistake analytical output for legal, tax, compliance, procurement, or contract-approval advice.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the output as analytical support only and route formal decisions or approvals to qualified human reviewers.
+
+Risk: Long commercial or legal-adjacent documents can contain ambiguity, contradictions, or missing assumptions that may not be fully resolved by analysis alone.
+
+Mitigation: Ask the agent to separate facts, inferences, uncertainty, and recommended next steps, then review the source text before relying on conclusions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/duclawbot/skills/claude)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown document assessment with summaries, risk flags, structure recommendations, and next-step guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Analytical support only; not legal, tax, compliance, procurement, or contract-approval advice.]
+
+## Skill Version(s):
+
+1.0.0 (source: frontmatter, skill.json, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

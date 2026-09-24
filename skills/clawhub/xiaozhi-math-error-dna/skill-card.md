@@ -1,40 +1,70 @@
-## Description: <br>
-数学错误的持续分析与根因档案系统，仅在学生明确要求记录错题、分析弱项、生成数学报告或同意连续跟踪时激活。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes recurring middle-school math mistakes by refining general error categories into math-specific subtypes, cross-dimension patterns, weakness reports, and consent-controlled follow-up guidance.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, tutors, and learning agents use this skill to classify math mistakes, identify recurring weak areas, and generate consent-based error maps or monthly weak-area reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-math-error-dna) <br>
-- [数学错因维度表](references/math-error-dimension-table.md) <br>
-- [初中数学高频概念混淆对照表](references/concept-confusion-map.md) <br>
-- [数学读题失误训练方法手册](references/reading-habits.md) <br>
+External Chinese-speaking K-12 learners, guardians, and education agents use this skill to identify why math mistakes recur, generate math weakness maps or monthly reports, and route follow-up practice or records through consent-controlled learning workflows.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Chinese-language tutoring analysis, structured markdown reports, consent prompts, and weak-area tracking guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; intended to operate with explicit student consent before creating long-term learning records.] <br>
+Mainland China Chinese-speaking K-12 deployments; localize safety channels, curriculum assumptions, consent rules, and language before use elsewhere.
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Use outside mainland China or outside Chinese-speaking K-12 settings may provide mismatched curriculum assumptions, consent expectations, or crisis-resource guidance.
+
+Mitigation: Localize curriculum references, emergency and support channels, language, and minor-data consent rules before deployment in other regions.
+
+Risk: Persistent student profiles, cross-skill sharing, parent visibility, or reminders could expose minor learning records without appropriate consent.
+
+Mitigation: Verify guardian/student consent settings, profile sharing, parent visibility, and reminder permissions before writing records or sharing summaries.
+
+Risk: Math-history statistics or recurring-weakness conclusions may be misleading when cross-session memory or statistics are unavailable.
+
+Mitigation: Use only current-session counts or clearly labeled preliminary trends unless the platform supplies authorized historical statistics.
+
+Risk: Learning-pressure conversations can contain crisis signals that exceed ordinary tutoring support.
+
+Mitigation: Route self-harm, severe distress, bullying, or family-safety signals through the crisis referral protocol before any study workflow, report, or parent-facing summary.
+
+Risk: Generated diagnostic or practice items may be mathematically invalid or mismatched to the targeted weakness.
+
+Mitigation: Apply the bundled item self-check guidance and review generated items before presenting them to students.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-math-error-dna)
+- [数学错因维度表](references/math-error-dimension-table.md)
+- [初中数学高频概念混淆对照表](references/concept-confusion-map.md)
+- [数学读题失误训练方法手册](references/reading-habits.md)
+- [平台能力约定与降级路径](shared/platform-conventions.md)
+- [危机识别与转介协议](shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown-style learner-facing reports plus structured profile, writeback, and reminder handoff fields]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs depend on consent state, available memory/statistics capabilities, and crisis-safety routing.]
+
+## Skill Version(s):
+
+2.3.0 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
