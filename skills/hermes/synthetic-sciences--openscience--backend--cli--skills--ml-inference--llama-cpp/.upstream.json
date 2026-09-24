@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-inference/llama-cpp",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-inference/llama-cpp",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-inference/llama-cpp",
+  "branch": "main",
+  "pushedAt": "2026-09-24T12:41:54Z",
+  "contentHash": "f7d7c51ee500cdeb128e14bab2360f5a1c46483e988016826819702249175911",
+  "fetchedAt": "2026-09-24T12:47:06.139Z"
+}

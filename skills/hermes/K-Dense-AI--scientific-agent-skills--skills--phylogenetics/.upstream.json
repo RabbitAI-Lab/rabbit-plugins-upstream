@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/phylogenetics",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/phylogenetics",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/phylogenetics",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "63770826574ff06f9d581237c22dd2b9aed7b302814cfd673566052491d1aa64",
+  "fetchedAt": "2026-09-24T12:47:21.275Z"
+}

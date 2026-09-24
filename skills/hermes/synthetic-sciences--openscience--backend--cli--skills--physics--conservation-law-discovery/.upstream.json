@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/conservation-law-discovery",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/conservation-law-discovery",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/conservation-law-discovery",
+  "branch": "main",
+  "pushedAt": "2026-09-24T12:41:54Z",
+  "contentHash": "7cb0300e623eaf2bfbb88f79aa460ea6d7fd3440facd3fa2b25fd5e3c53aee54",
+  "fetchedAt": "2026-09-24T12:47:06.092Z"
+}

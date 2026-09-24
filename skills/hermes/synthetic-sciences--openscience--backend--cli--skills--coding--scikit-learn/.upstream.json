@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/coding/scikit-learn",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/coding/scikit-learn",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/coding/scikit-learn",
+  "branch": "main",
+  "pushedAt": "2026-09-24T12:41:54Z",
+  "contentHash": "b40975a7a799f35353a038f8b287534b8832cba97fff7c1ae010a12865b1baf4",
+  "fetchedAt": "2026-09-24T12:47:06.290Z"
+}
