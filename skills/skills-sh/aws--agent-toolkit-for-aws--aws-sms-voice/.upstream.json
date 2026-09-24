@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-sms-voice",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-sms-voice",
+  "branch": "main",
+  "pushedAt": "2026-09-24T12:45:37Z",
+  "contentHash": "705e17a8b96d0505588c58b7009c5583589088f8f8d08fe87630d7da54062cc5",
+  "fetchedAt": "2026-09-24T12:49:12.990Z"
+}
