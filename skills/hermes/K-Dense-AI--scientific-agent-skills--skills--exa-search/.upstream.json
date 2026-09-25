@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/exa-search",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/exa-search",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/exa-search",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "215e3f52646bee0925893ad187fd0be289c34f7e85a78cf2d138921f46b77173",
+  "fetchedAt": "2026-09-25T12:50:11.498Z"
+}

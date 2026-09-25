@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/mono-color",
+  "identifier": "official/creative/mono-color",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/mono-color",
+  "branch": "main",
+  "pushedAt": "2026-09-25T11:14:59Z",
+  "contentHash": "13d255781f71305cb8087c2e2d5344b81cff985836fefb52562f97eabd59019c",
+  "fetchedAt": "2026-09-25T12:51:18.207Z"
+}

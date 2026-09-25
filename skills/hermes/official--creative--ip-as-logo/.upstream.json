@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/ip-as-logo",
+  "identifier": "official/creative/ip-as-logo",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/ip-as-logo",
+  "branch": "main",
+  "pushedAt": "2026-09-25T11:14:59Z",
+  "contentHash": "3c6c43d520f6d9b9aa0af999aed99bb3ff886addd5cf0b3be242815c174f32a0",
+  "fetchedAt": "2026-09-25T12:51:18.195Z"
+}

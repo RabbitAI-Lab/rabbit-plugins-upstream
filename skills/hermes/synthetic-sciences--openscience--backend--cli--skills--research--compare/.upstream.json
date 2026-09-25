@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/research/compare",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/research/compare",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/research/compare",
+  "branch": "main",
+  "pushedAt": "2026-09-25T08:28:52Z",
+  "contentHash": "b6231ff88921f933df32774611ba9210e464b41a522b235670658bf5e825c2a1",
+  "fetchedAt": "2026-09-25T12:50:00.981Z"
+}
