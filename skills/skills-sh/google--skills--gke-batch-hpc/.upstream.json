@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-batch-hpc",
+  "repo": "google/skills",
+  "skillId": "gke-batch-hpc",
+  "branch": "main",
+  "pushedAt": "2026-09-24T21:03:28Z",
+  "contentHash": "6bf6165e44ac9d6d5153c233109fd489467ef1b2474b63e46c93dc9e41a4a5e8",
+  "fetchedAt": "2026-09-25T12:51:43.340Z"
+}

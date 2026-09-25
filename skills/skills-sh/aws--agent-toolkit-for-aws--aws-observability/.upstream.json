@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-observability",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-observability",
+  "branch": "main",
+  "pushedAt": "2026-09-25T10:10:05Z",
+  "contentHash": "997735aca3c9077dc678278b1e0dff8187dc8bbbf1340b243b455e0431783f44",
+  "fetchedAt": "2026-09-25T12:52:30.005Z"
+}
