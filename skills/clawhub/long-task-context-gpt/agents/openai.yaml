@@ -1,0 +1,13 @@
+interface:
+  display_name: "Long Task Context (GPT)"
+  short_description: "Resume multi-step work from verified checkpoints"
+  default_prompt: "Use $long-task-context-gpt when a project spans stages or needs resuming; keep one concise, source-linked checkpoint current."
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+    - "chatgpt"
+    - "codex"
+    - "api"
+    - "atlas"
+  allow_implicit_invocation: true

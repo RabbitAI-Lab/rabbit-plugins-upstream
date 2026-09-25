@@ -1,41 +1,57 @@
-## Description: <br>
-This skill helps personal investors and early-stage finance analysts perform company financial analysis, valuation modeling, financial ratio analysis, and risk assessment through natural-language agent instructions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+财务分析入门工具 helps agents perform single-company valuation modeling, financial ratio analysis, cash-flow review, peer comparison, and financial risk assessment from natural-language requests.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users such as personal investors, finance students, and junior analysts use this skill to structure single-company financial analysis, DCF and comparable valuation work, financial ratio review, and risk screening. It is intended to support analysis workflows and does not provide guaranteed investment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read local files, write outputs, and run local commands when the agent uses it. <br>
-Mitigation: Review any proposed command before execution, limit file access to the finance task, and avoid unnecessary credentials or private financial files. <br>
-Risk: Financial analysis and valuation outputs can be misleading when source data is incomplete, stale, or based on aggressive assumptions. <br>
-Mitigation: Use official financial statements where possible, disclose assumptions, compare multiple methods, and treat outputs as analysis support rather than investment advice. <br>
+## Use Case:
 
+External users such as individual investors, junior analysts, and finance students use this skill to analyze one company at a time, build basic DCF and comparable-valuation views, assess ratios, and summarize financial risks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/accounting-finance-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples and optional code or shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce structured financial analysis reports, valuation assumptions, risk ratings, configuration examples, and execution logs from user-provided financial data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata; artifact frontmatter reports 1.0.0) <br>
+Risk: Financial conclusions may be misleading when source data is incomplete, stale, unaudited, or poorly formatted.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use official filings or trusted financial data, check assumptions, and review generated ratios, valuation ranges, and risk ratings before relying on them.
+
+Risk: The skill discloses local read, write, and command execution capabilities when those tools are enabled.
+
+Mitigation: Limit the workspace to financial data intended for analysis and approve generated scripts, commands, and file writes deliberately.
+
+Risk: Optional external financial data APIs may require credentials.
+
+Mitigation: Provide credentials through environment variables only when needed and avoid placing secrets in prompts, generated files, or reports.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/accounting-finance-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown reports with structured tables, text summaries, YAML configuration examples, and command examples when local execution is enabled]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May read or write local analysis files and execute approved local commands when the agent enables those tools.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

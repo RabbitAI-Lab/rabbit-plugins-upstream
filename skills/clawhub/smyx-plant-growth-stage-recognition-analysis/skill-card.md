@@ -1,44 +1,63 @@
-## Description: <br>
-Identifies plant growth stages from images or videos using a cloud analysis service and returns structured results for precision agriculture decision support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Accurately identifies key growth stages of plants from germination to fruiting based on computer vision and deep learning, provides structured data for precision agriculture decision support.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Developers, agents, and agricultural operators use this skill to submit plant imagery or video for growth-stage recognition and retrieve structured analysis reports and history links for farm-management decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends plant images, videos, or submitted URLs to the Lifeemergence cloud service for analysis. <br>
-Mitigation: Use only media and URLs approved for that service, and avoid private farm footage, internal URLs, or regulated business media unless the service's retention and access controls are acceptable. <br>
-Risk: The skill silently creates or reuses an account identity and stores service tokens locally. <br>
-Mitigation: Ask the publisher for permission scoping, opt-out and deletion instructions, and instructions to delete local SQLite data and stored tokens. <br>
-Risk: Historical report listing is tied to the locally resolved account identity. <br>
-Mitigation: Review history access before using shared workspaces and request a way to disable, delete, or opt out of account history if needed. <br>
+## Use Case:
 
+External users, agricultural producers, and developers use this skill to analyze plant images, videos, or public media URLs and receive plant growth-stage recognition results for precision agriculture decisions. It can also list prior cloud-generated reports associated with the user's resolved account identity.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-growth-stage-recognition-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Interface Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON text with structured analysis results, report links, history lists, and command examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local file paths or public image/video URLs; supports basic, standard, and json detail modes; can write results to a file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release and frontmatter) <br>
+Risk: Media and report data are uploaded to a third-party cloud service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if the publisher is trusted and the user is comfortable with cloud media processing.
+
+Risk: The active configuration can use plaintext HTTP even though the skill text describes HTTPS transport.
+
+Mitigation: Require HTTPS-only production endpoints and remove development HTTP configuration before deployment.
+
+Risk: The skill can silently create or reuse a local account identity and store local credentials or tokens.
+
+Mitigation: Review identity creation, local credential storage, and token/database retention before use.
+
+Risk: Report-history lookup can retrieve cloud-stored report metadata.
+
+Mitigation: Narrow history triggers and confirm access controls and retention behavior with the publisher.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-growth-stage-recognition-analysis)
+- [API interface documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands]
+
+**Output Format:** [Markdown tables and structured JSON or text reports with report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local media paths, public media URLs, history-list requests, and basic, standard, or json detail levels.]
+
+## Skill Version(s):
+
+1.0.13 (source: server release metadata; artifact frontmatter reports 1.0.14)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

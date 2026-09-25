@@ -1,40 +1,56 @@
-## Description: <br>
-Design and implement automation workflows to save time and scale operations as a solopreneur. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automation Workflows guides solopreneurs through identifying, designing, testing, and maintaining no-code automations across tools such as Zapier, Make, and n8n.
 
-## Publisher: <br>
-[lucasayala](https://clawhub.ai/user/lucasayala) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[lucasayala](https://clawhub.ai/user/lucasayala)
 
-## Use Case: <br>
-External users and solopreneurs use this skill to identify repetitive business tasks, select no-code automation tools, design workflows, test them, and maintain them over time. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Connected automation tools may gain access to sensitive business data or perform unintended changes. <br>
-Mitigation: Review each connected tool's permissions and use least-privilege accounts before enabling automations. <br>
-Risk: Incorrect destinations or field mappings can create bad records, missed notifications, or customer-facing errors. <br>
-Mitigation: Test with sample data, verify destinations and field mappings, and monitor workflow logs after launch. <br>
-Risk: Automations touching payments, contracts, CRM records, or customer communications can create higher-impact mistakes. <br>
-Mitigation: Add human approval for customer-facing, payment, contract, or CRM updates. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
+## Use Case:
 
+External solopreneurs and business operators use this skill to decide what repetitive work to automate, choose a no-code automation tool, design workflow triggers and actions, test automations, and maintain them over time.
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown guidance with checklists, tables, formulas, and workflow templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Informational guidance; does not execute tools or connect to external services.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Suggested automations may touch customer, lead, payment, CRM, email, Slack, and public posting workflows.
+
+Mitigation: Use least-privilege app connections, test with limited data, and avoid sending sensitive customer or payment details into chat notifications unless necessary.
+
+Risk: Customer-facing messages or financial and accounting updates can cause business impact if an automation runs with incorrect logic or data mapping.
+
+Mitigation: Add human approvals before customer-facing messages or financial/accounting updates and verify mappings with realistic test cases before enabling the workflow.
+
+Risk: No-code automations can fail silently when connected services, permissions, or APIs change.
+
+Mitigation: Configure error alerts, review workflow logs weekly, and document each workflow's connected apps and troubleshooting steps.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/lucasayala/skills/automation-workflows-0-1-0)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, configuration]
+
+**Output Format:** [Markdown guidance with checklists, comparison tables, formulas, and workflow templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Does not produce executable code; users adapt the guidance inside their chosen automation platforms.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

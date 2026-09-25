@@ -1,43 +1,67 @@
-## Description: <br>
-Collect and rank daily AI content for creator-focused publishing workflows. Use when users ask for AI topic scouting, KOL tracking (especially X/Twitter), practical tutorial picks, industry updates, or automated Feishu/Obsidian briefing pushes with configurable templates and time windows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collect and rank daily AI content for creator-focused publishing workflows, including AI topic scouting, X/Twitter KOL tracking, tutorial picks, industry updates, and Feishu/Obsidian briefing pushes.
 
-## Publisher: <br>
-[rotbit](https://clawhub.ai/user/rotbit) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[rotbit](https://clawhub.ai/user/rotbit)
 
-## Use Case: <br>
-Creators, content operators, and agents use this skill to collect AI-related items from configured sources, rank them for publishing workflows, and produce concise group briefings plus full Obsidian reports. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Briefings may be posted to an unintended Feishu destination if the chat ID is misconfigured. <br>
-Mitigation: Verify the Feishu chat ID before enabling group posting. <br>
-Risk: Browser-based X/Twitter collection could expose private pages or notifications during collection. <br>
-Mitigation: Use a dedicated browser session and avoid collecting private pages or notification views. <br>
-Risk: Cron or automated runs can publish generated reports without a human review step. <br>
-Mitigation: Review generated reports and automation settings before enabling scheduled group posting. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [Cron prompt template](references/cron-prompt-template.md) <br>
-- [Data collection rules](references/data-collection-rules.md) <br>
-- [Push format](references/push-format.md) <br>
+## Use Case:
 
+Content creators, editorial operators, and automation-focused agents use this skill to collect AI-related items from public sources, rank them for creator workflows, and prepare concise group updates plus full Obsidian reports.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports, concise group-message summaries, shell command guidance, and file paths] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes ranked TOP lists, source fallback notes, must-track account status, and final report paths.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Browser collection can use an active X/Twitter session and may collect from a logged-in homepage if the operator chooses that path.
+
+Mitigation: Use public pages or a dedicated low-privilege browser profile, avoid private areas, and confirm browser collection targets before running.
+
+Risk: Generated reports may contain incorrect rankings, stale source data, or misleading briefing text before being posted to a group channel.
+
+Mitigation: Review the concise Feishu update and full Obsidian report before posting or scheduling automated pushes.
+
+Risk: Misconfigured Feishu chat IDs or Obsidian paths can send summaries to the wrong place or write durable files outside the intended vault structure.
+
+Mitigation: Confirm Feishu identifiers and Obsidian report directories in configuration before enabling routine runs.
+
+Risk: Cleanup behavior can delete old local pipeline data.
+
+Mitigation: Run cleanup with explicit retention settings, maintain backups for important reports, and treat cleanup as destructive unless a dry run has been reviewed.
+
+Risk: Shell scripts fetch external content and write logs, JSON, Markdown, and task files into local pipeline directories.
+
+Mitigation: Run the scripts as a least-privileged user in a scoped workspace and inspect generated files before using them downstream.
+
+## Reference(s):
+
+- [Creator Alpha Feed on ClawHub](https://clawhub.ai/rotbit/skills/creator-alpha-feed)
+- [Data Collection Rules](references/data-collection-rules.md)
+- [Cron Prompt Template](references/cron-prompt-template.md)
+- [Push Format](references/push-format.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown reports, JSON content files, shell command snippets, and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes concise Feishu-ready summaries, full Obsidian report paths, collection logs, fallback/degradation notes, and source status checks.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

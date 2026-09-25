@@ -1,45 +1,55 @@
-## Description: <br>
-Analyzes driver video or image inputs to identify unsafe driving behaviors and produce structured safety reports with recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes driver videos for unsafe driving behaviors and produces driving-safety reports and recommendations.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and developers use this skill to submit driving footage or media URLs for safety-behavior analysis, including fatigue, distraction, seatbelt use, posture, and other risky driving patterns. The skill returns structured findings, safety suggestions, report links, and cloud report-history results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Driver media or media URLs are sent to configured LifeEmergence cloud APIs for analysis. <br>
-Mitigation: Use only footage that is authorized for cloud processing, avoid sensitive in-cabin or regulated data unless retention and deletion terms are acceptable, and confirm the configured endpoint before use. <br>
-Risk: The skill can silently create or reuse a cloud identity and automatically query account-linked report history. <br>
-Mitigation: Run it only in workspaces where the account association is expected, and review report-history access expectations before enabling automatic history queries. <br>
-Risk: Identity and token material may be stored in a local workspace database. <br>
-Mitigation: Protect the workspace data directory, rotate credentials if the workspace is shared or exported, and remove local stored identity data when the skill is no longer needed. <br>
+## Use Case:
 
+Drivers, fleet safety teams, and developers use the skill to review driving footage for potential fatigue, distraction, seatbelt use, and other unsafe behaviors, or to retrieve prior analysis reports. Reports are educational aids, not substitutes for professional driver training.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-drive-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Interface Documentation](artifact/references/api_doc.md) <br>
-- [Analysis API Error Codes](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON-formatted structured analysis results, report-history tables, report links, and command-line guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include cloud-generated report identifiers and export links. Local file analysis is limited to supported video formats and the configured file-size limit.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata; artifact frontmatter reports 1.0.9) <br>
+Risk: Driver videos or video URLs are processed by a remote cloud service and may contain identifiable people or vehicles.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain appropriate permission before uploading footage, avoid sensitive recordings where possible, and review the publisher's retention, deletion, and access controls.
+
+Risk: The skill silently creates or reuses an identity, stores authentication tokens locally, and can fetch cloud report history on broad triggers.
+
+Mitigation: Use only in a trusted environment; restrict access to local credentials and confirm authorization before retrieving or sharing report history.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/smyx-sunjinhui/skills/smyx-drive-analysis)
+- [Driving analysis API documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Structured analysis results, driving-safety report text, or Markdown history tables with report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results can be saved to a file; historical reports are retrieved from a cloud service.]
+
+## Skill Version(s):
+
+1.0.13 (source: ClawHub release metadata; bundled SKILL.md lists 1.0.18)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

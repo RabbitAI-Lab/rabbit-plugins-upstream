@@ -1,41 +1,59 @@
-## Description: <br>
-This skill helps an agent use Gmail through gogcli for mailbox reading, organization, drafts, forwarding, autoreplies, attachments, and bulk message operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+gogcli-mcp-gmail lets an agent read, organize, draft, forward, autoreply, and manage Gmail through gogcli, including threads, labels, drafts, attachments, bulk actions, forwarding, and settings.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and developers use this skill when they want an agent to work with a selected Gmail account in depth, including threads, labels, drafts, attachments, forwarding, autoreplies, and bulk archive, trash, or mark-read operations. It is appropriate only when the user intends to grant broad Gmail mailbox and account-setting authority. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can give an agent broad access to Gmail messages and account settings. <br>
-Mitigation: Review before installing for sensitive personal or business mail, and authorize only the Gmail account the user intends to expose. <br>
-Risk: The skill can support permanent deletion, forwarding, delegates, forwarding settings, filters, send-as settings, vacation responders, watch notifications, tracking, sending mail, and downloading message content. <br>
-Mitigation: Require explicit confirmation before any destructive action, message sending, forwarding, settings change, tracking action, or message-content download. <br>
+## Use Case:
 
+External users and developers use this skill to connect an agent to a selected Gmail account for mail triage, message and thread reading, draft preparation, replies, forwards, label management, settings changes, and controlled bulk operations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/gogcli-mcp-gmail) <br>
-- [gogcli project](https://github.com/openclaw/gogcli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with JSON MCP server configuration and Gmail tool-use instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can lead an agent to invoke Gmail MCP tools that read, send, modify, delete, forward, download, or change Gmail account settings after authorization.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.8.0 (source: server release evidence) <br>
+Risk: The skill can give an agent broad Gmail access, including reading mail, sending replies, modifying labels and settings, and deleting account objects.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for accounts where this level of access is acceptable; use GOG_READONLY=1 for read-only workflows and manually review destructive or mutating Gmail actions.
+
+Risk: Attachment delivery can expose sensitive mailbox content through server-side file paths, signed URLs, or Drive delivery.
+
+Mitigation: Restrict GOG_FILE_ROOTS and avoid signed URL or Drive delivery for highly sensitive attachments unless that delivery mode is specifically needed.
+
+Risk: Raw command escape hatches can run broader gog auth or Gmail subcommands than the dedicated tools expose.
+
+Mitigation: Review tool permissions before deployment and require human approval for raw command use in sensitive accounts.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/gogcli-mcp-gmail)
+- [gogcli](https://github.com/openclaw/gogcli)
+- [Model Context Protocol](https://modelcontextprotocol.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, files, links, configuration]
+
+**Output Format:** [MCP tool responses as text or JSON; attachment tools may return inline content, server file paths, signed URLs, or Drive links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the Gmail account configured through gogcli; mutating tools depend on confirmation and read-only settings.]
+
+## Skill Version(s):
+
+4.5.0 (source: evidence release and package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

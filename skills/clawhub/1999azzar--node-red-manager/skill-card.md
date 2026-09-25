@@ -1,42 +1,57 @@
-## Description: <br>
-Manage Node-RED instances via Admin API or CLI. Automate flow deployment, install nodes, and troubleshoot issues. Use when user wants to "build automation", "connect devices", or "fix node-red". <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage Node-RED instances via Admin API or CLI.
 
-## Publisher: <br>
-[1999AZZAR](https://clawhub.ai/user/1999AZZAR) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[1999azzar](https://clawhub.ai/user/1999azzar)
 
-## Use Case: <br>
-Developers and operators use this skill to administer Node-RED instances they control, deploy or restore flows, manage nodes, inspect diagnostics, and update context values through the Admin API or CLI. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill can make persistent changes to live Node-RED automation systems. <br>
-Mitigation: Use it only against Node-RED instances you control, verify NODE_RED_URL before entering credentials, and back up flows before deploy, restore, delete, or node-management actions. <br>
-Risk: Credentials and flow files may expose sensitive operational access or behavior. <br>
-Mitigation: Keep the .env file private, review flow JSON before deployment or restore, and avoid sharing backups that contain sensitive flow configuration. <br>
-Risk: Exec nodes and third-party Node-RED modules can introduce higher-impact runtime behavior. <br>
-Mitigation: Review exec-node usage and third-party node modules before installation or deployment. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [Node-RED Admin API Reference](references/admin-api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/1999AZZAR/node-red-manager) <br>
+## Use Case:
 
+Developers and automation operators use this skill to inspect, deploy, back up, restore, and troubleshoot Node-RED flows, nodes, runtime state, and context through the Admin API or CLI.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON/configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Node-RED Admin API calls and file paths for flow backup, restore, deployment, and diagnostics.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill can give an agent broad live control over Node-RED flows, nodes, runtime state, and context.
+
+Mitigation: Use it only with trusted Node-RED instances, least-privilege credentials, and manual review before deploy, delete, restore, context, or node-install actions.
+
+Risk: Changes against production automation can disrupt running workflows.
+
+Mitigation: Require manual change review and maintain rollback backups before using the skill on production systems.
+
+Risk: Flow backups can contain sensitive operational data.
+
+Mitigation: Treat generated backup files as sensitive and control their storage, access, and retention.
+
+## Reference(s):
+
+- [Node-RED Admin API Reference](references/admin-api.md)
+- [ClawHub skill page](https://clawhub.ai/1999azzar/skills/node-red-manager)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, JSON, guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce or modify Node-RED flow JSON and backup files when the agent runs the provided CLI against a configured instance.]
+
+## Skill Version(s):
+
+1.0.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

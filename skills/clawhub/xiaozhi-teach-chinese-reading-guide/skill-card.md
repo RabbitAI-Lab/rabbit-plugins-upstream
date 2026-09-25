@@ -1,44 +1,61 @@
-## Description: <br>
-帮助语文老师将阅读课文讲解升级为系统化阅读教学，提供文本三解、阅读策略、三阶阅读任务、阅读成长档案和学员阅读力评估框架。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps Chinese-language teachers plan modern-text reading lessons with layered interpretation, reading strategies, discussion tasks, and reading-progress records.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External Chinese-language teachers use this skill to design reading lessons, choose explicit reading strategies, create staged reading tasks, and maintain student reading-growth records. It supports lesson planning and assessment workflows while requiring teachers to review outputs and protect student information. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student reading records or analysis updates could expose unnecessary personal information. <br>
-Mitigation: Use pseudonyms, omit unnecessary student details, and confirm before allowing connected student-analysis or resource-library records to be updated. <br>
-Risk: Lesson materials may include copyrighted textbook or book content. <br>
-Mitigation: Require copyrightStatus for selected texts and avoid copying full textbooks or complete ebooks. <br>
+## Use Case:
 
+Teachers of upper-primary and junior-secondary Chinese use this skill to draft reading-lesson frameworks, choose reading strategies, design activities, and track student reading development. Teachers review materials before classroom or family use.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-chinese-reading-guide) <br>
-- [文本三解模板](references/text-three-solve.md) <br>
-- [阅读 6 大策略卡片](references/six-strategies-card.md) <br>
-- [群文阅读设计模板](references/group-text-design.md) <br>
-- [学员阅读力档案模板](references/reading-ability-profile-template.md) <br>
+### Deployment Geography for Use:
 
+Mainland China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance, structured teaching notes, and reusable lesson-design templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; outputs may include teaching frameworks, reading-task plans, student profile templates, and suggested updates for connected teaching records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Student reading records may contain sensitive information about minors.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain school authorization, use pseudonyms, confirm record updates with the teacher, and check sharing consent before any family-facing use.
+
+Risk: Reading exercises or teaching suggestions may be inaccurate or unsuitable for a class.
+
+Mitigation: Have the teacher check generated questions against the text and grade level before classroom or resource-library use.
+
+Risk: Privacy, curriculum, and crisis-referral practices may not transfer outside Mainland China.
+
+Mitigation: Adapt these practices to local requirements before use in another jurisdiction.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-chinese-reading-guide)
+- [Three-layer text interpretation template](artifact/references/text-three-solve.md)
+- [Six reading strategies](artifact/references/six-strategies-card.md)
+- [Group-text reading design](artifact/references/group-text-design.md)
+- [Reading-ability profile template](artifact/references/reading-ability-profile-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Teaching guidance]
+
+**Output Format:** [Chinese-language lesson outlines, interpretation frameworks, discussion prompts, and draft reading-progress records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Student-record updates require teacher confirmation; reading-rate and reading-volume figures must be supplied by a teacher or student.]
+
+## Skill Version(s):
+
+2.4.0 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

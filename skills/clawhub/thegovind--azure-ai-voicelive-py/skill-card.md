@@ -1,46 +1,58 @@
-## Description: <br>
-Azure Ai Voicelive Py helps developers build Python applications for real-time bidirectional audio with Azure AI Voice Live, including voice assistants, chatbots, speech translation, transcription, function calling, MCP tools, and avatar integrations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Builds real-time Python voice AI applications with Azure AI Voice Live SDK for bidirectional audio streaming, Server VAD, conversation turns, function calling, MCP tools, avatar integration, and transcription.
 
-## Publisher: <br>
-[thegovind](https://clawhub.ai/user/thegovind) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[thegovind](https://clawhub.ai/user/thegovind)
 
-## Use Case: <br>
-Developers and engineers use this skill to create Python voice AI applications that connect to Azure AI Voice Live over WebSockets. It provides guidance, code examples, and configuration patterns for authentication, sessions, audio streaming, event handling, turn detection, function calling, MCP tools, transcription, and avatar integration. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Azure credentials or API keys can be exposed if copied into source code or shared logs. <br>
-Mitigation: Use least-privilege Azure credentials, prefer DefaultAzureCredential for production, store secrets outside code, and avoid committing or logging API keys. <br>
-Risk: Microphone audio, generated audio, and transcripts may contain sensitive personal or business information. <br>
-Mitigation: Obtain consent before recording or streaming speech, minimize retained audio and transcript data, and protect any generated audio files. <br>
-Risk: Function calls or MCP tools selected by the model may perform unintended actions if connected to real systems. <br>
-Mitigation: Review tool definitions before use, restrict tool permissions, and require approval for actions that affect external services or user data. <br>
-Risk: Real-time speech is streamed to an Azure-hosted service endpoint. <br>
-Mitigation: Use approved Azure endpoints and configurations that match the organization's privacy, residency, and compliance requirements. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thegovind/skills/azure-ai-voicelive-py) <br>
-- [API Reference](references/api-reference.md) <br>
-- [Examples](references/examples.md) <br>
-- [Models Reference](references/models.md) <br>
+## Use Case:
 
+Developers and engineers use this skill to build Python applications that connect to Azure AI Voice Live for real-time voice assistants, voice-enabled chatbots, speech-to-speech translation, transcription, avatar integration, and WebSocket-based audio streaming.
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with Python and shell code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Provides installation, authentication, session configuration, audio streaming, event handling, function calling, MCP, transcription, and avatar integration guidance.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Azure credentials or API keys can be exposed if example authentication patterns are copied without secret handling.
+
+Mitigation: Use a virtual environment, prefer managed credentials where appropriate, store Azure keys securely, and avoid hard-coding real secrets.
+
+Risk: Microphone or audio-file content may be sent to Azure for processing, and generated audio may be saved locally.
+
+Mitigation: Make applications clearly inform users when audio is captured, transmitted, processed, or stored, and align consent and retention with deployment policy.
+
+Risk: Unpinned dependencies can drift from the versions reviewed during development.
+
+Mitigation: Pin and review dependencies before installation or deployment.
+
+## Reference(s):
+
+- [Azure AI Voice Live SDK - API Reference](references/api-reference.md)
+- [Azure AI Voice Live SDK - Examples](references/examples.md)
+- [Azure AI Voice Live SDK - Models Reference](references/models.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with Python and shell code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only guidance; no files are generated unless an agent applies the examples.]
+
+## Skill Version(s):
+
+0.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

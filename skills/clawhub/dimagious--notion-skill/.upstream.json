@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/notion-skill",
   "slug": "notion-skill",
   "ownerHandle": "dimagious",
-  "version": "1.0.0",
-  "updatedAt": 1778485857338,
-  "contentHash": "c07c2b09f084a52231c479dba53a413979841f694ceef22e69c9015791ef922f",
-  "fetchedAt": "2026-07-26T18:17:46.104Z"
+  "version": "1.0.1",
+  "updatedAt": 1790017059187,
+  "contentHash": "a050823604dca1bacfb9538ead03de9473e472848fa066a1b33392ad95ee7af0",
+  "fetchedAt": "2026-09-25T14:08:58.046Z"
 }

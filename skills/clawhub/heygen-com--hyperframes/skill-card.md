@@ -1,48 +1,71 @@
-## Description: <br>
-HyperFrames routes video, animation, and motion-graphics requests into the right workflow, resumes existing projects, and manages project inspection, validation, preview, rendering, publishing, and batch rendering. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HyperFrames routes agent requests to create, edit, animate, render, inspect, validate, preview, publish, or batch-render HTML-based video and motion graphic projects.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-External users, developers, and content teams use this skill as the entry point for creating, editing, validating, rendering, and publishing HyperFrames video projects from briefs, URLs, GitHub PRs, Figma inputs, existing footage, or music. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may run npx-based HyperFrames commands and install or refresh related workflow skills. <br>
-Mitigation: Review command summaries, keep projects under version control, and run HyperFrames validation after upgrades or workflow changes. <br>
-Risk: Site capture, Figma or GitHub inputs, media generation, and publishing can use networked services when requested. <br>
-Mitigation: Confirm external inputs and publishing intent before use, and avoid sending sensitive material to networked services unless approved. <br>
-Risk: Project edits, renders, and publishing actions may create or update video project artifacts. <br>
-Mitigation: Inspect diffs, previews, and validation results before treating generated output as final or public. <br>
+## Use Case:
 
+External users, developers, and video production teams use this skill as the entry point for HyperFrames projects: it resumes project state, captures intent, chooses the appropriate workflow, and coordinates creation, editing, rendering, validation, and publishing of HTML-based video deliverables.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/hyperframes) <br>
-- [Publisher profile](https://clawhub.ai/user/heygen-com) <br>
-- [HyperFrames entry point](SKILL.md) <br>
-- [Intent interview](references/intent-interview.md) <br>
-- [Capability menu](references/capability-menu.md) <br>
-- [Skill lifecycle](references/skill-lifecycle.md) <br>
-- [Workflow route contracts](references/routes/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, code, configuration, and project artifact descriptions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include workflow routing decisions, project file changes, validation summaries, preview or render commands, and publishing guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.19 (source: server release metadata) <br>
+Risk: The skill can automatically run unpinned npm-based HyperFrames update or install commands that modify project dependencies and installed workflow skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it in projects where npm execution and workflow-skill updates are acceptable, and review package and skill changes after use.
+
+Risk: The skill can drive website capture, media generation, rendering, and publishing workflows.
+
+Mitigation: Run it only where those actions are authorized, and inspect generated assets, render outputs, and publication targets before release.
+
+Risk: Routing decisions can send a request to an inappropriate video workflow when the subject, input, or intended deliverable is ambiguous.
+
+Mitigation: Confirm the resulting BRIEF.md or ask the documented routing-only question when the owning workflow cannot be determined uniquely.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/heygen-com/skills/hyperframes)
+- [The intent layer - one conversation, before any workflow runs](references/intent-interview.md)
+- [Brief contract](references/brief-contract.md)
+- [Brief format - BRIEF.md](references/brief-format.md)
+- [Capability menu - what HyperFrames can bring to a video](references/capability-menu.md)
+- [Production loop - from an approved plan to a delivered video](references/production-loop.md)
+- [The review loop - plan, sketch, build](references/review-loop.md)
+- [Storyboard format - STORYBOARD.md + parsed manifest](references/storyboard-format.md)
+- [SCRIPT.md - locked narration](references/script-format.md)
+- [Subagent dispatch - harness adapter](references/subagent-dispatch.md)
+- [Skill installation and freshness](references/skill-lifecycle.md)
+- [Frame worker - core contract](references/frame-worker-core.md)
+- [Route: general-video](references/routes/general-video.md)
+- [Route: product-launch-video](references/routes/product-launch-video.md)
+- [Route: remotion-to-hyperframes](references/routes/remotion-to-hyperframes.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Markdown guidance with inline shell commands and project files such as BRIEF.md, STORYBOARD.md, SCRIPT.md, HTML compositions, and frame-packet artifacts.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May update project dependencies or installed HyperFrames workflow skills before render-affecting commands.]
+
+## Skill Version(s):
+
+1.0.33 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

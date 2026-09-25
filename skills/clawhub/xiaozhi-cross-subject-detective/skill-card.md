@@ -1,41 +1,60 @@
-## Description: <br>
-Guides Chinese-speaking learners through a week-long cross-disciplinary inquiry project that connects a real-world theme across subjects and summarizes the work as project DNA. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+引导学生用一周探索真实主题的多学科视角，整理跨学科联结和项目记录。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, parents, and learning assistants use this skill to plan and run a cross-subject project around a real topic, explore it from several academic perspectives, and turn the results into reusable study notes and a project DNA summary. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can connect with related learning-note skills and may read or update study records such as Cornell notes and a knowledge accumulation tree. <br>
-Mitigation: Use it only in learning-note workspaces where those records are expected to be available, and review generated note or knowledge-tree updates before keeping them. <br>
-Risk: Cross-subject project guidance can produce broad connections that may need validation for a student's curriculum or age level. <br>
-Mitigation: Review the proposed subject perspectives, prompts, and project DNA summary before treating them as study material. <br>
+## Use Case:
 
+Chinese-speaking upper-primary, middle-school and high-school students use this skill to investigate a topic across subjects, ask deeper questions and build a project record and concept map. Younger primary pupils need adult guidance.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-cross-subject-detective) <br>
-- [跨学科侦探周项目模板](references/detective-project-template.md) <br>
+### Deployment Geography for Use:
 
+Mainland China; localize curriculum, guardian consent and crisis contacts before use elsewhere
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance and structured project notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces subject-view prompts, connection maps, project DNA summaries, and learning-note updates when paired with the related note-taking skills.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Project notes about minors may expose learning history or be shared unexpectedly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm updates before saving; honor the learner's view, correction, deletion, export and sharing choices.
+
+Risk: Curriculum, guardian-consent rules and crisis contacts may be inappropriate outside mainland China.
+
+Mitigation: Localize these details before use elsewhere, and confirm location before providing crisis contacts.
+
+Risk: A student may disclose an urgent safety concern during study.
+
+Mitigation: Pause tutoring, encourage contacting a trusted adult and direct immediate danger to local emergency help.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/qizhitang/skills/xiaozhi-cross-subject-detective)
+- [Detective project record template](artifact/references/detective-project-template.md)
+- [Cross-subject connection examples](artifact/shared/cross-subject-connections.md)
+- [Crisis referral protocol](artifact/shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Simplified-Chinese study guidance, Markdown project records and structured concept-map entries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Confirmed project and concept-map notes can update a learner profile; records can be exported as text.]
+
+## Skill Version(s):
+
+2.4.0 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,40 +1,53 @@
-## Description: <br>
-Creates and edits banner illustrations with an image-generation API, supporting 1K, 2K, and 4K outputs and a draft-to-final workflow for personal creators. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents generate or edit banner illustrations through an image-generation API, using 1K, 2K, and 4K resolution choices with a draft-to-final workflow.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External creators use this skill to generate blog and social banners, quick concept images, and style edits from prompts or input images while choosing draft or final resolutions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and input images may be sent to the configured image-generation provider. <br>
-Mitigation: Do not use confidential, personal, or proprietary prompts or images unless the provider's data handling terms are acceptable. <br>
-Risk: API keys can be exposed if passed directly in commands or shared transcripts. <br>
-Mitigation: Set GEMINI_API_KEY through a protected environment variable or secret manager instead of placing keys in prompts or command text. <br>
+## Use Case:
 
+External users and developers use this skill to create or edit individual banner images with prompt-driven image-generation workflows, resolution selection, and API-key based setup.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/banner-gen-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, files] <br>
-**Output Format:** [Markdown guidance with shell command examples; generated or edited images are saved as PNG files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a configured image-generation API key, preferably via GEMINI_API_KEY; supports 1K, 2K, and 4K resolution choices.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata; artifact frontmatter lists 1.0.0) <br>
+Risk: The security scan marked the release suspicious because it requests execution/write authority and includes broad automation instructions beyond banner generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing, and only allow exec/write use for clearly identified image-generation commands you trust.
+
+Risk: API keys may be exposed if supplied directly in command arguments or copied into files.
+
+Mitigation: Prefer environment variables for API keys and avoid passing secrets on the command line.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/banner-gen-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Files, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and expected PNG image file outputs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses prompt text, optional input image path, output filename, resolution choice, and API key configuration.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact metadata reports 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

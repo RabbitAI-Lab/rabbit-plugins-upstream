@@ -1,38 +1,53 @@
-## Description: <br>
-Book painter services through Lokuli MCP. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Book painter services through Lokuli MCP for users who need to find and book a painter.
 
-## Publisher: <br>
-[edwardrodriguez703-design](https://clawhub.ai/user/edwardrodriguez703-design) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[edwardrodriguez703-design](https://clawhub.ai/user/edwardrodriguez703-design)
 
-## Use Case: <br>
-External users use this skill to search for painter services, check provider availability, and create a booking through Lokuli. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Creating a booking sends customer contact details to Lokuli. <br>
-Mitigation: Confirm the booking details with the user before calling the booking tool, and share only the contact information needed to complete the booking. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [Book Painter on ClawHub](https://clawhub.ai/edwardrodriguez703-design/skills/book-painter) <br>
-- [Lokuli MCP endpoint](https://lokuli.com/mcp/sse) <br>
+## Use Case:
 
+External users use this skill to search for painter service providers, check availability, and create bookings through Lokuli's MCP service.
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, API Calls, configuration] <br>
-**Output Format:** [Markdown with JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May send booking details, including customer name, email, and phone number, to Lokuli when creating a booking.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill relies on Lokuli's external MCP service for search, availability, and booking actions.
+
+Mitigation: Confirm service details and booking intent before using the external service.
+
+Risk: Creating a booking may send customer name, email, and phone number to the external service.
+
+Mitigation: Provide contact details only when the user intends to create that booking.
+
+## Reference(s):
+
+- [Lokuli MCP Endpoint](https://lokuli.com/mcp/sse)
+- [ClawHub Skill Page](https://clawhub.ai/edwardrodriguez703-design/skills/book-painter)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Guidance, Configuration]
+
+**Output Format:** [Markdown with JSON-RPC call examples and booking guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May call an external MCP service to search providers, check availability, and create bookings.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

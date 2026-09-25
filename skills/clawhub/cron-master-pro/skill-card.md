@@ -1,40 +1,50 @@
-## Description: <br>
-定时大师 is a platform-level scheduling guide that helps agents choose between heartbeat and cron scheduling, configure push or silent payloads, use strict reminder templates, manage self-wake behavior, lock time zones, and migrate legacy cron patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+定时大师 helps agents choose and apply cron, heartbeat, push notification, quiet logging, self-wake, timezone, and cleanup patterns for reliable scheduled workflows.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers, operators, and agent builders use this skill to design reliable scheduled reminders, background logs, self-wake flows, and cron migration patterns on platforms that expose cron-style agent tools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Agents with local shell or scheduler-admin access could alter persistent cron state while following scheduler maintenance guidance. <br>
-Mitigation: Use the skill only for explicit scheduling work, prefer supported platform recovery tools, and require a backup before any direct `jobs.json` cleanup. <br>
-Risk: Reminder delivery can target the wrong recipient or time if delivery fields or time zones are not confirmed. <br>
-Mitigation: Confirm recipients, channels, and time zones before creating reminders, and use ISO 8601 timestamps with explicit time-zone context. <br>
+## Use Case:
 
+Developers, automation builders, and agent operators use this skill to select reliable scheduling patterns for precise reminders, recurring maintenance, push delivery, quiet event logging, and cross-turn self-wake behavior.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cron-master-pro) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with JSON and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces scheduling decisions, payload templates, checklist guidance, and troubleshooting steps; it does not directly execute scheduler changes by itself.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server evidence and frontmatter) <br>
+Risk: The skill may influence cron jobs, push notifications, local memory, and scheduler state while requesting broad command, file, API, and scheduler authority.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after review, constrain permissions to explicit cron-related actions, and require confirmation before external notifications or scheduler-state changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cron-master-pro)
+- [Skill homepage](https://skillhub.cn/skill/)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Configuration, Shell commands, Code]
+
+**Output Format:** [Markdown guidance with JSON and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs scheduling recommendations, cron payload patterns, troubleshooting steps, and configuration examples for an agent to apply through platform tools.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

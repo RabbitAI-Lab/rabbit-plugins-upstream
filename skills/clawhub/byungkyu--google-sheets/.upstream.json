@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/google-sheets",
   "slug": "google-sheets",
   "ownerHandle": "byungkyu",
-  "version": "1.0.0",
-  "updatedAt": 1782267230074,
-  "contentHash": "adb5be07ba2a0dfd93d723d90e07a66b029049db674658647105460d402b723e",
-  "fetchedAt": "2026-07-26T18:23:02.241Z"
+  "version": "1.2.3",
+  "updatedAt": 1790208574003,
+  "contentHash": "b10ca9b603fb633333f3456ddf687dcda048d5843ba44bb456f5a3db23bd7be3",
+  "fetchedAt": "2026-09-25T13:19:21.355Z"
 }

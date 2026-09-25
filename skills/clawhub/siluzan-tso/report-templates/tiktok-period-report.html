@@ -489,6 +489,26 @@
         flex: none;
       }
 
+      .empty-placeholder {
+        text-align: center;
+        padding: 36px 24px;
+        border: 1px dashed var(--border-strong);
+        border-radius: var(--radius-md);
+        background: var(--surface-2);
+        color: var(--text-dim);
+      }
+      .empty-placeholder strong {
+        display: block;
+        color: var(--text);
+        font-size: 0.98rem;
+        margin-bottom: 8px;
+      }
+      .empty-placeholder span {
+        font-size: 0.86rem;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
       @keyframes fadeInUp {
         from {
           opacity: 0;
@@ -800,7 +820,6 @@
             .map((r) =>
               metricRow([
                 `<td>${escapeHtml(r.campaignName || "—")}</td>`,
-                `<td>${escapeHtml(r.campaignStatusDisplay || r.status || "—")}</td>`,
                 `<td class="num">${money(r.spend, currency)}</td>`,
                 `<td class="num">${int(r.impressions)}</td>`,
                 `<td class="num">${int(r.clicks)}</td>`,
@@ -814,10 +833,10 @@
             campaignsSorted.length > 0
               ? `<div id="chart-campaigns-top" class="chart-box" style="height:280px"></div>
 <div class="table-wrap"><table>
-  <thead><tr><th>广告系列</th><th>状态</th><th class="num">消耗</th><th class="num">展示</th><th class="num">点击</th><th class="num">CTR</th><th class="num">转化</th><th class="num">CPA</th></tr></thead>
+  <thead><tr><th>广告系列</th><th class="num">消耗</th><th class="num">展示</th><th class="num">点击</th><th class="num">CTR</th><th class="num">转化</th><th class="num">CPA</th></tr></thead>
   <tbody>${campaignsBody}</tbody>
 </table></div>`
-              : '<div class="empty-note">数据不可用：campaigns 未拉取</div>';
+              : "";
 
           const adGroupsSorted = [...adGroups].sort(
             (a, b) => (Number(b.spend) || 0) - (Number(a.spend) || 0),
@@ -841,7 +860,7 @@
   <thead><tr><th>广告组</th><th>广告系列</th><th class="num">消耗</th><th class="num">点击</th><th class="num">CTR</th><th class="num">转化</th><th class="num">CPA</th></tr></thead>
   <tbody>${adGroupsBody}</tbody>
 </table></div>`
-              : '<div class="empty-note">数据不可用：ad-groups 未拉取</div>';
+              : "";
 
           const adsSorted = [...ads].sort(
             (a, b) => (Number(b.spend) || 0) - (Number(a.spend) || 0),
@@ -851,7 +870,6 @@
             .map((r) =>
               metricRow([
                 `<td>${escapeHtml(r.adName || r.title || "—")}</td>`,
-                `<td>${escapeHtml(r.adGroupName || "—")}</td>`,
                 `<td class="num">${money(r.spend, currency)}</td>`,
                 `<td class="num">${int(r.clicks)}</td>`,
                 `<td class="num">${pct(r.ctr)}</td>`,
@@ -862,29 +880,39 @@
           const adsTable =
             adsSorted.length > 0
               ? `<div class="table-wrap"><table>
-  <thead><tr><th>广告</th><th>广告组</th><th class="num">消耗</th><th class="num">点击</th><th class="num">CTR</th><th class="num">转化</th></tr></thead>
+  <thead><tr><th>广告</th><th class="num">消耗</th><th class="num">点击</th><th class="num">CTR</th><th class="num">转化</th></tr></thead>
   <tbody>${adsBody}</tbody>
 </table></div>`
-              : '<div class="empty-note">数据不可用：ads 未拉取</div>';
+              : "";
 
-          return `
-<section id="sec-campaigns">
-  ${head}
-  <div class="card">
+          const campCard = campaignsTable
+            ? `<div class="card">
     <div class="card-title-row"><h3>广告系列</h3></div>
     ${campaignsTable}
     ${analysisBlock(data.narrative?.sections?.campaigns)}
-  </div>
-  <div class="card">
+  </div>`
+            : "";
+          const groupCard = adGroupsTable
+            ? `<div class="card">
     <div class="card-title-row"><h3>广告组</h3></div>
     ${adGroupsTable}
     ${analysisBlock(data.narrative?.sections?.adGroups)}
-  </div>
-  <div class="card">
+  </div>`
+            : "";
+          const adsCard = adsTable
+            ? `<div class="card">
     <div class="card-title-row"><h3>广告（Top 30）</h3></div>
     ${adsTable}
     ${analysisBlock(data.narrative?.sections?.ads)}
-  </div>
+  </div>`
+            : "";
+          if (!campCard && !groupCard && !adsCard) return "";
+          return `
+<section id="sec-campaigns">
+  ${head}
+  ${campCard}
+  ${groupCard}
+  ${adsCard}
 </section>`;
         }
 
@@ -914,7 +942,10 @@
   <thead><tr><th>视频素材</th><th class="num">消耗</th><th class="num">展示</th><th class="num">点击</th><th class="num">CTR</th><th class="num">转化</th><th class="num">CPA</th></tr></thead>
   <tbody>${body}</tbody>
 </table></div>`
-              : '<div class="empty-note">数据不可用：videos 未拉取</div>';
+              : `<div class="empty-placeholder">
+  <strong>当前广告没有视频创意素材</strong>
+  <span>本期账户投放未包含可展示的视频/创意素材明细，因此本节无表格数据。</span>
+</div>`;
           return `
 <section id="sec-videos">
   ${head}
@@ -956,14 +987,18 @@
   <thead><tr><th>${labelHead}</th><th class="num">消耗</th><th class="num">展示</th><th class="num">点击</th><th class="num">CTR</th></tr></thead>
   <tbody>${rowsHtml(rows, labelKey)}</tbody>
 </table></div>`
-              : `<div class="card-title-row"><h3>${escapeHtml(title)}</h3></div><div class="empty-note">数据不可用：未拉取</div>`;
+              : "";
+          const genderTable = table("性别", gender, "gender", "性别");
+          const ageTable = table("年龄段", age, "ageRange", "年龄段");
+          const interestTable = table("兴趣类目", interest, "interestCategory", "兴趣类目");
+          if (!genderTable && !ageTable && !interestTable && !section) return "";
           return `
 <section id="sec-audience">
   ${head}
   <div class="card">
-    ${table("性别", gender, "gender", "性别")}
-    <div style="margin-top:16px">${table("年龄段", age, "ageRange", "年龄段")}</div>
-    <div style="margin-top:16px">${table("兴趣类目", interest, "interestCategory", "兴趣类目")}</div>
+    ${genderTable}
+    ${ageTable ? `<div style="margin-top:16px">${ageTable}</div>` : ""}
+    ${interestTable ? `<div style="margin-top:16px">${interestTable}</div>` : ""}
     ${analysisBlock(section)}
   </div>
 </section>`;

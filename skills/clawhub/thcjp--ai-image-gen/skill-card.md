@@ -1,5 +1,5 @@
 ## Description: <br>
-Ai Image Gen helps an agent generate and edit images through a configured Gemini Flash Image service, including text-to-image, image-to-image, style conversion, multiple aspect ratios, and up to 4K output. <br>
+AI Image Gen helps agents generate and edit images by preparing prompts, selecting Gemini Flash Image model variants, and saving generated image outputs locally. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, creators, and design teams use this skill to have an agent prepare prompts, select image models and dimensions, call the configured image-generation service, and return generated image files or paths for commercial creative workflows. <br>
+External users, designers, marketers, and developers use this skill to generate commercial image assets, transform reference images, choose aspect ratios and resolutions, and obtain local PNG output paths through an agent workflow. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Prompts and reference images are sent to the configured image-generation service. <br>
-Mitigation: Use the skill only with prompts and reference images that are acceptable to send to that service. <br>
-Risk: The skill requires an image-generation API key. <br>
-Mitigation: Set the API key through environment variables and avoid pasting, logging, storing, or committing secrets. <br>
-Risk: Generated image files are written to local output paths. <br>
-Mitigation: Choose explicit output paths and review them before execution to avoid overwriting local files. <br>
+Risk: Prompts and reference images may be sent to a configured Gemini-compatible image API. <br>
+Mitigation: Use the skill only with data approved for that external service, and avoid confidential prompts or images unless the service terms and data handling controls are acceptable. <br>
+Risk: The image generation API key could be exposed if entered into chat, logs, scripts, or generated image metadata. <br>
+Mitigation: Keep the API key in environment variables, do not paste it into agent prompts, and review generated commands before execution. <br>
+Risk: The artifact references a generation script that is not included in the submitted files. <br>
+Mitigation: Verify the actual runtime script and its network, file-write, and command-execution behavior before production or confidential use. <br>
+Risk: Generated image outputs are saved locally and may contain content subject to third-party service terms. <br>
+Mitigation: Choose appropriate output paths, review generated content before reuse, and confirm commercial usage rights with the image service provider. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Listing](https://clawhub.ai/thcjp/skills/ai-image-gen) <br>
-- [Clawdis Homepage](https://skillhub.cn) <br>
+- [ClawHub skill release](https://clawhub.ai/thcjp/skills/ai-image-gen) <br>
+- [Configured Gemini-compatible image API endpoint](https://code.newcli.com/gemini) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, files, JSON] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON status examples, and generated image file paths such as PNG outputs] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files] <br>
+**Output Format:** [Markdown guidance with inline shell commands and generated PNG file paths] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs depend on the configured image-generation API, selected model, prompt detail, reference image quality, and explicit local output path.] <br>
+**Other Properties Related to Output:** [May save PNG outputs locally; accepts a prompt, model identifier, output path, and optional reference image path.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

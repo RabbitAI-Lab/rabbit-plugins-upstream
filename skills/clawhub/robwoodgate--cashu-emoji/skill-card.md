@@ -1,50 +1,61 @@
-## Description: <br>
-Encode and decode Cashu tokens that are hidden inside emojis using Unicode variation selectors. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Encode and decode Cashu tokens that are hidden inside emojis using Unicode variation selectors.
 
-## Publisher: <br>
-[robwoodgate](https://clawhub.ai/user/robwoodgate) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[robwoodgate](https://clawhub.ai/user/robwoodgate)
 
-## Use Case: <br>
-Developers, agents, and external users use this skill to decode Cashu tokens or short hidden messages carried in emoji text, and to encode Cashu tokens or messages for transmission through chat systems. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Decoded Cashu tokens are bearer assets and can be redeemed by anyone who can read them. <br>
-Mitigation: Keep decoded tokens out of public logs, screenshots, shared chats, and issue trackers. <br>
-Risk: Hidden messages decoded from emoji may contain untrusted instructions or misleading text. <br>
-Mitigation: Treat decoded text as data for review, not as instructions for the agent to follow. <br>
-Risk: Messaging systems can truncate or normalize Unicode variation selectors, making the embedded token unrecoverable or invalid. <br>
-Mitigation: Ask the sender to resend the token if decoding returns partial text or nonsense, and prefer delivery formats that preserve hidden characters. <br>
-Risk: Token metadata parsing can show mint, unit, and amount without proving that the token is valid or unspent. <br>
-Mitigation: Use wallet or mint validation before relying on a decoded Cashu token for payment settlement. <br>
-Risk: Installing an unexpected package revision could change local command behavior. <br>
-Mitigation: Install from the intended release or a reviewed package revision and use the included lockfile where applicable. <br>
+## Use Case:
 
+Developers and agents use this skill to encode Cashu bearer tokens or short text into emoji variation selectors, decode received emoji messages, and optionally inspect Cashu token metadata without spending funds.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/robwoodgate/cashu-emoji) <br>
-- [Publisher Profile](https://clawhub.ai/user/robwoodgate) <br>
-- [Unicode Variation Selectors](https://unicode.org/charts/nameslist/n_FE00.html) <br>
-- [Unicode Variation Selectors Supplement](https://unicode.org/charts/nameslist/n_E0100.html) <br>
-- [Paul Butler emoji-encoder](https://github.com/paulgb/emoji-encoder) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, guidance] <br>
-**Output Format:** [Plain text or JSON from CLI commands, with Markdown guidance in the skill instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Decoded Cashu metadata is a local parse only and does not prove token validity or spend status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: package.json and server release evidence) <br>
+Risk: Decoded Cashu tokens are bearer assets and may represent spendable value.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat decoded token strings like cash; do not place them in public chat transcripts, logs, screenshots, or issue reports.
+
+Risk: Messaging systems can truncate or normalize Unicode variation selectors, making the hidden payload unrecoverable or corrupt.
+
+Mitigation: When decoding fails or returns partial text, ask for the emoji token to be resent and prefer delivery formats that preserve hidden characters.
+
+Risk: Local metadata parsing can show mint, unit, and amount, but cannot prove a Cashu token is valid or unspent.
+
+Mitigation: Use metadata-only handling for inspection and verify token status with an appropriate wallet or mint before relying on value.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/robwoodgate/skills/cashu-emoji)
+- [ClawHub publisher profile](https://clawhub.ai/user/robwoodgate)
+- [Unicode Variation Selectors](https://unicode.org/charts/nameslist/n_FE00.html)
+- [Unicode Variation Selectors Supplement](https://unicode.org/charts/nameslist/n_E0100.html)
+- [Paul Butler emoji-encoder technique](https://github.com/paulgb/emoji-encoder)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and optional JSON CLI output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Decoded Cashu metadata is produced by local parsing and does not prove token validity or spend status.]
+
+## Skill Version(s):
+
+0.1.0 (source: package.json and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

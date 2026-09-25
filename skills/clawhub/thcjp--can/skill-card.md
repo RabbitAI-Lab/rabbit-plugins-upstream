@@ -1,44 +1,59 @@
-## Description: <br>
-Can helps agents create verifiable content addresses for data-flow events using timestamp, content-hash, and human-readable name fields. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CAN（Clock Address Naming）协议 helps agents create a verifiable content-addressing index for data flows by recording timestamps, content hashes, and human-readable labels.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and agent operators use Can to label content, verify integrity, find records by hash, and maintain append-only audit trails for agent outputs, API responses, files, and messages. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill mixes a local audit-log workflow with instructions to send records, hashes, timestamps, and callback URLs to an external service without enough privacy or retention disclosure. <br>
-Mitigation: Review before installing; for sensitive material, prefer the local self-evaluation and hashing path, and only use the external service when its retention and visibility behavior is acceptable. <br>
-Risk: The external evaluation and log endpoints may expose submitted metadata or make audit records visible outside the user's environment. <br>
-Mitigation: Avoid sending confidential records, labels, hashes, timestamps, or callback URLs to the service unless the publisher and endpoint are trusted for that data. <br>
+## Use Case:
 
+Developers, automation teams, and agent users use this skill to label, verify, find, and audit agent data outputs with a three-field WHEN/WHERE/WHAT content-addressing pattern.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/can) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [Clawdis homepage](https://skillhub.cn) <br>
-- [CAN evaluate endpoint](https://xc.cx/can/evaluate) <br>
-- [CAN log endpoint](https://xc.cx/can/log) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline JSON and bash examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include CAN or NOT status results, parsed summaries, content hashes, timestamps, audit-log entries, error codes, and troubleshooting guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill mixes local-only content-addressing claims with optional use of third-party xc.cx endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use local hashing and logs when possible, and send labels or workflow metadata to xc.cx only when that service is trusted for the task.
+
+Risk: The skill declares broad read, write, and exec authority.
+
+Mitigation: Review generated commands before execution and run the skill only for explicit CAN/content-addressing tasks.
+
+Risk: Sensitive labels, hashes, workflow metadata, or API keys could be exposed if provided unnecessarily.
+
+Mitigation: Avoid sensitive labels, redact workflow metadata, and do not provide API keys unless a specific trusted integration requires them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/can)
+- [CAN evaluate endpoint](https://xc.cx/can/evaluate)
+- [CAN log endpoint](https://xc.cx/can/log)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with JSON and bash examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns task status, parsed summaries, concrete output data, and error details when a task fails.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

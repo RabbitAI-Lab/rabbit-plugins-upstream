@@ -1,41 +1,55 @@
-## Description: <br>
-Talk to your Apple Health data - ask questions about your workouts, heart rate, activity rings, and fitness trends using AI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Talk to your Apple Health data \u2014 ask questions about your workouts, heart rate, activity rings, and fitness trends using AI.
 
-## Publisher: <br>
-[nftechie](https://clawhub.ai/user/nftechie) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[nftechie](https://clawhub.ai/user/nftechie)
 
-## Use Case: <br>
-External users and agent developers use this skill to connect an AI assistant to Transition APIs for Apple Health-derived workout history, activity, heart rate, performance metrics, and coach chat workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends sensitive Apple Health-derived fitness data, profile information, and coach messages to Transition's external service. <br>
-Mitigation: Install only when that data sharing is acceptable, review Transition privacy and deletion controls, and avoid sending unnecessary medical or personal details. <br>
-Risk: Authenticated endpoints rely on a Transition API key that can expose personal fitness data if mishandled. <br>
-Mitigation: Store the API key outside source files, avoid logging it, and rotate or revoke it if it may have been exposed. <br>
+## Use Case:
 
+External users and developers use this skill to let an agent call Transition's API for Apple Health-derived workout, activity, sleep, heart-rate, and performance insights, plus structured workout generation.
 
-## Reference(s): <br>
-- [Apple Health Skill on ClawHub](https://clawhub.ai/nftechie/apple-health-skill) <br>
-- [Transition](https://www.transition.fun) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Guidance, Shell commands, API calls, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and HTTP examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses TRANSITION_API_KEY for authenticated Transition API requests; the workout-of-the-day endpoint can be used without authentication.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill sends Apple Health-derived workouts, performance metrics, profile data, chat prompts, and possibly chat history to Transition's third-party service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review Transition's privacy policy and account controls before use, and only install the skill if this data sharing is acceptable.
+
+Risk: The API key can expose personalized Apple Health and coaching data if it is leaked or retained after access is no longer needed.
+
+Mitigation: Store TRANSITION_API_KEY securely, avoid logging it, and revoke the key when access is no longer needed.
+
+## Reference(s):
+
+- [Apple Health Skill on ClawHub](https://clawhub.ai/nftechie/skills/apple-health-skill)
+- [Transition](https://www.transition.fun)
+- [Transition API base URL](https://api.transition.fun)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with HTTP API guidance and curl examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses TRANSITION_API_KEY for authenticated endpoints; one workout-of-the-day endpoint is documented as available without authentication.]
+
+## Skill Version(s):
+
+1.0.0 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

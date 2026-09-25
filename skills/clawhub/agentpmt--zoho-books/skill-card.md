@@ -1,44 +1,59 @@
-## Description: <br>
-Zoho Books helps agents use AgentPMT-hosted remote tool calls to list organizations and manage Zoho Books accounting records such as contacts, invoices, bills, expenses, payments, projects, time entries, and bank transactions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zoho Books provides AgentPMT-hosted remote tool guidance for OAuth-based access to list organizations and manage accounting resources such as contacts, invoices, bills, expenses, payments, projects, time entries, and bank reconciliation.
 
-## Publisher: <br>
-[agentpmt](https://clawhub.ai/user/agentpmt) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[agentpmt](https://clawhub.ai/user/agentpmt)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent work with Zoho Books through AgentPMT, including organization lookup, accounting record retrieval, and permission-gated writes such as invoice updates, deletes, emails, and bank matching. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write-enabled Zoho Books actions can change, delete, void, email, or reconcile financial records. <br>
-Mitigation: Start with read-only access, grant add/edit/delete permissions only when needed, and manually confirm the requested change before allowing accounting writes. <br>
-Risk: Using the wrong organization, record, or recipient can apply an accounting action to the wrong target. <br>
-Mitigation: Confirm the organization ID, record ID, recipient, and requested operation before invoice emails, voids, deletes, bank matching, or other sensitive actions. <br>
+## Use Case:
 
+Developers and agents use this skill to invoke AgentPMT-hosted Zoho Books actions for organization-scoped accounting workflows such as creating invoices, syncing contacts, recording expenses, and matching bank transactions.
 
-## Reference(s): <br>
-- [Zoho Books on ClawHub](https://clawhub.ai/agentpmt/skills/zoho-books) <br>
-- [AgentPMT Zoho Books marketplace page](https://www.agentpmt.com/marketplace/zoho-books) <br>
-- [AgentPMT account MCP/REST setup](https://clawhub.ai/agentpmt/agentpmt-account-mcp-rest-api-setup) <br>
-- [What AgentPMT is](https://clawhub.ai/agentpmt/what-is-agentpmt) <br>
-- [Generated Zoho Books schema](artifact/schema.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, API Calls, Configuration] <br>
-**Output Format:** [Markdown instructions with JSON call examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses organization-scoped Zoho Books actions with permission-gated add, edit, and delete operations; remote tool responses are JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence.release.version and SKILL.md frontmatter) <br>
+Risk: The skill can change or delete accounting data when the connected Zoho Books account has add, edit, or delete permissions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer read-only access unless write actions are required, and require human approval before creating, updating, or deleting records.
+
+Risk: The skill can change invoice status, email invoices, and match or unmatch bank transactions.
+
+Mitigation: Require human approval before changing invoice status, emailing invoices, or matching bank transactions.
+
+Risk: Setup examples include unpinned npx commands.
+
+Mitigation: Avoid the unpinned npx setup path unless the current upstream package source is trusted.
+
+## Reference(s):
+
+- [Zoho Books Schema](artifact/schema.md)
+- [AgentPMT Marketplace Page](https://www.agentpmt.com/marketplace/zoho-books)
+- [ClawHub Skill Page](https://clawhub.ai/agentpmt/skills/zoho-books)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions, API Calls]
+
+**Output Format:** [Markdown with JSON and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes action schemas, permission requirements, and organization-scoped tool call examples.]
+
+## Skill Version(s):
+
+1.0.0 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

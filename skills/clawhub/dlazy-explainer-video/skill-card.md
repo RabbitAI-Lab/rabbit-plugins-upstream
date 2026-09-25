@@ -1,45 +1,52 @@
-## Description: <br>
-Turns a document, topic, or brief into a narrated explainer video by outlining, storyboarding, producing voiceover, building, and validating the result through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns a document, topic, or brief into a narrated explainer video with outline, storyboard, voiceover, build, and validation steps.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, creators, educators, and business users can use this skill to turn source documents, reports, topics, or briefs into narrated explainer, courseware, or training videos using the dLazy hosted service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, options, and attached files may be sent to dLazy APIs or uploaded to dLazy storage. <br>
-Mitigation: Do not attach confidential documents, secrets, personal data, or regulated data unless the user is comfortable sending them to dLazy. <br>
-Risk: Installing a third-party global CLI creates persistent local software and configuration. <br>
-Mitigation: Confirm trust in the dLazy CLI and service before installing, and prefer the pinned npx invocation when a persistent global install is not needed. <br>
-Risk: The skill requires a dLazy API key saved in local configuration or passed through an environment variable. <br>
-Mitigation: Use normal secret-handling practices for the API key and rotate or revoke it from the dLazy dashboard when access should change. <br>
+## Use Case:
 
+External users and developers use this skill to ask the dLazy hosted agent to produce narrated explainer, courseware, report-broadcast, or training videos from prompts and attached files.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-explainer-video) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and dLazy CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill may continue work across project-scoped dLazy chat sessions and may upload attached local files through the dLazy CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and ClawHub release evidence) <br>
+Risk: Prompts and attached files may be sent to dLazy services, and login can store an API key locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Attach only files intended for upload, prefer npx when avoiding a persistent global CLI, and rotate or revoke API keys from the dLazy dashboard when needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-explainer-video)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill sends prompts and optional attached files to dLazy services and streams the hosted agent response back through the CLI.]
+
+## Skill Version(s):
+
+1.0.17 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

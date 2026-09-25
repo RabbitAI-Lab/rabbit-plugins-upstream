@@ -1,45 +1,62 @@
-## Description: <br>
-Automatically update Clawdbot and all installed skills once daily. Runs via cron, checks for updates, applies them, and messages the user with a summary of what changed. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automatically update Clawdbot and all installed skills once daily. Runs via cron, checks for updates, applies them, and messages the user with a summary of what changed.
 
-## Publisher: <br>
-[eohmig](https://clawhub.ai/user/eohmig) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[eohmig](https://clawhub.ai/user/eohmig)
 
-## Use Case: <br>
-Developers and operators use this skill to configure scheduled Clawdbot and skill updates, including cron setup, update commands, and daily summary reporting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Scheduled updates can automatically change Clawdbot and all installed skills without clear per-run approval. <br>
-Mitigation: Enable unattended updates only intentionally, and add a review or approval step before applying updates. <br>
-Risk: Update commands may pull unreviewed versions into the local agent environment. <br>
-Mitigation: Use allowlists, trusted channels, version pinning, backups, and rollback instructions before enabling the cron job. <br>
+## Use Case:
 
+Developers and Clawdbot users use this skill to configure a daily update routine that updates Clawdbot and installed skills, then reports what changed or failed.
 
-## Reference(s): <br>
-- [Agent Implementation Guide](references/agent-guide.md) <br>
-- [Update Summary Examples](references/summary-examples.md) <br>
-- [Clawdbot Updating Guide](https://docs.clawd.bot/install/updating) <br>
-- [ClawdHub CLI](https://docs.clawd.bot/tools/clawdhub) <br>
-- [Cron Jobs](https://docs.clawd.bot/cron) <br>
-- [Auto Updater on ClawHub](https://clawhub.ai/eohmig/skills/auto-updater) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with shell command blocks and setup guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces cron setup instructions, update commands, troubleshooting guidance, and summary message formats.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: A scheduled auto-update routine can change Clawdbot and installed skills without per-update review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer check-only or dry-run update checks before applying changes, and review update summaries promptly.
+
+Risk: A recurring cron job can continue running after the user's needs or trust assumptions change.
+
+Mitigation: Document and verify the removal path with `clawdbot cron remove "Daily Auto-Update"` or disable cron in configuration.
+
+Risk: Update failures may leave Clawdbot or skills only partially updated.
+
+Mitigation: Report partial success and errors clearly, then guide the user to manual remediation for failed components.
+
+## Reference(s):
+
+- [Clawdbot Updating Guide](https://docs.clawd.bot/install/updating)
+- [ClawdHub CLI](https://docs.clawd.bot/tools/clawdhub)
+- [Cron Jobs](https://docs.clawd.bot/cron)
+- [Agent Implementation Guide](references/agent-guide.md)
+- [Update Summary Examples](references/summary-examples.md)
+- [ClawHub Skill Page](https://clawhub.ai/eohmig/skills/auto-updater)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May configure a recurring cron job and produce update status summaries.]
+
+## Skill Version(s):
+
+1.0.0 (source: frontmatter, release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,62 @@
-## Description: <br>
-Control Windows desktop software, system hardware, serial devices, IoT endpoints, and GUI automation through standalone CLI tools. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Controls Windows desktop software, system hardware, serial devices, IoT endpoints, and GUI automation through standalone command-line tools.
 
-## Publisher: <br>
-[wangjiaocheng](https://clawhub.ai/user/wangjiaocheng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wangjiaocheng](https://clawhub.ai/user/wangjiaocheng)
 
-## Use Case: <br>
-Developers and end users use this skill to let an agent inspect and control Windows applications, processes, system settings, serial devices, smart-home APIs, and GUI workflows after appropriate confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can control desktop windows, processes, power state, network adapters, serial devices, and smart-home/API endpoints. <br>
-Mitigation: Install only when this broad control is intended, list or inspect targets before acting, and require explicit confirmation before shutdown, restart, sleep, process or window closing, network changes, POST/PUT/API service calls, and GUI typing or clicking. <br>
-Risk: Screenshots, OCR, GUI typing, and API commands can expose sensitive data or affect the wrong on-screen target. <br>
-Mitigation: Hide sensitive windows before screenshots or OCR, take a screenshot first when the target is uncertain, and avoid placing long-lived tokens in command lines or transcripts. <br>
-Risk: Several scripts can automatically install Python dependencies at first use. <br>
-Mitigation: Preinstall and review dependencies in the managed environment instead of relying on automatic installation during agent operation. <br>
+## Use Case:
 
+Developers and technically capable users use this skill to let an agent inspect and control a Windows workstation, connected serial devices, and smart-home endpoints. It is intended for workflows that require explicit confirmation before state-changing actions such as closing windows, killing processes, power operations, adapter changes, or device control.
 
-## Reference(s): <br>
-- [Windows System Controller - Command Reference](references/command_reference.md) <br>
-- [System Controller ClawHub release page](https://clawhub.ai/wangjiaocheng/system-controller) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with command examples and JSON command outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Targets Windows 10/11 and may rely on optional local dependencies for serial, GUI, OCR, and precise volume control.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Broad control over desktop windows, processes, hardware settings, network adapters, serial devices, and smart-home APIs can affect the local system or connected devices.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run the skill only in a dedicated, least-privileged environment and require explicit confirmation before state-changing actions.
+
+Risk: Screenshots and OCR output may capture sensitive information from the active desktop.
+
+Mitigation: Treat saved screenshots and OCR files as sensitive data, avoid using the skill around private content, and delete captured files when no longer needed.
+
+Risk: Home Assistant and generic HTTP commands can expose long-lived tokens or send device commands over untrusted endpoints.
+
+Mitigation: Avoid passing long-lived tokens on command lines or over HTTP; prefer short-lived credentials and trusted local endpoints.
+
+Risk: The artifact can auto-install Python packages for serial, IoT, and GUI automation support.
+
+Mitigation: Review dependency installation in a managed environment and approve required packages before operational use.
+
+## Reference(s):
+
+- [Windows System Controller - Command Reference](artifact/references/command_reference.md)
+- [ClawHub Skill Page](https://clawhub.ai/wangjiaocheng/skills/system-controller)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON or status-text command results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands target Windows 10/11 and may produce screenshots or OCR text when GUI automation is used.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

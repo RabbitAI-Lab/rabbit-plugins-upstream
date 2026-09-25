@@ -1,43 +1,55 @@
-## Description: <br>
-Detect whether an image, video, or audio file is AI-generated, including visual deepfakes and the likely generator model, and return confidence scores for threshold-based decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects whether image, video, or audio media is AI-generated, including visual deepfake signals and likely generator attribution, and returns confidence scores for thresholding.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, analysts, and other external users use this skill to check image, video, or audio media for signs of AI generation, visual deepfakes, and likely generator attribution. It is intended for media analysis workflows where a structured verdict and confidence scores help inform human review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Local images, videos, or audio files can be uploaded to dLazy hosted services for analysis. <br>
-Mitigation: Use public URLs for less sensitive material when possible, and avoid sending private, biometric, or otherwise sensitive media unless the user has accepted that data handling. <br>
-Risk: The CLI can store a dLazy API key in the user's local configuration. <br>
-Mitigation: Use a per-invocation DLAZY_API_KEY environment variable for short-lived access or log out after use when persistent local credentials are not appropriate. <br>
+## Use Case:
 
+External users and developers use this skill to ask an agent to run dLazy media detection on a single image, video, or audio input and return AI-generation, deepfake, and likely-generator confidence signals.
 
-## Reference(s): <br>
-- [Dlazy Detect on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-detect) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Text, Guidance] <br>
-**Output Format:** [JSON detection result plus a human-readable text summary] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires exactly one image, video, or audio input. Local files may be uploaded to dLazy media storage for hosted analysis; asynchronous runs may return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Risk: Local media submitted for analysis may be uploaded to dLazy storage and processed by dLazy's hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for media that is appropriate to send to dLazy, and avoid private, confidential, or biometric media unless that service use is acceptable.
+
+Risk: The dLazy API key may be saved in local CLI configuration.
+
+Mitigation: Use the DLAZY_API_KEY environment variable for per-run authentication when a persistent local credential is not desired.
+
+## Reference(s):
+
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Text, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and structured JSON result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return asynchronous task status when invoked with no-wait mode.]
+
+## Skill Version(s):
+
+1.0.19 (source: server release metadata; artifact frontmatter lists 1.0.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

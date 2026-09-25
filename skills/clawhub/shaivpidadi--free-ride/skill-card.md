@@ -1,45 +1,65 @@
-## Description: <br>
-Manages free AI models from OpenRouter for OpenClaw by ranking available free models, configuring fallback routing for rate-limit handling, and updating OpenClaw model settings. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manages free AI models from OpenRouter for OpenClaw by ranking models, configuring fallbacks for rate-limit handling, and updating OpenClaw model configuration.
 
-## Publisher: <br>
-[shaivpidadi](https://clawhub.ai/user/shaivpidadi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[shaivpidadi](https://clawhub.ai/user/shaivpidadi)
 
-## Use Case: <br>
-Developers and OpenClaw users use this skill to configure OpenRouter free models, choose a primary model, and maintain fallback model routing when rate limits or unavailable models interrupt agent work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can persistently change OpenClaw default and fallback model routing. <br>
-Mitigation: Back up ~/.openclaw/openclaw.json before use and review the model settings after running FreeRide commands. <br>
-Risk: The optional watcher may continue making OpenRouter requests and rewriting model settings until it is stopped. <br>
-Mitigation: Run freeride-watcher only when continuous background recovery is intended, monitor its state or logs, and stop the process when unattended routing changes are no longer needed. <br>
-Risk: The skill requires an OpenRouter API key. <br>
-Mitigation: Keep OPENROUTER_API_KEY private and configure it only in trusted shell or OpenClaw environments. <br>
+## Use Case:
 
+Developers and OpenClaw users use this skill to configure free OpenRouter models as primary and fallback models, reducing API costs and keeping agent sessions running through rate limits.
 
-## Reference(s): <br>
-- [ClawHub Free Ride release](https://clawhub.ai/shaivpidadi/skills/free-ride) <br>
-- [Publisher profile](https://clawhub.ai/user/shaivpidadi) <br>
-- [OpenRouter API keys](https://openrouter.ai/keys) <br>
-- [OpenClaw project](https://github.com/openclaw/openclaw) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May instruct the agent to run FreeRide CLI commands that update OpenClaw model configuration and cache model data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: ClawHub release evidence) <br>
+Risk: The skill handles an OpenRouter API key and includes unsafe secret-check instructions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a non-printing presence check for the key and avoid commands that print secrets to the terminal.
+
+Risk: The skill changes OpenClaw model behavior by editing model and fallback configuration.
+
+Mitigation: Review the target OpenClaw configuration before and after running the skill, and restart the gateway only after confirming the intended model changes.
+
+Risk: The optional watcher can run continuously in the background and automatically rotate model configuration.
+
+Mitigation: Run the watcher only when continuous health checks and automatic rotation are desired, preferably under an explicit process supervisor.
+
+Risk: The documented installer uses an unpinned @latest package reference.
+
+Mitigation: Prefer a pinned installer version for reproducible installation.
+
+## Reference(s):
+
+- [ClawHub Free Ride release page](https://clawhub.ai/shaivpidadi/skills/free-ride)
+- [Publisher profile](https://clawhub.ai/user/shaivpidadi)
+- [OpenRouter API keys](https://openrouter.ai/keys)
+- [OpenRouter API reference](https://openrouter.ai/docs/api-reference/overview#headers)
+- [OpenClaw](https://github.com/openclaw/openclaw)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May recommend commands that edit OpenClaw model configuration and use an OpenRouter API key.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

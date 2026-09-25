@@ -1,41 +1,55 @@
-## Description: <br>
-TPSCheck lets agents check UK phone numbers against TPS and CTPS and retrieve TPSCheck account usage through OOMOL's oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TPSCheck helps agents check UK phone numbers against TPS and CTPS and retrieve TPSCheck usage details through the OOMOL oo CLI connector.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to run TPSCheck phone-number screening and account-credit lookups through an OOMOL-connected TPSCheck account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses sensitive TPSCheck credentials through an OOMOL-connected account. <br>
-Mitigation: Install only when comfortable connecting TPSCheck through OOMOL, and approve account connection steps intentionally. <br>
-Risk: First-time setup includes remote oo CLI installation commands and account or billing links. <br>
-Mitigation: Review install commands before running them, and use setup or billing steps only after an auth, connection, or credit failure. <br>
+## Use Case:
 
+External users and developers use this skill to check individual or batched UK phone numbers against TPS and CTPS, and to review current TPSCheck usage and remaining request capacity.
 
-## Reference(s): <br>
-- [TPSCheck homepage](https://www.tpscheck.uk) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill metadata) <br>
+Risk: The first-time setup instructions include piping a remote installer script into the shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer step before use, prefer verified official documentation or a signed package, and avoid allowing an agent to run remote installer pipes automatically.
+
+Risk: Connector commands rely on live TPSCheck schemas and account connection state.
+
+Mitigation: Inspect the action schema before building payloads and use setup or connection steps only after an authentication or connection failure.
+
+## Reference(s):
+
+- [TPSCheck homepage](https://www.tpscheck.uk)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [ClawHub TPSCheck release](https://clawhub.ai/oomol/skills/oo-tpscheck)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown instructions with bash and JSON examples; connector actions return JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports single phone checks, batch checks for up to 100 UK phone numbers, and TPSCheck credit usage lookups.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

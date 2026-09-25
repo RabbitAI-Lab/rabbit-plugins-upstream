@@ -1,43 +1,75 @@
-## Description: <br>
-Grafana API integration with managed authentication for reading and managing dashboards, data sources, folders, annotations, alerts, and teams. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Grafana provides managed-authentication access to dashboards, folders, data sources, annotations, teams, alert rules, plugins, and organization or user information, with write operations requiring explicit confirmation.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers, SREs, and observability teams use this skill to inspect and manage Grafana dashboards, data sources, folders, annotations, teams, and alert rules through Maton's managed API gateway. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends Grafana API traffic through Maton and requires sensitive credentials. <br>
-Mitigation: Install only if you trust Maton, use a dedicated least-privilege Grafana service account token, avoid admin tokens unless required, and revoke the connection when finished. <br>
-Risk: Write-capable Grafana operations can create, update, or delete dashboards, data sources, folders, annotations, alerts, and teams. <br>
-Mitigation: Default to read-only inspection, review each proposed change, and require explicit approval with specific resource identifiers before any POST, PUT, PATCH, or DELETE request. <br>
-Risk: High-impact changes can affect monitoring and observability workflows. <br>
-Mitigation: Verify the target resource and summarize consequences before deleting dashboards, modifying alert rules, changing data sources, or reorganizing folders. <br>
+## Use Case:
 
+Developers, SREs, and observability operators use this skill to inspect and manage Grafana resources through Maton-managed authentication. It is suited for read/list workflows by default and for confirmed writes or automation involving dashboards, folders, data sources, annotations, teams, and alerting configuration.
 
-## Reference(s): <br>
-- [Grafana skill listing on ClawHub](https://clawhub.ai/byungkyu/grafana-api) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python and HTTP request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and explicit user approval before write operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Write-capable Grafana operations can modify or delete dashboards, folders, data sources, annotations, teams, and alerting configuration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege Grafana credentials and require explicit user confirmation with exact resource IDs before any write or automation.
+
+Risk: Long-lived Maton API keys can be exposed through logs, shell history, child processes, or pasted output when raw HTTP access is used.
+
+Mitigation: Prefer OAuth through the Maton CLI and operating-system credential store; if an API key is required, do not print, persist, or pass it on a command line, and rotate it if exposed.
+
+Risk: Automation triggers and hosted functions can forward operational data outside the intended Grafana workflow.
+
+Mitigation: Avoid forwarding trigger data to third-party URLs unless necessary, deploy Grafana functions with deny-all outbound networking when possible, and remove unused connections, functions, triggers, and destinations.
+
+## Reference(s):
+
+- [ClawHub Grafana Skill](https://clawhub.ai/byungkyu/skills/grafana-api)
+- [byungkyu ClawHub Profile](https://clawhub.ai/user/byungkyu)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Grafana HTTP API Documentation](https://grafana.com/docs/grafana/latest/developers/http_api/)
+- [Grafana Dashboard API](https://grafana.com/docs/grafana/latest/developers/http_api/dashboard/)
+- [Grafana Folder API](https://grafana.com/docs/grafana/latest/developers/http_api/folder/)
+- [Grafana Data Source API](https://grafana.com/docs/grafana/latest/developers/http_api/data_source/)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Google Mail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include authenticated Grafana API calls, Maton CLI commands, SDK examples, and safety guidance for write-capable operations.]
+
+## Skill Version(s):
+
+1.2.8 (source: server release evidence; artifact frontmatter version 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

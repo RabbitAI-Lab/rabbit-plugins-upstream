@@ -1,44 +1,59 @@
-## Description: <br>
-Bilibili All In One lets agents monitor Bilibili trends, download and play videos, retrieve subtitles and danmaku, track metrics, and publish videos through Bilibili APIs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A comprehensive Bilibili toolkit that integrates hot trending monitoring, video downloading, video watching/playback, subtitle downloading, and video publishing capabilities into a single skill.
 
-## Publisher: <br>
-[wscats](https://clawhub.ai/user/wscats) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wscats](https://clawhub.ai/user/wscats)
 
-## Use Case: <br>
-Developers and external agent users use this skill to automate Bilibili content workflows, including trend monitoring, video and subtitle retrieval, engagement tracking, playback metadata lookup, and authenticated publishing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Optional Bilibili session cookies provide broad account access. <br>
-Mitigation: Use a secondary account where possible, pass credentials only when needed, and keep credential persistence disabled unless there is a clear operational need. <br>
-Risk: Publishing, scheduling, draft, and edit actions can change a Bilibili account or public channel. <br>
-Mitigation: Review dry-run previews and require explicit confirmation before executing account-modifying actions. <br>
-Risk: Danmaku retrieval may expose stable pseudonymous user hashes. <br>
-Mitigation: Treat danmaku output as potentially identifying data and avoid redistributing it beyond the intended workflow. <br>
+## Use Case:
 
+External users and developers use this skill to monitor Bilibili trends, inspect and download videos or subtitles, retrieve playback data, and publish or edit Bilibili videos when they provide session cookies.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wscats/bilibili-all-in-one) <br>
-- [Publisher profile](https://clawhub.ai/user/wscats) <br>
-- [Project homepage](https://github.com/wscats/bilibili-all-in-one) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, files, shell commands, code, configuration, guidance] <br>
-**Output Format:** [JSON result objects, Markdown guidance, shell commands, Python snippets, and local media or subtitle files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write downloaded videos, audio, subtitle files, and optional credential files when persistence is explicitly enabled.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.24 (source: server release evidence and artifact/skill.json) <br>
+Risk: The skill can use full Bilibili session cookies, and server security evidence warns those cookies may be attached to broader network requests than the documentation promises.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill without credentials when possible; provide cookies only for publishing or high-quality downloads and prefer a throwaway Bilibili account.
+
+Risk: Credential persistence can leave session cookies on disk when BILIBILI_PERSIST or equivalent persistence is enabled.
+
+Mitigation: Avoid BILIBILI_PERSIST unless persistence is required, and clear persisted credentials after use.
+
+Risk: The security verdict is suspicious, so network behavior deserves review before deployment.
+
+Mitigation: Run the skill in an isolated environment and review outbound traffic during evaluation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wscats/skills/bilibili-all-in-one)
+- [ClawHub publisher profile](https://clawhub.ai/user/wscats)
+- [Project homepage from ClawHub metadata](https://github.com/wscats/bilibili-all-in-one)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Markdown, JSON-like API results, shell command snippets, configuration guidance, and local media or subtitle files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May require Bilibili session cookies for publishing and high-quality downloads; downloaded media and subtitles are written to local output directories.]
+
+## Skill Version(s):
+
+1.0.24 (source: server release evidence and artifact/skill.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

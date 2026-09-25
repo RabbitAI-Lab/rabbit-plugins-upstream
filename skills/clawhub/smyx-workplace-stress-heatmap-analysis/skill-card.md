@@ -1,43 +1,64 @@
-## Description: <br>
-Analyzes fixed-camera workplace video or video URLs to produce anonymous, zone-level group stress indices, heatmap colors, trend summaries, and manager-facing recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes fixed-camera workplace video or images to produce anonymous, zone-level group stress indices, heatmap colors, trend signals, manager suggestions, and report links.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Workplace health, facilities, and operations teams use this skill to analyze office-area camera footage and review aggregate stress distribution by workstation zone. It is intended for organizational health monitoring and environment optimization, not individual employee identification, diagnosis, or performance evaluation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill processes sensitive employee camera footage or video URLs through cloud APIs and may create or reuse persistent operator identity and token state. <br>
-Mitigation: Before installation, confirm employee notice and consent, an approved workplace-camera stress-inference policy, explicit approval for sending video or video URLs plus operator identifiers to lifeemergence.com services, and reviewed retention, access control, and token storage expectations. <br>
-Risk: Stress heatmap outputs could be misused as individual performance-management evidence or psychological diagnosis. <br>
-Mitigation: Treat outputs as sensitive organizational health data, limit use to aggregate workplace-health monitoring, and prohibit individual identification, diagnosis, or performance evaluation. <br>
+## Use Case:
 
+Operations, HR, workplace health, and facilities teams use this skill to review anonymous, area-level stress heatmaps from office-camera footage and identify zones that may need workload, environment, or wellbeing follow-up.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-workplace-stress-heatmap-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON containing structured stress-analysis results, heatmap/report links, and historical report listings.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are intended to be aggregate and zone-level; areas with fewer than three people are documented as insufficient sample cases.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter lists 1.0.6) <br>
+Risk: The skill processes workplace video and sends analysis requests to cloud services, which can involve sensitive employee data even when outputs are intended to be anonymous and aggregate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Deploy only with explicit employee notice and consent, documented data-processing terms, and clear retention and deletion policies for uploaded video, reports, and report links.
+
+Risk: The security evidence flags user identity, credentials, cloud traffic, and local token/profile persistence as areas requiring review.
+
+Mitigation: Confirm the vendor and configured endpoints before installation, require HTTPS production endpoints, and remove or protect any local token or profile persistence before using real workplace video.
+
+Risk: Small groups or poorly scoped workstation zones could make aggregate stress outputs functionally identifiable.
+
+Mitigation: Enforce the documented minimum-sample behavior so zones with fewer than three observable people return only insufficient-sample status and no stress index.
+
+Risk: Visual stress cues such as frowning or posture can be ambiguous and should not be treated as individual diagnosis or performance evidence.
+
+Mitigation: Use outputs only as area-level operational signals, combine them with voluntary employee feedback where appropriate, and prohibit individual profiling, diagnosis, or performance evaluation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-workplace-stress-heatmap-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [Workplace stress heatmap API documentation](artifact/references/api_doc.md)
+- [Common analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, files]
+
+**Output Format:** [Markdown or JSON text, with optional saved output files and report export links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs zone-level aggregate stress metrics, heatmap colors, trend summaries, manager suggestions, and historical report records.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release evidence; artifact frontmatter says 1.0.14)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

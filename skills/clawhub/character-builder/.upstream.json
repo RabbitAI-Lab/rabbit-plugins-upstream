@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/character-builder",
   "slug": "character-builder",
   "ownerHandle": null,
-  "version": "1.0.5",
-  "updatedAt": 1783698582868,
-  "contentHash": "f4f2bf5e60a1450e493800741f90b8777eb20691d9faebe065cb98c3884a0b67",
-  "fetchedAt": "2026-07-26T18:17:03.153Z"
+  "version": "1.0.15",
+  "updatedAt": 1790074002669,
+  "contentHash": "52cd27c9203f0e0429860ddaddbd30296509233c8e68f4ef4efa5487f4338656",
+  "fetchedAt": "2026-09-25T13:38:42.111Z"
 }

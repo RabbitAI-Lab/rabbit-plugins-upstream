@@ -1,38 +1,53 @@
-## Description: <br>
-Generates local 12-16 character random passwords, evaluates password strength, and saves password history as Markdown. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates 12-16 character random passwords with letters, numbers, and symbols, with basic strength information and optional local history output.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Individuals and developers use this skill to generate local random passwords for personal accounts, temporary credentials, and development or test environments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated passwords are automatically saved locally in plaintext. <br>
-Mitigation: Avoid generating real account passwords unless you know where memory/passwords.md is stored, disable history when possible, and delete the file when saved passwords are no longer needed. <br>
+## Use Case:
 
+External users and agent operators use this skill to generate individual passwords for personal accounts, check basic password strength, and optionally record generated values locally.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/password-generator-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown instructions with Python and shell examples; generated passwords are shown as text and saved to memory/passwords.md.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runs locally with Python 3.8+ and no API key; generated passwords may be written to a local plaintext history file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Generated passwords may be written to local plaintext files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Disable history or remove local password logging; store credentials in a password manager or OS secret store instead of memory/passwords.md.
+
+Risk: The skill includes broader API, file, command, and security-workflow language than its password-generation purpose requires.
+
+Mitigation: Review and remove unrelated sections before deployment; limit allowed tools and commands to the password generation workflow.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/password-generator-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with Python and shell command snippets; generated password records may be Markdown.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generates 12-16 character passwords and may write generated passwords to memory/passwords.md if the workflow is followed.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

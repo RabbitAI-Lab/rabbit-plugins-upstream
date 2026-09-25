@@ -1,43 +1,54 @@
-## Description: <br>
-This skill helps agents operate a unified local Web dashboard for task queues, system metrics, network status, log filtering, and CLI status checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+统一 Web 仪表盘管理任务队列、监控系统指标与查看网络状态。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers, operators, and individual users use this skill to launch a local dashboard, inspect CPU, memory, load, task queues, and network state, filter logs, and run quick CLI status checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can involve local command execution and dashboard service startup. <br>
-Mitigation: Review commands before execution and use it only where starting local services and running CLI tools is acceptable. <br>
-Risk: The skill can inspect logs, system state, and potentially sensitive local data. <br>
-Mitigation: Avoid providing sensitive logs, credentials, or private configuration unless the data flow is understood. <br>
-Risk: The skill describes queue-clearing operations and callback or API request behavior without clear confirmation steps. <br>
-Mitigation: Ask for explicit user confirmation before clearing queues or sending callbacks and API requests. <br>
+## Use Case:
 
+External users, developers, and operations teams use this skill to ask an agent for local dashboard/status workflows such as task queue checks, system metrics, logs, and network status. The artifact positions it for personal and lightweight operational monitoring scenarios.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/glitch-dashboard-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include local dashboard commands, configuration snippets, and structured status or log output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill has inconsistent scope and privacy claims, so users could over-trust it for broader analytics or operational data handling than the evidence supports.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for local dashboard and status tasks until the publisher clarifies feature scope, external-service behavior, and data handling.
+
+Risk: The artifact includes command-execution workflows and configuration examples that may expose local status, logs, environment details, or operational data.
+
+Mitigation: Review commands before execution, avoid broad analytics requests, and do not provide API keys or sensitive operational data unless the publisher documents how data is sent, cached, and protected.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/glitch-dashboard-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include dashboard commands, local status summaries, task queue results, log filtering guidance, and configuration snippets.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact frontmatter says 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

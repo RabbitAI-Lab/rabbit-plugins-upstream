@@ -1,40 +1,55 @@
-## Description: <br>
-Configures an agent to manage Google Calendar events and Google Meet spaces through the gogcli Calendar MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides an MCP server for managing Google Calendar events and Google Meet spaces through gogcli.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Developers and agent users use this skill to connect a Google account to a Calendar MCP server so an agent can schedule, list, create, update, delete, and respond to calendar events, and create or manage Google Meet spaces. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The configured MCP server can modify calendar and meeting data, including deleting events, responding to invitations, updating Meet settings, and ending conferences. <br>
-Mitigation: Install it only for a Google account the agent is intended to manage and require clear user confirmation before destructive or externally visible calendar and Meet actions. <br>
+## Use Case:
 
+External users and developers use this skill to connect an agent to a Google account for calendar event management, invitation responses, Meet space operations, and related calendar queries.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/gogcli-mcp-calendar) <br>
-- [gogcli](https://github.com/openclaw/gogcli) <br>
-- [gogcli-mcp](https://github.com/chrischall/gogcli-mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON configuration snippets and command-line setup guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an authenticated gogcli installation, Node.js 18 or later, and a selected Google account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.8.0 (source: server release evidence) <br>
+Risk: Calendar and Meet tools can perform high-impact actions such as deleting events, deleting owned secondary calendars, moving events, or ending active conferences without enough enforced confirmation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated Google account or narrow OAuth scopes where possible, set GOG_READONLY=1 for read-only use, and require human review before enabling destructive actions.
+
+Risk: Raw run tools and stored Google or Zoom credentials can expand the impact of mistakes or misuse in a trusted host environment.
+
+Mitigation: Avoid raw run tools unless necessary, restrict GOG_FILE_ROOTS, and store credentials only in environments trusted to access the connected accounts.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/chrischall/skills/gogcli-mcp-calendar)
+- [gogcli Project](https://github.com/openclaw/gogcli)
+- [Model Context Protocol](https://modelcontextprotocol.io)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, API Calls, Configuration]
+
+**Output Format:** [MCP tool results as text or JSON, plus setup configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may reflect live Google Calendar, Google Meet, or Zoom-connected account state depending on configured credentials and tool inputs.]
+
+## Skill Version(s):
+
+4.5.0 (source: server release evidence and package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

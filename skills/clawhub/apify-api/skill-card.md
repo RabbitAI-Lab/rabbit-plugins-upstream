@@ -1,49 +1,74 @@
-## Description: <br>
-Apify API integration with managed authentication for running web scrapers and managing actors, datasets, key-value stores, schedules, and related Apify resources. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Apify provides a managed-authentication integration for using Maton to run Apify actors and web scrapers, manage datasets, key-value stores, request queues, schedules, and webhooks.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to interact with Apify through Maton-managed authentication, run or monitor actors, and manage datasets, storage, request queues, schedules, and webhooks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The Maton API key grants access to the connected Apify account. <br>
-Mitigation: Keep MATON_API_KEY secret and do not place it in client-side code, shared logs, or public repositories. <br>
-Risk: Actor runs can spend Apify credits and destructive API calls can modify or delete account resources. <br>
-Mitigation: Confirm actor runs, deletions, and other write operations with the user before execution. <br>
-Risk: Schedules and webhooks can continue operating after the conversation ends. <br>
-Mitigation: Review existing schedules and webhooks before changes, and confirm creation or modification of persistent resources. <br>
-Risk: Multiple Apify connections can cause actions to target the wrong account. <br>
-Mitigation: Specify the intended Maton-Connection header whenever more than one connection exists. <br>
+## Use Case:
 
+Developers and automation users use this skill to interact with Apify from an agent through Maton-managed authentication. It supports read-first API workflows, approved write operations, actor runs, storage management, schedules, webhooks, hosted functions, and triggers.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/apify-api) <br>
-- [Maton](https://maton.ai) <br>
-- [Apify API Reference](https://docs.apify.com/api/v2) <br>
-- [Apify Actors Documentation](https://docs.apify.com/actors) <br>
-- [Apify Storage Documentation](https://docs.apify.com/storage) <br>
-- [Apify Schedules Documentation](https://docs.apify.com/schedules) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline code blocks, HTTP examples, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and network access; outputs may include Apify resource identifiers, connection headers, and account-specific API responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The skill can perform high-impact account actions through the user's Apify connection, including writes, actor runs, schedules, webhooks, hosted functions, and trigger destinations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval after checking the account, resource IDs, payload, destination host, and whether the automation persists after the chat ends.
+
+Risk: Long-lived API keys can be exposed if raw HTTP access is used instead of the Maton CLI OAuth flow.
+
+Mitigation: Prefer OAuth, avoid printing or persisting keys, pass secrets only through the process environment when raw HTTP is necessary, and rotate any exposed key.
+
+Risk: Persistent schedules, webhooks, hosted functions, and triggers can keep operating after the conversation ends.
+
+Mitigation: Create persistent automation only when the user asks for it by name, confirm the exact destination and scope, and include cleanup or deletion when the task is complete.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/apify-api)
+- [Maton Homepage](https://maton.ai)
+- [Apify API Reference](https://docs.apify.com/api/v2)
+- [Apify Actors API](https://docs.apify.com/actors)
+- [Apify Storage API](https://docs.apify.com/storage)
+- [Apify Schedules API](https://docs.apify.com/schedules)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Time Trigger Reference](references/time/triggers.md)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, code blocks, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include Maton CLI commands, raw HTTP examples for environments without the CLI, and least-privilege approval guidance for account actions.]
+
+## Skill Version(s):
+
+1.2.4 (source: ClawHub release evidence; skill frontmatter metadata is 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

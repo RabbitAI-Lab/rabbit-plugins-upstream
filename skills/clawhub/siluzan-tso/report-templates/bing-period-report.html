@@ -306,11 +306,11 @@
       }
       .chart-box {
         position: relative;
-        height: 300px;
-        margin: 10px 0 4px;
+        height: 400px;
+        margin: 16px 0 8px;
       }
       .chart-box.sm {
-        height: 220px;
+        height: 320px;
       }
       .chart-grid-2 {
         display: grid;
@@ -472,6 +472,9 @@
         color: var(--muted);
         flex: none;
       }
+      .empty-note + .table-wrap {
+        margin-top: 10px;
+      }
 
       @keyframes fadeInUp {
         from {
@@ -535,7 +538,7 @@
           border-radius: 12px;
         }
         .chart-box {
-          height: clamp(220px, 56vw, 260px);
+          height: clamp(280px, 62vw, 360px);
         }
         .chart-grid-2 {
           grid-template-columns: 1fr;
@@ -757,11 +760,7 @@
             .map((def, i) => {
               const v = kpiVal(kpis, def.key);
               const p =
-                def.key === "spend"
-                  ? prev.spend != null
-                    ? prev.spend
-                    : prev.cost
-                  : prev[def.key];
+                def.key === "spend" ? (prev.spend != null ? prev.spend : prev.cost) : prev[def.key];
               const color = PALETTE[i % PALETTE.length];
               const delta = deltaKeys.has(def.key) ? deltaLabel(v, p) : "";
               return `<div class="kpi" style="--kpi-color:${color}">
@@ -837,8 +836,8 @@
           const table =
             sorted.length > 0
               ? `<div class="chart-grid-2">
-  <div id="chart-devices-pie" class="chart-box" style="height:280px"></div>
-  <div id="chart-devices-bar" class="chart-box" style="height:280px"></div>
+  <div id="chart-devices-pie" class="chart-box" style="height:380px"></div>
+  <div id="chart-devices-bar" class="chart-box" style="height:380px"></div>
 </div>
 <div class="table-wrap"><table>
   <thead><tr><th>设备</th><th class="num">消耗</th><th class="num">展示</th><th class="num">点击</th><th class="num">CTR</th><th class="num">平均CPC</th><th class="num">转化</th><th class="num">CPA</th></tr></thead>
@@ -876,7 +875,7 @@
             .join("");
           const table =
             sorted.length > 0
-              ? `<div id="chart-geographic" class="chart-box" style="height:320px"></div>
+              ? `<div id="chart-geographic" class="chart-box" style="height:420px"></div>
 <div class="card-title-row"><h3>地域 Top 10</h3><span class="hint">共 ${rows.length} 个国家/地区，按消耗排序</span></div>
 <div class="table-wrap"><table>
   <thead><tr><th>国家/地区</th><th class="num">消耗</th><th class="num">展示</th><th class="num">点击</th><th class="num">CTR</th><th class="num">平均CPC</th><th class="num">转化</th><th class="num">CPA</th></tr></thead>
@@ -967,7 +966,7 @@
             .join("");
           const table =
             sorted.length > 0
-              ? `<div id="chart-campaigns" class="chart-box" style="height:280px"></div>
+              ? `<div id="chart-campaigns" class="chart-box" style="height:380px"></div>
 <div class="card-title-row"><h3>系列 Top 10</h3><span class="hint">共 ${rows.length} 个系列，按消耗排序</span></div>
 <div class="table-wrap"><table>
   <thead><tr><th>广告系列</th><th>状态</th><th class="num">消耗</th><th class="num">展示</th><th class="num">点击</th><th class="num">CTR</th><th class="num">转化</th><th class="num">CPA</th></tr></thead>
@@ -1026,6 +1025,10 @@
           const currency = currencyOf(data);
           const section = data.narrative?.sections?.ads;
           const sorted = topBySpend(rows, 10);
+          const usedFallback = sorted.some((r) => r.adTitleFallback);
+          const titleNotice = usedFallback
+            ? `<div class="empty-note">Bing 响应式搜索广告的报表不返回创意标题，本列用「系列 / 广告组」名称代替。</div>`
+            : "";
           const body = sorted
             .map(
               (r) => `<tr>
@@ -1042,6 +1045,7 @@
           const table =
             sorted.length > 0
               ? `<div class="card-title-row"><h3>广告 Top 10</h3><span class="hint">共 ${rows.length} 条广告，按消耗排序</span></div>
+${titleNotice}
 <div class="table-wrap"><table>
   <thead><tr><th>广告标题</th><th>广告组</th><th>广告类型</th><th class="num">消耗</th><th class="num">点击</th><th class="num">CTR</th><th class="num">转化</th></tr></thead>
   <tbody>${body}</tbody>
@@ -1144,7 +1148,8 @@
               return `<div class="rec-card">${num}<div class="rec-body">${title}<div class="rec-content">${escapeHtml(r?.content || "")}</div></div></div>`;
             })
             .join("");
-          const body = recs.length > 0 ? `<div class="recommendation-list">${cards}</div>` : emptyNoteHtml();
+          const body =
+            recs.length > 0 ? `<div class="recommendation-list">${cards}</div>` : emptyNoteHtml();
           return `
 <section id="sec-recommendations">
   ${sectionHead("10", "优化建议汇总", "跨维度归纳优先级，须与各 section 分析一致")}
@@ -1175,11 +1180,12 @@
               { trigger: "item", formatter: (p) => `${p.name}: ${money(p.value, currency)}` },
               TOOLTIP_STYLE,
             ),
-            legend: { bottom: 0, textStyle: { color: AXIS_COLOR } },
+            legend: { bottom: 4, left: "center", textStyle: { color: AXIS_COLOR } },
             series: [
               {
                 type: "pie",
-                radius: ["42%", "70%"],
+                radius: ["36%", "54%"],
+                center: ["50%", "44%"],
                 itemStyle: { borderColor: "#ffffff", borderWidth: 3, borderRadius: 8 },
                 data: items.map((d, i) => ({
                   name: d[nameKey] || "—",
@@ -1203,7 +1209,7 @@
               { trigger: "axis", formatter: (p) => money(p[0].value, currency) },
               TOOLTIP_STYLE,
             ),
-            grid: { left: 140, right: 30, top: 16, bottom: 20 },
+            grid: { left: 140, right: 36, top: 28, bottom: 36 },
             xAxis: styleAxis({ type: "value" }),
             yAxis: styleAxis({
               type: "category",
@@ -1276,7 +1282,13 @@
             echarts
               .init(campaignsEl)
               .setOption(
-                hBarOption(campaigns, "campaignName", currency, "rgba(99,102,241,0.55)", PALETTE[1]),
+                hBarOption(
+                  campaigns,
+                  "campaignName",
+                  currency,
+                  "rgba(99,102,241,0.55)",
+                  PALETTE[1],
+                ),
               );
           }
 

@@ -1,45 +1,63 @@
-## Description: <br>
-Skill Release Plus helps developers package and publish an agent skill to ClawHub, skillhub.cn, GitHub Releases, or a trusted custom hook from one release command. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+skill-release-plus helps agents package, optionally sign, and publish skills to ClawHub, skillhub.cn, GitHub Releases, or custom hook targets.
 
-## Publisher: <br>
-[songhonglei](https://clawhub.ai/user/songhonglei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[songhonglei](https://clawhub.ai/user/songhonglei)
 
-## Use Case: <br>
-Developers and skill maintainers use this skill to prepare a clean skill package, check publishing readiness, and release the same skill to one or more supported registries with a consistent version and changelog. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can publish skill contents to external services and create or push GitHub repositories and releases. <br>
-Mitigation: Use --check and --dry-run before publishing, select only the intended target, and verify the resolved GitHub owner and repository before using github-release or --target all. <br>
-Risk: Custom user-hook targets execute user-supplied scripts with local environment access. <br>
-Mitigation: Run user-hook targets only from scripts that have been reviewed and are fully trusted. <br>
-Risk: Publishing tokens are required for external services. <br>
-Mitigation: Keep tokens narrowly scoped, provide only the tokens needed for the selected target, and avoid broad default target sets. <br>
+## Use Case:
 
+Developers and release engineers use this skill to publish agent skills across multiple registries from one workflow, including dry runs and deterministic package-only builds for governance review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/songhonglei/skill-release-plus) <br>
-- [Documented source repository](https://github.com/Songhonglei/build-better-skills/tree/main/skills/skill-release-plus) <br>
-- [ClawHub CLI package](https://www.npmjs.com/package/clawhub) <br>
-- [SkillHub.cn](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, files, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands; the release script emits JSON status reports and tar.gz package files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May publish to external services when invoked without --dry-run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata and SKILL.md Version field) <br>
+Risk: Verified packaging and publishing flaws could expose files the user did not intend to release.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the exact skill directory before publishing and prefer package-only or dry-run flows before any network publish.
+
+Risk: Publishing untrusted skill trees, especially those containing symlinks, may release unexpected content.
+
+Mitigation: Avoid untrusted skill trees and use the deterministic package-only flow, which rejects symlinks according to the artifact documentation.
+
+Risk: User-hook targets execute external scripts and can publish to arbitrary destinations.
+
+Mitigation: Use user-hook scripts only when they are fully trusted and review their behavior before running them with release metadata or package paths.
+
+Risk: Long-lived publishing tokens stored in configuration files increase credential exposure if the environment is compromised.
+
+Mitigation: Use short-lived or scoped tokens and avoid storing long-lived publishing tokens in the global .env file.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/songhonglei/skills/skill-release-plus)
+- [ClawHub CLI package](https://www.npmjs.com/package/clawhub)
+- [skillhub.cn](https://skillhub.cn)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and release configuration details]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce or invoke release packages, manifests, and per-target publishing results through the bundled scripts.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

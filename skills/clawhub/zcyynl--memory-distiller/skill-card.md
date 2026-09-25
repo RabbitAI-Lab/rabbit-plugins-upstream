@@ -1,43 +1,58 @@
-## Description: <br>
-Memory Distiller automatically distills conversation insights, corrections, and preferences into durable memory for OpenClaw agents. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OpenClaw's subconscious. Automatically distills conversation insights, corrections, and preferences into durable memory. The agent that learns from every session so you never have to repeat yourself.
 
-## Publisher: <br>
-[zcyynl](https://clawhub.ai/user/zcyynl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[zcyynl](https://clawhub.ai/user/zcyynl)
 
-## Use Case: <br>
-External users and developers use this skill to help OpenClaw agents retain reusable corrections, preferences, and lessons from conversations without manually editing memory files. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill may silently save selected conversation details into long-term memory. <br>
-Mitigation: Use it only when automatic memory is desired, and regularly inspect MEMORY.md, USER.md, and dated memory files for private, incorrect, or unwanted entries. <br>
-Risk: Broad triggers may capture preferences, corrections, or insights that the user did not intend to persist. <br>
-Mitigation: Avoid sensitive sessions with this skill enabled, and delete or edit unwanted entries after reviewing the memory files. <br>
-Risk: Stored memories can influence future agent behavior if they are outdated or inaccurate. <br>
-Mitigation: Keep the quality gate strict and update stale memory entries rather than duplicating them. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zcyynl/memory-distiller) <br>
-- [Claudeception inspiration](https://github.com/disler/claudeception) <br>
-- [claw-multi-agent](https://github.com/zcyynl/claw-multi-agent) <br>
+## Use Case:
 
+External OpenClaw users and agent developers use this skill to turn durable corrections, preferences, and insights from conversations into persistent memory entries. It is intended to reduce repeated mistakes by updating long-term memory only when a reusable, actionable rule passes the documented quality gate.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, files, guidance] <br>
-**Output Format:** [Markdown memory entries written to MEMORY.md, USER.md, or memory/YYYY-MM-DD.md, with optional short text confirmation] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Auto-triggered writes are silent; explicit memory requests receive a brief confirmation.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata; artifact frontmatter lists 1.0.0) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill can silently save broad conversation-derived memories that affect future sessions.
+
+Mitigation: Install only when automatic persistent memory is desired, and regularly review MEMORY.md, USER.md, and dated memory files.
+
+Risk: Sensitive information could be captured if a conversation includes secrets or personal data while the skill is active.
+
+Mitigation: Avoid sharing passwords, tokens, API keys, identification numbers, bank details, or sensitive third-party information during active use.
+
+Risk: Installing with an unpinned @latest command can make the installed package version less explicit.
+
+Mitigation: Prefer a pinned or otherwise verified ClawHub installer version for controlled environments.
+
+## Reference(s):
+
+- [Memory Distiller ClawHub page](https://clawhub.ai/zcyynl/skills/memory-distiller)
+- [Claudeception inspiration](https://github.com/disler/claudeception)
+- [claw-multi-agent](https://github.com/zcyynl/claw-multi-agent)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Configuration, Guidance]
+
+**Output Format:** [Markdown memory entries and concise user-facing status text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes structured memory entries to MEMORY.md, USER.md, or dated memory files when trigger and quality checks pass.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata; artifact frontmatter lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,57 @@
-## Description: <br>
-Temporary real-time chat rooms for AI agents. Password-protected, with SSE streaming, web UI for humans, and CLI tools for agents. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Temporary real-time chat rooms for AI agents. Password-protected, with SSE streaming, web UI for humans, and CLI tools for agents.
 
-## Publisher: <br>
-[awlevin](https://clawhub.ai/user/awlevin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[awlevin](https://clawhub.ai/user/awlevin)
 
-## Use Case: <br>
-Developers and agents use this skill to create or join temporary password-protected chat rooms for real-time coordination, with browser access for humans and CLI/API access for agents. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The shown uv command appears to reference an unpinned package that may not match the reviewed artifact. <br>
-Mitigation: Confirm and pin the intended package before running `uv run --with agent-chat`. <br>
-Risk: A tunneled chat room can expose messages outside the local environment. <br>
-Mitigation: Use a strong unique room password, avoid sharing secrets, and stop the server or tunnel when the room is no longer needed. <br>
-Risk: Passing the room password in a URL can leak it through browser history, logs, or shared links. <br>
-Mitigation: Prefer the `X-Room-Password` header when using the API. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/awlevin/agent-chat) <br>
-- [Source link listed in SKILL.md](https://github.com/Olafs-World/agent-chat) <br>
+## Use Case:
 
+Developers and agent operators use this skill to create temporary password-protected chat rooms where agents and humans can exchange messages in real time.
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Guidance, Configuration] <br>
-**Output Format:** [Markdown with bash command blocks and an API endpoint table] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires uv; room access uses a password header or query parameter.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill runs an external package through uv.
+
+Mitigation: Install it only in environments where running the agent-chat package is acceptable, and prefer isolated environments for use.
+
+Risk: Room passwords can be exposed through command history, copied invite text, or URL query parameters.
+
+Mitigation: Use low-value temporary room passwords and avoid putting reusable secrets in shell history or URLs.
+
+Risk: Internet-exposed temporary chat rooms can receive messages from anyone with the room URL and password.
+
+Mitigation: Share invites narrowly, rotate room passwords between sessions, and close rooms when collaboration ends.
+
+## Reference(s):
+
+- [Agent Chat skill page](https://clawhub.ai/awlevin/skills/agent-chat)
+- [Publisher profile](https://clawhub.ai/user/awlevin)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash commands and endpoint notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes commands for hosting, joining, sending, and listening to chat rooms.]
+
+## Skill Version(s):
+
+0.1.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -4,11 +4,11 @@ Stand up a recurring TikTok genre monitor and read its discovery signals: trendi
 
 ## User Prompt
 
-"Track the progressive house scene on TikTok — what sounds and hashtags are blowing up, and which small creators are breaking out?"
+"Track the progressive house scene on TikTok: what sounds and hashtags are blowing up, and which small creators are breaking out?"
 
 ## Agent Steps
 
-1. Create the genre monitor. Use 3-7 specific multi-word keywords that all describe the SAME genre (synonyms/sub-scenes). Hashtag-style tokens are fine — `#progressivehouse` and `progressive house` resolve to the same keyword.
+1. Create the genre monitor. Use 7-12 specific multi-word keywords that all describe the SAME genre (synonyms/sub-scenes); `POST /v1/agents/suggest-keywords` (free) drafts them from the intent. Write multi-word tags as words: a leading `#` is stripped but tags are not split, so `#progressivehouse` searches `progressivehouse`, not `progressive house`.
 
 ```bash
 curl -X POST https://api.virlo.ai/v1/agents \
@@ -16,15 +16,16 @@ curl -X POST https://api.virlo.ai/v1/agents \
   -H "Content-Type: application/json" \
   -d '{
     "is_recurring": true,
-    "intent": "track the progressive house scene on TikTok — breakout sounds, hashtags, and small creators",
+    "intent": "Track the progressive house scene on TikTok: breakout sounds, hashtags, and small creators, not house cleaning or real estate",
     "name": "Progressive House Scene",
-    "keywords": ["progressive house", "#melodichouse", "melodic techno", "afterhours set", "organic house"],
+    "keywords": ["progressive house", "melodic house", "melodic techno", "afterhours set", "organic house", "progressive house dj set", "melodic house mix"],
     "platforms": ["tiktok"],
-    "cadence": "weekly"
+    "cadence": "weekly",
+    "exclude_keywords": ["mortgage", "renovation", "cleaning"]
   }'
 ```
 
-2. The first run queues immediately. Poll every ~60s until `finalized: true` (~15-20 min) — don't loop tightly:
+2. The first run starts immediately and is billed like every run. Poll every 30-60s until `finalized: true` (usually under 20 min; half of runs collect in under ~8). Don't loop tightly:
 
 ```bash
 curl "https://api.virlo.ai/v1/agents/{id}" \
@@ -46,7 +47,7 @@ curl "https://api.virlo.ai/v1/agents/{id}/hashtags?sort=growth&limit=20" \
 curl "https://api.virlo.ai/v1/agents/{id}/creators/outliers?order_by=rising&follower_tier=micro" \
   -H "Authorization: Bearer $VIRLO_API_KEY"
 
-# Genre norms — what "good" looks like per follower tier
+# Genre norms: what "good" looks like per follower tier
 curl "https://api.virlo.ai/v1/agents/{id}/benchmarks" \
   -H "Authorization: Bearer $VIRLO_API_KEY"
 
@@ -68,10 +69,10 @@ curl -G "https://api.virlo.ai/v1/sounds/{sound_id}" \
   -d resolve=true
 ```
 
-5. Summarize: the sound to ride this week, the hashtags heating up, the rising micro-creators to seed/collab with (and how they compare to the genre norm), and confirm the weekly monitor will keep this fresh — and self-optimize as it learns the scene.
+5. Summarize: the sound to ride this week, the hashtags heating up, the rising micro-creators to seed/collab with (and how they compare to the genre norm), and confirm the weekly monitor will keep this fresh: and self-optimize as it learns the scene.
 
 ## Total Cost
 
-Free to create the monitor; each weekly run is billed like a search ($0.50/run). Every discovery read above is free. `/v1/sounds/breakout` is $0.25; `?resolve=true` on a sound adds $0.10 only the first time that sound is resolved.
+Free to create the monitor; each weekly run is billed like a search ($0.50/run, about $2.00 to $2.50 a month), starting with the first run. Every discovery read above is free. `/v1/sounds/breakout` is $0.25; a sound detail read is $0.05, and `?resolve=true` adds $0.10 only the first time that sound is resolved.
 
-> **Legacy note:** the old `POST /v1/comet` + `/v1/comet/:id/…` reads still work but are deprecated (removed Aug 3, 2026).
+> **Legacy note:** the old `POST /v1/comet` + `/v1/comet/:id/…` reads still respond but are deprecated; don't build on them.

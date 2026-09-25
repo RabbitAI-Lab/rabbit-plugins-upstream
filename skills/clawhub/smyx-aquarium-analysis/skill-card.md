@@ -1,47 +1,63 @@
-## Description: <br>
-Analyzes aquarium pet image or video files and URLs to produce aquatic pet health findings, possible disease warnings, care suggestions, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes aquarium pet videos or video URLs through a vendor service and returns health observations, potential disease warnings, and care suggestions.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and aquarium caretakers use this skill to check videos or images of aquatic pets such as goldfish, koi, betta, shrimp, crab, and turtles for health indicators. The output is a health-reference report with observations and care suggestions, not a substitute for professional veterinary diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Aquatic pet media or media URLs are sent to the Lifeemergence analysis service. <br>
-Mitigation: Submit only media that is acceptable to transmit to that service, and review the service and skill privacy expectations before use. <br>
-Risk: The skill can create or reuse an internal identity and store account tokens locally. <br>
-Mitigation: Review the workspace data directory, including the SQLite user database and `smyx-api-key.txt`, before and after use; isolate or clear that data when identity reuse is not desired. <br>
-Risk: Historical report access is account-linked cloud data rather than a purely local report list. <br>
-Mitigation: Confirm the expected account context before querying history and avoid sharing workspaces across users who should not see the same report history. <br>
-Risk: Health findings may be incomplete or incorrect and are not veterinary diagnosis. <br>
-Mitigation: Use reports as screening guidance only and consult a qualified aquatic veterinarian for diagnosis or treatment decisions. <br>
+## Use Case:
 
+Aquarium owners and caretakers use the skill to review videos of fish and other aquatic pets for possible health concerns and to retrieve prior reports. Its findings are informational and do not replace a veterinarian's diagnosis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-aquarium-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Guidance] <br>
-**Output Format:** [Markdown text with structured JSON report content and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save output to a user-specified file; results depend on remote analysis service responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter reports 1.0.8) <br>
+Risk: Aquarium videos or video URLs are sent to a vendor service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share media only with the owner's consent and review the vendor's data handling before use.
+
+Risk: The skill may create or reuse a service identity and store authentication tokens in the workspace.
+
+Mitigation: Use a trusted workspace, restrict access to stored credentials, and review account creation before running the skill.
+
+Risk: Broad history triggers may query cloud report history unexpectedly.
+
+Mitigation: Confirm the user's intent before requesting historical reports.
+
+Risk: The aquarium analysis command contains an autism-analysis scenario mismatch.
+
+Mitigation: Confirm the requested analysis type and review the result before relying on the report.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/smyx-sunjinhui/skills/smyx-aquarium-analysis)
+- [Aquarium analysis API reference](references/api_doc.md)
+- [Skill introduction](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Text or JSON health reports and Markdown links to historical reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports may include health observations, warnings, care suggestions, and report links.]
+
+## Skill Version(s):
+
+1.0.14 (source: ClawHub release metadata; bundled SKILL.md states 1.0.17)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

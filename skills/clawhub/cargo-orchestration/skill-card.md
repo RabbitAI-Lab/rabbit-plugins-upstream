@@ -1,35 +1,65 @@
-## Description: <br>
-Cargo Orchestration is an agent skill release on ClawHub; local source evidence was unavailable to characterize its behavior further. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents discover and run Cargo actions, workflows, and batches, build orchestration graphs, and inspect runtime results.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Developers and operators can use this skill when they need agent guidance related to cargo orchestration workflows. The available workspace evidence does not identify more specific tasks or execution capabilities. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
+Developers and Cargo workspace operators use this skill to discover connector actions, run or schedule workflows, test and edit node graphs, and inspect execution history. It also guides users through sampling and approving large batches before full enrollment.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Guidance] <br>
-**Output Format:** [Markdown] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [None] <br>
+Global
 
-## Skill Version(s): <br>
-1.5.1 (source: target metadata) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Actions may run in the wrong workspace or with broader access than intended.
+
+Mitigation: Confirm the active workspace with `cargo-ai whoami` and use least-privilege or test credentials before making changes.
+
+Risk: A batch or empty filter may process every matching record and incur unexpected costs.
+
+Mitigation: Sample 10–20 records, check the record count and credit estimate, and obtain explicit approval before full enrollment; avoid empty filters unless intentional.
+
+Risk: Uploaded files and signed download URLs may expose sensitive workspace data.
+
+Mitigation: Handle uploaded data and signed URLs as sensitive and limit their distribution.
+
+Risk: Installing the CLI from a moving latest version may change its behavior.
+
+Mitigation: Pin the `@cargo-ai/cli` version when possible.
+
+## Reference(s):
+
+- [Cargo Orchestration release on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo-orchestration)
+- [Cargo skills homepage (listed in release metadata)](https://github.com/getcargohq/cargo-skills)
+- [Node selection guidance](references/node-selection.md)
+- [Node graph reference](references/nodes.md)
+- [Batch polling reference](references/polling.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Markdown]
+
+**Output Format:** [Markdown with Cargo CLI commands and optional JSON or Mermaid snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include workflow or batch results returned by the Cargo CLI.]
+
+## Skill Version(s):
+
+1.13.0 (source: skill frontmatter and ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,55 @@
-## Description: <br>
-Structured decision support with self-improving local memory that helps users compare options, analyze risk and benefit, and retrospect on past decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides structured decision support that learns a user's decision style, risk profile, and framework preferences while helping with multi-option tradeoffs, risk/benefit analysis, time-sensitive decisions, and retrospectives.
 
-## Publisher: <br>
-[0xneosoul](https://clawhub.ai/user/0xneosoul) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[0xneosoul](https://clawhub.ai/user/0xneosoul)
 
-## Use Case: <br>
-External users and agent operators use this skill to get framework-driven help with multi-option, high-stakes, or time-sensitive decisions while maintaining a local decision-memory profile and retrospective history. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses persistent local decision memory, which may contain personal preferences, retrospective notes, or sensitive business context. <br>
-Mitigation: Install only when persistent decision memory is desired, review ~/decision-making/ periodically, and avoid storing secrets, medical details, financial specifics, or confidential business information. <br>
-Risk: Optional SOUL.md or HEARTBEAT.md snippets can enable proactive cross-session decision follow-up. <br>
-Mitigation: Add those snippets only when proactive behavior is wanted, and remove or disable them when follow-up should remain manual. <br>
-Risk: Decision guidance can be misleading when key assumptions, constraints, or user preferences are missing. <br>
-Mitigation: Use the skill's confidence labels, explicit assumptions, and multi-option tradeoff framing before treating its analysis as decision support. <br>
+## Use Case:
 
+External ClawHub users and developers use this skill to structure decisions, compare tradeoffs, surface assumptions, track decision outcomes, and improve future decision support from locally stored preferences and retrospectives.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/0xneosoul/neosoul-decision-agent) <br>
-- [Skill homepage](https://clawic.com/skills/decision-making) <br>
-- [Skill definition](artifact/SKILL.md) <br>
-- [Security boundaries](artifact/boundaries.md) <br>
-- [Setup guide](artifact/setup.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with local shell-command snippets and file templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Maintains optional local state under ~/decision-making/ when installed and used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill persistently stores decision habits, risk profile, framework preferences, and decision records in ~/decision-making/, which may contain sensitive personal or business context.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when local persistent decision memory is desired, periodically inspect or delete ~/decision-making/, and avoid storing credentials, medical details, exact financial data, third-party sensitive information, or location patterns.
+
+Risk: The setup flow can propose edits to global agent steering files such as SOUL.md, AGENTS.md, and HEARTBEAT.md, which may affect future agent behavior beyond one conversation.
+
+Mitigation: Review each proposed steering change before applying it and consider skipping global steering integration when the decision-support behavior should stay project-scoped.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/0xneosoul/skills/neosoul-decision-agent)
+- [Publisher profile](https://clawhub.ai/user/0xneosoul)
+- [Skill homepage](https://clawic.com/skills/decision-making)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with structured decision analyses, confidence tags, local file templates, and occasional shell command snippets.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses local persistent state under ~/decision-making/ for decision preferences, framework choices, decision records, retrospectives, and heartbeat markers.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
