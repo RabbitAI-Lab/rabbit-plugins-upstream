@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-auth",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-auth",
+  "branch": "main",
+  "pushedAt": "2026-09-25T10:10:05Z",
+  "contentHash": "b279df9bd03774a11b7df611f38645087c1d3805663ebaf73e587be4c6fe3772",
+  "fetchedAt": "2026-09-25T12:52:30.749Z"
+}
