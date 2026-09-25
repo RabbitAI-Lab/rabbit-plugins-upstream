@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/bids",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/bids",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/bids",
+  "branch": "main",
+  "pushedAt": "2026-09-25T08:28:52Z",
+  "contentHash": "3f6f6c76298a32be10005c469c8ad284b10f81a369794ea6b2f9084b72917e42",
+  "fetchedAt": "2026-09-25T12:50:00.958Z"
+}

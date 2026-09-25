@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/models/huggingface-hub",
+  "identifier": "official/mlops/models/huggingface-hub",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/models/huggingface-hub",
+  "branch": "main",
+  "pushedAt": "2026-09-25T11:14:59Z",
+  "contentHash": "d6dd4e8baefab2af0cc419a196a5feb1fe59e1e40c0710f6a68fbd668c9b82f4",
+  "fetchedAt": "2026-09-25T12:51:18.191Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/nnsight",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/nnsight",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/nnsight",
+  "branch": "main",
+  "pushedAt": "2026-09-25T08:28:52Z",
+  "contentHash": "9d1cfe99c48e64eb6811c8bc12bbc733814e4d5d1ef6ca758f8d53d5e71b276e",
+  "fetchedAt": "2026-09-25T12:50:01.088Z"
+}

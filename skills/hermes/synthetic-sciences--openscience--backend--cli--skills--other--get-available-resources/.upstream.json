@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/other/get-available-resources",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/other/get-available-resources",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/other/get-available-resources",
+  "branch": "main",
+  "pushedAt": "2026-09-25T08:28:52Z",
+  "contentHash": "104caf7780ac0fb7dcdb51fb4feee60e92a4715c5bf1ea67f915e61dbba4917b",
+  "fetchedAt": "2026-09-25T12:50:01.026Z"
+}

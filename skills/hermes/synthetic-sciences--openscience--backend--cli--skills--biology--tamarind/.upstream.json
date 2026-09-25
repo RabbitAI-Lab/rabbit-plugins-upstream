@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/tamarind",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/tamarind",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/tamarind",
+  "branch": "main",
+  "pushedAt": "2026-09-25T08:28:52Z",
+  "contentHash": "c92229c641c856ca3918e00eb7471401c323dbea5fbb746755a22bb4234029ea",
+  "fetchedAt": "2026-09-25T12:50:01.172Z"
+}

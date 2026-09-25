@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/i4h-workflow-finetune",
+  "identifier": "NVIDIA/skills/skills/i4h-workflow-finetune",
+  "repo": "NVIDIA/skills",
+  "path": "skills/i4h-workflow-finetune",
+  "branch": "main",
+  "pushedAt": "2026-09-25T03:14:56Z",
+  "contentHash": "aa17d2689e852809a4843746c6dbd85205fea8eae50b36cbc60ff7f095938055",
+  "fetchedAt": "2026-09-25T12:49:56.773Z"
+}

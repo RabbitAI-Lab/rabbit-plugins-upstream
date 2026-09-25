@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/cloud-compute/runpod",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/cloud-compute/runpod",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/cloud-compute/runpod",
+  "branch": "main",
+  "pushedAt": "2026-09-25T08:28:52Z",
+  "contentHash": "cf8ff9acb9f1667787a4680a16f261cd6a9a8d44b699ad069d8ac17d637904d9",
+  "fetchedAt": "2026-09-25T12:50:01.149Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pathogen-variant-surveillance",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pathogen-variant-surveillance",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pathogen-variant-surveillance",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "4990042b844ce5fd1081486a865c0f89b53c765d426f489f20d66fe2521353a6",
+  "fetchedAt": "2026-09-25T12:50:11.566Z"
+}
