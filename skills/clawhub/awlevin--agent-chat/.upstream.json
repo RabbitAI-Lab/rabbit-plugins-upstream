@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agent-chat",
   "slug": "agent-chat",
   "ownerHandle": "awlevin",
-  "version": "0.1.0",
-  "updatedAt": 1778989429534,
-  "contentHash": "5cace51ebbe8a138ab31f07dbd83278dd472cd6ed81d8b09143e7e99f69de4aa",
-  "fetchedAt": "2026-07-26T18:06:34.629Z"
+  "version": "1.0.2",
+  "updatedAt": 1790017209872,
+  "contentHash": "38fe91c721c17a83cff48e6ee1380bb0656fd752add92cced480bd2bc1cba81d",
+  "fetchedAt": "2026-09-25T13:52:04.035Z"
 }

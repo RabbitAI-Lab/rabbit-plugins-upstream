@@ -1,49 +1,73 @@
-## Description: <br>
-MailerLite API integration with managed OAuth for managing email subscribers, groups, campaigns, automations, forms, fields, segments, and webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+MailerLite API integration with managed OAuth for managing email subscribers, groups, campaigns, automations, forms, fields, segments, and webhooks.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to connect an agent to a MailerLite account through Maton-managed OAuth and perform subscriber, group, campaign, automation, form, segment, field, and webhook operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform real MailerLite account-changing actions such as sends, deletes, webhook changes, automation changes, and subscriber changes. <br>
-Mitigation: Require explicit user confirmation before any create, update, delete, send, schedule, webhook, automation, or subscriber-change action. <br>
-Risk: The skill requires sensitive credentials and proxies access through Maton-managed OAuth. <br>
-Mitigation: Keep MATON_API_KEY private and install only when the user trusts Maton to proxy the connected MailerLite account. <br>
-Risk: Multiple MailerLite connections can cause requests to affect the wrong account. <br>
-Mitigation: Use the Maton-Connection header when more than one MailerLite account is connected. <br>
+## Use Case:
 
+External users and developers use this skill to operate MailerLite through Maton, including subscriber management, group and campaign workflows, automation setup, forms, segments, fields, and webhooks. It is also useful when an agent needs to propose authenticated MailerLite API calls or user-approved hosted automation around MailerLite data.
 
-## Reference(s): <br>
-- [ClawHub MailerLite skill page](https://clawhub.ai/byungkyu/mailerlite) <br>
-- [Related API Gateway skill](https://clawhub.ai/byungkyu/api-gateway) <br>
-- [Maton](https://maton.ai) <br>
-- [Maton settings](https://maton.ai/settings) <br>
-- [MailerLite API Documentation](https://developers.mailerlite.com/docs/) <br>
-- [MailerLite Subscribers API](https://developers.mailerlite.com/docs/subscribers.html) <br>
-- [MailerLite Groups API](https://developers.mailerlite.com/docs/groups.html) <br>
-- [MailerLite Campaigns API](https://developers.mailerlite.com/docs/campaigns.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, API Calls, Configuration] <br>
-**Output Format:** [Markdown with inline bash, Python, JavaScript, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a valid MailerLite OAuth connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill requires authorization to a MailerLite account through Maton.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use OAuth where possible, connect only the intended account, and confirm connection creation with the user before proceeding.
+
+Risk: Write and delete operations can change subscriber records, groups, campaigns, automations, forms, fields, segments, or webhooks.
+
+Mitigation: Default to read and list calls, then obtain explicit user approval for each POST, PUT, PATCH, or DELETE with the target resource and payload summarized.
+
+Risk: Webhooks, trigger destinations, and hosted functions can create persistent automation that continues forwarding or changing data after setup.
+
+Mitigation: Treat each automation component as a separate approval step, document the destination or function behavior, and remove unused automation when the task is complete.
+
+Risk: Raw API responses and event payloads may contain personal or business data.
+
+Mitigation: Return only fields needed for the task, avoid logging full payloads, and treat third-party content as untrusted data rather than agent instructions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/mailerlite)
+- [Maton homepage](https://maton.ai)
+- [MailerLite API Documentation](https://developers.mailerlite.com/docs/)
+- [MailerLite Subscribers API](https://developers.mailerlite.com/docs/subscribers.html)
+- [MailerLite Groups API](https://developers.mailerlite.com/docs/groups.html)
+- [MailerLite Campaigns API](https://developers.mailerlite.com/docs/campaigns.html)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Time Trigger Reference](references/time/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash, JSON, Python, and Node code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are intended to guide authenticated MailerLite API calls, Maton connection setup, and user-approved automation.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,40 +1,49 @@
-## Description: <br>
-Helps developers generate and lightly validate Kubernetes YAML manifests for common resources such as Deployments, Services, ConfigMaps, Secrets, Ingresses, Jobs, PVCs, and Namespaces. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Kubernetes YAML manifest generation tool that supports common resource templates and basic validation.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and DevOps engineers use this skill to draft Kubernetes YAML manifests, create common application-stack resources, and review generated manifests before applying them to a cluster. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated Kubernetes manifests may be incorrect, incomplete, or unsuitable for a target cluster. <br>
-Mitigation: Review generated manifests, keep outputs in a clean or version-controlled directory, and run dry-run validation before applying them. <br>
-Risk: Secret manifests can expose sensitive values if generated or stored carelessly. <br>
-Mitigation: Inspect Secret manifests carefully and avoid committing real credentials or applying them without review. <br>
+## Use Case:
 
+Developers and DevOps engineers use this skill to generate Kubernetes YAML manifests for common resources, application stacks, and dry-run validation workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/k8s-devops-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with YAML and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose or write Kubernetes manifest files when the agent has file-write access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and server release evidence) <br>
+Risk: The skill requests read and command execution access while its instructions include broad file, API, network, and generic development behavior beyond Kubernetes manifest generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installing, keep execution limited to the Kubernetes YAML generation or validation task, and do not allow arbitrary commands, external services, or real secrets unless the exact command and data flow have been checked.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/k8s-devops-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with Kubernetes YAML and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce Kubernetes resource manifests, validation summaries, and operational guidance.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

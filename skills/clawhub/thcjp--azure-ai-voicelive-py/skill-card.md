@@ -1,5 +1,5 @@
 ## Description: <br>
-Helps developers build Azure VoiceLive real-time voice AI applications with WebSocket streaming, audio transcription, session management, VAD, function calling, authentication, and voice/model selection. <br>
+Guides agents through building Azure VoiceLive Python applications for realtime bidirectional voice interaction, streaming audio, transcription, session management, voice activity detection, function calling, and Azure or API-key authentication. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to design and troubleshoot Azure VoiceLive Python applications for voice assistants, customer-service conversations, real-time translation, meeting transcription, and telephony voice workflows. <br>
+Developers and engineers use this skill to plan and implement Azure VoiceLive SDK integrations for realtime voice assistants, customer-service conversations, live translation, meeting transcription, and telephony-style IVR workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill handles sensitive voice and transcript data. <br>
-Mitigation: Avoid recording or streaming sensitive conversations without consent, and apply the organization's data handling and retention controls. <br>
-Risk: Azure credentials may grant access to Cognitive Services resources. <br>
-Mitigation: Use dedicated Azure credentials with least privilege, prefer managed identity where practical, and keep API keys out of source control. <br>
-Risk: Callback URLs can expose results to unintended systems if misconfigured. <br>
-Mitigation: Use only callback URLs that the deploying organization controls and trusts. <br>
+Risk: Generated examples or commands could make changes outside the intended project. <br>
+Mitigation: Review any commands before running them and avoid letting generated examples write files or execute shell commands outside the project you are working on. <br>
+Risk: Azure credentials could be exposed if copied into code, logs, or version control. <br>
+Mitigation: Keep Azure keys in environment variables or use managed identity, and review generated examples before storing or sharing them. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/azure-ai-voicelive-py) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
+- [ClawHub publisher profile](https://clawhub.ai/user/thcjp) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with Python examples and inline shell commands] <br>
+**Output Format:** [Markdown guidance with Python and shell code blocks] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces implementation guidance, configuration patterns, and troubleshooting steps for Azure VoiceLive applications.] <br>
+**Other Properties Related to Output:** [May include Azure SDK setup steps, environment-variable configuration, realtime audio handling examples, troubleshooting guidance, and security notes.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+1.0.3 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

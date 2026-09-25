@@ -1,43 +1,57 @@
-## Description: <br>
-Get the weather — current conditions, forecasts, and historical data for any location. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Get the weather - current conditions, forecasts, and historical data for any location.
 
-## Publisher: <br>
-[tongguanghai](https://clawhub.ai/user/tongguanghai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tongguanghai](https://clawhub.ai/user/tongguanghai)
 
-## Use Case: <br>
-External users and agents use this skill to answer weather questions for named places, postal codes, or coordinates, including current conditions, forecasts, historical weather, air quality, and practical travel or clothing guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Weather queries may disclose the requested location to Open-Meteo services. <br>
-Mitigation: Avoid submitting sensitive locations unless sharing them with the weather API is acceptable. <br>
-Risk: Weather and lifestyle guidance may be incomplete or stale for high-impact decisions. <br>
-Mitigation: Use official local alerts and professional judgment for safety-critical travel or severe-weather decisions. <br>
+## Use Case:
 
+External users and developers use this skill to ask an agent for current, forecast, historical, and air-quality weather information for named places, postal codes, or coordinates. It also supports weather-aware lifestyle advice such as clothing, travel, UV, rain, and severe-weather guidance.
 
-## Reference(s): <br>
-- [Open-Meteo Forecast API](https://api.open-meteo.com/v1/forecast) <br>
-- [Open-Meteo Geocoding API](https://geocoding-api.open-meteo.com/v1/search) <br>
-- [Open-Meteo Air Quality API](https://air-quality-api.open-meteo.com/v1/air-quality) <br>
-- [Open-Meteo Historical Weather API](https://archive-api.open-meteo.com/v1/archive) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown weather summaries with structured conditions, forecasts, advice, and warnings] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May adapt language and temperature units based on the queried location.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Weather requests may send queried places or coordinates to Open-Meteo APIs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid precise private locations when that is sensitive, or use coarser locations and preferred language handling.
+
+Risk: Weather summaries and lifestyle advice can be incomplete or unsuitable for safety-critical decisions.
+
+Mitigation: Check authoritative local alerts before travel, outdoor work, or severe-weather response.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/tongguanghai/skills/weather)
+- [Open-Meteo Forecast API](https://api.open-meteo.com/v1/forecast)
+- [Open-Meteo Geocoding API](https://geocoding-api.open-meteo.com/v1/search)
+- [Open-Meteo Air Quality API](https://air-quality-api.open-meteo.com/v1/air-quality)
+- [Open-Meteo Historical Weather API](https://archive-api.open-meteo.com/v1/archive)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, API Calls, Guidance]
+
+**Output Format:** [Markdown or plain text weather summaries with current conditions, forecast details, and practical recommendations.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May adapt language and temperature units by region.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

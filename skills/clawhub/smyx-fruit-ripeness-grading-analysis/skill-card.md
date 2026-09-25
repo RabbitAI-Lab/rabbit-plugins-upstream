@@ -1,44 +1,56 @@
-## Description: <br>
-Grades tomato and strawberry ripeness from fruit images or videos by detecting color, colored-area ratio, gloss, and relative size, then returns maturity grades and harvest-window guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered fruit ripeness grading for tomatoes and strawberries that analyzes images or video for fruit color, colored-area ratio, gloss, and relative size, then returns maturity grades and harvest guidance.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Growers, greenhouse operators, home gardeners, and produce cooperatives use this skill to assess tomato or strawberry ripeness from submitted media and receive structured grading plus harvest-timing guidance. Agents can invoke it for image or video analysis, report generation, and cloud report-history lookup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Submitted fruit images, videos, or URLs may be processed by configured LifeEmergence cloud services. <br>
-Mitigation: Use only media appropriate for external processing, and avoid sensitive content until the publisher documents retention, deletion, and account controls. <br>
-Risk: The skill can silently create or reuse a local workspace identity and link cloud report history to that identity. <br>
-Mitigation: Review identity and report-state behavior before installation, and run in a dedicated workspace when separation from other activity matters. <br>
-Risk: Evidence.security marks this release as suspicious because account creation, token storage, report retention, and leftover pet/video-analysis references need review. <br>
-Mitigation: Install only after reviewing the publisher documentation and configured service endpoints, and reassess after those behaviors are clarified or cleaned up. <br>
+## Use Case:
 
+External growers, greenhouse operators, home gardeners, and agricultural cooperatives use this skill to grade tomato or strawberry ripeness from fruit images or videos. It helps identify harvest timing by returning structured maturity classifications, visual analysis results, recommendations, and report links.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-fruit-ripeness-grading-analysis) <br>
-- [Skill usage demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](artifact/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON-oriented structured analysis reports, with optional Markdown tables for report history] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can return ripeness grades, harvest recommendations, report links, and saved report output when an output path is supplied.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata and target metadata; artifact frontmatter states 1.0.5) <br>
+Risk: The release evidence reports cloud identity use, local token storage, history lookup, and plaintext development HTTP endpoints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review carefully before installing and avoid private media or account-sensitive workflows unless the publisher provides production HTTPS-only configuration, documents cloud uploads and report-history behavior, and provides controls to delete stored local tokens and identity data.
+
+Risk: Ripeness analysis is decision support and may not satisfy commercial grading standards on its own.
+
+Mitigation: Use results as harvest guidance and verify commodity-grade decisions against applicable enterprise or market standards.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-fruit-ripeness-grading-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [API Interface Documentation](artifact/references/api_doc.md)
+- [Analysis API Documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and JSON-style structured analysis reports, with optional report-link tables for historical results.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local file input, URL input, optional output file writing, and history-list retrieval through cloud API calls.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release metadata; artifact frontmatter reports 1.0.13)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

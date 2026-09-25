@@ -1,45 +1,65 @@
-## Description: <br>
-Connects an AI agent to Danube's growing marketplace of services and tools through a single API key so the agent can discover, search, and execute available tools. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Governed tool access for AI agents: one Danube API key lets an agent search, inspect, and execute an organization's tools and a catalog of services over MCP or curl, with confirmation guidance for actions that write, send, spend, store credentials, or delete.
 
-## Publisher: <br>
-[danube](https://clawhub.ai/user/danube) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[danube](https://clawhub.ai/user/danube)
 
-## Use Case: <br>
-Developers and agent operators use this skill to connect an AI agent to Danube's marketplace, discover available services and tools, execute selected tools, and guide users through credential requirements. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The Danube API key can grant user-scoped read, execute, and write access through marketplace tools. <br>
-Mitigation: Keep the API key private, scoped, and revocable; review each discovered tool's purpose and required parameters before running it. <br>
-Risk: Marketplace tools can include operations that write or delete user-scoped resources. <br>
-Mitigation: Confirm user intent before executing tools that modify resources, and inspect returned schemas and parameters before execution. <br>
-Risk: External service credentials may be required for some tools. <br>
-Mitigation: Direct users to configure credentials in the Danube dashboard and retry only after authorization is complete. <br>
+## Use Case:
 
+Developers and employees use this skill to give an agent governed access to Danube-discovered tools, service schemas, execution APIs, workflow operations, wallet controls, and troubleshooting guidance. It is intended for tasks that need tool discovery, tool execution, REST or MCP setup, credential configuration, and careful reporting of results.
 
-## Reference(s): <br>
-- [Danube homepage](https://danubeai.com) <br>
-- [Danube documentation](https://docs.danubeai.com) <br>
-- [Danube dashboard](https://danubeai.com/dashboard) <br>
-- [ClawHub skill page](https://clawhub.ai/danube/skills/tools-marketplace) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline bash and JSON configuration blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires curl and a user-scoped DANUBE_API_KEY for marketplace access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-8.0.13 (source: server release metadata) <br>
+Risk: The skill can broker access to broad external tools and organization-specific services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a scoped Danube API key and search, inspect, and report the exact tool and parameters before execution.
+
+Risk: Tool calls may write, send, delete, spend funds, store credentials, change limits, or run workflows.
+
+Mitigation: Get explicit user confirmation before these actions, before any batch execution, and before storing credentials or changing wallet and spending settings.
+
+Risk: Danube profile data and past-call examples can contain personal or task-specific information.
+
+Mitigation: Apply least-data handling: read only what the task needs and do not forward unrelated profile data or copied example values into third-party tool parameters.
+
+Risk: Paid tools, rate limits, and plan caps can cause refusals or unexpected cost-related decisions.
+
+Mitigation: Read pricing and limit messages carefully, tell the user the cost or limit that applies, and do not retry or raise limits unless the user asks for that specific action.
+
+## Reference(s):
+
+- [Danube OpenClaw guide](https://docs.danubeai.com/sdk/openclaw)
+- [Danube REST API reference](references/rest-api.md)
+- [Danube troubleshooting](references/troubleshooting.md)
+- [ClawHub skill listing](https://clawhub.ai/danube/skills/tools-marketplace)
+- [Danube MCP server](https://mcp.danubeai.com/mcp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with curl commands, JSON examples, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires DANUBE_API_KEY for authenticated Danube calls; curl is required for the REST workflow, and MCP setup is optional.]
+
+## Skill Version(s):
+
+8.1.12 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

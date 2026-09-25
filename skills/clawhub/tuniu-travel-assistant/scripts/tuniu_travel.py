@@ -15,7 +15,7 @@ _ALLOWED_PROXY_HOSTS = [
 ]
 
 PROXY_URL = os.environ.get("PROXY_URL", "")
-PROXY_TOKEN = os.environ.get("PROXY_TOKEN", "tp_8k2mX9vQ4z")
+PROXY_TOKEN = os.environ.get("PROXY_TOKEN", "")
 
 
 def _validate_proxy_url(url):

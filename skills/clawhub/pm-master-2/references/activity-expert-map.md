@@ -35,55 +35,55 @@ When no signal is found, domain = `generic` and roles fall back to cross-cutting
 ## 2. Activity Type → Role (keyword routing, by domain)
 
 Routing is **two-tier**: (1) if a domain is known, its domain-specific role keywords win; (2) otherwise
-cross-cutting keywords apply; (3) ambiguous words fall back to a neutral role (e.g. "model/设计" → `solution-architect`).
+cross-cutting keywords apply; (3) ambiguous words fall back to a neutral role (e.g. "model/design" → `solution-architect`).
 Representative mappings (full set in `role_catalog.py`):
 
-| Activity / deliverable keywords (CN/EN) | domain | dispatch role role_id |
+| Activity / deliverable keywords (EN) | domain | dispatch role role_id |
 |------------------------------|--------|------------------|
-| 建模 / model / schema / ERD / 主题域 | data-platform | `data-architect` |
-| 迁移 / ETL / load / 数据管道 | data-platform | `etl-engineer` |
-| 治理 / 元数据 / 血缘 / 审计 | data-platform | `data-governance-lead` |
-| 脱敏 / 隐私 / PII / 加密 / 合规 | data-platform / cybersecurity | `data-security-engineer` / `privacy-engineer` |
-| 架构设计 / 模块 / 系统设计 | software-dev | `software-architect` |
-| 后端 / 服务端 / API 实现 | software-dev | `backend-engineer` |
-| 前端 / 界面 / UI | software-dev | `frontend-engineer` |
-| 全栈 / fullstack | software-dev | `fullstack-engineer` |
-| 移动端 / iOS / Android | software-dev | `mobile-engineer` |
-| 云架构 / landing zone | cloud-infra | `cloud-architect` |
-| 可靠性 / SRE / 容灾 | cloud-infra | `sre-engineer` |
-| 平台工程 / DevOps / CI-CD | cloud-infra | `platform-engineer` / `devops-engineer` |
-| 网络 / VPC / DNS | cloud-infra | `network-engineer` |
-| 大模型 / LLM / RAG / 微调 | ai-ml | `llm-engineer` |
-| 模型训练 / 特征工程 / ML | ai-ml | `ml-engineer` |
-| 模型部署 / 监控 / MLOps | ai-ml | `mlops-engineer` |
-| 渗透 / 零信任 / 安全加固 | cybersecurity | `security-engineer` |
-| 应用安全 / SAST / DAST | cybersecurity | `appsec-engineer` |
-| 安全运营 / SOC / 威胁检测 | cybersecurity | `secops-engineer` |
-| 产品规划 / roadmap / 需求管理 | product | `product-manager` |
-| backlog / 产品负责人 | product | `product-owner` |
-| 用户体验 / UX / 原型 | product | `ux-designer` |
-| 测试 / UAT / 质量 | qa (or cross-cutting `qa-lead`) | `qa-engineer` |
-| 自动化测试 / 测试框架 | qa | `test-automation-engineer` |
-| 性能测试 / 压测 | qa | `performance-engineer` |
-| 集成 / ESB / 中间件 / 对接 | integration | `integration-engineer` |
-| API 设计 / 网关 | integration | `api-engineer` |
-| ERP 实施 / 业务流程 / blueprint | erp | `erp-consultant` |
-| ERP 开发 / 二次开发 | erp | `erp-developer` |
-| 报表 / dashboard / BI | biz-analytics | `bi-engineer` |
-| 指标 / 指标体系 / marts | biz-analytics | `analytics-engineer` |
-| 培训 / 赋能 / 课程 | cross-cutting | `enablement-lead` |
-| 基础设施 / 安装 / 环境 / 部署 | cross-cutting | `infra-engineer` |
-| SME / 业务知识 / 源系统 | cross-cutting | `domain-sme` |
-| 测试 / UAT / 质量 (generic) | cross-cutting | `qa-lead` |
-| 需求 / 用户故事 / 规格 | cross-cutting | `ba` |
-| 变更 / CCB | cross-cutting | `change-manager` |
-| 蓝图 / 集成 / 方案 (program) | cross-cutting | `solution-architect` |
-| charter / RACI / 沟通 / 状态 / 风险 / 排期骨架 | PM-generalist | existing (planner/risk/stakeholder/…) |
+| modeling / model / schema / ERD / subject-domain | data-platform | `data-architect` |
+| migration / ETL / load / data-pipeline | data-platform | `etl-engineer` |
+| governance / metadata / lineage / audit | data-platform | `data-governance-lead` |
+| desensitization / privacy / PII / encryption / compliance | data-platform / cybersecurity | `data-security-engineer` / `privacy-engineer` |
+| architecture-design / module / system-design | software-dev | `software-architect` |
+| backend / server-side / API-implementation | software-dev | `backend-engineer` |
+| frontend / UI / interface | software-dev | `frontend-engineer` |
+| fullstack | software-dev | `fullstack-engineer` |
+| mobile / iOS / Android | software-dev | `mobile-engineer` |
+| cloud-architecture / landing-zone | cloud-infra | `cloud-architect` |
+| reliability / SRE / disaster-recovery | cloud-infra | `sre-engineer` |
+| platform-engineering / DevOps / CI-CD | cloud-infra | `platform-engineer` / `devops-engineer` |
+| network / VPC / DNS | cloud-infra | `network-engineer` |
+| LLM / RAG / fine-tuning | ai-ml | `llm-engineer` |
+| model-training / feature-engineering / ML | ai-ml | `ml-engineer` |
+| model-deployment / monitoring / MLOps | ai-ml | `mlops-engineer` |
+| penetration / zero-trust / hardening | cybersecurity | `security-engineer` |
+| application-security / SAST / DAST | cybersecurity | `appsec-engineer` |
+| security-operations / SOC / threat-detection | cybersecurity | `secops-engineer` |
+| product-planning / roadmap / requirements-management | product | `product-manager` |
+| backlog / product-owner | product | `product-owner` |
+| user-experience / UX / prototype | product | `ux-designer` |
+| test / UAT / quality | qa (or cross-cutting `qa-lead`) | `qa-engineer` |
+| automated-testing / test-framework | qa | `test-automation-engineer` |
+| performance-testing / load-testing | qa | `performance-engineer` |
+| integration / ESB / middleware / connector | integration | `integration-engineer` |
+| API-design / gateway | integration | `api-engineer` |
+| ERP-implementation / business-process / blueprint | erp | `erp-consultant` |
+| ERP-development / custom-development | erp | `erp-developer` |
+| report / dashboard / BI | biz-analytics | `bi-engineer` |
+| metric / metric-system / marts | biz-analytics | `analytics-engineer` |
+| training / enablement / course | cross-cutting | `enablement-lead` |
+| infrastructure / installation / environment / deployment | cross-cutting | `infra-engineer` |
+| SME / domain-knowledge / source-system | cross-cutting | `domain-sme` |
+| test / UAT / quality (generic) | cross-cutting | `qa-lead` |
+| requirements / user-story / specification | cross-cutting | `ba` |
+| change / CCB | cross-cutting | `change-manager` |
+| blueprint / integration / solution (program) | cross-cutting | `solution-architect` |
+| charter / RACI / communication / status / risk / scheduling-skeleton | PM-generalist | existing (planner/risk/stakeholder/…) |
 
 > The matching engine lives in `role_catalog.py` (`infer_role`). `dispatch.py` and `consistency_check.py`
 > share it (single source of truth). To add a domain or role, edit `role_catalog.py` only.
 
-## 3. Granularity Standard —— preventing "SOW-level coarse-grained WBS"
+## 3. Granularity Standard — preventing "SOW-level coarse-grained WBS"
 
 An experienced team's WBS is not 10 SOW packages but **hundreds of leaf work packages**. Decision rules:
 

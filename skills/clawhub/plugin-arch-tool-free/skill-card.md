@@ -1,5 +1,5 @@
 ## Description: <br>
-The free Plugin Architecture Tool guides agents through adding UI plugin view registration, navigation grouping, and sidebar extension patterns for personal and small projects. <br>
+Provides a free UI plugin architecture helper for registering custom views, adding navigation tabs, and extending an application's sidebar. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,16 +11,14 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and small project maintainers use this skill to add or plan a UI plugin architecture with custom sidebar views, navigation groups, and TypeScript registration snippets. <br>
+Developers and engineers use this skill to add basic plugin UI extension points to personal or small projects, including custom panel registration, navigation grouping, icon metadata, and installation guidance. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The artifact references an INSTALL_INSTRUCTIONS.md file that is not present, so installation steps may be incomplete. <br>
-Mitigation: Ask the agent to summarize planned commands and file changes before running them, then verify the target project supports the referenced plugin APIs. <br>
-Risk: The skill can guide local UI plugin setup and code changes. <br>
-Mitigation: Review generated TypeScript snippets, configuration edits, and commands before execution or commit. <br>
+Risk: Installation and activation steps are under-specified for a skill that requests command execution and file-writing authority. <br>
+Mitigation: Review the exact installation steps, proposed commands, and target file changes before running the skill in a project. <br>
 
 
 ## Reference(s): <br>
@@ -28,10 +26,10 @@ Mitigation: Review generated TypeScript snippets, configuration edits, and comma
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, code, configuration, shell commands] <br>
-**Output Format:** [Markdown guidance with TypeScript code snippets and JSON-style structured responses] <br>
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration] <br>
+**Output Format:** [Markdown guidance with TypeScript snippets and JSON-like status output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No API key is required; outputs may describe local project changes for a UI plugin architecture.] <br>
+**Other Properties Related to Output:** [No API key is required; expected work may include local project configuration and file changes.] <br>
 
 ## Skill Version(s): <br>
 1.0.1 (source: server release metadata) <br>

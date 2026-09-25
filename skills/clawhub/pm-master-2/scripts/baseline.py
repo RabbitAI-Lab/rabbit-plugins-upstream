@@ -1,24 +1,28 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PM Master · 基线化（Plan → Baseline → Control Gate）
+PM Master · Baseline (Plan -> Baseline -> Control Gate)
+======================================================
 
-把"已评审批准"的项目计划冻结为基线快照，作为后续运营控制的对照基准。
+Freeze the "reviewed and approved" project plan into a baseline snapshot, used as
+the reference benchmark for subsequent operational control.
 
-用法：
-  # 冻结基线（前置：一致性门禁 exit 0）
+Usage:
+  # Freeze baseline (prerequisite: consistency gate exit 0)
   python3 baseline.py --freeze --project /workspace/<slug>/project.yaml
 
-  # 查看基线状态
+  # Show baseline status
   python3 baseline.py --status --project /workspace/<slug>/project.yaml
 
-前置纪律：
-  --freeze 会先跑 consistency_check.py；若不通过（计划尚未达控制级），拒绝基线化。
-  基线化后写入 baselines/<YYYY-MM-DD>.yaml，并在 project.yaml 记录指针：
+Discipline:
+  --freeze first runs consistency_check.py; if it fails (the plan is not yet at
+  control grade), baseline is refused.
+  After baselining, write baselines/<YYYY-MM-DD>.yaml and record a pointer in
+  project.yaml:
     baseline: {file: baselines/2026-07-15.yaml, on: 2026-07-15, by: <pm>}
     project.lifecycle_state: baselined
     project.baselined_on: 2026-07-15
-  同时渲染 baseline_record.md 与 control_register.md（运营期控制清单）。
+  Also render baseline_record.md and control_register.md (operational control checklist).
 """
 import os
 import sys
@@ -39,7 +43,7 @@ CONSISTENCY = os.path.join(HERE, 'consistency_check.py')
 
 def load(path):
     if yaml is None:
-        raise RuntimeError("需要 PyYAML，请先 pip install pyyaml")
+        raise RuntimeError("PyYAML required; run: pip install pyyaml")
     with open(path, 'r', encoding='utf-8') as f:
         return yaml.safe_load(f)
 
@@ -65,8 +69,9 @@ def run(cmd):
 
 
 def _date_integrity_ok(data):
-    """P2-5: 冻结前校验所有 WBS 日期在合理范围内、依赖闭环。
-    返回 (ok, messages)。若有问题则拒绝冻结。"""
+    """P2-5: before freezing, validate that all WBS dates fall in a reasonable
+    range and that dependencies are acyclic. Return (ok, messages). If there is a
+    problem, refuse to freeze."""
     import datetime as _dt
     wbs = data.get('wbs') or []
     proj = data.get('project') or {}
@@ -91,12 +96,12 @@ def _date_integrity_ok(data):
         except (ValueError, TypeError):
             we = None
         if ws and ps and ws < ps:
-            msgs.append(f"{w.get('id')} start {ws} 早于项目起始 {ps}")
+            msgs.append(f"{w.get('id')} start {ws} is earlier than project start {ps}")
         if we and pe and we > pe:
-            msgs.append(f"{w.get('id')} end {we} 晚于目标完工 {pe}")
+            msgs.append(f"{w.get('id')} end {we} is later than target completion {pe}")
         if ws and we and we < ws:
-            msgs.append(f"{w.get('id')} end {we} 早于 start {ws}")
-    # 依赖闭环检测
+            msgs.append(f"{w.get('id')} end {we} is earlier than start {ws}")
+    # Cycle detection
     ids = {w.get('id') for w in wbs}
     indeg = {w.get('id'): 0 for w in wbs}
     for w in wbs:
@@ -113,7 +118,7 @@ def _date_integrity_ok(data):
                     q.append(w['id'])
     cyclic = [i for i in ids if i not in topo]
     if cyclic:
-        msgs.append(f"存在循环依赖（无法基线化）：{', '.join(sorted(cyclic)[:10])}")
+        msgs.append(f"Cyclic dependency detected (cannot baseline): {', '.join(sorted(cyclic)[:10])}")
     return (len(msgs) == 0), msgs
 
 
@@ -122,18 +127,18 @@ def freeze(project_path, approve=False):
     data = load(project_path)
     proj = data.get('project', {}) or {}
 
-    # ---- P2-5 日期完整性门禁（冻结前） ----
+    # ---- P2-5 date-integrity gate (before freezing) ----
     ok, msgs = _date_integrity_ok(data)
     if not ok:
-        print("✗ 基线化被拒绝：日期/依赖完整性校验未通过：")
+        print("✗ Baseline rejected: date/dependency integrity check failed:")
         for m in msgs[:20]:
             print("  - " + m)
         sys.exit(6)
 
-    # ---- 门禁：计划须达控制级才允许基线化 ----
+    # ---- Gate: plan must be at control grade before baselining ----
     chk = run([CONSISTENCY, '--project', project_path])
     if chk.returncode != 0:
-        print("✗ 基线化被拒绝：一致性门禁未通过。请先修正以下问题，再冻结基线：")
+        print("✗ Baseline rejected: consistency gate failed. Fix the following issues, then freeze:")
         print(chk.stdout)
         print(chk.stderr)
         sys.exit(2)
@@ -145,7 +150,7 @@ def freeze(project_path, approve=False):
 
     snapshot = {
         'baselined_on': today,
-        'by': proj.get('pm') or '未指定',
+        'by': proj.get('pm') or '(unspecified)',
         'project_id': proj.get('id'),
         'project_name': proj.get('name'),
         'methodology': proj.get('methodology'),
@@ -156,20 +161,20 @@ def freeze(project_path, approve=False):
     }
     save(bfile, snapshot)
 
-    # ---- 回写指针到 project.yaml（经 project_state.py 保持原位） ----
+    # ---- Write back pointer to project.yaml (in place via project_state.py) ----
     rel = os.path.relpath(bfile, root)
     st = run([os.path.join(HERE, 'project_state.py'),
               'set', 'baseline.file', rel, '--file', project_path])
     run([os.path.join(HERE, 'project_state.py'),
          'set', 'baseline.on', today, '--file', project_path])
     run([os.path.join(HERE, 'project_state.py'),
-         'set', 'baseline.by', str(proj.get('pm') or '未指定'), '--file', project_path])
+         'set', 'baseline.by', str(proj.get('pm') or '(unspecified)'), '--file', project_path])
     run([os.path.join(HERE, 'project_state.py'),
          'set', 'project.lifecycle_state', 'baselined', '--file', project_path])
     run([os.path.join(HERE, 'project_state.py'),
          'set', 'project.baselined_on', today, '--file', project_path])
 
-    # ---- 渲染 baseline_record + control_register ----
+    # ---- Render baseline_record + control_register ----
     arts = data.get('artifacts', {}) or {}
     brec = arts.get('baseline_record') or 'artifacts/baseline_record.md'
     crec = arts.get('control_register') or 'artifacts/control_register.md'
@@ -180,57 +185,58 @@ def freeze(project_path, approve=False):
          os.path.join(HERE, '..', 'templates', 'common', 'control_register.md'),
          '--data', project_path, '--out', os.path.join(root, crec)])
 
-    # ---- 注册产物指针（便于发现 + 满足一致性门禁的运营期产物要求） ----
+    # ---- Register artifact pointers (for discovery + to satisfy the operational
+    #      artifact requirement of the consistency gate) ----
     run([os.path.join(HERE, 'project_state.py'),
          'set', 'artifacts.baseline_record', brec, '--file', project_path])
     run([os.path.join(HERE, 'project_state.py'),
          'set', 'artifacts.control_register', crec, '--file', project_path])
 
-    print(f"✓ 基线化完成（{today}）")
-    print(f"  快照: {rel}")
-    print(f"  WBS 包: {len(snapshot['wbs'])} | 风险: {len(snapshot['risks'])} | "
-          f"里程碑: {len(snapshot['milestones'])}")
-    print(f"  状态: project.lifecycle_state = baselined")
-    print(f"  已渲染: {brec}, {crec}")
-    print(f"  下一步: 通过控制门（stage_gate_review）后，将 lifecycle_state 置为 operational，"
-          f"即可用 control_engine.py 周期性巡检。")
+    print(f"✓ Baseline completed ({today})")
+    print(f"  Snapshot: {rel}")
+    print(f"  WBS packages: {len(snapshot['wbs'])} | risks: {len(snapshot['risks'])} | "
+          f"milestones: {len(snapshot['milestones'])}")
+    print(f"  State: project.lifecycle_state = baselined")
+    print(f"  Rendered: {brec}, {crec}")
+    print(f"  Next: after passing the control gate (stage_gate_review), set lifecycle_state to "
+          f"operational to enable periodic control_engine.py inspection.")
     if st.returncode != 0:
-        print("[warn] project_state.py 写入指针失败，请手动设置 baseline.file", file=sys.stderr)
+        print("[warn] project_state.py failed to write the pointer; please set baseline.file manually", file=sys.stderr)
 
-    # ---- P1-2 硬门接线：--freeze-and-approve 时自动提升为 operational ----
+    # ---- P1-2 hard-gate wiring: --freeze-and-approve auto-promotes to operational ----
     if approve:
         ge = run([os.path.join(HERE, 'gate_engine.py'), '--to', 'operational',
                   '--approve', '--project', project_path])
         if ge.returncode != 0:
-            print("⚠ 控制门未通过，lifecycle_state 保留为 baselined。请查看 gate_engine 输出。")
+            print("⚠ Control gate not passed; lifecycle_state remains baselined. See gate_engine output.")
             print(ge.stdout)
             print(ge.stderr)
         else:
-            print("✓ 控制门已通过并自动提升为 operational。可运行 control_engine.py 周期巡检。")
+            print("✓ Control gate passed and auto-promoted to operational. Run control_engine.py for periodic inspection.")
 
 
 def status(project_path):
     data = load(project_path)
     proj = data.get('project', {}) or {}
     bl = data.get('baseline') or {}
-    print("=== 基线状态 ===")
-    print(f"项目: {proj.get('name')} ({proj.get('id')})")
-    print(f"生命周期状态: {proj.get('lifecycle_state', 'planning')}")
-    print(f"阶段: {proj.get('phase')}")
+    print("=== Baseline Status ===")
+    print(f"Project: {proj.get('name')} ({proj.get('id')})")
+    print(f"Lifecycle state: {proj.get('lifecycle_state', 'planning')}")
+    print(f"Phase: {proj.get('phase')}")
     if bl.get('file'):
-        print(f"基线文件: {bl.get('file')}")
-        print(f"基线日期: {bl.get('on')}  基线人: {bl.get('by')}")
+        print(f"Baseline file: {bl.get('file')}")
+        print(f"Baseline date: {bl.get('on')}  baselined by: {bl.get('by')}")
     else:
-        print("⚠ 尚未基线化（无 baseline 指针）。waterfall/hybrid 进入执行/监控前必须先基线化。")
+        print("⚠ Not yet baselined (no baseline pointer). waterfall/hybrid must be baselined before entering execution/monitoring.")
 
 
 def main():
-    ap = argparse.ArgumentParser(description="PM Master 基线化")
+    ap = argparse.ArgumentParser(description="PM Master Baseline")
     ap.add_argument('--project', required=True)
-    ap.add_argument('--freeze', action='store_true', help="冻结基线（默认动作）")
+    ap.add_argument('--freeze', action='store_true', help="Freeze baseline (default action)")
     ap.add_argument('--freeze-and-approve', action='store_true',
-                    help="冻结基线并通过控制门后自动提升为 operational（硬门接线）")
-    ap.add_argument('--status', action='store_true', help="查看基线状态")
+                    help="Freeze baseline, pass the control gate, then auto-promote to operational (hard-gate wiring)")
+    ap.add_argument('--status', action='store_true', help="Show baseline status")
     a = ap.parse_args()
     if a.status:
         status(a.project)

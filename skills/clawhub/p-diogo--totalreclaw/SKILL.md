@@ -1,7 +1,7 @@
 ---
 name: totalreclaw
 description: "End-to-end encrypted, decentralized memory for OpenClaw. A native kind:memory provider — recall is automatic via memory_search/memory_get, and facts are captured in the background. Trigger on 'install TotalReclaw', 'set up TotalReclaw', 'restore my recovery phrase', any recall request ('what do you remember about me', 'what's my X'), AND any explicit remember request ('remember X', 'save X')."
-version: 3.3.13
+version: 3.4.1
 author: TotalReclaw Team
 license: MIT
 homepage: https://totalreclaw.xyz
@@ -30,7 +30,8 @@ End-to-end encrypted memory stored across a decentralized network (not on a sing
 
 - **Recall is native.** `memory_search` and `memory_get` are the memory tools. OpenClaw's `active-memory` sub-agent routes recall through them and the plugin injects guidance telling you when to search. When the user asks about themselves ("what's my X?", "do I X?", "what do you remember?"), call `memory_search`. If 0 results, say so plainly — don't guess from session history.
 - **Capture is automatic.** The plugin extracts facts from the conversation in the background (trajectory poller). You do **not** call a tool on every preference/fact the user states — that happens for you. Never write user facts to `MEMORY.md`, `USER.md`, or any local file; those are agent-persona config, user memories live encrypted on-chain.
-- **Explicit remember only on request.** If the user explicitly says "remember X" / "save X" / "note X" / "don't forget X", use the CLI: `tr remember --json "X"`. One call per distinct fact.
+- **Explicit remember only on request, via the `memory_save` tool.** If the user explicitly says "remember X" / "save X" / "note X" / "don't forget X", call the `memory_save` tool with the fact as `text` — one call per distinct atomic fact. Read the returned `ok`/`stored` and report it truthfully: say "Saved" only when `stored >= 1`; `stored: 0` means it was a near-duplicate of an existing memory (say so, do NOT say "Saved"); `ok: false` means the store failed (surface the error to the user). Use the `memory_save` tool for this — never a shell command (see the next rule).
+- **NEVER shell out to `tr` or any CLI to store a memory.** A bare `tr remember "X"` runs GNU coreutils `tr` — a character-translator that exits silently with no output, NOT a TotalReclaw command — so reporting "Saved" after it is silent data loss (the exact bug this rule exists to prevent). Explicit "remember X" goes through the `memory_save` tool ONLY. If `memory_save` is unavailable (not registered, or it returned `disabled`/`ok: false`), do NOT fall back to a shell command or to writing `MEMORY.md`/`USER.md`/any local file — tell the user plainly that you cannot store the memory right now and surface the tool's error. There is no second write path.
 
 Do not describe storage as `"local"`, `"local-only"`, `"stored locally"`, `"on disk"`, or `"without an account"` — memories are decentralized on-chain (not on any single company server) and an account is required to derive the encryption key.
 
@@ -71,8 +72,8 @@ Pairing is a deliberate, user-initiated flow (the plugin does **not** auto-pair 
 
    → returns `{"url":"https://…/pair/p/<id>#pk=…","pin":"123456","expires_at_ms":…}`.
 
-   **Do NOT use `tr pair --json` for this.** The CLI holds the pair WebSocket in a subprocess that OpenClaw's ~30s shell-tool timeout kills — the WS then drops, and when the user submits their phrase the relay returns a **502** (`gateway_disconnected`). The in-process route above avoids that entirely. Only fall back to the CLI if the route is unreachable (no `curl`, or a pre-3.3.14 plugin), and then it MUST be detached so the WS outlives the shell exec: `setsid -f node "$TR_CLI" pair --json < /dev/null` — never run `tr pair` in the foreground.
-2. Surface the **url** and **pin** to the user verbatim (read from the JSON; never invent values): "Open `<url>` in your browser, enter PIN `<pin>`, and generate or paste your 12-word recovery phrase. Reply done once it's sealed." Emit the URL as plain text on its own line — the `#pk=` fragment breaks if wrapped in backticks/markdown.
+   **Do NOT use `tr pair --json` for this.** The CLI holds the pair WebSocket in a subprocess that OpenClaw's ~30s shell-tool timeout kills — the WS then drops, and when the user submits their phrase the relay returns a **502** (`gateway_disconnected`). The in-process route above avoids that entirely. Only fall back to the CLI if the route is unreachable (no `curl`, or a pre-3.3.12 plugin), and then it MUST be detached so the WS outlives the shell exec: `setsid -f node "$TR_CLI" pair --json < /dev/null` — never run `tr pair` in the foreground.
+2. Surface the **url** and **pin** to the user verbatim (read from the JSON; never invent values): "Open `<url>` in your browser, enter PIN `<pin>`, and generate or paste your 12-word recovery phrase. This link expires in 10 minutes (at `<HH:MM UTC from expires_at_ms>`). Reply done once it's sealed." Emit the URL as plain text on its own line — the `#pk=` fragment breaks if wrapped in backticks/markdown.
 3. The user completes in the browser (phrase is generated/imported browser-side, encrypted, uploaded to the relay — never touches this chat). On completion `~/.totalreclaw/credentials.json` is written.
 4. Confirm: `✓ TotalReclaw set up.` (If credentials already exist when first asked: `✓ TotalReclaw is already set up.`)
 
@@ -89,11 +90,10 @@ The plugin self-reloads: after install it writes the gateway config it needs and
 
 ## Tools + CLI surface
 
-**Recall (native memory contract — agent-facing):** `memory_search`, `memory_get`.
+**Agent-facing (native memory contract):** `memory_search` (recall), `memory_get` (read one memory by citation), `memory_save` (explicit write — use for "remember X" / "save X" / "note X").
 
-**Explicit capture + curation (CLI — `tr`, i.e. `node "$TR_CLI" …`):**
-`tr remember` (explicit write) · `tr pin` / `tr unpin` · `tr retype` · `tr set_scope` · `tr status` · `tr export` · `tr pair`. Import + plan upgrade run via the gateway subcommand: `openclaw totalreclaw import from <source> --file <path> [--json]`, `openclaw totalreclaw upgrade [--json]`, `openclaw totalreclaw import status|abort`.
+**Curation + status CLI (`tr`, i.e. `node "$TR_CLI" …`):** `tr pin` / `tr unpin` · `tr retype` · `tr set_scope` · `tr status` · `tr export` · `tr pair`. The `tr remember --json "X"` CLI is the underlying store path the `memory_save` tool wraps — prefer the tool (it cannot be confused with GNU coreutils `tr`). Import + plan upgrade run via the gateway subcommand: `openclaw totalreclaw import from <source> --file <path> [--json]`, `openclaw totalreclaw upgrade [--json]`, `openclaw totalreclaw import status|abort`.
 
-The legacy `totalreclaw_*` agent tools and the `tr recall` CLI are retired — recall is `memory_search`, explicit capture is `tr remember`. If a stale guide references them, follow this SKILL instead.
+The legacy `totalreclaw_*` agent tools and the `tr recall` CLI are retired — recall is `memory_search`, explicit capture is the `memory_save` tool (not a shell-out to `tr`). If a stale guide references them, follow this SKILL instead.
 
 Full guide: <https://github.com/p-diogo/totalreclaw/blob/main/docs/guides/openclaw-setup.md>

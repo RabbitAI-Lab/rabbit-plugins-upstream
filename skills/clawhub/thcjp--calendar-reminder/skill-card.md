@@ -1,5 +1,5 @@
 ## Description: <br>
-Calendar Reminder scans Outlook calendar events each night, schedules time-based Feishu reminders for the next day, and reports the scan results. <br>
+Describes an Outlook calendar reminder workflow that scans tomorrow's events each evening, schedules Feishu reminders by time of day, and reports scan results. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, employees, and developers use this skill to automate daily Outlook calendar scanning and send Feishu reminders for upcoming meetings, cross-time-zone events, and team schedule summaries. <br>
+Developers, independent workers, and teams use this skill to configure daily Outlook calendar scans and Feishu reminders for upcoming meetings, cross-time-zone schedules, and shared team visibility. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill reads Outlook meeting metadata and sends reminders or summaries to a configured Feishu user or group. <br>
-Mitigation: Confirm that the selected Feishu recipient is appropriate for private or customer meetings, and use the narrowest practical target. <br>
-Risk: The skill can keep running after setup through a scheduled cron job. <br>
-Mitigation: Verify the cron schedule before deployment and document how to list, pause, resume, or remove the reminder job. <br>
-Risk: The generated workflow depends on a separate calendar_reminder.py implementation that is not included in the artifact evidence. <br>
-Mitigation: Review the actual script implementation before deployment, especially calendar access, Feishu delivery, error handling, and credential handling. <br>
-Risk: Early morning events can produce reminders during quiet hours if the fixed two-hour lead time is used directly. <br>
-Mitigation: Add or confirm quiet-hour handling so overnight reminders are delayed or bundled into an acceptable morning notification. <br>
+Risk: The release appears to be documentation-only or unfinished while describing a workflow that depends on an external calendar_reminder.py script. <br>
+Mitigation: Inspect and test the actual calendar_reminder.py implementation before enabling the cron job or relying on the documented reminder behavior. <br>
+Risk: The workflow can send potentially sensitive Outlook calendar details to Feishu users or groups. <br>
+Mitigation: Limit which calendar fields are sent, confirm all recipients are authorized to see the events, and prefer the smallest appropriate Feishu target. <br>
+Risk: The workflow registers a persistent scheduled task that may continue sending messages after setup. <br>
+Mitigation: Verify how to pause, resume, update, and remove the skill-platform cron task before activating scheduled scans. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/calendar-reminder) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON result examples, code snippets, and shell commands] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands and JSON examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May register recurring cron jobs and send Feishu notifications based on Outlook calendar metadata.] <br>
+**Other Properties Related to Output:** [Describes setup, cron registration, validation, troubleshooting, and reminder-output structure.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release evidence; artifact frontmatter lists 1.0.1) <br>
+1.0.3 (source: server release metadata; artifact frontmatter states 1.0.1) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

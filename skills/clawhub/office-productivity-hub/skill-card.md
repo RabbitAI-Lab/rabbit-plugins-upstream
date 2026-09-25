@@ -1,44 +1,49 @@
-## Description: <br>
-办公效率中枢 helps agents automate common office workflows including document processing, data cleanup, email management, scheduling, report generation, and workflow orchestration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+办公效率中枢 helps agents automate common office workflows across document processing, data cleanup, email management, scheduling, report generation, and workflow orchestration, with emphasis on batch fault isolation, format preservation, PII masking, and reusable templates.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Employees and business teams use this skill to automate recurring document, spreadsheet, email, scheduling, and reporting work. It is most relevant for HR, finance, sales, administrative, and operations workflows that need batch processing, formatting checks, and sensitive-data handling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Command execution can modify local office files or run broad batch operations. <br>
-Mitigation: Require dry runs, scoped input and output paths, backups, and explicit user confirmation before execution. <br>
-Risk: Office workflows may handle HR, finance, customer, or personal data. <br>
-Mitigation: Apply PII masking, least-privilege access, local processing where possible, and human review before export or sharing. <br>
-Risk: Email sending, scheduled jobs, database access, cloud storage, and webhooks can create external side effects. <br>
-Mitigation: Require explicit approval for each external action, use test recipients or staging targets first, and keep audit logs. <br>
-Risk: Credentials for SMTP, databases, webhooks, or cloud storage may be exposed if placed in files. <br>
-Mitigation: Store credentials in environment variables or a secrets manager, avoid plaintext configuration, and rotate exposed tokens. <br>
+## Use Case:
 
+Employees, operations teams, and developers use this skill to automate repetitive office work such as bulk document conversion, spreadsheet consolidation, templated email preparation, schedule coordination, and recurring report generation. It is intended for efficiency and workflow optimization tasks, not tasks that require human creative judgment.
 
-## Reference(s): <br>
-- [ClawHub skill release page](https://clawhub.ai/thcjp/skills/office-productivity-hub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands, JSON configuration examples, and task reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local file operations, email actions, scheduled jobs, database access, webhook calls, and dry-run or resume commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release metadata) <br>
+Risk: The skill can combine file access, command execution, email, cloud, database, and scheduled automation in workflows that may process sensitive business data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installation; require dry runs, recipient review, attachment and content previews, least-privilege credentials, and explicit approval before emails, uploads, database queries, or cron jobs run.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/office-productivity-hub)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, Files]
+
+**Output Format:** [Markdown guidance with command examples, configuration snippets, and generated office-file workflow outputs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce execution reports, failed-item logs, resume commands, transformed office files, cleaned datasets, masked data, emails, schedules, and reports depending on the requested workflow.]
+
+## Skill Version(s):
+
+1.0.1 (source: release evidence and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

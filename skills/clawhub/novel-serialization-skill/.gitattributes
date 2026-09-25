@@ -1,0 +1,7 @@
+# Enforce LF line endings in both the repository and working copies,
+# matching the .editorconfig requirement (end_of_line = lf).
+* text=auto eol=lf
+
+# Treat license text files as text (no CRLF conversion)
+LICENSE text eol=lf
+LICENSES/*.txt text eol=lf

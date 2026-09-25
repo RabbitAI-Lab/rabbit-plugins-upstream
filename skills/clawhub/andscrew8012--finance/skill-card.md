@@ -1,43 +1,54 @@
-## Description: <br>
-AI-driven financial management offering expense analysis, budget forecasting, investment tracking, invoicing, and tax optimization for individuals and businesses. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Finance helps agents provide financial-management guidance for expense analysis, budgeting, investment tracking, invoicing, and tax-planning workflows.
 
-## Publisher: <br>
-[andscrew8012](https://clawhub.ai/user/andscrew8012) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[andscrew8012](https://clawhub.ai/user/andscrew8012)
 
-## Use Case: <br>
-Individuals, freelancers, small businesses, and finance teams can use this skill to draft expense analysis, budget forecasts, portfolio summaries, invoice tracking, and tax-planning guidance. Outputs should be treated as reviewable financial work product rather than final financial, investment, or tax advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may produce misleading or unsuitable finance, investment, budget, invoice, or tax guidance. <br>
-Mitigation: Treat outputs as draft analysis and review them with a qualified human before acting. <br>
-Risk: Users may over-share sensitive financial data while seeking analysis. <br>
-Mitigation: Do not provide banking credentials, full account numbers, tax IDs, or unnecessary financial records. <br>
-Risk: The separate ecosystem installer may introduce additional skills with memory or orchestration behavior outside this artifact. <br>
-Mitigation: Do not run the ecosystem installer unless those additional skills and their behavior have been independently reviewed. <br>
+## Use Case:
 
+Individuals, small businesses, freelancers, and finance teams can use this skill to guide financial analysis tasks such as expense categorization, budget forecasting, portfolio review, invoicing, and tax-planning preparation. Because the release is backed only by a markdown skill description, users should review privacy and compliance claims before using sensitive financial data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/andscrew8012/skills/finance) <br>
-- [Publisher profile](https://clawhub.ai/user/andscrew8012) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, shell commands] <br>
-**Output Format:** [Markdown or plain text financial analysis, summaries, reports, guidance, and suggested commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Financial, investment, invoice, budget, and tax-related outputs require qualified human review before action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata; artifact frontmatter states 3.10.0) <br>
+Risk: The skill asks users to trust sensitive financial handling without concrete privacy terms, data-flow details, or compliance evidence in the release evidence.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not provide real bank, tax, invoice, or portfolio data until the publisher supplies verifiable privacy terms, storage and sharing limits, and compliance evidence.
+
+Risk: The artifact recommends installing a broad related skill ecosystem beyond the finance skill itself.
+
+Mitigation: Avoid ecosystem-level installation commands unless each included skill and its permissions have been inspected and trusted separately.
+
+## Reference(s):
+
+- [ClawHub Finance skill page](https://clawhub.ai/andscrew8012/skills/finance)
+- [Publisher profile](https://clawhub.ai/user/andscrew8012)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with occasional inline shell commands or configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference financial categories, budgets, portfolio summaries, invoice workflows, and tax-planning considerations; does not itself provide verified financial, privacy, or compliance controls.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

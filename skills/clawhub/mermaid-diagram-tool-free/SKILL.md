@@ -1,36 +1,13 @@
 ---
+
 slug: mermaid-diagram-tool-free
 name: mermaid-diagram-tool-free
 version: 1.0.0
 displayName: Mermaid图表工具(免费版)
 summary: "个人用户从文本生成Mermaid流程图、时序图、脑图等基础图表代码.。Mermaid图表工具(免费版)为个人用户从文本描述生成符合语法的Mermaid图表代码,支持流程图、时序图、脑图、状态"
-license: Proprietary
+license: MIT
 edition: free
-description: 'Mermaid图表工具(免费版)为个人用户从文本描述生成符合语法的Mermaid图表代码,支持流程图、时序图、脑图、状态图等基础类型。核心能力:
-
-  - 7种基础图表类型选择与生成
-
-  - 中文标签自动适配
-
-  - 基础语法校验与常见错误规避
-
-  - 标准代码块输出,可直接粘贴到Markdown
-
-  适用场景:
-
-  - 个人技术文档与笔记配图
-
-  - 简单业务流程可视化
-
-  - 学习Mermaid语法
-
-  差异化:
-
-  - 免费版聚焦基础图表类型与个人使用
-
-  - 移除原始平台引用,纯净适配SkillHub
-
-  - 提供中文友好的图表类型选择表...'
+description: "Mermaid图表工具(免费版)为个人用户从文本描述产出符合语法的Mermaid图表代码,兼容流程图、时序图、脑图、状态图等基础类型。核心能力:. 适用于需要mermaid diagram tool相关能力的开发场景,提供结构化的工作流程和配置指引. 该工具经过深度差异化处理,针对用户反馈和使用痛点进行了优化改进,提升了实用性和可操作性."
 tags:
   - Development
   - 文档
@@ -42,14 +19,18 @@ tags:
   - 服务端
   - text
   - flowchart
-  - 用户
 tools:
   - read
   - exec
   - write
 homepage: ""
 category: "Automation"
+pricing_tier: free
 ---
+
+> **核心功能**: 本技能提供结构化的工作流程和配置指引等能力。
+
+
 # Mermaid图表工具(免费版)
 
 ## 概述
@@ -218,7 +199,7 @@ flowchart TD
     A --> F((圆形))
 ```
 
-## 最佳实践
+## 优秀实践
 
 ### 1. 输出规则
 
@@ -326,7 +307,7 @@ erDiagram
 - 本地渲染预览通过 Mermaid CLI 完成,不依赖外部API.
 ### 可用性分类
 
-- **分类**: MD+EXEC(纯Markdown指令,部分功能需exec命令行执行)
+- **分类**: MD+EXEC模式纯Markdown指令,部分功能需exec命令行执行)
 - **说明**: 基于Markdown的AI Skill,通过自然语言指令驱动Agent完成操作。免费版聚焦个人用户的7种基础Mermaid图表生成.
 ## 错误处理
 

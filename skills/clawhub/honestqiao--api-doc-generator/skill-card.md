@@ -1,40 +1,52 @@
-## Description: <br>
-Automatically generates OpenAPI/Swagger API documentation by analyzing source code function and method signatures, parameters, and return types. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates OpenAPI/Swagger API documentation from code by analyzing function and method signatures, parameters, and return types.
 
-## Publisher: <br>
-[HonestQiao](https://clawhub.ai/user/HonestQiao) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[honestqiao](https://clawhub.ai/user/honestqiao)
 
-## Use Case: <br>
-Developers use this skill to turn source code in Python, JavaScript, TypeScript, or Go into API documentation, especially OpenAPI or Swagger-style output. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Generic OpenAPI or Swagger trigger terms may activate the skill unexpectedly. <br>
-Mitigation: Confirm the user intends to generate API documentation before processing source code. <br>
-Risk: The skill processes source code supplied in the active agent session. <br>
-Mitigation: Only provide code that is appropriate to share in the current agent environment. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/HonestQiao/api-doc-generator) <br>
-- [Publisher profile](https://clawhub.ai/user/HonestQiao) <br>
+## Use Case:
 
+Developers use this skill to turn selected Python, JavaScript, TypeScript, or Go code into API documentation, especially OpenAPI/Swagger-style endpoint descriptions.
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Configuration, Guidance] <br>
-**Output Format:** [OpenAPI/Swagger documentation, typically JSON or Markdown] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated from user-provided source code and requested documentation format.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Broad trigger terms such as OpenAPI and Swagger may activate the skill when a user only mentions API documentation concepts.
+
+Mitigation: Review routing behavior before deployment when precise activation matters.
+
+Risk: Generated API documentation may be incomplete or inaccurate if code signatures lack sufficient context.
+
+Mitigation: Have a developer review generated OpenAPI/Swagger output against the source code before publication or integration.
+
+## Reference(s):
+
+- [API Doc Generator on ClawHub](https://clawhub.ai/honestqiao/skills/api-doc-generator)
+
+## Skill Output:
+
+**Output Type(s):** [markdown, code, configuration, guidance]
+
+**Output Format:** [OpenAPI/Swagger JSON or Markdown containing OpenAPI/Swagger examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include generated endpoint paths, summaries, parameters, response objects, and schema-like documentation derived from user-provided code.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

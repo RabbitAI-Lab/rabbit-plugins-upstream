@@ -1,44 +1,57 @@
-## Description: <br>
-Aegis Security Free gives AI agents basic blockchain safety checks for address reputation, token honeypot detection, and free-tier usage monitoring on Ethereum and Base. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides basic blockchain safety checks for agents, including Ethereum and Base address reputation checks, token honeypot detection, and free quota lookup.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External developers and agent users can use this skill to guide read-only pre-transaction checks before sending funds or buying tokens. It helps query address reputation, token honeypot risk, and remaining free quota while keeping final crypto decisions subject to user review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The evidence notes inconsistent API key setup guidance. <br>
-Mitigation: Clarify whether the free version needs an API key before installation, and store any required secret in a platform secret store rather than shell history or committed files. <br>
-Risk: The skill uses a stable client fingerprint for quota tracking. <br>
-Mitigation: Use a pseudonymous, non-sensitive identifier and avoid embedding personal data, wallet secrets, or private keys in the fingerprint value. <br>
-Risk: Blockchain safety results may be incomplete or incorrect for financial decisions. <br>
-Mitigation: Treat address and token checks as advisory, require user review for material transactions, and block or escalate HIGH and CRITICAL findings. <br>
+## Use Case:
 
+External developers and agent builders use this skill to run basic pre-transaction checks on Ethereum and Base addresses or tokens and to monitor free API quota. Results should support, not replace, human review for high-value or ambiguous blockchain decisions.
 
-## Reference(s): <br>
-- [Aegis Security Free on ClawHub](https://clawhub.ai/thcjp/skills/aegis-security-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [Skill homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, JSON] <br>
-**Output Format:** [Markdown guidance with curl commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only safety-check guidance; free version is limited to Ethereum and Base and results should be treated as advisory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill requests broad command execution despite primarily describing API lookup workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before deployment, restrict use to documented Ethereum and Base read-only checks, and avoid running unrelated shell commands from the skill.
+
+Risk: Quota tracking may send a client fingerprint or fall back to IP/User-Agent data.
+
+Mitigation: Use a non-sensitive client fingerprint, avoid embedding secrets or personal data in request headers, and document fingerprint privacy handling for users.
+
+Risk: Blockchain safety lookups can be incomplete or uncertain and do not guarantee that a transaction or token is safe.
+
+Mitigation: Require human review before acting on medium, high, critical, high-value, or ambiguous results.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/aegis-security-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON-style API response examples and curl command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include quota status, risk levels, threat signals, and API request guidance; the free tier is limited to Ethereum and Base.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata; artifact frontmatter version is 1.0.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

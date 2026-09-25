@@ -1,42 +1,59 @@
-## Description: <br>
-Access Artsonia student-art portfolios, comments, fans, notification preferences, and artwork downloads through an MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Access Artsonia student-art portfolios, comments, and fans via MCP.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent connect to an Artsonia MCP server for linked student artwork portfolios. It supports reviewing portfolios and activity, posting comments, inviting fans, changing notifications, and downloading artwork when the user has supplied Artsonia account credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The MCP server requires Artsonia account credentials and can expose linked student portfolio data to an agent. <br>
-Mitigation: Install only when the user is comfortable granting that access, keep credentials scoped to the intended account, and avoid sharing credential-bearing configuration. <br>
-Risk: Some tools can post comments, invite fans, change notifications, or download artwork to disk. <br>
-Mitigation: Confirm intent before using write, invitation, notification, or download tools, and review downloaded files and manifests before further sharing. <br>
+## Use Case:
 
+External users and developers use this skill to connect an MCP client to Artsonia so they can inspect student artwork portfolios, comments, fans, notifications, and related account activity through natural-language requests.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/chrischall/artsonia-mcp) <br>
-- [artsonia-mcp npm package](https://www.npmjs.com/package/artsonia-mcp) <br>
-- [Artifact-linked source repository](https://github.com/chrischall/artsonia-mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON configuration and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Artsonia credentials and an installed MCP server; agent use may access student portfolio data or perform account actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.0 (source: server release metadata) <br>
+Risk: The skill handles Artsonia credentials and cached session data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only from a trusted package source, provide credentials only in an appropriate local MCP configuration, and review or disable the session cache path when needed.
+
+Risk: The skill can access or export student artwork, comments, feedback, and private portfolio data.
+
+Mitigation: Treat exported files and metadata as private data, choose download destinations deliberately, and use options that exclude private pieces when sharing or archiving output.
+
+Risk: Write-capable tools can post comments, invite fans, change notification settings, mark feedback read, or download artwork.
+
+Mitigation: Keep confirmation mode at the default user-approval flow or refuse writes; avoid automatic confirmation unless the deployment explicitly accepts that risk.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/artsonia-mcp)
+- [npm package](https://www.npmjs.com/package/artsonia-mcp)
+- [Project source link from artifact](https://github.com/chrischall/artsonia-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, API Calls, Files, Markdown]
+
+**Output Format:** [Markdown guidance with JSON configuration examples, shell commands, and MCP tool responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return Artsonia account data, confirmation previews, downloaded artwork files, metadata sidecars, and index manifests depending on the invoked MCP tool.]
+
+## Skill Version(s):
+
+1.2.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

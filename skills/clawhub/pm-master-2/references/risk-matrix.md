@@ -46,7 +46,7 @@ Impact\Likelihood |  1  |  2  |  3  |  4  |  5
    1      |  1  |  2  |  3  |  4  |  5   (green)
 ```
 
-- Green zone: 1–4　Yellow zone: 5–9　Orange zone: 10–15　Red zone: 16–25
+- Green zone: 1–4 | Yellow zone: 5–9 | Orange zone: 10–15 | Red zone: 16–25
 
 ## 6. Consistency Check (enforced by consistency_check.py)
 

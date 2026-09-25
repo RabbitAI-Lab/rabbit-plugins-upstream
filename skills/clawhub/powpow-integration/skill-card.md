@@ -1,43 +1,60 @@
-## Description: <br>
-POWPOW Integration connects OpenClaw agents to POWPOW digital humans for real-time bidirectional chat over WebSocket. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users publish photo-based travel posts to PowPow and create digital humans pinned to its public map.
 
-## Publisher: <br>
-[durenzidu](https://clawhub.ai/user/durenzidu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[durenzidu](https://clawhub.ai/user/durenzidu)
 
-## Use Case: <br>
-Developers and OpenClaw users use this skill to connect an agent to a POWPOW digital human, manage connection state, send text, voice, and image messages, and optionally listen for or auto-reply to incoming messages. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Chat content and media URLs can be sent to a POWPOW WebSocket endpoint. <br>
-Mitigation: Use only trusted POWPOW endpoints and avoid sending sensitive chat content or private media URLs. <br>
-Risk: Automatic replies can send outbound messages without manual review when enabled. <br>
-Mitigation: Enable autoReply only in workflows where automatic outbound responses are acceptable. <br>
-Risk: Queued messages may be delivered after a reconnect. <br>
-Mitigation: Review connection state and queued-message behavior before using the skill in workflows where stale messages could cause confusion. <br>
+## Use Case:
 
+PowPow account holders use this skill to turn photos and travel notes into published posts, or create digital humans on the public map. It also helps prepare drafts, locate places, upload images, and verify publication.
 
-## Reference(s): <br>
-- [ClawHub POWPOW Integration release page](https://clawhub.ai/durenzidu/powpow-integration) <br>
-- [POWPOW homepage](https://global.powpow.online) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and command responses with connection status, message delivery status, and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands may establish WebSocket sessions, queue messages while disconnected, emit OpenClaw events, and return success or error status objects.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.10 (source: server release evidence and artifact metadata) <br>
+Risk: Account credentials and the saved session token can grant access to a PowPow account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the password prompt as sensitive and keep POWPOW_STATE_DIR private.
+
+Risk: Publishing posts or creating digital humans changes the user's account and may make content public.
+
+Mitigation: Review each draft and digital-human creation carefully before approving publication.
+
+Risk: A custom platform URL could send account activity to an untrusted server.
+
+Mitigation: Do not override platformUrl unless the destination is fully trusted.
+
+## Reference(s):
+
+- [PowPow Classic on ClawHub](https://clawhub.ai/durenzidu/skills/powpow-integration)
+- [PowPow website](https://global.powpow.online)
+- [Skill changelog](artifact/references/changelog.md)
+- [Skill usage guide](artifact/README.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Conversational text and Markdown with draft posts, commands, and publication links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can publish posts and digital humans to a public map after user review.]
+
+## Skill Version(s):
+
+2.1.15 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

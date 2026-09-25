@@ -1,40 +1,58 @@
-## Description: <br>
-定时调度专家 helps agents define and maintain local recurring or one-time scheduled jobs with timezone locking, previews, retries, cleanup, and audit history. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+定时调度专家 helps AI agents manage local recurring jobs with timezone locking, next-run preview, one-time job cleanup, concurrent write protection, retry, and circuit-breaker guidance.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and agent users use this skill to turn recurring checks, reminders, reports, data syncs, and health probes into auditable local schedules. It is suited for agents that need predictable task timing without relying on cloud scheduling services. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Scheduled jobs can repeatedly run tasks that read private files, call APIs, sync data, or write reports beyond the user's intent. <br>
-Mitigation: Review each task before creating a job, especially tasks with file, API, sync, or reporting behavior. <br>
-Risk: Persistent local job records can accumulate active or outdated automations if they are not reviewed. <br>
-Mitigation: Use the skill's documented list, pause, archive, stats, and cleanup workflows to audit active and archived jobs regularly. <br>
+## Use Case:
 
+Developers and agent builders use this skill to turn recurring-task requests, reminders, health checks, reports, and local workflow jobs into auditable schedules that an agent can manage. It is intended for local-first scheduling workflows where users review job definitions, storage paths, timezones, and downstream task credentials before unattended execution.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cron-scheduler-pro) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with inline Python and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces local scheduling guidance, command patterns, job configuration examples, and audit workflows for agent-maintained cron-style tasks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release and skill frontmatter) <br>
+Risk: The skill can guide an agent toward persistent local scheduled jobs and future task execution.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each job definition, storage path, timezone, cleanup policy, and confirmation boundary before allowing unattended execution.
+
+Risk: Scheduled tasks may inherit command, file, or API authority from the executing agent or downstream task.
+
+Mitigation: Limit scheduled work to scoped, low-risk actions and review any credentials or external API use required by the downstream task.
+
+Risk: The security verdict is suspicious due to broad activation scope, persistent jobs, auto-cleanup behavior, and mixed API-key guidance.
+
+Mitigation: Install only when a local scheduler is desired, keep high-stakes actions out of scope, and require user review until confirmation controls are tightened.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cron-scheduler-pro)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, code snippets, JSON examples, and configuration instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces local scheduling guidance and job-management patterns; scheduled jobs may create or update local cron memory files when implemented by an agent.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

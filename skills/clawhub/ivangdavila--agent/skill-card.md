@@ -1,37 +1,57 @@
-## Description: <br>
-Define agent identity, personality, voice, and boundaries to create assistants that feel authentic rather than generic. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Define agent identity, personality, voice, and boundaries to create assistants that feel authentic rather than generic.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-Developers and agent designers use this skill to define an assistant's identity, voice, role boundaries, adaptation behavior, and reusable identity templates. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Persistent memory or powerful tools could over-apply inferred preferences or act beyond the intended agent role. <br>
-Mitigation: Define autonomy boundaries before deployment and make remembered preferences visible, correctable, and resettable. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [Agent ClawHub release page](https://clawhub.ai/ivangdavila/agent) <br>
+## Use Case:
 
+Developers and agent builders use this skill to define an assistant's identity, voice, role boundaries, adaptation style, and reusable identity templates.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown guidance and templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Instruction-only skill; produces reusable identity, voice, boundary, and adaptation guidance.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill can lead agents to infer and retain user behavior patterns without enough user control or memory boundaries.
+
+Mitigation: Use it only where users know adaptation may occur and can disable, inspect, or clear learned preferences.
+
+Risk: Use in customer-facing, workplace, or sensitive contexts may create consent and retention concerns.
+
+Mitigation: Add explicit consent, memory-retention, and review rules before deploying it in those contexts.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/ivangdavila/skills/agent)
+- [Skill Definition](artifact/SKILL.md)
+- [Agent Voice & Personality](artifact/voice.md)
+- [Agent Role Boundaries](artifact/boundaries.md)
+- [Agent Learning & Adaptation](artifact/adaptation.md)
+- [Agent Identity Templates](artifact/templates.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown guidance and reusable identity templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

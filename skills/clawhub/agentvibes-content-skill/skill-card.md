@@ -1,41 +1,52 @@
-## Description: <br>
-API wrapper skill for AgentVibes content workflows that calls external APIs, returns API response data, and supports content creation, management, multimodal generation, monitoring, retries, and multi-format handling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AgentVibes内容技能 helps users generate marketing copy, written content, title optimizations, and structured content outputs through an AgentVibes-oriented workflow.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[thcjp](https://clawhub.ai/user/thcjp)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+External users, creators, and teams use this skill to generate marketing copy, writing content, optimized titles, and reusable content outputs in Chinese-friendly Agent workflows. It is not positioned for pure technical documentation writing.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The skill requests broad local file and command-execution authority without a clear need.
+
+Mitigation: Install and run it with restricted file and command access, and supervise any command or file operation it proposes.
+
+Risk: API keys may be exposed if used in sensitive workspaces or stored directly in files.
+
+Mitigation: Store API keys in environment variables and avoid using the skill in workspaces containing sensitive files unless tool scope is restricted.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers and external agent users use this skill to route AgentVibes content creation and management requests through API calls and receive structured response data. It is not positioned for complex cases that require human judgment. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill describes broad API, publishing, deletion, and multi-tenant administration powers without enough documented scope or safeguards. <br>
-Mitigation: Review before installing, use a limited API key, and restrict use to clearly scoped test or non-critical resources unless the publisher documents exact endpoints, permissions, tenant limits, and confirmation requirements. <br>
-Risk: The artifact requires API key configuration and includes executable-agent posture. <br>
-Mitigation: Store API keys outside version control, grant only the minimum required permissions, and confirm write or delete actions before execution. <br>
+**Output Format:** [Markdown guidance with JSON response examples and shell environment commands]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/agentvibes-content-skill) <br>
-- [ClawDIS homepage](https://skillhub.cn) <br>
+**Other Properties Related to Output:** [Outputs may include structured success, data, and error fields; API-key configuration is described through an environment variable.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON response examples and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May describe API responses with success, data, and error fields.] <br>
+1.0.4 (source: server release metadata; artifact frontmatter reports 1.0.1)
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,57 @@
-## Description: <br>
-Generates local, consent-gated Git-history reflection reports with descriptive commit cadence, change pattern, code style, and quality-artifact statistics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Code Analysis Skills generates descriptive Git-history reflection reports for self-review or consent-based team retrospectives from local repository commit data.
 
-## Publisher: <br>
-[wscats](https://clawhub.ai/user/wscats) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wscats](https://clawhub.ai/user/wscats)
 
-## Use Case: <br>
-Developers use this skill for self-reflection on their own Git history, or for opt-in team retrospectives where every included author has explicitly consented. It summarizes Git-visible activity as discussion prompts, not performance judgments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill processes identifiable per-author Git activity data. <br>
-Mitigation: Run it only for self-reflection or for a team retrospective where every included author has explicitly consented. <br>
-Risk: Generated reports could be misused for performance reviews, ranking, compensation, discipline, or surveillance. <br>
-Mitigation: Treat outputs as descriptive discussion prompts only and refuse HR, ranking, comparison, or surveillance use cases. <br>
-Risk: Reports may contain sensitive work-history data. <br>
-Mitigation: Store generated reports carefully and share them only with the consenting participants who need them. <br>
+## Use Case:
 
+Developers and engineering teams use this skill to summarize Git commit cadence, change patterns, style markers, and code-quality traces for personal reflection or fully consented retrospectives. It is not for performance reviews, ranking, compensation, discipline, surveillance, or other HR decisions.
 
-## Reference(s): <br>
-- [Metrics Guide](references/metrics-guide.md) <br>
-- [ClawHub Release Page](https://clawhub.ai/wscats/code-analysis-skills) <br>
-- [Publisher Profile](https://clawhub.ai/user/wscats) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, html, pdf, guidance] <br>
-**Output Format:** [Markdown, JSON, HTML, or PDF report with an explicit usage notice] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports are scoped to the current local Git user by default; multi-author reports require explicit consented author names.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: server release metadata; artifact pyproject.toml and skill.yaml list 1.1.0) <br>
+Risk: The skill processes personal developer Git activity data, including timestamps, commit frequency, and change patterns.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only for self-reflection or a team retrospective where every included contributor has clearly opted in, and treat generated reports as sensitive personal data.
+
+Risk: Broad recursive scans can include repositories or contributors outside the intended consent scope.
+
+Mitigation: Choose repository paths tightly and avoid broad scan-all runs on shared workspaces unless every included repository and contributor is in scope.
+
+Risk: Report-rendering risks are noted for HTML and PDF outputs.
+
+Mitigation: Prefer Markdown or JSON output until HTML escaping and PDF resource restrictions are fixed.
+
+## Reference(s):
+
+- [Metrics Guide](references/metrics-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, html, pdf, shell commands, guidance]
+
+**Output Format:** [Markdown, JSON, HTML, or PDF reports, plus concise command and interpretation guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an explicit repository path and usage-policy acknowledgement; reports are scoped to the current local Git user by default or to explicitly consented authors for team retrospectives.]
+
+## Skill Version(s):
+
+1.1.1 (source: ClawHub release metadata; artifact pyproject.toml and skill.yaml list 1.1.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,209 @@
+# PROTOCOL — the reasoning behind backup-chain
+
+This document argues the six invariants properly, records the incident classes
+that produced each rule, and gives patterns this skill deliberately does not
+implement in code. Read it once before trusting the tool with something you
+cannot afford to lose.
+
+## Threat model
+
+The adversary is not a hacker; it is **infrastructure amnesia**. Observed
+failure classes, all real, all in ordinary sandboxed agent environments:
+
+- **Full workspace reset** — the project directory returns to an earlier state
+  or to empty. Everything inside dies together: archives, configs, tools.
+- **Partial rollback (the dangerous one)** — home dotdirs vanish while the
+  project root survives, or vice versa; recent files roll back while older ones
+  stay. Partial damage is worse than total loss because it *looks* fine: the
+  workspace opens, the worklog is there, and only the credentials or the last
+  three generations are gone.
+- **The silent-extraction failure** — bulk extraction that exits 0 and writes
+  nothing. Observed **twice** in production with GNU tar inside patched sandbox
+  environments, on different days, against different archives. Both times the
+  bulk restore "succeeded" and healed nothing. This is why invariant 5 exists
+  and why the drill extracts and re-hashes rather than trusting `tar -x`.
+- **The mtime trap** — after a rollback, timestamps lie. "Newest backup" by
+  mtime or filename may be a stale handoff wearing fresh paint.
+- **The helpful retry** — a recovery that restores an *older* generation
+  cleanly and confidently, clobbering whatever newer state existed. A restore
+  that completes but rolls you back is worse than a restore that fails loudly.
+- **The smuggled path** — filesystem entries that look innocent by name but
+  resolve somewhere else. Two directions, both closed by gates rather than
+  trust: a nested symlink planted in a member directory that would pull
+  *reads* (and archived bytes) from outside the project root at build time,
+  and a symlinked directory left under a restore target that would push
+  *writes* outside the target at restore time. Names are clean in both
+  cases; only resolving the paths catches them. (Found by the ClawHub
+  automated audit of 1.0.1; fixed in 1.0.2.)
+
+Nothing here defends against an adversary who controls the machine *and* the
+ledger. If the ledger channel can be rewritten, the protocol detects accidents,
+not malice — say so in your own status docs.
+
+## The six invariants
+
+### 1. Ordering is asserted, never inferred
+
+The generation counter is a fencing token: **one issuer, total order**. It
+lives inside the archive, in the manifest, where a rollback cannot edit it
+without breaking hashes; filenames carry it only as a human-readable label and
+the tool never trusts them (a renamed archive, a colliding version number from
+a destroyed predecessor session — both have happened; the manifest survived
+both because it is the only authority).
+
+`next-gen = max(local heads, ledger head) + 1` means a wipe that destroys the
+local chain still cannot reissue an old number once the ledger remembers.
+
+### 2. The chain is hash-linked
+
+Each manifest records `parent_sha256`. The parent resolution order is:
+
+1. **Ledger truth** — the sha256 registered for gen N-1. The ledger was written
+   at registration time, outside the workspace; it cannot drift with the local
+   filesystem.
+2. **Local manifest truth** — the newest local archive whose *embedded
+   manifest* says generation N-1. Its own sha256, computed now.
+3. **Omit, loudly** — build proceeds with no parent and says the chain head is
+   broken.
+
+Filename-based guessing was removed after it produced a stale parent on a
+production build (caught in review, overridden with manifest truth). The
+sequence `parent → (gen, sha) → parent → …` turns N independent archives into
+one falsifiable object: break any link and the break is provable.
+
+### 3. The ledger lives outside the blast radius
+
+The ledger answers three questions after a wipe:
+
+- *What is the true head?* → `check` refuses anything older (stale handoff).
+- *Which bytes were real?* → `verify` authenticates a pulled archive by hash.
+- *What generation may the rebuilt workspace claim?* → `next-gen` stays
+  monotonic even from an empty directory.
+
+The skill ships three adapters and **no platform code**:
+
+| adapter | wipe-safe? | use |
+|---|---|---|
+| `none` | — | testing, or when local-chain fencing is genuinely enough; every result is marked |
+| `file` | only if the file lives outside the machine (`--ledger-file /mnt/persist/ledger.log`) | default; simplest real option |
+| `command` | whatever your commands do | any append-only channel you already have: a gist, a paste, a forum post, a git branch, a database row |
+
+For a shared or public channel, put identity filtering **inside the read
+command** (`curl … | grep my-handle`), because the parser accepts any line
+shaped like an entry. The one-issuer property of the fencing token depends on
+it. Posting may be manual (some channels gate writes behind challenges or
+moderation — solve them, then append); `build` prints the exact line either way.
+
+### 4. A build is not done until a drill passed
+
+The gates, in order — each exists because its absence was exploited by reality:
+
+| gate | refuses |
+|---|---|
+| G1 member presence | building an archive that silently misses critical files |
+| G2 generation fencing | reissuing a generation after a wipe |
+| G3 parent resolution | a chain link nobody can vouch for (warns, does not guess) |
+| G4 manifest inside | archives that order without describing themselves |
+| G5 listing check | members that failed to make it into the tarball |
+| G6 manifest roundtrip | a manifest that says something different from the archive built seconds ago |
+| G7 sha256 receipt | later, undetectable bit rot; gives the off-site copy something to check against |
+| G8 restore drill | everything above, if extraction itself is broken |
+
+G8 re-extracts **every** member to staging and hash-compares against the
+manifest's member map. It is the difference between "I created a file" and
+"this file is recoverable."
+
+The manifest's **member map** (`path → sha256` for every file member) is what
+makes restores verifiable without a surviving source: the archive carries its
+own proof. Hashing every member at build time is cheap at workspace scale and
+is the feature that turns a tarball into a chain node.
+
+### 5. Restore is per-member, verified
+
+The implementation streams each member out of the archive individually
+(`tarfile.extractfile`), writes it under a temp name, fsyncs, hashes while
+writing, compares against the member map, and only then renames into place.
+There is no bulk extraction anywhere in the tool, and the drill would catch one
+if someone added it.
+
+Additional restore discipline:
+
+- **Pre-gate** (`check`): refuse stale handoffs; mark skips loudly.
+- **Authenticity**: if the ledger has an entry for this generation, the archive
+  hash must match it before anything is written.
+- **Overwrite separation**: existing differing files are counted and *refused*
+  without `--overwrite`. A heal and a clobber must be two different decisions.
+- **Post-receipt** (`recheck`): `ok` closes the incident; `stale` means bytes
+  landed but the precondition did not — the ledger remembers more than the
+  workspace now holds. Treat a stale like an incident, not a success.
+- **Traversal defence**: member names are validated on read (absolute paths,
+  `..`, NUL) and every write is resolved inside `--target`.
+
+### 6. Fencing failures are loud or refused, never silent
+
+The decision table:
+
+| archive manifest | ledger reachable? | vs head | decision |
+|---|---|---|---|
+| absent | yes | — | **refuse** (provenance unknown while a sequencer exists) |
+| absent | no | — | restore, *marked* (legacy heuristic) |
+| gen N | yes | N < head | **refuse** (stale handoff) |
+| gen N | yes | N < local head | **refuse** (stale vs local chain — assertable even when the ledger is silent; found by test, not by theory) |
+| gen N | yes | N ≥ head, ≥ local head | restore (N > head is annotated: unregistered build) |
+| gen N | no/error | N < local head | **refuse** (assertable locally even without the ledger) |
+| gen N | no/error | N ≥ local head | **skip, marked** (unverified precondition) |
+
+"A clearly marked untested solution is more useful than a falsely verified
+one." The corollary: a refusal is the protocol working, not malfunctioning.
+Investigate before `--force`. A deliberate rollback to an older generation is a
+legitimate operation — but it must be a *decision*: with `--force` it proceeds
+under an explicit OVERRIDE banner, without it the refusal stands.
+
+## Off-site distribution (the part that is deliberately yours)
+
+The tool has no upload code, so it cannot ship bad upload code. What it gives
+you is everything distribution needs to be checkable:
+
+**The roundtrip pattern** (the only proof that matters):
+
+1. `build` → archive + `.sha256` receipt, drill PASS.
+2. Upload archive + receipt (and the ledger line, if your ledger is manual).
+3. **Fetch the uploaded copy back down** (signed URL, raw endpoint, whatever).
+4. `sha256sum -c` the fetched copy against the receipt. Only a fetched-back
+   hash-equal copy is a MATCH. Upload APIs report what you asked them to do;
+   the roundtrip reports what actually landed.
+
+**Rules of thumb learned from incidents:**
+
+- Keep the newest archive + receipt + ledger line in at least two failure
+  domains (e.g. local + one off-site). More is fine; one is zero.
+- The ledger is small — replicate it more aggressively than the archives.
+- Archives that contain credentials must go only to **private** storage. The
+  tool prints `SECRET-WARN` for credential-looking member names; treat the
+  warning as a prompt to check where the archive will be sent.
+- After any heal, build a new generation whose `--carries` note records the
+  incident and the cure. The chain then documents its own history, and the
+  next session inherits the lesson without needing this conversation.
+
+## Custody vs validity
+
+sha256 proves a sentence **survived** a restore. It does not prove the sentence
+was ever **right**. These are separate receipts, and this tool only issues the
+first. The pattern that covers the second: alongside each consequential
+conclusion, keep a small route file (premises with receipts, rejected
+alternatives, priced uncertainty, a falsifier, a recheck date) and put the
+route files **in the member list**. Routes then hash into the same chain as the
+artifacts they audit: after a restore, an artifact whose route survived is
+content-with-route; an artifact whose route is gone is content-without-route —
+refuse to narrate its why, flag it for re-derivation. The tool stays
+content-blind; the member list is where you teach it your epistemology.
+
+## What a chain buys over "just copy files"
+
+1. Ordering you can prove, even to a session with no memory and a lying clock.
+2. Authenticity you can prove from outside the failure domain.
+3. Completeness you can prove per restore, per file.
+4. History: each manifest's `carries` note is the incident log of the workspace
+   itself.
+5. A short, honest failure vocabulary: refuse / skip (marked) / stale / ok —
+   instead of "it seemed to work."

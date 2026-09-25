@@ -1,42 +1,61 @@
-## Description: <br>
-Use Axiom Wallet via MCP to manage payment methods, review account activity, and complete user-requested purchases through Axiom's server-managed browser checkout. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Orders physical products the user asks for through Axiom, using the payment method saved in their Axiom account, checks which payment method Axiom has on file, and reviews past Axiom orders.
 
-## Publisher: <br>
-[axiom-wallet](https://clawhub.ai/user/axiom-wallet) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[axiom-wallet](https://clawhub.ai/user/axiom-wallet)
 
-## Use Case: <br>
-External users and agents use this skill to connect to Axiom Wallet, check saved payment-method metadata, review recent transactions, and start user-requested purchases that require Axiom approval flows before completion. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A connected agent can read wallet transaction and payment-method metadata. <br>
-Mitigation: Install only when the user intends to let an agent use Axiom Wallet, use OAuth approval, and avoid exposing tokens, cookies, browser state, or OAuth authorize URLs. <br>
-Risk: The skill can start purchases through Axiom Wallet. <br>
-Mitigation: Require clear user intent, verify the payment method before purchase, wait for Axiom approval links, and never claim success until purchase status returns completed. <br>
+## Use Case:
 
+External users and agents use this skill to place clearly requested physical-product orders through Axiom, check the saved payment method, and review Axiom order status or receipts. The skill is intended for specific purchase requests, not browsing, price comparison, subscriptions, digital goods, or unrequested orders.
 
-## Reference(s): <br>
-- [Axiom ClawHub listing](https://clawhub.ai/axiom-wallet/axiom) <br>
-- [Authentication guide](references/authentication.md) <br>
-- [Axiom MCP endpoint](https://mcp.useaxiom.ai/mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text] <br>
-**Output Format:** [Markdown guidance with inline shell commands and MCP tool-call instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires mcporter >=0.8.0 and OAuth approval before account or purchase tools can be used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata and VERSION) <br>
+Risk: The skill can initiate real physical-product purchase attempts through the user's Axiom account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only after a clear user request, confirm merchant, product, and required options before calling purchase tools, and rely on Axiom approval links and spending rules before an order is placed.
+
+Risk: Authentication involves OAuth flow URLs and payment-account access.
+
+Mitigation: Share only the activation URL with the user, never expose OAuth tokens, cookies, browser state, or internal authorization URLs, and reconnect with the required scopes if access is insufficient.
+
+Risk: The documented /tmp PATH interception troubleshooting workaround can alter local command resolution.
+
+Mitigation: Avoid that workaround unless necessary, understand the local PATH risk before using it, and clean up the temporary shim after troubleshooting.
+
+## Reference(s):
+
+- [Axiom ClawHub Page](https://clawhub.ai/axiom-wallet/axiom)
+- [Authentication](references/authentication.md)
+- [Axiom MCP Tool Reference](references/tool-reference.md)
+- [Worked Examples](references/examples.md)
+- [Troubleshooting](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API Calls]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces user-facing order progress, approval, receipt, and troubleshooting guidance while keeping internal tool instructions and identifiers out of user-facing responses.]
+
+## Skill Version(s):
+
+0.2.0 (source: artifact/VERSION and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

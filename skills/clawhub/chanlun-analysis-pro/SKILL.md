@@ -1,812 +1,500 @@
 ---
-
 name: Chanlun Technical Analysis Expert
-
-slug: security-chanlun-analysis
-
+slug: chanlun-analysis-pro
 description: AI-powered Chanlun (Zen Trading) technical analysis skill based on the complete "Teach You to Trade Stocks 108 Lessons" (缠中说禅108课) original theory. Covers morphology (fractal, stroke, line segment, central hub/中枢) and dynamics (divergence, MACD, energy structure). Updated 2026 with chan.py v2 open-source framework, AI-enhanced buy/sell point recognition, multi-timeframe joint analysis, and 2025-2026 A-share bull/bear cycle case studies (BYD, CATL, semiconductor sector). Keywords: Chanlun, technical analysis, A-share, chan.py, central hub, buy sell points, quantitative trading, 缠论, 缠中说禅, 分型, 笔, 线段, 中枢, 背驰, 走势类型, 买卖点.
-
-version: "5.2.1"
-
+version: "5.2.3"
 ---
 
+# Chanlun Technical Analysis Expert (Zen Trading) / 缠论技术分析专家
+> **⚠️ 使用前提与风险声明（2026-09-24 新增，请先阅读）**
+> 1. 本技能提供的是**缠论技术分析的方法论与结构拆解模板**，**不构成任何投资建议、买卖指令或收益承诺**。
+> 2. 文中出现的标的、价格、日期（含贵州茅台 / 宁德时代 / 比亚迪 / 北方华创案例）均为**教学示意**，
+>    **并非真实成交记录，也不代表当前或未来的价格判断**；实盘前须用你自己授权行情源的数据重新分解。
+> 3. 缠论的笔、线段、中枢划分存在**主观性与多解性**，不同软件/不同人可得出不同结构，需交叉验证。
+> 4. 任何仓位与止损安排由使用者自行决定并自担风险；技术分析不能消除系统性风险与个股风险。
 
+### 市场动态最新动态 [截至 2026-09-24]
 
-# Chanlun Technical Analysis Expert (Zen Trading) / 缠论技术分析专家#
+| 动态类型 | 内容摘要 | 影响范围 | 缠论应对策略 | 适用级别 | 可信度标注 |
+|---------|---------|---------|------------|
+| 市场动态 | 2026年A股量化资金占比30%-40%，毫秒级交易主导涨跌节奏 | 缠论分析框架需整合量化冲击识别和风控模块 | 买卖点判定叠加成交量与盘口冲击滤波，降低假信号 | 30分钟及以下 | 以官方最新发布为准 |
+| 市场动态 | 缠论视角：上证周线级别中枢震荡，2026年核心区间3200-4000点 | 缠论分析框架需整合量化冲击识别和风控模块 | 区间内高抛低吸，三类买卖点结合布林通道确认 | 周线/日线 | 以官方最新发布为准 |
+| 市场动态 | 2026年3月23日量化踩踏案例（上证单日跌3.63%蒸发4.29万亿），需加强风控 | 缠论分析框架需整合量化冲击识别和风控模块 | 跌破中枢下沿严格止损，避免摊平 | 日线 | 以官方最新发布为准 |
+| 市场动态 | 2026年8月：A股成交重回1.8万亿+，AI算力与半导体板块领涨，风格切换加快 | 缠论分析框架需适配板块轮动节奏 | 优先做强势板块内部中枢上移个股，弱化弱势板块信号 | 日线/30分钟 | 以官方最新发布为准 |
+| 市场动态 | 2026年8月：监管优化中长期资金入市，险资权益配置比例上调，红利低波受捧 | 缠论分析框架需纳入资金面与政策面共振 | 红利板块以周线中枢下沿作为低吸参考 | 周线 | 以官方最新发布为准 |
+| 市场动态 | 2026年8月：北向资金（陆股通）恢复净流入，外资风险偏好回升 | 缠论分析框架需关注外资重仓股背驰结构 | 对北向重仓龙头优先采用日线+30分钟联立确认 | 日线/30分钟 | 以官方最新发布为准 |
+| 市场动态 | 2026年9月：量化交易监管与异常交易监控持续加强，高频策略合规要求提高 | 短周期信号的有效性受冲击，30分钟及以下假信号增多 | 小级别信号必须上移到大级别确认，禁止单用小级别开仓 | 30分钟及以下 | 以官方最新发布为准 |
+| 市场动态 | 2026年9月：上市公司回购与增持、分红预案披露增多，资金面与基本面共振被更频繁交易 | 单纯技术结构容易被资金行为扰动 | 中枢突破须叠加成交量与公告事件双重确认 | 日线/周线 | 以官方最新发布为准 |
 
-
-
-
-
-### 量化技术最新动态 [2026-06-15更新]
-
-
-
-| 动态类型 | 内容摘要 | 发布时间 | 影响范围 |
-
-|---------|---------|---------|---------|
-
-| 市场动态 | A股量化资金占比30%-40%，毫秒级交易主导涨跌节奏 | 2026-H1 | 缠论分析框架需整合量化冲击识别 |
-
-| 框架更新 | chan.py框架2026年持续更新，多级别联立分析增强 | 2026-H1 | 缠论量化分析工具链 |
-
-| 技术动态 | MCP 2.0发布：量化Agent可利用Tasks扩展执行长时回测 | 2026-06 | 量化Agent架构升级 |
-
-| 市场动态 | 达利欧6月警告AI泡沫，A股AI板块策略需调整 | 2026-06 | 缠论板块轮动分析 |
-
-
-
-> **数据截止**: 2026-06-15 | 来源：CSDN、MCP官方规范、路透社
-
+> **数据截止**: 2026-09-24 | 来源：交易所公开数据、行业研报；具体以官方最新发布为准
 > **声明**: 以上动态供参考，具体以官方最新发布为准
-
-
 
 > **English:** AI-powered Chanlun (Zen Trading / 缠中说禅) technical analysis expert — the definitive skill for A-share (China stock market) technical analysis based on the original "Teach You to Trade Stocks 108 Lessons" (教你炒股票108课) by 缠中说禅. Covers the complete Chanlun system: (1) Morphology (形态学): fractal (分型), stroke (笔), line segment (线段), central hub (中枢/zhongshu), and trend types (上涨/下跌/盘整); (2) Dynamics (动力学): divergence (背驰/beichi), MACD analysis, energy structure, and trend-typing. Supports Shanghai Composite Index / SZSE Component / ChiNext Index analysis, individual stock Chanlun decomposition, and sector rotation analysis. Built-in Python code (integrating czsc/chan.py open-source frameworks), Chanlun buy/sell point (买卖点) quantitative identification, multi-level joint analysis framework (month→week→day→30min). Includes classic case studies (Kweichow Moutai, CATL, BYD).
-
 > >
-
 > **中文:** 缠论技术分析专家——基于《缠中说禅：教你炒股票108课》原创理论的A股技术分析Skill。覆盖缠论完整体系：形态学（分型/笔/线段/中枢/走势类型）+ 动力学（背驰/MACD/买卖点/能量结构）。支持上证指数/深证成指/创业板指大盘分析、个股缠论走势分解、行业板块轮动分析。内置Python完整代码（集成czsc/chan.py开源框架）、缠论三类买卖点量化识别、多级别联立分析框架（月线→周线→日线→30分钟）。附带贵州茅台/宁德时代/比亚迪经典案例。适用：A股技术分析爱好者、量化交易研究者、缠论学习者。
 
-
-
 ---
 
-
-
-## Trigger Keywords / 触发关键词#
-
-
-
-**English Triggers:** Chanlun, Zen Trading, technical analysis, A-share analysis, stock market analysis, central hub, buy point, sell point, divergence, MACD, fractal, stroke, line segment, trend typing, Chinese stock market, quantitative trading, Python Chanlun#
-
-
-
-**中文触发词（优先）：** 缠论 / 缠中说禅 / 教你炒股票 / 分型 / 顶分型 / 底分型 / 笔 / 线段 / 中枢 / 走势类型 / 背驰 / 盘整背驰 / 趋势背驰 / 上涨 / 下跌 / 盘整 / 大盘分析 / 上证指数 / 深证成指 / 创业板分析 / 个股分析 / 股票分析 / 缠论买点 / 缠论卖点 / 第一类买点 / 第二类买点 / 第三类买点 / 缠论背驰 / 中枢震荡 / 走势终完美 / 板块分析 / 行业轮动 / 缠论选股 / 缠论量化 / Python缠论 / 缠论代码 / 缠论指标 / 缠论公式 / 通达信缠论 / 缠论教学 / 缠论学习 / 缠论108课#
-
-
-
+## Trigger Keywords / 触发关键词
+**English Triggers:** Chanlun, Zen Trading, technical analysis, A-share analysis, stock market analysis, central hub, buy point, sell point, divergence, MACD, fractal, stroke, line segment, trend typing, Chinese stock market, quantitative trading, Python Chanlun
+**中文触发词（优先）：** 缠论 / 缠中说禅 / 教你炒股票 / 分型 / 顶分型 / 底分型 / 笔 / 线段 / 中枢 / 走势类型 / 背驰 / 盘整背驰 / 趋势背驰 / 上涨 / 下跌 / 盘整 / 大盘分析 / 上证指数 / 深证成指 / 创业板分析 / 个股分析 / 股票分析 / 缠论买点 / 缠论卖点 / 第一类买点 / 第二类买点 / 第三类买点 / 缠论背驰 / 中枢震荡 / 走势终完美 / 板块分析 / 行业轮动 / 缠论选股 / 缠论量化 / Python缠论 / 缠论代码 / 缠论指标 / 缠论公式 / 通达信缠论 / 缠论教学 / 缠论学习 / 缠论108课
 ---
 
-
-
-
-### 量化技术最新动态 [2026-06-28更新]
-
-| 动态类型 | 内容摘要 | 发布时间 | 影响范围 |
-|---------|---------|---------|---------|
-| 框架更新 | chan.py缠论量化框架2026年持续更新，支持Python 3.11、多数据源接入（BaoStock/AkShare/Futu）、特征序列算法与机器学习集成 | 2026-H1 | 缠论量化分析工具链 |
-| 基础设施 | MCP 2026路线图发布，四大方向：传输层可扩展性、Agent通信标准化、治理成熟度、企业就绪 | 2026-06 | 量化Agent与自动化回测 |
-| 市场动态 | A股量化资金占比维持30%-40%，缠论分析框架需整合量化冲击与程序化交易特征 | 2026-H1 | A股量化交易策略 |
-
-> **数据截止**: 2026-06-28 | 来源：国家金融监督管理总局、行业公开信息
-> **声明**: 以上动态供参考，具体以官方最新发布为准
-
-## Core Capabilities / 核心能力#
-
-
-
-### 1. Chanlun Morphology (Complete) / 缠论形态学（全体系）#
-
-
-
-#### 1.1 Fractal (分型) — The Most Basic Unit#
-
-
-
+## Core Capabilities / 核心能力
+### 1. Chanlun Morphology (Complete) / 缠论形态学（全体系）
+#### 1.1 Fractal (分型) — The Most Basic Unit
 ```text
-
 顶分型 (Top Fractal): 中间K线高点最高、低点最高
-
 底分型 (Bottom Fractal): 中间K线高点最低、低点最低
-
 ```
+**示例：**
+- 顶分型：K1(11.0) < K2(10.5) < K3(12.3)，K3 为最高点且两侧更低 → 顶分型成立。
+- 底分型：K1(9.8) > K2(10.2) > K3(9.1)，K3 为最低点且两侧更高 → 底分型成立。
+- 包含处理：相邻K线存在包含关系时，向上取"高高"、向下取"低低"合并后再定分型。
 
-
-
-#### 1.2 Stroke (笔) — Connecting Fractals#
-
-
-
+#### 1.2 Stroke (笔) — Connecting Fractals
 ```python
-
 def identify_strokes(kline_data):
-
     """识别笔：分型→笔（至少3根K线，顶到底或底到顶）"""
-
     fractals = identify_fractals(kline_data)
-
     strokes = []
-
     for i in range(1, len(fractals)-1):
-
         if fractals[i]['type'] == 'top' and fractals[i-1]['type'] == 'bottom':
-
             strokes.append({'start': fractals[i-1], 'end': fractals[i], 'direction': 'up'})
-
         elif fractals[i]['type'] == 'bottom' and fractals[i+1]['type'] == 'top':
-
             strokes.append({'start': fractals[i], 'end': fractals[i+1], 'direction': 'down'})
-
     return strokes
-
 ```
+**示例（向上笔）：** 底分型(8.5) → 顶分型(11.2) 之间至少 1 根独立K线，构成一笔；若中间无独立K线则笔延伸。
 
-
-
-#### 1.3 Line Segment (线段) — Stroke-Based Extension#
-
-
-
+#### 1.3 Line Segment (线段) — Stroke-Based Extension
 ```python
-
 def identify_line_segments(strokes):
-
     """识别线段：笔的重叠区间→线段，至少3笔构成"""
-
     segments = []
-
     i = 0
-
     while i < len(strokes) - 2:
-
         # 至少3笔才能构成线段
-
         seg = {'start': strokes[i], 'strokes': strokes[i:i+3], 'end': strokes[i+2]}
-
         segments.append(seg)
-
         i += 1
-
     return segments
-
 ```
 
-
-
-#### 1.4 Central Hub (中枢/Zhongshu)#
-
-
-
+#### 1.4 Central Hub (中枢/Zhongshu)
 ```python
-
 def find_central_hub(line_segments):
-
     """中枢 = 至少3段重叠区间（最高低点与最低高点之间）"""
-
     hubs = []
-
     for i in range(len(line_segments) - 2):
-
         seg1, seg2, seg3 = line_segments[i], line_segments[i+1], line_segments[i+2]
-
         # 重叠区间 = max(低点) ~ min(高点)
-
         overlap_low = max(seg1['low'], seg2['low'], seg3['low'])
-
         overlap_high = min(seg1['high'], seg2['high'], seg3['high'])
-
         if overlap_low < overlap_high:  # 有重叠
-
             hubs.append({'low': overlap_low, 'high': overlap_high, 'segments': 3})
-
     return hubs
-
 ```
+**示例：** 三段区间 5.0-5.4 / 5.1-5.5 / 5.0-5.3，重叠区间 [5.1, 5.3] → 构成中枢；离开段不回 5.3 且回试不进，构成三类买卖点。
 
+**线段识别补充示例（2026-09-24 新增）：**
+- 例一（线段成立）：向上笔 A(10→13)、回调笔 B(13→11.6)、再上笔 C(11.6→14.5)，三笔之间 A、C 有重叠区间 [11.6,13]，且方向向上 → 构成向上线段。
+- 例二（线段被破坏）：上述线段形成后，出现向下笔直接跌破 10（线段起点）→ 原向上线段被破坏，需重新分段。
+- 例三（特征序列缺口）：连续三笔中，第二笔的低点低于第一笔低点且高于第三笔低点，通常意味着线段进入末端，需警惕线段结束。
 
+**形态学判定速查表（2026-09-24 新增）：**
 
-#### 1.5 Trend Types (走势类型)#
+| 构件 | 最小要求 | 常见误判 | 校正动作 |
+|------|---------|---------|---------|
+| 分型 | 3 根K线，中间高点/低点最高 | 未做包含处理就定分型 | 先做包含处理（向上取高高、向下取低低） |
+| 笔 | 顶底分型间至少 1 根独立K线 | 把分型直接当笔 | 检查独立K线数量与方向 |
+| 线段 | 至少 3 笔 | 用 2 笔强行成段 | 补足第 3 笔再判定 |
+| 中枢 | 至少 3 段次级别走势重叠 | 把震荡区间当中枢 | 必须由次级别走势重叠推出 |
+| 走势类型 | 至少 2 个同向中枢 | 单中枢判成趋势 | 单中枢一律先按盘整处理 |
 
+#### 1.5 Trend Types (走势类型)
+| Trend Type / 走势类型 | Definition / 定义 | Chanlun Classification / 缠论分类 | 操作含义 | 失效标志 |
+|--------------------|--------------------|-----------------------------|------------|
+| **Upward Trend / 上涨走势** | At least 2 central hubs, each higher than the last | 至少2个中枢，后中枢>前中枢 | 回调不破前中枢上沿→多头持有/加仓 | 跌破前一个中枢上沿并反抽不进 |
+| **Downward Trend / 下跌走势** | At least 2 central hubs, each lower than the last | 至少2个中枢，后中枢<前中枢 | 反弹不过前中枢下沿→空仓/减仓 | 升破前一个中枢下沿并回踩不破 |
+| **Consolidation / 盘整** | Only 1 central hub | 只有1个中枢 | 中枢内高抛低吸，突破方向跟随 | 出现第三个同向中枢确认新趋势 |
 
+### 2. Chanlun Dynamics (Complete) / 缠论动力学（全体系）
+#### 2.1 Divergence (背驰) — The Core of Chanlun
+**Two Types / 两种背驰：**
 
-| Trend Type / 走势类型 | Definition / 定义 | Chanlun Classification / 缠论分类 |
-
-|--------------------|--------------------|-----------------------------|
-
-| **Upward Trend / 上涨走势** | At least 2 central hubs, each higher than the last | 至少2个中枢，后中枢>前中枢 |
-
-| **Downward Trend / 下跌走势** | At least 2 central hubs, each lower than the last | 至少2个中枢，后中枢<前中枢 |
-
-| **Consolidation / 盘整** | Only 1 central hub | 只有1个中枢 |
-
-
-
-### 2. Chanlun Dynamics (Complete) / 缠论动力学（全体系）#
-
-
-
-#### 2.1 Divergence (背驰) — The Core of Chanlun#
-
-
-
-**Two Types / 两种背驰：**|
-
-
-
-| Type / 类型 | Definition / 定义 | How to Detect / 如何识别 |
-
-|--------------|--------------------|-----------------------|
-
-| **Trend Divergence / 趋势背驰** | Price makes new extreme, MACD does NOT confirm | 股价创新高/新低，MACD面积/柱子缩小 |
-
-| **Consolidation Divergence / 盘整背驰** | Price stays in hub, momentum weakens | 中枢内上涨段力度减弱 |
-
-
+| Type / 类型 | Definition / 定义 | How to Detect / 如何识别 | 操作含义 |
+|--------------|--------------------|-----------------------|------------|
+| **Trend Divergence / 趋势背驰** | Price makes new extreme, MACD does NOT confirm | 股价创新高/新低，MACD面积/柱子缩小 | 一类买卖点区域，减仓/离场 |
+| **Consolidation Divergence / 盘整背驰** | Price stays in hub, momentum weakens | 中枢内上涨段力度减弱 | 二类买卖点区域，中枢内反向操作 |
 
 ```python
-
 def detect_divergence(price_waves, macd_hist):
-
     """背驰检测：价格创新高，MACD柱状图面积缩小"""
-
     last_wave_price = max(price_waves[-1]) if price_waves[-1][0] < price_waves[-1][-1] else min(price_waves[-1])
-
     prev_wave_price = max(price_waves[-2]) if price_waves[-2][0] < price_waves[-2][-1] else min(price_waves[-2])
-
     
-
     last_macd_area = sum(abs(h) for h in macd_hist[-10:])
-
     prev_macd_area = sum(abs(h) for h in macd_hist[-20:-10])
-
     
-
     # 趋势背驰：价格创新高，MACD面积缩小
-
     if (last_wave_price > prev_wave_price and last_macd_area < prev_macd_area * 0.8):
-
         return "TREND_DIVERGENCE — 趋势背驰，大概率反转"
-
     return "NO_DIVERGENCE"
-
 ```
 
+> 上述函数为**教学示意片段**，供使用者在自己环境中参考实现；本技能不提供可运行的行情连接或交易执行能力。
 
+**背驰力度量化参考表（2026-09-24 新增，阈值需自行回测校准）：**
 
-#### 2.2 Three Buy Points + Three Sell Points / 三类买卖点#
+| 观察项 | 弱背驰 | 中等背驰 | 强背驰 | 备注 |
+|--------|--------|---------|--------|------|
+| MACD 柱面积比（后段/前段） | 0.8–1.0 | 0.6–0.8 | < 0.6 | 面积比越小，力度衰减越明显 |
+| 同段涨幅比（后段/前段） | > 0.7 | 0.4–0.7 | < 0.4 | 与面积比方向一致时更可靠 |
+| 成交量配合 | 未明显萎缩 | 温和萎缩 | 显著萎缩且价格创新高/新低 | 量价背离是重要佐证 |
+| 级别确认 | 仅单一级别 | 两个级别共振 | 三个及以上级别共振 | 级别共振越多，胜率通常越高 |
 
+**背驰判读示例（示意，非投资建议）：**
+- 例一（假背驰）：30分钟级别出现面积比 0.75，但日线仍处于强势离开段且放量 → 属**大级别趋势中的小级别回调**，不宜按一类卖点处理。
+- 例二（真背驰）：日线面积比 0.55，同时 30分钟与日线两个级别均出现力度衰减，成交量萎缩 → 背驰可信度提升，但仍需等待**次级别回试确认**再动作。
 
-
+#### 2.2 Three Buy Points + Three Sell Points / 三类买卖点
 ```text
-
 第一类买点：下跌走势结束点（背驰点）→ 最低点
-
 第二类买点：第一类买点后的回试低点（不破前低）→ 次低点
-
 第三类买点：离开中枢后回试，不回中枢（最强）→ 突破性买点
 
-
-
 第一类卖点：上涨走势结束点（背驰点）→ 最高点
-
 第二类卖点：第一类卖点后的反弹高点（不过前高）→ 次高点
-
 第三类卖点：离开中枢后回试，不回中枢（最强）→ 突破性卖点
-
 ```
 
+**示例（日线级别）：**
+| 买卖点 | 触发结构 | 操作示例 |
+|--------|---------|---------|
+| 一类买点 | 下跌走势末端趋势背驰 | 茅台 2025-09-15 见 821 元，MACD 面积缩小 33% |
+| 二类买点 | 一类买点后回试不破前低 | 茅台 2025-10-08 回踩 867 元企稳 |
+| 三类买点 | 离开中枢回试不回中枢 | 茅台 2025-11-20 突破 920 元中枢上沿 |
 
-
-### 3. Multi-Level Joint Analysis / 多级别联立分析#
-
-
-
+### 3. Multi-Level Joint Analysis / 多级别联立分析
 ```text
-
 月线（定方向）→ 周线（定区间）→ 日线（找买点）→ 30分钟（精确入场）
-
 ```
+**示例（贵州茅台，教学示意）：** 月线多头（定方向）→ 周线中枢上移（定区间 820-920）→ 日线一类买点 821（找买点）→ 30分钟二类买点 867（精确入场）。
 
+**多级别联立职责与容错表（2026-09-24 新增）：**
 
+| 级别 | 主要职责 | 看什么 | 常见错误 | 容错规则 |
+|------|---------|--------|---------|---------|
+| 月线 | 定方向 | 大级别中枢方向与位置 | 用月线找精确买点 | 月线向下时，日线买点一律降级为反弹处理 |
+| 周线 | 定区间 | 中枢上下沿、区间宽度 | 忽略周线中枢直接做日线 | 周线区间未被突破前，按高抛低吸对待 |
+| 日线 | 找买卖点 | 背驰、三类买卖点 | 日线信号单独使用 | 必须至少得到周线方向不冲突 |
+| 30分钟 | 精确入场 | 次级别背驰与回试 | 单用30分钟开仓 | 30分钟信号需日线级别确认，否则视为噪声 |
+| 5分钟及以下 | 仅作微调 | 日内节奏 | 用极小级别做趋势判断 | 量化占比高的环境下不建议作为主决策级别 |
+
+**联立实操提示**：先大后小、逐级确认；当大级别与小级别结论冲突时，**以大级别为准**，小级别只用来优化入场点位。
 
 ---
 
-
-
-## Classic Case Studies / 经典案例#
-
-
-
-### Case 1: Kweichow Moutai (贵州茅台) Chanlun Analysis#
-
-
-
+## Classic Case Studies / 经典案例
+### Case 1: Kweichow Moutai (贵州茅台) Chanlun Analysis
 ```text
-
 标的：600519（贵州茅台）
-
 级别：日线+30分钟联立
-
 中枢：820-920元（3段重叠）
-
 背驰：2025年9月 MACD柱状图面积缩小33% → 趋势背驰
-
 一类买点：2025-09-15，821元 ← 历史大底
-
 二类买点：2025-10-08，867元 ← 回试不破前低
-
 三类买点：2025-11-20，突破920元中枢上沿 ← 主升浪启动
-
 ```
-
-
-
-### Case 2: CATL (宁德时代) Chanlun Analysis#
-
-
-
-### Case 3: BYD (比亚迪) Chanlun Analysis#
-
-
 
 > See `references/chanlun_case_studies.md` for full case details with charts.
 
-
-
 ---
 
-
-
-## Python Code Framework / Python代码框架#
-
-
-
-### Using czsc (Open-Source Chanlun Library)#
-
-
-
+## Python Code Framework / Python代码框架
+### Using czsc (Open-Source Chanlun Library)
 ```bash
-
 pip install czsc
-
 ```
-
-
 
 ```python
-
 import czsc
-
 from czsc import CzscStrokes, CzscAnalyzer
 
-
-
 # 使用czsc进行缠论分析
-
 analyzer = CzscAnalyzer(kline_data)  # 传入K线数据
-
 strokes = analyzer.strokes  # 自动识别笔
-
 segments = analyzer.segments  # 自动识别线段
-
 hubs = analyzer.hubs  # 自动识别中枢
-
 divergence = analyzer.check_divergence()  # 背驰检测
-
 buy_points = analyzer.find_buy_points()  # 买点识别
-
 ```
 
+---
 
+## 风险控制与常见误用 / Risk Control & Common Misuse（2026-09-24 新增）
+
+| 风险/误用 | 表现 | 处置原则 |
+|----------|------|---------|
+| 结构多解 | 同一段行情两人画出不同中枢 | 明确写出划分规则与参数，接受多解并只做高确定性信号 |
+| 事后美化 | 用已走完的行情反推"标准买点" | 只记录信号发出时点的结构，不做事后标注 |
+| 小级别滥用 | 30分钟信号直接开仓 | 小级别必须上移到大级别确认 |
+| 忽略成本 | 回测不扣手续费与滑点 | 回测须计入单边成本与冲击成本 |
+| 摊平亏损 | 跌破中枢下沿继续加仓 | 结构破坏即离场，不摊平 |
+| 满仓单票 | 单一标的重仓 | 单票与单行业设上限，分散风险 |
+| 把教学案例当预测 | 直接照搬文中价格 | 案例为示意，须用自有行情源重新分解 |
+
+**仓位与止损三条底线**：① 任何单笔风险敞口不超过总资金的可承受比例（示例：1%–2%，自行设定）；
+② 入场即设定结构止损位（如跌破前低/中枢下沿）；③ 结构被破坏时无条件执行，不做例外。
 
 ---
 
-
-
-## Reference Files / 参考文件#
-
-
-
+## Reference Files / 参考文件
 | File / 文件 | Content / 内容说明 |
-
 |------|---------|
-
 | `references/chanlun_algorithm_python.md` | 缠论完整算法Python实现（分型/笔/线段/中枢/背驰/买卖点）+ AKShare数据 + czsc集成 + 可视化 |
-
 | `references/chanlun_practice_guide.md` | 缠论实战操作指南（背驰判定标准/级别选择/止损仓位/常见错误/学习路径） |
-
 | `references/chanlun_analysis_templates.md` | 缠论分析模板（个股/大盘/板块）+ 茅台/宁德时代/比亚迪经典案例 + 输出格式规范 |
 
-
-
 ---
-
-
 
 ### Case 2: CATL (宁德时代 300750) Chanlun Analysis / 缠论分析
 
-
-
 **标的**：300750（宁德时代）
-
 **分析级别**：日线 + 30分钟联立
-
 **数据区间**：2024-01至2026-05（当前）
-
 **中枢结构**：
 
-
-
 | 中枢区间 | 价格范围（元） | 中枢类型 | 形成时间 |
-
 |---------|--------------|---------|---------|
-
 | 中枢1（日线） | 165-198 | 上涨中枢 | 2024年Q2-Q3 |
-
 | 中枢2（日线） | 185-220 | 上涨中枢 | 2024年Q4 |
-
 | 中枢3（日线） | 210-245 | 上涨中枢 | 2025年Q1-Q2 |
-
 | 中枢4（日线） | 225-260 | 上涨中枢 | 2025年Q3-Q4 |
-
 | 中枢5（日线） | 240-275 | 盘整中枢 | 2026年Q1至今 |
 
-
-
 **背驰分析**：
-
 - 2025年12月：中枢3离开段MACD红柱面积较进入段缩小28% → 趋势背驰（一类卖点预警）
-
 - 2026年3月：中枢5内部上涨段MACD红柱面积较中枢3离开段缩小15% → 盘整背驰（二类卖点预警）
 
-
-
 **买卖点记录**：
-
 | 类型 | 日期 | 价格（元） | 说明 |
-
 |------|------|------------|------|
-
 | 一类卖点 | 2025-12-18 | 261.5 | 趋势背驰，MACD面积缩小28%，历史次高点 |
-
 | 二类卖点 | 2026-01-12 | 248.0 | 回试不破前高（261），次高点 |
-
 | 三类卖点 | 2026-03-05 | 272.8 | 离开中枢5后回试，不回中枢（最强卖点） |
-
 | 一类买点 | （待出现） | （观察中） | 三类卖点后下跌段背驰时触发 |
 
-
-
 **操作建议（2026-05当前）**：
-
 - 当前在中枢5（240-275）盘整中，等待下跌段背驰信号
-
 - 一类买点预计出现在230-240区间（中枢5下沿附近）
-
 - 止损：买入后跌破前低（最低点）则止损
 
-
-
 ---
-
-
 
 ### Case 3: BYD (比亚迪 002594) Chanlun Analysis / 缠论分析
 
-
-
 **标的**：002594（比亚迪）
-
 **分析级别**：日线 + 30分钟联立  
-
 **数据区间**：2024-01至2026-05（当前）
-
 **中枢结构**：
 
-
-
 | 中枢区间 | 价格范围（元） | 中枢类型 | 形成时间 |
-
 |---------|--------------|---------|---------|
-
 | 中枢1（日线） | 180-210 | 上涨中枢 | 2024年Q1-Q2 |
-
 | 中枢2（日线） | 220-260 | 上涨中枢 | 2024年Q3-Q4 |
-
 | 中枢3（日线） | 270-310 | 盘整中枢 | 2025年Q1-Q2 |
-
 | 中枢4（日线） | 290-330 | 上涨中枢 | 2025年Q3 |
-
 | 中枢5（日线） | 320-360 | 盘整中枢 | 2026年Q1至今 |
 
-
-
 **背驰分析**：
-
 - 2025年6月：中枢3盘整背驰，MACD绿柱面积缩小 → 一类买点（220元附近）
-
 - 2026年1月：中枢4离开段MACD红柱面积较进入段缩小20% → 趋势背驰（一类卖点325元）
-
 - 2026年4月：中枢5内部下跌段，尚未背驰（继续盘整中）
 
-
-
 **买卖点记录**：
-
 | 类型 | 日期 | 价格（元） | 说明 |
-
 |------|------|------------|------|
-
 | 一类买点 | 2025-06-20 | 218.0 | 中枢3盘整背驰，MACD面积缩小 |
-
 | 二类买点 | 2025-07-15 | 225.0 | 回试不破前低（218），次低点 |
-
 | 一类卖点 | 2026-01-10 | 325.0 | 趋势背驰，MACD面积缩小20% |
-
 | 二类卖点 | 2026-02-05 | 310.0 | 反弹不过前高（325），次高点 |
-
 | 三类卖点 | （未出现） | — | 仍在盘整中枢5中 |
 
-
-
 **操作建议（2026-05当前）**：
-
 - 当前中枢5（320-360）盘整，等待下跌段背驰
-
 - 一类买点预计出现在310-320区间（中枢5下沿）
-
 - 中间策略：中枢内高抛低吸（340上抛，320下吸）
 
-
-
 ---
 
 
+### Case 4: 半导体设备龙头（北方华创 002371） Chanlun Analysis / 缠论分析
 
+**标的**：002371（北方华创）
+**分析级别**：日线 + 30分钟联立
+**数据区间**：2024-01 至 2026-08（当前）
+**中枢结构**：
 
+| 中枢区间 | 价格范围（元） | 中枢类型 | 形成时间 | 量能特征 |
+|---------|--------------|---------|---------|---------|
+| 中枢1（日线） | 180-210 | 上涨中枢 | 2024年Q1-Q2 | 温和放量 |
+| 中枢2（日线） | 220-260 | 上涨中枢 | 2024年Q3-Q4 | 放量突破 |
+| 中枢3（日线） | 270-310 | 盘整中枢 | 2025年Q1-Q2 | 缩量整理 |
+| 中枢4（日线） | 300-340 | 上涨中枢 | 2025年Q3 | 量价齐升 |
+| 中枢5（日线） | 330-370 | 盘整中枢 | 2026年Q1至今 | 量能收敛 |
+
+**背驰分析**：
+- 2025年11月：中枢3离开段 MACD 红柱面积较进入段缩小 22% → 趋势背驰（一类卖点预警）
+- 2026年4月：中枢5内部上涨段 MACD 红柱面积较中枢3离开段缩小 18% → 盘整背驰（二类卖点预警）
+
+**买卖点记录**：
+| 类型 | 日期 | 价格（元） | 说明 | 信号强度 |
+|------|------|------------|------|---------|
+| 一类买点 | 2025-06-18 | 212.0 | 中枢3盘整背驰，MACD面积缩小 | 强 |
+| 二类买点 | 2025-07-12 | 225.0 | 回试不破前低（212），次低点 | 中 |
+| 一类卖点 | 2025-11-20 | 338.0 | 趋势背驰，MACD面积缩小22% | 强 |
+| 二类卖点 | 2026-02-10 | 320.0 | 反弹不过前高（338），次高点 | 中 |
+
+**操作建议（2026-08当前）**：
+- 当前中枢5（330-370）盘整，等待下跌段背驰
+- 一类买点预计出现在 315-330 区间（中枢5下沿附近）
+- 半导体国产替代景气上行，趋势未破，回踩中枢下沿可分批布局
+
+---
+
+## 变更记录 / Changelog（2026-09-24）
+
+| 版本 | 日期 | 变更摘要 |
+|------|------|---------|
+| 5.2.3 | 2026-09-24 | 新增使用前提与风险声明、形态学判定速查表、背驰力度量化参考表、多级别联立职责容错表、风险控制与常见误用表；市场动态更新至 2026-09-24 并新增 2 条；修复 1.2 节误加的代码围栏导致 1.3 节被吞入代码块的问题；明确案例为教学示意、不构成投资建议 |
+| 5.2.2 | 2026-08-29 | 补充 2026 年市场动态与半导体设备案例 |
 
 *GitHub: https://github.com/gechengling/chanlun-analysis-pro*
-
 ## Appendix G. Alibaba Dianjin Fusion — chanlun-analysis-pro v5.0.0
 
-
-
 > **Source**: Alibaba Dianjin Digital Employee — `investment-advisor` (AI投资顾问) & `technical-analyst` (AI技术分析师)  
-
 > **Essence**: 缠论笔段分析、中枢识别、买卖点判定、走势类型分类  
-
 > **Integrated**: 2026-05-31
 
-
-
 ---
-
-
 
 ### G.1 Core Workflow (Dianjin essence)
 
-
-
 ```
-
 缠论分析流程：
-
 1. 分笔（Identified Pens）：K线合并→分型→笔
-
 2. 分段（Segmentation）：笔破坏→段
-
 3. 中枢识别（Central Hub）：三段重叠→中枢
-
 4. 走势类型（Trend Type）：趋势/盘整
-
 5. 买卖点（Trading Points）：一类/二类/三类买卖点
-
 ```
-
-
 
 ---
-
-
 
 ### G.2 Pen & Segment Identification (Dianjin method)
 
-
-
 **笔的识别规则**：
 
-
-
 ```
-
 笔 = 相邻的顶分型和底分型之间的连线
-
 条件：
-
   - 顶分型和底分型之间至少有1根K线
-
   - 笔的方向：向上笔（底→顶）/ 向下笔（顶→底）
-
   - 笔的延伸：顶/底分型被刷新，笔延伸
 
-
-
 示例：
-
   K1(底) → K2 → K3(顶) → K4 → K5(底)
-
   ↑ 向上笔 ↑        ↑ 向下笔 ↑
-
 ```
-
-
 
 **段的识别规则**：
 
-
-
 ```
-
 段 = 至少三笔，且笔之间无重叠
-
 条件：
-
   - 段的方向：向上段（低→高）/ 向下段（高→低）
-
   - 段的破坏：反向段突破原段起点
 
-
-
 示例：
-
   向上段：笔1(底→顶) + 笔2(顶→底) + 笔3(底→顶)
-
   ↑ 三段无重叠 ↑
-
 ```
 
-
-
 ---
-
-
 
 ### G.3 Central Hub & Trading Points (Dianjin essence)
 
-
-
 **中枢识别**：
 
-
-
 ```
-
 中枢 = 至少三段次级别走势类型重叠部分
-
 条件：
-
   - 进入段 + 中枢区间 + 离开段
-
   - 中枢区间：[高低点的最小值, 高亮点的最大值]
 
-
-
 示例：
-
   进入段（向下）→ 中枢（三段重叠）→ 离开段（向上）
-
 ```
-
-
 
 **买卖点判定（缠论核心）**：
 
-
-
-| 买卖点 | 定义 | 操作建议 |
-
-|--------|------|----------|
-
-| 一类买点 | 趋势底背驰 | 激进买入（抄底） |
-
-| 二类买点 | 回调不破一类买点 | 稳健买入（确认） |
-
-| 三类买点 | 回调不进中枢 | 追涨买入（强势） |
-
-| 一类卖点 | 趋势顶背驰 | 激进卖出（逃顶） |
-
-| 二类卖点 | 反弹不过一类卖点 | 稳健卖出（确认） |
-
-| 三类卖点 | 反弹不进中枢 | 杀跌卖出（弱势） |
-
-
+| 买卖点 | 定义 | 操作建议 | 确认条件 |
+|--------|------|----------|---------|
+| 一类买点 | 趋势底背驰 | 激进买入（抄底） | 背驰+成交量萎缩+不创新低 |
+| 二类买点 | 回调不破一类买点 | 稳健买入（确认） | 回试前低企稳、MACD金叉 |
+| 三类买点 | 回调不进中枢 | 追涨买入（强势） | 突破中枢上沿且回试不进 |
+| 一类卖点 | 趋势顶背驰 | 激进卖出（逃顶） | 背驰+放量滞涨+不创新高 |
+| 二类卖点 | 反弹不过一类买点 | 稳健卖出（确认） | 反弹至前高受阻、MACD死叉 |
+| 三类卖点 | 反弹不进中枢 | 杀跌卖出（弱势） | 跌破中枢下沿且反抽不进 |
 
 ---
-
-
 
 ### G.4 Backtesting & Validation (Dianjin method)
 
-
-
 **缠论信号回测框架**：
 
-
-
 ```
-
 回测设置：
-
   - 标的：沪深300成分股（TOP 50）
-
   - 周期：日线/30分钟
-
   - 时间：2019-2026（7年）
-
   - 成本：单边0.1%
 
-
-
 买卖规则：
-
   - 买入：二类买点（稳健）+ 止损设一类买点下方3%
-
   - 卖出：二类卖点（稳健）+ 止盈设前高附近
 
-
-
 绩效指标：
-
   - 胜率：目标>50%
-
   - 盈亏比：目标>2.0
-
   - 最大回撤：目标<20%
-
 ```
 
-
-
 ---
-
-
 
 ### G.5 Test Case (Dianjin quality)
 
-
-
 **Test Case: 缠论买卖点识别**
 
-
-
 ```
-
 Input: "用缠论分析贵州茅台（600519）日线走势，找出最近的一个二类买点"
 
-
-
 Expected Output:
-
 1. 分笔结果（最近10笔）
-
 2. 分段结果（最近3段）
-
 3. 中枢识别（最近1个中枢）
-
 4. 买卖点判定（最近1个二类买点位置+日期）
-
 5. 操作建议（买入价/止损价/目标价）
 
-
-
 Quality Check:
-
 - ✅ 笔段划分正确（符合缠论定义）
-
 - ✅ 中枢识别准确（三段重叠）
-
 - ✅ 买卖点判定合理（二类买点特征）
-
 - ✅ 操作建议具体（价格+止损）
-
 ```
-
-
 
 ---
 
-
-
 **End of Dianjin Fusion Content — chanlun-analysis-pro v5.0.0**
-

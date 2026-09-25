@@ -1,45 +1,60 @@
-## Description: <br>
-Analyzes pet ear, head-shaking, or scratching media to produce visual ear-health observations, abnormality alerts, suggested owner or veterinary follow-up, and cloud report links without providing a medical diagnosis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet ear images or head-shaking and scratching videos to produce visual ear-canal observations, abnormality alerts, and check-up or veterinary follow-up suggestions without making a medical diagnosis.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External pet owners, boarding centers, and pet-hospital intake teams use this skill to submit pet ear videos, images, local files, or URLs for structured visual observations of redness, discharge, earwax accumulation, and related risk prompts. The output is for health reference and pre-screening, not diagnosis or treatment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet media, URLs, and report queries are sent to the LifeEmergence/SMYX cloud service. <br>
-Mitigation: Use the skill only with media and URLs that are acceptable to process through that third-party service. <br>
-Risk: The skill can create or reuse a workspace identity and persist local identity or token data. <br>
-Mitigation: Use a dedicated workspace or account when possible, and review or remove smyx-api-key.txt and smyx-common-claw.db if identity reuse is not desired. <br>
-Risk: The output is visual health reference material and may be mistaken for veterinary diagnosis. <br>
-Mitigation: Treat findings as pre-screening observations and seek a veterinarian for medical diagnosis or treatment decisions. <br>
+## Use Case:
 
+Pet owners, boarding centers, and veterinary intake teams use this skill to screen pet ear media for visible redness, discharge-like material, earwax buildup, and related health-risk prompts. It returns observations and follow-up suggestions for human review, not a diagnosis.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-ear-health-snapshot-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [SMYX Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown-style text containing structured JSON analysis, status messages, report-list output, and report export links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write the returned analysis text to a user-specified output file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter reports 1.0.5) <br>
+Risk: Pet images or videos may reveal private household details when submitted for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media the user is comfortable sending to the configured cloud service, and avoid submitting unnecessary private surroundings.
+
+Risk: The skill creates or reuses a local identity and may persist service tokens in the workspace data directory.
+
+Mitigation: Run it in a workspace with appropriate access controls, and clear local data when identity or token persistence is not desired.
+
+Risk: Visual ear-health observations may be mistaken for a medical diagnosis.
+
+Mitigation: Present outputs as visual observations and follow-up suggestions, and direct abnormal findings to owner review or veterinary care.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-ear-health-snapshot-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API documentation](artifact/references/api_doc.md)
+- [SMYX analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, guidance]
+
+**Output Format:** [Markdown and JSON-like structured analysis text with optional report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May save results to a caller-provided output path and can list cloud report history.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata; artifact frontmatter reports 1.0.16)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

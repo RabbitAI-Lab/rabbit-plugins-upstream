@@ -1,5 +1,5 @@
 ## Description: <br>
-Guides an agent through basic Baidu Netdisk file listing, upload, and small-download workflows using bdpan within the /apps/bdpan/ scope. <br>
+Baidu Netdisk Skills Free helps agents use the bdpan CLI for basic Baidu Netdisk status checks, directory listing, uploads, and small-file downloads within /apps/bdpan/. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to let an agent inspect Baidu Netdisk contents, upload local files, and download files up to 50 MB while keeping operations scoped to /apps/bdpan/. <br>
+External users and developers use this skill to perform constrained Baidu Netdisk file-management tasks from an agent, including checking login status, listing files, uploading files, and downloading files up to 50 MB under /apps/bdpan/. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can guide an agent to run bdpan commands that upload, download, or overwrite Baidu Netdisk content. <br>
-Mitigation: Require explicit user confirmation before uploads, overwrites, or downloads to sensitive local paths, and keep remote operations within /apps/bdpan/. <br>
-Risk: Baidu Netdisk login or configuration data may be sensitive. <br>
-Mitigation: Review any installer or login script before use and do not read or output bdpan credential configuration files. <br>
+Risk: The security scan found broad, unrelated triggers and capabilities that could cause unsafe use outside the Baidu Netdisk purpose. <br>
+Mitigation: Use the skill only for explicit Baidu Netdisk tasks under /apps/bdpan/ and do not allow generic file-processing, Security-task, API-key, search, delete, rename, or backup behavior unless the publisher provides a corrected artifact. <br>
+Risk: The skill can lead an agent to run shell commands and perform write operations through bdpan. <br>
+Mitigation: Require explicit user confirmation for uploads, downloads that overwrite local files, and any ambiguous path; validate paths stay within /apps/bdpan/ before execution. <br>
+Risk: The artifact references install and login scripts without providing auditable script names in the release artifact. <br>
+Mitigation: Do not run placeholder install or login commands; require clear supported commands and auditable install/login scripts from the publisher before enabling those flows. <br>
+Risk: Credential exposure is possible if an agent reads or prints local bdpan configuration. <br>
+Mitigation: Do not read or output ~/.config/bdpan/config.json or other token-bearing files, and avoid direct bdpan login commands outside the documented safe flow. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/baidu-netdisk-skills-free) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
+- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and concise status guidance] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands and optional JSON-style result summaries] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include confirmation prompts before uploads, overwrites, or downloads to local paths.] <br>
+**Other Properties Related to Output:** [Operations are scoped to /apps/bdpan/; direct downloads are limited to files up to 50 MB.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+1.0.3 (source: server release metadata; artifact frontmatter says 2.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

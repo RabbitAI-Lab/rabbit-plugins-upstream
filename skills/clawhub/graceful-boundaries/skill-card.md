@@ -1,44 +1,59 @@
-## Description: <br>
-Assess API or website conformance with the Graceful Boundaries specification and provide concrete guidance or implementation changes for clearer rate-limit and error communication. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assess APIs or websites for Graceful Boundaries conformance, rate-limit communication, structured refusals, and actionable steps to improve to the next conformance level.
 
-## Publisher: <br>
-[snapsynapse](https://clawhub.ai/user/snapsynapse) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[snapsynapse](https://clawhub.ai/user/snapsynapse)
 
-## Use Case: <br>
-Developers, engineers, and agent operators use this skill to audit HTTP services for Graceful Boundaries conformance, identify gaps in structured refusals and proactive limit discovery, and implement response patterns that help agents avoid blind retries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Auditing a service can send HTTP requests to the target and may be inappropriate for systems the user does not own or have permission to test. <br>
-Mitigation: Run audits only against owned or authorized services, and avoid internal or sensitive network targets unless that is the intended scope. <br>
-Risk: Builder-mode guidance can modify application error handling, rate-limit disclosure, and response headers. <br>
-Mitigation: Review generated code changes before committing or deploying, and verify behavior against the service's actual security and operational requirements. <br>
+## Use Case:
 
+External developers, API operators, and engineering teams use this skill to audit a URL's rate-limit communication and produce a prioritized Graceful Boundaries conformance assessment with implementation guidance.
 
-## Reference(s): <br>
-- [Graceful Boundaries ClawHub release](https://clawhub.ai/snapsynapse/graceful-boundaries) <br>
-- [Graceful Boundaries specification site](https://gracefulboundaries.dev) <br>
-- [Specification](artifact/spec.md) <br>
-- [Implementation guide](artifact/docs/implementation-guide.md) <br>
-- [curl examples](artifact/docs/curl-examples.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline JSON, JavaScript, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include conformance findings, gap analysis, implementation snippets, and verification commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: release evidence) <br>
+Risk: The skill directs the agent to fetch discovery endpoints from user-provided services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only on URLs the user owns or has permission to audit, and keep requests lightweight.
+
+Risk: Attempting to verify refusal behavior by forcing rate limits could create unwanted traffic or service disruption.
+
+Mitigation: Do not deliberately trigger 429 responses; report refusal-format levels as unverifiable unless an actual refusal response is already available.
+
+Risk: A service's self-declared conformance level may not match observable behavior.
+
+Mitigation: Compare declared conformance with validated findings and clearly flag discrepancies.
+
+## Reference(s):
+
+- [Graceful Boundaries specification website](https://gracefulboundaries.dev)
+- [ClawHub skill listing](https://clawhub.ai/snapsynapse/skills/graceful-boundaries)
+- [Publisher profile](https://clawhub.ai/user/snapsynapse)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown assessment with HTTP findings, gap analysis, and implementation examples.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include JSON examples, HTTP header examples, and optional shell command examples; does not install code or change the target service.]
+
+## Skill Version(s):
+
+1.5.6 (source: server release metadata and ClawHub manifest)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

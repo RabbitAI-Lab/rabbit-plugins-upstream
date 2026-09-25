@@ -1,41 +1,58 @@
-## Description: <br>
-A local ComfyUI text-to-image guide for basic workflows, default model setup, parameter tuning, and saving generated images for personal creative use. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A local ComfyUI text-to-image helper that supports basic workflows, default model use, parameter tuning, and local image output for personal creative work.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and developers use this skill to run local ComfyUI text-to-image workflows, tune common generation parameters, and save generated images without a cloud API key. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Starting ComfyUI on 0.0.0.0 can expose the service to the wider network without access-control guidance. <br>
-Mitigation: Bind ComfyUI to 127.0.0.1 unless remote LAN access is intentional and protected with firewall or authentication controls. <br>
-Risk: The skill asks the agent to run local shell commands and download ComfyUI, Python dependencies, and model files. <br>
-Mitigation: Review commands before execution and install dependencies only from trusted sources in an isolated environment when possible. <br>
+## Use Case:
 
+External users and developers use this skill to guide an agent through local ComfyUI text-to-image setup, parameter selection, command execution, and saving generated images.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/comfyui-painter-tool-free) <br>
-- [Stable Diffusion v1.5 checkpoint](https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.safetensors) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration, files] <br>
-**Output Format:** [Markdown guidance with shell and Python code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce local image files through ComfyUI; no cloud API key is required.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Activation language and execution scope are broader than the stated local ComfyUI image-generation purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installing and use it only for local ComfyUI text-to-image workflows, not general LLM or agent-orchestration tasks.
+
+Risk: The skill runs local commands and can write generated outputs to disk.
+
+Mitigation: Keep output paths explicit and review proposed shell commands before execution.
+
+Risk: Binding ComfyUI to a network interface can expose the local service beyond the machine.
+
+Mitigation: Prefer binding ComfyUI to localhost unless intentional LAN access is required.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/comfyui-painter-tool-free)
+- [Stable Diffusion v1.5 checkpoint](https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.safetensors)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and Python code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides local ComfyUI execution and image file output; generated images are produced by the local ComfyUI environment.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata; artifact metadata lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

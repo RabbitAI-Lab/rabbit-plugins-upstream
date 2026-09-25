@@ -1,42 +1,58 @@
-## Description: <br>
-通过 Admin API 或 CLI 管理 Node-RED 实例，支持可回滚的流程部署、多实例管理、节点依赖治理、Context 持久化和安全加固。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Flow Editor Pro helps agents administer Node-RED instances through Admin API or CLI guidance for flow deployment, rollback, backups, node management, context persistence, diagnostics, and security hardening.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers, automation engineers, and operations teams use this skill to administer Node-RED instances, version and deploy flows, manage nodes, back up or restore state, and apply operational safety checks across development, staging, and production environments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide production-impacting Node-RED deploy, delete, restore, rollback, upgrade, and Docker operations. <br>
-Mitigation: Require explicit human confirmation before production operations and prefer staging validation before deploying to production. <br>
-Risk: Weak scoping could let an agent administer unintended Node-RED instances. <br>
-Mitigation: Configure only intended instances, use least-privilege credentials, and keep development or staging as the default target. <br>
-Risk: Backups may contain credentials or other sensitive operational state. <br>
-Mitigation: Store backups in encrypted storage and avoid committing backup files to public repositories. <br>
+## Use Case:
 
+Developers and operations engineers use this skill to administer Node-RED instances, manage flows across development, staging, and production, back up and restore state, and recover from failed deployments.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/flow-editor-pro) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples, configuration snippets, operational checklists, and troubleshooting tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose production-impacting Node-RED Admin API, CLI, rollback, restore, upgrade, and Docker operations that require human review before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill can direct an agent to change live Node-RED workflow systems.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Restrict use to named dev, staging, and production instances, and require explicit confirmation before production deploy, delete, restore, rollback, context writes, node changes, Docker restarts, or scheduled backups.
+
+Risk: Node-RED credentials and backup files may contain sensitive operational data.
+
+Mitigation: Store credentials and backup files only in protected secret or encrypted storage and avoid committing them to public repositories.
+
+Risk: Unclear activation boundaries and inconsistent execution guidance can lead to unintended administration actions.
+
+Mitigation: Review the requested action, target instance, and command plan before execution, and prefer staging validation before production changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/flow-editor-pro)
+- [Skill homepage](https://skillhub.cn/skill/)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include operational checklists, rollback steps, backup and restore commands, and JSON status examples.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

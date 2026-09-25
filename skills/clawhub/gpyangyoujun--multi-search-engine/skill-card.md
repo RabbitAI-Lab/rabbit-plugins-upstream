@@ -1,44 +1,51 @@
-## Description: <br>
-Multi search engine integration with 16 engines (7 CN + 9 Global). Supports advanced search operators, time filters, site search, privacy engines, and WolframAlpha knowledge queries. No API keys required. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Multi Search Engine helps agents query and summarize results from 16 Chinese and global search engines with advanced operators, time filters, site search, privacy engines, and WolframAlpha knowledge queries without API keys.
 
-## Publisher: <br>
-[gpyangyoujun](https://clawhub.ai/user/gpyangyoujun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gpyangyoujun](https://clawhub.ai/user/gpyangyoujun)
 
-## Use Case: <br>
-External users and developers use this skill to route web search queries across Chinese and international search engines, apply advanced search operators and time filters, and aggregate results without API keys. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search terms and request metadata are sent to selected third-party search engines. <br>
-Mitigation: Avoid secrets, credentials, internal hostnames, confidential business topics, regulated data, and sensitive personal queries. <br>
-Risk: Search-engine requests may be subject to provider rate limits, access controls, robots policies, and terms of service. <br>
-Mitigation: Use the documented rate limiting, query only relevant engines, and confirm that the intended use complies with each provider's terms. <br>
-Risk: The skill's privacy notice understates third-party query exposure. <br>
-Mitigation: Treat searches as external disclosures and review provider routing before using the skill for non-public topics. <br>
+## Use Case:
 
+Developers and external users use this skill to route web search requests across Chinese and global search engines, apply search operators and time filters, and aggregate results into a concise search report.
 
-## Reference(s): <br>
-- [ClawHub listing](https://clawhub.ai/gpyangyoujun/skills/multi-search-engine) <br>
-- [Domestic search guide](references/advanced-search.md) <br>
-- [International search guide](references/international-search.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, API Calls, Markdown] <br>
-**Output Format:** [Markdown search report with web_fetch JSON call examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses selected search-engine URLs and does not require API keys.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.3 (source: ClawHub release evidence) <br>
+Risk: Search terms are sent to third-party search engines, which may expose private, internal, regulated, or identifying information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing for sensitive use cases and avoid searching secrets, credentials, private customer data, incident details, or confidential project names unless that disclosure is acceptable.
+
+## Reference(s):
+
+- [Domestic Search Engine Deep Search Guide](artifact/references/advanced-search.md)
+- [International Search Engine Deep Search Guide](artifact/references/international-search.md)
+- [Multi Search Engine on ClawHub](https://clawhub.ai/gpyangyoujun/skills/multi-search-engine)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown search report with inline web_fetch examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No API keys required; search requests are sent to third-party search engines.]
+
+## Skill Version(s):
+
+2.1.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

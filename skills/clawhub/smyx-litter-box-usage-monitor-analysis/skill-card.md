@@ -1,48 +1,59 @@
-## Description: <br>
-Analyzes litter-box area video or video URLs to track cat entry and exit events, summarize usage frequency and visit duration, compare behavior with historical baselines, and return behavior-based urinary health alerts without providing a medical diagnosis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes litter-box video to summarize each cat's visit frequency and duration, compare activity with historical patterns, and flag behavior changes for veterinary follow-up without making a diagnosis.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, pet-care teams, catteries, veterinary inpatient wards, and boarding centers use this skill to turn litter-box camera footage into per-cat usage frequency, visit duration, historical comparison, and behavior-alert reports. Results are behavior-statistics alerts and are not a substitute for veterinary diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Litter-box footage or video URLs may be processed by the vendor cloud service. <br>
-Mitigation: Use only media appropriate for vendor processing, avoid footage containing people or sensitive household details, and review the vendor's retention and access practices before installation. <br>
-Risk: Reports are associated with a persistent internal user identity. <br>
-Mitigation: Use an appropriate workspace or account boundary for the intended user group, and avoid sharing workspace data where report association could expose private household or pet-health information. <br>
-Risk: Local workspace data may contain service tokens or identity material used by the vendor service. <br>
-Mitigation: Restrict access to the workspace, avoid committing local data stores, and remove local credential or token data before sharing or archiving the environment. <br>
-Risk: Behavior-based alerts can be mistaken for veterinary diagnosis. <br>
-Mitigation: Present outputs as monitoring signals only and direct users to consult a veterinarian for medical assessment or treatment decisions. <br>
+## Use Case:
 
+Pet owners, catteries, boarding facilities, and veterinary staff use litter-box video to review visit patterns, spot unusual changes, and access prior reports. Alerts are behavioral indicators, not medical diagnoses.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-litter-box-usage-monitor-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
-- [API interface documentation](artifact/references/api_doc.md) <br>
-- [Common analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with structured JSON-like analysis content, cloud report links, and optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports local video files or video URLs, historical report listing, configurable detail level, and optional output-file writing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: ClawHub release metadata; artifact frontmatter and release changelog mention 1.0.5) <br>
+Risk: Pet or home video may be sent to a cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with informed user consent and an acceptable cloud data-retention and deletion policy.
+
+Risk: Persistent identities and tokens may expose or mix private report history in shared workspaces.
+
+Mitigation: Use isolated workspaces per user and review identity separation and token handling before enabling historical reports.
+
+Risk: Behavioral alerts may be mistaken for medical diagnoses.
+
+Mitigation: Present findings as monitoring signals and refer concerning changes to a veterinarian.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/smyx-sunjinhui/skills/smyx-litter-box-usage-monitor-analysis)
+- [Litter-box analysis API reference](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Behavioral analysis report or historical-report list, with optional JSON and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports may include per-cat visit frequency, duration, trend alerts, and follow-up guidance.]
+
+## Skill Version(s):
+
+1.0.10 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,47 +1,64 @@
-## Description: <br>
-Make (formerly Integromat) API integration with managed authentication for managing scenarios, organizations, teams, connections, data stores, hooks, and templates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Make (formerly Integromat) API integration with managed authentication for managing scenarios, organizations, teams, connections, data stores, hooks, and templates.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and automation operators use this skill to inspect and manage Make resources through Maton-managed authentication, including scenarios, teams, organizations, connections, webhooks, data stores, templates, and incomplete executions. It is intended for interactive API work where the agent proposes or executes calls with explicit confirmation for write operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Maton API key and brokered OAuth connection to access Make resources. <br>
-Mitigation: Install only when Maton is trusted to broker the Make account, and keep MATON_API_KEY scoped and protected. <br>
-Risk: Write actions can create, update, start, stop, or delete resources in Make. <br>
-Mitigation: Before approving a write action, verify the target organization, team, scenario, hook, data store, connection, or template ID and the intended effect. <br>
-Risk: Started scenarios and created hooks or data stores may persist after the agent conversation ends. <br>
-Mitigation: Track resources created or started during the session and explicitly stop or delete anything that should not continue running. <br>
+## Use Case:
 
+External users and developers use this skill to administer Make accounts through Maton, automate workflows, manage scenarios and related resources, and integrate apps while keeping write actions behind explicit user approval.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/make-api) <br>
-- [Publisher profile](https://clawhub.ai/user/byungkyu) <br>
-- [Maton homepage](https://maton.ai) <br>
-- [Make API Documentation](https://developers.make.com/api-documentation) <br>
-- [Make API Reference](https://developers.make.com/api-documentation/api-reference) <br>
-- [Make Help Center](https://www.make.com/en/help) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [api calls, shell commands, code, configuration, guidance] <br>
-**Output Format:** [Markdown with inline HTTP endpoints, shell commands, Python and JavaScript examples, and JSON request or response snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and the MATON_API_KEY environment variable; write actions can create, modify, start, stop, or delete persistent Make resources.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill can create or change persistent Make automations and related resources that continue operating after the conversation ends.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the target resource, payload, and intended effect with the user before any write action, and confirm starts, creates, updates, deletes, hooks, functions, triggers, and destinations explicitly.
+
+Risk: Raw Maton API keys are long-lived credentials that can leak through environment exposure, logs, shell history, crash dumps, or pasted output.
+
+Mitigation: Prefer OAuth through the Maton CLI, use raw API keys only when the CLI cannot be used, and never print, persist, log, or pass the key on a command line.
+
+Risk: Ambiguous Maton accounts or Make connections can route reads or writes to the wrong account.
+
+Mitigation: List and verify available connections first, specify the intended connection or profile when more than one exists, and default to read or list operations before proposing changes.
+
+## Reference(s):
+
+- [Make Skill on ClawHub](https://clawhub.ai/byungkyu/skills/make-api)
+- [Maton Homepage](https://maton.ai)
+- [Make API Documentation](https://developers.make.com/api-documentation)
+- [Make API Reference](https://developers.make.com/api-documentation/api-reference)
+- [Make Help Center](https://www.make.com/en/help)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and API endpoint guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance centers on Maton CLI or raw HTTPS calls, managed authentication, least-privilege account selection, and explicit approval before writes or persistent automation changes.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

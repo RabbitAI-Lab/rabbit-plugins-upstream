@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/sendgrid",
   "slug": "sendgrid",
   "ownerHandle": null,
-  "version": "1.0.3",
-  "updatedAt": 1784339435329,
-  "contentHash": "d6c222933045a45716b7fe9f47ef83a9be185dcad51c062efb84977514952291",
-  "fetchedAt": "2026-07-26T18:11:06.712Z"
+  "version": "1.2.5",
+  "updatedAt": 1790210957556,
+  "contentHash": "5361c65169bc9a7ff93ad3aedef9507ffffa0ee31c0c8d3924badfba8b612141",
+  "fetchedAt": "2026-09-25T13:18:33.633Z"
 }

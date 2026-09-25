@@ -13,9 +13,10 @@ if __name__ == "__main__" and __package__ is None:
 
 import http.client
 import socket
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, cast
 
-from . import _config
+from . import _config, _http
+from ._coerce import to_bool
 from ._config import DeviceRecord
 from ._errors import RecameraError
 
@@ -27,6 +28,12 @@ __all__ = [
     "get_device",
     "list_devices",
 ]
+
+
+def _public(record: DeviceRecord) -> DeviceRecord:
+    """External views never expose the bearer token (transport keeps it internally)."""
+    return cast(DeviceRecord, {k: v for k, v in record.items() if k != "token"})
+
 
 # Connectivity probe
 
@@ -57,13 +64,13 @@ def _probe(
         except OSError:
             host_header = connect_host
         if use_tls:
-            import ssl
-
-            ctx = ssl.create_default_context()
             if allow_unsecured:
-                ctx.check_hostname = False
-                ctx.verify_mode = ssl.CERT_NONE
-            conn = http.client.HTTPSConnection(
+                ctx = _http.insecure_ssl_context(host)
+            else:
+                import ssl
+
+                ctx = ssl.create_default_context()
+            conn: http.client.HTTPConnection = http.client.HTTPSConnection(
                 connect_host, port, timeout=timeout, context=ctx
             )
         else:
@@ -161,6 +168,7 @@ def add_device(
     _config.validate_host(host)
     _config.validate_token(token)
     _config.validate_protocol(protocol)
+    allow_unsecured = to_bool(allow_unsecured, "allow_unsecured")
     if port is not None:
         port = int(port)
         if not 1 <= port <= 65535:
@@ -169,7 +177,8 @@ def add_device(
     devices = _config.load_all()
     if name in devices:
         raise RecameraError(
-            f"Device '{name}' already exists. Use update_device to modify it, or remove_device first."
+            f"Device '{name}' already exists. Use update_device to modify it, "
+            "or remove_device first."
         )
     probe_port = port if port is not None else (443 if protocol == "https" else 80)
     err = _probe(
@@ -187,13 +196,13 @@ def add_device(
         "host": host.strip(),
         "token": token.strip(),
         "protocol": protocol,
-        "allow_unsecured": bool(allow_unsecured),
+        "allow_unsecured": allow_unsecured,
     }
     if port is not None:
         entry["port"] = port
     devices[name] = entry
     _config.save_all(devices)
-    return _config.resolve(name)
+    return _public(_config.resolve(name))
 
 
 def update_device(
@@ -223,7 +232,7 @@ def update_device(
         _config.validate_protocol(protocol)
         entry["protocol"] = protocol
     if allow_unsecured is not None:
-        entry["allow_unsecured"] = bool(allow_unsecured)
+        entry["allow_unsecured"] = to_bool(allow_unsecured, "allow_unsecured")
     if port is not None:
         port = int(port)
         if not 1 <= port <= 65535:
@@ -244,7 +253,7 @@ def update_device(
 
     devices[device_name] = entry
     _config.save_all(devices)
-    return _config.resolve(device_name)
+    return _public(_config.resolve(device_name))
 
 
 def remove_device(device_name: str) -> bool:
@@ -264,12 +273,12 @@ def get_device(device_name: str) -> Optional[DeviceRecord]:
     devices = _config.load_all()
     if device_name not in devices:
         return None
-    return _config.resolve(device_name)
+    return _public(_config.resolve(device_name))
 
 
 def list_devices() -> List[DeviceRecord]:
     """Every saved device, sorted by name (case-insensitive)."""
-    return _config.list_records_on_disk()
+    return [_public(r) for r in _config.list_records_on_disk()]
 
 
 COMMANDS = {
@@ -279,21 +288,4 @@ COMMANDS = {
     "remove_device": remove_device,
     "get_device": get_device,
     "list_devices": list_devices,
-}
-COMMAND_SCHEMAS = {
-    "detect_local_device": {
-        "required": {"host"},
-        "optional": {"port", "token", "timeout"},
-    },
-    "add_device": {
-        "required": {"name", "host", "token"},
-        "optional": {"protocol", "allow_unsecured", "port"},
-    },
-    "update_device": {
-        "required": {"device_name"},
-        "optional": {"host", "token", "protocol", "allow_unsecured", "port"},
-    },
-    "remove_device": {"required": {"device_name"}, "optional": set()},
-    "get_device": {"required": {"device_name"}, "optional": set()},
-    "list_devices": {"required": set(), "optional": set()},
 }

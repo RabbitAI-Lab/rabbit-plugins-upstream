@@ -1,41 +1,58 @@
-## Description: <br>
-Unified knowledge capture and retrieval for URLs, video/article/paper extracts, social posts, and agent research outputs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Unified knowledge capture and retrieval for URLs, video/article/paper extracts, social posts, and agent research outputs.
 
-## Publisher: <br>
-[space-cadet](https://clawhub.ai/user/space-cadet) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[space-cadet](https://clawhub.ai/user/space-cadet)
 
-## Use Case: <br>
-Developers and agents use this skill to save, organize, search, and maintain a local markdown knowledge base for URLs, extracts, social posts, and research outputs that need to be found later. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can save local knowledge entries that may contain sensitive material. <br>
-Mitigation: Set KNOWLEDGE_DIR deliberately and require confirmation before saving sensitive content. <br>
-Risk: Automated cleanup can modify or remove local knowledge files. <br>
-Mitigation: Run tidy in audit mode before enabling any scheduled tidy --fix job. <br>
+## Use Case:
 
+Developers, researchers, and agent operators use this skill to save, search, summarize, tag, and re-find useful URLs, extracts, social posts, and agent research outputs in a local knowledge store.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/space-cadet/skills/knowledge) <br>
-- [ClawHub metadata link](https://clawhub.ai/ianderrington/agent-knowledge) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and YAML frontmatter examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces local markdown knowledge entries, an auto-maintained index, search guidance, and maintenance commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and skill metadata) <br>
+Risk: The skill persists saved knowledge locally, which may retain secrets or sensitive private material if an agent stores them.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review what the agent saves and avoid storing secrets or sensitive private material unless retention is intentional.
+
+Risk: Automatic tidy operations can change files inside the knowledge directory.
+
+Mitigation: Run cleanup in audit mode first and enable recurring tidy --fix jobs only when automatic normalization is acceptable.
+
+Risk: The installed helper script is unaudited in the provided security evidence.
+
+Mitigation: Review the installed helper script before deployment and monitor its file-system behavior in the configured knowledge directory.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/space-cadet/skills/knowledge)
+- [Original ClawHub URL from artifact metadata](https://clawhub.ai/ianderrington/agent-knowledge)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with YAML frontmatter and command-line guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates and maintains local Markdown knowledge entries and an index in a configurable knowledge directory.]
+
+## Skill Version(s):
+
+1.0.0 (source: artifact metadata and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

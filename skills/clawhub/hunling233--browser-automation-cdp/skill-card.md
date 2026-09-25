@@ -1,43 +1,56 @@
-## Description: <br>
-Enables an agent to control a user's logged-in Edge or Chrome browser through Chrome DevTools Protocol for navigation, page interaction, JavaScript evaluation, DOM extraction, and screenshots. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automates an already logged-in Edge or Chrome browser over the Chrome DevTools Protocol for navigation, JavaScript-rendered page interaction, DOM extraction, screenshots, and related browser tasks.
 
-## Publisher: <br>
-[hunling233](https://clawhub.ai/user/hunling233) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[hunling233](https://clawhub.ai/user/hunling233)
 
-## Use Case: <br>
-Developers and agents use this skill when ordinary page fetching is insufficient, such as JavaScript-rendered pages, authenticated browser sessions, forms, scrolling workflows, screenshots, and DOM-based data extraction. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill gives an agent broad control over logged-in browser sessions. <br>
-Mitigation: Use a dedicated automation profile, sign in only to accounts needed for the task, close the debug-enabled browser afterward, and manually approve sensitive submissions, account changes, purchases, downloads, and private-page access. <br>
-Risk: Session and cookie handling guidance is under-scoped and may expose private browser state. <br>
-Mitigation: Avoid cookie-database workflows and limit automation to pages and accounts that are appropriate for the task. <br>
+## Use Case:
 
+Developers and agents use this skill when static fetching is insufficient, especially for JavaScript-rendered pages, authenticated browser sessions, interactive workflows, screenshots, and structured extraction from a live browser.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/hunling233/browser-automation-cdp) <br>
-- [Skill documentation](artifact/SKILL.md) <br>
-- [Browser Automation CLI Reference](artifact/REFERENCE.md) <br>
-- [Browser Automation Examples](artifact/EXAMPLES.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JavaScript and shell command examples; browser operations may return JSON data, PNG screenshots, or base64 screenshot data.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Edge or Chrome with remote debugging enabled and a local Node.js WebSocket dependency.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill can broadly control a logged-in browser session, including pages and accounts available in that profile.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an isolated automation browser profile rather than a daily profile, and confirm before form submissions, downloads, purchases, account changes, or other sensitive actions.
+
+Risk: Browser cookies, tabs, downloads, and forced browser restarts are under-scoped in the skill guidance.
+
+Mitigation: Avoid reading browser cookie databases, close or clean the automation profile after use, and review active tabs and downloaded files before trusting outputs.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/hunling233/skills/browser-automation-cdp)
+- [SKILL.md](artifact/SKILL.md)
+- [REFERENCE.md](artifact/REFERENCE.md)
+- [EXAMPLES.md](artifact/EXAMPLES.md)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Shell commands, Configuration, Guidance, JSON, Screenshots]
+
+**Output Format:** [Markdown guidance with JavaScript and shell command examples, JSON command results, and base64 or file-based PNG screenshots]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May act through a live browser profile, reuse authenticated sessions, and create downloaded files or screenshots depending on the requested automation.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

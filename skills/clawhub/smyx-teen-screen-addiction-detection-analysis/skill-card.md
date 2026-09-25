@@ -1,44 +1,58 @@
-## Description: <br>
-Analyzes fixed-camera videos to estimate adolescents' head posture and handheld-device use, summarize screen-looking time, and produce behavior reminders and reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes fixed-camera images or video to estimate adolescent screen-looking posture, summarize screen-time behavior, and produce gentle family-facing reminders without making medical diagnoses.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Parents, guardians, educators, and developers use this skill to analyze home, study-room, or classroom camera videos for screen-looking posture patterns and generate structured reports with gentle intervention suggestions. It is intended for visual behavior statistics, not medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can upload sensitive videos of minors to a remote service. <br>
-Mitigation: Use only with guardian and child consent, confirm the destination service, and require documented retention, deletion, authorization, and access-control practices before deployment. <br>
-Risk: Cloud report history and account identity reuse can expose reports beyond the intended user. <br>
-Mitigation: Restrict history lookups to authorized users, verify report access controls, and avoid broad automatic history retrieval unless the user has a clear need. <br>
-Risk: Visual classification may mistake normal reading, writing, or online classes for problematic screen use. <br>
-Mitigation: Review outputs before acting, keep reminders gentle, and do not treat the report as a diagnosis or disciplinary basis. <br>
+## Use Case:
 
+Parents, guardians, and education or smart-home operators use this skill to review camera footage for head-down screen posture, daily screen-time patterns, and family-friendly intervention reminders. The skill is intended for behavior monitoring and reporting, not clinical diagnosis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-teen-screen-addiction-detection-analysis) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON analysis reports with optional shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include posture statistics, screen-time summaries, reminder text, report links, and history-report tables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter says 1.0.5) <br>
+Risk: Minor-related home or school camera footage may be sent to a cloud service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with guardian and adolescent consent, limit recordings to appropriate spaces, and confirm the publisher's retention, deletion, and access-control practices before deployment.
+
+Risk: The skill can create or reuse a local identity with stored tokens.
+
+Mitigation: Run it in a controlled environment, review where credentials are stored, and establish an account revocation or cleanup process before operational use.
+
+Risk: Screen-time labels can be mistaken for clinical conclusions or punitive judgments.
+
+Mitigation: Present outputs as posture and duration observations only, avoid medical diagnosis language, and use the skill's gentle reminder posture for family-facing guidance.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-teen-screen-addiction-detection-analysis)
+- [API interface documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown text with JSON-style structured report content and optional report link]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May save report output to a file when requested; analysis and history lookup use a documented cloud service.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata; artifact frontmatter says 1.0.16)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

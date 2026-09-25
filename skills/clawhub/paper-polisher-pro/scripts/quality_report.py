@@ -137,7 +137,7 @@ def calc_readability(text: str, lang: str) -> dict:
 
 def generate_report(file_path: str, before_path: str = None) -> QualityReport:
     """Generate comprehensive quality report."""
-    with open(file_path, "r", encoding="utf-8") as f:
+    with open(file_path, "r", encoding="utf-8", errors="replace") as f:
         text = f.read()
     
     lang = detect_lang(text)
@@ -178,7 +178,7 @@ def generate_report(file_path: str, before_path: str = None) -> QualityReport:
     before_ai = -1
     improvement = 0
     if before_path and os.path.exists(before_path):
-        with open(before_path, "r", encoding="utf-8") as f:
+        with open(before_path, "r", encoding="utf-8", errors="replace") as f:
             before_text = f.read()
         before_report = ai_detect(before_text, lang)
         before_ai = before_report.overall_ai_score
@@ -186,10 +186,12 @@ def generate_report(file_path: str, before_path: str = None) -> QualityReport:
     
     # Build summary
     lines = []
+    _risk_zh = {"high": "🔴高", "medium": "🟡中", "low": "🟢低"}.get(ai_report.overall_risk, "⚪无法判定")
+    _risk_en = {"high": "🔴High", "medium": "🟡Medium", "low": "🟢Low"}.get(ai_report.overall_risk, "⚪No verdict")
     if lang == "zh":
         lines.append(f"📊 论文质量报告")
         lines.append(f"{'='*40}")
-        lines.append(f"AI痕迹: {ai_report.overall_ai_score:.1f}/100 ({'🔴高' if ai_report.overall_risk=='high' else '🟡中' if ai_report.overall_risk=='medium' else '🟢低'}风险)")
+        lines.append(f"AI痕迹: {ai_report.overall_ai_score:.1f}/100 ({_risk_zh}风险)")
         lines.append(f"结构完整性: {structure_score:.0f}%（{len(found)}/{total_sections} 个标准章节）")
         if missing:
             lines.append(f"  缺失章节: {', '.join(s.name for s in missing)}")
@@ -204,7 +206,7 @@ def generate_report(file_path: str, before_path: str = None) -> QualityReport:
     else:
         lines.append(f"📊 Paper Quality Report")
         lines.append(f"{'='*40}")
-        lines.append(f"AI Traces: {ai_report.overall_ai_score:.1f}/100 ({'🔴High' if ai_report.overall_risk=='high' else '🟡Medium' if ai_report.overall_risk=='medium' else '🟢Low'} risk)")
+        lines.append(f"AI Traces: {ai_report.overall_ai_score:.1f}/100 ({_risk_en} risk)")
         lines.append(f"Structure: {structure_score:.0f}% ({len(found)}/{total_sections} standard sections)")
         if missing:
             lines.append(f"  Missing: {', '.join(s.name for s in missing)}")
@@ -267,4 +269,10 @@ def main():
 
 
 if __name__ == "__main__":
+    import sys as _sys
+    try:  # v3.5: 中文 Windows 默认 GBK 控制台会因 emoji/警示符崩溃 stdout——统一 UTF-8
+        _sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        _sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
     main()

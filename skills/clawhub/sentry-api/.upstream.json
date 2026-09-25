@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/sentry-api",
   "slug": "sentry-api",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1781739753410,
-  "contentHash": "e1c4862335af02ff88680ad1879fb623cc556f898fdf3e07528e339f022db094",
-  "fetchedAt": "2026-07-26T18:27:36.140Z"
+  "version": "1.2.3",
+  "updatedAt": 1790211045741,
+  "contentHash": "b157ea0991c82b453664ee87a1c5ae6e9870ac5f3bc780ce891fd8986278824d",
+  "fetchedAt": "2026-09-25T13:18:33.719Z"
 }

@@ -1,42 +1,55 @@
-## Description: <br>
-This skill coaches English grammar learning by using Socratic follow-up questions, grammar-error DNA tracking with user consent, and focused practice for common issues such as tense, subject-verb agreement, prepositions, relative clauses, and complex sentences. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+通过循序追问帮助学生发现并纠正英语语法错误，并在获得同意后记录语法弱项。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and English learners use this skill when they want grammar coaching instead of direct proofreading. It helps classify grammar weaknesses, guide learners through targeted questions, and produce progress summaries when ongoing tracking is explicitly allowed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Learners may expect quick proofreading, but the skill is designed to guide them with questions instead of immediately correcting every error. <br>
-Mitigation: Use it for grammar coaching and learning practice; choose a proofreading-oriented workflow when direct edits are the goal. <br>
-Risk: The skill can track grammar weaknesses over time when the user wants ongoing learning support. <br>
-Mitigation: Only maintain or update ongoing grammar tracking after the user explicitly consents, and avoid treating a single correction as permission for long-term records. <br>
+## Use Case:
 
+面向中国大陆的小学高年级及初中英语学习者，提供语法错误分析、引导式纠错和定语从句练习；小学学段需家长或老师陪同。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-grammar-coach) <br>
-- [English error dimension table](references/english-error-dimension-table.md) <br>
-- [Grammar patterns](references/grammar-patterns.md) <br>
+### Deployment Geography for Use:
 
+Mainland China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Conversational coaching text and Markdown-style learning reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include categorized grammar-error summaries, Socratic question sequences, practice prompts, and monthly progress reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server-resolved release evidence) <br>
+Risk: Minor learners' grammar profiles or summaries could be retained or shared without appropriate consent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enforce platform consent flags before persistent profile writes, cross-skill sharing, reminders, or parent-visible summaries; otherwise keep analysis within the session.
+
+Risk: Crisis referrals and consent practices may be inappropriate outside Mainland China.
+
+Mitigation: Localize emergency resources and minor-consent rules before use in other regions; refer crisis signals to trusted adults and local emergency services.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-english-grammar-coach)
+- [English error dimension table](references/english-error-dimension-table.md)
+- [Grammar patterns](references/grammar-patterns.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Conversational text and structured progress summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Optional learner-profile updates require consent; historical progress reports require platform support.]
+
+## Skill Version(s):
+
+2.4.0 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

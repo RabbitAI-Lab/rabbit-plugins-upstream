@@ -1,40 +1,53 @@
-## Description: <br>
-Helps agents manage structured project-context documents for project initialization, technology-stack tracking, workflow notes, and consistent AI-assisted development. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+将项目上下文作为可管理制品，通过结构化文档确保 AI 辅助开发的一致性。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and individual users use this skill to create, inspect, and maintain project context documents such as product notes, technology-stack records, workflow guidance, and task registers so AI coding sessions stay aligned across time. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may ask an agent to read project files and create or update context Markdown files. <br>
-Mitigation: Scope use to the intended workspace and review proposed file writes before approval. <br>
-Risk: The skill includes command-execution capabilities for setup checks, package installation, and network troubleshooting. <br>
-Mitigation: Review any proposed write, delete, pip install, or network-troubleshooting command before approving execution. <br>
+## Use Case:
 
+Developers, independent builders, and engineering teams use this skill to create and maintain structured project context documents for new projects, existing codebases, and AI-assisted development alignment. It is intended for work with clear technical requirements or an identifiable technology stack.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/context-driven-dev-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with optional code blocks, shell commands, and structured JSON-style responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local file reads, context-document writes, simple command execution, and single-task free-edition workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata; artifact frontmatter is 1.0.0) <br>
+Risk: The skill requests command execution and describes broad file, API, and automation abilities beyond its context-document purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it primarily to read project context and create context Markdown files; explicitly approve any shell command, package installation, external API call, or broad repository modification before execution.
+
+Risk: Generated project context can become an authoritative input for later AI-assisted development even when it contains incorrect assumptions.
+
+Mitigation: Review generated context documents before relying on them for implementation, debugging, deployment, or cross-session alignment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/context-driven-dev-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with structured steps, code blocks, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports Chinese interaction and may produce project context files, validation snippets, or command suggestions for agent review.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact metadata version is 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

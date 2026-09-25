@@ -1,41 +1,62 @@
-## Description: <br>
-Multi search engine integration with 16 engines (7 CN + 9 Global), advanced search operators, time filters, site search, privacy engines, and WolframAlpha knowledge queries without API keys. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Multi search engine integration with 16 engines (7 CN + 9 Global). Supports advanced search operators, time filters, site search, privacy engines, and WolframAlpha knowledge queries. No API keys required.
 
-## Publisher: <br>
-[xiiang0529](https://clawhub.ai/user/xiiang0529) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xiiang0529](https://clawhub.ai/user/xiiang0529)
 
-## Use Case: <br>
-Developers and agents use this skill to route search queries across Chinese and international search engines, apply advanced search operators, and summarize aggregated search results. It is intended for normal search and knowledge lookup workflows where users can choose providers and evaluate result quality. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search terms are sent to third-party search engines and may be logged or processed under those providers' privacy practices. <br>
-Mitigation: Do not use secrets, credentials, internal project names, regulated data, or sensitive personal queries unless the provider is explicitly chosen and its privacy practices are acceptable. <br>
-Risk: The artifact privacy notice says there is no external data transmission, but the skill's core behavior sends queries to external search engines. <br>
-Mitigation: Treat searches as external network requests and correct user-facing privacy notices before relying on the skill in sensitive environments. <br>
+## Use Case:
 
+Developers and agents use this skill to build web search workflows that select Chinese or international search engines, apply advanced search operators and time filters, and summarize aggregated results.
 
-## Reference(s): <br>
-- [Domestic Search Guide](references/advanced-search.md) <br>
-- [International Search Guide](references/international-search.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Text] <br>
-**Output Format:** [Markdown with inline web_fetch examples and summarized search reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search requests may contact third-party search engines and use in-memory session cookies when access is denied.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Search queries can be sent to multiple external search providers, possibly in different jurisdictions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review intended queries before use, avoid sensitive topics or regulated data, and limit provider selection to jurisdictions acceptable for the deployment.
+
+Risk: The artifact privacy notice states there is no external data transmission, which conflicts with the skill behavior and security summary.
+
+Mitigation: Update user-facing privacy disclosures and installation review notes to state that search terms are transmitted to external providers.
+
+Risk: Automated searches may conflict with provider terms, rate limits, or crawling policies.
+
+Mitigation: Keep rate limiting enabled, respect provider policies, and require users to confirm search-engine terms before commercial use.
+
+## Reference(s):
+
+- [Multi Search Engine ClawHub Listing](https://clawhub.ai/xiiang0529/skills/multi-search-engine)
+- [Domestic Search Guide](references/advanced-search.md)
+- [International Search Guide](references/international-search.md)
+- [Baidu Advanced Search Syntax](https://baike.baidu.com/item/搜索语法)
+- [Bing Search Tips](https://cn.bing.com/tips)
+- [Sogou Search Help](https://help.sogou.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, guidance]
+
+**Output Format:** [Markdown search guidance and report text with web_fetch JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No API keys are required; search queries may be sent to selected external search providers.]
+
+## Skill Version(s):
+
+1.0.0 (source: ClawHub release metadata; artifact version files also cite 2.1.0 and 2.1.3)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

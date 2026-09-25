@@ -1,39 +1,54 @@
-## Description: <br>
-Helps individual developers inspect local Podman or Docker containers, including status, logs, resource usage, health, and configuration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Podman/Docker container inspection skill for checking container status, logs, resource usage, health, ports, volumes, and configuration.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and operators use this skill to ask an agent for local container inspection workflows, command examples, and troubleshooting guidance for Podman or Docker environments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Local container inspection can expose sensitive logs, configuration, environment variables, ports, and mounts. <br>
-Mitigation: Use only where the agent is authorized to inspect local containers, treat outputs as sensitive, and review results before sharing them. <br>
-Risk: Callback, export, write, create, or deployment-management actions can send data out or change local state if used unintentionally. <br>
-Mitigation: Avoid callback URLs unless intentional, and manually confirm any create, export, write, or deployment-management action before execution. <br>
+## Use Case:
 
+Developers and operations engineers use this skill to inspect local Podman or Docker containers, review logs, check resource usage, and diagnose common container state or configuration issues.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell-command examples and structured inspection output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include local container status, logs, resource usage, ports, mounts, environment variables, and configuration details.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Container inspection output may expose sensitive logs, mounts, ports, or environment variables.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only on containers whose data can be shared with the agent, and instruct the agent to redact secrets before returning output.
+
+Risk: The artifact claims sensitive data will not appear in outputs, but security evidence says environment variables and logs can be exposed.
+
+Mitigation: Treat all outputs as potentially sensitive and review them before sharing or storing them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/docker-ctl-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline bash and YAML code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include container status, logs, ports, mounts, environment variables, health checks, and resource usage summaries.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

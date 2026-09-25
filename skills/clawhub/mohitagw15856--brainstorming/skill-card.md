@@ -1,39 +1,51 @@
-## Description: <br>
-Brainstorming guides an agent through divergent idea generation followed by criteria-based shortlisting, preserving rejected options and the reasons they were set aside. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Run a real brainstorm - divergent generation without judgment, then convergent selection with explicit criteria - instead of listing ten obvious ideas and calling it creativity.
 
-## Publisher: <br>
-[mohitagw15856](https://clawhub.ai/user/mohitagw15856) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mohitagw15856](https://clawhub.ai/user/mohitagw15856)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill when they need a broad option set for a prompt, product problem, naming task, or solution space exploration. It helps separate idea generation from evaluation by producing 20-40 varied ideas, explicit selection criteria, a 3-5 item shortlist, and a reject ledger. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill intentionally makes brainstorming responses longer and includes deliberately unusual ideas that may not be suitable for immediate use. <br>
-Mitigation: Review the divergent set, shortlist, and reject ledger before acting on proposals, and confirm selected ideas against real constraints. <br>
+## Use Case:
 
+External users and employees use this skill when they need an agent to generate a broad set of ideas, name options, or solution directions, then select a shortlist against explicit criteria while preserving rejected ideas and revival conditions.
 
-## Reference(s): <br>
-- [ClawHub Brainstorming skill page](https://clawhub.ai/mohitagw15856/skills/brainstorming) <br>
-- [Brainstorming homepage](https://mohitagw15856.github.io/pm-claude-skills/skill/brainstorming.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown with grouped lists, a criteria scoring table, and a reject ledger] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes 20-40 ideas, 3-5 shortlisted options, one wildcard, and revival conditions for rejected ideas.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence, released 2026-07-16) <br>
+Risk: The skill may produce more structure than expected for broad idea generation or naming requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it when a full brainstorm is desired, including explicit criteria, a shortlist, and a reject ledger; ask for a lighter response when only brief suggestions are needed.
+
+## Reference(s):
+
+- [Brainstorming Skill Page](https://clawhub.ai/mohitagw15856/skills/brainstorming)
+- [Skill Homepage](https://mohitagw15856.github.io/pm-claude-skills/skill/brainstorming.html)
+- [Publisher Profile](https://clawhub.ai/user/mohitagw15856)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown with grouped idea lists, criteria table, shortlist, and reject ledger]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces 20-40 divergent ideas, a 3-5 item shortlist, one wildcard selection, and reasons for rejected ideas.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

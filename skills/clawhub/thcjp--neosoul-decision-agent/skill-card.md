@@ -1,5 +1,5 @@
 ## Description: <br>
-Neosoul Decision Agent provides structured decision support that learns local decision preferences over time and returns confidence-labeled analyses, prompts, and review records. <br>
+Neosoul Decision Agent provides structured decision support with local layered memory for learning user risk preferences, decision-framework preferences, domain weights, decision reviews, proactive decision detection, and confidence labeling. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, operators, and individual users use this skill to analyze product, technical architecture, business strategy, and personal decisions with structured tradeoff frameworks while reusing local decision-memory files. <br>
+External users and developers use this agent skill to analyze product, technical architecture, business strategy, and personal decisions with structured tradeoff analysis informed by local decision memory. The skill is intended for decision support and does not make final decisions for the user. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Local decision-memory files may capture sensitive personal, legal, health, or business strategy context. <br>
-Mitigation: Review and delete files under ~/decision-making regularly, avoid recording sensitive details unless intentional, and confirm before saving new preferences or decision records. <br>
-Risk: Learned preferences and prior decision records may bias later analyses if they are outdated or incorrect. <br>
-Mitigation: Treat recommendations as decision support, review cited memory sources, and update or remove stale preferences before relying on them. <br>
+Risk: Persistent decision preferences under ~/decision-making/ can expose or retain sensitive decision history. <br>
+Mitigation: Review stored memory files periodically, avoid recording third-party sensitive information, and delete or restrict access to entries that are no longer needed. <br>
+Risk: Server security evidence flags inconsistent API, callback, and command-execution claims. <br>
+Mitigation: Review the skill before installing and approve or block API, callback, or command-execution behavior that is outside the local decision-memory directory. <br>
+Risk: Decision recommendations can be misleading if learned preferences are wrong, stale, or based on incomplete context. <br>
+Mitigation: Treat outputs as advisory, verify assumptions and confidence labels, and keep final decisions with the user. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/thcjp/skills/neosoul-decision-agent) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/neosoul-decision-agent) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown decision analyses, status summaries, local memory records, and optional bash setup commands] <br>
+**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown with structured analysis, inline shell commands, configuration steps, and local file paths] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update local files under ~/decision-making; no network access is described.] <br>
+**Other Properties Related to Output:** [May create, read, and update local decision-memory files under ~/decision-making/ when executed by an agent.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+1.0.2 (source: server release metadata; artifact frontmatter says 1.0.1) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

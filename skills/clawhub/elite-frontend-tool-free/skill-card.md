@@ -1,41 +1,54 @@
-## Description: <br>
-精英前端设计-免费版 helps individual developers generate distinctive single-page frontend UI designs using font, color, animation, and anti-pattern guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-language frontend UI design skill that applies typography, color, motion, and anti-pattern checks to produce HTML/CSS code.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External developers and individual creators use this skill to create landing pages, portfolio pages, dashboards, and small web app interfaces. It provides design direction and example HTML/CSS for typography, color systems, asymmetrical layouts, and simple CSS animation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requests command execution and file-writing authority that is broader than its frontend design guidance usually requires. <br>
-Mitigation: Limit exec and write access to explicit user-requested code generation tasks, review changes before use, or remove those permissions when only design guidance is needed. <br>
-Risk: Generated frontend code or design recommendations may be incorrect, inaccessible, or unsuitable for a production interface. <br>
-Mitigation: Review generated HTML/CSS, test responsive behavior and accessibility, and adapt the result to the project's design and security requirements before deployment. <br>
+## Use Case:
 
+External developers, designers, and product teams use this skill to generate single-page HTML/CSS interfaces, landing pages, dashboards, color themes, and frontend visual design guidance.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/elite-frontend-tool-free) <br>
-- [Google Fonts CSS API example](https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;900&family=IBM+Plex+Sans:wght@300;400;600&family=JetBrains+Mono:wght@400&display=swap) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with HTML, CSS, shell, text, and JSON code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs frontend design guidance, single-page HTML/CSS examples, CSS variables, animation snippets, and structured status-style examples.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The skill requests command, file, browser, API, and broad automation capabilities beyond its stated HTML/CSS design purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each proposed file, browser, network, API, or shell action before it runs, and grant only the capabilities needed for the current design task.
+
+Risk: Generated frontend code and design guidance may not meet project accessibility, security, brand, or production quality requirements without review.
+
+Mitigation: Treat outputs as drafts; review generated HTML/CSS, external font usage, animation behavior, and any commands before use in a release.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/elite-frontend-tool-free)
+- [Google Fonts stylesheet example](https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;900&family=IBM+Plex+Sans:wght@300;400;600&family=JetBrains+Mono:wght@400&display=swap)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with HTML/CSS code blocks, configuration snippets, and occasional shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include single-file HTML/CSS, CSS variables, animation snippets, design checklists, and theme guidance.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
