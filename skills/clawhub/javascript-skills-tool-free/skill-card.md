@@ -1,40 +1,53 @@
-## Description: <br>
-JavaScript规范工具(免费版) provides JavaScript style guidance, basic code review suggestions, and standards-aligned code snippets for individual developers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+面向个人开发者的JavaScript代码风格指南,涵盖核心规则与基础代码审查能力。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and individual JavaScript learners use this skill to draft style-compliant JavaScript snippets, review common style issues, and learn modern conventions for variables, objects, arrays, functions, modules, and naming. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad write and command-running authority could allow unexpected file edits or shell commands when the hosting agent grants tools automatically. <br>
-Mitigation: Use the skill in workspaces where file edits and shell execution are acceptable, or restrict it to read-only guidance when the platform supports that. <br>
-Risk: Loose activation around JavaScript and front-end coding requests may make the skill run in workflows where its style guidance is not intended. <br>
-Mitigation: Invoke it explicitly for JavaScript style review or code generation, and disable automatic activation for unrelated coding or deployment tasks. <br>
+## Use Case:
 
+Developers and individual JavaScript users use this skill to generate style-compliant JavaScript snippets, review pasted JavaScript for common style issues, and receive concise explanations of core conventions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/javascript-skills-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, configuration] <br>
-**Output Format:** [Markdown with JavaScript, JSON, and configuration code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include review notes, corrected code snippets, and optional ESLint or Prettier configuration examples.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The server security review classifies the release as suspicious because it grants broader tool and workflow authority than a passive JavaScript style guide clearly requires.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installing, restrict use to JavaScript style review or snippet generation, and avoid allowing it to run commands or modify files automatically.
+
+Risk: The artifact describes command execution and file modification pathways through agent tools.
+
+Mitigation: Require explicit user approval for file writes and command execution, and use allowlisted commands when linting or formatting code.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/thcjp/skills/javascript-skills-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with JavaScript, JSON, shell command, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are intended as review guidance or generated snippets; file changes and command execution should remain user-controlled.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

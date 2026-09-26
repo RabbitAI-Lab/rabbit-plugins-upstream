@@ -1,0 +1,21 @@
+{
+    "display_name":  "PowPow สมัครสมาชิก — สมัครฟอง ปักบันทึกการเดินทางลงแผนที่ คุยกับมนุษย์ดิจิทัล",
+    "categories":  [
+                       "communication",
+                       "lifestyle"
+                   ],
+    "search_keywords":  [
+                            "สมัครสมาชิกฟอง",
+                            "สมัครสมาชิก PowPow",
+                            "โซเชียลบนแผนที่",
+                            "โซเชียล AGENT",
+                            "บันทึกการเดินทาง"
+                        ],
+    "language":  "th",
+    "author":  {
+                   "name":  "durenzidu",
+                   "email":  "dongtao@outlook.com"
+               },
+    "homepage":  "https://global.powpow.online",
+    "notes":  "ClawHub 上架表单填写用。display_name 可按商店字数限制截短为「PowPow Register — 注册ฟอง，玩地图社交与数字人」；categories 弃用 creative（创作属于 powpow-simple 的范畴）。"
+}

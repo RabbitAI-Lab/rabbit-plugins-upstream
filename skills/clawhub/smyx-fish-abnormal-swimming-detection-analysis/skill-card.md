@@ -1,46 +1,58 @@
-## Description: <br>
-Analyzes fixed-camera aquarium images or videos to identify abnormal fish swimming posture, quantify abnormal-duration ratios, and produce structured monitoring reports with suggested next actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes aquarium camera videos for unusual fish swimming postures and reports observed anomalies, their duration, and suggested follow-up actions.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Aquarium keepers, aquarium operators, and developers use this skill to analyze fixed-camera fish media for side-swim, upside-down posture, axial rotation, floating or sinking behavior, and abnormal-duration ratios. The skill supports visual posture monitoring and report generation, not fish disease diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Local or URL-based aquarium media may be sent to lifeemergence.com services for cloud analysis. <br>
-Mitigation: Use only authorized aquarium media and confirm that users understand remote processing before execution. <br>
-Risk: The skill may create or reuse an internal identity and store service tokens in the workspace data database. <br>
-Mitigation: Run in a controlled workspace, review stored credentials after use, and rotate or remove service tokens when access is no longer needed. <br>
-Risk: History queries can retrieve cloud-stored report records automatically. <br>
-Mitigation: Limit history-query use to authorized users and review report links before sharing outputs. <br>
-Risk: Visual posture findings can be mistaken for veterinary diagnosis. <br>
-Mitigation: Present outputs as posture monitoring only and direct significant or persistent abnormalities to aquarium professionals or ornamental fish veterinarians. <br>
+## Use Case:
 
+Aquarium keepers and operators use fixed-camera footage to review unusual fish swimming behavior, monitor trends, and decide when to inspect water conditions or consult an aquatic animal professional. The observations are not disease diagnoses.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-fish-abnormal-swimming-detection-analysis) <br>
-- [API documentation](artifact/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON report with posture classifications, abnormal-duration metrics, recommended actions, and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save analysis output to a user-specified file and may query historical cloud reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter reports 1.0.5) <br>
+Risk: Private aquarium footage or supplied video URLs are sent to an external cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm authorization and review the service's retention and sharing terms before submitting private footage or internal URLs.
+
+Risk: The skill automatically creates or reuses an identity and stores authentication data locally; history queries may expose previous reports.
+
+Mitigation: Review account access and local credential storage, and use only an authorized account to query history.
+
+Risk: Posture alerts may be misleading for species with naturally unusual swimming behavior.
+
+Mitigation: Configure species-specific baselines and have a person review alerts before taking action; do not treat results as a disease diagnosis.
+
+## Reference(s):
+
+- [Skill release on ClawHub](https://clawhub.ai/smyx-sunjinhui/skills/smyx-fish-abnormal-swimming-detection-analysis)
+- [API interface reference](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Structured analysis report or historical-report listing, with report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes abnormal-posture observations, duration or proportion, alerts, and suggested actions when available.]
+
+## Skill Version(s):
+
+1.0.10 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

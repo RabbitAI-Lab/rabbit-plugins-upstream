@@ -1,40 +1,54 @@
-## Description: <br>
-出境游旅行助手为出境游用户提供国际机票和酒店搜索、签证、安全、插头电压、退税、汇率、航班座位行李和紧急求助等一站式旅行查询。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+出境游一站式全链路助手，11个工具覆盖国际机票酒店搜索、签证查询、安全评级、插头电压、退税计算、汇率换算、航班座位行李、紧急求助，零配置即装即用。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External travelers use this skill to plan outbound trips by checking flights, hotels, visa requirements, destination safety, plug and voltage standards, tax refunds, exchange rates, baggage details, seat information, and emergency contacts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Live flight, hotel, seat, baggage, room, and exchange-rate lookups send travel query details to external services. <br>
-Mitigation: Use only the itinerary details needed for the query, avoid highly sensitive personal data, and review external-service handling before deployment. <br>
-Risk: The skill relies on a shared embedded proxy token for proxy-backed lookups. <br>
-Mitigation: Replace it with configurable per-deployment credentials or require the publisher to clarify token scope, rotation, and retention behavior before commercial use. <br>
+## Use Case:
 
+External travelers and travel planners use this skill to prepare outbound trips by checking flights, hotels, visa requirements, safety context, plug standards, tax refund estimates, exchange rates, baggage, seat information, and emergency contacts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/outbound-travel-assistant) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [JSON-formatted text and agent-readable Markdown summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include booking links, estimated prices, safety scores, tax-refund estimates, exchange-rate calculations, and emergency contact guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: Flight, hotel, seat, baggage, and hotel-detail queries are sent to the skill's RG cloud proxy, and currency codes are sent to a public exchange-rate API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when that data sharing is acceptable, and avoid entering unnecessary personal details beyond the itinerary fields needed for a lookup.
+
+Risk: Visa rules, destination safety conditions, tax refund amounts, travel prices, and exchange rates can change or may be estimates.
+
+Mitigation: Confirm important decisions with official consulates, carriers, hotels, tax refund providers, emergency services, or current public sources before acting.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/outbound-travel-assistant)
+- [ClawHub publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Guidance]
+
+**Output Format:** [JSON-formatted Chinese text responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes live travel lookup results, local reference data, disclaimers, and suggested follow-up tool tips.]
+
+## Skill Version(s):
+
+1.0.19 (source: server release evidence and target metadata; artifact _meta.json lists 1.0.3)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

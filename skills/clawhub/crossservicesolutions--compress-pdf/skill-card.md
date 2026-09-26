@@ -1,40 +1,59 @@
-## Description: <br>
-Compress a user-provided PDF by uploading it to Cross-Service-Solutions, polling until completion, then returning a download URL for the compressed file. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Compress a user-provided PDF by uploading it to Cross-Service-Solutions, polling until completion, then returning a download URL for the compressed file.
 
-## Publisher: <br>
-[crossservicesolutions](https://clawhub.ai/user/crossservicesolutions) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[crossservicesolutions](https://clawhub.ai/user/crossservicesolutions)
 
-## Use Case: <br>
-External users and developers use this skill to compress selected PDF files through Cross-Service-Solutions and receive job status plus a compressed-file download URL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Selected PDFs are uploaded to Cross-Service-Solutions and the compressed output is returned through a third-party-hosted download URL. <br>
-Mitigation: Use only for documents approved for that provider; avoid confidential, regulated, legal, financial, or personal documents unless the provider's privacy and retention practices are approved. <br>
-Risk: The Cross-Service-Solutions API key could be exposed if pasted into shared chats, logs, or command history. <br>
-Mitigation: Use a dedicated API key, pass it through a secret or environment variable, and do not echo or log the key. <br>
+## Use Case:
 
+External users and developers use this skill to compress PDF files through the Cross-Service-Solutions API and receive a structured result with the job status, output file name, download URL, and settings used.
 
-## Reference(s): <br>
-- [ClawHub Compress PDF skill page](https://clawhub.ai/crossservicesolutions/skills/compress-pdf) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration] <br>
-**Output Format:** [JSON result with job status, download URL, file name, and compression settings.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a user-provided PDF and Cross-Service-Solutions API key; optional image quality and DPI settings control compression.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: PDF files are uploaded to an external service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for PDFs the user is comfortable sending to Cross-Service-Solutions.
+
+Risk: The helper script can be redirected to send the PDF and API token to an arbitrary server.
+
+Mitigation: Do not allow untrusted users or wrappers to set --base-url or SOLUTIONS_BASE_URL.
+
+Risk: API tokens may be exposed if passed or logged unsafely.
+
+Mitigation: Prefer environment or secret-manager credentials and never echo or log the API key.
+
+## Reference(s):
+
+- [Compress PDF on ClawHub](https://clawhub.ai/crossservicesolutions/skills/compress-pdf)
+- [Cross-Service-Solutions publisher profile](https://clawhub.ai/user/crossservicesolutions)
+- [Cross-Service-Solutions API registration](https://login.cross-service-solutions.com/register)
+
+## Skill Output:
+
+**Output Type(s):** [text, json, shell commands, guidance]
+
+**Output Format:** [JSON result and human-facing guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns job status, download URL when available, file name, and compression settings.]
+
+## Skill Version(s):
+
+1.0.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

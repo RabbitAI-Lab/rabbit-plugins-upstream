@@ -1,45 +1,60 @@
-## Description: <br>
-A Chinese-language English speaking coach that guides learners through short warmups, role play, impromptu speaking, pronunciation review, Socratic prompts, and permission-based follow-up from a learner profile. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-language English speaking coach offering short warm-ups, role-play, speech practice, and consent-based progress reviews for school-age learners.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External learners use this skill as an English speaking practice coach for morning warmups, role-play conversations, short speeches, pronunciation practice, and progress review. It is designed for coached dialogue and feedback, with profile-based continuity only when the user permits tracking. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses broad activation rules and may track pronunciation weaknesses, fluency patterns, vocabulary, milestones, and topic preferences across sessions. <br>
-Mitigation: Use it for explicit coaching requests and enable continuous tracking or reminders only when the platform provides clear controls to view, limit, and delete the stored learner profile. <br>
-Risk: Pronunciation scoring and stuck-silence prompts depend on audio analysis capabilities that may not be available in all channels. <br>
-Mitigation: When only text or ordinary ASR is available, downgrade to vocabulary, grammar, expression, and fluency review, and tell the learner that phoneme-level pronunciation cannot be assessed in that mode. <br>
+## Use Case:
 
+School-age English learners use guided conversation, role-play, pronunciation practice, and brief reviews to build speaking confidence. Parents or teachers should supervise younger learners and authorize any persistent learning profile.
 
-## Reference(s): <br>
-- [晨间热身5步 · 状态机定义](references/morning-warmup-statemachine.md) <br>
-- [中国学生高频发音弱点与纠正方法](references/pronunciation-issues.md) <br>
-- [5套真实场景完整对话脚本](references/roleplay-scripts.md) <br>
-- [分年级口语话题库](references/topic-bank.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-speaking-coach) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/qizhitang) <br>
+### Deployment Geography for Use:
 
+Global; designed for mainland China and requires localization of consent rules and crisis contacts elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Conversational coaching text with Markdown-formatted feedback and practice prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May recommend learner-profile updates, reminders, or follow-up practice only when the user permits tracking.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: A minor's speech and learning profile may contain sensitive information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit practice intent and consent before profile access or each update; obtain guardian authorization where required and offer session-only practice.
+
+Risk: Text or speech transcripts cannot establish precise pronunciation errors.
+
+Mitigation: Reserve phoneme-level feedback and persistent pronunciation records for platforms with scored audio; otherwise limit feedback to the words and expressions available.
+
+Risk: Consent thresholds, curriculum assumptions, and crisis contacts may not apply outside mainland China.
+
+Mitigation: Check local guardian-consent requirements and adapt curriculum, language defaults, and emergency referrals before deployment elsewhere.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-english-speaking-coach)
+- [Speaking topic bank](artifact/references/topic-bank.md)
+- [Role-play scripts](artifact/references/roleplay-scripts.md)
+- [Pronunciation practice reference](artifact/references/pronunciation-issues.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Conversational text and structured practice feedback]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes optional, consent-gated session summaries and speaking-profile updates; phoneme-level feedback requires scored audio.]
+
+## Skill Version(s):
+
+2.6.0 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

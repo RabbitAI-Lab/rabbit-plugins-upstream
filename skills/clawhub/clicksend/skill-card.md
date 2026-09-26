@@ -1,47 +1,79 @@
-## Description: <br>
-ClickSend API integration with managed authentication for sending SMS, MMS, and voice messages, managing contacts and lists, managing verified email addresses, and viewing account configuration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ClickSend API integration with managed authentication for sending SMS, MMS, and voice messages, managing contacts, lists, verified email addresses, and account configuration.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to make user-approved ClickSend requests through Maton, including sending SMS, MMS, and voice messages and managing contacts, lists, verified email addresses, and account settings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive credentials are required for ClickSend access through Maton. <br>
-Mitigation: Keep MATON_API_KEY in trusted environment variables and avoid printing API keys in shared logs or screenshots. <br>
-Risk: Messaging and voice operations can contact real recipients and may incur charges. <br>
-Mitigation: Review recipient, content, timing, and cost impact before approving any send operation. <br>
-Risk: Write operations can modify contacts, lists, verified email addresses, or other account data. <br>
-Mitigation: Approve create, update, or delete requests only after confirming the target resource and intended effect. <br>
-Risk: Accounts with multiple ClickSend connections can route a request to the wrong account. <br>
-Mitigation: Specify the intended connection when multiple active connections exist. <br>
+## Use Case:
 
+External users and operators use this skill to work with a connected ClickSend account through Maton: send approved SMS, MMS, and voice messages, manage contact lists and verified sender addresses, inspect account data, and optionally configure approved automations.
 
-## Reference(s): <br>
-- [ClickSend on ClawHub](https://clawhub.ai/byungkyu/clicksend) <br>
-- [Maton](https://maton.ai) <br>
-- [ClickSend Developer Portal](https://developers.clicksend.com/) <br>
-- [ClickSend REST API v3 Documentation](https://developers.clicksend.com/docs) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline code blocks, shell commands, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and network access; write operations require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Messaging operations can send SMS, MMS, or voice messages to real recipients and may incur costs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm recipient, content, send timing, and expected cost before approving any send operation.
+
+Risk: Contact, list, and verified email address changes can modify account data or sender identities.
+
+Mitigation: Review the exact target resource and payload before approving create, update, or delete operations.
+
+Risk: Hosted functions, triggers, and destinations can continue running or forwarding data after setup.
+
+Mitigation: Approve each automation separately, restrict destinations to intended hosts, use least-privilege scopes, and delete unused connections, functions, or triggers.
+
+Risk: ClickSend account data and trigger payloads may contain personal, business, or payment-related information.
+
+Mitigation: Forward only the minimum fields needed for the task, avoid logging raw responses, and prefer Maton-controlled destinations unless the user explicitly approves a third-party host.
+
+## Reference(s):
+
+- [ClawHub ClickSend Skill](https://clawhub.ai/byungkyu/skills/clicksend)
+- [byungkyu Publisher Profile](https://clawhub.ai/user/byungkyu)
+- [Maton Homepage](https://maton.ai)
+- [ClickSend Developer Portal](https://developers.clicksend.com/)
+- [ClickSend REST API v3 Documentation](https://developers.clicksend.com/docs)
+- [ClickSend PHP SDK](https://github.com/ClickSend/clicksend-php)
+- [ClickSend Help Center](https://help.clicksend.com/)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Time Trigger Reference](references/time/triggers.md)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Code, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and explicit approval before write operations or new connections.]
+
+## Skill Version(s):
+
+1.2.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

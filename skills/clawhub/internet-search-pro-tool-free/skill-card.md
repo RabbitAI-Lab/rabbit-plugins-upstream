@@ -1,42 +1,57 @@
-## Description: <br>
-联网搜索助手 helps an agent run single-query web searches, filter results, and return concise structured summaries with source links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+联网搜索助手 helps an agent extract search keywords, retrieve current information, filter low-value results, and summarize concise Chinese-language findings with source links.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Personal users can ask an agent to search for current information such as news, weather, real-time data, product details, or recent topic updates. The skill is intended for single-query lookup and summary, not batch search, export, history, or multi-turn research. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan flags this release for review because the requested agent authority is broader than a simple web search helper usually needs. <br>
-Mitigation: Use it only when web search is needed, review its behavior before deployment, and narrow or remove local read, glob, grep, and shell execution permissions unless they are specifically required. <br>
-Risk: Search queries, external search services, or callback behavior could expose sensitive prompts, secrets, or private personal data. <br>
-Mitigation: Use non-sensitive queries, do not enter secrets or private personal data, and require clear documentation of external query and callback behavior before broader use. <br>
-Risk: Some artifact text describes unsupported create, export, or broad SEO behavior that may confuse the intended search-only scope. <br>
-Mitigation: Treat the supported scope as single-query personal information retrieval and verify any broader behavior with the publisher before relying on it. <br>
+## Use Case:
 
+External users and developers use this skill for everyday Chinese-language web searches, recent news and product lookups, SEO-oriented keyword research, and short structured summaries. It is intended for single-query searches and does not claim multi-turn search, batch querying, export, or search history support.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/internet-search-pro-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown-style structured search summaries with source links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns about 3-5 results for a single query; free edition does not support multi-turn search, batch queries, result export, or search history.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The security evidence marks the release suspicious because it requests shell execution and file-write capabilities that are broader than a basic search assistant needs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it only in constrained environments, review commands before execution, and prefer a search-only configuration or command whitelist before broader deployment.
+
+Risk: Search results may be incomplete, outdated, or affected by irrelevant pages and search-engine ranking behavior.
+
+Mitigation: Check cited source links, ask for narrower search terms when results are weak, and avoid treating summaries as authoritative without source review.
+
+Risk: Optional external search API configuration can expose credentials if keys are written into files or command history.
+
+Mitigation: Use environment variables or platform secret storage, avoid hardcoding keys, and redact credentials from shared outputs.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/internet-search-pro-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries with source links and optional inline shell or environment-variable examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Typically returns 3-5 search results with a brief core finding, detailed items, and one practical suggestion.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

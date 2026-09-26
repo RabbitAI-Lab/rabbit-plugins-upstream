@@ -1,42 +1,57 @@
-## Description: <br>
-Zero-dependency AI memory system. No API keys needed. Pure local storage with smart search. Works everywhere. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zero-dependency AI memory system. No API keys needed. Pure local storage with smart search. Works everywhere.
 
-## Publisher: <br>
-[shianaixuexi-cell](https://clawhub.ai/user/shianaixuexi-cell) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[shianaixuexi-cell](https://clawhub.ai/user/shianaixuexi-cell)
 
-## Use Case: <br>
-Developers and agent users use this skill to add persistent local memory for preferences, decisions, lessons, and project context without API keys or cloud services. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent local memory may contain sensitive user or project information in plaintext. <br>
-Mitigation: Avoid storing passwords, API keys, regulated personal data, or sensitive business details, and exclude SESSION-STATE.json, MEMORY.md, and memories/ from git, backups, and sync tools unless that exposure is intended. <br>
-Risk: Stale or incorrect memories can influence future agent responses. <br>
-Mitigation: Review memory-list, memory-stats, MEMORY.md, and stored memory files periodically, and delete or correct outdated entries. <br>
+## Use Case:
 
+Developers and agent users use this skill to set up project-local memory for preferences, decisions, facts, lessons, and active session state. It provides CLI-backed workflows for storing, searching, listing, importing, and exporting local memory files.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/shianaixuexi-cell/simple-memory-skill) <br>
-- [README](artifact/README.md) <br>
-- [Skill source](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON file content] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates and updates local plaintext memory files such as SESSION-STATE.json, MEMORY.md, and memories/*.json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter, package.json, server release evidence) <br>
+Risk: The skill encourages plaintext storage of conversation-derived information in project-local files, which can capture sensitive or regulated data without clear consent or retention controls.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not store secrets or regulated personal data; add SESSION-STATE.json, MEMORY.md, and memories/*.json to .gitignore; review and delete memory files periodically.
+
+Risk: The security guidance flags memory-list --date as unsafe with untrusted input until date validation is fixed.
+
+Mitigation: Use only trusted, validated date values and avoid passing untrusted user input to memory-list --date.
+
+Risk: The documentation mentions maintenance commands that are not present in the packaged CLI files.
+
+Mitigation: Verify command availability before relying on maintenance workflows, and use export, manual review, or implemented commands for memory maintenance.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/shianaixuexi-cell/skills/simple-memory-skill)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON examples, and file-oriented configuration steps]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update project-local memory files such as SESSION-STATE.json, MEMORY.md, and memories/*.json when the described commands are run.]
+
+## Skill Version(s):
+
+1.0.0 (source: frontmatter, package.json, ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,60 @@
-## Description: <br>
-Pet Sneeze / Cough Detection analyzes pet video, with optional audio, to identify sneeze and cough events, distinguish occasional from repeated episodes, and report timing, frequency, and observations without providing a medical diagnosis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects sneeze and cough events in pet video, optionally using audio, and returns structured behavior observations, frequency information, suggestions, and report links.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Pet owners, veterinary staff, and boarding-center operators use this skill to analyze pet activity video or a video URL for behavior-focused sneeze and cough event detection. The skill can also retrieve prior sneeze and cough analysis reports associated with the internal service identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet video, optional audio, and report queries may be sent to the lifeemergence.com cloud service. <br>
-Mitigation: Use only footage appropriate for that cloud transfer, and avoid sensitive home, clinic, or boarding footage unless the publisher provides acceptable privacy, retention, and consent controls. <br>
-Risk: The skill can silently create or reuse an internal identity and store service tokens in a local workspace database. <br>
-Mitigation: Review identity and token handling before installation, restrict workspace access, and remove local state when the skill is no longer needed. <br>
-Risk: The skill reports behavioral observations and may miss or misclassify respiratory events. <br>
-Mitigation: Treat results as observation support rather than medical diagnosis, and escalate frequent coughing, repeated sneezing, wheezing, or breathing difficulty to a veterinarian. <br>
+## Use Case:
 
+External users, pet-care operators, and animal-care teams use this skill to analyze pet activity videos for sneeze or cough behavior and to review cloud-stored historical reports. The output is intended for behavior observation and triage support, not veterinary diagnosis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-sneeze-cough-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface reference](references/api_doc.md) <br>
-- [Shared analysis API reference](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON structured analysis report with event observations, risk level, suggestions, and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include historical report tables when the user requests prior sneeze or cough reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: Pet videos, optional audio, URLs, report history requests, and account identifiers are sent to the publisher's cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media you are comfortable sharing with the publisher, and review the publisher's retention, access-control, and identity-handling documentation before use with private household footage.
+
+Risk: The skill can silently create or reuse an identity and store tokens locally.
+
+Mitigation: Run it in a workspace with appropriate access controls and remove locally stored identity or token data when it is no longer needed.
+
+Risk: Detection results may be incomplete or inaccurate and are not medical diagnoses.
+
+Mitigation: Treat outputs as behavior observations; seek veterinary review for frequent, severe, or concerning respiratory events.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-sneeze-cough-detection-analysis)
+- [API interface reference](references/api_doc.md)
+- [Shared analysis API reference](skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, files]
+
+**Output Format:** [Markdown or JSON text, with optional saved output file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include structured detection results, event frequency, suggestions, historical report records, and report export links.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

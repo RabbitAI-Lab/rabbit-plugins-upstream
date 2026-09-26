@@ -1,41 +1,62 @@
-## Description: <br>
-Memory Radar helps agents scan AI memory files and workspace configuration for prompt injection, credential exposure, data-exfiltration instructions, and related security risks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+记忆雷达 helps agents scan memory files, logs, and workspace configuration for prompt injection patterns, credential exposure, exfiltration instructions, and related security concerns.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and agent operators use this skill to audit agent memory and configuration files before continued use, after importing external content, or before sharing context across agents. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Remote LLM analysis may transmit portions of memory content outside the local environment. <br>
-Mitigation: Use the default local mode for routine scans and require explicit approval before enabling remote analysis. <br>
-Risk: Quarantine, restore, or scheduled-scan setup can modify files or create persistent local state. <br>
-Mitigation: Review the proposed changes before allowing quarantine actions or scheduled monitoring to run. <br>
+## Use Case:
 
+Developers, agent operators, and security reviewers use this skill to inspect AI agent memory files for prompt injection, leaked credentials, suspicious instructions, and cross-file threat patterns. It is intended for explicit memory-security scanning and review workflows, not unauthorized security assessment.
 
-## Reference(s): <br>
-- [Memory Radar ClawHub listing](https://clawhub.ai/thcjp/skills/memory-radar) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and optional JSON scan reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include local scan recommendations, optional remote LLM analysis, quarantine and restore steps, and scheduled scan setup.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The release evidence flags broad activation language, unclear scan scope, and read/execute/write authority.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installation, run it only for explicit memory-security scanning, and verify the exact files it will scan before granting access.
+
+Risk: The artifact references scripts such as memory-scan.py, quarantine.py, and schedule-scan.sh, but the release artifact contains only SKILL.md.
+
+Mitigation: Confirm the referenced scripts exist in the installed environment before following command examples or enabling scheduled scanning.
+
+Risk: The optional --allow-remote mode may send redacted memory context to a remote LLM.
+
+Mitigation: Keep local mode unless remote analysis is explicitly approved and the remaining context is acceptable to transmit.
+
+Risk: Quarantine, restore, and cron setup behaviors can modify files or automate future scans.
+
+Mitigation: Approve quarantine or scheduled execution only after checking backups, target paths, and the files that may be changed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/memory-radar)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and text guidance with shell command examples; described scan reports may use JSON, text, or CSV.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include severity labels, file and line references, cross-file correlation notes, quarantine or restore guidance, and remediation recommendations.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence; artifact frontmatter says 1.0.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

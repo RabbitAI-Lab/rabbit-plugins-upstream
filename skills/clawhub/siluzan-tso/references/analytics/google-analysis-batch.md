@@ -3,7 +3,6 @@
 > 适用：账户数 ≥ 5 且需拉 ≥ 2 个 google-analysis 维度。**禁止**外层 for-loop 替代。中断后**必须** `resume`，不得重跑 `run`。
 > **数据时效性**：维度的实时 / 每日同步口径见 `references/analytics/account-analytics.md` 顶部「数据时效性」表。当天高消耗排行只能用 `--sections overview`，且**禁止**加 `--min-spend`（其预筛选来自非实时 `accountsoverview`）。
 
-
 ## Contents
 
 - 子命令

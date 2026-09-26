@@ -1,5 +1,5 @@
 ## Description: <br>
-Generates a lightweight Markdown daily news brief by collecting public international, economic, and technology news and filtering items with keyword-based rules. <br>
+This skill helps an agent collect public international, economic, and technology news, filter items with keyword rules, and produce a daily Markdown news brief for personal use. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Individuals and content creators use this skill to gather public news items across international affairs, economics, and technology, filter them with keyword rules, and generate a Markdown daily brief for review. <br>
+External users and developers can use this skill to have an agent gather public news links, apply lightweight keyword filtering, and generate a consistent daily Markdown brief. It is intended for personal news review, industry tracking, and content research workflows rather than deterministic or high-stakes decision-making. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Metadata may cause agents to select the skill for unrelated AI, coding, automation, or finance tasks. <br>
-Mitigation: Use the skill only for public-news brief generation and verify that the requested task matches news collection, filtering, and Markdown brief creation. <br>
-Risk: Execution examples can run network requests, install scraping libraries, and write generated files in the working directory. <br>
-Mitigation: Review commands before running them, use a controlled workspace, and adjust output paths before saving files. <br>
-Risk: Keyword-based filtering and scraped public webpages can miss, duplicate, or mis-rank news items. <br>
-Mitigation: Review generated briefs against source links before relying on them. <br>
+Risk: The skill may make outbound requests to public news websites. <br>
+Mitigation: Review the source list and adapt or restrict it before use in environments with network policy constraints. <br>
+Risk: The skill may install Python packages and write generated brief or cache files in the working directory. <br>
+Mitigation: Run it in an appropriate workspace, review package installation commands, and keep output and cache paths under user-controlled directories. <br>
+Risk: Generated briefs may be incomplete or misleading because source sites can change and free-version filtering is keyword based. <br>
+Mitigation: Review generated news summaries before publishing, sharing, or relying on them for decisions. <br>
 
 
 ## Reference(s): <br>
-- [Detailed code examples](references/detail.md) <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/daily-news-brief-tool-free) <br>
+- [Detailed reference examples](references/detail.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown daily brief with optional Python and shell command snippets] <br>
+**Output Format:** [Markdown briefs with Python and shell command examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May run public web requests and write generated brief files in the working directory when file-saving examples are executed.] <br>
+**Other Properties Related to Output:** [May install Python packages and write generated brief or cache files in the working directory.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+1.0.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

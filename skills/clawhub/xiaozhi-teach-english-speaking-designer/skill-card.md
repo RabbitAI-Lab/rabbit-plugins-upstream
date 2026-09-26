@@ -1,48 +1,56 @@
-## Description: <br>
-帮助英语老师把口语练习升级为系统化口语教学，围绕目标设定、输入准备、任务型活动、输出练习、反馈纠正和口语能力档案设计教学流程。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps teachers design task-based English speaking lessons with realistic scenarios, differentiated activities, feedback prompts, and draft assessment rubrics.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-English teachers use this skill to design classroom speaking activities, feedback routines, and speaking-profile templates based on task-based language teaching. It supports planning and instructional guidance, not automated oral exams or AI practice conversations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student recordings, speaking profiles, and classroom feedback may contain sensitive student information. <br>
-Mitigation: Obtain appropriate student or guardian consent, de-identify records, restrict access, and set a deletion schedule before using or storing these materials. <br>
-Risk: Teaching guidance, rubrics, or feedback templates may be mistaken for final automated assessment. <br>
-Mitigation: Use the skill as a classroom-planning aid and have a teacher review outputs before sharing feedback or making assessment decisions. <br>
-Risk: Speaking task materials may include copyrighted textbook or third-party content. <br>
-Mitigation: Label material copyright status and use self-authored, licensed, adapted, or otherwise authorized materials. <br>
+## Use Case:
 
+Teachers in Chinese primary and secondary classrooms use this skill to plan English speaking tasks, adapt activities to class size and grade level, and prepare feedback and assessment templates. Teachers review all student-facing material and retain responsibility for evaluation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-english-speaking-designer) <br>
-- [任务型口语活动模板](references/task-based-template.md) <br>
-- [英语口语评估评分细则](references/speaking-rubric.md) <br>
-- [英语纠错策略参考](references/error-correction-strategies.md) <br>
-- [任务设计样板 · 餐厅点餐](references/task-design-sample-restaurant.md) <br>
-- [反馈话术库](references/feedback-phrases.md) <br>
-- [学员口语档案模板](references/speaking-profile-template.md) <br>
+### Deployment Geography for Use:
 
+Mainland China (intended Chinese K–12 classroom context)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown teaching plans, rubrics, feedback phrases, task templates, and speaking-profile structures] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces instructional planning content and templates; no executable code or tool calls are included.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Student learning records or recordings may expose minors' personal information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use student pseudonyms, confirm consent before handling recordings or writing personal records, and require teacher review before saving.
+
+Risk: Generated activities or draft rubrics may be inaccurate or mistaken for final student evaluations.
+
+Mitigation: Have teachers check generated tasks and scoring frameworks before classroom use; teachers make all final student evaluations.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-english-speaking-designer)
+- [Task-based lesson template](artifact/references/task-based-template.md)
+- [Speaking rubric](artifact/references/speaking-rubric.md)
+- [Error correction strategies](artifact/references/error-correction-strategies.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown lesson plans, task cards, feedback prompts, and draft rubrics]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher-facing drafts; no automatic student scoring or phoneme-level pronunciation assessment.]
+
+## Skill Version(s):
+
+2.6.0 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

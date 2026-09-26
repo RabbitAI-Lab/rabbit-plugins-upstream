@@ -1,52 +1,75 @@
-## Description: <br>
-高德地图 JSAPI v2.0 (WebGL) 开发技能，涵盖地图生命周期管理、强制安全配置、3D 视图控制、覆盖物绘制及 LBS 服务集成。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps developers build AMap/Gaode Map JSAPI v2.0 WebGL integrations covering map lifecycle, required security setup, 3D view control, overlays, layers, events, and LBS services.
 
-## Publisher: <br>
-[lbs-amap](https://clawhub.ai/user/lbs-amap) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lbs-amap](https://clawhub.ai/user/lbs-amap)
 
-## Use Case: <br>
-Developers and engineers use this skill to generate and verify Gaode Maps JSAPI v2.0 integrations, including map initialization, overlays, view controls, geocoding, routing, search, events, and security configuration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: AMap keys and AMAP_SECURITY_JS_CODE are sensitive credentials that can be exposed if generated code hardcodes them in frontend source or version control. <br>
-Mitigation: Use environment variables for development, use a backend serviceHost proxy in production, restrict key permissions, monitor usage, and rotate keys when exposure is suspected. <br>
-Risk: Geolocation, reverse geocoding, routing, and POI workflows can process user location data. <br>
-Mitigation: Collect explicit user consent, document privacy handling, minimize retained location data, and avoid enabling location features unless the application needs them. <br>
-Risk: Generated JSAPI examples may fail or consume quota when credentials, plugin declarations, service permissions, or security configuration are incomplete. <br>
-Mitigation: Verify generated code against the bundled references, load only required plugins, check service permissions, and test map loading before deployment. <br>
+## Use Case:
 
+Developers and engineers use this skill to generate and review AMap/Gaode Map JSAPI v2.0 code, configuration, and usage guidance for web maps, overlays, layers, routing, search, geocoding, and map events.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/lbs-amap/amap-jsapi-skill) <br>
-- [Gaode Maps Developer Homepage](https://lbs.amap.com) <br>
-- [Skill Overview](artifact/SKILL.md) <br>
-- [Security Configuration](artifact/references/security.md) <br>
-- [Map Initialization](artifact/references/map-init.md) <br>
-- [Markers](artifact/references/marker.md) <br>
-- [Vector Graphics](artifact/references/vector-graphics.md) <br>
-- [Geocoder](artifact/references/geocoder.md) <br>
-- [Routing](artifact/references/routing.md) <br>
-- [Search](artifact/references/search.md) <br>
-- [Geolocation API Reference](artifact/references/api/geolocation.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown with JavaScript, HTML, CSS, proxy configuration, and framework examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may reference AMAP_JSAPI_KEY and AMAP_SECURITY_JS_CODE and should be checked against the bundled JSAPI references before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: server release evidence and skill frontmatter) <br>
+Risk: Generated examples may expose AMap API keys or the securityJsCode if copied directly into browser code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep AMAP_JSAPI_KEY and AMAP_SECURITY_JS_CODE in environment variables for development and use a backend serviceHost proxy for production.
+
+Risk: Map labels, search results, geocoding results, or other untrusted location data could be inserted into templates or DOM content unsafely.
+
+Mitigation: Review generated UI code, escape untrusted values, and avoid raw innerHTML or template insertion for untrusted map data.
+
+Risk: Precise location, IP-based city lookup, geocoding, and reverse-geocoding can process sensitive location data.
+
+Mitigation: Add clear user notice and consent before collecting or deriving location data.
+
+Risk: JSONP or non-HTTPS endpoints can expand trust and transport risks in map integrations.
+
+Mitigation: Use HTTPS and avoid JSONP unless the source is fully trusted and reviewed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/lbs-amap/skills/amap-jsapi-skill)
+- [AMap official developer site](https://lbs.amap.com)
+- [Security Configuration](artifact/references/security.md)
+- [Map Initialization](artifact/references/map-init.md)
+- [View Control](artifact/references/view-control.md)
+- [Markers](artifact/references/marker.md)
+- [Vector Graphics](artifact/references/vector-graphics.md)
+- [Information Window](artifact/references/info-window.md)
+- [Official Layers](artifact/references/layers.md)
+- [Custom Layers](artifact/references/custom-layers.md)
+- [Geocoder](artifact/references/geocoder.md)
+- [Routing](artifact/references/routing.md)
+- [Search](artifact/references/search.md)
+- [Event System](artifact/references/events.md)
+- [Context Menu](artifact/references/context-menu.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline JavaScript, HTML, shell, and configuration code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated project files are intended to be placed under an amap-jsapi/ workspace folder when the skill creates files.]
+
+## Skill Version(s):
+
+1.1.1 (source: evidence.release.version and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

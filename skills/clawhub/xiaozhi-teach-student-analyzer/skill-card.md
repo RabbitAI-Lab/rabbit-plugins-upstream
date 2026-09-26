@@ -1,45 +1,56 @@
-## Description: <br>
-帮助老师从凭经验判断学情升级为数据驱动的教学决策，基于成绩数据生成班级画像、共性弱项、个体诊断和差异化教学建议。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+把班级测评成绩转化为知识点弱项分析、学生分层和可执行的教学调整建议。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External teachers use this skill to analyze class assessment data, identify common weak points, diagnose individual learning patterns, and turn findings into differentiated teaching actions. It is intended for authorized education data supplied by the teacher or connected teaching skills. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive student or class data could be exposed in reports or cross-skill sharing. <br>
-Mitigation: Use only authorized class data, prefer student IDs or aliases, avoid public reports with real names, and confirm before sharing or writing outputs into other skills. <br>
-Risk: Individual diagnoses may be overstated when the data sample is too small. <br>
-Mitigation: Require repeated evidence for stable conclusions and mark conclusions as evidence insufficient when history is limited. <br>
-Risk: Score analysis could turn into misleading forecasts, labels, or anxiety-inducing parent communication. <br>
-Mitigation: Do not predict future scores or rankings, avoid character judgments, and keep parent-facing output grounded in objective evidence and practical next steps. <br>
+## Use Case:
 
+面向使用中文的中小学教师：分析班级逐题成绩和历次测评，定位共性弱项，生成班级报告、学生诊断卡和分层教学建议；面向家长的材料须经教师审定。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-student-analyzer) <br>
-- [学情分析框架与模板](references/analysis-framework.md) <br>
-- [班级学情报告模板](references/class-report-template.md) <br>
-- [学生个体诊断卡模板](references/student-diagnosis-card-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Analysis, Guidance] <br>
-**Output Format:** [Markdown reports and structured text templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses teacher-provided class data; outputs should avoid real names in public reports and mark insufficient evidence when data is limited.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Student assessment records could be exposed or shared without permission.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm class-workspace access controls before use, use student aliases, and check consent and privacy controls before parent or cross-skill sharing.
+
+Risk: Small samples or incomplete assessment data could produce misleading student conclusions.
+
+Mitigation: Flag insufficient evidence, omit unsupported trend or item statistics, and have the teacher review conclusions before use.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-student-analyzer)
+- [学情分析框架](references/analysis-framework.md)
+- [班级学情报告模板](references/class-report-template.md)
+- [学生个体诊断卡模板](references/student-diagnosis-card-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown reports, diagnosis cards, and teaching recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Marks insufficient evidence and omits unsupported comparisons; teacher review is required before sharing.]
+
+## Skill Version(s):
+
+2.6.0 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

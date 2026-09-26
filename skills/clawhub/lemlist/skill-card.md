@@ -1,46 +1,73 @@
-## Description: <br>
-Lemlist API integration with managed OAuth for managing campaigns, leads, activities, schedules, sequences, and unsubscribes in Lemlist. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lemlist API integration with managed OAuth for managing campaigns, leads, activities, schedules, sequences, and unsubscribes in sales automation workflows.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users, sales operations teams, and developers use this skill to operate Lemlist outreach workflows through Maton-managed OAuth, including campaign, lead, schedule, activity, and unsubscribe management. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Maton API key and access to a connected Lemlist account. <br>
-Mitigation: Keep MATON_API_KEY private and install only when Maton is trusted to broker access to the Lemlist account. <br>
-Risk: Write and delete operations can change campaigns, leads, schedules, unsubscribes, or OAuth connections. <br>
-Mitigation: Confirm the exact target resource and intended effect with the user before any create, update, pause, or delete request. <br>
-Risk: Multiple Lemlist connections can cause requests to affect the wrong account. <br>
-Mitigation: Use the Maton-Connection header when multiple active Lemlist connections exist. <br>
+## Use Case:
 
+Sales, revenue operations, and developer users use this skill to work with Lemlist account data through Maton-authenticated API calls. It supports reviewed workflows for reading data, making approved writes, and optionally wiring approved hosted functions or triggers around Lemlist actions.
 
-## Reference(s): <br>
-- [Maton](https://maton.ai) <br>
-- [Lemlist API Documentation](https://developer.lemlist.com/) <br>
-- [Lemlist API Reference](https://developer.lemlist.com/api-reference) <br>
-- [Lemlist Help Center - API](https://help.lemlist.com/en/collections/17109856-api-webhooks) <br>
-- [ClawHub Lemlist Skill](https://clawhub.ai/byungkyu/lemlist) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, API Calls, Configuration instructions] <br>
-**Output Format:** [Markdown with Python, JavaScript, HTTP, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, a MATON_API_KEY credential, and explicit approval before write or delete API calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Write operations or new Lemlist connections can change account data or authorization state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to read and list calls, and require explicit user confirmation before creating connections or running POST, PUT, PATCH, or DELETE requests.
+
+Risk: Hosted functions, triggers, and destinations can continue acting on future events after setup.
+
+Mitigation: Require user approval for each deploy, invocation, trigger, or destination, and use least-privilege connection selection with DENY_ALL network policy where documented.
+
+Risk: Maton API keys and Lemlist responses can expose credentials, business data, or personal data.
+
+Mitigation: Prefer OAuth through the Maton CLI, avoid printing or persisting keys, and extract only the fields needed for the user's task.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/lemlist)
+- [Maton Homepage](https://maton.ai)
+- [Lemlist API Documentation](https://developer.lemlist.com/)
+- [Lemlist API Reference](https://developer.lemlist.com/api-reference)
+- [Lemlist Help Center - API](https://help.lemlist.com/en/collections/17109856-api-webhooks)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly trigger catalog](references/calendly/triggers.md)
+- [GitHub trigger catalog](references/github/triggers.md)
+- [Google Mail trigger catalog](references/google-mail/triggers.md)
+- [HubSpot trigger catalog](references/hubspot/triggers.md)
+- [Linear trigger catalog](references/linear/triggers.md)
+- [Notion trigger catalog](references/notion/triggers.md)
+- [Slack trigger catalog](references/slack/triggers.md)
+- [Stripe trigger catalog](references/stripe/triggers.md)
+- [Time trigger catalog](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, code blocks, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include Maton CLI commands, raw HTTP examples for restricted environments, endpoint guidance, and approval prompts for writes or automation.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

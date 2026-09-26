@@ -1,42 +1,59 @@
-## Description: <br>
-Detects and recognizes cats and dogs from smart feeder or IPC camera images and videos, supports pet identity matching and enrollment, and returns structured analysis reports for smart feeding workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes feeder or pet-camera images and videos to detect cats and dogs, recognize or enroll individual pets, and retrieve prior detection reports.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and developers use this skill to analyze smart feeder or IPC camera media, enroll pet identities, and query historical pet detection reports for smart feeding scenarios. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends pet-camera images, videos, URLs, report queries, and internal user identifiers to lifeemergence.com and open.lifeemergence.com services. <br>
-Mitigation: Use only when that remote processing is acceptable, and review the publisher's account, retention, deletion, and data handling documentation before installation. <br>
-Risk: The skill silently creates or logs into a remote account and stores authentication tokens locally without clear user control. <br>
-Mitigation: Run in an isolated workspace where appropriate, and verify how to clear the local SQLite database, data/smyx-api-key.txt identity state, and any retained tokens. <br>
+## Use Case:
 
+Pet owners and smart-feeder developers use this skill to identify cats and dogs from camera media, enroll pets for individual recognition, and review historical detection reports.
 
-## Reference(s): <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration] <br>
-**Output Format:** [Markdown reports, JSON detail output, and optional saved text or JSON files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local media paths or public media URLs; supports mp4, avi, mov, jpg, png, and jpeg inputs up to 10 MB.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata; artifact frontmatter reports 1.0.8) <br>
+Risk: Pet-camera media, URLs, and report history are handled by a cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with approved media and review cloud data handling before enabling analysis or report lookup.
+
+Risk: The skill creates or reuses cloud account tokens in the workspace data directory.
+
+Mitigation: Restrict access to that directory and remove tokens when they are no longer needed.
+
+Risk: A hidden identity selector could be misused by untrusted callers.
+
+Mitigation: Remove or strongly authenticate the hidden identity path before allowing untrusted access.
+
+## Reference(s):
+
+- [Skill listing](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-detection-feeder-analysis)
+- [API documentation](artifact/references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Structured pet detection reports, enrollment results, report lists, and links; optional JSON output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a cloud-hosted report export link.]
+
+## Skill Version(s):
+
+1.0.12 (source: server-resolved ClawHub release; bundled SKILL.md states 1.0.18)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

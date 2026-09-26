@@ -1,42 +1,59 @@
-## Description: <br>
-Cloud Ops Orchestrator gives agents Terraform and Ansible guidance for multi-cloud infrastructure workflows, including plan review, drift detection, credential separation, rollback, and guarded destruction. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+云运维编排器 helps agents plan, review, and guide Terraform and Ansible workflows for multi-cloud infrastructure operations, including drift detection, environment isolation, credential handling, and guarded destroy procedures.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers, platform engineers, and operators use this skill to ask an agent for infrastructure-as-code workflows that separate Terraform resource lifecycle tasks from Ansible configuration tasks across AWS, GCP, and Azure. It is intended for planning, reviewing, and executing cloud operations with explicit confirmation gates for risky actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Agent-assisted cloud operations can affect real infrastructure, including apply, destroy, override-lock, force, or credential-related commands. <br>
-Mitigation: Before execution, verify the selected environment, cloud profile, Terraform state backend, and generated plan; require explicit confirmation for high-risk commands. <br>
-Risk: A wrong profile, backend, or environment can cause changes to be planned or applied against the wrong cloud resources. <br>
-Mitigation: Keep dev, staging, and prod separated by state backend and IAM role, and review plan output before apply or destroy. <br>
-Risk: Credentials can be exposed if cloud secrets are placed in Terraform files or committed to source control. <br>
-Mitigation: Use cloud profiles, environment injection, CI OIDC, or Vault-style secret retrieval, and keep state, local variable, and credential files out of version control. <br>
+## Use Case:
 
+External developers, DevOps engineers, and automation teams use this skill to structure multi-cloud IaC operations across AWS, GCP, and Azure with Terraform for resource lifecycle changes and Ansible for host configuration. It is intended to support plan-review-apply workflows, drift checks, environment separation, rollback guidance, and guarded destroy procedures.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/thcjp/skills/cloud-ops-orchestrator) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with shell, JSON, YAML, and HCL examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Terraform, Ansible, cloud CLI, policy, and environment-isolation guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: The skill requests broad execution and write authority around Terraform, Ansible, cloud CLIs, and cloud credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only in repositories and cloud accounts where the agent is explicitly authorized to run these tools, with least-privilege cloud roles and isolated credentials.
+
+Risk: The safety gates for plan, apply, reconcile, and destroy are described in documentation but are not enforceable code in this artifact.
+
+Mitigation: Require human review and explicit approval for plan, apply, reconcile, and destroy actions, especially in production.
+
+Risk: Infrastructure changes can affect production resources or expose credentials if applied in the wrong environment.
+
+Mitigation: Keep environment state and credentials separated, avoid committing secrets, and review target environment, state backend, and cloud identity before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cloud-ops-orchestrator)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+- [Skill homepage](https://skillhub.cn/skill/)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline shell, Terraform, Ansible, JSON, YAML, and HCL examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should be reviewed by a human before applying infrastructure changes, especially plan, apply, reconcile, and destroy actions.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

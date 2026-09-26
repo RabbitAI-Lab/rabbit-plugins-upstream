@@ -117,9 +117,19 @@ Don't reuse the previous deck's scheme out of habit.
 > weights, density, tint fractions within the locked palette; a saturation transform of a locked
 > palette is a re-litigation and goes back to the user.
 
+**Type by register (the academic default).** For a **lab meeting, group progress update,
+conference talk, job talk or thesis defense**, the expected face is a conference face — **Times New
+Roman** (serif, and the right answer whenever the deck carries equations, because prose and math
+then share one face), or **Calibri / Arial** for a sans register — with **Courier New** for mono. A
+characterful designer sans reads as marketing in that room. 🔴 And check that the face is installed
+SYSTEM-WIDE, not just inside an app bundle: Office's Calibri/Cambria on macOS are invisible to the
+render loop and to the width measurement, so a deck set in them is laid out and "verified" against
+a substitute (`font-guidance.md` → the app-bundle section). Override with a stated clause.
+
 **Non-Latin decks:** the font names below are Latin. For Chinese/Japanese/Korean, pick
 the script-appropriate equivalent and set `deckkit.EAFONT` — sans (modern/corporate/
-talks) → Heiti SC / PingFang SC / Noto Sans CJK; serif (formal/defense) → Songti SC /
+talks) → Hiragino Sans GB / PingFang SC / Heiti SC (macOS) / Noto Sans CJK; serif
+(formal/defense) → Songti SC /
 Noto Serif CJK; brush → Kaiti SC. See `references/multilingual.md`.
 
 ---
@@ -127,6 +137,22 @@ Noto Serif CJK; brush → Kaiti SC. See `references/multilingual.md`.
 ## Research meeting with a supervisor / lab group
 Working session, expert audience, frequent. Optimize for *fast technical read*, not
 polish. Calm, low-chrome, content-forward.
+- **Type:** the academic default — Times New Roman (or Calibri/Arial for a sans register),
+  Courier New for mono; equations in the SAME face as the body. See the Type-by-register note
+  above; a designer sans is the wrong signal in this room.
+- 🔴 **Structure — when the update reports a CHANGE OF APPROACH, three things move.** Use the
+  `method-pivot` arc (`content-planner.md` §3). (a) **The prior work's RESULTS go BEFORE the
+  pivot**, grouped, in the order the steps produced them — a room asked to accept a direction
+  change before seeing what the old direction showed has no basis to accept it. (b) **Every step
+  of the retired method carries WHAT IT WAS FOR**, not only what it did; the purposes are what the
+  pivot later contradicts, and a recap without them is a list rather than an argument. (c) **The
+  deck ENDS ON STATUS** — what is established and what is not — because the new method's slide is
+  not evidence, and a deck that stops there implies a result it does not have. Each of these three
+  was a correction on a real delivered deck, twice by the user.
+- 🔴 **Every step you enumerate owes a result, or an explicit "no result yet".** If the method
+  recap numbers four steps and the deck shows outcomes for three, the room notices the gap — and a
+  later slide that rests on the missing one (a measurement, a benchmark) is arguing from something
+  it never showed. Say the outcome inline where it is used, or mark the step as not-yet-reported.
 - **Palette:** restrained — one cool primary (slate/navy or deep teal), grey body,
   a single saturated accent reserved for "look here / the new result". Avoid busy
   multi-colour.
@@ -138,6 +164,10 @@ polish. Calm, low-chrome, content-forward.
   recurring diagram or a category mark; keep them off the result slides; a status chip often beats a
   status icon. A style-matched family still fits — just sparing (see `icons.md` Scenario fit).
 - **Signature:** "what changed since last time" framing; open questions slide.
+- 🔴 **Declares (checked): what changed · open questions.** Both come from the Signature line
+  above; a working session with neither is a report, and nobody called a meeting for a report.
+- 🔴 **Fidelity:** this is the one audience where rounding a shaky number up costs you directly —
+  they will build advice on it.
 
 ## Work status update to a manager / team
 Decision- and outcome-oriented; the reader is busy. Lead with results, make status
@@ -150,11 +180,16 @@ scannable.
 - **Layout/chrome:** consistent header with the status, tidy footer with date/owner.
   Use chips/badges for status. Predictable grid > clever layout.
 - **Signature:** a takeaway line per slide phrased as the *decision or ask*.
+- 🔴 **Declares (checked): outcome · the ask.**
+- 🔴 **Fidelity:** a status update with no ask is a report the reader did not need. If nothing is
+  wanted from them, say so explicitly rather than leaving them to guess.
 
 ## Academic conference talk
 A *spoken* talk to a room, often dim. Big, legible, one message per slide; built to
 be followed at the back of the hall. **Venue conventions dominate** — if step 0 found
 an official template or venue norms, those override this section.
+- **Type:** the academic default — Times New Roman, or the venue template's own face when step 0
+  found one (venue conventions dominate here). Size for the back of the hall before anything else.
 - **Palette:** higher contrast for projection; a strong dark or strong light base
   (not mid-grey), one vivid accent. Avoid thin light-grey text — it disappears on a
   projector.
@@ -167,12 +202,17 @@ an official template or venue norms, those override this section.
   style-matched, sparing family is fine — not off by rule.
 - **Signature:** a clear arc (problem → method → result → so-what); a memorable
   closing message slide named "Conclusion".
+- 🔴 **Declares (checked): contribution · evidence · limitations.**
+- 🔴 **Fidelity:** the room cannot check you while you are in it, which is exactly why the
+  limitation slide matters. State the regime where the method does NOT hold.
 
 ## Academic job talk / faculty interview
 A *spoken* talk to a whole department — like a conference talk in legibility, but
 longer, more personal, and selling a research *program*, not one paper. It must read
 as "a confident future colleague," authoritative yet warm, and accessible at the back
 of a room holding people far from your subfield.
+- **Type:** the academic default — Times New Roman for an equation-heavy talk, Calibri/Arial for a
+  slide-native one. Consistency across every slide matters more than the choice.
 - **Palette:** projection-grade contrast like a conference talk — a strong base + one
   vivid accent — but a touch warmer and more personal than a sterile corporate scheme.
   One consistent **program colour** running through the arc (the through-line you keep
@@ -192,6 +232,9 @@ of a room holding people far from your subfield.
 - **Signature:** open by establishing *who you are as a scholar* and the program's unifying
   thesis; descend into 2-3 deep results; **close on a concrete future-program roadmap** (named
   5-7-year projects) and return to the opening big picture — never end on "Thanks".
+- 🔴 **Declares (checked): track record · research plan · fit.**
+- 🔴 **Fidelity:** the plan is judged on feasibility, not ambition. A five-year programme with
+  no named first project reads as a wish — say what starts in month one.
 
 ## Company / stakeholder / investor readout
 Persuasive and credible to a mixed, partly non-technical audience. Polished, on-brand,
@@ -203,6 +246,9 @@ confident.
 - **Layout/chrome:** strong title slide and section dividers, consistent premium
   spacing, hero-number layouts, clean icons used sparingly.
 - **Signature:** a clear story spine and an explicit ask/next-steps close.
+- 🔴 **Declares (checked): the ask · the number · the risk.**
+- 🔴 **Fidelity:** a readout that names no downside reads as a sales pitch, and the first
+  question will be the one you left out. Name the assumption the number rests on.
 
 ## Product description / pitch
 Selling a product to prospects/customers/users. The most *designed* deck of the set —
@@ -228,10 +274,15 @@ modern, visual; the product itself is the hero.
   Same for any competitor/customer logos: real or omit — **never** a recolored monochrome `simple:`
   glyph on a proof/partner slide (the icon mechanism recolors it to the deck accent → a wrong-colour
   look-alike); `simple:` is for naming a tool inline, not for a credibility logo (`icons.md`).
+- 🔴 **Declares (checked): positioning · benefits.** Both from the Signature line above.
+- 🔴 **Fidelity:** a benefit is a CLAIM. Every number on a pitch slide is one a customer may hold
+  you to; an unverifiable one is not persuasion, it is an unpaid debt.
 
 ## Thesis defense
 Formal, rigorous, complete; an expert committee that will probe. Serious and
 authoritative, but still legible as a talk.
+- **Type:** the academic default — Times New Roman throughout, equations included, so the formulas
+  read as part of the argument rather than pasted into it.
 - **Palette:** sober and classic — deep navy/charcoal/maroon base, restrained accent,
   excellent contrast. Nothing trendy or playful.
 - **Density:** moderate; completeness matters more than minimalism, but never a wall
@@ -244,6 +295,9 @@ authoritative, but still legible as a talk.
   (`big_numeral`) + typographic hierarchy; restrained matched icons, not zero by rule.
 - **Signature:** contributions slide stated plainly; limitations + future work owned
   honestly; an appendix of defensible detail.
+- 🔴 **Declares (checked): contributions · limitations · future work.**
+- 🔴 **Fidelity:** own the limitations before the committee finds them. One you raised is
+  evidence of judgement; the same one raised from the floor is a gap.
 
 ## Teaching / lecture
 Goal is *understanding and retention*, mixed/novice audience. Friendly, clear,
@@ -260,6 +314,10 @@ progressive; a little warmth is welcome.
   short-list guard).
 - **Signature:** an objectives slide up front and a recap at the end; questions to the
   audience built in.
+- 🔴 **Declares (checked): objectives · worked example · recap.** All three are already in the
+  Layout and Signature lines above — this only makes them checkable.
+- 🔴 **Fidelity:** a novice cannot tell a simplification from a claim. Say when you are
+  simplifying, or the simplification is what they carry away as fact.
 
 ## Webinar / online presentation
 A talk delivered over video (Zoom/Teams/streamed), watched on screens of varying size,
@@ -281,6 +339,90 @@ tabs. Like a conference talk but built for a *shared-screen* medium, not a proje
   pacing genuinely helps a remote audience you can't read (by design sense, not a quota — see
   `references/animation.md`); explicit "ask in the chat" prompts; a visible agenda so late
   joiners orient. If it's recorded, ensure every slide reads as a still frame.
+- 🔴 **NO section list, and the reason is not 'too unconventional'.** A webinar is a delivery
+  MODE, not a genre: the same session can be a lecture, a product pitch or an exec readout, and
+  those need different content — so a list attached to "webinar" would be a guess about which,
+  firing on two decks in three. What it genuinely constrains is the MEDIUM, and that already
+  lives in the lint's type floors and `formats.py`'s safe zones. Record the GENRE as the
+  purpose ("a teaching webinar", "an investor webinar") — `check_purpose` recognises the
+  medium words and asks you for the genre rather than silently checking nothing.
+
+## Grant proposal / funding pitch
+ERC · NWO · NIH · Horizon. The highest-stakes deck an academic makes, and the one with the most
+rigid conventions — reviewers score against *named* criteria, so a missing section is a lost point
+rather than a stylistic choice. Not a product pitch: the register is sober, and enthusiasm reads as
+a substitute for evidence.
+- **Type:** the academic default; equations only where the method genuinely turns on one.
+- **Palette:** institutional or sober; nothing that looks like a startup deck.
+- **Density:** high but structured — a reviewer is reading against a checklist, not being toured.
+- **Layout/chrome:** the scored sections visible as sections. Numbered aims.
+- **Signature:** the aims page is the deck. One sentence per aim, each falsifiable.
+- 🔴 **Declares (checked): aims · feasibility · risk.** Feasibility means *why this team, why now* —
+  pilot data, track record, access. Risk means named risks with named mitigations; "no significant
+  risks" is read as not having thought about it.
+- 🔴 **Fidelity:** preliminary data is the section most often overstated. A pilot is a pilot — say n,
+  say it is preliminary. A reviewer who catches one inflated claim discounts the rest.
+
+## Progress / guidance committee meeting
+A PhD guidance committee, a thesis advisory board, a stage-gate review. It differs from a lab
+meeting in exactly one way, and it is the way that matters: **the room has to decide something** —
+is this on track, does the thesis hold together, what should be scoped down. A committee deck with
+no ask has silently become a status update, and the meeting's most valuable output is lost.
+- **Type/palette:** the lab or institution's own template, unchanged. Nobody is being impressed.
+- **Density:** moderate-to-high; the deck is also the record of the year, read as well as presented.
+- **Layout/chrome:** status legible at a glance — what is done, what is out for review, what is
+  still on your desk. Bind one hue to each state and keep it deck-wide.
+- **Signature:** the closing slide names the decisions you want them to weigh in on.
+- 🔴 **Declares (checked): progress · plan · ask.**
+- 🔴 **Fidelity:** what is not done must READ as not done. A committee exists to advise on open
+  work, and a hypothesis promoted to a result removes the thing they are there to help with
+  (`content.open_ledger` is the artifact).
+
+## Journal club / presenting someone else's paper
+You are presenting work you did not do. Extremely common, and it carries a fidelity risk the
+universal never-invent rule does not reach: not fabrication but **misattribution** — stating their
+result more strongly than they did, or blurring their claims with your critique until the audience
+cannot tell which is which.
+- **Type/palette:** reuse the paper's own figures; let its visual language show through.
+- **Density:** moderate — the method matters, but the room has (in principle) read it.
+- **Layout/chrome:** a visible separation between *their claim* and *your reading*. A rail, a
+  colour, a consistent slot — anything, as long as it is the same on every slide.
+- **Signature:** your assessment, owned as yours.
+- 🔴 **Declares (checked): attribution · critique.**
+- 🔴 **Fidelity:** attribute on the slide that carries the result, not only on the title slide. An
+  audience that cannot tell which is which will remember your critique as the paper's conclusion.
+
+## Clinical case presentation / tumour board / M&M
+A fixed clinical narrative. The structure is not a style choice: colleagues are being asked to judge
+a decision, and they cannot do that without the information that was available when it was made.
+- **Type/palette:** the institution's template; sober. Never playful — somber veto.
+- **Density:** high on the facts, minimal on chrome. Imaging large.
+- **Layout/chrome:** one section per stage, in order; imaging shown at a size a clinician can read.
+- **Signature:** the learning point, stated plainly.
+- 🔴 **Declares (checked): presentation · investigations · management · outcome.**
+- 🔴 **Fidelity — DE-IDENTIFICATION IS LOAD-BEARING.** This is the genre PRE-FLIGHT 5's burned-in
+  identifier check exists for: name, MRN, accession, date of birth, study date, institution, read on
+  all four edges and in every overlay strip. Get a de-identified export — never crop or blur and
+  ship. Unlike everything else on this page, it is irreversible once the deck is sent.
+
+> 🔴 **These four are CHECKED, not just described.** `scripts/purposes.py` declares the sections each
+> genre is not finished without and `scripts/check_purpose.py` looks for them in the built deck, on
+> both gate paths — the same mechanism `formats.py`/`check_surface.py` already applies to surfaces.
+> The check asks whether the deck NAMES the section, not whether it does it well; judging the latter
+> is the critic's job. Terms are multilingual; extend them with `design_plan.purpose_section_terms`
+> rather than waiving, and waive in writing when a deck genuinely has none.
+>
+> **TWELVE of the thirteen entries on this page are now checked.** The thirteenth, **webinar**, has no
+> section list on purpose: it is a delivery MODE, not a genre, and `check_purpose` says so rather
+> than checking nothing (see its entry above).
+>
+> 🔴 **Every section list here was DERIVED FROM THIS PAGE'S OWN PROSE, not invented.** Teaching's
+> objectives/example/recap were already in its Layout and Signature lines; the lab meeting's "what
+> changed" and "open questions" and the pitch's "positioning" and "benefits" are its Signature line
+> verbatim. That is the whole move — the conventions were already written down and simply could not
+> be checked. Where a genre's prose does NOT name a required section, none was added: inventing one
+> would fire on good decks, and a check that fires on good decks is how people learn to ignore
+> checks.
 
 ## Preset fit by purpose — a fast sanity map (fit is a default, avoid is a flag, both overridable with a stated reason)
 | Purpose | Natural fits | Flag before using |

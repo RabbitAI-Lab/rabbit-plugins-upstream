@@ -19,6 +19,16 @@ except ModuleNotFoundError as exc:  # pragma: no cover - clean-machine path
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "references" / "domain-coverage.yaml"
 SOURCE_CATALOG = ROOT / "references" / "domains" / "domain-sources.yaml"
+VENDOR_AUTHORITY_TYPES = {
+    "vendor_whitepaper", "vendor_product_docs", "vendor_case_library", "vendor_open_source",
+}
+EFFECT_CLASSES = {"binding_baseline", "design_guidance", "product_pattern", "change_watch"}
+SECTION_ALIASES = {
+    "指标": "Metric / Indicator Governance", "指标口径": "Metric / Indicator Governance",
+    "状态机": "State Machines", "核心流程": "Core Workflows",
+    "角色路径": "Role Path Patterns", "验收清单": "Acceptance Checklist",
+    "隐私约束": "Policy / Privacy Constraints", "测试场景": "Domain Test Scenarios",
+}
 
 
 def stale(last_verified_at: object, refresh_days: object) -> bool:
@@ -29,6 +39,25 @@ def stale(last_verified_at: object, refresh_days: object) -> bool:
         return True
 
 
+def effect_class(source: dict[str, object]) -> str:
+    declared = str(source.get("effect_class", "")).strip()
+    if declared:
+        return declared if declared in EFFECT_CLASSES else "change_watch"
+    status = str(source.get("status", "")).casefold()
+    if source.get("authority_type") in VENDOR_AUTHORITY_TYPES:
+        return "product_pattern"
+    if any(token in status for token in ("draft", "watch", "proposed", "unverified")):
+        return "change_watch"
+    return "authoritative_reference"
+
+
+def binding_use(source: dict[str, object]) -> str:
+    classification = effect_class(source)
+    if classification in {"product_pattern", "change_watch"}:
+        return "prohibited"
+    return "verify_applicability"
+
+
 def select_sections(raw: str, requested: list[str]) -> tuple[list[str], list[str]]:
     headings = [
         (len(match.group(1)), match.group(2).strip(), match.start())
@@ -37,6 +66,7 @@ def select_sections(raw: str, requested: list[str]) -> tuple[list[str], list[str
     selected: list[str] = []
     missing: list[str] = []
     for name in requested:
+        name = SECTION_ALIASES.get(name.strip(), name.strip())
         index = next(
             (idx for idx, (_level, title, _start) in enumerate(headings) if title.casefold() == name.casefold()),
             None,
@@ -54,6 +84,45 @@ def select_sections(raw: str, requested: list[str]) -> tuple[list[str], list[str
     return selected, missing
 
 
+def search_terms(query: str, aliases: dict) -> list[str]:
+    """Keep the literal query; expand known terms without inventing translations."""
+    terms = [query.strip()]
+    for group in search_concepts(query, aliases).values():
+        terms.extend(group)
+    return list(dict.fromkeys(terms))
+
+
+def term_pattern(term: str) -> str:
+    literal = re.escape(term)
+    return r"(?<![a-zA-Z0-9_])" + literal + r"(?:s)?(?![a-zA-Z0-9_])" if re.search(r"[a-zA-Z]", term) else literal
+
+
+def search_concepts(query: str, aliases: dict) -> dict[str, list[str]]:
+    """Recognize curated phrases inside either language, longest phrase first.
+
+    Overlapping short aliases must not expand milestones into mileage or
+    active customers into all active entities. Unrelated words stay literal.
+    """
+    groups, candidates = {}, []
+    for key, values in aliases.items():
+        if not isinstance(key, str) or not key or not isinstance(values, list) or not all(isinstance(v, str) and v for v in values):
+            continue
+        groups[key] = list(dict.fromkeys([key, *values]))
+        for term in groups[key]:
+            for match in re.finditer(term_pattern(term), query, re.I):
+                candidates.append((match.start(), match.end(), key))
+    selected = []
+    for start, end, key in sorted(candidates, key=lambda item: (-(item[1] - item[0]), -len(item[2]), item[0])):
+        if any(start < b and end > a for a, b, _ in selected):
+            continue
+        selected.append((start, end, key))
+    return {key: groups[key] for _, _, key in sorted(selected)}
+
+
+def term_matches(term: str, line: str) -> bool:
+    return bool(term and re.search(term_pattern(term), line, re.I))
+
+
 def main() -> int:
     # Domain records intentionally contain multilingual source titles and gaps.
     # Emit a deterministic UTF-8 stream even when a Windows host exposes a
@@ -62,14 +131,33 @@ def main() -> int:
         sys.stdout.reconfigure(encoding="utf-8")
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--domain", required=True)
+    parser.add_argument("--domain")
+    parser.add_argument("--search", help="Find literal keywords and curated Chinese/English aliases across packs")
+    parser.add_argument("--limit", type=int, default=12)
     parser.add_argument("--format", choices=["yaml", "markdown"], default="yaml")
+    parser.add_argument("--source-detail", choices=["compact", "full"], default="compact")
+    parser.add_argument("--language", choices=["auto", "zh-CN", "en-US"], default="auto")
     parser.add_argument("--section", action="append", default=[], help="Load only an exact ##/### heading; repeat as needed")
     parser.add_argument("--custom-root", type=Path, default=Path("custom"), help="本地私有扩展目录")
     args = parser.parse_args()
+    if not args.domain and not args.search:
+        parser.error("provide --domain or --search")
+    if args.search is not None and (not args.search.strip() or not 1 <= args.limit <= 50):
+        parser.error("--search must be nonempty; --limit must be 1..50")
+    if args.search and args.section:
+        parser.error("search locates candidate sections; select --section in a separate call")
 
     catalog = yaml.safe_load(CATALOG.read_text(encoding="utf-8"))
     sources = yaml.safe_load(SOURCE_CATALOG.read_text(encoding="utf-8"))
+    aliases = catalog.get("search_aliases", {})
+    concepts = search_concepts(args.search, aliases) if args.search else {}
+    terms = search_terms(args.search, aliases) if args.search else []
+    english = args.language == "en-US" or (args.language == "auto" and not re.search(r"[\u4e00-\u9fff]", (args.search or "") + " ".join(args.section)))
+    usage_rule = (
+        "Search hits and domain patterns are candidates, not approved project rules. Verify jurisdiction, covered entities, effective version and authority; response language does not determine jurisdiction."
+        if english else
+        "检索命中与领域经验只是候选，不是项目已批准规则。核实法域、适用对象、生效版本与来源权威；提问语言不决定适用法域。"
+    )
     official = {item["domain_id"]: item for item in catalog.get("domains", [])}
     custom_root = args.custom_root.resolve()
     custom_config = {}
@@ -82,9 +170,11 @@ def main() -> int:
     } if isinstance(custom_config, dict) else {}
 
     records: list[dict[str, object]] = []
-    for domain_id in [item.strip() for item in args.domain.split("+") if item.strip()]:
+    domain_ids = [item.strip() for item in args.domain.split("+") if item.strip()] if args.domain else list(official)
+    for domain_id in domain_ids:
         item = official.get(domain_id)
         if item is not None:
+            domain_sources = [source for source in sources.get("sources", []) if domain_id in source.get("domains", [])]
             record: dict[str, object] = {
                 "domain_id": item["domain_id"],
                 "origin": "official",
@@ -95,18 +185,39 @@ def main() -> int:
                 "practice_status": item["practice_status"],
                 "coverage": item["coverage"],
                 "evidence_refs": list(dict.fromkeys(evidence["location"] for evidence in item.get("evidence", []))),
-                "source_refs": [
-                    {
-                        "id": source["id"], "type": source["authority_type"], "title": source["title"],
-                        "last_verified_at": source.get("last_verified_at"), "refresh_days": source.get("refresh_days"),
-                        "stale": stale(source.get("last_verified_at"), source.get("refresh_days")),
-                    }
-                    for source in sources.get("sources", []) if domain_id in source.get("domains", [])
-                ],
                 "known_gaps": item.get("known_gaps", []),
                 "production_claim": item.get("production_claim", "prohibited"),
                 "last_verified_at": item.get("last_verified_at"),
+                "source_catalog": "references/domains/domain-sources.yaml",
+                "jurisdictions": sorted({str(s["jurisdiction"]) for s in domain_sources if s.get("jurisdiction")}),
             }
+            if args.source_detail == "full":
+                record["source_refs"] = [
+                    {
+                        "id": source["id"], "title": source["title"],
+                        "url": source.get("url"), "jurisdiction": source.get("jurisdiction"),
+                        "applicability": source.get("applicability"), "status": source.get("status"),
+                        "effect_class": effect_class(source), "binding_use": binding_use(source),
+                        "last_verified_at": source.get("last_verified_at"), "refresh_days": source.get("refresh_days"),
+                        "stale": stale(source.get("last_verified_at"), source.get("refresh_days")),
+                        **({"claim_limit": source["claim_limit"]} if source.get("claim_limit") else {}),
+                    }
+                    for source in domain_sources
+                ]
+            else:
+                record["source_refs"] = [source["id"] for source in domain_sources]
+                record["source_effects"] = {
+                    kind: [source["id"] for source in domain_sources if effect_class(source) == kind]
+                    for kind in ("binding_baseline", "design_guidance", "product_pattern", "change_watch")
+                    if any(effect_class(source) == kind for source in domain_sources)
+                }
+                record["stale_source_refs"] = [
+                    source["id"] for source in domain_sources
+                    if stale(source.get("last_verified_at"), source.get("refresh_days"))
+                ]
+                limits = {source["id"]: source["claim_limit"] for source in domain_sources if source.get("claim_limit")}
+                if limits:
+                    record["source_claim_limits"] = limits
             knowledge_path = ROOT / str(record["knowledge_file"])
         else:
             item = custom_domains.get(domain_id)
@@ -132,22 +243,99 @@ def main() -> int:
                 "known_gaps": item.get("known_gaps", []),
                 "production_claim": item.get("production_claim", "local_only"),
                 "owner": item.get("owner"),
+                "jurisdictions": item.get("jurisdictions", []),
             }
             if not knowledge_path.is_file():
                 print(f"FAIL: local domain knowledge file not found: {knowledge_path}")
                 return 1
         record["source_refresh_warning"] = (
-            "存在超过刷新周期或缺少日期的来源；使用其作约束前必须重新核验"
-            if any(source.get("stale") for source in record.get("source_refs", []) if isinstance(source, dict)) else None
+            ("Some sources are stale or undated; recheck them before using them as constraints." if english else
+             "存在超过刷新周期或缺少日期的来源；使用其作约束前必须重新核验")
+            if record.get("stale_source_refs") or any(
+                source.get("stale") for source in record.get("source_refs", []) if isinstance(source, dict)
+            ) else None
         )
+        record["source_usage_rule"] = usage_rule + (
+            " product_pattern/change_watch cannot establish binding requirements."
+            if english else " product_pattern/change_watch 不能生成硬要求。")
+        if args.search:
+            section = ""
+            matches = []
+            for number, line in enumerate(knowledge_path.read_text(encoding="utf-8").splitlines(), 1):
+                heading = re.match(r"^#{2,3}\s+(.+)", line)
+                if heading:
+                    section = heading[1].strip()
+                matched = [term for term in terms if term_matches(term, line)]
+                if matched:
+                    matches.append({"domain_id": domain_id, "section": section, "line": number,
+                                    "knowledge_file": record["knowledge_file"], "excerpt": line.strip()[:300],
+                                    "status": "candidate", "origin": record["origin"],
+                                    "matched_terms": matched,
+                                    "matched_concepts": [key for key, group in concepts.items() if any(term_matches(term, line) for term in group)],
+                                    "match_type": "literal" if term_matches(args.search, line) else "alias"})
+            record["search_hits"] = matches
         if args.section:
             knowledge_text = knowledge_path.read_text(encoding="utf-8")
             selected, missing = select_sections(knowledge_text, args.section)
             if missing:
-                print(f"FAIL: {domain_id} unknown section(s): {', '.join(missing)}")
+                available_headings = [
+                    match.group(1).strip()
+                    for match in re.finditer(r"^#{2,3}\s+(.+?)\s*$", knowledge_text, re.M)
+                ]
+                available = "; ".join(available_headings[:30]) or "<none>"
+                print(
+                    f"FAIL: {domain_id} unknown section(s): {', '.join(missing)}; "
+                    f"available headings: {available}"
+                )
                 return 1
             record["selected_sections"] = selected
         records.append(record)
+
+    if args.search:
+        hits = [hit for record in records for hit in record.get("search_hits", [])]
+        hits.sort(key=lambda hit: (hit["match_type"] != "literal", -len(hit["matched_concepts"])))
+        next_action = None if hits else (
+            "No local passage matched. Try a shorter business term, or use --domain <id> to inspect a relevant pack and its sections; no hit does not prove no applicable rule."
+            if english else
+            "本地语料未命中。尝试更短的业务词，或用 --domain <领域 ID> 查看相关包及章节；零命中不代表没有适用规则。")
+        payload = {"query": args.search, "searched_domains": domain_ids, "total_matches": len(hits),
+                   "expanded_terms": terms, "retrieval": "literal_with_curated_aliases",
+                   "matched_concepts": list(concepts), "next_action": next_action,
+                   "truncated": len(hits) > args.limit, "hits": hits[:args.limit],
+                   "source_usage_rule": usage_rule}
+        if args.format == "yaml":
+            print(yaml.safe_dump(payload, allow_unicode=True, sort_keys=False), end="")
+        else:
+            print(f"# {'Domain search' if english else '领域检索'}: {args.search}\n\n{payload['source_usage_rule']}\n")
+            print(f"{'Search terms' if english else '检索词'}: {', '.join(terms)}\n")
+            for hit in hits[:args.limit]:
+                print(f"- {hit['domain_id']} / {hit['section']} [{hit['line']}, {hit['match_type']}]: {hit['excerpt']}")
+            print(f"\n{'Matches / shown' if english else '匹配 / 显示'}: {len(hits)} / {min(len(hits), args.limit)}")
+            if next_action:
+                print(next_action)
+        return 0
+
+    if args.section:
+        if args.format == "yaml":
+            slices = [
+                {key: record.get(key) for key in ("domain_id", "origin", "maturity", "practice_status", "production_claim", "jurisdictions", "source_catalog", "source_refs", "source_refresh_warning", "source_usage_rule", "selected_sections")}
+                for record in records
+            ]
+            payload: object = slices[0] if len(slices) == 1 else {"domains": slices}
+            print(yaml.safe_dump(payload, allow_unicode=True, sort_keys=False), end="")
+        else:
+            for index, record in enumerate(records):
+                print(f"<!-- {record['domain_id']} | maturity={record['maturity']} | practice={record['practice_status']} | production_claim={record['production_claim']} -->")
+                print(f"> {record['source_usage_rule']}" + (f"；{record['source_refresh_warning']}" if record['source_refresh_warning'] else "") + "\n")
+                if len(records) > 1:
+                    if index:
+                        print()
+                    print(f"# {record['domain_id']}")
+                for section_index, section in enumerate(record.get("selected_sections", [])):
+                    if index or section_index:
+                        print()
+                    print(str(section), end="" if str(section).endswith("\n") else "\n")
+        return 0
 
     payload: dict[str, object] = records[0] if len(records) == 1 else {
         "composition": [record["domain_id"] for record in records],

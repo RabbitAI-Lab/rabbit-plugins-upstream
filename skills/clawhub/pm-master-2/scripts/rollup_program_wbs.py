@@ -1,32 +1,32 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PM Master · 项目群 WBS 两层化（tagged single-source model）
+PM Master · Program WBS two-tier rollup (tagged single-source model)
 ============================================================
 
-将单源 project.yaml 的 wbs 改造为两层结构，满足"项目群层级 = 里程碑级、
-组件层级 = 叶子工作包级"的颗粒度约定：
+Refactor the single-source project.yaml wbs into a two-tier structure, satisfying the
+granularity convention "program tier = milestone level, component tier = leaf work-package level":
 
-  - SOW 汇总包（id 无 '.' 或 summary:true）           → tier: program, summary: true
-  - 每层为每个 SOW / P0 的**阶段(phase)**生成里程碑汇总包
-                                                      → tier: program, milestone: true
-  - 所有叶子工作包（id 含 '.'）                      → tier: component, component: <slug>
+  - SOW summary package (id has no '.' or summary:true)        -> tier: program, summary: true
+  - A milestone summary package per SOW / P0 phase             -> tier: program, milestone: true
+  - All leaf work packages (id contains '.')                   -> tier: component, component: <slug>
 
-组件视图（build_wbs.py --view component --component <slug>）只筛 tier:component 的叶子；
-项目群视图（build_wbs.py --view program）只筛 tier!=component 的汇总+里程碑包。
+The component view (build_wbs.py --view component --component <slug>) filters only tier:component leaves;
+the program view (build_wbs.py --view program) filters only tier!=component summary + milestone packages.
 
-`--derive-actuals`：把叶子实际进度按 estimate 加权汇总为每个里程碑的实际%，
-写入 project.yaml 的 actuals.wbs_progress（里程碑 id 为键），使项目群层级的
-进度控制表（control_engine）可直接以里程碑颗粒度呈现。
+`--derive-actuals`: roll up leaf actual progress (weighted by estimate) into each milestone's actual %,
+writing it into project.yaml's actuals.wbs_progress (keyed by milestone id), so the program-tier
+progress control table (control_engine) can present at milestone granularity directly.
 
-只重写 project.yaml 的 `wbs:`（及可选的 `actuals.wbs_progress:`）块，其余段落与
-注释完整保留；执行前自动备份为 <project.yaml>.bak-<date>。
+Only rewrites project.yaml's `wbs:` block (and optionally `actuals.wbs_progress:`) while preserving all
+other sections and comments; a backup <project.yaml>.bak-<date> is made automatically before execution.
 
-> 组件 / 阶段映射（`COMPONENT_MAP` / `PHASE_NAME`）为**示例默认值**（取自示例项目）。
-> 生产环境请在 `project.yaml` 提供 `program.components`（SOW id → 组件 slug）与
-> `governance.waves`（阶段 key → 阶段名），引擎优先使用项目级配置，缺省才回退示例并告警。
+> The component / phase mapping (COMPONENT_MAP / PHASE_NAME) are example defaults (taken from the sample project).
+> For production, provide `program.components` (SOW id -> component slug) and `governance.waves`
+> (phase key -> phase name) in project.yaml; the engine prefers project-level config and falls back to
+> the example with a warning when absent.
 
-用法：
+Usage:
   python3 rollup_program_wbs.py <program/project.yaml>
   python3 rollup_program_wbs.py <program/project.yaml> --derive-actuals
 """
@@ -37,8 +37,8 @@ import datetime
 import collections
 import yaml
 
-# 示例默认值（取自示例项目）。生产环境请改用 project.yaml 的
-# program.components / governance.waves，见下方 COMPONENT_MAP_EFF / PHASE_NAME_EFF。
+# Example defaults (taken from the sample project). For production, use project.yaml's
+# program.components / governance.waves; see COMPONENT_MAP_EFF / PHASE_NAME_EFF below.
 COMPONENT_MAP = {
     'P0': 'pmo-program-management',
     'SOW1': 'sow1',
@@ -53,21 +53,21 @@ COMPONENT_MAP = {
     'EXT-PII': 'ext-pii',
 }
 PHASE_NAME = {
-    'M0': 'M0 动员与就绪',
-    'W1': 'Stream 1 基础建模',
-    'W2': 'Stream 2 协议处理',
-    'W3': 'Stream 3 分析结构',
-    'W4': 'Stream 4 归档与集成',
+    'M0': 'M0 Mobilization and Readiness',
+    'W1': 'Stream 1 Foundation Modeling',
+    'W2': 'Stream 2 Protocol Processing',
+    'W3': 'Stream 3 Analysis Structure',
+    'W4': 'Stream 4 Archiving and Integration',
 }
-# 运行时生效映射：由 main() 按 project.yaml 覆盖；缺省回退示例。
+# Effective mapping at runtime: overridden by main() per project.yaml; falls back to the example when absent.
 COMPONENT_MAP_EFF = dict(COMPONENT_MAP)
 PHASE_NAME_EFF = dict(PHASE_NAME)
 P0_KEYWORD = [
-    ('章程', 'Charter'), ('方法', 'Charter'),
-    ('治理', 'Governance'), ('RACI', 'Governance'),
-    ('阶段门', 'StageGate'),
-    ('IMS', 'IMS基线'), ('主进度', 'IMS基线'),
-    ('指导委员会', 'Steering'), ('例会', 'Steering'),
+    ('Charter', 'Charter'), ('Method', 'Charter'),
+    ('Governance', 'Governance'), ('RACI', 'Governance'),
+    ('Stage Gate', 'StageGate'),
+    ('IMS', 'IMS Baseline'), ('Master Schedule', 'IMS Baseline'),
+    ('Steering Committee', 'Steering'), ('Regular Meeting', 'Steering'),
 ]
 
 
@@ -93,14 +93,14 @@ def clean(row):
     return {k: v for k, v in row.items() if v is not None}
 
 
-# 取消/终止态，则里程碑行也应携带 cancelled 状态，避免控制引擎误报逾期。
-_CANCELLED_LEAF_STATES = {'cancelled', 'canceled', '已取消', '取消',
-                          'descoped', '已降级', '移出范围', 'out-of-scope',
-                          'terminated', '已终止', '终止'}
+# Cancelled/terminated states: the milestone row should also carry the cancelled status
+# to avoid the control engine falsely reporting it as overdue.
+_CANCELLED_LEAF_STATES = {'cancelled', 'canceled', 'descoped', 'out-of-scope', 'terminated'}
 
 
 def _rollup_status(items):
-    """根据叶子包状态汇总里程碑状态：全部取消/终止→cancelled；否则不设（由进度%推导）。"""
+    """Roll up milestone status from leaf-package statuses: all cancelled/terminated -> cancelled;
+    otherwise unset (derived from progress %)."""
     if not items:
         return None
     sts = {str(i.get('status', '')).lower() for i in items}
@@ -143,7 +143,7 @@ def build_milestone(top, phase, items, prev_id, label=None):
 
 
 def find_block(path, key_line):
-    """返回 (start_idx, end_idx) 覆盖 key_line 起的整块（到下一个顶层 key 止）。"""
+    """Return (start_idx, end_idx) covering the whole block starting at key_line (until the next top-level key)."""
     with open(path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
     start = None
@@ -170,7 +170,7 @@ def find_block(path, key_line):
 def rewrite_wbs_block(path, new_wbs):
     start, end, lines = find_block(path, 'wbs:')
     if start is None:
-        # 骨架无 wbs: 块（如旧版 init 产物）时，整文件末尾追加，保证兼容
+        # When the skeleton has no wbs: block (e.g. legacy init output), append at end of file for compatibility
         lines.append('\nwbs:\n')
         start = len(lines) - 1
         end = len(lines) - 1
@@ -183,19 +183,19 @@ def rewrite_wbs_block(path, new_wbs):
 
 
 def inject_milestone_actuals(path, ms_actuals):
-    """在 actuals.wbs_progress 块末尾（ev: 之前）插入里程碑实际% 键。"""
+    """Insert milestone actual-% keys at the end of the actuals.wbs_progress block (before ev:)."""
     with open(path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
-    # 定位 wbs_progress: 行
+    # locate the wbs_progress: line
     wp = None
     for i, ln in enumerate(lines):
         if ln.rstrip('\n') == '  wbs_progress:':
             wp = i
             break
     if wp is None:
-        print("[warn] 未找到 actuals.wbs_progress:，跳过里程碑实际% 注入")
+        print("[warn] actuals.wbs_progress: not found, skipping milestone actual% injection")
         return
-    # 找到其后第一个 2 空格顶层键（ev: / ac:）作为插入点
+    # find the first 2-space top-level key after it (ev: / ac:) as the insertion point
     insert_at = None
     for i in range(wp + 1, len(lines)):
         if lines[i].startswith('  ') and not lines[i].startswith('    ') and lines[i].strip():
@@ -211,15 +211,15 @@ def inject_milestone_actuals(path, ms_actuals):
 
 def main():
     import argparse
-    ap = argparse.ArgumentParser(description="PM Master 项目群 WBS 两层化")
+    ap = argparse.ArgumentParser(description="PM Master program WBS two-tier rollup")
     ap.add_argument('project')
     ap.add_argument('--derive-actuals', action='store_true',
-                    help="把叶子实际%% 加权汇总为里程碑实际%%，写入 actuals.wbs_progress")
+                    help="Roll up leaf actual%% weighted into milestone actual%%, writing into actuals.wbs_progress")
     a = ap.parse_args()
 
     path = os.path.abspath(a.project)
     if not os.path.exists(path):
-        print(f"✗ 文件不存在: {path}")
+        print(f"✗ file not found: {path}")
         sys.exit(2)
     backup = f"{path}.bak-{datetime.date.today().isoformat()}"
     shutil.copy(path, backup)
@@ -227,7 +227,8 @@ def main():
     doc = yaml.safe_load(open(path, encoding='utf-8'))
     wbs = doc.get('wbs', [])
 
-    # 组件 / 阶段映射：优先取项目级配置，缺省回退示例并告警（解耦硬编码）
+    # Component / phase mapping: prefer project-level config, fall back to the example with a warning
+    # (decoupling from hard-coded values)
     prog = doc.get('program') or {}
     gov = doc.get('governance') or {}
     comp_override = prog.get('components') if isinstance(prog.get('components'), dict) else None
@@ -236,16 +237,17 @@ def main():
     if comp_override:
         COMPONENT_MAP_EFF.update(comp_override)
     else:
-        print("[rollup] 警告：未提供 program.components，使用内置示例 COMPONENT_MAP（示例项目）。"
-              "生产请在 project.yaml 配置 program.components（SOW id → 组件 slug）。", file=sys.stderr)
+        print("[rollup] Warning: program.components not provided, using the built-in example COMPONENT_MAP "
+              "(sample project). For production, configure program.components in project.yaml "
+              "(SOW id -> component slug).", file=sys.stderr)
     if wave_override:
         PHASE_NAME_EFF.update(wave_override)
     else:
-        print("[rollup] 警告：未提供 governance.waves，使用内置示例 PHASE_NAME。"
-              "生产请在 project.yaml 配置 governance.waves（阶段 key → 阶段名）。", file=sys.stderr)
+        print("[rollup] Warning: governance.waves not provided, using the built-in example PHASE_NAME. "
+              "For production, configure governance.waves in project.yaml (phase key -> phase name).", file=sys.stderr)
 
-    # 幂等保护：若已存在 tier:program 的里程碑汇总包，视为已两层化，
-    # 不再重新生成（避免重复 / 误把里程碑当 summary）。
+    # Idempotency guard: if a tier:program milestone summary package already exists, treat it as already
+    # two-tiered and do not regenerate (avoids duplication / mis-classifying a milestone as a summary).
     already = any(w.get('milestone') and w.get('tier') == 'program' for w in wbs)
 
     summaries = []
@@ -273,7 +275,7 @@ def main():
         top = str(w['id']).split('.')[0]
         by_top.setdefault(top, []).append(w)
 
-    # 始终按确定性规则重建 里程碑→叶子 映射（供 --derive-actuals 使用）
+    # Always rebuild the milestone -> leaf mapping by deterministic rules (used by --derive-actuals)
     ms_leaves = {}
     ms_est = {}
     milestone_rows = existing_ms[:] if already else []
@@ -313,7 +315,7 @@ def main():
                     prev_id = m['id']
             else:
                 m, lids = build_milestone(top, 'DELIVERY', unphased, prev_id,
-                                          label=f"{top} 交付")
+                                          label=f"{top} Delivery")
                 ms_leaves[m['id']] = lids
                 ms_est[m['id']] = m.get('estimate', 0)
                 if not already:
@@ -335,7 +337,7 @@ def main():
             den = 0.0
             for lid in lids:
                 la = float(prog.get(lid, 0) or 0)
-                le = float(ms_est.get(lid) or 0) or 1.0  # 兜底权重
+                le = float(ms_est.get(lid) or 0) or 1.0  # fallback weight
                 num += la * le
                 den += le
             val = round(num / den, 1) if den else 0.0

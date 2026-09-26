@@ -1,40 +1,54 @@
-## Description: <br>
-Provides local Whisper CLI guidance for transcribing or translating common audio formats into text, subtitle, or JSON outputs without an API key. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Local Whisper CLI speech-to-text guidance for transcribing common audio formats and translating audio without requiring an API key.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and developers use this skill to run local Whisper-based transcription or translation workflows for meetings, podcasts, video subtitles, and single audio files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Setup commands install Python packages and system dependencies, including package-manager commands that may require elevated privileges. <br>
-Mitigation: Review dependency commands before execution and install only from trusted package sources. <br>
-Risk: The first transcription run may download a Whisper model into ~/.cache/whisper, which is incompatible with strictly offline environments. <br>
-Mitigation: Preload approved model files into the cache before use when offline or network-restricted operation is required. <br>
+## Use Case:
 
+External users and developers use this skill to install and run a local Whisper command-line workflow for single-file transcription, subtitle generation, and speech translation. It is aimed at personal or workflow automation use where local processing is preferred.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/llm-provider-whisper-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and CLI output file descriptions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The underlying CLI may produce txt, srt, vtt, json, or tsv transcription files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: The security summary flags inconsistent API-key guidance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not provide API keys for this skill unless new authoritative release evidence requires them; use it only for local transcription, subtitle generation, or speech translation tasks.
+
+Risk: The security summary flags an overbroad trigger that could cause exec-enabled agents to use the skill for unrelated media tasks.
+
+Mitigation: Limit use to explicit transcription, subtitle generation, or speech translation requests, and review setup or execution commands before running them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/llm-provider-whisper-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces command guidance and output-format choices for local Whisper transcription, subtitle files, JSON, TSV, or translated text.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

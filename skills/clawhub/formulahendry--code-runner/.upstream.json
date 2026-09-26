@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/code-runner",
   "slug": "code-runner",
   "ownerHandle": "formulahendry",
-  "version": "0.1.0",
-  "updatedAt": 1779078252463,
-  "contentHash": "1041984661a330f6469baf55736cfea4ce492a691bb6c84d94293291f9958975",
-  "fetchedAt": "2026-07-26T18:05:49.347Z"
+  "version": "1.0.2",
+  "updatedAt": 1790017185855,
+  "contentHash": "75f78e9d95344acafbc77d7e2dc270471f660248a4ba3283592caf252a9283f8",
+  "fetchedAt": "2026-09-26T12:45:38.342Z"
 }

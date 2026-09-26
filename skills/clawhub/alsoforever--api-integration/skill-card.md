@@ -1,38 +1,48 @@
-## Description: <br>
-API integration guidance for RESTful API calls, GraphQL support, and API authentication management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+API 集成技能 - 掌握 RESTful API 调用、GraphQL 支持、API 认证管理等核心能力
 
-## Publisher: <br>
-[alsoforever](https://clawhub.ai/user/alsoforever) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[alsoforever](https://clawhub.ai/user/alsoforever)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers and agents use this skill for practical guidance on integrating third-party APIs, including RESTful requests, GraphQL concepts, authentication approaches, and basic error handling.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: API examples can transmit credentials, personal data, or workspace data if adapted against an untrusted endpoint.
+
+Mitigation: Review the destination endpoint and obtain user approval before sending passwords, tokens, client secrets, personal data, or workspace data.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers and agents use this skill to plan and implement API integrations, including RESTful requests, GraphQL concepts, authentication choices, and basic error handling. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, code, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: API keys, client secrets, bearer tokens, headers, and request bodies may be exposed or sent to the wrong endpoint when adapting examples. <br>
-Mitigation: Treat credentials and request payloads as sensitive, verify HTTPS endpoints before use, prefer environment variables or a secret manager, and explicitly approve POST, PUT, or DELETE requests. <br>
+**Output Format:** [Markdown with Python code examples]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/alsoforever/api-integration) <br>
+**Other Properties Related to Output:** [Instructional content for API integration patterns; users should review endpoints and credentials before applying examples.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, configuration] <br>
-**Output Format:** [Markdown with inline code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include example API requests, authentication patterns, and error-handling snippets.] <br>
+1.0.0 (source: frontmatter, release metadata)
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

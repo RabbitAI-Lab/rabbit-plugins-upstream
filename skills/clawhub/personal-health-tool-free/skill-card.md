@@ -1,5 +1,5 @@
 ## Description: <br>
-个人健康管家免费版 helps personal users manage local health data, including exercise, sleep, diet, physical-exam report analysis, health suggestions, plans, and trends. <br>
+Personal Health Tool Free helps individual users record health data, interpret common checkup indicators, generate exercise plans, provide diet guidance, and summarize health trends. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,30 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Personal users use this skill to record and review local health information, interpret common physical-exam indicators, and generate exercise, diet, reminder, and trend-analysis guidance. It is not a substitute for professional medical diagnosis. <br>
+External individual users use this skill with an agent to manage personal health records, checkup summaries, exercise plans, diet guidance, goals, reminders, and trend summaries. Its health guidance is informational and not a substitute for professional medical diagnosis. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill stores personal health information locally under ~/.health, which can expose sensitive records if the user account or file permissions are weak. <br>
-Mitigation: Install only when local storage is acceptable, review file permissions, avoid entering data that should not persist, and consider encryption or a private user account for real medical or fitness records. <br>
-Risk: Health suggestions and physical-exam interpretations can be incomplete or misleading if treated as medical diagnosis. <br>
-Mitigation: Use the output as general wellness guidance and consult a qualified medical professional for abnormal indicators, symptoms, diagnosis, or treatment decisions. <br>
+Risk: The skill may process sensitive health data through the hosting agent or model provider despite local-storage claims. <br>
+Mitigation: Use only health data acceptable for the configured agent/model provider or run with local processing; restrict file access to the intended ~/.health directory where possible. <br>
+Risk: Health summaries and checkup interpretations may be mistaken for medical diagnosis or care instructions. <br>
+Mitigation: Treat outputs as informational guidance and consult a qualified clinician for abnormal indicators, symptoms, medication decisions, or treatment plans. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/personal-health-tool-free) <br>
+- [ClawHub publisher profile](https://clawhub.ai/user/thcjp) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON, YAML, Python, and shell-command examples] <br>
+**Output Format:** [Markdown, JSON examples, Python snippets, shell commands, and configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create, query, export, or format local health records under ~/.health.] <br>
+**Other Properties Related to Output:** [May create or read local health data under ~/.health when the hosting agent grants file-system access.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release evidence and SKILL.md frontmatter) <br>
+1.0.2 (source: server release metadata and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,46 +1,65 @@
-## Description: <br>
-Creates short, design-led, unnarrated motion graphics, including kinetic type, stats and charts, logo reveals, lower thirds, maps, social/news/web highlights, and image-to-chart asset fusion, rendered as MP4 or transparent overlays. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates short, design-led, unnarrated motion graphics such as kinetic typography, stat count-ups, data-viz hits, logo stings, lower thirds, animated maps, web/news/tweet treatments, and asset-fusion shots, rendering to MP4 or a transparent overlay.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and creative agents use this skill to plan, source, build, verify, and render short motion graphics from user-provided content or resolved web/media assets. It is suited to concise brand, data, social, map, UI, news, and asset-fusion animations rather than narrated or multi-scene video. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill instructs the agent to silently run a HyperFrames skill update, which can change installed skill behavior without a user review step. <br>
-Mitigation: Disable or remove the silent update instruction and require explicit approval before updating installed skills. <br>
-Risk: Search-driven categories may source remote assets or use external APIs, including Gemini-assisted localization when keys are available. <br>
-Mitigation: Require explicit approval before external uploads or asset searches, freeze selected assets locally, and review the asset provenance ledger. <br>
-Risk: Published map or web-asset animations may carry attribution or usage-term obligations. <br>
-Mitigation: Review captured asset provenance and map tile terms, and include required attribution in the composition before publishing. <br>
+## Use Case:
 
+Designers, marketers, content teams, and developers use this skill to turn a concise brief or supplied content into a short motion graphic. It can plan the shot, source or prepare assets when needed, compose a HyperFrames animation, run visual checks, and render only after user approval.
 
-## Reference(s): <br>
-- [Builder Contract](references/builder-contract.md) <br>
-- [Motion Vocabulary](references/motion-vocabulary.md) <br>
-- [Shot Plan IR](references/shot-plan-ir.md) <br>
-- [Locate Protocol](grounding/PROTOCOL.md) <br>
-- [Source Phase Guide](phases/source/guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files, Guidance] <br>
-**Output Format:** [Markdown guidance, JSON shot plans, HTML/CSS/JavaScript composition files, shell commands, and rendered MP4 or transparent overlay files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are project-local under videos/<project-name>/ and include verification artifacts such as proof snapshots before rendering.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release evidence) <br>
+Risk: The skill can run mutable HyperFrames update or install commands through npx.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a sandboxed workspace, pin or pre-vet the HyperFrames CLI, and separately approve any global skill updates before installation.
+
+Risk: Image localization can upload full images to Gemini when a Gemini or Google API key is present.
+
+Mitigation: Unset GEMINI_API_KEY and GOOGLE_API_KEY when image upload is not intended, or explicitly approve image processing before using that path.
+
+Risk: Webpage, news, tweet, and map workflows may perform networked processing of supplied or searched content.
+
+Mitigation: Avoid sensitive content in networked workflows and review sourced assets before rendering or publishing the result.
+
+Risk: Generated motion graphics may contain layout, timing, or readability issues if verification is skipped.
+
+Mitigation: Run lint, check, and proof snapshots, inspect the contact sheet, and require explicit user approval before rendering.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/motion-graphics)
+- [shot-plan-ir.md](references/shot-plan-ir.md)
+- [builder-contract.md](references/builder-contract.md)
+- [motion-vocabulary.md](references/motion-vocabulary.md)
+- [grounding protocol](grounding/PROTOCOL.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files, Guidance]
+
+**Output Format:** [Markdown guidance, JSON shot plans, HTML/GSAP composition code, shell commands, proof snapshots, and rendered video files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create project-local assets, HyperFrames configuration, contact-sheet snapshots, MP4 renders, or transparent WebM/MOV overlays.]
+
+## Skill Version(s):
+
+1.0.19 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,52 @@
-## Description: <br>
-每晚22:00自动扫描明天的Outlook日历，上午日程提前2小时提醒，下午日程12:00统一提醒，通过飞书发送通知。依赖 owa-outlook skill。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scans tomorrow's Outlook calendar each night at 22:00, schedules Feishu reminders for morning and afternoon events, and sends a scan summary.
 
-## Publisher: <br>
-[ilove323](https://clawhub.ai/user/ilove323) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ilove323](https://clawhub.ai/user/ilove323)
 
-## Use Case: <br>
-Employees and personal productivity users can use this skill to scan the next day's Outlook calendar and schedule Feishu reminders for morning and afternoon events. It is intended for OpenClaw environments where the user has configured the dependent owa-outlook skill and their own Feishu recipient. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill can send private calendar details to a hard-coded Feishu user if installed or run without editing the target. <br>
-Mitigation: Replace the Feishu target with the user's own verified recipient before any manual run or cron setup. <br>
-Risk: Automatic nightly scanning and reminder creation may continue after the user no longer wants calendar automation. <br>
-Mitigation: Review the registered OpenClaw cron entry and remove the nightly scan when automatic calendar reminders are no longer needed. <br>
-Risk: The skill depends on the owa-outlook helper path and may fail or report incorrect results if that dependency is missing or unexpected. <br>
-Mitigation: Confirm the owa-outlook helper installation and path before relying on scheduled reminders. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ilove323/calendar-reminder) <br>
+## Use Case:
 
+Users who rely on Outlook calendar and Feishu notifications use this skill to create timed reminders for the next day's meetings and receive a daily calendar scan summary.
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration] <br>
-**Output Format:** [Markdown instructions with command examples and runtime Feishu messages] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3, openclaw, the owa-outlook skill, and a user-edited Feishu target.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill can repeatedly send private Outlook calendar details to a bundled Feishu recipient.
+
+Mitigation: Replace the Feishu open_id before any run, and consider rewriting the code so it refuses to send messages until an explicit recipient is configured.
+
+Risk: The skill registers recurring and one-time cron jobs that scan Outlook calendar data and deliver reminders.
+
+Mitigation: Review the scheduled cron entry, confirm the Asia/Shanghai timing matches the intended use, and remove unwanted jobs before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ilove323/skills/calendar-reminder)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration]
+
+**Output Format:** [Markdown with inline shell and Python snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates OpenClaw cron entries and Feishu notification messages.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

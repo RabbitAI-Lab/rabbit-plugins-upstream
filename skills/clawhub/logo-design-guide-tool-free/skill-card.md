@@ -1,5 +1,5 @@
 ## Description: <br>
-Guides agents through AI-assisted logo design principles, prompt patterns, scalability checks, color guidance, and iteration workflows for personal logo design learning. <br>
+Logo设计指南免费版 helps users plan AI-assisted logo design with logo type selection, prompt-writing patterns, scalability checks, color guidance, and an iteration workflow. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, independent designers, and personal learners use this skill to get structured guidance for AI-assisted logo ideation, prompt writing, design checks, and handoff formats. <br>
+External creators, independent designers, and developers use this skill for structured guidance on AI-assisted logo ideation, prompt construction, color choices, small-size testing, and handoff format planning. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The artifact declares read/exec capability and includes broad execution-like wording. <br>
-Mitigation: Use it as a logo-design reference skill, keep execution user-directed, and review proposed actions before running tools. <br>
-Risk: The skill mentions external AI image tools that may require third-party API credentials. <br>
-Mitigation: Configure API keys only with the intended provider and follow that provider's terms before commercial logo use. <br>
-Risk: AI-generated logo text can be distorted, misspelled, or unsuitable for direct brand use. <br>
-Mitigation: Use AI primarily for icon concepts, add text manually in a design tool, and perform trademark and rights checks before release. <br>
+Risk: The skill requests exec and write authority that is not clearly needed for a logo design guide. <br>
+Mitigation: Run with least privilege and deny or remove exec/write access unless a reviewed workflow requires it. <br>
+Risk: The optional callback_url parameter could route results to an external endpoint if a host agent implements callback behavior. <br>
+Mitigation: Use only trusted callback URLs, review destinations before sending data, or disable callback handling. <br>
+Risk: Logo guidance can help produce marks that still conflict with existing trademarks or platform terms. <br>
+Mitigation: Perform trademark clearance and review the relevant AI image tool terms before commercial use. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/logo-design-guide-tool-free) <br>
-- [Publisher Profile](https://clawhub.ai/user/thcjp) <br>
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/logo-design-guide-tool-free) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration instructions] <br>
-**Output Format:** [Markdown with tables, checklists, prompt templates, and inline shell-style examples] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with tables, prompt templates, JSON examples, and inline shell command snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces design guidance and workflow suggestions; image generation and third-party design-tool actions remain user-directed.] <br>
+**Other Properties Related to Output:** [May include example response objects, logo prompt templates, checklists, and placeholder command snippets.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release evidence and artifact metadata) <br>
+1.0.1 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

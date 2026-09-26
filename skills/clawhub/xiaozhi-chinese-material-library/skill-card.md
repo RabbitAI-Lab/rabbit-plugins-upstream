@@ -1,41 +1,60 @@
-## Description: <br>
-A Chinese writing-material library skill that helps students save, tag, retrieve, recommend, and review useful quotes, literary examples, and self-written sentences for composition work. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助中文写作学习者保存并标记素材，按主题找回适用的句子和典故，并在获得同意后记录使用情况。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External learners, parents, and education agents use this skill to maintain a Chinese composition material library, surface matching examples before writing, capture useful language during reading practice, and summarize material usage over time. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Saved quotes, self-written sentences, usage history, and monthly summaries may contain student information or learning history. <br>
-Mitigation: Before using the skill with students, especially minors, define how stored materials are reviewed, retained, deleted, and shared. <br>
-Risk: Automatically recommended writing materials may include inaccurate sources, weak attribution, or generic examples. <br>
-Mitigation: Review recommended materials and prefer items with reliable sources before using them in student writing. <br>
+## Use Case:
 
+面向小学高段和初中学生的中文写作学习工具，帮助学生积累、检索和运用写作素材；小学阶段须有家长或老师陪同。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-chinese-material-library) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
+### Deployment Geography for Use:
 
+Mainland China (default; localize before use elsewhere)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or conversational text with structured storage confirmations, material recommendations, tagging guidance, and monthly summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Chinese-language quote records, tags, suggested writing placements, usage tracking summaries, and review prompts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Students' saved writing materials and usage history may be shared or retained without their understanding.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Explain memory and sharing controls; honor consent, pause, export, correction, and deletion requests before storing or sharing records.
+
+Risk: Emergency contacts and minor-consent expectations may not fit deployments outside Mainland China.
+
+Mitigation: Localize emergency contacts, curriculum assumptions, and minor-consent requirements before deployment outside Mainland China.
+
+Risk: Cross-session materials and historical usage totals may be unavailable on platforms without persistent memory or statistics.
+
+Mitigation: Tell students when records are session-only, offer a text export, and avoid presenting session totals as historical figures.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-chinese-material-library)
+- [Platform and data controls](artifact/shared/platform-conventions.md)
+- [Crisis response and regional guidance](artifact/shared/crisis-exception.md)
+- [Learning profile schema](artifact/shared/dna-profile.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Conversational text and Markdown summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tagged material lists, suggested writing placements, text exports, and consent-dependent usage summaries.]
+
+## Skill Version(s):
+
+2.6.0 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
