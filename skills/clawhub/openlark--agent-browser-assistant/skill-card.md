@@ -1,40 +1,53 @@
-## Description: <br>
-Agent Browser Assistant supports browser automation tasks, web data scraping, form filling, page screenshots, UI testing, and related browser workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+For browser automation tasks, web data scraping, form filling, page screenshots, UI testing, and more.
 
-## Publisher: <br>
-[openlark](https://clawhub.ai/user/openlark) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[openlark](https://clawhub.ai/user/openlark)
 
-## Use Case: <br>
-Developers, QA engineers, and operations teams use this skill to automate browser workflows such as navigating pages, filling forms, capturing screenshots, exporting pages, scraping page data, and running UI or regression checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can direct an agent to control logged-in browser sessions, submit forms, accept dialogs, upload files, export private pages, scrape data, post content, make purchases, or change account settings. <br>
-Mitigation: Use the default sandbox profile, avoid profile="user" on sensitive accounts, and require explicit confirmation before high-impact browser actions. <br>
-Risk: Large-scale scraping or batch browser operations can expose private data or exceed site expectations. <br>
-Mitigation: Limit scraping scope, review extracted data before use, and confirm authorization before collecting or exporting site content. <br>
+## Use Case:
 
+Developers and agents use this skill to operate a browser for page navigation, element interaction, form filling, data extraction, screenshots, PDF export, and UI testing workflows.
 
-## Reference(s): <br>
-- [Agent Browser Assistant on ClawHub](https://clawhub.ai/openlark/agent-browser-assistant) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline browser automation examples and configuration tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include browser actions for page navigation, element interaction, screenshots, uploads, PDF export, scraping, and testing workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Browser automation may operate on logged-in sites or reuse a user browser profile.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installation and permit profile, credential, or authenticated browsing only when explicitly requested and the destination site is trusted.
+
+Risk: Form filling, file upload, scraping, screenshots, PDFs, and exports can expose account, local file, or page data if used without clear scope.
+
+Mitigation: Limit actions to the requested workflow, confirm sensitive uploads or exports before execution, and avoid authenticated scraping unless the user has approved it.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/openlark/skills/agent-browser-assistant)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Files, Text, Guidance]
+
+**Output Format:** [Markdown guidance with browser tool-call examples and browser-generated artifacts such as screenshots, PDFs, and extracted text.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce browser actions that interact with authenticated sessions, local uploads, screenshots, PDFs, and scraped page content.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

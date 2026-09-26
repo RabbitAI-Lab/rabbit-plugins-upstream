@@ -1,45 +1,72 @@
-## Description: <br>
-Klaviyo API integration with managed OAuth for accessing profiles, lists, segments, campaigns, flows, events, metrics, templates, catalogs, and webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Klaviyo API integration with managed OAuth for accessing and managing profiles, lists, segments, campaigns, flows, events, metrics, templates, catalogs, webhooks, tags, coupons, images, forms, reviews, and account settings.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers, operators, and marketing teams use this skill to query and manage Klaviyo customer profiles, campaigns, flows, events, metrics, catalogs, webhooks, and related marketing resources through Maton-managed OAuth. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive marketing and customer data in the connected Klaviyo account. <br>
-Mitigation: Install only if you trust Maton with the Klaviyo account, keep MATON_API_KEY secret, and use an account with the minimum practical Klaviyo permissions. <br>
-Risk: Write, send, webhook, bulk subscription, suppression, or import operations can change customer data or marketing behavior. <br>
-Mitigation: Confirm the exact resource, ID, account, and intended effect with the user before executing any sensitive or mutating operation. <br>
-Risk: Requests may target the wrong Klaviyo account when multiple OAuth connections exist. <br>
-Mitigation: Use the Maton-Connection header to select the intended connection whenever more than one Klaviyo account is available. <br>
+## Use Case:
 
+Developers and agents use this skill to manage Klaviyo marketing and customer engagement workflows through Maton-authenticated API calls. The skill supports read/list workflows by default and documents approval requirements for writes, account connections, hosted functions, triggers, webhooks, and persistent forwarding.
 
-## Reference(s): <br>
-- [ClawHub Klaviyo Skill](https://clawhub.ai/byungkyu/skills/klaviyo) <br>
-- [Klaviyo API Documentation](https://developers.klaviyo.com) <br>
-- [Klaviyo API Reference](https://developers.klaviyo.com/en/reference/api_overview) <br>
-- [Klaviyo Developer Portal](https://developers.klaviyo.com/en) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with API endpoint descriptions and Python/bash code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a connected Klaviyo account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: ClawHub release metadata) <br>
+Risk: Klaviyo access can expose customer and marketing data or enable changes to campaigns, contacts, webhooks, and automations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use OAuth where possible, select least-privilege scopes, default to read/list calls, and get explicit user confirmation before writes, new connections, sends, automation, or persistent forwarding.
+
+Risk: Persistent webhooks, triggers, and destinations can continue forwarding future customer, marketing, or event data after setup.
+
+Mitigation: Review the exact destination URL, payload fields, host ownership, and frequency before creation; prefer Maton-controlled destinations where appropriate and delete unused webhooks, triggers, destinations, functions, and connections.
+
+Risk: Raw HTTP mode requires handling a long-lived Maton API key that can leak through logs, shell history, files, or child processes.
+
+Mitigation: Prefer the Maton CLI with OAuth; if raw HTTP is unavoidable, keep MATON_API_KEY in the process environment only, never print or persist it, send it only to api.maton.ai, and rotate it if exposed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/klaviyo)
+- [Maton Homepage](https://maton.ai)
+- [Klaviyo API Documentation](https://developers.klaviyo.com)
+- [Klaviyo API Reference](https://developers.klaviyo.com/en/reference/api_overview)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with shell commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Maton CLI or API commands and user-approval checkpoints.]
+
+## Skill Version(s):
+
+1.2.6 (source: server release evidence; artifact metadata.version is 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

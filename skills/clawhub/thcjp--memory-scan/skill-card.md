@@ -1,43 +1,57 @@
-## Description: <br>
-Memory Scan helps agents audit memory files and workspace configuration for malicious instructions, prompt injection, credential leakage, data exfiltration, guardrail bypass, behavior manipulation, and privilege-escalation indicators. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Memory Scan audits AI agent memory files and workspace configuration for malicious instructions, prompt injection, credential leaks, data exfiltration, guardrail bypass attempts, behavior manipulation, and privilege-escalation content.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers, security engineers, and agent operators use Memory Scan to review agent memory and workspace configuration before continued agent work, after importing external data, or before multi-agent collaboration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill needs access to memory and workspace configuration files that may contain sensitive information. <br>
-Mitigation: Install and run it only in workspaces where that access is acceptable, and review the files in scope before scanning. <br>
-Risk: Optional remote LLM analysis may send redacted memory content to an external provider. <br>
-Mitigation: Keep remote mode disabled unless external analysis is intentional, and confirm redaction and provider settings before enabling it. <br>
-Risk: Quarantine and scheduled monitoring can change workspace files or recurring task configuration. <br>
-Mitigation: Review and approve quarantine, restore, cron, or heartbeat changes before applying them. <br>
+## Use Case:
 
+Developers, agent operators, and security reviewers use this skill to scan AI agent memory files and workspace configuration for malicious content, leaked credentials, injection attempts, and related memory safety issues before trusting or automating those files.
 
-## Reference(s): <br>
-- [Memory Scan on ClawHub](https://clawhub.ai/thcjp/skills/memory-scan) <br>
-- [Skill homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and optional JSON scan reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local scans, optional remote LLM analysis, quarantine and restore actions, and scheduled monitoring steps.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The skill reads memory and workspace configuration files that may contain sensitive content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when this file access is acceptable, keep local mode as the default, and avoid running with sudo unless a narrowly scoped administrative review justifies it.
+
+Risk: Remote LLM analysis and callback configuration can transmit or route scan context outside the local workspace.
+
+Mitigation: Review remote LLM and callback settings before use, enable remote analysis only when needed, and confirm that redaction and destination settings match the deployment policy.
+
+Risk: Scheduled monitoring, alerts, and quarantine writes can create operational changes without continuous human attention.
+
+Mitigation: Enable scheduled monitoring only after confirming where alerts go, review findings before quarantine, and keep backups available for restore.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/memory-scan)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and optional JSON scan output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose local scans, optional remote LLM analysis, scheduled monitoring, and quarantine or restore actions that require user review.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

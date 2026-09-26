@@ -1,41 +1,54 @@
-## Description: <br>
-Controls IKEA/TP-Link Kasa smart bulbs by setting power, brightness, and color. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Controls IKEA and TP-Link Kasa smart bulbs for on/off state, brightness, and color adjustments.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and smart-home users can use this skill to have an agent control IKEA or TP-Link Kasa light bulbs, including on/off state, brightness, and color. Use it only when shell execution for local device control is acceptable. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requests shell execution for smart-bulb control without clearly limiting allowed commands. <br>
-Mitigation: Review and approve exact commands before execution, and run only in an environment where shell access and local device control are acceptable. <br>
-Risk: The skill can change local smart-bulb state on the user's network. <br>
-Mitigation: Use it only with intended devices and verify device identifiers, IP addresses, brightness, and color settings before executing control commands. <br>
+## Use Case:
 
+External users and developers can use this skill to ask an agent to control supported IKEA or TP-Link Kasa smart bulbs and return execution status or troubleshooting guidance.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/control-ikea-lightbulb) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON-like status or confirmation output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use local command-line tools to control smart bulbs; commands should be reviewed before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The security evidence marks the skill suspicious because it requests broad read, write, and command-execution authority for a smart-home control task.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in an agent environment where file and command tools are constrained or manually approved, and prefer a version scoped to explicit bulb-control operations.
+
+Risk: Smart-home control may expose credentials or enable unauthorized remote access if credentials and network access are not handled carefully.
+
+Mitigation: Use environment-based credential handling, avoid committing secrets, restrict network access to trusted devices, and review credential handling before use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/control-ikea-lightbulb)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with JSON status examples and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May request broad file and command execution authority in the agent environment.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact frontmatter reports 1.0.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

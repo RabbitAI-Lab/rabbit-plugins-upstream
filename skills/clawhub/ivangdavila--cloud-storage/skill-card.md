@@ -1,44 +1,59 @@
-## Description: <br>
-Manage files across cloud providers with authentication, cost awareness, and multi-provider operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage files across cloud providers with authentication, cost awareness, and multi-provider operations.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-Developers and engineers use this skill to upload, download, sync, and manage files across object storage and consumer cloud storage providers while accounting for authentication, rate limits, verification, and costs. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Cloud storage credentials or tokens could be exposed through chat, logs, or overly broad credential use. <br>
-Mitigation: Use least-privilege credentials, prefer managed identity or short-lived credentials, and avoid pasting real secrets into chat or logs. <br>
-Risk: Bulk transfers, permission changes, or deletes could affect large amounts of data if executed without review. <br>
-Mitigation: Require explicit review before bulk operations, verify backups are restorable before deletion, and define checksum, count, or spot-check verification before execution. <br>
-Risk: Large transfers can create unexpected egress, API, or storage costs. <br>
-Mitigation: Estimate transfer, operation, and storage costs before large operations and re-check current provider pricing. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [Cloud Storage skill page](https://clawhub.ai/ivangdavila/cloud-storage) <br>
-- [Provider-Specific Patterns](artifact/providers.md) <br>
-- [Authentication Setup](artifact/auth.md) <br>
-- [Cost Calculation](artifact/costs.md) <br>
+## Use Case:
 
+Developers, engineers, and agents use this skill to upload, download, sync, and manage files across object storage and consumer cloud storage providers while accounting for authentication, rate limits, verification, and cost.
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown with checklists, tables, and inline shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Instruction-only guidance; no bundled executable tools or required binaries.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Cloud credentials, service account keys, client secrets, SAS tokens, and OAuth refresh tokens can expose storage resources if mishandled.
+
+Mitigation: Use least-privilege accounts, prefer managed or keyless identity where supported, avoid root or broad keys, and store tokens as sensitive secrets.
+
+Risk: Large transfers or repeated listing operations can produce unexpected egress, API, and storage charges.
+
+Mitigation: Estimate transfer, storage, and operation costs before bulk work and verify current provider pricing before execution.
+
+Risk: Deletion or migration tasks can lose data if success is assumed from API responses or backups are not restorable.
+
+Mitigation: Verify object existence, size or checksums, and backup restorability before deleting source data.
+
+## Reference(s):
+
+- [Cloud Storage skill page](https://clawhub.ai/ivangdavila/skills/cloud-storage)
+- [Provider-specific patterns](artifact/providers.md)
+- [Authentication setup](artifact/auth.md)
+- [Cost calculation](artifact/costs.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Configuration, Shell commands, Code]
+
+**Output Format:** [Markdown guidance with tables, checklists, and inline shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only cloud storage helper; no hidden execution behavior reported by security evidence.]
+
+## Skill Version(s):
+
+1.0.1 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,38 +1,54 @@
-## Description: <br>
-Provides core Git version-control command guidance for repository setup, commits, branching, remote synchronization, and history management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Git基础工具免费版 provides Chinese-language guidance for core Git workflows, including repository setup, commits, branching, remote synchronization, history inspection, stash, and recovery.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers use this skill to ask an agent for Git command guidance and shell-command execution support for initialization, commits, branching, remotes, history inspection, undo workflows, stash usage, and basic collaboration tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill gives an agent broad shell-based Git authority, including commands that can alter history, remotes, credentials, or untracked files. <br>
-Mitigation: Before execution, require the agent to show git status, current branch, remote URL, and previews for cleanup commands; require explicit approval for push, pull --rebase, reset --hard, branch or tag deletion, credential changes, and git clean commands. <br>
+## Use Case:
 
+Developers and engineers use this skill to receive Git command guidance for initializing repositories, staging and committing changes, managing branches, synchronizing remotes, reviewing history, and recovering changes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/git-essentials-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an agent with shell execution and Git 2.20+ available; commands should be reviewed before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and target metadata) <br>
+Risk: The skill can guide an agent to run Git commands that alter repository state, history, remotes, or credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require the agent to show git status and relevant diffs, then ask for explicit confirmation before reset, clean, force push, branch or tag deletion, remote deletion, or credential changes.
+
+Risk: Credential-storage guidance may lead to insecure persistent credential storage.
+
+Mitigation: Prefer secure operating-system credential managers or SSH keys instead of credential.helper store.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/git-essentials-tool-free)
+- [ClawHub publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration]
+
+**Output Format:** [Markdown with inline bash and INI code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an agent with command execution capability and Git 2.20+ for executable workflows.]
+
+## Skill Version(s):
+
+1.0.2 (source: release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

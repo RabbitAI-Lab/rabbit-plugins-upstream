@@ -1,41 +1,55 @@
-## Description: <br>
-从“套公式”到“建模型”：通过识别现象、选择模型、数学表达三步法，训练学生先判断物理模型再列式。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps Chinese middle-school and first-year high-school students identify physical phenomena, choose applicable models, and express them mathematically before solving problems.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, tutors, and learning agents use this skill to practice physics modeling instead of formula matching. It guides learners to identify physical phenomena, select an appropriate model, write the mathematical relationship, and transfer the same model across problem variants. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Coordination with learning or reminder skills could persist study summaries or create reminders beyond the immediate tutoring exchange. <br>
-Mitigation: Use those related skills only after explicit user consent, matching the inspected skill instructions. <br>
-Risk: Some physics models include high-school extension content that may be inappropriate for an introductory middle-school lesson. <br>
-Mitigation: Respect the skill's grade-level markings and present high-school quantitative formulas only when the learner's level supports them. <br>
+## Use Case:
 
+Students and educators use this skill to practice selecting physics models and checking when physical laws apply, rather than immediately substituting numbers into formulas. High-school coverage currently extends through the first compulsory physics volume.
 
-## Reference(s): <br>
-- [物理建模模式详解](references/physics-modeling-patterns.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-modeling-coach) <br>
+### Deployment Geography for Use:
 
+Chinese Mainland
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-formatted tutoring guidance and Socratic prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May coordinate with related learning or reminder skills when available and only with user consent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Learner profiles, cross-skill sharing, parent sharing, or reminders may disclose student information unexpectedly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review memory, sharing, and reminder settings with the learner or guardian before use.
+
+Risk: Curriculum assumptions and crisis-help channels may be unsuitable outside Chinese Mainland.
+
+Mitigation: Localize curriculum guidance and crisis-help contacts before using the skill in another region.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-modeling-coach)
+- [Physics modeling patterns](references/physics-modeling-patterns.md)
+- [First-year high-school physics models](references/physics-hs1-models.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text]
+
+**Output Format:** [Conversational text with physics models and equations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Model-selection prompts and explanations tailored to the learner's grade level]
+
+## Skill Version(s):
+
+2.6.0 (source: server release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

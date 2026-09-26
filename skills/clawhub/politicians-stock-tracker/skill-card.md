@@ -1,45 +1,55 @@
-## Description: <br>
-Tracks U.S. congressional stock trades from official House Clerk and Senate eFD disclosures through the read-only SentiSense Politicians Trading API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents look up U.S. congressional stock disclosures by member or ticker and summarize reported trades, amounts, and disclosure delays through the read-only SentiSense API.
 
-## Publisher: <br>
-[thesentitrader](https://clawhub.ai/user/thesentitrader) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thesentitrader](https://clawhub.ai/user/thesentitrader)
 
-## Use Case: <br>
-Users and agents use this skill to look up recent congressional trades, per-ticker trading history, active politicians, and individual member profiles. It is intended for informational analysis of public disclosure data, not order entry, portfolio management, or personalized investment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a SentiSense API key for congressional trading lookups. <br>
-Mitigation: Install only when the runtime can protect SENTISENSE_API_KEY, keep the key out of prompts and user-facing output, and use it only for read-only requests. <br>
-Risk: Congressional trading data can be misread as investment advice or a trading signal. <br>
-Mitigation: Treat results as informational, verify important financial conclusions independently, and do not use the skill by itself for trading decisions. <br>
-Risk: STOCK Act filings report amount ranges and may be disclosed after the transaction date. <br>
-Mitigation: Report amount bands rather than precise values and distinguish transaction dates from disclosure dates, including disclosure delay when available. <br>
+## Use Case:
 
+Researchers, developers, and other users can investigate public U.S. congressional trading disclosures by member or ticker, compare disclosure and transaction dates, and summarize reported activity without placing trades or receiving personalized investment advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thesentitrader/skills/politicians-stock-tracker) <br>
-- [SentiSense homepage](https://sentisense.ai) <br>
-- [SentiSense API key signup](https://app.sentisense.ai/get-api-key) <br>
-- [SentiSense pricing](https://app.sentisense.ai/pricing?coupon=AGENTS26) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown summaries with optional inline curl or Python examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only API lookups requiring SENTISENSE_API_KEY; results should preserve disclosure dates, transaction dates, amount ranges, and preview limits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The SentiSense API receives the user's API key; an optional User-Agent may identify the agent runtime.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep the key in the environment, send it only to app.sentisense.ai, and omit optional runtime identifiers if disclosure is unwanted.
+
+Risk: Public disclosure data can be incomplete or misread as a trading signal or financial advice.
+
+Mitigation: Label preview and partial results, distinguish trade dates from filing dates, quote reported amount ranges, and avoid personalized trading recommendations.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/thesentitrader/skills/politicians-stock-tracker)
+- [SentiSense](https://sentisense.ai)
+- [SentiSense API key](https://app.sentisense.ai/get-api-key)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown summaries and example HTTP GET commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Summaries should distinguish transaction from disclosure dates, preserve reported amount ranges, and identify preview or partial results.]
+
+## Skill Version(s):
+
+1.1.5 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

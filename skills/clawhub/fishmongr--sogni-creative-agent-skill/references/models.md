@@ -1,0 +1,1225 @@
+# Model Catalog & Sizing Rules
+
+Read this when choosing a specific model (`-m`), validating dimensions, or
+answering "which model should I use for X". For everyday generation prefer
+`-Q fast|hq|pro` and automatic workflow routing instead of memorizing IDs.
+`sogni-agent --help` is the canonical flag reference.
+
+## Contents
+
+- Live model discovery
+- Quality presets (images)
+- Image models
+- Utility and 3D models
+- Music models
+- Speech models
+- Video models — current selectors
+- Seedance 2.5
+- HappyHorse 1.1 models
+- Alibaba Wan 3
+- Wan 3.0 Enhanced
+- MiniMax H3 models
+- LTX-2 / LTX-2.3 models
+- Recommended model selectors by need
+- Video sizing & aspect ratios
+- GPT Image 2.5 controls (as of 2026-09)
+
+## Live model discovery
+
+The static tables below are recommendations, not the complete changing
+Supernet catalog. Query the public REST catalog through the CLI:
+
+```bash
+sogni-agent --list-models
+sogni-agent --search-models darkbeast
+sogni-agent --search-models spicy
+sogni-agent --list-models --model-tag uncensored
+sogni-agent --list-models --model-tag spicy --model-tag uncensored
+sogni-agent --list-models --model-media video
+sogni-agent --list-models --model-media model
+sogni-agent --search-models pixal3d
+sogni-agent --json --search-models darkbeast
+sogni-agent --list-models --model-network relaxed
+```
+
+Search matches model IDs and names case-insensitively and ignores separators,
+so `darkbeast`, `dark beast`, and `dark_beast` produce the same matches. It
+also searches catalog tags such as `spicy`, `uncensored`, `community`, `new`,
+and tier labels. `--model-tag <tag>` is repeatable and combines filters with
+AND semantics.
+
+Availability, worker counts, media types, network coverage, and tags come from
+`https://api.sogni.ai/v1/model-catalog`. Only models that are live on the
+selected network are returned. Discovery does not require an API key.
+
+Use each model's dedicated input contract: `--image-to-3d` for Pixal3D,
+`--remove-background` for BiRefNet, `--music -m music3` for MiniMax Music 3,
+and `--speech` for Qwen3-TTS. A catalog ID alone does not supply its required
+inputs. Read the mode-specific commands and controls below.
+
+`--list-api-models` is different: it lists Sogni Intelligence language models
+from `/v1/models`, not Supernet media models.
+
+## Quality presets (images)
+
+| Preset | Model | Steps | Size | Speed |
+|--------|-------|-------|------|-------|
+| `fast` | `z_image_turbo_bf16` | 8 | 512x512 | ~5-10s |
+| `hq` | `z_image_turbo_bf16` | default | 768x768 | ~10-15s |
+| `pro` | `qwen_image_2512_fp8` | 20 | 1024x1024 | ~30sec |
+
+Explicit `-m` overrides the preset's model. Explicit `-w`/`-h` overrides
+dimensions. "high quality" / "best quality" / "pro" → `-Q pro`; quick drafts →
+`-Q fast`.
+
+## Image models
+
+| Model | Speed | Use Case |
+|-------|-------|----------|
+| `z_image_turbo_bf16` | Fast (~5-10s) | General purpose, default |
+| `z_image_bf16` | Variable | Full Z-Image; explicit model selection |
+| `dark_beast_z_image_turbo_v9_bf16` | Variable | Dark Beast Z-Image Turbo v9 community model |
+| `gpt-image-2` | Variable | OpenAI GPT Image 2 text-to-image and edit, strong prompt and text rendering |
+| `gpt-image-2.5-sunburst` | Variable | GPT Image 2.5 Sunburst; explicit selection, edits, masks and transparency |
+| `gpt-image-2.5-flare` | Variable | GPT Image 2.5 Flare; explicit selection, edits, masks and transparency |
+| `flux1-schnell-fp8` | Very fast | Quick iterations |
+| `qwen_image_2512_fp8` | Medium (~30s) | High quality |
+| `qwen_image_2512_fp8_lightning` | Variable | Qwen Image 2512 Lightning |
+| `krea2_turbo_fp8_scaled` | Fast | Krea 2 Turbo text-to-image, fast high-quality generations with strong prompt adherence |
+| `dark_beast_krea2_fp8` | Fast | Dark Beast Krea 2 community text-to-image fine-tune |
+| `krea2_identity_edit_v1_2` | Fast | Krea 2 Identity Edit LoRA v1.2, identity-preserving edits with 1-2 references |
+| `dark_beast_krea2_identity_edit_v1_2` | Fast | Dark Beast Krea 2 Identity Edit community LoRA with 1-2 references |
+| `chroma-v.46-flash_fp8` | Medium | Balanced |
+| `chroma-v48-detail-svd_fp8` | Variable | Chroma v.48 detail-calibrated model |
+| `chroma1-hd_fp8_scaled` | Variable | Chroma1-HD |
+| `one_obsession_v22_fp16` | Variable | One Obsession v22 community model |
+| `qwen_image_edit_2511_fp8` | Medium | Image editing with context (up to 3), strongest preservation |
+| `qwen_image_edit_2511_fp8_lightning` | Fast | Quick image editing (default for `-c`) |
+| `coreml-sogniXLturbo_alpha1_ad` | Fast | Photobooth face transfer (SDXL Turbo) |
+| `rtx_vsr_pro` | Fast | Promptless, deterministic NVIDIA RTX VSR upscale from one starting image; 512-15360 target box, 8px step |
+
+RTX VSR is not a text-to-image or restoration model. Invoke it with
+`sogni-agent --upscale <path|url>` (optionally `--upscale-scale 2|3|4` or
+`--target-longest-edge <px>`), or use the hosted `upscale_image` tool. The
+source is sent through `startingImage`, the prompt stays empty, and the worker
+fits the result inside the requested box without cropping or stretching. Both
+8px-aligned output edges must be 512-15360px. Use 7680 for 8K or 15360 for
+16K; targets above 7680px return JPG. If a scale leaves the short edge below
+512px, use the minimum target longest edge reported by the CLI/tool.
+
+### Video upscaling
+
+| Model | Kind | Use Case |
+|-------|------|----------|
+| `flashvsr_v1.1_tiny_long_bf16` | Video job | Promptless FlashVSR v1.1 upscale of one finished video to 1080p or 1440p |
+
+FlashVSR is not a generation model. Invoke it with
+`sogni-agent --upscale-video <path|url>` (optionally
+`--upscale-resolution 1080|1440`), or use the hosted `upscale_video` tool with
+`sourceVideoIndex` and an optional `targetResolution`. The output short edge
+becomes 1080 or 1440 (default 1440; 1080 when the source is below 720p) while
+the aspect ratio, every frame, the exact frame rate, and the original audio are
+kept; nothing is trimmed, cropped, restyled, or interpolated. Sources must be
+at most 768px on the short edge and about 1344x768 pixels overall (768x1344 in
+portrait), 1-60 fps,
+SDR with square pixels, and 100 MB or less; 1440p needs a source short edge of
+at least 720px and 1080p at least 540px. 4K is not available. The direct CLI
+reads the exact frame count and rate with a local ffprobe. The server sets the
+maximum clip length; do not quote a fixed limit. Relay a server rejection if
+the source is too long, without trimming it or switching to a generative tool.
+
+For Krea 2 Turbo, hosted/chat planning may use the creative-agent selector
+`krea-2-turbo`; direct CLI `-m` uses the worker model ID
+`krea2_turbo_fp8_scaled`.
+
+Krea 2 Turbo supports ordered LoRA stacks:
+
+```bash
+sogni-agent -m krea2_turbo_fp8_scaled \
+  --lora krea2-detail-enhancer --lora-strength 3 \
+  --lora krea2-amateur --lora-strength -2 \
+  "candid editorial street portrait at dusk"
+```
+
+Use no more than 8 LoRAs. `loraStrengths[i]` controls `loras[i]`, and changing
+the order can change the result. Omitted strengths default to 1. Many Krea 2
+LoRAs are bipolar sliders, so negative values are valid and apply the inverse
+effect. Follow the range documented for each LoRA rather than assuming 0-2.
+The first render with an uncached LoRA can take longer while its asset downloads.
+
+All 25 published Krea 2 LoRAs apply to every Krea 2 based model —
+`krea2_turbo_fp8_scaled`, `krea2_identity_edit_v1_2`,
+`krea2_identity_edit_sogni_v0_3_alpha`, `dark_beast_krea2_fp8`, and
+`dark_beast_krea2_identity_edit_v1_2`. [`krea2-loras.md`](./krea2-loras.md) lists
+every ID with its range, recommended range, default, and slider direction. The
+catalog moves without a skill release, so read it live before relying on an
+exact range:
+
+```bash
+sogni-agent --list-loras --lora-catalog-model krea2_turbo_fp8_scaled
+sogni-agent --search-loras lighting
+```
+
+For an edit of a referenced person or character that must preserve likeness or
+character identity while changing clothing, hair or makeup, pose or position,
+face/head/body, background, lighting, or visual style, default to a context
+edit with `-m krea2_identity_edit_v1_2`. Infer that semantic intent in any
+language; never route from keyword or regex matching. Also use it for a
+single-character sheet unless Pro/detail-critical layout requirements favor
+GPT Image 2. An explicitly requested model always wins. Use
+`-m dark_beast_krea2_identity_edit_v1_2` only when the creator explicitly
+requests that community/uncensored variant.
+
+These models accept 1-2 context images at 512-2048 px. With two references,
+pass the base scene first and the person/detail/outfit/pose/style reference
+second. Use a concise 1-4 sentence delta instruction rather than restating the
+whole image, do not send a negative prompt, and leave steps, guidance, sampler,
+and scheduler unset so the current model tier and worker choose their optimized
+defaults.
+
+`gpt-image-2` supports flexible OpenAI image sizes up to `3840px` on either
+edge, max `3:1` aspect ratio, and total pixels from `655,360` through
+`8,294,400`; the API snaps dimensions to valid multiples of 16. For image
+editing with `gpt-image-2`, you can pass up to 16 context images (Qwen models
+support up to 3; Krea identity edit models support up to 2).
+
+## Utility and 3D models
+
+| Model | Speed | Use Case |
+|-------|-------|----------|
+| `sam3_image_segment_bf16` | Very fast | SAM 3 object selection from one starting image: text, click points, or boxes in, one mask or cutout out |
+| `pixal3d_int8_i23d` | Slow (~120-170s) | Single-image reconstruction to a textured GLB |
+| `pixal3d_multiview_int8_i23d` | Slow (~1.5-4 min) | Front view plus any of left, back and right views of the same object to a textured GLB |
+| `birefnet_image_background_removal_fp16` | Very fast (~1s warm) | Prompt-free background removal, soft matte — the better cut-out when the subject is clear |
+
+None is a text-to-image model. All always require a `startingImage`. SAM 3 and
+BiRefNet are flat-priced; Pixal3D pricing depends on `shapeResolution`. None of
+the usual generation controls apply either: leave steps, guidance, sampler,
+scheduler, and the negative prompt unset for every one of them.
+
+### SAM 3 segmentation (`sam3_image_segment_bf16`)
+
+Flat $0.005 (1 Spark) per request at any source size. Returns exactly one
+artifact at the source dimensions and ignores width/height entirely. Select
+what you want in one of three ways, passed as `sam3Prompt`:
+
+- `text` — a noun phrase, up to 240 characters. Selects every instance of that
+  concept.
+- `points` — up to 32 `{x, y, label}` clicks, coordinates normalized 0-1
+  against the original image, `label` either `positive` or `negative`.
+- `boxes` — up to 16 `{x0, y0, x1, y1}` boxes, also normalized 0-1. With a text
+  prompt a box may carry `label: 'negative'` to exclude one instance ("every
+  dog except this one").
+
+Text and point prompts cannot be combined; the underlying model has no entry
+point that accepts both. A negative box likewise requires a text prompt.
+
+However you select, you are naming the object to isolate rather than describing
+a desired output — "the red ceramic teapot", not "a beautiful teapot".
+Selection is deterministic for a given image and prompt, so re-rolling the seed
+changes nothing. The artifact is a mask or a cutout, never a generated image: it
+cannot be upscaled, enhanced, or refined.
+
+Other `sam3Prompt` fields:
+
+- `applyMask` — return the selection cut out of the source as an RGBA PNG with
+  the mask in alpha, instead of a black-and-white mask. Usually what you want if
+  the output is going into a composite. Defaults to `false`.
+- `maxInstances` — 1 to 16. Keeps only the highest-scoring N selections. With
+  `text`, `maxInstances: 1` returns just the strongest match instead of every
+  match merged into one shape; with `points` it picks among the model's
+  whole/part/subpart candidates for the clicked object.
+- `threshold` — 0 to 1, default 0.5. One detection filter on both paths. If
+  nothing scores above it the job fails and the error reports the best score
+  seen, so raise or lower it from there rather than guessing.
+- `multimask` — point prompts only; rejected with a text prompt.
+
+The result carries per-selection detail: `maskDetectedCount`,
+`maskReturnedCount`, and `maskSelections` with each selection's `score`, `box`
+(normalized `[x0, y0, x1, y1]`), `coverage`, and whether it was `included`. Use
+it to tell a confident selection from a marginal one, and to discover that a
+concept matched more instances than you expected — then re-run with a box around
+the one you actually wanted.
+
+### Pixal3D image-to-3D (`pixal3d_int8_i23d`)
+
+$0.30 per reconstruction at the default shape resolution of 1024; explicitly
+selecting 1536 costs $0.42. These are the two priced shape settings.
+Takes one `startingImage` and returns a binary GLB — a TRELLIS.2 mesh of roughly
+695,000 triangles with a full PBR set baked in: 4K base colour and UV atlas, 4K
+metallic-roughness, 2K normal, and 1K ambient occlusion. Output is a 3D model,
+not a picture — do not treat the artifact as an image.
+
+**Reconstruction takes no prompt.** The supported graph isolates the subject
+with BiRefNet. Omit `templateVariant`, or explicitly select `i23d-birefnet`.
+The old prompted `i23d` variant has been removed and is rejected by the current
+SDK and Socket; never select it. For a busy scene, isolate the intended object
+before reconstruction. Use a sharp original photo with the whole object
+visible and minimal occlusion; keep its input resolution.
+
+```bash
+sogni-agent --image-to-3d object.png --mesh-faces 30000 -o object.glb --json
+sogni-agent --image-to-3d object.png --shape-resolution 1536 --texture-size 2048 --normal-map-size 1024 --ao-map-size 512 -o detailed.glb
+```
+
+`--pixal3d` is an alias for `--image-to-3d`. Supply one original PNG, JPEG,
+or WebP; the CLI preserves its bytes and saves a validated binary `.glb`.
+There is no prompt, seed, sampler, sizing, or batch control for this utility.
+SDK callers use an image project with `startingImage` and the options below.
+Do not substitute `--context`: that creates an image-edit request.
+
+Texture and mesh controls reduce the shipped budgets; `shapeResolution` can
+increase work and price above the 1024 default:
+
+| Option | Range | Default |
+|--------|-------|---------|
+| `meshTargetFaces` | 5000-700000 | 700000 |
+| `textureSize` | 1024-4096 | 4096 |
+| `normalMapSize` | 512-2048 | 2048 |
+| `ambientOcclusionSize` | 256-1024 | 1024 |
+| `shapeResolution` | 1024 or 1536 | 1024 |
+
+`meshTargetFaces` is the one worth setting deliberately. The 700,000-triangle
+default is far heavier than a real-time engine wants, so asking for less usually
+yields a *more* useful asset. Sampling steps are deliberately not exposed.
+
+### Pixal3D multi-view (`pixal3d_multiview_int8_i23d`)
+
+When the user has more than one photo of the same object, reconstruct from all
+of them instead of letting Pixal3D guess the sides the front cannot show. The
+`--image-to-3d` image is the **front** view and stays required; add any subset
+of the three orbit views. With at least one view the CLI uses
+`pixal3d_multiview_int8_i23d`; with none it stays on `pixal3d_int8_i23d`. The
+options, defaults, and prices are the single-view ones ($0.30 at the default
+1024 shape resolution, $0.42 at 1536). It is promptless and has no
+`templateVariant`.
+
+| Flag | SDK field | What the photo shows |
+|------|-----------|----------------------|
+| `--image-to-3d` | `startingImage` | The front of the subject (required) |
+| `--left-view` | `leftViewImage` | The subject turned so **its own left side** faces the camera — it faces screen-left |
+| `--back-view` | `backViewImage` | The subject seen from behind |
+| `--right-view` | `rightViewImage` | The subject turned so **its own right side** faces the camera — it faces screen-right |
+
+Views are named by the subject's sides, never the viewer's. Some turnaround
+templates (including the Comfy-Org Pixal3D example) label the photo of the
+subject's right side "left"; following those labels swaps left and right and
+builds a model turned 180 degrees, so the front faces backwards. Use photos of
+the same object at the same height and distance, about 90 degrees apart at eye
+level, like a character turnaround sheet.
+
+```bash
+sogni-agent --image-to-3d front.png --left-view left.png --back-view back.png --right-view right.png --mesh-faces 30000 -o object.glb --json
+sogni-agent --image-to-3d front.png --back-view back.png -o object.glb
+```
+
+The view flags require `--image-to-3d` and are refused with every other mode;
+`-m pixal3d_int8_i23d` with a view, or `-m pixal3d_multiview_int8_i23d` without
+one, is refused rather than silently switched. SDK callers send the views as
+`leftViewImage`, `backViewImage` and `rightViewImage` on the image project; do
+not put them in `contextImages`. `--json` reports the view files under
+`orbitViews`.
+
+### BiRefNet background removal (`birefnet_image_background_removal_fp16`)
+
+Flat $0.005 (1 Spark) per image at any source size, about 1.0s on
+a warm worker. It is **prompt-free** — there is no concept to name, it simply
+separates foreground from background — and returns either the foreground matte
+or, with `applyMask`, the source image carrying that matte in alpha. Output
+dimensions always match the input.
+
+BiRefNet is available on Supernet. Discover current availability with
+`--search-models birefnet`; do not repeat the obsolete "not yet routable" claim.
+Its SDK image project takes `startingImage` and top-level `applyMask: true`
+for a cutout. SAM 3 instead nests `applyMask` inside `sam3Prompt`.
+
+```bash
+sogni-agent --remove-background original.png -o cutout.png --json
+sogni-agent --remove-background original.png --matte -o matte.png --json
+```
+
+The default is an RGBA cutout; `--matte` returns the soft foreground mask.
+Both preserve source dimensions. Use one original image without a text prompt,
+steps, or resizing controls. Both outputs must be saved as PNG.
+
+### Choosing between SAM 3 and BiRefNet
+
+They are not interchangeable, and the difference decides the quality of every
+cut-out. Use both when the job needs both.
+
+| | SAM 3 | BiRefNet |
+|---|---|---|
+| What it does | **Selects an object** you name, click, or box | **Separates foreground from background** |
+| Prompt | Required — text, points, or boxes | None. There is nothing to name |
+| Knows which object you meant | Yes | No — it takes whatever is in front |
+| Output | Strictly **binary** mask: two levels, hard stair-stepped edges | True **soft matte**: 256 levels, antialiased edges, real partial alpha |
+| Best at | Picking one thing out of a busy scene | Clean edges on a clear subject: hair, fur, fabric, fine detail |
+
+**Use SAM 3** when the picture contains several things and you need a specific
+one: "the telescope, not the observatory around it".
+
+**Use BiRefNet** when the picture has one clear subject and what you want is a
+clean cut-out — a character on a backdrop, a product shot, anything where the
+edge quality is the point. SAM 3's edges are noticeably worse here: on a
+hooded figure it left specks of backdrop above the head, bit notches out of the
+cloak, and left the hem ragged where BiRefNet's matte was clean.
+
+**Use both** for the best result on an object inside a busy scene: SAM 3 to
+decide *which* object and where it sits, its bounding box to crop the original
+down to that object, then BiRefNet to matte the crop — where the thing being
+separated is now the only thing in frame, which is the situation it is best at.
+
+**A gotcha worth knowing before you write the code.** SAM 3 returns a binary
+mask, so testing a pixel for pure white is the same as testing whether it is
+selected. BiRefNet does not: its matte is soft, and a figure covering 48% of the
+frame can have under 5% of it at exactly 255. Code that thresholds on pure white
+will silently measure a fraction of the real coverage and crop the subject to a
+sliver. Threshold at half-opaque instead — identical on a binary mask, correct
+on a soft one — and composite with the matte's full range so the antialiased
+edges survive.
+
+## Music models
+
+| Model | Use Case |
+|-------|----------|
+| `ace_step_1.5_xl_turbo` | Default direct music generation model (ACE-Step 1.5 XL Turbo) |
+| `ace_step_1.5_xl_sft` | Quality variant (ACE-Step 1.5 XL SFT) with stronger lyric handling |
+| `minimax_music3` | MiniMax Music 3; direct `--music -m music3` or hosted `generate_music` with `model: "music3"` |
+
+The `--music-model` keys are `music3`, `turbo` (default), and `sft`. ACE selectors
+map to the XL ids (`turbo` → `ace_step_1.5_xl_turbo`, `sft` →
+`ace_step_1.5_xl_sft`). The legacy `ace_step_1.5_turbo` / `ace_step_1.5_sft`
+models are no longer the default.
+
+Use `--music` for direct audio-only generation. Defaults: 30 seconds, `mp3`,
+`ace_step_1.5_xl_turbo`, 8 steps, `euler` sampler, `simple` scheduler. Keep
+`--audio` for video reference audio (`--ref-audio` alias); do not use it for
+direct music generation. Music controls: `--lyrics`, `--language`, `--bpm`
+(30-300), `--keyscale`, `--timesig` (2|3|4|6), `--composer-mode`,
+`--prompt-strength` (0-10), `--creativity` (0-2), `--music-shift` (1-6),
+`--audio-format mp3|flac|wav`.
+
+Hosted `generate_music` defaults to MiniMax Music 3 (`model: "music3"`); direct
+`--music` still defaults to ACE-Step. Music 3 supports 10–300 seconds, with
+duration as a ceiling: it can finish early at a musical resolution. Put tempo
+and key in its prompt; BPM/key/time-signature controls do not apply. Use plain
+section tags in lyrics; instrumental tracks also need a section-tag skeleton
+to give the composer enough structure. The CLI preserves supplied lyrics:
+
+```bash
+sogni-agent --music -m music3 --duration 60 --lyrics $'[Intro]\n[Verse]\n[Chorus]\n[Outro]' -o score.mp3 "Instrumental orchestral score, 90 BPM, D minor"
+```
+
+Music 3 defaults to 60 seconds, 30 steps, guidance 1.7, `euler`, and `simple`.
+It rejects ACE-only shift, BPM, key, time-signature, language, and composer
+controls; put that direction in the prompt or lyrics. `--prompt-strength`
+(0–10), `--creativity` (0–2), `--guidance` (1–5), and `--steps` (10–100) are
+available. Output formats are MP3, FLAC, and WAV. Audio batches (`-n`) save
+all results, appending `-2`, `-3`, etc. to the requested output filename.
+
+## Speech models
+
+Qwen3-TTS is available through direct `--speech`, hosted `generate_speech`,
+and SDK audio projects. Speech reads the exact script; it does not use music
+samplers, steps, duration, or lyrics controls.
+
+```bash
+sogni-agent --speech --speech-voice ryan -o narration.wav "Welcome to the story."
+sogni-agent --speech --speech-mode clone --voice-reference voice.wav --voice-transcript "The known words in the recording." -o clone.wav "New words in the same voice."
+sogni-agent --speech --speech-mode design --voice-description "A warm, low-pitched narrator with a gentle Scottish accent" -o designed.wav "The journey begins."
+```
+
+Default mode is `voice`, default speaker `serena`, format WAV, language `auto`.
+`--speech-voice` accepts `serena`, `vivian`, `uncle_fu`, `ryan`, `aiden`,
+`ono_anna`, `sohee`, `eric`, or `dylan`. It is only valid in `voice` mode.
+`--voice-description` optionally directs a studio voice and is required for
+`design`; clone mode instead requires `--voice-reference` (local path or URL).
+Install `ffprobe` to check clone recordings; the CLI accepts 3–30 seconds and
+preserves the original recording. `--voice-transcript` is clone-only, up to
+1024 characters. `--language` takes `auto`, `english`, `chinese`, `japanese`,
+`korean`, `german`, `french`, `russian`, `portuguese`, `spanish`, or `italian`.
+Optional `--speech-creativity` accepts 0.1–2. Use `--output-format wav|mp3|flac`
+and a matching filename extension. `-n` saves each requested audio result.
+
+| Model ID | Hosted `model` | Input |
+|----------|----------------|-------|
+| `qwen3_tts_1.7b_custom_voice_bf16` | `voice` | Exact script, studio `voice`, optional `voiceDescription` |
+| `qwen3_tts_1.7b_voice_clone_bf16` | `clone` | Exact script and `voiceSourceIndex`; include known `voiceTranscript` |
+| `qwen3_tts_1.7b_voice_design_bf16` | `design` | Exact script and required `voiceDescription` |
+
+`prompt` contains only the words to speak (up to 4096 characters); put delivery
+and speaker descriptions in `voiceDescription` (up to 512 characters).
+Clone mode uses a clean 3–30s recording, not written voice direction. Its known
+reference transcript improves conditioning; do not invent one. Evaluate voice
+identity and accent by listening, not by automatic transcription accuracy.
+Read [hosted-api.md](./hosted-api.md) for execution and
+[interactive-worlds.md](./interactive-worlds.md) for recurring-character audio.
+
+## Video models — current selectors
+
+| Model | Speed | Use Case |
+|-------|-------|----------|
+| `ltx25` → `ltx25-22b-int8_t2v_distilled` | Distilled | Default text-to-video with native synchronized audio |
+| `ltx25-i2v` → `ltx25-22b-int8_i2v_distilled` | Distilled | Image-to-video; also first/last-frame conditioning through the separate FLF template |
+| `ltx25-ia2v` → `ltx25-22b-int8_ia2v_distilled` | Distilled | Image+audio-to-video |
+| `ltx25-a2v` → `ltx25-22b-int8_a2v_distilled` | Distilled | Audio-to-video |
+| `ltx25-v2v` → `ltx25-22b-int8_v2v_distilled` | Distilled | Video-to-video canny, depth, pose, detailer, inpaint, and outpaint templates; pose requires both source video and subject reference image |
+| `ltx25-22b-int8_{t2v,i2v,ia2v,a2v,v2v}_dev` | Dev/HQ | Official two-stage Dev workflow for the matching mode |
+| `ltx23-22b-fp8_t2v_distilled` | Fast (~2-3min) | Explicit LTX-2.3 text-to-video with native dialogue/audio; current default is LTX-2.5 |
+| `ltx23-22b-fp8_i2v_distilled` | Fast (~2-3min) | Explicit LTX-2.3 image-to-video; current first/last-frame default is LTX-2.5, with no transition LoRA |
+| `ltx23-22b-fp8_{t2v,i2v,ia2v,a2v,v2v}_dev` | Dev/HQ | Explicit older LTX-2.3 modes; use the matching LTX-2.5 model for new requests without a version preference |
+| `ltx23-eros` → `ltx23-22b-10eros-v1.4-fp8mixed_i2v` | Fast | Explicit uncensored I2V; 30GB+ GPU and `--no-filter` required |
+| `ltx23-22b-fp8_ia2v_distilled` | Fast (~2-3min) | Image+audio-to-video |
+| `ltx23-22b-fp8_a2v_distilled` | Fast (~2-3min) | Audio-to-video |
+| `ltx23-22b-fp8_v2v_distilled` | Fast (~3min) | Video-to-video with ControlNet, plus canvas outpaint and masked inpaint |
+| `ltx23-22b-10eros-v1.4-fp8mixed_i2v` | Fast, 32GB+ Fast workers | Opt-in mature-theme image-to-video with native audio |
+| `seedance2` | Variable | Seedance 2.0 text-to-video, 4-15s, native audio, up to native 4K |
+| `seedance2-mini` | Variable | Seedance 2.0 Mini text-to-video, lower-cost 720p path |
+| `seedance2-fast` | Variable | Legacy fast Seedance 2.0 text-to-video, 720p path |
+| `seedance2-ia2v` | Variable | Seedance 2.0 image+audio-to-video |
+| `seedance2-v2v` | Variable | Seedance 2.0 video-to-video, no ControlNet |
+| `seedance2-5` | Variable | Seedance 2.5 text-to-video (alias `seedance2-5-t2v`), 4-30s single clips, native audio, 480p/720p/1080p, MP4/MOV and last-frame export |
+| `seedance2-5-ia2v` | Variable | Seedance 2.5 image+audio-to-video |
+| `seedance2-5-v2v` | Variable | Seedance 2.5 video-to-video and video editing/extension, no ControlNet |
+| `happyhorse-1.1-t2v` | Variable | HappyHorse 1.1 text-to-video, 3-15s, native audio, 720P/1080P |
+| `happyhorse-1.1-i2v` | Variable | HappyHorse 1.1 image-to-video from one first-frame image (`--ref`) |
+| `happyhorse-1.1-r2v` | Variable | HappyHorse 1.1 reference-to-video from 1-9 reference images (`-c`/`--context`) |
+| `wan3` / `wan3.0-video` | Variable | Alibaba Wan 3 unified text/frame/reference/audio/video generation, 2-30s, native audio, 480P/720P/1080P |
+| `wan3-enhanced` / `wan3.0-spicy-video` | Variable | MuleRouter `w3.0-video`: Wan 3.0 Enhanced text/frame/reference/audio/video generation, fixed or smart 2-30s, native audio, 480P/720P/1080P |
+| `minimax-h3` / `minimax-h3-t2v` | Standard | MiniMax H3 text-to-video at 24 fps with native stereo audio |
+| `minimax-h3-i2v` | Standard | MiniMax H3 first-frame image-to-video with native stereo audio |
+| `minimax-h3-flf2v` | Standard | MiniMax H3 first-frame → last-frame video; pass both `--ref` and `--ref-end` |
+| `minimax-h3-r2v` | Standard | MiniMax H3 reference-to-video from a whole reference set (up to 9 images / 3 videos / 3 audio, 12 files total) |
+| `minimax-h3-balanced` / `minimax-h3-t2v-balanced` | 8-step | H3 Balanced text-to-video; the generic selector also infers i2v/flf2v from supplied frames |
+| `minimax-h3-i2v-balanced` | 8-step | H3 Balanced first-frame image-to-video |
+| `minimax-h3-flf2v-balanced` | 8-step | H3 Balanced first-frame → last-frame video; pass both `--ref` and `--ref-end` |
+| `minimax-h3-r2v-balanced` | 8-step | H3 Balanced reference-to-video from a whole reference set |
+| `minimax-h3-turbo` / `minimax-h3-t2v-turbo` | 4-step | H3 LightX2V Turbo text-to-video; the generic selector also infers i2v/flf2v from supplied frames |
+| `minimax-h3-i2v-turbo` | 4-step | H3 LightX2V Turbo first-frame image-to-video |
+| `minimax-h3-flf2v-turbo` | 4-step | H3 LightX2V Turbo first-frame → last-frame video; pass both `--ref` and `--ref-end` |
+| `minimax-h3-r2v-turbo` | 4-step | H3 Turbo reference-to-video from a whole reference set; 960×544 default |
+| `minimax-h3-fasth3-turbo` / `minimax-h3-fasth3-t2v-turbo` | 4-step | FastVideo VSA FastH3 text-to-video; generic selector infers frame modes; about 2x faster than LightX2V Turbo and up to 6x Standard |
+| `minimax-h3-fasth3-i2v-turbo` | 4-step | FastH3 first-frame image-to-video or last-frame-only L2VA |
+| `minimax-h3-fasth3-flf2v-turbo` | 4-step | FastH3 first-frame → last-frame video; no FastH3 R2V mode |
+| `minimax-h3-fasth3-turbo-2stage` / `minimax-h3-fasth3-t2v-turbo-2stage` | 4-step | FastH3 Two-Stage text-to-video, delivered at twice the canvas (2K by default; `--target-resolution 1080` or `720`); generic selector infers frame modes |
+| `minimax-h3-fasth3-i2v-turbo-2stage` | 4-step | FastH3 Two-Stage first-frame image-to-video or last-frame-only L2VA |
+| `minimax-h3-fasth3-flf2v-turbo-2stage` | 4-step | FastH3 Two-Stage first-frame → last-frame video; no R2V mode |
+| `wan_v2.2-14b-fp8_i2v_lightx2v` | Fast | **Default single-image image-to-video** (one `--ref`, no end frame) |
+| `wan_v2.2-14b-fp8_i2v` | Slow | Higher quality video |
+| `wan_v2.2-14b-fp8_t2v_lightx2v` | Fast | Text-to-video |
+| `wan_v2.2-14b-fp8_s2v_lightx2v` | Fast | Face lip-sync with uploaded audio |
+| `wan_v2.2-14b-fp8_animate-move_lightx2v` | Fast | Animate-move |
+| `wan_v2.2-14b-fp8_animate-replace_lightx2v` | Fast | Animate-replace |
+
+### CLI selector aliases
+
+Every key below is a valid `-m` value. The shared intelligence-client
+`VIDEO_MODEL_ALIASES` map resolves aliases (workflow-aware, so one Seedance
+alias can serve several workflows) to canonical worker/vendor model ids.
+`test/docs-consistency.test.mjs` asserts every alias key in that map appears
+in this file, so a new runtime model family fails CI until it is documented
+here. The bare `happyhorse` / `happyhorse-1.1` selector is resolved by the CLI
+itself (see [HappyHorse 1.1 models](#happyhorse-11-models)).
+
+| Alias | Resolves to |
+|-------|-------------|
+| `ltx25`, `ltx25-t2v` | `ltx25-22b-int8_t2v_distilled` |
+| `ltx25-i2v` | `ltx25-22b-int8_i2v_distilled` |
+| `ltx25-ia2v` | `ltx25-22b-int8_ia2v_distilled` |
+| `ltx25-a2v` | `ltx25-22b-int8_a2v_distilled` |
+| `ltx25-v2v` | `ltx25-22b-int8_v2v_distilled` |
+| `ltx23`, `ltx23-t2v` | `ltx23-22b-fp8_t2v_distilled` |
+| `ltx23-i2v` | `ltx23-22b-fp8_i2v_distilled` |
+| `ltx23-ia2v` | `ltx23-22b-fp8_ia2v_distilled` |
+| `ltx23-a2v` | `ltx23-22b-fp8_a2v_distilled` |
+| `ltx23-v2v` | `ltx23-22b-fp8_v2v_distilled` |
+| `ltx23-eros`, `10eros` | `ltx23-22b-10eros-v1.4-fp8mixed_i2v` |
+| `wan22`, `wan22-t2v` | `wan_v2.2-14b-fp8_t2v_lightx2v` |
+| `wan22-i2v` | `wan_v2.2-14b-fp8_i2v_lightx2v` |
+| `wan22-s2v` | `wan_v2.2-14b-fp8_s2v_lightx2v` |
+| `wan22-animate-move` | `wan_v2.2-14b-fp8_animate-move_lightx2v` |
+| `wan22-animate-replace` | `wan_v2.2-14b-fp8_animate-replace_lightx2v` |
+| `seedance2`, `seedance2-t2v`, `seedance2-ia2v`, `seedance2-v2v` | `seedance-2-0` (suffix picks the workflow) |
+| `seedance2-mini`, `seedance2-mini-t2v` | `seedance-2-0-mini` |
+| `seedance2-fast`, `seedance2-fast-t2v` | `seedance-2-0-fast` |
+| `seedance2-5`, `seedance2-5-t2v`, `seedance2-5-ia2v`, `seedance2-5-v2v` | `seedance-2-5` (suffix picks the workflow) |
+
+### Default image-to-video routing
+
+- **Single-image i2v** (`--ref` only, no `-m`) defaults to
+  `wan_v2.2-14b-fp8_i2v_lightx2v`. Keep that default for plain "animate this
+  image" requests. The CLI auto-routes single-image i2v to
+  `ltx25-22b-int8_i2v_distilled` only when the prompt calls for native audio
+  (quoted dialogue; words like audio, music, sound, speech, sings) or reads
+  as story direction (story, scene, script, narrative, commercial), or when
+  `-Q hq`/`-Q pro` is set — WAN clips render silent. If the prompt must
+  contain such words but the WAN path is still wanted, pin it explicitly
+  with `-m wan_v2.2-14b-fp8_i2v_lightx2v`.
+- **Two-image first-frame → last-frame animation** (`--ref` + `--ref-end`,
+  no `-m`) defaults to `ltx25-22b-int8_i2v_distilled` and uses the dedicated
+  FLF template. FLF shares the I2V public model ID; it does not attach the
+  LTX-2.3 transition LoRA. Pin `ltx23-22b-fp8_i2v_distilled` only when the
+  legacy LoRA-assisted transition behavior is explicitly required.
+- A configured `videoModels.i2v` (OpenClaw plugin config) overrides both
+  defaults.
+
+## Seedance 2.5
+
+`seedance2-5` (vendor model `seedance-2-5`) is the newest Seedance generation.
+Like the rest of the family it is an external-vendor Premium-Spark path (never
+subscription-covered), renders at a fixed 24 fps with native audio, and takes
+no negative prompt and no ControlNet.
+
+- **Duration**: 4-30 s per clip (97-721 frames) — the only Seedance that
+  renders past 15 s in a single call. Prefer `seedance2-5` over splitting and
+  stitching 2.0 segments when the user wants one continuous Seedance clip
+  longer than 15 s.
+- **Resolution**: 480p/720p/1080p (up to 2206 pixels on the long side;
+  default 1280×720). Keep full `seedance2` for 4K requests.
+- **Exports**: MP4 or MOV with `--output-format`, plus an optional final-frame
+  image with `--return-last-frame` for the first frame of a subsequent clip.
+- **Workflows**: text-to-video, image-to-video from a first frame, first- and
+  last-frame conditioning (`--ref` + `--ref-end`), image+audio-to-video
+  (`seedance2-5-ia2v`), and multimodal reference / video-to-video including
+  video editing and extension (`seedance2-5-v2v`).
+- **Reference budget**: up to 30 image / 10 video / 10 standalone audio refs,
+  50 reference files total across those per-modality caps — much larger than
+  the 2.0 family's 9 / 3 / 3 / 12.
+  Per-model caps come from `@sogni-ai/sogni-protocol`'s
+  `seedance-reference-limits` catalog.
+- **Prompting**: the same `@Image1` / `@Video1` / `@Audio1` loose-reference
+  grammar and the same mutually exclusive dedicated-frame vs loose-reference
+  modes as Seedance 2.0.
+- **Task contract**: Seedance 2.5 first/last-frame, edit, and extend requests
+  use adaptive output ratio. The CLI sends typed task metadata so
+  `seedance2-5-v2v` defaults to edit; pass `--seedance-task-type extend` for
+  continuation or `reference` when a video is only a loose creative reference.
+  Edit requires `--duration` equal to the source video's duration. Extend uses
+  the requested 4-30 second continuation duration. For edit/extend, select only
+  `--target-resolution 480|720|1080`; the provider inherits `@Video1`'s aspect ratio.
+  Untyped automatic classification is rejected before billing because it can
+  fail asynchronously after inferring the task.
+- **Audio-only reference**: unlike 2.0, Seedance 2.5 accepts standalone audio as
+  its only loose reference.
+
+The bundled CLI and pinned SDKs recognize `seedance-2-5` and transport typed
+tasks; see `package.json` for the current dependency versions. The direct CLI
+applies Seedance's fixed 24 fps,
+4-30 s duration window, larger reference caps, reference-mode exclusivity, and
+HTTPS reference forwarding before dispatch.
+
+## HappyHorse 1.1 models
+
+Alibaba HappyHorse 1.1 is a Premium-Spark vendor video family (three discrete
+models, no mini/fast variants). Every mode renders at a fixed 24 fps with an
+always-on natively synchronized audio track (no negative prompt, no ControlNet),
+supports 3–15 second durations, and targets 720P or 1080P output. The bare
+`happyhorse` selector resolves to the mode inferred from your references.
+
+| Model | Mode | Use Case |
+|-------|------|----------|
+| `happyhorse-1.1-t2v` | Text-to-video | Prompt-only clip with native audio (default for `-m happyhorse`) |
+| `happyhorse-1.1-i2v` | Image-to-video | Animate a single first-frame image passed with `--ref` |
+| `happyhorse-1.1-r2v` | Reference-to-video | Compose from 1–9 reference images passed with `-c`/`--context` |
+
+HappyHorse takes image references only — it does not accept reference video or
+reference audio (audio is generated natively). i2v uses exactly one first-frame
+image; r2v accepts up to nine reference images.
+
+### HappyHorse 1.1 prompting tips
+
+HappyHorse rewards short, concrete scene direction — roughly 15–30 words for a
+simple shot. One subject, one action, one setting, and one strong visual or
+camera cue is the sweet spot; over-long prompts reduce face and hand fidelity, so
+simplify before adding detail.
+
+**What to include:**
+
+- **Observable visual detail**: "overcast daylight", "wet asphalt", "warm amber
+  backlight", "shallow depth of field" — not evaluative filler like "cinematic",
+  "beautiful", "stunning", "epic", or "masterpiece".
+- **One cinematography idea**: put the camera move last and be specific — "slow
+  dolly-in", "lateral orbit with parallax", "locked-off wide". Prefer one exact
+  color over stacked synonyms.
+- **Plain prose only**: no tag lists, JSON, or weighting syntax; HappyHorse
+  ignores negative prompts.
+
+**Multi-beat clips:** use a timecoded shot list rather than "first X then Y" —
+for example: *"Shot 1 (wide establishing, 0–2 s): …; Shot 2 (mid tracking,
+2–5 s): …"*
+
+**By mode:**
+
+- **t2v** — describe the whole scene compactly in a single prompt.
+- **i2v** — prompt only the *deltas*: motion, camera move, or lighting change.
+  The first frame already fixes subject, wardrobe, and background; don't restate
+  them.
+- **r2v** — give each `[Image N]` a clear role, then state composition + action
+  + one camera/lighting cue for the resulting clip.
+
+HappyHorse excels at camera moves, atmospheric light and reflections,
+wind-driven motion (hair, fabric, flags), fire, wide and aerial shots, mirrors,
+and short in-scene text.
+
+*Source: fal "Happy Horse Prompting Guide" — <https://fal.ai/learn/tools/prompting-happy-horse>*
+
+## Alibaba Wan 3
+
+`wan3`, `wan3-video`, `wan3.0`, and `wan-3` resolve to the single Premium-Spark
+vendor model `wan3.0-video`.
+Media shape selects the operation; there are no separate t2v/i2v/v2v model
+IDs. It renders 2–30 second clips at fixed 30 fps with native audio (enabled by
+default, disable with `--no-generate-audio`) at 480P, 720P, or 1080P.
+Supported ratios are `adaptive`, `16:9`, `4:3`, `1:1`, `3:4`, and `9:16`.
+Use `--smart-duration` for provider-selected timing or `--duration 2..30` for
+an exact request. `--no-expand-prompt` bypasses local prompt guardrails and
+sends literal wording; hosted agent paths run Sogni's exact-model shaper. The
+configured Alibaba Model Studio WAN3 endpoint accepts no provider-side
+`prompt_extend` behavior is coordinated with Sogni's own model-specific shaping
+so a prompt is not rewritten twice.
+
+- **Frame mode:** `--ref` is the first frame; optional `--ref-end` is the last
+  frame. A last frame requires a first frame.
+- **Loose-reference mode:** select `r2v`, `a2v`, or `ia2v`. In these
+  modes `--ref` is a loose `Image 1`; `--ref-video` and `--ref-audio` are
+  repeatable loose `Video N` / `Audio N` inputs. Give every reference one
+  explicit job in the prompt.
+- **Mutual exclusion:** first/last-frame anchors cannot be mixed with loose
+  image, video, or audio references, document context, or webpage context.
+- **Document/web context:** `--reference-file-url` accepts one public HTTPS
+  PDF, Office, text, Markdown, Keynote, Pages, or Numbers file up to 100 MB
+  (PDF/DOCX/DOC/PPTX/PPT/Keynote/Pages: up to 50 pages);
+  `--reference-link-url` accepts one public HTTPS webpage. File and link are
+  mutually exclusive. They may accompany loose-reference generation but not
+  dedicated first/last-frame anchors.
+- **Caps:** 10 images, 5 videos, and 5 audio clips. There is no additional
+  aggregate media-count cap in the upstream contract.
+  Each video/audio input is 1–15 seconds; total video input is at most 15
+  seconds.
+- **Inputs:** a prompt or at least one media input is required; prompts allow up
+  to 20,000 characters. Send no negative prompt, steps, guidance, sampler,
+  scheduler, ControlNet, or mask. Seeds are integers from 0 through 2147483647.
+- **No edit/extend task:** video references are loose conditioning for a new
+  generation. Alibaba exposes no edit/extend task mode or task-type field; use
+  a dedicated video-to-video model when source-preserving editing is required.
+- **Cost (as of 2026-08):** platform artist pricing is $0.065/s at 480P,
+  $0.13/s at 720P, and $0.26/s at 1080P; native audio does not change the rate.
+
+Prompt in plain natural language. Name references exactly as `Image 1`,
+`Video 1`, and `Audio 1` in per-modality submission order. For dialogue, quote
+the words and identify the speaker; keep the visual action and camera direction
+observable and concise.
+
+## Wan 3.0 Enhanced
+
+`wan3-enhanced`, `wan3.0-enhanced`, `wan3-spicy`, and `wan3.0-spicy` resolve to
+the Sogni model `wan3.0-spicy-video`; MuleRouter's provider ID is
+`w3.0-video`. Public surfaces call it **Wan 3.0 Enhanced**. It renders fixed or
+smart 2–30 second clips at 30 fps with native audio and 480P, 720P, or 1080P
+output. Supported ratios are `adaptive`, `16:9`, `9:16`, `1:1`, `4:3`, and
+`3:4`.
+
+- Use t2v for prompt-only video, i2v for first/optional last frame, r2v for
+  loose media references, and a2v/ia2v when audio drives the result.
+- Use either first/last-frame anchors or loose references; the modes cannot be
+  combined. Loose-reference limits are 10 images, 5 videos, and 5 audio clips;
+  every input must be supplied through the context image/media workflow because
+  a prompt name alone cannot preserve identity.
+- Smart duration (`--smart-duration`) and provider prompt expansion are
+  supported. There is no document/web context, watermark control, negative
+  prompt, sampling override, source-video edit, or extend mode. Seeds are
+  integers from `0` through `2147483647`; omit the seed for a random result.
+- Standard artist PAYG rates are $0.08/s at 480P, $0.16/s at 720P, and
+  $0.32/s at 1080P (as of 2026-09). Existing paid subscribers receive a
+  one-time model credit of $10 on Unlimited or $20 on Unlimited Pro through
+  September 1, 2026 00:00 UTC (August 31 at 5:00 PM PT). That credit is not
+  subscription coverage; once used or expired, normal PAYG applies.
+
+## MiniMax H3 models
+
+MiniMax H3 is a Sogni-hosted video family with **twenty current selectors**:
+four Standard workflows, four 8-step Balanced workflows, four 4-step
+LightX2V Turbo workflows, three FastVideo VSA FastH3 Turbo workflows,
+three FastH3 Two-Stage (720p/1080p/2K) workflows, and two Ref2VA Two-Stage
+(Standard and Balanced) workflows. Every one of those modes
+generates picture and **native 32 kHz stereo audio jointly**. FastH3 also has
+three audio-to-video modes, each with a Two-Stage form, that take the user's
+own audio instead; see [FastH3 audio-to-video](#fasth3-audio-to-video).
+`--no-generate-audio` (SDK `generateAudio=false`) strips the generated track
+from the delivered file rather than skipping audio generation. It is an explicit model choice, never a
+universal default. The bare `minimax-h3`, `minimax-h3-balanced`, and
+`minimax-h3-turbo`, `minimax-h3-fasth3-turbo`, and `minimax-h3-fasth3-turbo-2stage` selectors resolve to the matching engine and mode inferred
+from your references. The Standard, Balanced, and LightX2V Turbo families accept
+an explicit `--workflow r2v`; FastH3 and FastH3 Two-Stage reject it.
+**`minimax-h3-r2v` is never inferred** — it runs a different checkpoint and must
+be asked for by name. Its Balanced and Turbo counterparts are
+`minimax-h3-r2v-balanced` and `minimax-h3-r2v-turbo`, and Standard and Balanced
+each have a two-stage form, `minimax-h3-r2v-2stage` and
+`minimax-h3-r2v-balanced-2stage` (see "Ref2VA Two-Stage" below); those are
+never inferred either.
+FastH3 has no R2V mode, so `--workflow r2v` is rejected with its generic selector.
+
+| Model | Mode | Use Case |
+|-------|------|----------|
+| `minimax-h3` / `minimax-h3-t2v` | Text-to-video | Prompt-only clip with native audio (default for `-m minimax-h3` with no refs) |
+| `minimax-h3-i2v` | Image-to-video | Animate a single first-frame image passed with `--ref` |
+| `minimax-h3-flf2v` | First → last frame | Interpolate between `--ref` and `--ref-end` |
+| `minimax-h3-r2v` | Reference-to-video | Compose from a labelled reference SET: up to 9 images, 3 videos, 3 audio clips, 12 files total |
+| `minimax-h3-balanced` / `minimax-h3-t2v-balanced` | Balanced text-to-video | Fixed 8-step Euler/simple LightX2V prompt-only path; generic `minimax-h3-balanced` infers the frame workflow |
+| `minimax-h3-i2v-balanced` | Balanced image-to-video | Fixed 8-step animation from one first frame |
+| `minimax-h3-flf2v-balanced` | Balanced first → last frame | Fixed 8-step interpolation between `--ref` and `--ref-end` |
+| `minimax-h3-r2v-balanced` | Balanced reference-to-video | Fixed 8-step Euler/simple Ref2VA from a labelled reference set |
+| `minimax-h3-r2v-2stage` | Ref2VA Two-Stage | The `minimax-h3-r2v` request (20 steps) on a half-size canvas, delivered at twice it (2K default, 1080p or 720p) |
+| `minimax-h3-r2v-balanced-2stage` | Balanced Ref2VA Two-Stage | The `minimax-h3-r2v-balanced` request (8 steps), delivered at twice the canvas |
+| `minimax-h3-turbo` / `minimax-h3-t2v-turbo` | Turbo text-to-video | 4-step prompt-only path; generic `minimax-h3-turbo` infers the frame workflow |
+| `minimax-h3-i2v-turbo` | Turbo image-to-video | 4-step animation from one first frame |
+| `minimax-h3-flf2v-turbo` | Turbo first → last frame | 4-step interpolation between `--ref` and `--ref-end` |
+| `minimax-h3-r2v-turbo` | Turbo reference-to-video | Dedicated 4-step Ref2VA LoRA; Euler/simple and 960×544 by default |
+| `minimax-h3-fasth3-turbo` / `minimax-h3-fasth3-t2v-turbo` | FastH3 text-to-video | Separate FastVideo VSA four-step engine; generic selector infers frame workflows |
+| `minimax-h3-fasth3-i2v-turbo` | FastH3 image-to-video | First-frame I2VA or last-frame-only L2VA from one endpoint |
+| `minimax-h3-fasth3-flf2v-turbo` | FastH3 first → last frame | Both endpoints; FastH3 has no R2V selector |
+| `minimax-h3-fasth3-turbo-2stage` / `minimax-h3-fasth3-t2v-turbo-2stage` | FastH3 Two-Stage text-to-video | FastH3 on a half-size canvas, delivered at twice it (2K default, 1080p or 720p); generic selector infers frame workflows |
+| `minimax-h3-fasth3-i2v-turbo-2stage` | FastH3 Two-Stage image-to-video | First-frame I2VA or last-frame-only L2VA, delivered at twice the canvas |
+| `minimax-h3-fasth3-flf2v-turbo-2stage` | FastH3 Two-Stage first → last frame | Both endpoints, delivered at twice the canvas; no R2V |
+| `minimax-h3-fasth3-ia2v-turbo` | FastH3 image + audio to video | `--ref` first frame plus `--ref-audio`; the upload drives the clip and is its soundtrack |
+| `minimax-h3-fasth3-flfa2v-turbo` | FastH3 first + last frame + audio | `--ref`, `--ref-end` and `--ref-audio` |
+| `minimax-h3-fasth3-a2v-turbo` | FastH3 audio to video | `--ref-audio` only |
+| `minimax-h3-fasth3-ia2v-turbo-2stage` / `-flfa2v-turbo-2stage` / `-a2v-turbo-2stage` | FastH3 Two-Stage audio to video | The same uploads, delivered at twice the canvas |
+
+The three standard frame modes share the FL2VA checkpoint: worker ids
+`minimax-h3-fl2va-fp8_t2v`, `minimax-h3-fl2va-fp8_i2v`, and
+`minimax-h3-fl2va-fp8_flf2v`. The CLI resolves those three short selectors,
+picking i2v vs flf2v from whether `--ref-end` is present. Turbo applies
+LightX2V's 4-step distillation LoRA to those same workflows through worker ids
+`minimax-h3-fl2va-fp8_t2v_turbo`, `minimax-h3-fl2va-fp8_i2v_turbo`, and
+`minimax-h3-fl2va-fp8_flf2v_turbo`. Balanced applies the fixed 8-step LightX2V path
+through `minimax-h3-fl2va-fp8_t2v_balanced`,
+`minimax-h3-fl2va-fp8_i2v_balanced`, and
+`minimax-h3-fl2va-fp8_flf2v_balanced`. Reference-to-video is a
+SEPARATE checkpoint — worker id `minimax-h3-ref2va-fp8_r2v` — selected directly
+with `-m minimax-h3-r2v`, or through the creative-agent `generate_video` tool
+with `videoModel="minimax-h3-r2v"` (including callers such as Sogni Chat). The
+dedicated LightX2V LoRA exposes it as `minimax-h3-ref2va-fp8_r2v_turbo` through
+the public `minimax-h3-r2v-turbo` selector; the Balanced Larry v4 version is
+`minimax-h3-ref2va-fp8_r2v_balanced`, exposed as `minimax-h3-r2v-balanced`.
+FastH3 is not an alias for LightX2V: it maps to
+`minimax-h3-fastvideo-int8_t2v_turbo`, `minimax-h3-fastvideo-int8_i2v_turbo`,
+and `minimax-h3-fastvideo-int8_flf2v_turbo`. Its qualified FastVideo VSA recipe
+is fixed four-step Euler/simple, it is about 2x faster than LightX2V Turbo and
+up to 6x faster than Standard for comparable 768p, 15-second requests, and it has no R2V mode.
+FastH3 Two-Stage has its own worker ids, `minimax-h3-fastvideo-int8_t2v_turbo_2stage`,
+`minimax-h3-fastvideo-int8_i2v_turbo_2stage`, and `minimax-h3-fastvideo-int8_flf2v_turbo_2stage`,
+with the FastH3 request shape on a half-size canvas. Every output class (720p,
+1080p and 2K) uses the same `_2stage` id; `--target-resolution 720` sends it
+with the 384 px canvas. Ref2VA Two-Stage likewise has one id per tier,
+`minimax-h3-ref2va-fp8_r2v_2stage` (Standard) and
+`minimax-h3-ref2va-fp8_r2v_balanced_2stage` (Balanced).
+
+The **fl2va** modes (t2v / i2v / flf2v) take image references only — they do not
+accept reference video or reference audio, because audio is generated natively.
+The CLI refuses `--ref-audio` on them and names the FastH3 audio-to-video
+selector that takes it. **r2v takes audio as a labelled reference**: see
+[MiniMax H3 reference-to-video (r2v)](#minimax-h3-reference-to-video-r2v).
+FastH3 keeps the FastVideo engine when an H3 LoRA is attached: base jobs require 23 GB and jobs with an H3 LoRA require 32 GB. FL2VA/Balanced/LightX2V Turbo and image-only R2V are routed to 32 GB-class workers;
+video-conditioned R2V requires a worker above 40 GB.
+
+**Fixed parameters (do not override):**
+
+- **24 fps**, always.
+- **Frames on the `124 + n×17` grid**, `124` through `362` — **5.17 s to
+  15.08 s**. `--duration` snaps onto that grid; an off-grid explicit `--frames`
+  is a hard error.
+- **Dimensions divisible by 32**, total pixels ≤ **1,032,192**. Standard,
+  Balanced, and FL2VA Turbo default to `1344×768`; Ref2VA Turbo defaults to
+  `960×544`.
+- **20 steps for Standard; 8 for Balanced; 4 for Turbo; guidance/CFG 1** — send
+  no steps, guidance, scheduler, or **negative prompt**. Standard and Balanced
+  accept no sampler override; Balanced is fixed to Euler/simple. FL2VA H3 Turbo
+  defaults to `er_sde` on Socket, and the CLI
+  omits the sampler unless `--sampler` is passed. Direct FL2VA CLI A/B tests may pass
+  exactly `--sampler euler`, `--sampler er_sde`, or `--sampler sa_solver`.
+  Ref2VA Turbo uses the exact upstream Euler/simple recipe and accepts only
+  `--sampler euler`. The checkpoint is CFG-distilled with
+  guidance locked at 1, so there is no negative branch and a `negativePrompt`
+  parameter is ignored wherever it is accepted. Put negative direction in the
+  prompt text instead.
+- **Balanced and Turbo use the same prompt contract as Standard H3.** Balanced
+  is fixed at 8 steps with Euler/simple; Turbo is fixed at 4 steps with the
+  `simple` scheduler; only Turbo's sampler has the three
+  explicit variants above.
+- **1080p and 2K output is FastH3 Two-Stage, a model choice.**
+  `-m minimax-h3-fasth3-turbo-2stage` (or the `-t2v-`, `-i2v-`,
+  `-flf2v-turbo-2stage` selectors) sends the FastH3 request on a half-size
+  canvas and delivers the clip at exactly twice it with the same frames and
+  audio, through a learned latent enlargement plus a short refinement on the
+  worker. `--target-resolution` names the delivered size, from the Intelligence
+  Client's size table:
+
+  | `--target-resolution` | Canvas (16:9) | Delivered | Price |
+  | --- | --- | --- | --- |
+  | `2K` or `1440` (default) | 1344×768 | 2688×1536 | 16 Spark/s (FastH3 + 12) |
+  | `1080` | 960×544 | 1920×1088 | 10 Spark/s (FastH3 + 6) |
+  | `720` | 672×384 | 1344×768 | 4 Spark/s (the FastH3 rate) |
+
+  The canvas keeps the prompt's aspect, or a `--ref`/`--ref-end` image's aspect
+  (a 1080 portrait renders 544×960); explicit `-w`/`-h` are used as given and
+  still delivered at twice. Any other value, 768 included, is refused. Other
+  canvases up to a 544 px short edge add 6 Spark/s, and larger ones 12. Prices
+  follow measured GPU time. Ordinary 768p output stays on the regular
+  FastH3 selectors; of the other H3 tiers only Standard and Balanced Ref2VA have
+  a two-stage path (next item). The summary
+  line and `--json` (`deliveredWidth`, `deliveredHeight`) report the delivered
+  size. If the server is not serving two-stage, it refuses before charging and
+  the CLI prints its message unchanged. This is Sogni's own path; MiniMax's
+  hosted 2K stage is still not part of the open release. The retired
+  `outputScale` request option is refused.
+- **1080p and 2K reference-to-video is Ref2VA Two-Stage.** `-m minimax-h3-r2v-2stage` (Standard, 20 steps, worker id
+  `minimax-h3-ref2va-fp8_r2v_2stage`) and `-m minimax-h3-r2v-balanced-2stage`
+  (Balanced, 8 steps, `minimax-h3-ref2va-fp8_r2v_balanced_2stage`) send exactly
+  the request of `minimax-h3-r2v` / `minimax-h3-r2v-balanced` — the same loose
+  `--ref`/`-c` images, repeatable `--ref-video`/`--ref-audio`, reference limits,
+  durations, LoRAs and six-field prompt contract — on the half-size canvas, and
+  the platform delivers exactly twice it. They are never Turbo (no `--sampler`)
+  and never inferred. `--target-resolution` reads exactly as in the table above
+  (2K default renders 1344×768 → 2688×1536, `1080` renders 960×544 →
+  1920×1088, `720` renders 672×384 → 1344×768); a reference image never sets the
+  canvas aspect, and explicit `-w`/`-h` are used as given. Each bills its
+  tier's reference rate plus the two-stage surcharge of the delivered class;
+  `--estimate-video-cost` quotes the `_2stage` id on the canvas it renders, and
+  the summary line and `--json` report the delivered size.
+
+```bash
+sogni-agent -q --video -m minimax-h3 --duration 10 -w 1344 -h 768 -o ./video.mp4 "<three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-fasth3-turbo-2stage --duration 8 -o ./video-2k.mp4 "<three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-fasth3-turbo-2stage --target-resolution 1080 --duration 8 -o ./video-1080p.mp4 "<three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-r2v-2stage --ref identity.png -c wardrobe.png --ref-video motion.mp4 -o ./ref-2k.mp4 "<six-field Ref2VA prompt>"
+sogni-agent -q --video -m minimax-h3-i2v --ref first.png --duration 8 -o ./video.mp4 "<I2V preamble plus three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-flf2v --ref first.png --ref-end last.png --duration 8 -o ./video.mp4 "<FLF2V preamble plus three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-r2v --ref identity.png -c wardrobe.png --ref-video motion.mp4 --ref-audio voice.m4a -o ./video.mp4 "<six-field Ref2VA prompt>"
+sogni-agent -q --video -m minimax-h3-balanced --duration 8 -o ./video.mp4 "<three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-i2v-balanced --ref first.png --duration 8 -o ./video.mp4 "<I2V preamble plus three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-flf2v-balanced --ref first.png --ref-end last.png --duration 8 -o ./video.mp4 "<FLF2V preamble plus three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-r2v-balanced --ref identity.png -c wardrobe.png --duration 8 -o ./video.mp4 "<six-field Ref2VA prompt>"
+sogni-agent -q --video -m minimax-h3-turbo --duration 8 -o ./video.mp4 "<three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-fasth3-turbo --duration 8 -o ./video.mp4 "<three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-i2v-turbo --ref first.png --duration 8 -o ./video.mp4 "<I2V preamble plus three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-flf2v-turbo --ref first.png --ref-end last.png --duration 8 -o ./video.mp4 "<FLF2V preamble plus three-field H3 prompt>"
+```
+
+### FastH3 audio-to-video
+
+The FastH3 audio guide drives the video with an audio file the user supplies —
+a voice, a song, a soundtrack — from frame 0, lips included, and delivers that
+audio as the clip's soundtrack instead of generating one.
+
+| Selector | Worker id | Uploads |
+|----------|-----------|---------|
+| `minimax-h3-fasth3-ia2v-turbo` | `minimax-h3-fastvideo-int8_ia2v_turbo` | `--ref` (first frame) and `--ref-audio` |
+| `minimax-h3-fasth3-flfa2v-turbo` | `minimax-h3-fastvideo-int8_flfa2v_turbo` | `--ref`, `--ref-end` (last frame) and `--ref-audio` |
+| `minimax-h3-fasth3-a2v-turbo` | `minimax-h3-fastvideo-int8_a2v_turbo` | `--ref-audio` only |
+
+Each selector has a `-2stage` form (`minimax-h3-fasth3-ia2v-turbo-2stage`, …,
+worker ids `..._turbo_2stage`) with the same uploads, delivered at twice the
+canvas like the other FastH3 Two-Stage models: `--target-resolution` names the
+delivered size, and a server refusal of two-stage is printed unchanged.
+`-m minimax-h3-fasth3-turbo --ref-audio track` (or `-m
+minimax-h3-fasth3-turbo-2stage`) picks the mode from the frames supplied: audio
+alone is a2v, `--ref` is ia2v, `--ref` plus `--ref-end` is flfa2v. A last frame
+without a first frame is refused. `--workflow ia2v` or `a2v` selects these modes
+on the FastH3 family selectors only.
+
+- **Length:** fixed 24 fps and the usual `124 + n×17` frame grid (5.17-15.08 s),
+  set with `--duration` (snapped) or `--frames`. The audio is trimmed to the
+  clip, so choose a length that covers the part you want.
+- **Window:** `--audio-start <sec>` picks where in the upload the window begins.
+  There is no `--audio-duration`: the window is always the clip length.
+- **Audio:** always kept. `--no-generate-audio` is refused.
+- **Sampling and size:** fixed 4-step Euler/simple, no steps or guidance, the
+  32 px grid up to 1,032,192 pixels (1344×768 by default, or the first frame's
+  aspect). Frames are fitted to the canvas exactly as for i2v/flf2v.
+- **No LoRAs:** `--lora` is refused on these modes.
+- **Uploads:** each mode refuses any upload it does not take (an end frame on
+  ia2v, an image on a2v, loose `-c`, `--ref-video`, a second `--ref-audio`).
+- **Price:** the FastH3 per-second price of the matching frame mode (ia2v as
+  i2v, flfa2v as flf2v, a2v as t2v); `--estimate-video-cost` quotes it.
+- **Prompt:** FastH3's ordered-field contract with the I2V or FLF2V preamble
+  when frames are supplied. Write the words actually spoken in the upload inside
+  `<d>[Language] …</d>` so the text matches what the audio says.
+
+```bash
+sogni-agent -q --video -m minimax-h3-fasth3-ia2v-turbo --ref portrait.png --ref-audio voice.m4a --duration 8 -o ./talking.mp4 "<I2V preamble plus three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-fasth3-flfa2v-turbo --ref first.png --ref-end last.png --ref-audio song.mp3 --duration 12 -o ./music-video.mp4 "<FLF2V preamble plus three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-fasth3-a2v-turbo --ref-audio song.mp3 --audio-start 30 --duration 15 -o ./visualizer.mp4 "<three-field H3 prompt>"
+sogni-agent -q --video -m minimax-h3-fasth3-ia2v-turbo-2stage --target-resolution 1080 --ref portrait.png --ref-audio voice.m4a -o ./talking-1080p.mp4 "<I2V preamble plus three-field H3 prompt>"
+```
+
+For audio used as a loose reference rather than the soundtrack (a voice or
+rhythm the prompt assigns a job to), use H3 r2v instead.
+
+### MiniMax H3 prompting
+
+Standard, Balanced, and Turbo T2V, I2V, and FLF2V use MiniMax's exact three-field rewrite
+contract, in this order:
+
+```text
+integrated_multimodal_description: [Shot 1] ...
+
+overall_soundscape: ...
+
+non_diegetic_music: ...
+```
+
+I2V prepends the exact first-frame alignment line; FLF2V prepends the exact
+first-and-last-frame alignment line. The preamble must be the first line,
+followed by one blank line before the fields. T2V has no preamble. Balanced and
+Turbo use the same structure as their corresponding Standard mode.
+
+Vocal sources receive stable `(S1)`, `(S2)`, ... IDs across all shots. Put only
+the language tag and exact spoken words inside `<d>`, for example
+`<d>[English] I kept this one behind the counter for you.</d>`. Do not translate
+or paraphrase dialogue. **Read [`video-prompting.md`](video-prompting.md) §
+MiniMax H3 Prompting** for the exact preambles, shot notation, field semantics,
+and complete Ref2VA contract.
+
+### MiniMax H3 reference-to-video (r2v)
+
+The `minimax-h3-r2v`, `minimax-h3-r2v-balanced`, and
+`minimax-h3-r2v-turbo` selectors are the H3 modes that condition on a whole
+**reference set** instead of one or two locked frames. Ref2VA runs its own
+checkpoint, so it is **never inferred** from stray uploads the way HappyHorse
+r2v is — the user or the plan must name a tier. Direct CLI uses
+`-m minimax-h3-r2v`: `--ref` supplies loose image 1, repeatable `-c` supplies
+additional images, and repeatable `--ref-video` / `--ref-audio` supply those
+modalities. At least one visual reference must be supplied: an image or a
+video. A video can be the only visual input; audio alone is invalid. The
+creative-agent `generate_video` tool uses
+`videoModel="minimax-h3-r2v"` plus its typed reference-index arrays.
+
+Everything in [MiniMax H3 models](#minimax-h3-models) above still applies: 24 fps,
+the `124 + n×17` frame grid (5.17–15.08 s), dimensions divisible by 32 inside the
+1,032,192-pixel budget, tier-fixed sampling (20/8/4 steps for
+Standard/Balanced/Turbo), guidance 1, no negative prompt, and jointly generated
+stereo audio.
+
+**Reference ceilings** (from the `MiniMaxH3ReferenceToVideo` node, enforced by
+Sogni Socket before the job is priced):
+
+| Kind | Max | Notes |
+|------|-----|-------|
+| Reference images | 9 | Optional when a reference video supplies the required visual input |
+| Reference videos | 3 | Read as 24 fps, 2–15 s each; a clip's own soundtrack is presented too |
+| Reference audio | 3 | Standalone clips, separate from any video soundtrack |
+| Total files | 12 | 9 + 3 + 3 = 15 does **not** fit; trade slots (e.g. 6 + 3 + 3) |
+
+At least one image or video is required; audio alone is invalid. For a prompt-only render use
+`minimax-h3-t2v`; for a locked opening frame use `minimax-h3-i2v`; to
+interpolate between two anchors use `minimax-h3-flf2v`. r2v has no frame anchors
+at all, so an end-frame parameter is rejected rather than ignored.
+
+Ref2VA uses exactly six fields in this order:
+
+```text
+subject_definitions:
+
+summary:
+
+retention_analysis:
+
+detailed_description:
+
+overall_soundscape:
+
+non_diegetic_music:
+```
+
+This is a different prompt contract from FL2VA H3. Standard, Balanced, and Turbo Ref2VA
+share it.
+
+#### Ordinals and the prompt tag form
+
+References are numbered **from 1 independently per type**. Use `<Subject N>`
+for visible referenced people, objects, scenes, or effects; cite the source
+`<Picture N>` or `<Video N>` in that subject definition. Reserve `<Picture N>`
+for a concrete frame or storyboard relationship, `<Video N>` for a whole-video
+edit, continuation, camera, cut, rhythm, or temporal relationship, and
+`<Audio N>` for a standalone audio asset or an explicitly enabled audio track.
+
+This mirrors Seedance's loose-reference grammar — same 9 / 3 / 12 shape, same
+"give every reference one explicit job" rule — but the tag form differs: Seedance
+uses `@Image1` / `@Video1` / `@Audio1`, H3 uses `<Picture 1>` / `<Video 1>` /
+`<Audio 1>`. Never carry one model's tags into the other's prompt.
+
+Numbering restarts per type, so the first image is `<Picture 1>` even when a
+video was attached before it. A video file does not automatically create an
+`<Audio N>` label merely because it contains sound. Submission order remains
+ordinal order; never reorder or drop a reference after writing the prompt.
+
+#### One explicit job per reference
+
+H3 blends everything it is shown unless told what to take from where. Give every
+attached reference a single, non-overlapping job — identity, wardrobe, location,
+camera movement, voice character — and state who wins when two disagree. An
+unassigned reference is the most common cause of identity drift and washed-out
+style on this model.
+
+Compact format example:
+
+```text
+subject_definitions:
+<Subject 1> is the woman in <Picture 1>; preserve her face, hairstyle, and dark-red jacket.
+<Video 1> is the camera-motion reference for a slow handheld push-in.
+<Audio 1> is the voice-timbre reference for <Subject 1> (S1).
+
+summary:
+[reference generation + audio reference] The target video follows <Subject 1> through a rain-slicked street using <Video 1>'s camera movement and <Audio 1>'s voice timbre.
+
+retention_analysis:
+<Subject 1> (appears in [Shot 1]): fully_preserved - her identity, hairstyle, and jacket are retained.
+<Video 1> (camera movement): weak_reference - its slow handheld push-in guides the new shot.
+<Audio 1>: reference - its vocal timbre guides <Subject 1>'s dialogue without copying the source signal.
+
+detailed_description:
+The target video uses a live-action cinematic style with wet neon street lighting. [Shot 1] <Subject 1> (S1) walks toward the camera while it performs the slow handheld push-in referenced from <Video 1>. She stops beneath a streetlight and says with the dry, low timbre referenced from <Audio 1>: <d>[English] It was never going to be the last train.</d>
+
+overall_soundscape:
+Steady rain falls on asphalt while tyres hiss through standing water and a bus engine passes from left to right.
+
+non_diegetic_music:
+N/A
+```
+
+Trim definitions for references that were not attached; unresolved labels are
+invalid. See the full Ref2VA section in `video-prompting.md` for relationship
+markers and detailed field semantics.
+
+## LTX-2 / LTX-2.3 models
+
+### LTX-2.3 10Eros
+
+Use `-m ltx23-eros` only when the user explicitly requests 10Eros/the
+uncensored model and explicitly permits disabling the content filter. It is
+image-to-video only and requires `--ref`, `--no-filter`, and a worker with at
+least 30GB VRAM. The CLI resolves it to
+`ltx23-22b-10eros-v1.4-fp8mixed_i2v` and pins 9 steps, guidance 1,
+`euler_ancestral`, and `manual_sigmas`.
+
+```bash
+sogni-agent --video --workflow i2v --ref input.png \
+  -m ltx23-eros --no-filter -o output.mp4 "<LTX-rewritten paragraph>"
+```
+
+| Model | Speed | Use Case |
+|-------|-------|----------|
+| `ltx2-19b-fp8_t2v_distilled` | Fast (~2-3min) | Text-to-video, 8-step |
+| `ltx2-19b-fp8_t2v` | Medium (~5min) | Text-to-video, 20-step quality |
+| `ltx2-19b-fp8_i2v_distilled` | Fast (~2-3min) | Image-to-video, 8-step |
+| `ltx2-19b-fp8_i2v` | Medium (~5min) | Image-to-video, 20-step quality |
+| `ltx2-19b-fp8_ia2v_distilled` | Fast (~2-3min) | Image+audio-to-video |
+| `ltx2-19b-fp8_a2v_distilled` | Fast (~2-3min) | Audio-to-video |
+| `ltx2-19b-fp8_v2v_distilled` | Fast (~3min) | Video-to-video with ControlNet |
+| `ltx2-19b-fp8_v2v` | Medium (~5min) | Video-to-video with ControlNet, quality |
+
+### Private mature-theme video options
+
+Sogni supports private, uncensored creativity, including optional video models
+for mature themes. These options are opt-in and should not be foregrounded in
+general recommendations. When an adult user explicitly requests mature
+content, read
+[`private-mature-video.md`](private-mature-video.md) for the compatible model,
+LoRA, filter, and specialized prompt-token contract.
+
+Keep specialized prompt tokens in the scoped reference rather than general
+model recommendations.
+
+## Recommended model selectors by need
+
+| Need | Recommended selector |
+|------|----------------------|
+| Default images | `z_image_turbo_bf16` |
+| OpenAI GPT Image generation, editing, or strong text rendering | `gpt-image-2` |
+| Highest-quality images | `qwen_image_2512_fp8` (or `-Q pro`) |
+| Image editing | `qwen_image_edit_2511_fp8_lightning` |
+| Dark Beast Krea 2 images | `dark_beast_krea2_fp8` |
+| Identity-preserving Krea image edits | `krea2_identity_edit_v1_2` |
+| Uncensored identity-preserving Krea edits | `dark_beast_krea2_identity_edit_v1_2` |
+| Photobooth face transfer | `coreml-sogniXLturbo_alpha1_ad` |
+| Select or cut out an object in an image | `sam3_image_segment_bf16` |
+| Remove a background | `--remove-background original.png` (BiRefNet); add `--matte` for a soft mask |
+| Turn one image into a textured 3D model (GLB) | `--image-to-3d original.png -o object.glb` (Pixal3D), no prompt |
+| Turn several photos of one object into a 3D model | `--image-to-3d front.png` plus `--left-view` / `--back-view` / `--right-view` (Pixal3D multi-view; views named by the subject's own sides) |
+| Direct music generation | `ace_step_1.5_xl_turbo` (or `--music-model turbo`) |
+| Music with stronger lyric handling | `ace_step_1.5_xl_sft` (or `--music-model sft`) |
+| MiniMax Music 3 songs and instrumentals | `--music -m music3` or hosted `generate_music` |
+| Spoken audio, voice cloning, or voice design | `--speech --speech-mode voice/clone/design` or hosted `generate_speech` |
+| Text-to-video with native dialogue/audio | `ltx25` |
+| Image-to-video from one start frame (default) | `wan_v2.2-14b-fp8_i2v_lightx2v` |
+| Animate two images together (first frame → last frame) | `ltx25-i2v` with `--ref A --ref-end B` (FLF template, no transition LoRA) |
+| Explicit uncensored image-to-video on 30GB+ GPUs | `ltx23-eros` with `--no-filter` |
+| Image+audio-to-video | `ltx25-ia2v` |
+| Audio-to-video | `ltx25-a2v` |
+| Video-to-video with ControlNet/edit templates | `ltx25-v2v` |
+| Private mature-theme image-to-video | `ltx23-22b-10eros-v1.4-fp8mixed_i2v` |
+| Seedance text-to-video | `seedance2`, `seedance2-mini`, or `seedance2-fast` |
+| Seedance video-to-video without ControlNet | `seedance2-v2v` |
+| Seedance 2.5 single clip up to 30s (480p/720p/1080p, MP4/MOV and last-frame export) | `seedance2-5` |
+| Seedance 2.5 video-to-video, editing, or extension | `seedance2-5-v2v` |
+| HappyHorse text-to-video with native audio | `happyhorse-1.1-t2v` (or `happyhorse`) |
+| HappyHorse image-to-video from one first frame | `happyhorse-1.1-i2v` |
+| HappyHorse reference-to-video from up to 9 images | `happyhorse-1.1-r2v` |
+| Wan 3 unified text/frame/reference/audio/video generation | `wan3` / `wan3.0-video` |
+| Wan 3.0 Enhanced text/frame/reference/audio/video generation | `wan3-enhanced` / `wan3.0-spicy-video` |
+| MiniMax H3 text-to-video with native stereo audio | `minimax-h3` (or `minimax-h3-t2v`) |
+| MiniMax H3 image-to-video from one first frame | `minimax-h3-i2v` with `--ref` |
+| MiniMax H3 first frame → last frame transition | `minimax-h3-flf2v` with `--ref A --ref-end B` |
+| MiniMax H3 from a set of loose references (identity + wardrobe + location, a motion clip, a voice clip) | `minimax-h3-r2v` with `--ref`/`-c`, repeatable `--ref-video`, and repeatable `--ref-audio` |
+| MiniMax H3 Balanced text-to-video | `minimax-h3-balanced` or `minimax-h3-t2v-balanced` |
+| MiniMax H3 Balanced image-to-video from one first frame | `minimax-h3-i2v-balanced` with `--ref` |
+| MiniMax H3 Balanced first frame → last frame transition | `minimax-h3-flf2v-balanced` with `--ref A --ref-end B` |
+| MiniMax H3 Balanced from loose references | `minimax-h3-r2v-balanced` with `--ref`/`-c`, repeatable `--ref-video`, and repeatable `--ref-audio` |
+| MiniMax H3 LightX2V Turbo text-to-video | `minimax-h3-turbo` or `minimax-h3-t2v-turbo` |
+| MiniMax H3 LightX2V Turbo image-to-video from one first frame | `minimax-h3-i2v-turbo` with `--ref` |
+| MiniMax H3 LightX2V Turbo first frame → last frame transition | `minimax-h3-flf2v-turbo` with `--ref A --ref-end B` |
+| MiniMax H3 Ref2VA Turbo from loose references | `minimax-h3-r2v-turbo` with `--ref`/`-c`, repeatable `--ref-video`, and repeatable `--ref-audio` |
+| MiniMax H3 FastH3 Turbo text-to-video | `minimax-h3-fasth3-turbo` or `minimax-h3-fasth3-t2v-turbo` |
+| MiniMax H3 FastH3 Turbo image-to-video | `minimax-h3-fasth3-i2v-turbo` with `--ref` |
+| MiniMax H3 FastH3 Turbo first frame → last frame | `minimax-h3-fasth3-flf2v-turbo` with `--ref A --ref-end B`; no R2V |
+| MiniMax H3 1080p or 2K (FastH3 Two-Stage, delivered at twice the canvas) | `minimax-h3-fasth3-turbo-2stage` (2K default; `--target-resolution 1080` or `720`), or `minimax-h3-fasth3-t2v-turbo-2stage` / `-i2v-turbo-2stage` / `-flf2v-turbo-2stage`; no R2V |
+| MiniMax H3 1080p or 2K reference-to-video (Ref2VA Two-Stage, delivered at twice the canvas) | `minimax-h3-r2v-2stage` (Standard) or `minimax-h3-r2v-balanced-2stage` (Balanced) with the same references as `minimax-h3-r2v`; 2K default, `--target-resolution 1080` or `720` |
+| MiniMax H3 video driven by the user's own voice or song | `minimax-h3-fasth3-ia2v-turbo` (`--ref` + `--ref-audio`), `minimax-h3-fasth3-flfa2v-turbo` (`--ref` + `--ref-end` + `--ref-audio`), or `minimax-h3-fasth3-a2v-turbo` (`--ref-audio`); add `-2stage` for Two-Stage |
+| Face lip-sync with uploaded audio | `wan_v2.2-14b-fp8_s2v_lightx2v` |
+
+## Video sizing & aspect ratios
+
+- **WAN 2.2 models** use dimensions divisible by 16, min 480 px, max 1536 px.
+- **Wan 3** uses fixed 30 fps, fixed or smart 2–30 s output, and 480P/720P/1080P buckets with `adaptive`, `16:9`, `4:3`, `1:1`, `3:4`, and `9:16`; see [Alibaba Wan 3](#alibaba-wan-3).
+- **Wan 3.0 Enhanced** uses fixed 30 fps, fixed or smart 2–30 s output, 480P/720P/1080P buckets, and `adaptive`, `16:9`, `9:16`, `1:1`, `4:3`, or `3:4`; see [Wan 3.0 Enhanced](#wan-30-enhanced).
+- **MiniMax H3 Standard, Balanced, LightX2V Turbo, and FastH3 Turbo** use dimensions divisible by 32, fixed 24 fps, 124–362 frames on the `124 + n×17` grid (5.17–15.08 s), and no more than 1,032,192 pixels. Standard, Balanced, LightX2V FL2VA Turbo, and FastH3 default to 1344×768; Ref2VA Turbo defaults to 960×544. Standard uses 20 steps; Balanced uses fixed 8-step Euler/simple acceleration, with LightX2V for FL2VA and Larry v4 for Ref2VA; both Turbo engines use 4 steps. LightX2V FL2VA H3 Turbo defaults to `er_sde` and accepts `euler`, `er_sde`, or `sa_solver`; the CLI omits the sampler unless `--sampler` is passed. Ref2VA Turbo and FastH3 use Euler/simple only. FastH3 is the separate FastVideo VSA engine and has no R2V mode. Guidance 1 applies to all, and native stereo audio to all but the FastH3 audio-to-video modes, which deliver the uploaded audio. FastH3 keeps the FastVideo engine when an H3 LoRA is attached: base jobs require 23 GB and jobs with an H3 LoRA require 32 GB. Other FL2VA/Balanced/Turbo and image-only R2V routes require 32 GB-class workers, while video-conditioned R2V requires above 40 GB. See [MiniMax H3 models](#minimax-h3-models).
+- **LTX family** (`ltx2-*`, `ltx23-*`, `ltx25-*`) uses dimensions divisible by 64. The current wrapper caps non-WAN video dimensions at 2048 px on the long side.
+- **Seedance** runs at fixed 24 fps. The 2.0 family (`seedance2`, `seedance2-mini`, `seedance2-fast`) supports 4–15 s durations; full `seedance2` supports native 4K via `--target-resolution 2160` while `seedance2-mini` and `seedance2-fast` remain capped to the 720p lower-resolution path. `seedance2-5` renders 4–30 s single clips (97–721 frames) with 480p/720p/1080p output (no 4K). Select `--output-format mov` for editing or `--return-last-frame` to receive the final frame as an image for the next clip. Other default/WAN paths support up to 10 s; LTX and WAN animate workflows support up to 20 s.
+- **HappyHorse 1.1** runs at fixed 24 fps and supports 3–15 s durations at 720P or 1080P, with always-on native audio (no negative prompt, no ControlNet). Accepted aspect ratios are `16:9`, `9:16`, `1:1`, `4:3`, `3:4`, `4:5`, `5:4`, `9:21`, and `21:9`. i2v takes one first-frame image (`--ref`); r2v takes 1–9 reference images (`-c`/`--context`); it accepts no reference video or audio.
+- For spoken dialogue, budget roughly 3 words per second plus about 1 second per meaningful acting beat or pause.
+- The CLI auto-normalizes video sizes to satisfy these constraints.
+- Use `--target-resolution <px>` for bare resolution requests like "720p" — it targets the short side and preserves the inherited aspect ratio. On FastH3 and Ref2VA Two-Stage it names the delivered size instead: `720`, `1080`, or `2K`/`1440` (the default).
+- Natural-language aspect requests like "portrait", "square", "16:9", or "9:16" are inferred when width/height aren't explicitly set. Combined requests like "720p 9:16" keep the requested short side while applying the requested shape.
+- For i2v (and any workflow using `--ref` / `--ref-end`), the client wrapper resizes the reference image with strict aspect-fit (`fit: inside`) and uses the *resized* dimensions as the final video size. Because that resize uses rounding, a "valid" requested size can still produce an invalid final size (example: `1024×1536` requested, but the ref becomes `1024×1535`). The CLI detects this for local refs and auto-adjusts to a nearby safe size.
+- Pass `--strict-size` to fail instead — the CLI prints a suggested size.
+
+## GPT Image 2.5 controls (as of 2026-09)
+
+Use `-m gpt-image-2.5-sunburst` or `-m gpt-image-2.5-flare` explicitly.
+`--image-quality low|medium|high|xhigh|max` preserves the exact quality;
+default is medium. Sogni never uses provider-chosen (auto) quality.
+`--image-background transparent` requires PNG or WebP. JPEG/WebP accept
+`--image-output-compression 0..100`; omit compression for PNG.
+For editing, repeat `--context` in source order (up to 16 total). `--image-mask`
+accepts an original PNG alpha mask of the first context image; it must match
+that image's dimensions (the image itself may be JPEG, PNG or WebP) and be
+smaller than 50 MB. Transparent
+mask regions identify edits; the model can also change pixels outside them.
+The image mask flag is separate from video `--mask` semantics.
+
+Dimensions default to 1024×1024: multiples of 16, at most 3840 per edge,
+3:1 maximum aspect ratio, 655,360–8,294,400 pixels. Above 3,686,400 pixels is
+experimental. Transparency is integrated but clean cutout edges failed the
+initial Flare canaries; inspect native output against a contrasting background.
+These source changes still require the coordinated package release and server rollout.

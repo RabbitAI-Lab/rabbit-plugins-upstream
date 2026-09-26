@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides U.S. sales-tax lookup guidance for agents using zip-tax.com by address, ZIP code, or coordinates, with basic CLI examples and tax-rate parsing. <br>
+销售税查询(免费版) helps developers query U.S. sales tax rates by address, ZIP code, or coordinates using the zip-tax.com API, with guidance for API-key setup, curl calls, and basic CLI-style usage. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agents use this skill to prepare and run U.S. sales-tax lookup requests against zip-tax.com, interpret state, county, city, and district rates, and handle API-key setup and response codes. <br>
+Developers building personal e-commerce or tax lookup workflows use this skill to generate commands and guidance for querying zip-tax.com sales tax rates and parsing state, county, city, and district rate components. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill requests read, write, and exec authority and contains unrelated create, modify, delete, import, and export language beyond sales-tax lookup. <br>
-Mitigation: Limit use to address, ZIP, coordinate, and metrics queries, and review proposed commands before execution. <br>
-Risk: API keys and address data may be exposed through shell history, source files, front-end code, or third-party API transmission. <br>
-Mitigation: Store the API key using normal secret-management practices and submit personal addresses only when zip-tax.com transmission is acceptable. <br>
-Risk: Sales-tax results can become stale or vary by precise address and tax district. <br>
-Mitigation: Prefer exact address lookups, check response codes, and refresh cached rates for checkout or other decision-critical workflows. <br>
+Risk: Address, ZIP code, or coordinate lookup data is sent to zip-tax.com. <br>
+Mitigation: Use the skill only with data you are permitted to share with zip-tax.com, and avoid sensitive customer addresses unless that processing is approved. <br>
+Risk: The ZIPTAX_API_KEY can be exposed if it is hard-coded, committed, or used in frontend code. <br>
+Mitigation: Store the API key in an environment variable or secret manager and keep it out of repositories and client-side code. <br>
+Risk: Broad activation wording could cause the skill to run outside explicit sales-tax lookup tasks. <br>
+Mitigation: Narrow activation text or require an explicit sales-tax lookup request before using the skill. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/ziptax-tool-free) <br>
-- [Zip-Tax API request endpoint](https://api.zip-tax.com/request/v60) <br>
+- [zip-tax.com API endpoint](https://api.zip-tax.com/request/v60) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration] <br>
-**Output Format:** [Markdown with inline bash, curl, and JavaScript examples plus JSON response examples] <br>
+**Output Type(s):** [guidance, shell commands, configuration, code] <br>
+**Output Format:** [Markdown with inline shell commands, JavaScript snippets, and JSON response examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a ZIPTAX_API_KEY environment variable and network access to zip-tax.com.] <br>
+**Other Properties Related to Output:** [Requires ZIPTAX_API_KEY and sends lookup inputs to zip-tax.com.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release and skill frontmatter) <br>
+1.0.1 (source: server release metadata; artifact frontmatter reports 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

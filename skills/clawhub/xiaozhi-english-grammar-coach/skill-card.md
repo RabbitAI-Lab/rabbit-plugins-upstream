@@ -1,42 +1,56 @@
-## Description: <br>
-This skill coaches English grammar learning by using Socratic follow-up questions, grammar-error DNA tracking with user consent, and focused practice for common issues such as tense, subject-verb agreement, prepositions, relative clauses, and complex sentences. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+通过循序追问帮助中文学习者发现英语语法错误、练习薄弱知识点，并在同意后记录学习进展。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and English learners use this skill when they want grammar coaching instead of direct proofreading. It helps classify grammar weaknesses, guide learners through targeted questions, and produce progress summaries when ongoing tracking is explicitly allowed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Learners may expect quick proofreading, but the skill is designed to guide them with questions instead of immediately correcting every error. <br>
-Mitigation: Use it for grammar coaching and learning practice; choose a proofreading-oriented workflow when direct edits are the goal. <br>
-Risk: The skill can track grammar weaknesses over time when the user wants ongoing learning support. <br>
-Mitigation: Only maintain or update ongoing grammar tracking after the user explicitly consents, and avoid treating a single correction as permission for long-term records. <br>
+## Use Case:
 
+Chinese-speaking school students use guided questions to identify and practice English grammar errors, including tenses, agreement and relative clauses. With consent, the skill can track recurring weaknesses and summarize progress.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-grammar-coach) <br>
-- [English error dimension table](references/english-error-dimension-table.md) <br>
-- [Grammar patterns](references/grammar-patterns.md) <br>
+### Deployment Geography for Use:
 
+Global; localize crisis referrals and consent practices outside mainland China.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Conversational coaching text and Markdown-style learning reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include categorized grammar-error summaries, Socratic question sequences, practice prompts, and monthly progress reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server-resolved release evidence) <br>
+Risk: A minor's learning profile could be stored without appropriate consent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep profiles optional and consent-gated; confirm guardian or parent consent requirements on the deployment platform.
+
+Risk: Crisis referrals may point to the wrong local support resources.
+
+Mitigation: Confirm the student's location and localize emergency and crisis contacts before use outside mainland China.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/qizhitang/skills/xiaozhi-english-grammar-coach)
+- [English error dimension table](references/english-error-dimension-table.md)
+- [Grammar patterns](references/grammar-patterns.md)
+- [High-school grammar](references/english-hs-grammar.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language conversational text and optional Markdown progress summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Learning profiles are optional and require consent; without history, progress feedback is limited to the current conversation.]
+
+## Skill Version(s):
+
+2.6.0 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

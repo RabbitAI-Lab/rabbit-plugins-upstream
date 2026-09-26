@@ -1,47 +1,58 @@
-## Description: <br>
-Story Short Write helps agents plan, draft, revise, and format Chinese short web fiction with an emphasis on emotional pacing, hooks, reversals, and platform-ready manuscript files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through planning, drafting, and revising Chinese short web-fiction with a focus on emotional impact and pacing.
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers and creative-writing agents use this skill to develop short Chinese web-fiction stories from an initial emotional target through outline, scene drafting, revision, quality checks, and final manuscript formatting. It is especially focused on short-form commercial web-fiction conventions such as hooks, reversals, genre patterns, and platform submission polish. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is designed to create and revise local story files, so drafts in the working directory can be overwritten or substantially changed during normal use. <br>
-Mitigation: Use version control or backups before running the workflow in folders that contain valuable manuscripts. <br>
-Risk: Generated fiction guidance and quality checks may still produce weak, inconsistent, or platform-mismatched story choices. <br>
-Mitigation: Review outlines, manuscript drafts, and final checks before publication or submission. <br>
+## Use Case:
 
+Authors and writing assistants use this skill to plan, draft, and polish Chinese short web-fiction, including genre-specific story structure and quality checks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-short-write) <br>
-- [OpenClaw source metadata](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [短篇正文格式](references/short-format.md) <br>
-- [短篇写作工作流详解](references/writing-workflow.md) <br>
-- [短篇写作通用底座](references/short-craft.md) <br>
-- [题材写作公式](references/genre-writing-formulas.md) <br>
-- [输出契约：story-short-analyze ↔ story-short-write](references/output-contract.md) <br>
-- [网文质量检查清单](references/quality-checklist.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Text, Files, Shell commands, Guidance] <br>
-**Output Format:** [Markdown prose, manuscript files, outlines, checklists, and occasional shell commands for validation] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates and updates local story project files such as settings, outlines, manuscript drafts, and comparison notes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.13 (source: server release evidence; artifact frontmatter reports 1.0.0) <br>
+Risk: Drafting and revision can change local story files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review story-file changes and confirm the intended project before accepting revisions.
+
+Risk: Explicit long-term writing preferences can persist and influence later projects.
+
+Mitigation: Review stored author preferences before reusing the skill across projects.
+
+Risk: The writing workflow can run local quality-check scripts.
+
+Mitigation: Review local scripts before running them in a writing project.
+
+## Reference(s):
+
+- [Project link listed in skill metadata (GitHub provenance unavailable)](https://github.com/zenstory-ai/oh-story-claudecode)
+- [Writing reference index](artifact/references/reference-index.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Text, Guidance]
+
+**Output Format:** [Markdown story drafts, plans, and revision guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or revise story files and, when explicitly requested, retain writing preferences.]
+
+## Skill Version(s):
+
+1.1.18 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

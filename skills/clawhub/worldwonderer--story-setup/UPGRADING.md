@@ -2,10 +2,116 @@
 
 ## 当前版本
 
-- `setup_skill_version: 1.2.7`
-- `agents_version: 20`
+发布版本 `v0.8.1`。`agents_version` 从上一发布 tag v0.8.0 的 32 增加到 33；已部署项目需更新技能包、重新运行 `/story-setup` 并新开会话，以加载本次完整部署内容。
 
-`.story-deployed` 缺失任一字段，或 `agents_version` 缺失 / 非整数 / 小于 `20`，都视为待更新部署。直接重新运行 `/story-setup`（Codex 用 `$story-setup`）；不在运行时逐级兼容历史模板。如项目 `agents_version` 大于 `20`，说明本地 story-setup 比项目旧：先更新 oh-story-claudecode，不得用 v20 降级覆盖。历史版本改动见仓库根目录 `CHANGELOG.md`。
+- `setup_skill_version: 1.3.1`
+- `agents_version: 33`
+
+`.story-deployed` 缺失任一字段，或 `agents_version` 缺失 / 非整数 / 小于 `33`，都视为待更新部署。直接重新运行 `/story-setup`（Codex 用 `$story-setup`，Antigravity 用 `/skills` 或自然语言点名）；不在运行时逐级兼容历史模板。如项目 `agents_version` 大于 `33`，说明本地 story-setup 比项目旧：先更新 oh-story-claudecode，不得用 v33 降级覆盖。历史版本改动见仓库根目录 `CHANGELOG.md`。
+
+### v0.8.1 必须重跑 story-setup
+
+各端用户更新技能包后都要在写作项目根重跑 `/story-setup`（Codex 用 `$story-setup`），再新开会话：
+
+- 写手、架构师、一致性检查与拆文 agent 模板已改（Claude Code 上写手改用 Opus，续写章字数更稳，消耗额度更快）：新增物三级与「先问作者」统一口径，架构师拿到卷纲模板与九个必填字段，一致性检查的严重度标签改为必须修 / 建议看 / 仅提示。
+- 写正文守卫：细纲是空壳（不计 # 号和空白不到 30 字）时拦下；Claude Code 端也认 `.deslop-whitelist`；标了 `<!-- 去味:跳过 -->` 的章不再因为这行标记本身被判 blocking。
+- 长篇拆文的 `chapter-extractor` 在 OpenCode 上也只许写批次输入文件；Codex、Antigravity 仍靠 agent 指令与提交校验约束。
+- 长篇写后检查需要 Node.js 18+：缺 Node 时 `chapter check` 报 `tool_unavailable`，本章不能提交，装好 Node 后重跑。
+
+### 已在写的项目不用迁移
+
+- 细纲可以新增一行「字数范围：2000-2600」写作者给定的范围；没写就按默认 ±15%。
+- 细纲里旧写法「风险等级」检查照旧认作「契约风险」；卷纲单元卡没有检查脚本读这一栏，建议顺手改名，不改也不影响检查。
+- 修订已提交的章改为 `tracking_commit.py draft --chapter N`（预填本章完整记录）→ 改草稿 → `storyctl.py chapter commit`。
+
+### v0.8.0 必须重跑 story-setup（历史）
+
+各端用户更新技能包后都要在写作项目根重跑 `/story-setup`（Codex 用 `$story-setup`），再新开会话：
+
+- `narrative-writer` 写正文不再预加载去 AI 味整套流程，也不自己跑检测脚本；`consistency-checker` 只读本次检查范围相关的设定与细纲。
+- 写正文守卫修正：`cd 书目录 && …` 这类命令不再被误报「缺少细纲」。
+- 长篇拆文的 `chapter-extractor` 改为可写：它按行号自己读原文，把整批结果写进 `{拆文目录}/_analysis_cache/输入-{批次ID}.md`，只回一行回执。Claude Code 上由 agent 内联 hook 限定只能写这类文件；Codex、OpenCode、Antigravity 没有这个挂载点，靠 agent 指令与提交校验约束。旧部署的 extractor 没有写权限，拿不到输入文件，所以必须重跑。
+- 长篇写作流程变短：每章收尾一次检查、追踪提交先生成草稿再填、作者记忆由脚本代查；一致性检查与去 AI 味审查改为按需。
+
+### 已在写的长篇不用迁移
+
+- 老卷纲里写在单元卡内的「供给自查」「建纲追加」照常可读；之后排纲，新批次的这两节写进 `大纲/排纲底稿_{单元ID}.md`，不再写进卷纲。
+- `outline_view.py` 默认输出就是写正文要的内容；老卷纲排纲时想一并看旧底稿，加 `--stage outline`。
+- 细纲里的「契约风险」三档名称不变；新细纲只在本章让单元卡的契约风险变化时才写它。
+- 老细纲写全了阶段位置、结构公式、本章标价等字段照样通过检查，写手照样用；新细纲这些字段需要时再写，不写不拦。
+
+### v0.7.11 必须重跑 story-setup（历史）
+
+Claude Code、Codex、Antigravity、OpenCode、ZCode、OpenClaw、Reasonix 用户更新技能包后都要在写作项目根重跑 `/story-setup`（Codex 用 `$story-setup`），再新开会话：
+
+- `chapter-extractor` 与 `story-explorer` 模板已改。`story-long-analyze` Stage 2 按新格式校验情节点，旧 extractor 的输出会被整批拒收。
+- 长篇拆文（`story-long-analyze`）的运行时改由 Python 脚本管理，本机需要 Python 3（`python3` / `python` / `py` 任一可用）。
+- 部署到项目的指令模板新增「与作者协作」三条规则：回复用写书的话说，不抛脚本名和字段名；作者要求记住 / 忘掉 / 确认写作习惯时走 story 的作者记忆（`.story/作者记忆/`），不写宿主自带记忆；skill 脚本报错时停下报告，不改写项目里已安装的 skill 文件。安装报告与检查报告改为先说「现在可以做什么」「你还需要做的事」。
+
+## OpenCode 只支持 2.x（v0.7.11）
+
+OpenCode 2.0 起发布在 npm 包 `@opencode/cli`（`opencode-ai` 停在 1.x）。本适配只支持 2.x：1.x 的插件 loader 读不了新版 `story-hooks.ts`，在 1.x 上会没有写正文守卫与写后兜底；1.x 也不认 agents 的 `permissions:` 规则，三个只读 agent 会拿到完整读写与 shell 权限。story-setup 在版本是 1.x 或无法确定时停止部署。
+
+1. 升级 OpenCode：先卸载旧包 `npm rm -g opencode-ai`，再 `npm i -g @opencode/cli`（或 `curl -fsSL https://opencode.ai/v2/install | bash`），确认 `opencode --version` 为 2.x。两个包都提供 `opencode` 命令，不先卸载旧包时 PATH 上可能仍是 1.x。
+2. 更新技能包后，在写作项目根重跑 story-setup：替换 `.opencode/plugins/story-hooks.ts` 与 `.opencode/agents/`（改为 2.x 原生 `permissions:` 规则列表，已配的 `model:` 会保留），并从 `opencode.json` / `opencode.jsonc` 删除旧的 story-hooks 插件注册。
+
+## 插件打包身份迁移（v0.7.9 同版本修复）
+
+Claude Code / ZCode 市场改为单一 `oh-story` 插件，仍包含全部 13 个 Skills。该迁移始于 v0.7.9 的同版本修复，仍使用旧插件身份的用户需手动迁移；`npx skills` 安装无需迁移。卸载前备份要保留的插件数据，以下操作仅针对旧插件记录，保留写作项目及 story-setup 部署文件。
+
+### Claude Code
+
+1. 先在受影响的写作项目目录中列出已安装插件，按记录中的 `id` 与 `scope` 核对实际旧身份；`project` / `local` 记录属于各自项目，多个项目须分别核对：
+
+   ```bash
+   claude plugin list --json
+   ```
+
+   只处理列表中确实存在、marketplace 为 `oh-story-skills` 的以下旧 ID：
+
+   ```text
+   browser-cdp@oh-story-skills
+   story@oh-story-skills
+   story-cover@oh-story-skills
+   story-deslop@oh-story-skills
+   story-import@oh-story-skills
+   story-long-analyze@oh-story-skills
+   story-long-scan@oh-story-skills
+   story-long-write@oh-story-skills
+   story-review@oh-story-skills
+   story-setup@oh-story-skills
+   story-short-analyze@oh-story-skills
+   story-short-scan@oh-story-skills
+   story-short-write@oh-story-skills
+   ```
+
+2. **刷新 catalog 前**，逐个卸载实际存在的旧 ID，并使用列表中原有的 `user`、`project` 或 `local` scope。以下以 user-scope 的 `story` 插件为例：
+
+   ```bash
+   claude plugin uninstall story@oh-story-skills --scope user --keep-data
+   ```
+
+   `--keep-data` 保留该旧插件身份的数据，但不会把它迁移到新的 `oh-story` 身份。同一旧 ID 若出现在多个 scope，每个 scope 分别执行。
+
+3. 所有实际旧身份卸载完后，刷新已有 catalog；若本机尚未添加该 catalog，则添加仓库：
+
+   ```bash
+   claude plugin marketplace update oh-story-skills
+   # 仅在 catalog 尚不存在时：
+   claude plugin marketplace add https://github.com/zenstory-ai/oh-story-claudecode
+   ```
+
+4. 在原 scope 安装统一 bundle；多个 scope 分别安装：
+
+   ```bash
+   claude plugin install oh-story@oh-story-skills --scope user
+   ```
+
+5. 新开 Claude Code 会话，使用 `/oh-story:story-setup` 或 `/oh-story:story dashboard`。命令与 manifest 格式见 [Claude Code 插件参考](https://code.claude.com/docs/en/plugins-reference)。
+
+### ZCode
+
+在 Plugin Management 中卸载受影响的旧条目，刷新市场；必要时重新添加本仓库，再安装一个 `oh-story`。沿用界面中的市场名（`oh-story-skills` 或 `oh-story-zcode`），避免重复安装。若无法卸载，保留数据备份，附 ZCode 版本与界面现象联系官方支持，不要清空全部缓存或手改缓存 JSON。操作说明见 [ZCode 插件文档](https://zcode.z.ai/en/docs/plugin)。
 
 ## 升级策略
 
@@ -17,6 +123,12 @@
 
 推荐始终重新运行 story-setup，让部署器按 owner class 处理文件。
 
+### 自嵌套残留
+
+部署清单的 Source 相对 skill 包、Target 相对项目根，两个基准目录在 skills-only 端会重合；经 `.agents/skills → ../skills` 等 symlink 加载时，路径文字不同也可能指向同一目录。部署器会先按 realpath / samefile 语义拒绝同对象与「目标位于源目录内」的递归复制，再删掉已有的 `agent-references/agent-references/`（可能多层）或 `skills/story-setup/skills/` 残留。
+
+OpenClaw / Reasonix / generic 三条路径的 skill 副本在项目 `skills/` 里，重跑时执行的就是项目里那份，自动清理到不了：先手动删掉上述目录。要让项目里的 skill 文本本身更新，还需要更新 oh-story-claudecode 后，用新包覆盖项目 `skills/` 下这 13 个目录。
+
 ## 文件所有权
 
 ### story-setup 管理，可替换
@@ -26,6 +138,8 @@
 - `.claude/agents/` — 所有 agent 定义
 - `.claude/rules/` — 所有 path-scoped 规则
 - `.claude/skills/story-setup/references/agent-references/` — Agent 参考资料副本
+- `.agents/skills/{13 known skills}/`、`.agents/agents/agent-name/agent.md`（7 个已知 `agent-name`）、`.agents/rules/oh-story.md`、`.agents/hooks/{story_antigravity_hook.js,story_hook_core.js}` — Antigravity 项目内真实 Skills、生成 Agents、Always-On Rule 与 Hook runtime；同目录其他用户 Skills/Agents 保留
+- `skills/{13 known skills}/` — OpenClaw / Reasonix / generic 的项目 skill 副本，仅覆盖 oh-story 已知名称
 - `.zcode/skills/{13 known skills}/`、`.zcode/commands/{13 known commands}.md` — 仅覆盖 oh-story 已知名称
 - `.zcode/hooks/story_zcode_hook.js` — ZCode 专用 Hook runner
 
@@ -33,9 +147,10 @@
 
 这些文件可能含用户自定义内容：
 - `CLAUDE.md` — 按 marker/section 合并，用户独有 section 保留
-- `.claude/settings.local.json` — hooks 按 command 去重 append，其他配置保留
+- `.claude/settings.local.json` — 按 command 识别 story hooks；已存在的受管 command 会迁移到当前模板的 event/matcher/timeout/if（例如 v25 的 Bash 正文 pre-guard），其他用户 hook 与配置保留
 - `AGENTS.md` — ZCode/OpenCode/Codex/OpenClaw/generic 按 marker/section 合并
 - `.zcode/config.json` — 仅按事件、matcher 和 process args 去重合并 oh-story Hooks，其他字段保留
+- `.agents/hooks.json` — 仅替换顶层 `oh-story` named group，其他用户 hook groups 保留
 
 ### 用户状态，不覆盖
 
@@ -43,181 +158,175 @@
 - `{书名}/设定/`、`大纲/`、`追踪/`
 - `.active-book`
 
-## v20 当前契约
+## 三层灵感库契约（v0.7.11）
 
+- story-long-analyze 新增可选「三层灵感库管道」：复用 Stage 3 的 EM 机制卡——IA 只是索引登记行（无文件），NM 只记合并增量，CBA 是唯一自包含写作消费卡；卡内禁路径引用，来源用 `书名/EM-xxx` 裸 ID，溯源经 `灵感索引.csv` 或 `resolve` 子命令。
+- story-long-write 在开书（适用阶段=设定）、卷纲、细纲三处可选召回 active CBA；逐章写前召回与写手 prompt 不接灵感库。无库或零命中只记 gap，不阻塞。
+
+## v32 当前契约
+
+- `chapter-extractor` 按原文块逐章输出紧凑字段与 10–20 个情节点（长章最多 30），由 `manage_analysis_run.py commit` 校验后生成章节摘要；不合格的整批拒收重跑。
+- `story-explorer` 读新版轻量章节摘要的「信息变化」「状态变化」「章尾钩子」「三维节奏」字段，旧摘要回退读「关键信息与扩写技法」表；对标主产物只以两份文件是否存在判定，不看 `schema_version`。
+- OpenCode 只部署 2.x：agents 使用原生 `permissions:` 规则列表，`story-hooks.ts` 按 2.x 插件接口加载；版本为 1.x 或无法确定时停止部署。
+- 项目指令模板新增「与作者协作」一节：说写书的话、作者记忆路由、不改已安装 skill 文件。写正文拦截文案给补零的细纲名（`细纲_第001章.md`），shell 变量路径如实报「路径未解析」。
+
+重新部署后新开会话，使新 agent 定义生效。
+
+## v30 历史契约
+
+- 默认保留一次 checkpoint；全章细纲供整体编排，用户可明确选择一次成文。
+- 写手 prompt 使用脚本组装；卷纲按作用域取段，旧卷纲未声明的段保守保留并告警。
+- 新增材料按后续影响分级；需作者裁定的章暂停提交和续写，避免正文事实漏进追踪。
+- 更新 narrative-writer 与参考资料，同时保留短篇格式、所选 Gate 范围及既有情绪表达规则。
+
+重新部署后新开会话，使新 agent 定义生效。
+
+## v29 历史契约
+
+- narrative-writer 模板去掉逐段配额：「展开子事件」改为「展开推进单元」，删除「详写的子事件合计 ≥100-150 字」；情弦理论不再要求「每节至少拨一次」，任务、推理、手艺或等待链可连续展开。三端（Claude / OpenCode / Codex）产物同步。
+- 短篇 reference bundle 改按场景功能判断篇幅与节奏：`short-genre-formulas.md` 去掉钩子密度的固定节距、「爽文章节 500-800 字/节」和「打脸密度每 3-5 节一次」；`short-emotional-methods.md` 去掉固定节距的情绪转向与打脸节拍；`short-suspense.md` 不再给每类小节设最低悬念等级；`short-reversal.md` 甜宠线不再要求每节一个甜点。
+- `format-and-structure.md` 的小节结构不再设统一最低字数与「8-15 节 / 总字数 ÷ 1000」推算；小节长度与数量服从叙事职责，整篇由用户交付范围约束。
+
+重新部署后需**新开会话**，custom agent 与 hooks 才会重新注册。
+
+## v28 历史契约
+
+- `agent-reference-profiles.md` 成为 story-architect 唯一资料清单；Agent 模板不再复制第二份 inventory。部署守卫会校验 Common / Long / Short 所有权、文件存在性和表外读取。
+- 悬念、反转和质量标准改为 profile 专属：long 使用 `long-suspense.md`、`long-reversal.md`、`long-quality.md`，short 使用对应 `short-*` 文件；`agent-quality.md` 只保留跨体裁五维核心。
+- 长篇题材资料改为 `long-genre-catalog.md` + `long-genre-mechanics.md`，不再把短篇三幕结构放进 Common；短篇继续使用 `short-genre-formulas.md`。
+- `format-and-structure.md` 只服务短篇/import/setup；长篇改用独立 `long-format.md`，不再“只读同一文件的一部分”。
+- 跨 Skill 近似副本由 `shared-references.json` 的 `derived_groups` 登记来源与分化原因；目录镜像清单必须覆盖 source tree 全部文件。
+
+重新部署后需**新开会话**，custom agent 与 hooks 才会重新注册。
+
+## v27 历史契约
+
+- story-architect 保持单一 Agent 名称，但每次任务先选择 `long` / `short` reference profile，只加载 common + 当前篇幅资产；无法判定时显式返回 unresolved，不混合两套口径。
+- `plot-core-methods.md` 由 story-architect 在卡文、剧情循环、五步高潮、过渡、长线期待和日纲推进场景中条件消费；部署守卫会拒绝没有 Agent 消费链的 reference。
+- 长篇 profile 使用 `genre-prose-cards.md` 与 `long-emotional-methods.md`，短篇 profile 使用 `short-genre-formulas.md`、`short-paragraph-hooks.md` 与 `short-emotional-methods.md`，长篇不再继承每节 500–800 字等短篇默认值。
+- setup reference bundle 的 profile 文件和语义别名属于 story-setup 管理资产；重新部署会替换旧 bundle，部署后必须新开会话。
+
+重新部署后需**新开会话**，custom agent 与 hooks 才会重新注册。
+
+## v26 历史契约
+
+- 新增 Google Antigravity 2.0 项目部署：13 个 skill 真实复制到 `.agents/skills/`，7 个 Claude agent 真源确定性转换为 `.agents/agents/agent-name/agent.md`（`agent-name` 为实际名称），并安装 `.agents/rules/oh-story.md` Always-On Rule。
+- Antigravity Workspace Hooks 只使用官方 `PreToolUse`、`PostToolUse`、`PreInvocation`、`Stop` 事件；写前门禁直接返回 allow/deny，PostToolUse 按协议只返回 `{}`，写后正文 findings 通过 session artifact 交给下一次 PreInvocation，Stop 最多续跑一次。
+- `.agents/hooks.json` 按顶层 `oh-story` 管理组原子合并，不覆盖用户其他 hook groups；部署不写 `~/.gemini/`，也不依赖全局 skill 或 symlink 发现。已有 `.agents/skills` symlink 必须先明确确认才迁移为真实目录，helper 从不沿 symlink 写入其目标。
+- Antigravity custom agent 通过 `invoke_subagent` + 同名 `TypeName` 调用；运行时无该能力时按既有 solo/direct 规则降级。外部 Hook API 没有 PreCompact/PostCompact，压缩后上下文恢复由 Always-On Rule 强制读取 `追踪/上下文.md`。
+
+重新部署后需**新开 Antigravity conversation**，使 Skills、Rules、Agents 与 Hooks 重新扫描；IDE 与交互式 `agy` 建议分别 smoke test。
+
+- 长篇字数只由 `storyctl.py` 的 `visible_chars_v1` 运行时入口测量。写作中只增加一次纯 `checkpoint`，最终 `chapter check` 同时返回长度与现有 blocking quality；用户带内可提交，`under` 禁止自动补写并由用户接受自然长度或改目标/细纲/放弃，`over` 默认只做一次不新增语义的净删型压缩并复检，仍带外则交由用户决策。tracking 提交后才进入下一章。
+- Claude、OpenCode、Codex、ZCode 的正文 Hook 不再各自解析细纲、计算字符数或执行旧 90% 欠账提示；Adapter 只保留正文内容网，避免与 `storyctl` 形成第二套字数口径。
+- narrative-writer 与 story-architect 使用显式字数口径，不再填写逐情节点数字配额，也不在缺少目标时回退 3000 字；后半段只能完成尚未写的批准情节点，完成即停，不为字数新增独立剧情。
+- 使用 `story-import` 导入时按 `storyctl wordcount measure` 记录已写章节的当前口径长度；无法执行 Python 3/CLI 时明确停止，不用模型估算代替。
+- 工作区新增 `.story/作者记忆/`：只有带原话证据、经过确认的稳定偏好才进入作者画像；候选、冲突替代和撤回保留审计记录。它与单本小说追踪隔离，当前指令、本书设定和硬门禁优先。
+- story-explorer 遇到已登记但主产物缺失的对标时 fail-closed，不再静默换用另一本；narrative-writer、story-architect、character-designer 的 reference 表改为按任务条件读取，避免列出但不触发。
+- 新建细纲的情节点使用五列表格记录内容、功能、人物、约束与落点；不再把逐点字数配额当正文编排指令。存量细纲仍可继续日更，只有新建、补建或改纲时采用新格式。
+- 部署器在复制前按 realpath / samefile 拦截源目标同对象和目标嵌入源目录，并清理已知嵌套残留；OpenClaw / Reasonix / generic 的项目内旧副本需按本页“自嵌套残留”先手动处理。
+
+重新部署后需**新开会话**，custom agent 与 hooks 才会重新注册。
+
+## v25 历史契约
+
+- Claude Code 的正文前置守卫现在也注册到 Bash：常见的重定向、`tee`、`touch`、`cp`、`mv`、`install` 写入正文时复用共享 JS 核识别目标并执行大纲/追踪门；只读命令里的引号示例与 heredoc 正文提及不拦，并按 hook `cwd` 解析相对路径。该面是**静态 best-effort 识别，不是 shell 沙箱**：环境变量间接路径、运行时生成命令与未列出的任意写文件程序无法可靠静态判定；这类写入应改用 Write/Edit。Bash 命令面依赖 node，node/共享核异常时显式告警后 fail-open；Write/Edit/MultiEdit 的纯 bash 兜底不受影响。
+- Codex Python 与共享 JS 的书目录发现统一限制为项目下 4 层，并剪枝隐藏目录、`node_modules`，避免 SessionStart/Stop 无界扫描和跨端发现范围漂移。
+- narrative-writer 与部署 reference 增加“普通名词不用引号强调”的 Gate B；合法对话、直接引用、书名/代号和场内系统载体原文保留。
+- narrative-writer 的工具白名单加入 `Bash`：字数统计、句长分布、`check-ai-patterns.js` 与 `check-outline-copy.js` 复扫都要确定性数值，缺工具时这几条规则整条空转。字数与句长必须报实测值，探测不到 Python / node 时如实声明“未完成机器验证”，不得声称已统计或已运行脚本。
+- narrative-writer 的细纲消费规则拆成两条并列：内容层（每项独立落地、不许漏、不许两项并一句）与形状层（落地位置、顺序、断段自定，可打散重排，不要一项一段平推）。形状半边同步进 `story-long-write` 的 spawn 清单。
+- 细纲「情节细化」新增**复沓锚句**字段：必须一字不差进正文的原话逐行列出并注明落点，没有写“无”。存量细纲缺该字段时按“无锚句”处理，行为与此前一致，不必回头补。
+
+重新部署后需**新开会话**，custom agent 与 hooks 才会重新注册。
+
+## v24 历史契约
+
+- `.claude/rules/story-narrative.md` 删掉「禁止 AI 腔」红线块。该块只在 `拆文库/` `对标/` `设定/` 三个 path 下加载，正文目录根本不命中，五条规则也已由 narrative-writer 的 7 Gate / 禁止事项与 `check-ai-patterns.js` 的 blocking 规则覆盖。
+- `.claude/rules/story-format.md` 的对话标签规则从「禁止「他说」「她道」」改为「避免对话标签机械化」：高频或公式化标签用动作/上下文替代，普通「说」低频使用可保留。此前该文件是全仓唯一把普通「说」判为违规的地方，与 `format-and-structure.md` 等 11 处口径冲突，且它正好在 `正文/` path 上加载。
+- `.claude/agents/narrative-writer.md` 精简约 19%：删除与 7 Gate / 禁止事项重复的审查清单（story-review spawn 时会内联完整 rubric）、正文写作阶段的具体字数表达校验（移到审查侧）、以及 `……`/`——`、段间空行、章节元信息正则的重复陈述。写作规则本身未放宽，Gate A-G 与禁止事项口径不变。
+- `.claude/hooks/guard-outline-before-prose.sh` 补上追踪检查点门，与 OpenCode / ZCode / Codex 同序：追踪状态缺失、schema 不是 4、续写状态卡修订号与 state 不一致、首建新章时上一章事务未提交，都拦下写正文。细纲/大纲门只在首建时判，追踪门对首建与续写都判。判定经 `.claude/hooks/story_hook_cli.js` 的 `tracking-checkpoint` 子命令调共享核，四端一份实现；需要解析 JSON，故 node 不在场时这道门放行（大纲/细纲门仍是纯 bash，无 node 也拦得住）。
+  - **对已部署项目的影响**：v0.7.3 起就该迁移的旧追踪项目，此前在 Claude Code 上还能继续写，现在会被拦下。按提示走 `/story-import` 的「旧追踪项目迁移」重建 `追踪/` 即可，不必重跑全书拆解。
+
+重新部署后需**新开会话**，custom agent 才会重新注册。
+
+## v23 历史契约
+
+- `story-import` 只把作者已有小说重建为写作工程：`拆文库/{导入书名}/` 迁移到正文/设定/大纲/追踪，不再自动登记成主/副对标，也不再复制到项目 `对标/`。只有用户明确选择、且来源为独立 `拆文库/{对标书名}/` 的外部作品才同步到 `对标/{对标书名}/`。
+- 无外部对标时只跳过对标模块、节奏和文风召回；项目题材卡仍从本书题材信息生成，不再被对标分支误伤。对标主产物缺失继续 fail-fast，只有单个可选模块卡未命中时才局部跳过。
+- 所有可能 spawn 项目 agent 的 Skill 都先读取 `.story-deployed.agents_version`：与 v23 不一致时**照常 spawn**，只在报告里提示版本不匹配、建议重跑 `/story-setup` 并新开会话。版本不匹配不阻断并行——bump 常常源于别的部署物变化而 agent 模板未动。真正降级 solo/direct 的信号是 agent 文件缺失或运行时不暴露 custom agent。
 - 写作与导入只接受当前拆文产物：`剧情/情绪模块.md` 与 `剧情/节奏.md` 缺失时 fail-fast，并给出重跑 Stage 3+ / 重新导入的修复动作。
-- 新建、补建、改纲的细纲只接受完整章节蓝图：缺少阶段位置、结构公式、禁止提前释放、内容概括、情节安排、人物关系、情节细化或结尾设定时，先补齐再写。旧版细纲缺这些字段不阻塞日更，回退消费旧字段（核心事件、情节点序列、目标情绪、章首/章尾钩子、字数目标）。
+- 当时新建、补建、改纲的细纲只接受完整章节蓝图：缺少阶段位置、结构公式、禁止提前释放、内容概括、情节安排、人物关系、情节细化或结尾设定时，先补齐再写（v32 起阶段位置、结构公式改为可选，必填项以 v0.8.0 的九个核心字段为准）。旧版细纲缺这些字段不阻塞日更，回退消费旧字段（核心事件、情节点序列、目标情绪、章首/章尾钩子、字数目标）。
+- 细纲字段是本章「要发生什么」的内容规格，不规定正文形状：各字段都要在正文里兑现，但正文可合并、穿插、重排情节点，不按条目顺序一条一段平推。细纲「结尾 / 结尾设定」写本章最后落在什么动作、画面或台词上，不写状态判词。
 - 每个 agent adapter 只读取本目标的 canonical reference 路径：Claude `.claude/skills/`、OpenCode `skills/`、Codex `.codex/skills/`。
 - `_progress.md` 恢复只接受 `schema_version: 2` 与章节边界表，不再执行隐式历史迁移。
 - Codex hooks 升级使用稳定管理身份替换注册；会先移除旧直调 Python 命令与已有 launcher 命令，再写入当前 6 个注册，不会双重执行。
 - 定制 hook 如果调用了已删除的 `discover_book_dir()`，请改为 `discover_active_book()`。当前版不再保留该兼容别名。
+- `拆文库/` 的「未完成拆文」提醒按 `_progress.md` 的「最终状态」取值过滤：`completed` / `completed_with_errors` 不计入，其余取值与字段缺失、空文件、不可读一律按未完成上报。判定收在 `lib/common.sh` 的 `discover_incomplete_analyses()`。
+- 被动版本更新提醒按 24h 节流提示本身；取不到 GitHub 时写入负缓存，同一窗口内不重复请求。
 
 ## 升级步骤
 
 1. 在项目根目录重新运行 story-setup。
-2. 确认 `.story-deployed` 写入 `agents_version: 20` 与 `setup_skill_version: 1.2.7`。
+2. 确认 `.story-deployed` 写入 `agents_version: 33` 与 `setup_skill_version: 1.3.1`。
 3. 确认目标 CLI 的 agents、hooks/rules 和 reference bundle 都通过安装验证。
 4. 新开会话，使 custom agents 与 hooks 按当前文件重新注册。
-5. 若已有拆文库或细纲不满足当前契约，先重新拆解/导入或补齐细纲，再继续写作。
+5. **长篇在写项目必做**：检查每本书的 `追踪/_tracking-state.json` 是否存在。不存在就是旧追踪结构，按下方「追踪模型迁移」重建，否则写下一章会被拦。
+6. 若已有拆文库或细纲不满足当前契约，先重新拆解/导入或补齐细纲，再继续写作。
 
-## 版本变更
+## 作者记忆两级 store 迁移（v0.7.11，#437）
 
-### v2
+作者记忆从「一个工作区一份」改成两级：工作区 `.story/作者记忆/` 只存全局、题材、流程条目（编号 `AP`），每本书目录下的 `.story/作者记忆/` 存这本书的条目（编号 `BP`），记忆随书归档、迁移。同时不再从反复修改或成稿推断偏好：`record` 拒绝 `repeated_correction` / `inferred_pattern` 来源，存量条目照常可读、可确认、可退役。
 
-- 4 个创作型 Agent + 1 个研究型 Agent（story-architect, character-designer, narrative-writer, consistency-checker, story-researcher）
-- Agent 引用 skill references 写作理论
-- Hook 脚本优化（减少 context 输出）
-- 4 条 path-scoped 规则
+要知道三件事：
 
-### v3
+1. 新的本书偏好必须传 `--book-root {书目录}` 才能写入；旧 skill 副本没带这个参数会报错，重跑 `/story-setup` 让脚本与文档同版。
+2. 升级前写进工作区的本书条目**不再被 `query` 返回**（全局、题材、流程条目不受影响），直到搬进书目录；它们仍在工作区 `作者画像.md` 里可见。不做双读，是为了让迁移真的发生。
+3. 对每本书运行一次即可整批搬家，幂等、中途失败直接重跑：
 
-- 新增 story-explorer 只读查询 Agent（角色/伏笔/设定/进度查询，日更上下文快速加载）
-- 6 个 Agent 总计（story-architect, character-designer, narrative-writer, consistency-checker, story-researcher, story-explorer）
-- story-explorer 被 story-long-write、story-review、story 路由集成调用
+   ```text
+   {PYTHON} {story skill 根}/scripts/author_memory_commit.py migrate --workspace {工作区} --book-root {工作区}/长篇/{书名}
+   ```
 
-### v4
+   断言、原话证据、确认次数、重要度原样保留；与全局条目的冲突候选在迁移后退回待确认。也可以对 agent 说「整理作者记忆」，迁移会列为默认提案项。
 
-- 新增 chapter-extractor 章节提取 Agent
-- 7 个 Agent 总计（story-architect, character-designer, narrative-writer, consistency-checker, story-researcher, story-explorer, chapter-extractor）
+**单书布局**（`正文/`、`追踪/` 直接在工作区根）：书级 store 住 `{工作区}/.story/作者记忆/书级/`，迁移时 `--book-root` 就传工作区本身：
 
-### v5
+   ```text
+   {PYTHON} {story skill 根}/scripts/author_memory_commit.py migrate --workspace {工作区} --book-root {工作区}
+   ```
 
-- 更新 narrative-writer 场景写法：使用”三维度揉进”并按画面分段控制段落密度
-- 字数统计改为 Python 字符统计优先，`wc -m` 仅作 macOS/Linux 备选，提升 Windows + DeepSeek/Claude Code 兼容性
-- 已部署项目重新运行 `/story-setup` 后获取新版 agent 定义
+书名默认取存量本书条目里的书名；存量里有多本书的条目时用 `--book {书名}` 指定。用过 main 上预发布版本、查询时报 `project-level state must not carry state.book` 的工作区，带 `--book-root {工作区}` 运行任一命令即自动修复，不丢条目。
 
-### v6
+## 长篇拆文旧成果（v0.7.11）
 
-- 统一 narrative-writer 子代理与主会话的短篇正文格式：固定写入 `正文.md`、小节标记统一、段落无空行、对话半角双引号
-- 短篇写作不再由 narrative-writer 创建长篇 `追踪/上下文.md`
+- v0.7.10 及更早的拆文库如果原文以楔子/序章开头，续拆会先停下询问（旧版不认楔子，直接续跑会错一章）。只拆到黄金三章的库选「楔子单独成章重拆」代价最小；已有逐章摘要的库推荐「楔子并入第一章，按旧章号继续」。
+- `拆文报告.md` 小节结构变了（去掉「质量评估」，「证据边界与待核事项」改为「还不确定的地方」），旧报告不会自动改写，重跑 Stage 5 才生效。
+- 人物关系图改为 `人物关系图/人物关系图.md`（任何 Markdown 查看器都显示中文），有中文字体时另出 PNG；以前生成的拼音版 PNG 不会自动删除，可手动删掉。
 
-### v7
+## 导入项目的自对标清理（v23）
 
-- 修复长篇 `/story-long-write 日更` 批量续写中的 continuation 规则：同一批次内“继续/续写/日更”保持在 daily workflow，不直接跳到正文续写。
-- 修复 `detect-story-gaps.sh` 对伏笔表头和正常开放伏笔（`未埋`/`已埋`）的误报；SessionStart 只提示 `已过期` 或异常状态。
-- 已部署项目需重新运行 `/story-setup`，以覆盖 `.claude/hooks/`、`.claude/agents/`、`.claude/rules/` 并获得新版 hook 行为。
+旧版 `story-import` 可能把作者自己的导入书误建成 `对标/{当前书名}/`，甚至把本书设定登记成“主对标”。升级不会自动删除用户文件，按以下边界人工核对：
 
-### v8
+1. 保留 `拆文库/{导入书名}/`；它是本书导入分析和重建工程的数据源，不是错误目录。
+2. 以项目根 `设定/` 为本书正式设定。若 `对标/{当前书名}/` 的内容确认只是从本书 `设定/` 或 `拆文库/{导入书名}/` 复制而来，且没有人工补充，再删除这个误建目录。
+3. 清理 `设定/题材定位.md` 中把当前书登记为主/副对标的字段；真实外部对标登记不动。
+4. 若某个 `对标/{外部书名}/` 目录名看似外部作品，但内容实际来自当前书，删除这份错误视图，再从真正的 `拆文库/{对标书名}/` 重新同步；不要改名冒充修复。
+5. 重新运行 `/story-setup`（Codex 用 `$story-setup`）并新开会话，使 v23 的 agent 模板生效；在此之前 spawn 照常工作，只会多一条版本不匹配提示。
 
-- 修复 story-review 及部署后的 reviewer Agent 在项目根目录下读取参考文件时，只找裸文件名（如 `quality-checklist.md`）导致找不到 skill references 的问题。
-- Agent 模板新增参考文件路径规则：优先从 `.claude/skills/` 或 `skills/` 拼接解析 `story-setup/references/agent-references/*.md` 规范路径，避免依赖当前工作目录且不跨 skill 引用 references。
-- 已部署项目需重新运行 `/story-setup`，以覆盖 `.claude/agents/` 并获得新版参考文件路径规则。
+## 追踪模型迁移（v0.7.2 及更早的长篇项目必读）
 
-### v9
+长篇追踪从「模型自由写多个 Markdown」改成 **`追踪/_tracking-state.json` 单一结构化权威 + `scripts/tracking_commit.py` 事务写入**。所有 Markdown（续写状态卡、逐章记录、角色快照、伏笔表、时间线双视图）都是由工具整份生成的派生视图，不再手写。
 
-- `setup_skill_version` 升级到 `1.1.0`，`.story-deployed` 的 `agents_version` 升级到 `9`。
-- 部署契约补充机械可检查清单：hooks、rules、agents、Agent References、settings hooks、`CLAUDE.md` 合并和 `.story-deployed` 字段都必须明确 source、target、owner、merge mode、validation。
-- Hook 部署从“只复制 `.sh` 文件”改为递归复制完整 `references/templates/hooks/` 目录树，避免遗漏 `lib/common.sh`；新增 `lib/sentinel.sh` 统一读取 `.story-deployed` 字段。
-- Hook runtime 改为 root-aware：优先使用 `CLAUDE_PROJECT_DIR`，其次 git root，最后 cwd；`discover_active_book` 与 `discover_all_books` 分离，避免单本会话逻辑和全项目巡检互相污染。
-- `detect-story-gaps.sh` 使用 bash 3.2 兼容数组/去重逻辑，并从公共库获取所有书目。
-- `session-end.sh` 默认不写 `session-log.txt`；显式 `STORY_SESSION_LOG=1` 时也只写已存在的长篇 `追踪/`，不会为短篇创建 `追踪/`。
-- `validate-story-commit.sh` 增加脚本内自检：解析 `CLAUDE_TOOL_INPUT.command` / `STORY_COMMIT_COMMAND` 后只对真实 `git commit` 生效，避免 `echo git commit docs` 这类非提交命令误触发。
-- Agent Reference bundle 补齐并 canonicalize：
-  - `genre-readers.md`：从 `story-long-write/references/genre-readers.md` 复制为 story-setup canonical 副本。
-  - `genre-writing-formulas.md`：从 `story-long-write/references/genre-writing-formulas.md` 复制为 story-setup canonical 副本。
-  - `emotional-methods.md`：从 `story-long-write/references/emotional-methods.md` 复制为 story-setup canonical 副本。
-  - `style-combat-face.md`：从 `story-long-write/references/style-combat-face.md` 复制为 story-setup canonical 副本。
-  - `output-templates.md`：不复制；`chapter-extractor` 已内置输出格式，旧的裸引用改写为“遵循本文件输出格式”。
-- `story-format.md` 删除“章节之间用 `---` 分隔”的旧规则，改为禁止正文片段使用水平分隔线，与 narrative-writer 保持一致。
+判断与后果：
 
-### v10
+| 情况 | 表现 |
+|------|------|
+| `追踪/_tracking-state.json` 存在且 `check` 通过 | 正常，无需处理 |
+| 缺 `_tracking-state.json` 但已有正文 | 日更停止；OpenCode / ZCode / Codex 上写正文被 hook 直接拦截 |
+| 存在但派生视图被手改 | `check` 报 `derived view differs from _tracking-state.json` |
 
-已部署项目请重新运行 `/story-setup`，刷新写作 Agent；主要影响是日更续写更稳定地沿用对标文风。
+迁移**不需要重跑全书拆解**：正文、`设定/`、`大纲/`、`拆文库/` 都不受影响，只重建 `追踪/`。执行 `/story-import` 的「旧追踪项目迁移」——数出最后完整章号 `N`，从旧追踪文件与最近几章正文重建当前状态，构造 `last_chapter=N` 的初始化事务跑 `tracking_commit.py init`。旧追踪结构会被按原样整体移入 `追踪/_旧追踪存档/`，不删除、不参与解析。
 
-### v11
+退役结构：`_tracking-meta.json`、`时间线/事件库.json` 及更早追踪文件不再被解析，`commit` 与 `check` 遇到会直接拒绝。
 
-- `setup_skill_version` 升级到 `1.2.0`，`.story-deployed` 的 `agents_version` 升级到 `11`。
-- **新增写正文前流程守卫 hook** `guard-outline-before-prose.sh`（PreToolUse Write/Edit/MultiEdit）：首次创建 `正文/第N章_*.md` 时若缺 `大纲/细纲_第N章.md`、首次创建短篇 `正文.md` 时若缺 `小节大纲.md`，直接阻断（exit 2），强制先搭大纲再写正文。正文已存在（续写/去AI味/改稿）或非正文文件一律放行。
-- **部署后必须新开会话**：custom agents 只在会话启动时注册成 `subagent_type`。`/story-setup` 部署完会留下一次性标记 `.claude/.agents-pending-restart`，session-start.sh 在下个会话确认 agents 已注册并清除标记。部署当前会话内 spawn agent 仍会降级 solo——必须新开 Claude Code 会话。
-- **写作规则补「长短交错 + 疏密分配」**：`format-and-structure.md` 段落节奏不再使用固定字数上限的一刀切，改为按戏剧单元、情绪 beat 和疏密分配自然断段；`writing-craft.md` 新增「疏密分配（详略不均）」；`anti-ai-writing.md` 长短句交错改为可执行的自然节奏目标；narrative-writer 模板补 Gate D 长短变化与「句式多样性」审查；story-review 段落 gate 由旧字数上限改为查长短/疏密变化。针对生成内容文学味过重、句式单一、节奏平坦的反馈。
-- 已部署项目重新运行 `/story-setup` 刷新 hooks/agents/references；**部署后新开会话**。
-
-### v12
-
-- `setup_skill_version` 升级到 `1.2.1`，`.story-deployed` 的 `agents_version` 升级到 `12`。
-- **拆文→写作模块链（issue #149）**：`story-long-analyze` Stage 2 摘要新增「关键信息与扩写技法」表，Stage 3 产出权威产物 `剧情/节奏.md`（关键信息推进 / 情绪触动点 / 爆发节奏）与 `剧情/情绪模块.md`（读者需求·情绪引擎 / 可复现模块）；`story-import` 同步到 `对标/{书名}/剧情/`；`story-long-write` 日更按权威优先级读取并复现。
-- **agent 模板更新**：`chapter-extractor` 增加「关键信息与扩写技法」提取，`story-explorer` 的 `benchmark_style_load` 增加 `selected_emotion_module`/`rhythm_reference` 等返回字段。**已部署项目须重新运行 `/story-setup` 才能拿到新 agent 行为**；否则日更回退到主会话手动加载（功能不丢，仅失去 agent 快捷路径）。
-- `consistency-checker` 从纯 grep-first 字面矛盾扩展为「grep-first + 推理型一致性审查」：补查规则边界悖论、设定层级冲突、跨章因果链、规则可滥用漏洞、代价一致性。
-- **自然分段 + 主语节奏**：`format-and-structure.md` 与 `writing-craft.md` 不再把 `60/45` 字数当成硬切分规则，改为按戏剧单元/镜头/一件事结束分段；完整推理链、氛围铺陈、情绪变化可保留稍长段。
-- **主语过密修复**：narrative-writer 模板和 story-review 检查项新增“段首点名建立主语、段中代词/省略、关键转折再点名”的节奏规则，不按全章名字次数一刀切。
-- 已部署项目重新运行 `/story-setup` 刷新 agents/references；**部署后新开会话**。
-
-### v13
-
-- `setup_skill_version` 升级到 `1.2.2`，`.story-deployed` 的 `agents_version` 升级到 `13`。
-- **细纲升级为章节蓝图（issues #162）**：新建/补建长篇 `大纲/细纲_第XXX章.md` 时，除旧字段外新增内容概括（起因/发展/转折/高潮/结尾）、情节安排（主线/辅线/事件线/感情线/逻辑线）、人物关系和出场顺序、情节细化、结尾设定和钩子；旧版细纲仍可续写，缺失字段不阻塞，回填未知项写 `[待补充]`。
-- **语气标点谱系（issue #161）**：writer references、narrative-writer、review/deslop 增加“标点跟着语气/人物声线走”的规则，避免通篇句号化，也禁止随机堆砌问号/感叹号；犹豫/未尽/打断/拖长改用动作停顿、短句或换行处理，正文产物不用 `……`、不用 `——`，知乎盐言 `「」` 引号风格继续有效。
-- `story-architect` 会产出新版章节蓝图；`consistency-checker` 会消费细纲里的逻辑线、人物关系变化、出场顺序和代价/收益兑现；`narrative-writer` 会按语气标点谱系执行正文标点节奏。
-- 已部署项目请重新运行 `/story-setup` 刷新 hooks/agents/references；**部署后新开会话**，否则旧会话仍使用 v12 agent 定义。
-
-### v14
-
-- `setup_skill_version` 升级到 `1.2.3`，`.story-deployed` 的 `agents_version` 升级到 `14`。
-- **AI 句式硬门槛（issue #166）**：`narrative-writer`、写作 skill、review/deslop 流程都把“先否定再肯定”的翻转句式列为硬禁令；文风召回、对标模仿和 Gate B 软规则都不能覆盖这条禁令。
-- **本地正文检查**：`story-deslop`、`story-long-write`、`story-short-write`、`story-review` 都携带本地 `check-ai-patterns.js`，文件模式会在预检或交付前对正文执行 `node scripts/check-ai-patterns.js --check --fail-on=blocking <正文文件...>`；`blocking` 命中时回到正文改写，并复扫到 0；`advisory` 只提示读感风险，按上下文处理；功能性写法保留或标 `[需复核]`。
-- **narrative-writer 交付边界**：agent 本身没有 Bash/Node 工具时，只能报告已按规则自检，不能声称已运行脚本；主会话或调用方具备执行能力时，必须对实际落盘文件复扫。
-- **字数统计修复（issue #170）**：`narrative-writer` Gate E 增「具体字数表达校验」——禁止正文写未经脚本核验的「这五个字」式字数断言，改用非数字表述。
-- **对话机械化/论文腔/不分场合修复（issue #171）**：`narrative-writer` 参考表接入 `dialogue-mastery`、审查清单加对话质量逐项、新增「写完后对话自检」收尾步；写前意图确认加「对话声线基线」（高压 beat→搞笑声线让位、信息型配角不当科普嘴、逐句承接对方情绪），`consistency-checker`/`character-designer` 审查侧同步。
-- **续写文风漂移每章自检（issue #168）**：`narrative-writer` 新增「写完后文风自检」，并把目标句长带快照钉进 `追踪/上下文.md` 的「## 文风指纹」区（抗 compaction），续写逐章按目标带把碎句合并回中长句，防逗号结巴体。
-- **新名词/设定首次出现给读者锚点（issue #175）**：`anti-ai-writing.md` Gate G 自检后补「删解释腔 ≠ 把读者读懵」反向制衡，新名词首次出现靠动作/对话半句/场景后果一笔带出当下作用。
-- **被动版本更新检查（issue #173）**：`session-start.sh` 增加被动更新提醒——每 24h 至多一次、curl 5s 超时、全程静默兜底、`STORY_NO_UPDATE_CHECK=1` 可关，仅落后才提示。
-- 已部署项目请重新运行 `/story-setup` 刷新 hooks/agents/references；**部署后新开会话**，否则旧会话仍使用 v13 agent 定义，无法获得以上 v14 的全部改进。
-
-### v15
-
-- `setup_skill_version` 升级到 `1.2.4`，`.story-deployed` 的 `agents_version` 升级到 `15`。
-- **正文兜底 + 跨批连续性确定性网（#195）**：新增 deployed hook `check-prose-after-write.sh`（PostToolUse Write/Edit 落盘后跑硬信号兜底——截断、拒绝语/AI 自指、工程词泄漏、逐行复读、字数欠账）；`session-start.sh` 部署自检补 hook、`detect-story-gaps.sh` 与 Codex `story_codex_hook.py` 同步跨批连续性兜底。
-- **自定义文风指纹来源刷新（#196）**：narrative-writer 模板与 `上下文.md.tmpl` 的「文风指纹」加「来源」字段，用户新增/改 `设定/文风.md` 后能用新来源刷新句长带快照，不再被旧对标永久压住。
-- **模型退化 / 碎句号检测接入写作链路（#193/#192）**：`check-degeneration.js`（复读/截断/工程词泄漏）与升级版 `check-ai-patterns.js`（碎句号/长段落/破折号按功能改写）随写作 skill 部署，正文收尾复扫，每条 finding 带 `severity: blocking|advisory`。
-- **Codex / OpenClaw 适配（#186/#189）**：`$story-setup` 部署 `.codex/agents/*.toml` 与 `.codex/hooks.json`，补齐 OpenClaw skills-only 兼容，Codex `.agents/skills` symlink 守卫。
-- 已部署项目请重新运行 `/story-setup` 刷新 hooks/agents/references；**部署后新开会话**，否则旧会话仍使用 v14 agent 定义，无法获得以上 v15 的全部改进。
-
-### v16
-
-- `setup_skill_version` 升级到 `1.2.5`，`.story-deployed` 的 `agents_version` 升级到 `16`。
-- **短篇写作参考栈清理（#206）**：`story-short-write` 不再继承长篇通用参考；改由 `short-format.md`、`short-craft.md`、`short-deslop.md` 与 `genre-styles/` 题材包承担短篇格式、情绪直给、节奏密度和去 AI 味规则。
-- **narrative-writer 短篇例外同步（#206）**：Claude/OpenCode/Codex 三端 agent 模板同步「短篇题材包例外」——短篇需要情绪直给时允许“情绪词 + 体感/动作焊住”，只清除空泛 AI 情绪总结，不再误把短篇爽感写法全部改成纯动作外化。
-- 已部署项目请重新运行 `/story-setup` 刷新 agents/reference bundle；**部署后新开会话**，否则旧会话仍使用 v15 narrative-writer 模板，无法获得以上 v16 的短篇写作规则。
-
-### v17
-
-- `setup_skill_version` 升级到 `1.2.6`，`.story-deployed` 的 `agents_version` 升级到 `17`。
-- **题材正文提示卡召回（#226）**：narrative-writer Claude/OpenCode/Codex 三端模板接入「题材正文提示卡」召回——先读索引、再只读取 `genre-prose-cards/{题材}.md` 单卡，卡片只内部校准题材味，anti-leak 硬约束保证卡名/题材标签/置信度/合规自评一律不写进正文；文风指纹与 Gate G 去解释腔规则按题材细化。
-- **大纲边界与逐章写法公式（#225/#226）**：narrative-writer 模板只扩写细纲计划内情节点，不足时返回 `outline_underfilled` 欠账报告交主会话补纲；chapter-extractor 模板新增 `chapter_formula` 逐章写法公式产物（情绪流向/节奏配比/结构公式/章尾卡点）。
-- **generic Web AI 部署（#216）**：story-setup 新增 `target_cli=generic` 文件模式，Web AI / 通用 Agent 项目复制 `skills/` 与通用 `AGENTS.md`，不声明平台原生 hooks/custom agents 能力。
-- 已部署项目请重新运行 `/story-setup` 刷新 agents/reference bundle；**部署后新开会话**，否则旧会话仍使用 v16 agent 模板，无法获得以上 v17 改进。
-
-### setup 1.2.7（ZCode，agents v17）
-
-- 新增 `target_cli=zcode`：部署 `.zcode/skills/`、`.zcode/commands/`、`.zcode/hooks/story_zcode_hook.js`，合并 `.zcode/config.json` 与根 `AGENTS.md`。
-- ZCode 3.3.4 不执行项目/plugin custom agents；不创建 `.zcode/agents/` 或 `.zcode/rules/`，专业角色稳定降级为 solo/direct。
-- ZCode Hook 依赖 PATH 中的 `node`，仅使用受支持的 SessionStart / PreToolUse / PostToolUse 事件；无 PreCompact / SessionEnd 等价能力。
-- 已有 ZCode 项目升级后重新运行 `$story-setup` 并新开 ZCode session；Claude/OpenCode/Codex 的 agents bundle 仍为 v17，无需因本项单独提升 `agents_version`。
-
-### v18
-
-- `.story-deployed` 的 `agents_version` 升级到 `18`（`setup_skill_version` 仍为 `1.2.7`）。
-- **技能契约体检（#242）**：新增 `check-current-skill-contracts.py`，把版本锚点、主产物路径、细纲必填项和「静默降级」禁令固化成 CI 契约；`agents_version` 成为运行时过期判定的唯一权威。
-- **对标主产物缺失改 fail-fast**：`剧情/情绪模块.md` / `剧情/节奏.md` 缺失时统一停下、设 `missing_primary_contract` 并提示重跑 `/story-long-analyze` Stage 3+ 或 `/story-import`，不再用 `拆文报告.md` / 章节摘要 / 故事线静默降级。
-- **旧版大纲容忍保留**：旧版卷纲缺卷契约/剧情单元卡、旧版细纲缺章节蓝图字段仍不阻塞日更；本轮内存推断、未知项写 `[待补充]`，仅在明确补纲/改纲时回写；新建、补建、改纲时必须按当前章节蓝图补齐。
-- session-start / story-outline 规则与 agent 模板同步刷新。已部署项目请重新运行 `/story-setup` 刷新 hooks/agents/references；**部署后新开会话**，否则旧会话仍使用 v17 部署。
-
-### v19
-
-- `.story-deployed` 的 `agents_version` 升级到 `19`（`setup_skill_version` 仍为 `1.2.7`）。
-- **概念统一为「剧情单元」**：剧情条 / 循环卡 / 正式情节循环 / 剧情段统一叫**剧情单元**（卷纲里的记为**剧情单元卡**），字段 循环ID/循环节拍/循环情绪引擎/循环承诺 → 单元ID/单元节拍/单元情绪引擎/单元承诺；「循环」一词只保留节奏义（爽点循环/小中大循环等）。已有卷纲用旧词不阻塞——按字段结构回退读取，补纲/改纲时升级为新词。
-- **拆书剧情单元接入卷纲/细纲**：卷纲剧情单元卡新增可缺省字段「对标剧情参照」；「对标节奏迁移」改以剧情单元为选段单位（按 类型/桥段标签 圈同类）；细纲分批边界改为「一批 = 一个剧情单元」，剧情批召回一次、结论固化进剧情单元卡；story-long-write 场景表新增「补纲/扩纲」入口与卷纲锁定定义。拆文侧 `剧情/README.md` 新增「剧情单元清单」索引（存量书可用「补剧情单元清单」机械补建）。旧版卷纲/细纲/拆文库无这些字段一律不阻塞，回退原流程。
-- **卷纲规则同步新推进模型**：部署规则 story-outline.md 的卷纲必填项改为 卷契约/终局储备/剧情单元卡 schema，废弃「每 N 章一个大爽点」固定周期；细纲缺项处理恢复旧版容忍（新建/补建/改纲才要求按当前蓝图齐全）。
-- **story-architect 模板对齐**：细纲最小结构补 单元ID/位置、主角目标/关键选择；「代价兑现/收益兑现」改名「行动成本（可无）/收益归属」；Phase 2 spawn 也必须附带契约摘要（新增细纲层字段一条）。
-- **审查线对齐新推进模型**：agent-references/quality-checklist.md 同步七类状态分档、悬念/爽点间隔按章节定位豁免，新增「读者契约与终局储备双向审查」一节。
-- **hooks 健壮性**：session-start 部署自检名单纳入 `story_hook_cli.js` / `story_hook_core.js`，并在 node 缺失时一次性 [WARN] 提示正文兜底网/commit 提示/连续性检查已停用（大纲拦截仍有纯 bash 兜底）；staged 提交扫描四份实现（JS core / Codex python / Claude bash / OpenCode pre-commit）语义与中文文案统一，parity 测试新增 Part E（staged warnings 与大纲阻断的 py↔js 逐字锁）。
-- **去AI味闸口机器化（无状态）**：写后正文网新增确定性毒句式检测（不是A而是B 全家族/声线反差/否定排比/预告收尾），写正文落盘即自动扫描并推回命中，Claude/ZCode/OpenCode/Codex 四端同一共享核；写下一章前新增「毒句式欠账门」——上一章有未清 blocking 命中且未标 `<!-- 去味:跳过 -->` 豁免时拦截（判据现算自文件本身，不落任何状态文件，node 缺失或解析失败一律放行）；豁免标记冒号全半角均认，且同时使写后网跳过该章毒句式推回（其余网照常）；`check-ai-patterns.js` 同步新增 voice-contrast / negation-parade / reverse-not-is / trailer-ending（blocking，经真人语料零误报校准）与 quote-emphasis-tic（advisory）；SKILL 侧最毒句式速查内联进写作步骤、新增「写后同轮清零」要求，OpenClaw/generic 无 hook 平台由 AGENTS 模板自锁条款兜底。
-- 已部署项目请重新运行 `/story-setup` 刷新 hooks/agents/rules/references；**部署后新开会话**，否则旧会话仍使用 v18 部署。
-
-### v20 (当前)
-
-- `.story-deployed` 的 `agents_version` 升级到 `20`（`setup_skill_version` 仍为 `1.2.7`）。
-- **narrative-writer Gate D 接入句长标准**：Gate D 由「节奏打碎」改为「节奏调整」——只拆臃肿修饰、堆叠比喻、信息过载的长句，改写后叙述句仍以逗号长句为主（agent-references/anti-ai-writing.md 规则 3「句子该多长」：逗号之间 8-12 字、整句 20-30 字，不要连着出现 ≤5 字的碎片）；「手机阅读密度」明确拆的是段落，不把句子内部切碎。
-- **agent-references 句长治理**：anti-ai-writing.md 规则 3 重写为「句子该多长（短句是工具，不是默认）」，并声明本文件句长以规则 3 为准（真实爆款语料校准：长篇旁白逗号之间平均 8.8-9.6 字、整句平均 22-24 字、逗号长句占 74-80%）；banned-words.md 的 缓缓/微微/轻轻/淡淡 从一级降为二级密度控制（每千字合计 ≤3）；quality-checklist / writing-craft / format-and-structure / genre-writing-formulas 同步消除「见长就拆」「全量情绪外化」等诱导条款。
-- **narrative-writer 外化处方设上限**：「心理外化 / Gate C 心理描写外化 / 情绪词默认外化」由绝对化改为一处到位、非铁律、必要内心可直写、别堆蹭袖口/攥裤管式无功能小动作；emotional-arc-design 的「短句=果决热血」改为「句长跟着情绪和节奏走」；writing-craft 开头事件密度的高密度范例由电报体短句换成逗号流水，点明密度是一段里几件事、不是句句断开。
-- 已部署项目请重新运行 `/story-setup` 刷新 hooks/agents/rules/references；**部署后新开会话**，否则旧会话仍使用 v19 部署。
+日常写作的两条硬约束：所有追踪写入都走 `tracking_commit.py`；派生视图被改动后用该章的 `mode=revision` 事务整份重建，不手改。

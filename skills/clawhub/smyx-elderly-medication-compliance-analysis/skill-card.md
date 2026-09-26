@@ -1,45 +1,60 @@
-## Description: <br>
-Using a fixed camera installed above or beside a home medication area, this skill analyzes video to detect medication pickup, movement to mouth, and swallowing steps and records incomplete medication events for caregiver follow-up. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes fixed-camera medication-area videos to detect pick-up, to-mouth, and swallow steps and produce medication-compliance results and caregiver alert text.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External caregivers, elder-care operators, and developers use this skill to analyze medication-area videos for visual compliance signals, generate structured reports, and retrieve prior medication-compliance reports. The output supports caregiver follow-up and is not a substitute for medical advice or prescribed medication decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Medication-area videos and related identifiers may be processed by remote services and linked to persistent report history. <br>
-Mitigation: Use only with clear consent from the monitored person or caregiver, confirm retention and access controls, and verify where videos, snapshots, reports, and identifiers are stored. <br>
-Risk: Remote URL inputs may cause the service to fetch externally supplied media. <br>
-Mitigation: Restrict submitted URLs to approved media locations and confirm the remote service enforces URL allowlists, size limits, and content validation. <br>
-Risk: Automated medication-compliance analysis can be incomplete or wrong, especially when video quality does not show the pill box, hands, mouth, and neck clearly. <br>
-Mitigation: Treat results as caregiver-support signals only, require human follow-up for missed or uncertain medication events, and do not use the output as medical advice. <br>
+## Use Case:
 
+External caregivers, elder-care operators, and developers use this skill to analyze medication-area video or image inputs, check whether the pick-up, to-mouth, and swallow steps were observed, and generate structured compliance reports or historical report listings. It supports medication adherence monitoring, not medical diagnosis or dosing advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-elderly-medication-compliance-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown text with structured JSON-style analysis results, compliance status, alert text, and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save report output to a local file when an output path is provided.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release metadata) <br>
+Risk: Medication-area videos may contain sensitive health and household information and are sent to the configured cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with informed consent from the monitored person or caregiver, avoid unnecessary uploads, and keep video files and report outputs in a protected workspace.
+
+Risk: The skill can create or reuse persistent identities and tokens with limited user-visible control.
+
+Mitigation: Run it in a dedicated workspace or account, review stored workspace data after use, and clear local databases or tokens when report access should not persist.
+
+Risk: Visual medication-step detection can be incomplete or uncertain and should not be treated as medical advice.
+
+Mitigation: Use results as adherence-support signals only; confirm missed or uncertain medication events manually and do not use the output to change medication plans.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-elderly-medication-compliance-analysis)
+- [Medication compliance API documentation](artifact/references/api_doc.md)
+- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown or JSON containing structured medication-step detections, compliance status, confidence, alert text, and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write an optional output file when requested by the user.]
+
+## Skill Version(s):
+
+1.0.12 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

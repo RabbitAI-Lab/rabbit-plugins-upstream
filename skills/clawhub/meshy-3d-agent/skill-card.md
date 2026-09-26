@@ -1,47 +1,64 @@
-## Description: <br>
-Generate 3D models, textures, images, rigged characters, animations, and 3D print ready assets through the Meshy AI API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create 3D models, textures, reference images, rigging and animation with Meshy, and prepare models for physical 3D printing: white or multicolor prints, Creative Lab products, sizing and slicer handoff.
 
-## Publisher: <br>
-[arlieeee](https://clawhub.ai/user/arlieeee) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[arlieeee](https://clawhub.ai/user/arlieeee)
 
-## Use Case: <br>
-Developers, creators, and 3D printing users use this skill to generate or transform Meshy assets, manage asynchronous API tasks, download model outputs, and prepare files for printing workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Meshy API requests can spend paid credits. <br>
-Mitigation: Require a clear cost summary and explicit user confirmation before creating paid Meshy tasks. <br>
-Risk: Prompts, image URLs, or selected local image data may be sent to Meshy. <br>
-Mitigation: Disclose the data transfer and use only user-provided or user-approved inputs for API calls. <br>
-Risk: Console logs may include an API key prefix. <br>
-Mitigation: Treat logs as sensitive and avoid exposing the full API key in output, files, or shared artifacts. <br>
-Risk: The skill can detect or open local slicer applications. <br>
-Mitigation: Ask for explicit approval before probing for slicers or opening local applications. <br>
+## Use Case:
 
+Developers, designers, and makers use this skill to guide an agent through Meshy CLI workflows for generating 3D assets, preparing models for printing, and delivering resulting files in a user-selected workspace.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/arlieeee/skills/meshy-3d-agent) <br>
-- [Meshy API documentation](https://docs.meshy.ai) <br>
-- [Meshy API reference](artifact/reference.md) <br>
-- [Meshy API endpoint](https://api.meshy.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with Python and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create Meshy API tasks after user confirmation and save generated assets under meshy_output/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.1 (source: server release metadata) <br>
+Risk: The skill can spend Meshy credits through paid generation or processing tasks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify estimated costs and user authorization before starting paid work, and report actual consumed credits when the task completes.
+
+Risk: Prompts, input images, models, and task requests may be sent to Meshy.
+
+Mitigation: Use the skill only with assets the user is comfortable uploading to Meshy.
+
+Risk: The Meshy CLI can reuse local credentials and download generated files.
+
+Mitigation: Keep credential handling inside the CLI flow, avoid exposing tokens, and rely on the documented workspace and overwrite limits for local file writes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/arlieeee/skills/meshy-3d-agent)
+- [Meshy 3D Agent homepage](https://github.com/meshy-dev/meshy-3d-agent)
+- [Setup](references/setup.md)
+- [Digital asset pipelines](references/pipelines.md)
+- [Printing recipes](references/printing.md)
+- [Cost, waiting, previews, delivery and follow-ups](references/delivery.md)
+- [Troubleshooting](references/troubleshooting.md)
+- [Meshy API pricing](https://docs.meshy.ai/en/api/pricing)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown guidance with inline shell commands, file paths, and JSON-oriented CLI outputs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide the agent to create, inspect, download, or hand off 3D asset files within the requested workspace.]
+
+## Skill Version(s):
+
+0.6.0 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

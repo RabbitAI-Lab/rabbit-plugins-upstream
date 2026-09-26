@@ -1,48 +1,61 @@
-## Description: <br>
-Zoho Bigin API integration with managed OAuth for managing contacts, companies, pipelines, and products in Bigin CRM. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an agent read and manage Zoho Bigin CRM records, including contacts, companies, products, and sales pipelines, through an authorized Maton connection.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to read, search, create, update, and delete Zoho Bigin CRM records through Maton-managed OAuth when working with contacts, companies, products, and sales pipelines. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access connected Zoho Bigin CRM data through Maton-managed OAuth. <br>
-Mitigation: Review the Zoho and Maton OAuth scopes before use and install only for accounts whose CRM data the agent is allowed to access. <br>
-Risk: Create, update, and delete operations can mutate business CRM records. <br>
-Mitigation: Require explicit user approval before executing write operations, including confirmation of the target resource and intended effect. <br>
-Risk: Using the wrong connection when multiple Zoho Bigin accounts are configured could affect unintended CRM data. <br>
-Mitigation: Use the Maton-Connection header to select the intended active connection when more than one account is available. <br>
+## Use Case:
 
+Sales teams and their agents use this skill to look up, create, update, and delete Zoho Bigin CRM records and manage pipeline information after connecting an authorized account. Optional Maton functions and triggers can automate approved actions.
 
-## Reference(s): <br>
-- [Zoho Bigin Skill on ClawHub](https://clawhub.ai/byungkyu/skills/zoho-bigin) <br>
-- [Publisher Profile](https://clawhub.ai/user/byungkyu) <br>
-- [Bigin API Overview](https://www.bigin.com/developer/docs/apis/v2/) <br>
-- [Bigin REST API Documentation](https://www.bigin.com/developer/docs/apis/) <br>
-- [Modules API](https://www.bigin.com/developer/docs/apis/modules-api.html) <br>
-- [Maton](https://maton.ai) <br>
-- [Maton Community](https://discord.com/invite/dBfFAcefs2) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with API endpoint descriptions and Python, JavaScript, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and the MATON_API_KEY environment variable for authenticated requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: Connecting an account may authorize access to sensitive CRM records beyond the immediate task.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the account connection with the user, prefer OAuth, and select only the Zoho scopes needed for the task.
+
+Risk: Creating, changing, or deleting CRM records can affect customer information and sales workflows.
+
+Mitigation: Start with read-only requests and obtain explicit user approval for each write or delete after reviewing its target and payload.
+
+Risk: Functions, triggers, destinations, and non-core CRM modules can introduce broader or ongoing access and downstream effects.
+
+Mitigation: Require specific approval before using these features and review their scope, destinations, and intended effects.
+
+## Reference(s):
+
+- [ClawHub Zoho Bigin skill](https://clawhub.ai/byungkyu/skills/zoho-bigin)
+- [Maton homepage](https://maton.ai)
+- [Zoho Bigin API documentation](https://www.bigin.com/developer/docs/apis/)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Guidance]
+
+**Output Format:** [Markdown with example commands, code, and API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access and an authorized Maton connection; CRM responses may contain personal data.]
+
+## Skill Version(s):
+
+1.2.4 (source: ClawHub release evidence; skill metadata states 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,79 @@
-## Description: <br>
-Notion API integration with managed OAuth for querying databases, searching pages, reading workspace content, and performing confirmed write operations against selected Notion resources. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Notion API integration with managed OAuth for querying databases, searching pages, reading workspace content, and performing confirmed Notion write operations through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and external users use this skill to connect an agent to a Notion workspace through Maton OAuth, search and read Notion content, and make explicit user-approved changes to pages, blocks, databases, or data sources. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Maton-mediated Notion access can expose workspace pages, databases, blocks, users, and search results through the selected connection. <br>
-Mitigation: Use the least-privileged Notion connection available and install only when Maton-mediated access to the selected workspace is acceptable. <br>
-Risk: Write operations can create, update, archive, or delete Notion resources, including shared workspace content. <br>
-Mitigation: Confirm the exact page, database, block, or data source and the intended connection before executing any write operation. <br>
-Risk: Bulk updates or changes to shared pages can disrupt team workflows. <br>
-Mitigation: Require explicit approval for each batch and use extra caution for shared or destructive changes. <br>
+## Use Case:
 
+Developers and operators use this skill to access Notion workspace content, run Notion API calls, and configure approved Notion automations through a managed OAuth connection.
 
-## Reference(s): <br>
-- [ClawHub Notion Skill](https://clawhub.ai/byungkyu/skills/notion-api-skill) <br>
-- [Maton](https://maton.ai) <br>
-- [Maton CLI Manual](https://cli.maton.ai/manual) <br>
-- [Notion API Introduction](https://developers.notion.com/reference/intro) <br>
-- [Notion LLM Reference](https://developers.notion.com/llms.txt) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI, HTTP, Python, and JavaScript examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, a valid Notion OAuth connection, and explicit confirmation before write operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: server release metadata; artifact frontmatter metadata.version is 1.0) <br>
+Risk: Authorizing a Notion connection can expose workspace data available to the connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the user is comfortable granting Maton access to the intended Notion workspace, prefer least-privilege scopes, and confirm the connection before use.
+
+Risk: Write, deletion, trigger, hosted function, or destination actions can change data or create ongoing data flows.
+
+Mitigation: Require explicit confirmation of the exact Notion connection, target resource, payload, destination, and intended effect before executing sensitive actions.
+
+Risk: Forwarding Notion or trigger data to third-party URLs can disclose private workspace content.
+
+Mitigation: Avoid third-party forwarding URLs unless the user understands what data will be sent, to which host, and for how long.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/notion-api-skill)
+- [Maton homepage](https://maton.ai)
+- [Notion API Introduction](https://developers.notion.com/reference/intro)
+- [Notion Search](https://developers.notion.com/reference/post-search.md)
+- [Notion Query Database](https://developers.notion.com/reference/post-database-query.md)
+- [Notion Get Page](https://developers.notion.com/reference/retrieve-a-page.md)
+- [Notion Create Page](https://developers.notion.com/reference/post-page.md)
+- [Notion Update Page](https://developers.notion.com/reference/patch-page.md)
+- [Append Block Children](https://developers.notion.com/reference/patch-block-children.md)
+- [Notion Filter Reference](https://developers.notion.com/reference/post-database-query-filter.md)
+- [Notion LLM Reference](https://developers.notion.com/llms.txt)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, code, markdown]
+
+**Output Format:** [Markdown with inline shell commands, JSON examples, and code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include Notion API request guidance, Maton CLI commands, hosted function examples, trigger configuration, and security handling notes.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

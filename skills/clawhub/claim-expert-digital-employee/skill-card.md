@@ -1,42 +1,57 @@
-## Description: <br>
-Provides an insurance claims workflow reference framework covering case intake, document handling, medical review, liability assessment, settlement checks, fraud screening, adjudication, and closure communication. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides draft guidance and review frameworks for insurance claims intake, document and medical review, coverage and payment assessment, fraud screening, and customer communications.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Insurance claims professionals use this skill as a structured reference for claims intake, material analysis, medical review, liability assessment, settlement review, fraud risk checks, adjudication support, and customer communications. Outputs require human review before any real-world claims decision or operational action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may involve broad access to customer, medical, claims-system, credential, notification, closure, archival, and logging workflows. <br>
-Mitigation: Use only in a controlled insurance-operations environment with approved tools, secure secret management, intentionally granted and monitored permissions, and a documented logging and retention policy. <br>
-Risk: Case registration, notification, closure, and archival actions can affect real claims workflows. <br>
-Mitigation: Require explicit human approval before those actions and review outputs before relying on them for operational decisions. <br>
-Risk: Live API keys or other secrets could be exposed if pasted into chat. <br>
-Mitigation: Do not paste live API keys into chat; use managed secret storage and scoped credentials. <br>
+## Use Case:
 
+Insurance claims staff use this Chinese-language reference to prepare draft intake records, review findings, calculation checks, fraud indicators, and customer notices for qualified human review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/claim-expert-digital-employee) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance, structured report templates, JSON examples, and inline shell command blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires human review; some workflows assume approved insurance operations tools and controlled access to claims, policy, notification, calculation, and archival systems.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.1 (source: target metadata and SKILL.md frontmatter) <br>
+Risk: Conflicting workflow language could be read as authorizing claim decisions, customer notices, fraud actions, case closure, or archiving.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit approval by authorized staff for each consequential action; keep system lookups, sending, payments, closure, and archiving within institution-controlled workflows.
+
+Risk: Claims analysis may expose medical histories and customer identifiers.
+
+Mitigation: Minimize and de-identify inputs, restrict access to authorized personnel, and do not connect customer or medical-history tools without institution-specific controls.
+
+Risk: Draft calculations and fraud indicators may be mistaken for final adjudications.
+
+Mitigation: Have qualified staff verify findings against policy terms and institution systems; use approved calculation results for payment decisions.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/gechengling/skills/claim-expert-digital-employee)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Chinese-language draft reports, checklists, and notice text in Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Drafts for human review; no files, customer messages, case changes, or payments are produced by the skill.]
+
+## Skill Version(s):
+
+2.1.8 (source: skill frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

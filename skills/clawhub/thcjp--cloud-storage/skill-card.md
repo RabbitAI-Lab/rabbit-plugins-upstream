@@ -1,43 +1,57 @@
-## Description: <br>
-Manage files across cloud providers with authentication, cost awareness, and multi-provider operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manages files across cloud providers with authentication, cost awareness, and multi-provider storage workflows.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and cloud operators use this skill to upload, list, download, cost-review, and migrate cloud-storage objects across providers such as AWS, Azure, GCP, and Aliyun. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Cloud-storage operations can affect remote accounts, buckets, objects, permissions, and billable resources. <br>
-Mitigation: Use only for explicit user-directed cloud-storage tasks, and verify the provider, account, bucket, region, permissions, and expected cost before execution. <br>
-Risk: The documentation mixes cloud-storage behavior with SQL and database task language. <br>
-Mitigation: Do not use the skill for SQL or database requests until the documentation is corrected; limit use to cloud-storage operations. <br>
-Risk: Mutating actions such as upload, migration, or permission changes may have persistent effects. <br>
-Mitigation: Require user confirmation before mutating operations and review the configured cloud credentials and CLI context first. <br>
+## Use Case:
 
+Developers and operations teams use this skill to manage cloud storage files and buckets across providers, including upload, download, listing, cost review, and cross-cloud migration tasks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cloud-storage) <br>
-- [Skill homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON result examples and shell-command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce cloud resource URLs, storage metadata, migration status, integrity checks, and cost reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata; skill frontmatter reports 1.0.2) <br>
+Risk: The skill requests command execution and file access for cloud-storage work.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in an agent environment where command execution is reviewed and scoped to the intended cloud-storage task.
+
+Risk: Cloud operations can access production buckets, credentials, and billable resources.
+
+Mitigation: Use least-privilege cloud credentials, test against non-production buckets first, and confirm provider billing and region settings before running changes.
+
+Risk: The documentation mixes cloud-storage behavior with unrelated document, database, and code-review template text.
+
+Mitigation: Treat the documented behavior as poorly scoped and review proposed commands, parameters, and outputs before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cloud-storage)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON examples and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include cloud file URLs, storage metadata, usage and cost reports, migration progress, and integrity-check results.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata; artifact frontmatter lists 1.0.3)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

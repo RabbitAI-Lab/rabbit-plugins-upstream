@@ -1,30 +1,32 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PM Master · 模板渲染引擎（契约脚本）
+PM Master · Template rendering engine (contract script)
 -------------------------------------------------
-把带占位符的 Markdown 模板 + YAML/JSON 数据，渲染为最终 Markdown 产物。
+Render a Markdown template with placeholders plus YAML/JSON data into a final
+Markdown artifact.
 
-支持的模板语法（mini-Jinja，足够 PM 文档使用）：
-  1. 变量：      {{ project.name }}  或  {{ this.id }}
-  2. 循环：      {{#each risks}} ... {{this.description}} ... {{/each}}
-  3. 循环变量：  {{@index}} / {{@first}} / {{@last}}（循环内可用，常用于拼接逗号数组）
-  4. 条件：      {{#if framework == "scrum"}} ... {{else}} ... {{/if}}
-                  （也兼容 {{#else}} 写法，二者等价）
-  5. 比较运算：  ==  /  !=  （用于 #if）
-  6. 字面量：    "文本"  /  '文本'  /  true / false / null / 数字
-  7. 列表索引：  {{ burndown.[0].remaining }}（支持 arr.[n] 形式）
-  8. 字段拼接：  {{ join(burndown, ", ", "day") }} -> 1, 2, 3（单行拼接，用于 mermaid 数组；None 回退为 0 防崩溃）
-9. mermaid 安全辅助：
-   - {{ mid(text) }}      -> mermaid 节点/task 安全 ID（空格/点/非常规字符 -> 下划线，保证非空、不以数字开头）
-   - {{ mlabel(text) }}   -> mermaid 标签文本（转义双引号、折叠空白，用于 ["..."] 内）
-   - {{ gname(text) }}    -> 甘特图任务显示名（标签安全 + 冒号转全角，避免破坏 `name :id` 分隔）
-10. 色标辅助（风险登记册等）：
-   - {{ sev_icon(text) }} / {{ risk_icon(text) }} -> 把严重度(绿/黄/橙/红 或 green/yellow/orange/red 或
-     low/medium/high/critical)映射为颜色 emoji：🟢 绿 / 🟡 黄 / 🟠 橙 / 🔴 红；未知 -> ⚪
+Supported template syntax (mini-Jinja, sufficient for PM documents):
+  1. Variable:    {{ project.name }}   or  {{ this.id }}
+  2. Loop:        {{#each risks}} ... {{this.description}} ... {{/each}}
+  3. Loop vars:   {{@index}} / {{@first}} / {{@last}} (available inside loops, often used to join comma arrays)
+  4. Condition:   {{#if framework == "scrum"}} ... {{else}} ... {{/if}}
+                   (also accepts {{#else}}, the two are equivalent)
+  5. Comparisons: ==  /  !=  (for #if)
+  6. Literals:    "text"  /  'text'  /  true / false / null / number
+  7. List index:  {{ burndown.[0].remaining }} (supports the arr.[n] form)
+  8. Field join:  {{ join(burndown, ", ", "day") }} -> 1, 2, 3 (single-line join, for mermaid arrays; None falls back to 0 to avoid crashes)
+  9. Mermaid safety helpers:
+   - {{ mid(text) }}      -> mermaid node/task safe ID (spaces/dots/irregular chars -> underscore, guaranteed non-empty and not starting with a digit)
+   - {{ mlabel(text) }}   -> mermaid label text (escapes double quotes, collapses whitespace, for use inside ["..."])
+   - {{ gname(text) }}    -> gantt task display name (label-safe + colon -> full-width, to avoid breaking the `name :id` separator)
+ 10. Color helpers (risk register, etc.):
+   - {{ sev_icon(text) }} / {{ risk_icon(text) }} -> map a severity (green/yellow/orange/red or
+     low/medium/high/critical) to its canonical color word: green / yellow / orange / red; unknown -> empty string
 
-数据合并：循环体内通过 `this` 引用当前元素；支持一层嵌套循环（this 会按层覆盖）。
-缺失变量输出空串，不抛错（便于部分数据渲染）。
+Data merge: inside a loop, reference the current element via `this`; one level of nested
+loops is supported (this is overwritten per level).
+Missing variables output an empty string without raising (enabling partial-data rendering).
 """
 import os
 import sys
@@ -37,12 +39,12 @@ except ImportError:
     yaml = None
 
 
-# ---------- 表达式求值 ----------
+# ---------- Expression evaluation ----------
 def _resolve(path, ctx):
-    """按 '.' 路径从 ctx 取值，支持 dict / list 索引（含 arr.[0] 形式）。"""
+    """Resolve a value from ctx by '.' path, supporting dict / list indexing (incl. arr.[0])."""
     cur = ctx
     for part in str(path).split('.'):
-        # 支持 list 索引段：arr.[0] -> 0
+        # support list index segment: arr.[0] -> 0
         if len(part) >= 3 and part.startswith('[') and part.endswith(']'):
             part = part[1:-1]
         if isinstance(cur, dict) and part in cur:
@@ -77,7 +79,7 @@ def _resolve_or_literal(tok, ctx):
 
 def _eval(expr, ctx):
     expr = expr.strip()
-    # 支持 #if 内的辅助函数调用，如 (eq granularity "fortnight") / (sev_cell x y)
+    # support helper calls inside #if, e.g. (eq granularity "fortnight") / (sev_cell x y)
     if expr.startswith('(') and expr.endswith(')'):
         inner = expr[1:-1].strip()
         if re.match(r'^\w+[(\s]', inner):
@@ -94,7 +96,7 @@ def _eval(expr, ctx):
 
 
 def _split_args(s):
-    """按逗号切分，忽略引号内的逗号（用于 join() 参数解析）。"""
+    """Split by comma, ignoring commas inside quotes (used for join() argument parsing)."""
     out = []
     cur = []
     in_q = None
@@ -116,10 +118,10 @@ def _split_args(s):
 
 
 def _join_call(tag, ctx):
-    """支持 join(listExpr, "sep", "field") 形式的字段拼接（单行、无换行）。
+    """Support field join of the form join(listExpr, "sep", "field") (single-line, no newlines).
 
-    例：{{ join(burndown, ", ", "day") }} -> 1, 2, 3
-    用于生成 mermaid xychart 等需要逗号数组的图表。
+    Example: {{ join(burndown, ", ", "day") }} -> 1, 2, 3
+    Used to generate comma arrays for charts such as mermaid xychart.
     """
     m = re.match(r'^\s*join\s*\((.*)\)\s*$', tag, re.S)
     if not m:
@@ -139,7 +141,7 @@ def _join_call(tag, ctx):
     items = []
     for it in lst:
         if not field or field == 'this':
-            # None -> '0'：用于 mermaid xychart 等数值数组，避免 [1, , 3] 语法错误
+            # None -> '0': for numeric arrays like mermaid xychart, avoid [1, , 3] syntax errors
             items.append('0' if it is None else str(it))
         else:
             v = _resolve(field, it)
@@ -148,21 +150,22 @@ def _join_call(tag, ctx):
 
 
 def _mermaid_id(val):
-    """生成 mermaid 安全的节点/task ID。
+    """Generate a mermaid-safe node/task ID.
 
-    - 空格 -> 下划线
-    - 点(.) -> 下划线（mermaid gantt/flowchart 的 ID 不允许含 '.'，
-      原 slug 直接删点会丢失层级并可能造成重复 ID 而报错）
-    - 其余非常规字符 -> 下划线
-    - 保证非空（空值回退到稳定的 node_<hash>），且不以数字开头（前缀 '_'）
-    例：{{ mid this.id }} -> SOW1_1 （输入 'SOW1.1'）
+    - spaces -> underscore
+    - dot (.) -> underscore (mermaid gantt/flowchart IDs may not contain '.',
+      naively deleting the dot would lose hierarchy and could cause duplicate IDs / errors)
+    - other irregular characters -> underscore
+    - guaranteed non-empty (empty falls back to a stable node_<hash>), and not starting with a digit (prefixed '_')
+    Example: {{ mid this.id }} -> SOW1_1 (input 'SOW1.1')
     """
     if val is None:
         return ''
     s = re.sub(r'\s+', '_', str(val).strip())
-    # 保留：单词字符 \w（含字母/数字/下划线/中日韩等 unicode 字母）与连字符 '-'；
-    # 其余（点号/标点）-> 下划线。mermaid 接受 unicode 节点/task ID，
-    # 故保留中文，仅把 '.' 等非常规字符转为 '_'（同时避免 gantt 非法 task id）。
+    # Keep: word characters \w (letters/digits/underscore, including Unicode letters such
+    # as CJK) and the hyphen '-'; everything else (dots/punctuation) -> underscore.
+    # Mermaid accepts Unicode node/task IDs, so we keep CJK and only convert '.' etc. to
+    # '_' (also avoiding illegal gantt task ids).
     s = re.sub(r'[^\w-]', '_', s)
     if s == '' or s == '_':
         h = abs(hash(str(val))) % 1000000
@@ -173,72 +176,76 @@ def _mermaid_id(val):
 
 
 def _mermaid_label(val):
-    """mermaid 标签文本（用于 ["..."] / "..." 内）。
+    """Mermaid label text (for use inside ["..."] / "...").
 
-    - 双引号 '"' -> 单引号 "'"（避免破坏双引号字符串）
-    - 折叠连续空白/换行为单个空格并去首尾空白
-    例：{{ mlabel this.from }} -> 订单服务（即使原文含引号/换行也安全）
+    - double quote '"' -> single quote "'" (avoids breaking the double-quoted string)
+    - collapse consecutive whitespace/newlines into a single space and strip ends
+    Example: {{ mlabel this.from }} -> Order Service (safe even if the original contains quotes/newlines)
     """
     if val is None:
         return ''
     s = str(val).replace('"', "'")
-    # 注意：'\n' 是字面量反斜杠+n，不被 \s 匹配，故节点内换行仍保留
+    # Note: '\n' is a literal backslash+n here and is not matched by \s, so newlines inside
+    # a node are preserved
     s = re.sub(r'[ \t\r\f\v]+', ' ', s).strip()
     return s
 
 
 def _gantt_name(val):
-    """甘特图任务显示名（':' 分隔符之前的文本）。
+    """Gantt task display name (text before the ':' separator).
 
-    在 gantt 行 `任务名 :taskId, start, end` 中，任务名里的冒号会破坏分隔，
-    故把 ':' 换成全角 '：'；`&` 是 mermaid 多任务同行运算符，需转义，
-    否则未转义的 '&' 会让解析器把后续 token 当作无日期任务 -> 'undefined.endTime' 报错。
-    同时复用标签安全处理（引号/空白）。
+    In a gantt line `task name :taskId, start, end`, a colon inside the task name
+    breaks the separator, so ':' is replaced with the full-width colon '\uFF1A';
+    '&' is mermaid's same-line multi-task operator and must be escaped too, otherwise
+    an unescaped '&' makes the parser treat subsequent tokens as dateless tasks ->
+    'undefined.endTime' error. Label-safe handling (quotes/whitespace) is reused as well.
     """
     s = _mermaid_label(val)
-    # gantt 中 ':' 是任务/ID 分隔符，'&' 是多任务同行运算符；
-    # 两者都会破坏标签，必须转义。'&' 换成全角 '＆'(U+FF06)，
-    # 视觉仍是 & 但不会被当作运算符，避免 'undefined.endTime' 报错。
-    s = s.replace(':', '：').replace('&', '＆')
+    # In gantt, ':' is the task/ID separator and '&' is the same-line multi-task operator;
+    # both break the label and must be escaped. '&' is replaced with the full-width
+    # ampersand '\uFF06' (U+FF06): visually still '&' but not treated as an operator,
+    # avoiding the 'undefined.endTime' error.
+    s = s.replace(':', '\uFF1A').replace('&', '\uFF06')
     return s
 
 
 def _severity_icon(val):
-    """把严重度映射为颜色 emoji，用于风险登记册等色标展示。
+    """Map a severity to its canonical color word (green/yellow/orange/red), used for color-coded
+    display in the risk register, etc.
 
-    接受中文色字（绿/黄/橙/红）、英文 band（green/yellow/orange/red）、
-    英文等级（low/medium/high/critical）或其任意组合文本。未知 -> ⚪。
-    例：{{ sev_icon this.severity }} -> 🔴（输入 '红' / 'red' / 'critical'）
+    Accepts English bands (green/yellow/orange/red) or English levels (low/medium/high/critical).
+    Unknown -> empty string.
+    Example: {{ sev_icon this.severity }} -> red (input 'red' / 'critical')
     """
     if not val:
         return ''
     s = str(val).strip().lower()
-    if s in ('绿', 'green', 'low'):
-        return '🟢'
-    if s in ('黄', 'yellow', 'medium'):
-        return '🟡'
-    if s in ('橙', 'orange', 'high'):
-        return '🟠'
-    if s in ('红', 'red', 'critical'):
-        return '🔴'
-    # 子串兜底（如 "10 橙"、"15 orange"）
-    if '绿' in s or 'green' in s:
-        return '🟢'
-    if '黄' in s or 'yellow' in s:
-        return '🟡'
-    if '橙' in s or 'orange' in s:
-        return '🟠'
-    if '红' in s or 'red' in s:
-        return '🔴'
-    return '⚪'
+    if s in ('green', 'low'):
+        return 'green'
+    if s in ('yellow', 'medium'):
+        return 'yellow'
+    if s in ('orange', 'high'):
+        return 'orange'
+    if s in ('red', 'critical'):
+        return 'red'
+    # substring fallback (e.g. "10 orange", "15 high")
+    if 'green' in s:
+        return 'green'
+    if 'yellow' in s:
+        return 'yellow'
+    if 'orange' in s:
+        return 'orange'
+    if 'red' in s:
+        return 'red'
+    return ''
 
 
 def _assume_text(val):
-    """RAID 假设渲染助手：兼容 dict({text: ...}) 与纯字符串两种写法。
+    """RAID assumption rendering helper: works with both dict ({text: ...}) and plain-string forms.
 
-    模板里用 {{ assume_text(this) }} 渲染假设条目，避免 dict 被 str() 成
-    "{'text': '...'}" 这类 JSON 字面量而破坏文档可读性。
-    例：{'text': '<=1600 源表'} -> '<=1600 源表'；'<=1600 源表' -> '<=1600 源表'。
+    Templates use {{ assume_text(this) }} to render assumption items, avoiding the dict being
+    str()-ified into a JSON literal like "{'text': '...'}" that breaks document readability.
+    Example: {'text': '<=1600 source table'} -> '<=1600 source table'; '<=1600 source table' -> '<=1600 source table'.
     """
     if isinstance(val, dict):
         return str(val.get('text', ''))
@@ -248,7 +255,7 @@ def _assume_text(val):
 
 
 def _slug_call(tag, ctx):
-    """兼容旧写法：slug(x) / slug x 等价于 mid(x)（mermaid 安全 ID）。"""
+    """Backward-compatible legacy form: slug(x) / slug x is equivalent to mid(x) (mermaid-safe ID)."""
     m = re.match(r'^\s*slug\s*\((.*)\)\s*$', tag, re.S)
     if not m:
         m = re.match(r'^\s*slug\s+(.+?)\s*$', tag, re.S)
@@ -258,41 +265,42 @@ def _slug_call(tag, ctx):
 
 
 def _severity_band_from_score(score):
-    """按 5×5 校准矩阵把 score 映射为颜色 emoji（缺 severity 时回退用）。
+    """Map a score to its canonical color word via the 5x5 calibration matrix (fallback when severity is absent).
 
-    色带：🟢 绿 1–4 ｜ 🟡 黄 5–9 ｜ 🟠 橙 10–15 ｜ 🔴 红 16–25。
-    无法解析 -> ⚪。
+    Color bands: green 1-4 | yellow 5-9 | orange 10-15 | red 16-25.
+    Unparseable -> empty string.
     """
     if score is None:
-        return '⚪'
+        return ''
     try:
         sc = float(str(score).strip())
     except (ValueError, AttributeError):
-        return '⚪'
+        return ''
     if sc <= 4:
-        return '🟢'
+        return 'green'
     if sc <= 9:
-        return '🟡'
+        return 'yellow'
     if sc <= 15:
-        return '🟠'
-    return '🔴'
+        return 'orange'
+    return 'red'
 
 
 def _severity_cell(sev, score=None):
-    """优先用 severity 显式色标，缺失时用 score 推导，保证色标永远显示。
+    """Prefer the explicit severity color; fall back to score-derived band when absent,
+    so the color indicator is always shown.
 
-    用法：{{ sev_cell this.severity this.score }} -> 🔴
+    Usage: {{ sev_cell this.severity this.score }} -> red
     """
     icon = _severity_icon(sev)
-    if icon and icon != '⚪':
+    if icon:
         return icon
     return _severity_band_from_score(score)
 
 
 def _call_helper(tag, ctx):
-    """分发已知辅助函数调用：slug / mid / mlabel / gname / join。
+    """Dispatch known helper function calls: slug / mid / mlabel / gname / join.
 
-    返回 None 表示这不是一个可识别的辅助调用（交由通用变量求值处理）。
+    Returning None means this is not a recognized helper call (handed to general variable evaluation).
     """
     m = re.match(r'^\s*(\w+)\s*\((.*)\)\s*$', tag, re.S)
     if m:
@@ -307,7 +315,7 @@ def _call_helper(tag, ctx):
         if name in ('sev_icon', 'risk_icon'):
             return _severity_icon(_resolve_or_literal(arg, ctx))
         if name in ('sev_cell', 'sev_band'):
-            # sev_cell(severity, score) / sev_band(score)  -- 支持逗号或空格分隔
+            # sev_cell(severity, score) / sev_band(score) -- supports comma or space separation
             inner = re.match(r'^\s*(.*?)\s*[,\s]\s*(.*)\s*$', arg, re.S)
             if name == 'sev_band':
                 return _severity_band_from_score(_resolve_or_literal(arg, ctx))
@@ -321,13 +329,13 @@ def _call_helper(tag, ctx):
         if name == 'assume_text':
             return _assume_text(_resolve_or_literal(arg, ctx))
         if name == 'eq':
-            # eq(a, b) 或 eq a b -> 相等返回 b 的字面值（truthy），否则 ''（falsy），供 {{#if (eq ..)}} 使用
+            # eq(a, b) or eq a b -> returns b's literal (truthy) when equal, else '' (falsy), for {{#if (eq ..)}}
             a_raw, b_raw = None, None
             inner = re.match(r'^\s*(.*?)\s*,\s*(.*)\s*$', arg, re.S)
             if inner:
                 a_raw, b_raw = inner.group(1).strip(), inner.group(2).strip()
             else:
-                # 空格分隔（兼容引号包裹字面量）：eq granularity "fortnight"
+                # space-separated (also accepts quote-wrapped literals): eq granularity "fortnight"
                 m2 = re.match(r'^\s*(\S+)\s+"([^"]*)"\s*$', arg, re.S)
                 if m2:
                     a_raw, b_raw = m2.group(1).strip(), '"' + m2.group(2) + '"'
@@ -341,25 +349,25 @@ def _call_helper(tag, ctx):
                 return b if str(a) == str(b) else ''
             return ''
         return None
-    # 兼容文档示例中的无括号写法：{{ slug this.from }} 与 {{ eq a b }}
+    # Backward-compatible bracket-less forms from doc examples: {{ slug this.from }} and {{ eq a b }}
     if tag.startswith('slug '):
         return _slug_call(tag, ctx)
     if tag.startswith('eq '):
         inner = tag[3:].strip()
-        # 转成 eq(a, b) 形式重新进入解析（支持引号字面量）
+        # convert to eq(a, b) form and re-enter parsing (supports quoted literals)
         m2 = re.match(r'^(\S+)\s+"([^"]*)"\s*$', inner, re.S)
         if m2:
             return _call_helper('eq(%s, "%s")' % (m2.group(1), m2.group(2)), ctx)
         parts = inner.split(None, 1)
         if len(parts) == 2:
-            return _call_helper('eq(%s, %s)' % (parts[0], parts[1].strip('"')), ctx)
+            return _call_helper('eq(%s, %s)' % (parts[0], parts[1].strip('"')))
         return ''
     return None
 
 
-# ---------- 块匹配 ----------
+# ---------- Block matching ----------
 def _find_block(text, start, open_marker, close_marker):
-    """从 start 起，找到与 open_marker 匹配的 close_marker，返回 (内部文本, close之后索引)。"""
+    """From start, find the close_marker matching open_marker; return (inner text, index after close)."""
     depth = 1
     i = start
     L = len(text)
@@ -367,7 +375,7 @@ def _find_block(text, start, open_marker, close_marker):
         oi = text.find(open_marker, i)
         ci = text.find(close_marker, i)
         if ci == -1:
-            raise ValueError(f"未匹配的块标记: {open_marker}")
+            raise ValueError(f"Unmatched block marker: {open_marker}")
         if oi != -1 and oi < ci:
             depth += 1
             i = oi + len(open_marker)
@@ -380,9 +388,9 @@ def _find_block(text, start, open_marker, close_marker):
 
 
 def _split_else(body):
-    """在 #if 体内找到顶层（depth==1）的 {{else}} 或 {{#else}} 作为 then/else 分界。
+    """Within a #if body, find the top-level (depth==1) {{else}} or {{#else}} as the then/else boundary.
 
-    两种写法等价：{{else}} 与 {{#else}}。
+    The two forms are equivalent: {{else}} and {{#else}}.
     """
     depth = 1
     i = 0
@@ -426,7 +434,7 @@ def _split_else(body):
     return body, ''
 
 
-# ---------- 递归渲染 ----------
+# ---------- Recursive rendering ----------
 def _parse(text, ctx):
     out = []
     i = 0
@@ -454,10 +462,10 @@ def _parse(text, ctx):
                     sub['@first'] = (idx == 0)
                     sub['@last'] = (idx == n - 1)
                     rendered = _parse(body, sub)
-                    # 去掉循环体首尾换行，避免连续行之间出现空行（保持每行一个换行）
+                    # strip leading/trailing newlines to avoid blank lines between consecutive rows
                     stripped = rendered.lstrip('\n').rstrip('\n')
-                    # 仅当循环体本身含换行（如表格行）才补换行；
-                    # 行内 each（如甘特图依赖链）不补，避免打断同一行。
+                    # only add a newline when the loop body itself contains newlines (e.g. table rows);
+                    # inline each (e.g. gantt dependency chains) keeps the same line intact.
                     chunk.append(stripped + '\n' if '\n' in rendered else stripped)
             out.append(''.join(chunk))
             i = ni
@@ -497,16 +505,16 @@ def load_data(path):
         raw = f.read()
     if path.endswith(('.yaml', '.yml')):
         if yaml is None:
-            raise SystemExit("需要 PyYAML：请先 `pip install pyyaml`")
+            raise SystemExit("PyYAML is required: run `pip install pyyaml`")
         return yaml.safe_load(raw)
     return __import__('json').loads(raw)
 
 
 def main():
-    ap = argparse.ArgumentParser(description="PM Master 模板渲染引擎")
-    ap.add_argument('--template', required=True, help="模板 .md 路径")
-    ap.add_argument('--data', required=True, help="数据 .yaml/.json 路径")
-    ap.add_argument('--out', required=True, help="输出 .md 路径")
+    ap = argparse.ArgumentParser(description="PM Master template rendering engine")
+    ap.add_argument('--template', required=True, help="Path to the .md template")
+    ap.add_argument('--data', required=True, help="Path to the data .yaml/.json")
+    ap.add_argument('--out', required=True, help="Output .md path")
     args = ap.parse_args()
 
     with open(args.template, 'r', encoding='utf-8') as f:

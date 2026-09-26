@@ -1,40 +1,51 @@
-## Description: <br>
-Agent Group creates and manages simple local groups of named agents through short Chinese text commands. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A minimal Chinese-language helper for creating an agent group, adding predefined agent roles, listing members, and dissolving the group.
 
-## Publisher: <br>
-[84191879](https://clawhub.ai/user/84191879) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[84191879](https://clawhub.ai/user/84191879)
 
-## Use Case: <br>
-Agent users can create a lightweight group, add predefined role agents, list members, and dissolve the group using short conversational commands. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill saves local group membership state. <br>
-Mitigation: Avoid putting sensitive information into group commands and review saved group state according to local retention expectations. <br>
-Risk: Short commands can create or dissolve groups. <br>
-Mitigation: Use clear, intentional commands when creating or dissolving groups. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/84191879/agent-group) <br>
-- [Publisher Profile](https://clawhub.ai/user/84191879) <br>
+## Use Case:
+
+External users and developers can use this skill to manage a simple Chinese-language multi-agent group workflow with commands for creating a group, inviting supported agent roles, viewing members, and dissolving the group.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The command interface is Chinese-only, which may make group actions unclear to users who do not read Chinese.
+
+Mitigation: Use only when operators understand the supported Chinese commands or provide translated operational guidance before deployment.
+
+Risk: The skill stores group membership in a local OpenClaw memory JSON file until the group is dissolved.
+
+Mitigation: Dissolve groups when they are no longer needed and review local workspace retention expectations before installation.
+
+## Reference(s):
 
 
-## Skill Output: <br>
-**Output Type(s):** [text] <br>
-**Output Format:** [Plain text command responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Maintains local group membership state for each user.] <br>
+## Skill Output:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata, created 2026-02-26) <br>
+**Output Type(s):** [Text, Configuration]
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+**Output Format:** [Plain text Chinese status messages and local JSON group membership state]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Stores simple group membership locally until the group is dissolved.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

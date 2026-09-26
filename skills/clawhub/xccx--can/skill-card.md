@@ -1,40 +1,58 @@
-## Description: <br>
-Agent & MCP integration. CAN stamps what flows through any pipe. Verify, name, log locally. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Agent and MCP integration for stamping data that flows through pipes so agents can verify, name, and log tool outputs locally.
 
-## Publisher: <br>
-[xccx](https://clawhub.ai/user/xccx) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Public Domain <br>
+## Publisher:
 
+[xccx](https://clawhub.ai/user/xccx)
 
-## Use Case: <br>
-Developers and agent builders use this skill to stamp, verify, and locally log data retrieved through MCP tools or other transports. It supports local audit trails, tamper evidence, and recall of prior tool outputs without requiring MCP server integration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Public Domain
 
-## Known Risks and Mitigations: <br>
-Risk: The skill encourages agents to write persistent local records and optionally cached payloads under ~/.can, which can retain secrets, credentials, personal data, regulated data, or sensitive MCP/API results. <br>
-Mitigation: Only log data intended for persistent local retention, avoid secrets and sensitive results, and protect or delete ~/.can according to the deployment's data handling requirements. <br>
+## Use Case:
 
+Developers and agent builders use CAN to create local audit trails for MCP and other tool outputs by recording a timestamp, content hash, and human-readable name. Agents can use those entries to verify cached results before reusing them.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/xccx/skills/can) <br>
-- [README](artifact/README.md) <br>
-- [Skill definition](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces local timestamp, hash, and label logging patterns for agent workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.9.0 (source: frontmatter and server release metadata) <br>
+Risk: Persistent local logs or caches may retain private reports, customer data, credentials, proprietary API responses, or regulated content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use explicit opt-in logging, avoid storing raw tool outputs by default, and define retention and deletion practices.
+
+Risk: Human-readable WHAT values can expose sensitive context even when payloads are hashed.
+
+Mitigation: Redact sensitive WHAT values before writing entries to the CAN index.
+
+Risk: Local CAN files may be readable by other processes or users on the same machine.
+
+Mitigation: Restrict permissions on ~/.can and review local access controls before using CAN with sensitive data.
+
+## Reference(s):
+
+- [CAN Skill on ClawHub](https://clawhub.ai/xccx/skills/can)
+- [CAN Homepage](https://github.com/xccx/can)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces local timestamp, hash, name, and log-entry patterns for agent-managed data.]
+
+## Skill Version(s):
+
+1.9.0 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

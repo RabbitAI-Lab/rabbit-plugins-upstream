@@ -1,43 +1,59 @@
-## Description: <br>
-Use ezBookkeeping API Tools script to record new transactions, query transactions, retrieve account information, retrieve categories, retrieve tags, and retrieve exchange rate data in the self hosted personal finance application ezBookkeeping. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents use ezBookkeeping APIs to record and query transactions and retrieve accounts, categories, tags, and exchange rates.
 
-## Publisher: <br>
-[mayswind](https://clawhub.ai/user/mayswind) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mayswind](https://clawhub.ai/user/mayswind)
 
-## Use Case: <br>
-Developers and personal finance automation users use this skill to call ezBookkeeping APIs from shell or PowerShell scripts for account, category, tag, transaction, exchange-rate, server-version, and session-token workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can modify financial data in ezBookkeeping. <br>
-Mitigation: Install only when the agent is expected to query or change ezBookkeeping data, and review proposed write operations before execution. <br>
-Risk: The skill can list and revoke login tokens. <br>
-Mitigation: Treat token administration commands as sensitive actions that require explicit user intent. <br>
-Risk: The skill requires an API token and may read token values from environment variables or .env files. <br>
-Mitigation: Use a dedicated least-privilege token, avoid broad home-directory .env secrets when possible, and restrict token file permissions. <br>
+## Use Case:
 
+People using a self-hosted ezBookkeeping instance can ask an agent to look up financial records or create bookkeeping entries through its API.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mayswind/skills/ezbookkeeping) <br>
-- [ezBookkeeping](https://ezbookkeeping.mayswind.net) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Markdown, Configuration] <br>
-**Output Format:** [Shell or PowerShell command output, with JSON responses or markdown tables when pretty formatting is available] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EBKTOOL_SERVER_BASEURL and EBKTOOL_TOKEN for authenticated ezBookkeeping API access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.0 (source: server release metadata) <br>
+Risk: Nearby .env files may silently provide the server URL and API token for authenticated financial requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only in trusted workspaces; explicitly set both settings from the same trusted source, avoid repository or parent-directory .env files, and check the printed API URL before running commands.
+
+Risk: An untrusted server endpoint could receive the API token or financial information.
+
+Mitigation: Verify the destination server and prefer HTTPS.
+
+Risk: Add commands can immediately modify bookkeeping records.
+
+Mitigation: Review the intended record and command arguments before execution.
+
+## Reference(s):
+
+- [ezBookkeeping OpenClaw integration](https://ezbookkeeping.mayswind.net/agent/openclaw)
+- [ezBookkeeping](https://ezbookkeeping.mayswind.net)
+- [ClawHub skill listing](https://clawhub.ai/mayswind/skills/ezbookkeeping)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown with command examples and API response summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Authenticated API results may contain financial information; add commands can change bookkeeping records.]
+
+## Skill Version(s):
+
+2.0.2 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

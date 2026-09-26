@@ -1,43 +1,60 @@
-## Description: <br>
-Alibaba Bailian Fun-ASR recording transcription supports Chinese, English and other languages, with auto language detection and speaker diarization for subtitles, transcription, and meeting notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+录音转写 Fun ASR transcribes audio with Alibaba Bailian Fun-ASR, supporting Chinese, English, language detection, and speaker diarization for subtitles, transcripts, and meeting notes.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and agent operators use this skill to send recording files to dLazy's hosted Fun-ASR service for multilingual transcription, speaker diarization, subtitle preparation, and meeting notes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User-provided audio, video, image, and parameters may be sent to dLazy as a third-party cloud processor. <br>
-Mitigation: Use the skill only when that processing is acceptable for the data involved, avoid sensitive recordings unless policy permits it, and review dLazy service terms for retention and access practices. <br>
-Risk: Authentication can store a dLazy API key in the local CLI configuration. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable for per-session credentials when a saved config key is not desired, and rotate or revoke keys from the dLazy dashboard when needed. <br>
+## Use Case:
 
+External users and developers use this skill to submit audio URLs or local audio files to dLazy's hosted Fun-ASR workflow for transcription, subtitles, and meeting notes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-fun-asr) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy service homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [JSON responses and agent-facing command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return asynchronous task identifiers when invoked with no-wait behavior.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: Audio files, supplied URLs, and task parameters are processed by dLazy cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review dLazy's CLI and service terms before use, and avoid sending sensitive audio unless the intended cloud processing is approved.
+
+Risk: The dLazy API key may be saved in the local CLI configuration.
+
+Mitigation: Rely on OS user permissions, rotate or revoke keys when needed, and use the DLAZY_API_KEY environment variable for per-invocation credentials when preferable.
+
+Risk: The artifact example shows --prompt even though the security guidance says to use --audio_url for transcription.
+
+Mitigation: Invoke transcription with --audio_url and set --language_code explicitly when needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-fun-asr)
+- [dLazy CLI homepage and source](https://github.com/dlazy-ai/cli)
+- [dLazy service homepage](https://dlazy.com)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Files, Configuration guidance]
+
+**Output Format:** [JSON response with transcription output and optional saved result files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires dLazy authentication; asynchronous runs can return a task identifier for polling.]
+
+## Skill Version(s):
+
+1.3.20 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

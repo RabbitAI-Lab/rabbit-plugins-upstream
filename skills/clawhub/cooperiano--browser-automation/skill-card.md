@@ -1,40 +1,57 @@
-## Description: <br>
-Browser Automation helps agents navigate pages, fill forms, capture screenshots or PDFs, extract structured data, upload files, and reuse browser sessions with Playwright or Selenium. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Browser Automation helps an agent operate web pages, fill forms, take screenshots, extract structured data, manage sessions, upload files, and integrate with the Claude Chrome extension.
 
-## Publisher: <br>
-[cooperiano](https://clawhub.ai/user/cooperiano) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cooperiano](https://clawhub.ai/user/cooperiano)
 
-## Use Case: <br>
-Developers and automation users use this skill to have an agent operate websites, complete forms, collect structured web data, manage browser sessions, and capture visual or PDF evidence. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can automate browser actions on user-selected sites, including scraping, uploads, session reuse, cookie handling, and multi-account switching. <br>
-Mitigation: Confirm the account, site, files, data scope, and authorization before use; respect robots.txt, rate limits, and site rules. <br>
-Risk: Reusable sessions and saved cookies can expose sensitive account access if used with the wrong browser profile or destination. <br>
-Mitigation: Use scoped browser profiles, avoid sharing session artifacts, and review target domains before loading or saving cookies. <br>
+## Use Case:
 
+Developers and external users use this skill to have an agent drive browser workflows such as navigation, interaction, form submission, screenshots, structured extraction, session reuse, and file upload on sites where they have permission.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/cooperiano/skills/browser-automation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration, text] <br>
-**Output Format:** [Markdown with inline commands, code snippets, and operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include browser automation steps, extraction plans, session handling guidance, and screenshot or PDF capture instructions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Browser automation may reuse login sessions or cookies and act in authenticated accounts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Scope tasks to accounts and sites where the user has permission, avoid sharing session artifacts, and request confirmation before sensitive authenticated actions.
+
+Risk: Scraping, proxy use, or anti-bot handling can violate site rules or create abusive traffic patterns.
+
+Mitigation: Respect robots.txt, site terms, and rate limits, and avoid proxy or anti-bot flows unless the user has a legitimate authorized need.
+
+Risk: Form submissions and file uploads can change external systems or disclose user data.
+
+Mitigation: Preview target URLs, fields, files, and intended submissions before execution, and keep uploads limited to approved data.
+
+## Reference(s):
+
+- [ClawHub Browser Automation skill page](https://clawhub.ai/cooperiano/skills/browser-automation)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown with browser automation steps, code snippets, shell commands, and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include browser action plans, selector guidance, screenshot or PDF capture instructions, session-handling guidance, and extraction schemas.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

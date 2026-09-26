@@ -1,0 +1,13 @@
+{
+ "name": "投稿选刊助手",
+ "version": "1.0.6",
+ "entry": "scripts/run.mjs",
+ "product": "openalex-journal-match",
+ "tags": [
+  "投稿选刊",
+  "期刊推荐",
+  "科研",
+  "论文",
+  "开放获取"
+ ]
+}

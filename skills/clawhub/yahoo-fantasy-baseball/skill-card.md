@@ -1,45 +1,56 @@
-## Description: <br>
-Query Yahoo Fantasy Baseball league data, including rosters, standings, matchups, free agents, draft results, transactions, injuries, and read-only daily roster optimization suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Query a Yahoo Fantasy Baseball league for rosters, standings, matchups, free agents, draft results, transactions, injuries, and read-only daily roster optimization suggestions.
 
-## Publisher: <br>
-[khaney64](https://clawhub.ai/user/khaney64) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[khaney64](https://clawhub.ai/user/khaney64)
 
-## Use Case: <br>
-External fantasy baseball managers use this skill to inspect Yahoo league, team, player, matchup, transaction, injury, and draft data and receive read-only lineup optimization guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Yahoo OAuth credentials and tokens are stored on disk under ~/.openclaw/credentials/yahoo-fantasy/. <br>
-Mitigation: Use the skill only in trusted environments, treat that directory as sensitive, and remove stale legacy .env credentials after migration. <br>
-Risk: Commands can read league-wide data visible to the authenticated Yahoo account. <br>
-Mitigation: Grant Yahoo API access only from accounts whose fantasy league data may be viewed by the agent. <br>
-Risk: The --setup command installs Python dependencies before normal use. <br>
-Mitigation: Run --setup only after reviewing the included requirements and accepting the dependency install. <br>
+## Use Case:
 
+Fantasy baseball managers and agents use this skill to inspect Yahoo league data, monitor daily roster availability, and generate lineup, pitcher rotation, and injured-list suggestions without applying roster changes.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/khaney64/skills/yahoo-fantasy-baseball) <br>
-- [yahoo-fantasy-api](https://github.com/spilchen/yahoo_fantasy_api) <br>
-- [Yahoo Developer Apps](https://developer.yahoo.com/apps/) <br>
-- [MLB Stats API](https://statsapi.mlb.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Guidance, Shell commands] <br>
-**Output Format:** [CLI text output, JSON, or Discord-formatted code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only results and recommendations; requires Yahoo OAuth access, local token storage, network access, and explicit dependency installation via --setup.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.29 (source: server release metadata) <br>
+Risk: The skill accesses Yahoo Fantasy Baseball data and stores Yahoo OAuth tokens locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and authenticate intentionally, use the documented credential path, and protect ~/.openclaw/credentials/yahoo-fantasy/.
+
+Risk: Lineup optimizer output could be mistaken for an applied roster change or definitive instruction.
+
+Mitigation: Treat optimization output as advisory; review suggestions in Yahoo before making any roster move.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/khaney64/skills/yahoo-fantasy-baseball)
+- [Yahoo Developer Apps](https://developer.yahoo.com/apps/)
+- [yahoo-fantasy-api library](https://github.com/spilchen/yahoo_fantasy_api)
+- [MLB Stats API](https://statsapi.mlb.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Plain text, Discord-style Markdown code blocks, and structured JSON depending on the selected command format.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only recommendations; optimization suggestions are advisory and do not apply roster changes.]
+
+## Skill Version(s):
+
+0.1.30 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

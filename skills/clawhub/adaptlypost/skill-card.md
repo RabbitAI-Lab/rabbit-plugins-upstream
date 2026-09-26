@@ -1,47 +1,60 @@
-## Description: <br>
-Schedule and manage social media posts across Instagram, X (Twitter), Bluesky, TikTok, Threads, LinkedIn, Facebook, Pinterest, and YouTube using the AdaptlyPost API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents draft, schedule, publish, and review social posts and analytics for accounts connected to AdaptlyPost.
 
-## Publisher: <br>
-[tarasshyn](https://clawhub.ai/user/tarasshyn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tarasshyn](https://clawhub.ai/user/tarasshyn)
 
-## Use Case: <br>
-External users, marketers, creators, and developers use this skill to draft, schedule, publish, inspect, and manage social media posts across connected AdaptlyPost accounts. It is intended for agent-assisted social posting workflows that require explicit confirmation before public write actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Posts can become public, attributable, and difficult to fully retract. <br>
-Mitigation: Require an explicit confirmation covering content, connected accounts, timing, and visibility before each post; prefer drafts when the user is uncertain or content is sensitive. <br>
-Risk: The API token can act on every social account connected to the AdaptlyPost account group. <br>
-Mitigation: Use a dedicated revocable token and connect only the accounts the agent needs for the workflow. <br>
-Risk: Media uploaded through presigned URLs becomes publicly reachable once the upload completes, even if no post is created. <br>
-Mitigation: Confirm exact file paths before upload, avoid broad directories without per-file approval, and upload only files the user named. <br>
-Risk: Bulk or unattended scheduling can amplify mistakes across many accounts or posts. <br>
-Mitigation: Confirm a small first batch for multi-post sessions and default unattended runs to drafts unless the exact recurring workflow was pre-authorized. <br>
+## Use Case:
 
+People and teams with an AdaptlyPost account use this skill to prepare and manage posts on connected social accounts, check publishing outcomes, and review engagement analytics.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/tarasshyn/skills/adaptlypost) <br>
-- [AdaptlyPost homepage](https://adaptlypost.com) <br>
-- [AdaptlyPost API reference](references/api-reference.md) <br>
-- [AdaptlyPost platform configs](references/platform-configs.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text] <br>
-**Output Format:** [Markdown guidance with JSON and bash examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ADAPTLYPOST_API_KEY; posting and media-upload workflows require explicit user confirmation before write actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release metadata; artifact frontmatter reports 1.2.0) <br>
+Risk: A mistaken schedule or live post can publish unwanted content to connected public accounts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact content, accounts, timing, and visibility before each post; default to a draft when uncertain.
+
+Risk: Uploaded media becomes publicly accessible before a post is published.
+
+Mitigation: Confirm the exact file with the user before upload and upload only media they explicitly named.
+
+Risk: Broad API permissions or exposed connect links and webhooks can affect social accounts or persistent integrations.
+
+Mitigation: Use a dedicated, revocable token with the lowest suitable role; review connect-link, webhook, and deletion requests and keep access links private.
+
+## Reference(s):
+
+- [AdaptlyPost on ClawHub](https://clawhub.ai/tarasshyn/skills/adaptlypost)
+- [AdaptlyPost](https://adaptlypost.com)
+- [AdaptlyPost API reference](artifact/references/api-reference.md)
+- [AdaptlyPost platform configurations](artifact/references/platform-configs.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown with API request examples and plain-language status or analytics summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Publishing outcomes are reported per platform; analytics availability varies by network.]
+
+## Skill Version(s):
+
+1.9.1 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

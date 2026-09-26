@@ -1,48 +1,58 @@
-## Description: <br>
-作业跟进管家 helps independent teachers manage the full homework lifecycle from assignment tracking through completion status, error reflow, persistent weakness flags, next-lesson diagnosis, and student homework profiles. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助独立教师登记作业、追踪提交与订正状态、归纳错因，并确定下节课的教学重点。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Independent teachers use this skill to track homework status, route errors back into teaching decisions, and prepare next-lesson diagnostic guidance from homework evidence. The skill supports pseudonymous student records and coordinates with related teaching workspace skills for assignment design, student analysis, lesson logs, dashboards, and parent communication. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Homework tracking can expose student privacy if real names, contact details, full answers, or family supervision details are entered. <br>
-Mitigation: Use pseudonymous records, avoid unnecessary sensitive details, and confirm workspace consent settings before profile creation or cross-skill sharing. <br>
-Risk: Automated homework chasing or grading could create inappropriate teacher, student, or parent interactions. <br>
-Mitigation: Keep reminder and parent-contact actions teacher-led, and keep scoring decisions with the teacher rather than the skill. <br>
-Risk: Shared workspace records can carry incorrect or overly sensitive status information into other teaching workflows. <br>
-Mitigation: Record only low-sensitivity progress fields and use the documented view, correct, delete, pause-recording, and cross-skill sharing controls when records need adjustment. <br>
+## Use Case:
 
+Chinese-speaking independent K–12 teachers use this skill to track homework completion, identify recurring learning difficulties, and prepare follow-up teaching. Teachers review student-facing content and confirm lasting changes to learner records.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-homework-tracker) <br>
-- [作业状态追踪模板](references/homework-status-template.md) <br>
-- [作业完成度追踪视图模板](references/completion-tracking-views.md) <br>
-- [错题回流清单模板](references/error-reflow-checklist-template.md) <br>
-- [顽固弱项档案模板](references/persistent-weakness-file-template.md) <br>
-- [下节课预诊断输出模板](references/pre-diagnosis-output-template.md) <br>
-- [学员作业画像模板](references/student-homework-profile-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Configuration, Guidance] <br>
-**Output Format:** [Markdown reports and structured workspace update guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses templates for homework status, completion tracking, error reflow, pre-diagnosis, persistent weakness records, and student homework profiles.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Homework records could expose information about minors when shared beyond the teacher's intended audience.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use student aliases, confirm consent settings before sharing with other skills or parents, and honor pause, delete, and export requests.
+
+Risk: An incorrect recurring-weakness label could persist in a student's profile.
+
+Mitigation: Present supporting homework evidence and require teacher confirmation before updating the student profile.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-homework-tracker)
+- [Completion tracking views](references/completion-tracking-views.md)
+- [Error reflow checklist](references/error-reflow-checklist-template.md)
+- [Next-lesson pre-diagnosis template](references/pre-diagnosis-output-template.md)
+- [Student homework profile template](references/student-homework-profile-template.md)
+- [Teacher workspace schema](shared/solo-teacher-workspace.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON records]
+
+**Output Format:** [Chinese-language summaries and structured homework records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses student aliases; requires teacher confirmation before recording persistent weaknesses.]
+
+## Skill Version(s):
+
+2.6.0 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

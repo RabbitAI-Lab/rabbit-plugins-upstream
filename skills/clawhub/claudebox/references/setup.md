@@ -5,6 +5,10 @@
 - Docker installed and running. That's it — the wrapper handles the rest.
 - An Anthropic credential: `CLAUDE_CODE_OAUTH_TOKEN` (via `claudebox setup-token`) or `ANTHROPIC_API_KEY`.
 
+For ordinary agent work, use the installed `claudebox` command from the target
+workspace. Do not replace it with a hand-written Docker invocation. The
+wrapper handles the workspace, state, SSH, image, and nested launch context.
+
 ## Quick Install (CLI wrapper)
 
 Safer path — download, inspect, then run:
@@ -25,15 +29,30 @@ Downloading and reading the script before running it is the recommended flow, es
 
 The installer pulls the image, generates an ed25519 SSH key at `~/.ssh/claudebox/id_ed25519` for git operations inside the container, creates `~/.claude`, and installs the wrapper to `/usr/local/bin/claudebox` (override with `CLAUDEBOX_INSTALL_DIR` / `CLAUDEBOX_BIN_NAME`). Add the generated public key to GitHub/GitLab for git push/pull to work from inside the container.
 
+```bash
+claudebox                                  # interactive
+claudebox -p "inspect this workspace"      # one-shot
+CLAUDEBOX_FULL=1 claudebox -p "run tests"  # temporary full image
+```
+
+For a wrapper-started server, use `CLAUDEBOX_ENV_` before every variable that
+must reach the container. For example,
+`CLAUDEBOX_ENV_CLAUDEBOX_API_MODE=1 claudebox` starts API mode.
+
+Install `claudebox`, `codexbox`, and `pibox` in the same command directory,
+normally `/usr/local/bin`, when one box needs to launch another. The parent
+mounts only sibling wrapper files read-only. A sibling wrapper then runs through
+the host Docker daemon and mounts its own host data directory.
+
 Manual setup without piping to bash: `mkdir -p ~/.claude`, generate the SSH key yourself, `docker pull psyb0t/claudebox:latest` (or `:latest-full`), then fetch `wrapper.sh` and install it as your `claudebox` binary.
 
 ## Image Variants
 
 | | `psyb0t/claudebox:latest` (minimal, default) | `psyb0t/claudebox:latest-full` |
 | --- | --- | --- |
-| Base | Ubuntu 24.04, git/curl/wget/jq, Node.js 22 LTS, Python 3.12 + uv, Docker CE | same, plus everything below |
+| Base | Ubuntu 24.04, git/curl/wget/jq, Node.js 24 LTS, Python 3.14 + uv, Docker CE | same, plus everything below |
 | Go | — | 1.26 toolchain (golangci-lint, gopls, delve, staticcheck, gofumpt, gotests, impl, gomodifytags) |
-| Python | — | 3.12 via pyenv (flake8, black, isort, pyright, mypy, vulture, pytest, poetry, pipenv) |
+| Python | — | 3.14 via pyenv (flake8, black, isort, pyright, mypy, vulture, pytest, poetry, pipenv) |
 | Node dev tools | — | eslint, prettier, typescript, yarn, pnpm, framework CLIs |
 | C/C++ | — | gcc, g++, make, cmake, clang-format, valgrind, gdb |
 | DevOps | — | terraform, kubectl, helm, gh |
@@ -106,18 +125,18 @@ All wrapper/installer config uses the `CLAUDEBOX_*` prefix; the entrypoint alias
 Auth/in-container settings route through `CLAUDEBOX_ENV_*`:
 
 ```bash
-CLAUDEBOX_ENV_ANTHROPIC_API_KEY=sk-... claudebox "do stuff"
-CLAUDEBOX_ENV_CLAUDE_CODE_OAUTH_TOKEN=<YOUR_OAUTH_TOKEN> claudebox "do stuff"
-CLAUDEBOX_ENV_DEBUG=true claudebox "do stuff"          # structured JSON debug logging
+CLAUDEBOX_ENV_ANTHROPIC_API_KEY=your-api-key claudebox -p "do stuff"
+CLAUDEBOX_ENV_CLAUDE_CODE_OAUTH_TOKEN=<YOUR_OAUTH_TOKEN> claudebox -p "do stuff"
+CLAUDEBOX_ENV_DEBUG=true claudebox -p "do stuff"          # structured JSON debug logging
 ```
 
 Extra mounts:
 
 ```bash
-CLAUDEBOX_MOUNT_DATA=/data claudebox "process the data"                   # same path both sides
-CLAUDEBOX_MOUNT_1=/opt/configs CLAUDEBOX_MOUNT_2=/var/logs claudebox "go" # multiple mounts
-CLAUDEBOX_MOUNT_STUFF=/host/path:/container/path claudebox "do stuff"     # explicit src:dst
-CLAUDEBOX_MOUNT_RO=/data:/data:ro claudebox "read the data"               # read-only
+CLAUDEBOX_MOUNT_DATA=/data claudebox -p "process the data"                   # same path both sides
+CLAUDEBOX_MOUNT_1=/opt/configs CLAUDEBOX_MOUNT_2=/var/logs claudebox -p "go" # multiple mounts
+CLAUDEBOX_MOUNT_STUFF=/host/path:/container/path claudebox -p "do stuff"     # explicit src:dst
+CLAUDEBOX_MOUNT_RO=/data:/data:ro claudebox -p "read the data"               # read-only
 ```
 
 ### Server modes

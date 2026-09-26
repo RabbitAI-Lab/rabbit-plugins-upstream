@@ -1,46 +1,61 @@
-## Description: <br>
-Create professional, dark-themed SVG diagrams across architecture, flowchart, sequence, structural, mind map, timeline, state machine, data flow, and conceptual diagram types. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create professional, dark-themed standalone SVG diagrams across architecture, flowchart, sequence, structural, mind map, timeline, state machine, data-flow, and conceptual formats.
 
-## Publisher: <br>
-[jimliu](https://clawhub.ai/user/jimliu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jimliu](https://clawhub.ai/user/jimliu)
 
-## Use Case: <br>
-Developers, technical writers, and product teams use this skill to turn system designs, workflows, relationships, timelines, and conceptual material into standalone SVG diagrams for documentation, articles, and presentations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill creates diagram files in the workspace. <br>
-Mitigation: Confirm the intended output directory before use and run it only where generated SVG and PNG files are acceptable. <br>
-Risk: The skill may run Bun or `npx -y bun` to create a PNG in addition to the SVG. <br>
-Mitigation: Review the conversion step before execution, especially in restricted environments or workspaces where package execution is not allowed. <br>
-Risk: Generated diagrams can misrepresent complex systems if the source description is incomplete or ambiguous. <br>
-Mitigation: Review the generated diagram for correct labels, relationships, and layout before publishing or sharing it. <br>
+## Use Case:
 
+Developers, technical writers, architects, and product teams use this skill to turn technical or conceptual material into polished diagrams for documentation, articles, and presentations.
 
-## Reference(s): <br>
-- [Baoyu Diagram on ClawHub](https://clawhub.ai/jimliu/baoyu-diagram) <br>
-- [Architecture Diagram Layout](artifact/references/architecture.md) <br>
-- [Flowchart Layout](artifact/references/flowchart.md) <br>
-- [Sequence Diagram Layout](artifact/references/sequence.md) <br>
-- [Structural Diagram Layout](artifact/references/structural.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, files, guidance] <br>
-**Output Format:** [Markdown guidance with standalone SVG file output and optional PNG conversion command or status] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates diagram files in the workspace; may also run Bun or npx to generate an @2x PNG from the SVG.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.117.3 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The security scan reports that the skill automatically runs an unpinned local runtime or converter and may fetch Bun through npm at runtime.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only where local command execution and runtime fetching are acceptable, and prefer a release that pins the runtime and dependencies.
+
+Risk: The security scan reports an inconsistent SVG-only versus PNG output contract.
+
+Mitigation: Review expected SVG and PNG outputs before relying on generated artifacts in a workflow, and prefer a release that documents PNG output in the manifest.
+
+Risk: The security guidance calls for size limits before rasterizing SVGs.
+
+Mitigation: Apply input size limits and review complex SVGs before conversion.
+
+## Reference(s):
+
+- [Baoyu Diagram ClawHub Skill Page](https://clawhub.ai/jimliu/skills/baoyu-diagram)
+- [Architecture Diagram Layout](artifact/references/architecture.md)
+- [Flowchart Layout](artifact/references/flowchart.md)
+- [Sequence Diagram Layout](artifact/references/sequence.md)
+- [Structural Diagram Layout](artifact/references/structural.md)
+
+## Skill Output:
+
+**Output Type(s):** [code, shell commands, guidance]
+
+**Output Format:** [Standalone SVG file with optional @2x PNG conversion result]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill writes self-contained SVG output and may invoke a local converter to produce a scaled PNG.]
+
+## Skill Version(s):
+
+1.117.3 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

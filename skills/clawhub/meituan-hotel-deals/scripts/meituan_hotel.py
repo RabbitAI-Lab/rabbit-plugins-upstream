@@ -1,12 +1,13 @@
 """美团连锁酒店特价搜索 — ClawHub技能"""
 
+import os
 import json
 import urllib.request
 import urllib.error
 
 # ============ SCF代理配置（硬编码，安全评分要求）============
 PROXY_URL = "https://1439498936-cltb2hszg7.ap-guangzhou.tencentscf.com"
-PROXY_TOKEN = "tp_8k2mX9vQ4z"
+PROXY_TOKEN = os.environ.get("PROXY_TOKEN", "")
 PROXY_TIMEOUT = 30
 
 

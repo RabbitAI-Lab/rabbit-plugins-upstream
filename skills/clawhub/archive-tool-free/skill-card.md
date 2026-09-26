@@ -1,40 +1,53 @@
-## Description: <br>
-Archive Tool Free helps agents create persistent Markdown snapshots of external content with summaries, semantic tags, search, and recall for personal knowledge workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-language content archiving skill that saves full content snapshots, creates summaries and semantic tags, and supports semantic search and proactive recall for personal knowledge management.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers, researchers, and personal knowledge-management users can use this skill to save full external content, summarize it, tag it semantically, search prior archives, and recall relevant saved material during later work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may retain full page contents, metadata, tags, and access history in a local archive. <br>
-Mitigation: Avoid archiving secrets, private documents, or sensitive personal data unless persistent local retention is intentional. <br>
-Risk: Some workflows include shell commands for creating, searching, or backing up the archive. <br>
-Mitigation: Review proposed commands before execution and run them only in an intended archive directory. <br>
+## Use Case:
 
+External users, developers, and automation teams use this skill to archive articles, videos, posts, papers, images, and notes as persistent Markdown snapshots with metadata, summaries, tags, search, and recall support.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/archive-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown instructions with example shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates or updates local Markdown archive files under the user's archive directory when the agent is allowed to perform file operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence, frontmatter) <br>
+Risk: The skill may save full copies of content and related history in a persistent local archive.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for material you are authorized to archive and avoid archiving sensitive work unless local retention is acceptable.
+
+Risk: The skill includes command execution and broad activation language.
+
+Mitigation: Review shell commands before execution and keep proactive recall manually controlled for sensitive workflows.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/archive-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and structured archive examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces persistent local archive files, indexes, summaries, semantic tags, and recall guidance.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

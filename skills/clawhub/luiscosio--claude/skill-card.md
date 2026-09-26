@@ -1,44 +1,53 @@
-## Description: <br>
-Spin up, SSH into, run commands on, and tear down Linux servers from Claude, with payment by USDC over x402 or card. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Spin up, SSH into, run commands on, and tear down Linux servers from Claude, with payment by USDC over x402 or card.
 
-## Publisher: <br>
-[luiscosio](https://clawhub.ai/user/luiscosio) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[luiscosio](https://clawhub.ai/user/luiscosio)
 
-## Use Case: <br>
-Developers and agents use this skill to browse, provision, operate, renew, and destroy real Linux VPS instances from Claude workflows. It is suited to deployment, hosting, command execution, diagnostics, and infrastructure management tasks where paid server provisioning is intentional. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can provision paid infrastructure and renew leases, which can create unintended spend. <br>
-Mitigation: Use a dedicated limited wallet and set a low AGENTMETAL_MAX_USDC cap before allowing provisioning or renewal. <br>
-Risk: The skill can run commands as root on managed servers and change firewall exposure. <br>
-Mitigation: Require manual confirmation for root command execution, firewall changes, reboot, diagnostics, renewal, and destroy operations. <br>
-Risk: Managed SSH keys, returned private keys, wallet keys, and AgentMetal API keys are sensitive credentials. <br>
-Mitigation: Treat all returned private keys and environment variables as secrets, use dedicated limited credentials, and avoid exposing them in logs or shared transcripts. <br>
+## Use Case:
 
+Developers and operators use this skill to let Claude provision, access, operate, renew, and destroy real Linux servers for deployments, command execution, hosting, or temporary agent-owned compute.
 
-## Reference(s): <br>
-- [AgentMetal API documentation for agents](https://api.agentmetal.dev/llms.txt) <br>
-- [ClawHub skill page](https://clawhub.ai/luiscosio/skills/claude) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/luiscosio) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Configuration, Shell commands, API calls] <br>
-**Output Format:** [Markdown with inline JSON and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include server identifiers, SSH connection details, command output, firewall settings, payment-related configuration, and secret-handling guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill can give an agent payment credentials, root server control, and server destruction authority.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated low-balance wallet, set AGENTMETAL_MAX_USDC, keep the AgentMetal API key in secret storage, and require explicit approval before spending money, running root commands, opening firewall ports, renewing leases, or destroying servers.
+
+Risk: Managed SSH keys and account keys can expose privileged infrastructure access.
+
+Mitigation: Avoid exposing raw private keys where possible, limit access to managed-key servers, and review command proposals before execution.
+
+## Reference(s):
+
+- [AgentMetal API documentation for agents](https://api.agentmetal.dev/llms.txt)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Configuration, Shell commands, API calls, Code]
+
+**Output Format:** [Markdown with JSON configuration and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include MCP tool names, payment and wallet setup guidance, server lifecycle steps, command execution instructions, and firewall or destruction actions that require explicit review.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

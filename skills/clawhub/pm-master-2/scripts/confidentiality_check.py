@@ -1,31 +1,44 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PM Master · 机密性扫描器（Confidentiality Scanner）
---------------------------------------------------
-对 skill 包做一次穿透式扫描，覆盖「所有文件的内容」，而不仅限文件路径/文件名。
-包括：
-  - 文本文件（.py / .md / .yaml / .json / templates / references / examples / 任意文本）
-  - 二进制 / 缓存文件（如 __pycache__/*.pyc，其字节码内嵌 co_filename 绝对路径，
-    仅扫文件名/文本会漏掉这类泄露）
+PM Master · Confidentiality Scanner
+-----------------------------------
+Perform a deep scan of the skill pack covering the *content* of all files, not
+just file paths/names. This includes:
+  - Text files (.py / .md / .yaml / .json / templates / references / examples / any text)
+  - Binary / cache files (e.g. __pycache__/*.pyc, whose bytecode embeds co_filename
+    absolute paths; scanning only names/text would miss this kind of leak)
 
-用途：在上架 / 发布（push 到共享分支）前确认包内不含真实客户 / 厂商标识或
-本机绝对路径泄露。这是对「每次发布前的机密性评审」的自动化固化。
+Purpose: before publishing (pushing to a shared branch), confirm the pack contains
+no real customer / vendor identifiers or local absolute-path leaks. This automates
+the "confidentiality review before each release" discipline.
 
-敏感令牌（HIGH，命中即视为泄露 -> exit 1）：
-  LIC / Teradata / Vertica / Vantage / FSAS / lic-datalake /
-  /Users/ / /home/ / C:\\Users / qclaw / Stephen Lau
+Sensitive tokens (HIGH, a hit means a leak -> exit 1):
+  - Built in (universal, safe to publish): local absolute paths
+    /Users/ , /home/ , C:\\Users  -- these leak the developer's account name.
+  - Deployment specific: customer / vendor / personal identifiers are deliberately
+    NOT hardcoded in this package. Supply them at install time via config.yaml:
 
-白名单（不报警，已在评审中确认安全）：
-  - 脱敏占位符：示例客户 / 示例数据湖项目 / MPP数仓
-  - 通用示例角色：nos-architect（方法论示例角色，非客户系统 NOS）
-  - 通用示例邮箱：*@corp.com / *@external.com / *@example.com
-  - 通用示例货币占位：示例 ₹ 金额 / ₹XX.XM（明确标注为示例，非真实金额）
+        confidentiality:
+          high_tokens:   ["ACME", "ACME-DW"]       # literal, word-boundary matched
+          high_patterns:                           # or explicit regex + label
+            - pattern: "acme[-_]?dw"
+              label: "ACME data warehouse"
 
-用法：
-  python3 confidentiality_check.py --pack <skill_root>   # 默认 = 脚本上级的上级目录
-  python3 confidentiality_check.py                        # 自动定位 skill 根
-返回：发现 HIGH 泄露 -> exit 1；全清 -> exit 0。
+    Keeping them out of the distributed package is the point: a published skill
+    must not advertise whose data it was built around.
+
+Whitelist (no alert, confirmed safe in review):
+  - Desensitization placeholders: example client / example data-lake project / MPP data warehouse
+  - Generic example role: nos-architect (methodology example role, not the customer system NOS)
+  - Generic example emails: *@example.com (RFC 2606 reserved domain)
+  - Generic example currency placeholders: example INR amount / INR XX.XM
+    (explicitly marked as examples, not real amounts)
+
+Usage:
+  python3 confidentiality_check.py --pack <skill_root>   # default = two levels above the script
+  python3 confidentiality_check.py                        # auto-locate skill root
+Returns: HIGH leak found -> exit 1; all clear -> exit 0.
 """
 import argparse
 import os
@@ -33,34 +46,67 @@ import re
 import sys
 
 
-# ---- HIGH 敏感令牌：命中即泄露 ----
+# ---- HIGH sensitive tokens: a hit means a leak ----
+# Only universally sensitive patterns are built in. Customer / vendor / personal
+# identifiers must never be hardcoded in a distributed package -- they are loaded
+# from config.yaml (see `load_extra_patterns`), so the published skill carries no
+# real-world identity while remaining fully functional for the owning org.
 HIGH_PATTERNS = [
-    (r'\bLIC\b', 'LIC (客户缩写)'),
-    (r'Teradata', 'Teradata (厂商)'),
-    (r'Vertica', 'Vertica (厂商)'),
-    (r'Vantage', 'Vantage (Teradata Vantage)'),
-    (r'\bFSAS\b', 'FSAS (客户系统)'),
-    (r'lic-datalake', 'lic-datalake (客户项目 slug)'),
-    (r'/Users/', '绝对路径 /Users/ (泄露本机用户名)'),
-    (r'/home/', '绝对路径 /home/ (泄露本机用户名)'),
-    (r'C:\\Users', '绝对路径 C:\\Users (泄露本机用户名)'),
-    (r'qclaw', 'qclaw (历史工作区路径)'),
-    (r'Stephen Lau', 'Stephen Lau (真实人名)'),
+    (r'/Users/', 'absolute path /Users/ (leaks local username)'),
+    (r'/home/', 'absolute path /home/ (leaks local username)'),
+    (r'C:\\Users', 'absolute path C:\\Users (leaks local username)'),
 ]
 
-# ---- 已在评审中确认安全的白名单片段（仅用于报告提示，不报警）----
+
+def load_extra_patterns(pack_root):
+    """Load deployment-specific sensitive tokens from config.yaml.
+
+    Reads the `confidentiality` block:
+        high_tokens:   ["ACME", ...]                     -> literal, word-boundary matched
+        high_patterns: [{"pattern": ..., "label": ...}]  -> explicit regex (or bare regex string)
+
+    Returns [] when unconfigured, so a freshly installed package leaks nothing
+    and simply has nothing org-specific to look for.
+    """
+    extra = []
+    cfg_path = os.path.join(pack_root, 'config.yaml')
+    if not os.path.exists(cfg_path):
+        return extra
+    try:
+        import yaml
+        with open(cfg_path, 'r', encoding='utf-8') as f:
+            cfg = yaml.safe_load(f) or {}
+    except Exception:
+        return extra
+    block = cfg.get('confidentiality') or {}
+    for tok in (block.get('high_tokens') or []):
+        tok = str(tok).strip()
+        if tok:
+            extra.append((r'\b' + re.escape(tok) + r'\b',
+                          f'{tok} (configured sensitive token)'))
+    for entry in (block.get('high_patterns') or []):
+        if isinstance(entry, dict):
+            pat, label = entry.get('pattern'), entry.get('label')
+        else:
+            pat, label = entry, None
+        pat = str(pat or '').strip()
+        if pat:
+            extra.append((pat, label or f'{pat} (configured sensitive pattern)'))
+    return extra
+
+# ---- Whitelist fragments confirmed safe in review (report hint only, no alert) ----
 REVIEW_NOTES = [
-    ('示例客户', '脱敏占位符（非真实客户名）'),
-    ('示例数据湖项目', '脱敏占位符（非真实项目名）'),
-    ('MPP数仓', '脱敏占位符（非真实厂商名）'),
-    ('nos-architect', '通用方法论示例角色（非客户系统 NOS）'),
-    ('示例 ₹ 金额', '通用示例货币占位（非真实金额）'),
-    ('₹XX.XM', '通用示例货币占位（非真实金额）'),
+    ('example client', 'desensitization placeholder (not a real customer name)'),
+    ('example data-lake project', 'desensitization placeholder (not a real project name)'),
+    ('MPP data warehouse', 'desensitization placeholder (not a real vendor name)'),
+    ('nos-architect', 'generic methodology example role (not the customer system NOS)'),
+    ('example INR amount', 'generic example currency placeholder (not a real amount)'),
+    ('INR XX.XM', 'generic example currency placeholder (not a real amount)'),
 ]
 
 
 def _scan_text(text, patterns):
-    """在已解码文本上逐行匹配，返回 [(line_no, label, snippet)]。"""
+    """Match line by line on decoded text, return [(line_no, label, snippet)]."""
     hits = []
     for i, line in enumerate(text.splitlines(), 1):
         for pat, label in patterns:
@@ -70,7 +116,7 @@ def _scan_text(text, patterns):
 
 
 def _scan_bytes(raw, patterns):
-    """对二进制（如 .pyc）做字节级扫描，返回 [(offset, label, snippet)]。"""
+    """Byte-level scan on binary (e.g. .pyc), return [(offset, label, snippet)]."""
     hits = []
     for pat, label in patterns:
         for m in re.finditer(pat.encode('utf-8'), raw):
@@ -81,11 +127,14 @@ def _scan_bytes(raw, patterns):
     return hits
 
 
-# 扫描器自身文件名（含定义中的敏感令牌样例），必须排除自匹配
+# The scanner's own filename (contains sample sensitive tokens in its definitions)
+# must be excluded from self-matching.
 SELF_NAMES = {os.path.basename(__file__), 'confidentiality_check.py'}
 
-# 元文档（维护/说明类）按设计会引用敏感令牌词汇（如脱敏叙事、扫描器说明），
-# 非真实泄露，排除以免误报；真正的交付物内容（templates/scripts/references 方法论）仍全程扫描。
+# Meta documents (maintenance/explanation) are designed to reference sensitive
+# token vocabulary (e.g. desensitization narrative, scanner explanation) and are
+# not real leaks, so exclude them to avoid false positives; the real deliverable
+# content (templates/scripts/references methodology) is still scanned fully.
 EXCLUDE_META = {
     'confidentiality_check.py',
     'CHANGELOG.md',
@@ -96,18 +145,20 @@ EXCLUDE_META = {
 
 def scan_pack(pack_root):
     high = []        # (relpath, location, label, snippet)
-    reviewed = set() # 报告里提示的已评审安全片段
+    reviewed = set() # report hint for reviewed-safe fragments
+    # Universal built-in patterns + any org-specific tokens supplied via config.yaml
+    patterns = HIGH_PATTERNS + load_extra_patterns(pack_root)
     for dirpath, dirnames, filenames in os.walk(pack_root):
-        # 跳过 git 元数据
+        # Skip git metadata
         if '.git' in dirnames:
             dirnames.remove('.git')
         for fn in filenames:
             full = os.path.join(dirpath, fn)
             rel = os.path.relpath(full, pack_root)
-            # 跳过扫描器自身（其源码含待查令牌样例，会自匹配误报）
+            # Skip the scanner itself (its source contains sample tokens to check, would self-match)
             if fn in SELF_NAMES:
                 continue
-            # 跳过元文档（维护/说明类，按设计引用令牌词汇，非真实泄露）
+            # Skip meta documents (maintenance/explanation, designed to reference tokens, not real leaks)
             if fn in EXCLUDE_META:
                 continue
             try:
@@ -115,7 +166,7 @@ def scan_pack(pack_root):
                     raw = f.read()
             except OSError:
                 continue
-            # 先尝试以 utf-8 文本解码；失败则按二进制扫字节
+            # First try to decode as utf-8 text; on failure scan bytes as binary
             try:
                 text = raw.decode('utf-8')
                 is_text = True
@@ -123,12 +174,12 @@ def scan_pack(pack_root):
                 text = None
                 is_text = False
             if is_text:
-                for ln, label, snip in _scan_text(text, HIGH_PATTERNS):
+                for ln, label, snip in _scan_text(text, patterns):
                     high.append((rel, f'L{ln}', label, snip))
             else:
-                for off, label, snip in _scan_bytes(raw, HIGH_PATTERNS):
+                for off, label, snip in _scan_bytes(raw, patterns):
                     high.append((rel, f'@{off}', label, snip))
-            # 收集白名单片段用于提示
+            # Collect whitelist fragments for the hint
             sample = text if text is not None else raw.decode('latin-1', errors='replace')
             for token, note in REVIEW_NOTES:
                 if token in sample:
@@ -137,32 +188,32 @@ def scan_pack(pack_root):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="PM Master · 机密性穿透扫描")
+    ap = argparse.ArgumentParser(description="PM Master · Confidentiality deep scan")
     here = os.path.dirname(os.path.abspath(__file__))
     default_pack = os.path.dirname(here)
-    ap.add_argument('--pack', default=default_pack, help='skill 根目录（默认脚本上级目录）')
+    ap.add_argument('--pack', default=default_pack, help='skill root directory (default: parent of the script directory)')
     a = ap.parse_args()
 
     pack = os.path.abspath(a.pack)
     if not os.path.isdir(pack):
-        raise SystemExit(f'包目录不存在：{pack}')
+        raise SystemExit(f'Pack directory does not exist: {pack}')
 
     high, reviewed = scan_pack(pack)
 
     print('=' * 64)
-    print(f'PM Master · 机密性扫描  ->  {pack}')
+    print(f'PM Master · Confidentiality scan  ->  {pack}')
     print('=' * 64)
     if high:
-        print(f'\n[FAIL] 发现 {len(high)} 处 HIGH 敏感令牌泄露：\n')
+        print(f'\n[FAIL] {len(high)} HIGH sensitive-token leaks found:\n')
         for rel, loc, label, snip in high:
             print(f'  • {rel} ({loc})  [{label}]')
             print(f'      {snip}')
-        print('\n这些命中必须脱敏后才能发布。')
+        print('\nThese hits must be desensitized before publishing.')
     else:
-        print('\n[PASS] 未在任何文件内容（含二进制/字节码）中发现 HIGH 敏感令牌。')
+        print('\n[PASS] No HIGH sensitive tokens found in any file content (including binary/bytecode).')
 
     if reviewed:
-        print('\n[INFO] 已评审确认安全的占位/示例片段（不报警）：')
+        print('\n[INFO] Placeholder/example fragments confirmed safe in review (not flagged):')
         for r in sorted(reviewed):
             print(f'  - {r}')
 

@@ -1,40 +1,56 @@
-## Description: <br>
-Create high-quality skills with modular structure, progressive disclosure, and token-efficient design. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create high-quality skills with modular structure, progressive disclosure, and token-efficient design.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-Developers and skill authors use this skill to design, review, and improve OpenClaw skills with concise structure, progressive disclosure, and publication-oriented quality checks. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Optional project tracking notes could accidentally include sensitive project details or secrets. <br>
-Mitigation: Ask before creating local notes and avoid storing secrets or credentials in them. <br>
-Risk: Skill-writing recommendations may produce incomplete or misleading instructions if adopted without review. <br>
-Mitigation: Review and scan generated skill content before publishing or deployment. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/ivangdavila/skill-builder) <br>
-- [Skill Builder homepage](https://clawic.com/skills/skill-builder) <br>
+## Use Case:
 
+Developers and agent builders use this skill to create or improve agent skills, including structure, naming, descriptions, progressive disclosure, optional memory templates, and publishing readiness.
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown guidance with examples, checklists, and optional project notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No external tools, credentials, or API keys are required; optional project tracking requires user approval before file creation.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Generated skill content can include incomplete or misleading guidance if published without review.
+
+Mitigation: Review generated skills, apply the quality checklist, and test the skill before publishing or installing related skills.
+
+Risk: Optional project tracking can create files under the user's home directory.
+
+Mitigation: Ask the user before creating files and keep project-tracking notes limited to the requested workflow.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/ivangdavila/skills/skill-builder)
+- [Skill Homepage](https://clawic.com/skills/skill-builder)
+- [Setup Guide](artifact/setup.md)
+- [Patterns](artifact/patterns.md)
+- [Memory Template](artifact/memory-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, configuration, shell commands]
+
+**Output Format:** [Markdown guidance with examples, checklists, templates, and occasional shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose optional project-tracking notes only after user approval.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

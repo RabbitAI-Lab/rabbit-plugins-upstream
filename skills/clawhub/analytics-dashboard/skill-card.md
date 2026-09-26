@@ -1,43 +1,55 @@
-## Description: <br>
-Analytics Dashboard helps teams build configurable data dashboards with widgets, advanced analytics, alerts, report exports, collaboration, custom data sources, theming, and real-time updates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analytics Dashboard helps agents query operational dashboards through a configured dashboard-mcp server for realtime statistics, system health, tenant overviews, content queues, event subscriptions, agent status, and daily briefings.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Operations, SRE, data analysis, and product teams use this skill to configure dashboards, monitor KPIs and SLAs, detect anomalies, export reports, and share controlled views across teams. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Scheduled exports and shared dashboards could distribute business data to unintended recipients. <br>
-Mitigation: Verify recipients, roles, shared-dashboard permissions, and export schedules before enabling automatic distribution. <br>
-Risk: Dashboard tokens, database connections, external API tokens, webhook URLs, and OAuth credentials can expose sensitive access if configured casually. <br>
-Mitigation: Use approved secret storage or environment variables, restrict credentials to approved data sources, and rotate credentials when access changes. <br>
-Risk: Misconfigured data sources, alert thresholds, or analysis windows can create misleading dashboard results or noisy alerts. <br>
-Mitigation: Validate source schemas and data quality, test alert conditions with representative data, and review anomaly or forecast outputs before operational use. <br>
+## Use Case:
 
+Developers and operations teams use this skill to retrieve dashboard data for live service status, tenant activity, queues, recent events, health checks, and agent status. It is intended for environments with an authorized and trusted dashboard-mcp configuration.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/analytics-dashboard) <br>
-- [Project homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON, shell command, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce dashboard configuration guidance, export commands, report structures, and operational troubleshooting steps.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and artifact frontmatter) <br>
+Risk: The skill can surface operational, tenant, event, health, and agent-status data from the configured dashboard-mcp server.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only where dashboard-mcp is trusted and users are authorized to view that data.
+
+Risk: Documentation contains a stray Cookie-management sentence and limited data-handling guidance.
+
+Mitigation: Ask the publisher to remove the unrelated sentence and clarify how sensitive dashboard results should be handled.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/analytics-dashboard)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+- [dashboard-mcp server reference](mcps/dashboard-mcp/server.py)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Guidance]
+
+**Output Format:** [JSON dashboard results with concise natural-language summaries when useful]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only dashboard responses may include tenant, event, health, and agent-status data from the configured dashboard-mcp server.]
+
+## Skill Version(s):
+
+1.0.5 (source: ClawHub release metadata; artifact frontmatter lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

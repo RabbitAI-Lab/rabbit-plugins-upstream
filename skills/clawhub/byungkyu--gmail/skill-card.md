@@ -1,48 +1,63 @@
-## Description: <br>
-Gmail API integration with managed OAuth for reading, sending, and managing emails, threads, labels, and drafts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gmail API integration with managed OAuth for reading, sending, and managing emails, threads, labels, and drafts.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to access a connected Gmail account through Maton-managed OAuth for message triage, drafting, sending, label and thread management, and profile lookup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Connected Gmail access can expose email content or modify messages, drafts, labels, and threads. <br>
-Mitigation: Install only for accounts where Maton-mediated Gmail access is acceptable, use a dedicated or least-privilege Google account where possible, and confirm sends or modifications before execution. <br>
-Risk: When multiple Gmail accounts are linked, requests can target the wrong mailbox. <br>
-Mitigation: Specify the intended Maton connection whenever more than one Gmail account is connected. <br>
-Risk: A retained Maton OAuth connection or API key can continue to authorize Gmail access. <br>
-Mitigation: Protect MATON_API_KEY as a secret and revoke the Maton OAuth connection when it is no longer needed. <br>
+## Use Case:
 
+External users and developers use this skill to connect a Gmail account through Maton-managed OAuth, inspect mailbox data, send or draft messages, manage labels and threads, and create user-approved Gmail automations.
 
-## Reference(s): <br>
-- [ClawHub Gmail Skill](https://clawhub.ai/byungkyu/skills/gmail) <br>
-- [Gmail API Overview](https://developers.google.com/gmail/api/reference/rest) <br>
-- [Gmail Messages: List](https://developers.google.com/gmail/api/reference/rest/v1/users.messages/list) <br>
-- [Gmail Messages: Send](https://developers.google.com/gmail/api/reference/rest/v1/users.messages/send) <br>
-- [Gmail Drafts: Create](https://developers.google.com/gmail/api/reference/rest/v1/users.drafts/create) <br>
-- [Maton CLI Manual](https://cli.maton.ai/manual) <br>
-- [Related API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, API paths, JSON payloads, and Python/JavaScript code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a Maton-managed Gmail OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: server release evidence) <br>
+Risk: The skill can access sensitive Gmail data and perform write actions such as sending emails, modifying labels, drafts, or trashing messages.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the narrowest Gmail authorization scopes available, default to read and list operations, and require explicit user approval before any write, deletion, new connection, or hosted automation.
+
+Risk: Hosted functions, triggers, and destinations can create persistent automated actions or forwarding.
+
+Mitigation: Approve only exact destination URLs the user trusts, keep Gmail-derived data within Maton-controlled destinations unless separately approved, and remove automations when they are no longer needed.
+
+Risk: Maton API keys or OAuth-derived credentials could be exposed through logs, command arguments, destination headers, or files.
+
+Mitigation: Prefer OAuth through the Maton CLI, never print or persist credentials, do not place Maton or Gmail credentials in destination headers, and rotate any key that was exposed.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/gmail)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Gmail API Overview](https://developers.google.com/gmail/api/reference/rest)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and user-approved Gmail authorization.]
+
+## Skill Version(s):
+
+1.2.3 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

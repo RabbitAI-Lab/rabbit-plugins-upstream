@@ -1,5 +1,5 @@
 ## Description: <br>
-Helps an agent control Sonos speakers through command-line workflows for playback, volume, grouping, status checks, alarms, and sleep timers in a personal home Sonos setup. <br>
+Provides agent-facing guidance for controlling Sonos speakers from the command line, including playback, volume, room grouping, status checks, playlists, alarms, and sleep timers. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,18 +11,16 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Personal Sonos users and developers use this skill to have an agent prepare or execute local CLI workflows for discovering speakers, controlling playback and volume, managing room groups, checking state, and setting alarms or sleep timers. <br>
+External users and developers use this skill to guide an agent through Sonos speaker control on a local network they own or administer. It is intended for home Sonos workflows such as playback control, volume changes, room grouping, status checks, and scheduled playback. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Broad activation wording and immediate Sonos device-control instructions could cause accidental playback, volume, grouping, alarm, or timer changes. <br>
-Mitigation: Constrain when the skill activates and require explicit user confirmation before any playback, volume, grouping, alarm, or timer command is executed. <br>
-Risk: The skill asks users to install global npm or pip CLI dependencies before controlling local speakers. <br>
-Mitigation: Verify the package source before installation and prefer a controlled environment for testing the CLI dependency. <br>
-Risk: Commands interact with Sonos devices over the local network and can affect shared household audio devices. <br>
-Mitigation: Confirm target room names, device groups, and volume levels before executing commands, especially for grouped playback or scheduled actions. <br>
+Risk: The skill can guide an agent to discover and control Sonos devices on a local network. <br>
+Mitigation: Use it only on networks and Sonos rooms or devices that the user owns or administers, and confirm the target room or device before running discovery or playback commands. <br>
+Risk: The security review flags broad trigger wording for a local-network device-control skill. <br>
+Mitigation: Invoke the skill only when the user request explicitly involves Sonos, speakers, playback, volume, grouping, or related home-audio control. <br>
 
 
 ## Reference(s): <br>
@@ -31,13 +29,13 @@ Mitigation: Confirm target room names, device groups, and volume levels before e
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and optional JSON, text, or CSV command output] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown with command examples and configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose or execute local Sonos CLI commands and device configuration examples.] <br>
+**Other Properties Related to Output:** [May include Sonos CLI commands, local device configuration examples, and structured command-response guidance.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact frontmatter) <br>
+1.0.1 (source: server release metadata; artifact frontmatter says 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

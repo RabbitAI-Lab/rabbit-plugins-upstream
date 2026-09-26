@@ -1,41 +1,58 @@
-## Description: <br>
-Provides privacy-first, zero-dependency Git repository collaboration analysis for individual developers, producing repository-level aggregate reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps developers analyze local Git repository collaboration patterns and produce repository-level aggregate reports.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External developers use this skill to inspect Git repository collaboration patterns, including commit timing, churn, conventional commit compliance, and file-level bus-factor signals. It is intended for repository-level aggregate analysis rather than personal ranking or performance review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security evidence reports conflicting behavior that could allow write-like actions or network diagnostics despite the skill claiming read-only, offline operation. <br>
-Mitigation: Review before installing, run dry-run first, enforce the documented read-only git command whitelist, and avoid save/export, modify/reset/import, ping, or network behavior unless explicitly approved. <br>
-Risk: Local Git analysis can expose repository-sensitive information such as commit messages, file paths, and contributor names. <br>
-Mitigation: Use the skill only on repositories the user is authorized to analyze, keep processing local, and limit outputs to aggregate repository-level reporting with sensitive values redacted where applicable. <br>
+## Use Case:
 
+Developers use this skill to inspect a local Git repository and generate aggregate collaboration reports covering commit cadence, code churn, conventional commit compliance, and file-level bus-factor indicators. It is intended for repository workflow insight, not personal performance evaluation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/actor-identifier-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown report with inline shell command previews] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Repository-level aggregate Git metrics; dry-run command review is supported.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Declared write tooling and save/delete-style instructions conflict with the skill's read-only privacy claims.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Remove the write tool declaration and generic create, modify, delete, save, and import instructions before relying on read-only behavior.
+
+Risk: Generic network troubleshooting text conflicts with the local, zero-network operating posture described by the skill.
+
+Mitigation: Narrow triggers to explicit local Git repository analysis and delete generic network troubleshooting instructions.
+
+Risk: Local command execution over repository paths can expose commit metadata or run broader commands if parameters are not constrained.
+
+Mitigation: Require user-confirmed absolute repository paths, dry-run command review, and a reviewed read-only git command whitelist.
+
+## Reference(s):
+
+- [Artifact SKILL.md](artifact/SKILL.md)
+- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/actor-identifier-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown report with optional inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Repository-level aggregate metrics; file-level bus-factor notes may include contributor names.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata; artifact metadata reports 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

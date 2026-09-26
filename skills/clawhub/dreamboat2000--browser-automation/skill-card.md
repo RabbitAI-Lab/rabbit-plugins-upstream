@@ -1,47 +1,63 @@
-## Description: <br>
-Automates browser navigation, web page interaction, data extraction, screenshots, form filling, button clicks, and web application workflows through natural-language CLI commands. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automate web browser interactions using natural language via CLI commands.
 
-## Publisher: <br>
-[dreamboat2000](https://clawhub.ai/user/dreamboat2000) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dreamboat2000](https://clawhub.ai/user/dreamboat2000)
 
-## Use Case: <br>
-Developers, engineers, and agent operators use this skill to drive a local Chrome or Browserbase-backed browser for website navigation, form filling, page observation, structured extraction, screenshots, downloads, and debugging. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can drive a browser broadly, including external sites, localhost, internal networks, and authenticated sessions. <br>
-Mitigation: Review requested actions before execution, use a disposable browser profile, and avoid sensitive accounts unless session persistence is explicitly intended. <br>
-Risk: Browserbase remote browsing can be selected automatically when Browserbase API keys are present. <br>
-Mitigation: Remove Browserbase keys when remote browsing is not intended and verify the active environment before running browser tasks. <br>
-Risk: The browser may persist cookies and saved session state in .chrome-profile. <br>
-Mitigation: Use isolated profiles for sensitive work and clear the profile after tasks that involve credentials or private sites. <br>
-Risk: Screenshots and downloads can save local files that may contain sensitive or untrusted content. <br>
-Mitigation: Monitor and clean ./agent/browser_screenshots and ./agent/downloads, and verify downloaded files before opening or reusing them. <br>
-Risk: Setup commands rely on npm install and npm link, while the release evidence indicates the CLI/package source should be verified before relying on setup. <br>
-Mitigation: Inspect the package and CLI source before installation, then run setup only in an environment appropriate for untrusted dependencies. <br>
+## Use Case:
 
+Developers and agents use this skill to navigate websites, click and fill page elements, extract structured web data, capture screenshots, and manage browser sessions from CLI commands.
 
-## Reference(s): <br>
-- [Browser Automation Examples](EXAMPLES.md) <br>
-- [Browser Automation CLI Reference](REFERENCE.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, JSON, files, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON command outputs, screenshots, and downloaded files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands may create persistent browser profiles, screenshots under ./agent/browser_screenshots, and downloaded files under ./agent/downloads.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Browser sessions and cookies can persist in the Chrome profile.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an isolated browser profile and avoid real credentials or sensitive accounts unless the profile lifecycle is controlled.
+
+Risk: Remote Browserbase mode may be selected automatically when Browserbase credentials are present.
+
+Mitigation: Check the environment before use and confirm whether local or remote browser execution is active.
+
+Risk: Browser automation can expose a browser-control port and operate on internal or regulated sites.
+
+Mitigation: Run only in a trusted environment, avoid internal or regulated targets unless approved, and verify the source code and dependencies behind the global browser command.
+
+Risk: The skill can download files without strong upfront controls.
+
+Mitigation: Treat downloaded files as untrusted and review or scan them before opening or using them.
+
+## Reference(s):
+
+- [Browser Automation ClawHub Release](https://clawhub.ai/dreamboat2000/skills/browser-automation)
+- [Browser Automation Examples](EXAMPLES.md)
+- [Browser Automation CLI Reference](REFERENCE.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Files, Guidance]
+
+**Output Format:** [Markdown guidance with bash command examples; browser commands return JSON and can create PNG screenshots or downloaded files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Screenshots are written under ./agent/browser_screenshots/ and downloads under ./agent/downloads/ when the browser CLI performs those actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
