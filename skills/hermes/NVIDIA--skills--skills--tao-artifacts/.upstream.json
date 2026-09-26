@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-artifacts",
+  "identifier": "NVIDIA/skills/skills/tao-artifacts",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-artifacts",
+  "branch": "main",
+  "pushedAt": "2026-09-25T03:14:56Z",
+  "contentHash": "d4822055a54e199077ef2292afee923cab9f982d11528afd18bffe345e21836f",
+  "fetchedAt": "2026-09-26T12:17:27.963Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/depmap",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/depmap",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/depmap",
+  "branch": "main",
+  "pushedAt": "2026-09-26T12:12:57Z",
+  "contentHash": "ac8e3f193bbc483118f1ba5befc75f9637fb02c481e798aca127704a656502b0",
+  "fetchedAt": "2026-09-26T12:17:29.188Z"
+}

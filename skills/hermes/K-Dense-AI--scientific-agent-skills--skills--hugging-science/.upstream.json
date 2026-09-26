@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/hugging-science",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/hugging-science",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/hugging-science",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "5b0fed4d87a47ef73da43f330fd5fc3939dc64db61581b09b3d482af0aa7b3e2",
+  "fetchedAt": "2026-09-26T12:17:41.429Z"
+}

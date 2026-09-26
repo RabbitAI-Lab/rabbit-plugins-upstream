@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/other/checkpoint",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/other/checkpoint",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/other/checkpoint",
+  "branch": "main",
+  "pushedAt": "2026-09-26T12:12:57Z",
+  "contentHash": "8e368d8f47a511bd87a878daf44d834e56c41b79b576ce6773f8cb78a59e8df8",
+  "fetchedAt": "2026-09-26T12:17:29.162Z"
+}

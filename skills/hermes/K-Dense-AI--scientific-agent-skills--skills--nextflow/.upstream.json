@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/nextflow",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/nextflow",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/nextflow",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "7a801e5ec897560059b5f711953186b27551d4f5c08e06f2203b497e064a3fbd",
+  "fetchedAt": "2026-09-26T12:17:41.462Z"
+}
